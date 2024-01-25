@@ -8,10 +8,9 @@ const Header = () => {
         <h1 className="text-4xl font-bold">
           <Link href="/">GIBBY</Link>
         </h1>
-        {/* <input className="border-2" type="text" /> */}
       </div>
-      <div className="flex gap-2">
-        <a href="">Add</a>
+      <div className="flex gap-3">
+        <a href="">Create</a>
         <a href="">Alerts</a>
         <a href="">Account</a>
       </div>

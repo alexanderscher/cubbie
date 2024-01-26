@@ -11,7 +11,7 @@ const RegularButton = ({ children, handleClick, styles }: Props) => {
     <button
       className={`
        
-      border-[1.5px] px-4 py-[6px] rounded-3xl ${styles}`}
+      border-[1.5px] sm:px-4 sm:py-[6px] px-3 py-[4px] rounded-3xl ${styles}`}
       onClick={handleClick}
     >
       {children}

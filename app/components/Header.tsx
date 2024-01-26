@@ -17,7 +17,7 @@ const Header = () => {
       ? "bg-green-900 border-green-900 text-white"
       : "bg border-green-900 text-green-900";
   return (
-    <div className="flex flex-col gap-6 mb-8">
+    <div className="flex flex-col gap-6 mb-8 mt-10">
       <div className="flex justify-between items-center">
         <h1 className="sm:text-3xl text-2xl text-green-900 font-bold">
           Inventory
@@ -34,11 +34,9 @@ const Header = () => {
             </Link>
           </RegularButton>
           <RegularButton styles={"bg-black border-black text-white"}>
-            <p className="text-xs sm:text-sm">
-              <Link href="/create">
-                <p className="text-xs sm:text-sm">Create New</p>
-              </Link>
-            </p>
+            <Link href="/create">
+              <p className="text-xs sm:text-sm">Create New</p>
+            </Link>
           </RegularButton>
         </div>
       </div>

@@ -5,9 +5,9 @@ const page = () => {
   const dataArray = [1, 2, 3, 4, 5];
 
   return (
-    <div className="reciepts">
-      <div className="mb-10 flex flex-col gap-4 reciept-bar">
-        <h1 className="text-green-900 text-2xl font-bold">Macys</h1>
+    <div className="reciepts ">
+      <div className="flex flex-col gap-4 reciept-bar">
+        <h1 className="text-green-900 text-2xl ">Macys</h1>
         <div className="reciept-info">
           <h1 className="text-slate-500">Order Number</h1>
           <h1 className="">123123123</h1>

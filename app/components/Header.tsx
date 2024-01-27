@@ -2,7 +2,6 @@
 import RegularButton from "@/app/components/buttons/RegularButton";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import path from "path";
 import React from "react";
 
 const Header = () => {
@@ -17,11 +16,9 @@ const Header = () => {
       ? "bg-green-900 border-green-900 text-white"
       : "bg border-green-900 text-green-900";
   return (
-    <div className="flex flex-col gap-6 mb-8 mt-10">
+    <div className="flex flex-col gap-6 mb-8 ">
       <div className="flex justify-between items-center">
-        <h1 className="sm:text-3xl text-2xl text-green-900 font-bold">
-          Inventory
-        </h1>
+        <h1 className="sm:text-3xl text-2xl text-green-900 ">Inventory</h1>
         <div className="flex gap-2">
           <RegularButton styles={receiptColor}>
             <Link href="/">

@@ -8,9 +8,9 @@ const Item = () => {
     <div className="border-t-[1.5px] border-black flex flex-col gap-4 ">
       <div className="flex justify-between">
         <div>
-          <h1 className="font-bold text-lg text-orange-500">Macys</h1>
-          <h1 className="font-bold text-lg">Levi 501 Jeans</h1>
-          <h1 className="font-bold text-lg">12321312</h1>
+          <h1 className="text-lg text-orange-500">Macys</h1>
+          <h1 className="text-lg">Levi 501 Jeans</h1>
+          <h1 className="text-lg">12321312</h1>
         </div>
 
         <h1 className="text-sm">Created on 12/12/24</h1>

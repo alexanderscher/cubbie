@@ -98,6 +98,7 @@ const Create = () => {
                 case ReceiptStage.ITEMS:
                   return (
                     <div className="flex flex-col gap-8">
+                      <h1>Receipt Items</h1>
                       <div className="flex flex-col gap-4">
                         <div>
                           <input
@@ -166,7 +167,9 @@ const Create = () => {
                             handleStageClick(ReceiptStage.RECEIPT)
                           }
                         >
-                          <p className="text-green-900 text-sm">Go back</p>
+                          <p className="text-green-900 text-sm">
+                            Back: Receipt
+                          </p>
                         </RegularButton>
                         <RegularButton
                           submit
@@ -207,7 +210,7 @@ const Create = () => {
                               }
                             >
                               <p className="text-green-900  text-sm">
-                                Edit items
+                                Edit receipt items
                               </p>
                             </RegularButton>
                           </div>
@@ -291,7 +294,7 @@ const Create = () => {
                               }
                             >
                               <p className="text-green-900  text-sm">
-                                Edit items
+                                Edit receipt items
                               </p>
                             </RegularButton>
                           </div>
@@ -309,6 +312,7 @@ const Create = () => {
                 default:
                   return (
                     <div className="flex flex-col gap-8">
+                      <h1>Receipt</h1>
                       <div className="flex flex-col gap-4">
                         <div>
                           <input
@@ -400,7 +404,7 @@ const Create = () => {
                         styles={"bg-orange-400 border-green-900 w-full"}
                         handleClick={() => handleStageClick(ReceiptStage.ITEMS)}
                       >
-                        <p className="text-green-900 ">Add receipt items</p>
+                        <p className="text-green-900 ">Next: Receipt items</p>
                       </RegularButton>
                     </div>
                   );

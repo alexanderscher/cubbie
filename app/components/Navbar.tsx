@@ -17,7 +17,7 @@ const Navbar = () => {
 
         <a href="/create">Create</a>
         <a href="">Alerts</a>
-        <a href="">Account</a>
+        <a href="/account">Account</a>
       </div>
     </div>
   );

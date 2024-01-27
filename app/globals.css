@@ -11,21 +11,21 @@
   gap: 12px;
 }
 
-.reciepts {
+.receipts {
   display: flex;
   gap: 30px;
 }
 
-.reciept-bar {
+.receipt-bar {
   width: 300px;
 }
 
-.reciept-info {
+.receipt-info {
   display: flex;
   gap: 6px;
 }
 
-.reciept-grid {
+.receipt-grid {
   width: 75%;
 }
 
@@ -34,7 +34,7 @@
   .grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  .reciept-grid {
+  .receipt-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -43,16 +43,16 @@
   .grid {
     grid-template-columns: 1fr;
   }
-  .reciepts {
+  .receipts {
     flex-direction: column;
   }
-  .reciept-info {
+  .receipt-info {
     justify-content: space-between;
   }
-  .reciept-bar {
+  .receipt-bar {
     width: 100%;
   }
-  .reciept-grid {
+  .receipt-grid {
     width: 100%;
   }
   .navbar {
@@ -69,7 +69,7 @@
 }
 
 @media (max-width: 1000px) {
-  .reciept-grid {
+  .receipt-grid {
     grid-template-columns: 1fr;
   }
 }

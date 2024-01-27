@@ -1,5 +1,7 @@
 "use client";
+import ReceiptItems from "@/app/components/ReceiptItems";
 import RegularButton from "@/app/components/buttons/RegularButton";
+import { useIsMobile } from "@/utils/useIsMobile";
 import { Formik } from "formik";
 import React, { useState } from "react";
 
@@ -39,30 +41,35 @@ const DEFAULT_INPUT_VALUES: ReceiptInput = {
   items: [],
 };
 
-const page = () => {
+const Create = () => {
   const [stage, setStage] = useState<ReceiptStage>(ReceiptStage.RECEIPT);
-  const [items, setItems] = useState<ItemInput[]>([
-    {
+  const isMobile = useIsMobile();
+
+  const [item, setItem] = useState({
+    description: "",
+    photo: "",
+    tag: "",
+    price: "",
+    barcode: "",
+  });
+
+  const handleItemAdd = (value: string, type: string) => {
+    setItem({ ...item, [type]: value });
+  };
+  const addItemToFormik = (setFieldValue: any, values: ReceiptInput) => {
+    const currentItems = values.items;
+    setFieldValue("items", [...currentItems, item]);
+    setItem({
       description: "",
       photo: "",
       tag: "",
-      price: 0,
+      price: "",
       barcode: "",
-    },
-  ]);
-
+    });
+  };
   const handleStageClick = (stagePage: ReceiptStage) => {
     setStage(stagePage);
   };
-
-  const handleAddItem = () => {
-    setItems([
-      ...items,
-      { description: "", photo: "", tag: "", price: 0, barcode: "" },
-    ]);
-  };
-
-  console.log(items);
 
   return (
     <div className="flex h-screen w-full mt-10  flex-col gaplaceholder:text-green-9000">
@@ -79,7 +86,6 @@ const page = () => {
         initialValues={DEFAULT_INPUT_VALUES}
         onSubmit={(values) => {
           console.log(values);
-          // Handle form submission
         }}
       >
         {({ handleSubmit, setFieldValue, values }) => (
@@ -95,31 +101,67 @@ const page = () => {
                       <div className="flex flex-col gap-4">
                         <div>
                           <input
-                            className="border-b-[2px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                            className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
                             type="description"
                             placeholder="Description"
                             name="description"
-                            onChange={(e) => {}}
+                            value={item.description}
+                            onChange={(e) => {
+                              handleItemAdd(e.target.value, "description");
+                            }}
                           />
                         </div>
                         <div>
                           <input
-                            className="border-b-[2px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
-                            type="receiptNumber"
-                            name="receiptNumber"
-                            placeholder="Receipt Number"
-                            value={values.receiptNumber}
-                            onChange={(e) =>
-                              setFieldValue("receiptNumber", e.target.value)
-                            }
+                            className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                            type="barcode"
+                            name="barcode"
+                            value={item.barcode}
+                            placeholder="Barcode"
+                            onChange={(e) => {
+                              handleItemAdd(e.target.value, "barcode");
+                            }}
                           />
                         </div>
-                      </div>
+                        <div>
+                          <input
+                            className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                            type="price"
+                            value={item.price}
+                            name="price"
+                            placeholder="Price"
+                            onChange={(e) => {
+                              handleItemAdd(e.target.value, "price");
+                            }}
+                          />
+                        </div>
 
-                      <div className="flex justify-between">
+                        <div>
+                          {values.items.map((item, index) => (
+                            <div key={index}>
+                              <p>{item.description}</p>
+                              <p>{item.barcode}</p>
+                              <p>{item.price}</p>
+                            </div>
+                          ))}
+                        </div>
                         <RegularButton
                           submit
-                          styles={"bg-orange-400 border-green-900 w-[200px]"}
+                          styles={"bg border-green-900 w-full"}
+                          handleClick={() =>
+                            addItemToFormik(setFieldValue, values)
+                          }
+                        >
+                          <p className="text-green-900 text-sm">Add Item</p>
+                        </RegularButton>
+                      </div>
+
+                      <div className="flex justify-between gap-4">
+                        <RegularButton
+                          submit
+                          styles={
+                            "bg-orange-400 border-green-900 w-1/2 max-w-[200px]"
+                          }
                           handleClick={() =>
                             handleStageClick(ReceiptStage.RECEIPT)
                           }
@@ -128,7 +170,9 @@ const page = () => {
                         </RegularButton>
                         <RegularButton
                           submit
-                          styles={"bg-orange-400 border-green-900 w-[200px]"}
+                          styles={
+                            "bg-orange-400 border-green-900  w-1/2 max-w-[200px]"
+                          }
                           handleClick={() =>
                             handleStageClick(ReceiptStage.PREVIEW)
                           }
@@ -142,17 +186,123 @@ const page = () => {
                   );
                 case ReceiptStage.PREVIEW:
                   return (
-                    <div>
-                      <div>
-                        <RegularButton
-                          submit
-                          styles={"bg-orange-400 border-green-900 w-full"}
-                          handleClick={() => handleSubmit()}
-                          type="submit"
-                        >
-                          <p className="text-green-900 ">Submit</p>
-                        </RegularButton>
+                    <div className="flex flex-col gap-6">
+                      {isMobile && (
+                        <div className=" flex justify-between">
+                          <div className="flex justify-between gap-3">
+                            <RegularButton
+                              styles={"bg-orange-400 border-green-900 "}
+                              handleClick={() =>
+                                handleStageClick(ReceiptStage.RECEIPT)
+                              }
+                            >
+                              <p className="text-green-900 text-sm">
+                                Edit receipt
+                              </p>
+                            </RegularButton>
+                            <RegularButton
+                              styles={"bg-orange-400 border-green-900 "}
+                              handleClick={() =>
+                                handleStageClick(ReceiptStage.ITEMS)
+                              }
+                            >
+                              <p className="text-green-900  text-sm">
+                                Edit items
+                              </p>
+                            </RegularButton>
+                          </div>
+                          <RegularButton
+                            submit
+                            styles={"bg-green-900 border-green-900 "}
+                            handleClick={() => handleSubmit()}
+                          >
+                            <p className="text-white text-sm">Submit</p>
+                          </RegularButton>
+                        </div>
+                      )}
+
+                      <div className="reciepts ">
+                        <div className="flex flex-col gap-4 reciept-bar">
+                          <h1 className="text-green-900 text-2xl ">Macys</h1>
+                          <div className="reciept-info">
+                            <h1 className="text-slate-500">Order Number</h1>
+                            <h1 className="">123123123</h1>
+                          </div>
+
+                          <div>
+                            <div className="reciept-info">
+                              <h1 className="text-slate-500">Store</h1>
+                              <h1 className="">Macys</h1>
+                            </div>
+                            <div className="reciept-info">
+                              <h1 className="text-slate-500">Address</h1>
+                              <h1 className="">1234 12th street 90077</h1>
+                            </div>
+                          </div>
+                          <div>
+                            <div className="reciept-info">
+                              <h1 className="text-slate-500">
+                                Number of items
+                              </h1>
+                              <h1 className="">5</h1>
+                            </div>
+                            <div className="reciept-info">
+                              <h1 className="text-slate-500">Total Amount</h1>
+                              <h1 className="">$300.00</h1>
+                            </div>
+                          </div>
+                          <div>
+                            <div className="reciept-info">
+                              <h1 className="text-slate-500">Date Ordered</h1>
+                              <h1 className="">12/23/23</h1>
+                            </div>
+                            <div className="reciept-info">
+                              <h1 className="text-slate-500">Return Date</h1>
+                              <h1 className="">12/30/23</h1>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-10 reciept-grid mb-[100px]">
+                          {values.items.map((item, index) => (
+                            <div key={index}>
+                              <ReceiptItems />
+                            </div>
+                          ))}
+                        </div>
                       </div>
+                      {!isMobile && (
+                        <div className="fixed bottom-0 left-0 border-t-[1.5px] border-green-800 bg-white w-full p-4 flex justify-between">
+                          <div className="flex justify-between gap-3">
+                            <RegularButton
+                              styles={"bg-orange-400 border-green-900 "}
+                              handleClick={() =>
+                                handleStageClick(ReceiptStage.RECEIPT)
+                              }
+                            >
+                              <p className="text-green-900 text-sm">
+                                Edit receipt
+                              </p>
+                            </RegularButton>
+                            <RegularButton
+                              styles={"bg-orange-400 border-green-900 "}
+                              handleClick={() =>
+                                handleStageClick(ReceiptStage.ITEMS)
+                              }
+                            >
+                              <p className="text-green-900  text-sm">
+                                Edit items
+                              </p>
+                            </RegularButton>
+                          </div>
+                          <RegularButton
+                            styles={"bg-green-900 border-green-900 "}
+                            handleClick={() => handleSubmit()}
+                          >
+                            <p className="text-white text-sm">Submit</p>
+                          </RegularButton>
+                        </div>
+                      )}
                     </div>
                   );
 
@@ -162,7 +312,7 @@ const page = () => {
                       <div className="flex flex-col gap-4">
                         <div>
                           <input
-                            className="border-b-[2px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                            className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
                             type="store"
                             placeholder="Store"
                             name="store"
@@ -174,7 +324,7 @@ const page = () => {
                         </div>
                         <div>
                           <input
-                            className="border-b-[2px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                            className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
                             type="receiptNumber"
                             name="receiptNumber"
                             placeholder="Receipt Number"
@@ -186,7 +336,7 @@ const page = () => {
                         </div>
                         <div>
                           <input
-                            className="border-b-[2px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                            className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
                             placeholder="Card"
                             type="card"
                             name="card"
@@ -198,7 +348,7 @@ const page = () => {
                         </div>
                         <div>
                           <input
-                            className="border-b-[2px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                            className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
                             type="amount"
                             placeholder="Amount"
                             name="amount"
@@ -210,7 +360,7 @@ const page = () => {
                         </div>
                         <div>
                           <input
-                            className="border-b-[2px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                            className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
                             placeholder="Bought Date"
                             type="boughtDate"
                             name="boughtDate"
@@ -222,7 +372,7 @@ const page = () => {
                         </div>
                         <div>
                           <input
-                            className="border-b-[2px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                            className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
                             type="finalReturnDate"
                             placeholder="Final Return Date"
                             name="finalReturnDate"
@@ -234,7 +384,7 @@ const page = () => {
                         </div>
                         <div>
                           <input
-                            className="border-b-[2px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                            className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
                             type="address"
                             placeholder="Address"
                             name="address"
@@ -263,4 +413,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Create;

@@ -6,6 +6,11 @@
   background-color: #e2f1e2;
 }
 
+.navbar {
+  display: flex;
+  gap: 12px;
+}
+
 .reciepts {
   display: flex;
   gap: 30px;
@@ -49,6 +54,17 @@
   }
   .reciept-grid {
     width: 100%;
+  }
+  .navbar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    border-top: 1.5px solid rgb(20 83 45);
+    width: 100%;
+    background-color: white;
+    padding: 16px;
+    justify-content: space-between;
   }
 }
 

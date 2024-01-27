@@ -25,7 +25,6 @@ const RegularButton = ({
         !submit ? "sm:px-4 sm:py-[6px] px-3 py-[4px]" : "px-6 py-[8px]"
       } rounded-3xl ${styles}`}
       onClick={handleClick}
-      type={type}
       {...restProps}
     >
       {children}

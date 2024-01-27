@@ -20,7 +20,6 @@ export default function Home() {
 
   const dataArray = [1, 2, 3, 4, 5];
 
-  console.log(buttons);
   return (
     <main className="flex flex-col ">
       <Header />

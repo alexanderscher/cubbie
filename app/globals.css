@@ -11,6 +11,12 @@
   gap: 12px;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .receipts {
   display: flex;
   gap: 30px;
@@ -42,6 +48,12 @@
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: 1fr;
+  }
+  .header {
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+    /* align-items: center; */
   }
   .receipts {
     flex-direction: column;

@@ -23,4 +23,7 @@ const Navbar = () => {
   );
 };
 
+// conditioanl rendering put receipts create and items in a dropdown
+// move account
+
 export default Navbar;

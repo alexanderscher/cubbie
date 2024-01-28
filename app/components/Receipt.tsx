@@ -16,10 +16,7 @@ const Receipt = () => {
         </div>
         <h1 className="text-sm">Created on 12/12/24</h1>
       </div>
-      <div className="flex justify-between">
-        <h1 className="text-slate-400">Order Number</h1>
-        <h1>123213123</h1>
-      </div>
+
       <div className="flex justify-between">
         <h1 className="text-slate-400">Order Date</h1>
         <h1>1/1/25</h1>
@@ -31,6 +28,10 @@ const Receipt = () => {
       <div className="flex justify-between">
         <h1 className="text-slate-400">Amount</h1>
         <h1>$300.00</h1>
+      </div>
+      <div className="flex justify-between">
+        <h1 className="text-slate-400">Card</h1>
+        <h1>SB 1332</h1>
       </div>
       <div className="flex justify-between items-start">
         <button className="text-slate-400" onClick={() => setItems(!items)}>
@@ -52,10 +53,6 @@ const Receipt = () => {
       <div className="flex flex-col gap-2 mt-3">
         <RegularButton styles={"w-full border-green-900 "}>
           <p className="text-sm text-green-900">Edit</p>
-        </RegularButton>
-
-        <RegularButton styles={"w-full border-green-900 "}>
-          <p className="text-sm text-green-900">Mark as returned</p>
         </RegularButton>
       </div>
     </div>

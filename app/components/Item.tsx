@@ -33,11 +33,6 @@ const Item = () => {
         </div>
         <div className="text-sm flex flex-col gap-1 ">
           <div>
-            <h1 className="text-slate-400 font-bold">Receipt Number</h1>
-            <h1>1234</h1>
-          </div>
-
-          <div>
             <h1 className="text-slate-400 font-bold">Order Date</h1>
             <h1>1/1/25</h1>
           </div>
@@ -45,14 +40,7 @@ const Item = () => {
             <h1 className="text-slate-400 font-bold">Return Date</h1>
             <h1>1/1/25</h1>
           </div>
-          <div>
-            <h1 className="text-slate-400 font-bold">Quantity</h1>
-            <h1>2</h1>
-          </div>
-          <div>
-            <h1 className="text-slate-400 font-bold">Size</h1>
-            <h1>S</h1>
-          </div>
+
           <div>
             <h1 className="text-slate-400 font-bold">Amount</h1>
             <h1>$300.00</h1>

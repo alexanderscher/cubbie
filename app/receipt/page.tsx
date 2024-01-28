@@ -8,11 +8,6 @@ const page = () => {
     <div className="receipts ">
       <div className="flex flex-col gap-4 receipt-bar">
         <h1 className="text-green-900 text-2xl ">Macys</h1>
-        <div className="receipt-info">
-          <h1 className="text-slate-500">Order Number</h1>
-          <h1 className="">123123123</h1>
-        </div>
-
         <div>
           <div className="receipt-info">
             <h1 className="text-slate-500">Store</h1>
@@ -31,6 +26,10 @@ const page = () => {
           <div className="receipt-info">
             <h1 className="text-slate-500">Total Amount</h1>
             <h1 className="">$300.00</h1>
+          </div>
+          <div className="receipt-info">
+            <h1 className="text-slate-500">Card</h1>
+            <h1 className="">SB 1332</h1>
           </div>
         </div>
         <div>

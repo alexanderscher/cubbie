@@ -2,7 +2,7 @@
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { useIsMobile } from "@/utils/useIsMobile";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 const Header = () => {
@@ -23,9 +23,9 @@ const Header = () => {
       ? "bg-green-900 border-green-900 text-white"
       : "bg border-green-900 text-green-900";
   return (
-    <div className="flex flex-col gap-6 mb-8 ">
+    <div className="flex flex-col gap-6  ">
       <div className="header">
-        <h1 className="sm:text-3xl text-2xl text-green-900 ">Inventory</h1>
+        <h1 className="text-3xl text-green-900 ">Inventory</h1>
         <div className="flex gap-2">
           <RegularButton styles={receiptColor}>
             <Link href="/">
@@ -51,10 +51,7 @@ const Header = () => {
         </div>
       </div>
       <div className="flex gap-2">
-        <input
-          className="border-[1.5px] w-full bg border-black rounded-md p-1 placeholder:text-black focus:outline-none"
-          placeholder="Search"
-        ></input>
+        <input className="searchBar" placeholder="Search"></input>
       </div>
     </div>
   );

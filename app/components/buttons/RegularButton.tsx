@@ -22,7 +22,7 @@ const RegularButton = ({
       className={`
        
       border-[1.5px] ${
-        !submit ? "sm:px-4 sm:py-[6px] px-3 py-[4px]" : "px-6 py-[8px]"
+        !submit ? "px-4 py-[6px]" : "px-6 py-[8px]"
       } rounded-3xl ${styles}`}
       onClick={handleClick}
       {...restProps}

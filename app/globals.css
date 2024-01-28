@@ -6,9 +6,22 @@
   background-color: #e2f1e2;
 }
 
-.navbar {
-  display: flex;
-  gap: 12px;
+.navbarItems {
+  display: inline;
+}
+
+.searchBar {
+  border: 1.5px solid black;
+  width: 100%;
+  background-color: #e2f1e2;
+  border-radius: 8px;
+  padding: 6px;
+  outline: none;
+  margin-bottom: 40px;
+}
+
+.navbarMobile {
+  display: none;
 }
 
 .header {
@@ -52,7 +65,7 @@
   .header {
     flex-direction: column;
     align-items: start;
-    gap: 10px;
+    gap: 20px;
     /* align-items: center; */
   }
   .receipts {
@@ -67,7 +80,7 @@
   .receipt-grid {
     width: 100%;
   }
-  .navbar {
+  .navbarMobile {
     display: flex;
     position: fixed;
     bottom: 0;
@@ -77,6 +90,12 @@
     background-color: white;
     padding: 16px;
     justify-content: space-between;
+  }
+  .navbarItems {
+    display: none;
+  }
+  .searchBar {
+    display: none;
   }
 }
 

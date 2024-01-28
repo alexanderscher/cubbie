@@ -12,12 +12,24 @@ const Navbar = () => {
           <Link href="/">STICKY NOTES</Link>
         </h1>
       </div>
-      <div className="navbar">
-        {isMobile && <a href="/">Home</a>}
+      <div className="flex gap-3">
+        <a href="/create" className="navbarItems">
+          Create
+        </a>
+        <a href="" className="navbarItems">
+          Return
+        </a>
 
+        <a href="" className="navbarItems">
+          Alerts
+        </a>
+        <a href="/">Account</a>
+      </div>
+      <div className="navbarMobile">
         <a href="/create">Create</a>
+        <a href="">Return</a>
+        <a href="/">Search</a>
         <a href="">Alerts</a>
-        <a href="/account">Account</a>
       </div>
     </div>
   );

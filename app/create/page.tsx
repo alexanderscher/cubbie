@@ -166,6 +166,16 @@ const Create = () => {
                             />
                           </div>
                         )}
+                        <div className="flex gap-4">
+                          <button className="w-1/2 bg border-green-900 border-[1.5px] flex justify-center items-center h-[60px] rounded-md">
+                            <p className="text-green-900 text-sm">Take photo</p>
+                          </button>
+                          <button className="w-1/2 bg border-green-900 border-[1.5px] flex justify-center items-center h-[60px] rounded-md">
+                            <p className="text-green-900 text-sm">
+                              Upload an image
+                            </p>
+                          </button>
+                        </div>
 
                         <RegularButton
                           submit
@@ -183,6 +193,15 @@ const Create = () => {
                             <p>{item.description}</p>
                             <p>{item.barcode}</p>
                             <p>{item.price}</p>
+                            <button
+                              onClick={() => {
+                                const currentItems = values.items;
+                                currentItems.splice(index, 1);
+                                setFieldValue("items", currentItems);
+                              }}
+                            >
+                              remove
+                            </button>
                           </div>
                         ))}
                       </div>
@@ -435,16 +454,22 @@ const Create = () => {
                         onClose={() => setShowModal(false)}
                       >
                         <Camera
-                          setImage={setImage}
+                          // setImage={setImage}
                           setShowModal={setShowModal}
+                          setFieldValue={setFieldValue}
+                          field={"receiptImage"}
                         />
                       </Modal>
-                      {image && <img src={image} alt="Captured" />}
+                      {values.receiptImage && (
+                        <img src={values.receiptImage} alt="Captured" />
+                      )}
 
                       <RegularButton
                         submit
                         styles={"bg-orange-400 border-green-900 w-full"}
-                        handleClick={() => handleStageClick(ReceiptStage.ITEMS)}
+                        handleClick={() => {
+                          handleStageClick(ReceiptStage.ITEMS);
+                        }}
                       >
                         <p className="text-green-900 ">Next: Receipt items</p>
                       </RegularButton>

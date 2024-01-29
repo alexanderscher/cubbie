@@ -3,11 +3,12 @@ import React, { useState, useCallback, useRef } from "react";
 import Webcam from "react-webcam";
 
 interface Props {
-  setImage: (image: string) => void;
   setShowModal: (showModal: boolean) => void;
+  setFieldValue: (field: string, value: string) => void;
+  field: string;
 }
 
-const Camera = ({ setImage, setShowModal }: Props) => {
+const Camera = ({ setShowModal, setFieldValue, field }: Props) => {
   const webcamRef = useRef<Webcam>(null);
 
   const [tempImage, setTempImage] = useState<null | string>(null);
@@ -26,6 +27,13 @@ const Camera = ({ setImage, setShowModal }: Props) => {
     }
   }, [webcamRef]);
 
+  const handleReceiptImage = () => {
+    if (tempImage) {
+      setFieldValue(field, tempImage);
+      console.log(tempImage);
+    }
+  };
+
   return (
     <div>
       {tempImage ? (
@@ -34,7 +42,7 @@ const Camera = ({ setImage, setShowModal }: Props) => {
           <button onClick={() => setTempImage(null)}>Retake Image</button>
           <button
             onClick={() => {
-              setImage(tempImage);
+              handleReceiptImage;
               setShowModal(false);
             }}
           >

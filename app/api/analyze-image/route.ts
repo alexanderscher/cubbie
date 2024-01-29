@@ -1,11 +1,10 @@
 // File: /pages/api/analyze-image.js
 import { NextResponse } from "next/server";
 
-export async function POST(req) {
+export async function POST(request: Request) {
   try {
-    const { imageBase64 } = req.body; // Get the Base64 image string from the request body
-    console.log(imageBase64);
-
+    const json = await request.json();
+    const image = json.image; // Base64 string of the image
     const api_key = process.env.OPENAI_API_KEY; // Your OpenAI API key
 
     const payload = {
@@ -17,7 +16,7 @@ export async function POST(req) {
         },
         {
           role: "user",
-          content: `data:image/jpeg;base64,${imageBase64}`, // Directly the Base64 string
+          content: `data:image/jpeg;base64,${image}`, // Directly the Base64 string
         },
       ],
       max_tokens: 300,

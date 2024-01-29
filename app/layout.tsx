@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/app/components/Navbar";
 import Navbar from "@/app/components/Navbar";
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { extractRouterConfig } from "uploadthing/server";
+import { ourFileRouter } from "@/app/api/uploadthing/core";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="p-4 bg-[#e2f1e2] mb-[200px]">
+        <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <Navbar />
         {children}
       </body>

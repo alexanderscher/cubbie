@@ -6,9 +6,15 @@ interface Props {
   setShowModal: (showModal: boolean) => void;
   setFieldValue: (field: string, value: string) => void;
   field: string;
+  handleItemAdd?: (value: string, type: string) => void;
 }
 
-const Camera = ({ setShowModal, setFieldValue, field }: Props) => {
+const Camera = ({
+  setShowModal,
+  setFieldValue,
+  field,
+  handleItemAdd,
+}: Props) => {
   const webcamRef = useRef<Webcam>(null);
 
   const [tempImage, setTempImage] = useState<null | string>(null);
@@ -42,8 +48,12 @@ const Camera = ({ setShowModal, setFieldValue, field }: Props) => {
           <button onClick={() => setTempImage(null)}>Retake Image</button>
           <button
             onClick={() => {
-              handleReceiptImage;
               setShowModal(false);
+              {
+                field === "receiptImage"
+                  ? handleReceiptImage()
+                  : handleItemAdd(tempImage, "photo");
+              }
             }}
           >
             Save Image

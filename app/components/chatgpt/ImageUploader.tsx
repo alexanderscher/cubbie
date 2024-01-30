@@ -36,24 +36,11 @@
 
 "use client";
 import { ChangeEvent, useState, FormEvent } from "react";
-// Create Intial UI
-// Create file upload logic (uploading an image, base64 string)
-// Create the API route logic (POST api/analyzeImage, openai logic)
-// Handle the streaming of data to our frontend (when you see chatGPT talk block by block)
-// Discussion / where to go from here.
 
-export default function Home() {
+export default function ImageUploader() {
   const [image, setImage] = useState<string>("");
-  const [openAIResponse, setOpenAIResponse] = useState<string>("");
-  // useState to hold a base64 string.
-  // useState to hold the chatGPT response
 
-  // Image upload logic
-  // 1. User upload an image
-  // 2. We can take the image (all of its data), and convert it into a base64 string
-  // What is a base64 string? It is a string "AJADLSDJAK" that represents an ENTIRE image.
-  // "ENTIRESTRING" -> :)
-  // 3. When we request the API route we create, we will pass the image (string) to the backend.
+  const [openAIResponse, setOpenAIResponse] = useState<string>();
 
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files === null) {
@@ -61,14 +48,10 @@ export default function Home() {
       return;
     }
     const file = event.target.files[0];
-
-    // Convert the users file (locally on their computer) to a base64 string
-    // FileReader
     const reader = new FileReader();
     reader.readAsDataURL(file);
 
     reader.onload = () => {
-      // reader.result -> base64 string ("ENTIRESTRING" -> :))
       if (typeof reader.result === "string") {
         console.log(reader.result);
         setImage(reader.result);
@@ -79,7 +62,6 @@ export default function Home() {
       console.log("error: " + error);
     };
   }
-
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -88,30 +70,22 @@ export default function Home() {
       return;
     }
 
-    // POST api/analyzeImage
-    await fetch("api/analyzeImage", {
+    await fetch("api/analyze-image", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        image: image, // base64 image
+        image: image,
       }),
     }).then(async (response: any) => {
-      // Because we are getting a streaming text response
-      // we have to make some logic to handle the streaming text
       const reader = response.body?.getReader();
-      setOpenAIResponse("");
-      // reader allows us to read a new piece of info on each "read"
-      // "Hello" + "I am" + "Cooper Codes"  reader.read();
       while (true) {
         const { done, value } = await reader?.read();
-        // done is true once the response is done
         if (done) {
+          console.log(response);
           break;
         }
-
-        // value : uint8array -> a string.
         var currentChunk = new TextDecoder().decode(value);
         setOpenAIResponse((prev) => prev + currentChunk);
       }
@@ -131,23 +105,24 @@ export default function Home() {
             <p>Once you upload an image, you will see it here.</p>
           </div>
         )}
+        <div>
+          <form onSubmit={(e) => handleSubmit(e)}>
+            <div className="flex flex-col mb-6">
+              <label className="mb-2 text-sm font-medium">Upload Image</label>
+              <input
+                type="file"
+                className="text-sm border rounded-lg cursor-pointer"
+                onChange={(e) => handleFileChange(e)}
+              />
+            </div>
 
-        <form onSubmit={(e) => handleSubmit(e)}>
-          <div className="flex flex-col mb-6">
-            <label className="mb-2 text-sm font-medium">Upload Image</label>
-            <input
-              type="file"
-              className="text-sm border rounded-lg cursor-pointer"
-              onChange={(e) => handleFileChange(e)}
-            />
-          </div>
-
-          <div className="flex justify-center">
-            <button type="submit" className="p-2 bg-sky-600 rounded-md mb-4">
-              Ask ChatGPT To Analyze Your Image
-            </button>
-          </div>
-        </form>
+            <div className="flex justify-center">
+              <button type="submit" className="p-2 bg-sky-600 rounded-md mb-4">
+                Ask ChatGPT To Analyze Your Image
+              </button>
+            </div>
+          </form>
+        </div>
 
         {openAIResponse !== "" ? (
           <div className="border-t border-gray-300 pt-4">

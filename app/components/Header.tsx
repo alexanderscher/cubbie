@@ -44,7 +44,7 @@ const Header = () => {
           </RegularButton>
           <select className="border-[1.5px] w-[100px] bg border-black rounded-md p-1 placeholder:text-black focus:outline-none"></select>
           {/* <RegularButton styles={"bg-black border-black text-white"}>
-            <Link href="/create">
+            <Link href="/create-receipt">
               <p className="text-xs sm:text-sm">Create New</p>
             </Link>
           </RegularButton> */}

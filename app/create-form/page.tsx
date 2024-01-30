@@ -6,6 +6,8 @@ import { Formik } from "formik";
 import React, { useState } from "react";
 import { UploadButton } from "@/utils/uploadthing";
 import ImageUploader from "@/app/components/chatgpt/ImageUploader";
+import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
+import Image from "next/image";
 
 enum ReceiptStage {
   RECEIPT = "RECEIPT",
@@ -15,9 +17,14 @@ enum ReceiptStage {
 
 interface ItemInput {
   description: string;
-  photo: string;
+  photo: [{ url: string; key: string }];
   price: number;
   barcode: string;
+}
+
+interface Image {
+  url: string;
+  key: string;
 }
 
 interface ReceiptInput {
@@ -27,7 +34,7 @@ interface ReceiptInput {
   amount: "";
   boughtDate: string;
   finalReturnDate: string;
-  receiptImage: string;
+  receiptImage: Image[];
   items: ItemInput[];
 }
 
@@ -38,7 +45,7 @@ const DEFAULT_INPUT_VALUES: ReceiptInput = {
   amount: "",
   boughtDate: "",
   finalReturnDate: "",
-  receiptImage: "",
+  receiptImage: [],
   items: [],
 };
 
@@ -49,13 +56,18 @@ const Create = () => {
 
   const [item, setItem] = useState({
     description: "",
-    photo: "",
+    photo: [
+      {
+        url: "",
+        key: "",
+      },
+    ],
     price: "",
     barcode: "",
     asset: false,
   });
 
-  const handleItemAdd = (value: string, type: string) => {
+  const handleItemAdd = (value: any, type: string) => {
     setItem({ ...item, [type]: value });
   };
   const addItemToFormik = (setFieldValue: any, values: ReceiptInput) => {
@@ -63,7 +75,7 @@ const Create = () => {
     setFieldValue("items", [...currentItems, item]);
     setItem({
       description: "",
-      photo: "",
+      photo: [],
       price: "",
       barcode: "",
       asset: false,
@@ -73,12 +85,9 @@ const Create = () => {
     setStage(stagePage);
   };
 
-  const [frontImage, setFrontImage] = useState<
-    {
-      fileUrl: string;
-      fileKey: string;
-    }[]
-  >([]);
+  const deletePhoto = async (img: string) => {
+    deleteUploadThingImage(img);
+  };
 
   return (
     <div className="flex ">
@@ -172,36 +181,70 @@ const Create = () => {
                             </div>
                           )}
                           <p>Image</p>
+                          <UploadButton
+                            appearance={{
+                              button:
+                                "ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed bg-green-900  after:bg-orange-00 w-full",
+                            }}
+                            endpoint="imageUploader"
+                            content={{
+                              allowedContent: (
+                                <div className="text-[12px] mt-2"></div>
+                              ),
+                            }}
+                            onClientUploadComplete={(res) => {
+                              console.log("Files: ", res);
+                              handleItemAdd(res, "photo");
+                            }}
+                            onUploadError={(error: Error) => {
+                              alert(`ERROR! ${error.message}`);
+                            }}
+                          />
 
                           <RegularButton
                             submit
                             styles={"border-green-900 bg-green-900 w-full"}
-                            handleClick={() =>
-                              addItemToFormik(setFieldValue, values)
-                            }
+                            handleClick={() => {
+                              addItemToFormik(setFieldValue, values);
+                              console.log(values);
+                            }}
                           >
                             <p className="text-white text-sm">Add Item</p>
                           </RegularButton>
                         </div>
                         <div>
                           {values.items.map((item, index) => (
-                            <div key={index}>
-                              <p>{item.description}</p>
-                              <p>{item.barcode}</p>
-                              <p>{item.price}</p>
+                            <div key={index} className="flex gap-4">
                               {item.photo && (
-                                <img src={item.photo} alt="Captured" />
+                                <div className="w-1/4 max-w-[300px]">
+                                  <img
+                                    src={item.photo[0]?.url}
+                                    alt=""
+                                    style={{
+                                      padding: "",
+                                      objectFit: "contain",
+
+                                      borderRadius: "2px",
+                                    }}
+                                  />
+                                </div>
                               )}
 
-                              <button
-                                onClick={() => {
-                                  const currentItems = values.items;
-                                  currentItems.splice(index, 1);
-                                  setFieldValue("items", currentItems);
-                                }}
-                              >
-                                remove
-                              </button>
+                              <div>
+                                <p>{item.description}</p>
+                                <p>{item.barcode}</p>
+                                <p>{item.price}</p>
+                                <button
+                                  onClick={() => {
+                                    const currentItems = values.items;
+                                    currentItems.splice(index, 1);
+                                    setFieldValue("items", currentItems);
+                                    deletePhoto(item.photo[0].key);
+                                  }}
+                                >
+                                  remove
+                                </button>
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -275,50 +318,53 @@ const Create = () => {
 
                         <div className="receipts ">
                           <div className="flex flex-col gap-4 receipt-bar">
-                            <h1 className="text-green-900 text-2xl ">Macys</h1>
-                            <div className="receipt-info">
-                              <h1 className="text-slate-500">Order Number</h1>
-                              <h1 className="">123123123</h1>
-                            </div>
+                            <h1 className="text-green-900 text-2xl ">
+                              {values.store}
+                            </h1>
 
-                            <div>
-                              <div className="receipt-info">
-                                <h1 className="text-slate-500">Store</h1>
-                                <h1 className="">Macys</h1>
-                              </div>
-                              <div className="receipt-info">
-                                <h1 className="text-slate-500">Address</h1>
-                                <h1 className="">1234 12th street 90077</h1>
-                              </div>
-                            </div>
                             <div>
                               <div className="receipt-info">
                                 <h1 className="text-slate-500">
                                   Number of items
                                 </h1>
-                                <h1 className="">5</h1>
+                                <h1 className="">{values.items.length}</h1>
                               </div>
                               <div className="receipt-info">
                                 <h1 className="text-slate-500">Total Amount</h1>
-                                <h1 className="">$300.00</h1>
+                                <h1 className="">{values.amount}</h1>
                               </div>
                             </div>
                             <div>
                               <div className="receipt-info">
-                                <h1 className="text-slate-500">Date Ordered</h1>
-                                <h1 className="">12/23/23</h1>
+                                <h1 className="text-slate-500">
+                                  Date of purchase
+                                </h1>
+                                <h1 className=""> {values.boughtDate}</h1>
                               </div>
                               <div className="receipt-info">
                                 <h1 className="text-slate-500">Return Date</h1>
-                                <h1 className="">12/30/23</h1>
+                                <h1 className=""> {values.finalReturnDate}</h1>
                               </div>
                             </div>
                           </div>
+                          {values.receiptImage.length > 0 && (
+                            <img
+                              src={values.receiptImage[0].url}
+                              alt=""
+                              style={{
+                                padding: "",
+                                objectFit: "contain",
+                                width: "50%",
+                                height: "50%",
+                                borderRadius: "2px",
+                              }}
+                            />
+                          )}
 
                           <div className="grid grid-cols-3 gap-10 receipt-grid mb-[100px]">
                             {values.items.map((item, index) => (
                               <div key={index}>
-                                <ReceiptItems />
+                                <ReceiptItems item={item} />
                               </div>
                             ))}
                           </div>
@@ -424,7 +470,7 @@ const Create = () => {
                               }
                             />
                           </div>
-                          {/* <div className="w-full">
+                          <div className="w-full">
                             <UploadButton
                               appearance={{
                                 button:
@@ -438,15 +484,41 @@ const Create = () => {
                               }}
                               onClientUploadComplete={(res) => {
                                 console.log("Files: ", res);
-                                alert("Upload Completed");
+                                setFieldValue("receiptImage", res);
                               }}
                               onUploadError={(error: Error) => {
                                 alert(`ERROR! ${error.message}`);
                               }}
                             />
-                          </div> */}
+                          </div>
+                          {values.receiptImage.length > 0 && (
+                            <div className="">
+                              <div className="flex-grow mb-2">
+                                <Image
+                                  src={values.receiptImage[0].url}
+                                  alt=""
+                                  width={100}
+                                  height={100}
+                                  // style={{
+                                  //   padding: "",
+                                  //   objectFit: "contain",
+                                  //   width: "50%",
+                                  //   height: "50%",
+                                  //   borderRadius: "2px",
+                                  // }}
+                                />
+                              </div>
+                              <div className="text-center">
+                                {/* <p
+                                  className="cursor-pointer text-slate-400"
+                                  onClick={backDelete}
+                                >
+                                  Undo
+                                </p> */}
+                              </div>
+                            </div>
+                          )}
                         </div>
-                        <ImageUploader />
 
                         <RegularButton
                           submit

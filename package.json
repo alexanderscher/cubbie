@@ -10,9 +10,11 @@
   },
   "dependencies": {
     "@uploadthing/react": "^6.2.2",
+    "ai": "^2.2.31",
     "formik": "^2.4.5",
     "next": "14.1.0",
     "openai": "^4.26.0",
+    "openai-edge": "^1.2.2",
     "react": "^18",
     "react-dom": "^18",
     "react-webcam": "^7.2.0"

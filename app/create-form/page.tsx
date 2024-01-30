@@ -542,7 +542,12 @@ const Create = () => {
 
 export default Create;
 
-const Preview = ({ values, setFieldValue }) => {
+interface PreviewProps {
+  values: ReceiptInput;
+  setFieldValue: any;
+}
+
+const Preview = ({ values, setFieldValue }: PreviewProps) => {
   const removeItem = (index: number) => {
     const newItems = values.items.filter((_, i: number) => i !== index);
     setFieldValue("items", newItems);

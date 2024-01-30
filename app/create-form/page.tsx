@@ -499,13 +499,6 @@ const Create = () => {
                                   alt=""
                                   width={100}
                                   height={100}
-                                  // style={{
-                                  //   padding: "",
-                                  //   objectFit: "contain",
-                                  //   width: "50%",
-                                  //   height: "50%",
-                                  //   borderRadius: "2px",
-                                  // }}
                                 />
                               </div>
                               <div className="text-center">

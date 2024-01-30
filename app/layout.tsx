@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="p-4 bg-[#e2f1e2] mb-[200px]">
+      <body className="p-5 bg-[#e2f1e2] mb-[200px]">
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <Navbar />
         {children}

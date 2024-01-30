@@ -1,40 +1,27 @@
 "use client";
-import { BarcodeScanner } from "@/app/components/Barcode";
+import { BarcodeScanner } from "@/app/components/BarcodeScanner";
 import Header from "@/app/components/Header";
 import Receipt from "@/app/components/Receipt";
 import { useState } from "react";
 
 export default function Home() {
-  const [buttons, setButtons] = useState({
-    receipt: true,
-    item: false,
-  });
-
-  const handleClick = (e: string) => {
-    if (e === "receipt") {
-      setButtons({ receipt: true, item: false });
-    }
-    if (e === "item") {
-      setButtons({ receipt: false, item: true });
-    }
-  };
   const [result, setResult] = useState("");
 
   const dataArray = [1, 2, 3, 4, 5];
   const [showScanner, setShowScanner] = useState(false);
 
-  const handleResult = (result) => {
+  const handleResult = (result: any) => {
     console.log("Scanned barcode result:", result);
     setResult(result.text);
-    setShowScanner(false); // Close scanner on successful scan
+    setShowScanner(false);
   };
 
-  const handleError = (error) => {
-    // console.error("Scanning error:", error);
+  const handleError = (error: any) => {
+    console.error("Scanning error:", error);
   };
 
   const closeScanner = () => {
-    setShowScanner(false); // Manual close function
+    setShowScanner(false);
   };
 
   return (

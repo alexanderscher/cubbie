@@ -103,9 +103,6 @@ const Create = () => {
           <h1 className="xs:text-3xl text-2xl text-green-900  ">
             Create new receipt
           </h1>
-          <RegularButton styles={"bg border-green-800 "}>
-            <p className="text-green-900 text-xs">Add to existing receipt</p>
-          </RegularButton>
         </div>
 
         <Formik
@@ -378,7 +375,11 @@ const Create = () => {
                           <div className="grid grid-cols-3 gap-10 receipt-grid mb-[100px]">
                             {values.items.map((item, index) => (
                               <div key={index}>
-                                <ReceiptFormItems item={item} />
+                                <ReceiptFormItems
+                                  item={item}
+                                  index={index}
+                                  setFieldValue={setFieldValue}
+                                />
                               </div>
                             ))}
                           </div>
@@ -541,7 +542,11 @@ const Create = () => {
 
 export default Create;
 
-const Preview = ({ setFieldValue, values }) => {
+const Preview = ({ values, setFieldValue }) => {
+  const removeItem = (index: number) => {
+    const newItems = values.items.filter((_, i: number) => i !== index);
+    setFieldValue("items", newItems);
+  };
   return (
     <div className="flex flex-col gap-6 w-3/4  preview border-l-[1.5px] border-green-900 pl-4 ">
       <div className="flex  gap-4">
@@ -553,12 +558,6 @@ const Preview = ({ setFieldValue, values }) => {
               <h1 className="text-green-900 text-2xl ">Store</h1>
             )}
 
-            <div className="receipt-info">
-              <h1 className="text-slate-500">Number of items</h1>
-              {values.items.length > 0 && (
-                <h1 className="">{values.items.length}</h1>
-              )}
-            </div>
             <div className="receipt-info">
               <h1 className="text-slate-500">Total Amount</h1>
               <h1 className="">{values.amount}</h1>
@@ -592,7 +591,13 @@ const Preview = ({ setFieldValue, values }) => {
         <div className="w-full flex flex-col gap-4">
           {values.items.map((item, index) => (
             <div key={index}>
-              <ReceiptFormItems item={item} />
+              <ReceiptFormItems
+                removeItem={removeItem}
+                item={item}
+                setFieldValue={setFieldValue}
+                index={index}
+                edit
+              />
             </div>
           ))}
         </div>
@@ -603,14 +608,22 @@ const Preview = ({ setFieldValue, values }) => {
 
 interface ReceiptFormItemsProps {
   item: any;
+  setFieldValue: any;
+  index: number;
+  removeItem?: any;
+  edit?: boolean;
 }
 
-const ReceiptFormItems = ({ item }: ReceiptFormItemsProps) => {
-  console.log(item);
+const ReceiptFormItems = ({
+  item,
+  index,
+  removeItem,
+  edit = false,
+}: ReceiptFormItemsProps) => {
   return (
     <div className="border-t-[1.5px] border-black flex flex-col gap-4 ">
       <div className="flex justify-between">
-        <h1 className="text-lg text-orange-500">Levi 501 Jeans</h1>
+        <h1 className="text-lg text-orange-500">{item.description}</h1>
       </div>
       <div className="flex gap-6 ">
         {item.photo.length > 0 && (
@@ -626,7 +639,15 @@ const ReceiptFormItems = ({ item }: ReceiptFormItemsProps) => {
             <h1 className="text-slate-400 font-bold">Barcode</h1>
             <h1>{item.barcode}</h1>
           </div>
-          <div>Remove Item</div>
+          {edit && (
+            <button
+              onClick={() => {
+                removeItem(index);
+              }}
+            >
+              Remove
+            </button>
+          )}
         </div>
       </div>
     </div>

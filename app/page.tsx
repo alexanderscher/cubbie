@@ -5,8 +5,6 @@ import Receipt from "@/app/components/Receipt";
 import { useState } from "react";
 
 export default function Home() {
-  const [result, setResult] = useState("");
-
   const dataArray = [1, 2, 3, 4, 5];
   const [showScanner, setShowScanner] = useState(false);
 
@@ -16,8 +14,10 @@ export default function Home() {
     setShowScanner(false);
   };
 
+  const [result, setResult] = useState("");
+
   const handleError = (error: any) => {
-    console.error("Scanning error:", error);
+    // console.error("Scanning error:", error);
   };
 
   const closeScanner = () => {

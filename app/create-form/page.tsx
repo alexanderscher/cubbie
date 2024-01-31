@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import { UploadButton } from "@/utils/uploadthing";
 import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
 import Image from "next/image";
+import { BarcodeScanner } from "@/app/components/BarcodeScanner";
 
 enum ReceiptStage {
   RECEIPT = "RECEIPT",
@@ -52,6 +53,7 @@ const Create = () => {
   const [stage, setStage] = useState<ReceiptStage>(ReceiptStage.RECEIPT);
   const isMobile = useIsMobile();
   const [isBarcode, setIsBarcode] = useState(false);
+  const [showScanner, setShowScanner] = useState(false);
 
   const [item, setItem] = useState({
     description: "",
@@ -68,18 +70,17 @@ const Create = () => {
 
   const handleItemAdd = (value: any, type: string) => {
     setItem({ ...item, [type]: value });
+    console.log(value);
   };
+
   const addItemToFormik = (setFieldValue: any, values: ReceiptInput) => {
     const currentItems = values.items;
-
-    // Check if the first item in the photo array has an empty url
     if (item.photo.length > 0 && item.photo[0].url === "") {
-      item.photo = []; // Set photo to an empty array if url is empty
+      item.photo = [];
     }
 
     setFieldValue("items", [...currentItems, item]);
 
-    // Reset the item state
     setItem({
       description: "",
       photo: [],
@@ -94,6 +95,10 @@ const Create = () => {
 
   const deletePhoto = async (img: string) => {
     deleteUploadThingImage(img);
+  };
+
+  const handleError = (error: any) => {
+    // console.error("Scanning error:", error);
   };
 
   return (
@@ -148,34 +153,66 @@ const Create = () => {
                                 }}
                               />
                             </div>
-                            <p>Barcode</p>
-                            <div className="flex gap-4">
-                              <button className="w-1/2 bg border-green-900 border-[1.5px] flex justify-center items-center h-[60px] rounded-md">
-                                <p
-                                  className="text-green-900 text-sm"
-                                  onClick={() => {
-                                    setIsBarcode(false);
-                                  }}
-                                >
-                                  Scan barcode
-                                </p>
+                            <div>
+                              <button
+                                onClick={() => {
+                                  setShowScanner(true);
+                                  setIsBarcode(false);
+                                }}
+                                disabled={showScanner}
+                              >
+                                Open Scanner
                               </button>
                               <button
-                                className="w-1/2 bg border-green-900 border-[1.5px] flex justify-center items-center h-[60px] rounded-md"
                                 onClick={() => {
-                                  setIsBarcode(true);
+                                  setShowScanner(false);
+                                  setIsBarcode(!isBarcode);
                                 }}
                               >
-                                <p className="text-green-900 text-sm">
-                                  Input a barcode
-                                </p>
+                                Input barcode
                               </button>
                             </div>
+
+                            {showScanner && (
+                              <div>
+                                <h1>Scan a Barcode</h1>
+                                <BarcodeScanner
+                                  onResult={(result) => {
+                                    handleItemAdd(result.text, "barcode");
+                                    setShowScanner(false);
+                                  }}
+                                  onError={handleError}
+                                />
+                                <button
+                                  onClick={() => {
+                                    setShowScanner(false);
+                                  }}
+                                >
+                                  Close Scanner
+                                </button>
+                              </div>
+                            )}
+
+                            {item.barcode && !isBarcode && (
+                              <div>
+                                <input
+                                  className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                                  type="text"
+                                  name="barcode"
+                                  value={item.barcode}
+                                  placeholder="Barcode"
+                                  onChange={(e) => {
+                                    handleItemAdd(e.target.value, "barcode");
+                                  }}
+                                />
+                              </div>
+                            )}
+
                             {isBarcode && (
                               <div>
                                 <input
                                   className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
-                                  type="barcode"
+                                  type="text"
                                   name="barcode"
                                   value={item.barcode}
                                   placeholder="Barcode"
@@ -635,7 +672,7 @@ const ReceiptFormItems = ({
           <Image src={item.photo[0].url} width={100} height={100} alt="img" />
         )}
 
-        <div className="text-sm flex flex-col gap-3 ">
+        <div className="text-sm flex flex-col gap-3 items-start">
           <div>
             <h1 className="text-slate-400 font-bold">Amount</h1>
             <h1>{item.price}</h1>

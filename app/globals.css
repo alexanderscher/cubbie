@@ -3,24 +3,36 @@
 @tailwind utilities;
 
 input {
-  -webkit-appearance: none; /* Chrome, Safari, Opera */
-  -moz-appearance: none; /* Firefox */
-  appearance: none; /* Standard */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.line-input {
+  border-bottom: 1.5px solid rgb(20 83 45);
+  border-radius: none;
+  outline: none;
+  background-color: #e2f1e2;
+  color: rgb(20 83 45);
+  width: 100%;
+  border-radius: 0;
+}
+input::placeholder {
+  color: rgb(20 83 45);
 }
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
-  -webkit-text-fill-color: rgb(0, 0, 0); /* Change the text color */
-  transition: background-color 5000s ease-in-out 0s; /* Prevents quick flash of autofill color */
+  -webkit-text-fill-color: rgb(0, 0, 0);
+  transition: background-color 5000s ease-in-out 0s;
   background-color: #e2f1e2;
 }
 
-/* If you want to change the shadow color for the autofill (optional) */
 input:-webkit-autofill::first-line {
-  font-family: inherit; /* Ensures consistent font */
-  font-size: inherit; /* Ensures consistent font size */
-  color: black !important; /* Adjust if necessary */
+  font-family: inherit;
+  font-size: inherit;
+  color: black !important;
 }
 
 .bg {

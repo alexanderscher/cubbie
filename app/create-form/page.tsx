@@ -130,7 +130,7 @@ const Create = () => {
                           <div className="flex flex-col gap-4">
                             <div>
                               <input
-                                className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                                className="line-input "
                                 type="description"
                                 placeholder="Description/Title"
                                 name="description"
@@ -143,7 +143,7 @@ const Create = () => {
 
                             <div>
                               <input
-                                className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                                className="line-input "
                                 type="price"
                                 value={item.price}
                                 name="price"
@@ -197,7 +197,7 @@ const Create = () => {
                             {item.barcode && !isBarcode && (
                               <div>
                                 <input
-                                  className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                                  className="line-input "
                                   type="text"
                                   name="barcode"
                                   value={item.barcode}
@@ -212,7 +212,7 @@ const Create = () => {
                             {isBarcode && (
                               <div>
                                 <input
-                                  className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                                  className="line-input "
                                   type="text"
                                   name="barcode"
                                   value={item.barcode}
@@ -327,40 +327,6 @@ const Create = () => {
                   case ReceiptStage.PREVIEW:
                     return (
                       <div className="flex flex-col gap-6">
-                        {isMobile && (
-                          <div className=" flex justify-between">
-                            <div className="flex justify-between gap-3">
-                              <RegularButton
-                                styles={"bg-orange-400 border-green-900 "}
-                                handleClick={() =>
-                                  handleStageClick(ReceiptStage.RECEIPT)
-                                }
-                              >
-                                <p className="text-green-900 text-sm">
-                                  Edit receipt
-                                </p>
-                              </RegularButton>
-                              <RegularButton
-                                styles={"bg-orange-400 border-green-900 "}
-                                handleClick={() =>
-                                  handleStageClick(ReceiptStage.ITEMS)
-                                }
-                              >
-                                <p className="text-green-900  text-sm">
-                                  Edit receipt items
-                                </p>
-                              </RegularButton>
-                            </div>
-                            <RegularButton
-                              submit
-                              styles={"bg-green-900 border-green-900 "}
-                              handleClick={() => handleSubmit()}
-                            >
-                              <p className="text-white text-sm">Submit</p>
-                            </RegularButton>
-                          </div>
-                        )}
-
                         <div className="receipts ">
                           <div className="flex flex-col gap-4">
                             <div className="flex flex-col gap-4 receipt-bar">
@@ -368,38 +334,28 @@ const Create = () => {
                                 {values.store}
                               </h1>
 
-                              <div>
-                                <div className="receipt-info">
-                                  <h1 className="text-slate-500">
-                                    Number of items
-                                  </h1>
-                                  <h1 className="">{values.items.length}</h1>
-                                </div>
-                                <div className="receipt-info">
-                                  <h1 className="text-slate-500">
-                                    Total Amount
-                                  </h1>
-                                  <h1 className="">{values.amount}</h1>
-                                </div>
+                              <div className="receipt-info">
+                                <h1 className="text-slate-500">
+                                  Number of items
+                                </h1>
+                                <h1 className="">{values.items.length}</h1>
                               </div>
-                              <div>
-                                <div className="receipt-info">
-                                  <h1 className="text-slate-500">
-                                    Date of purchase
-                                  </h1>
-                                  <h1 className=""> {values.boughtDate}</h1>
-                                </div>
-                                <div className="receipt-info">
-                                  <h1 className="text-slate-500">
-                                    Return Date
-                                  </h1>
-                                  <h1 className="">
-                                    {" "}
-                                    {values.finalReturnDate}
-                                  </h1>
-                                </div>
+                              <div className="receipt-info">
+                                <h1 className="text-slate-500">Total Amount</h1>
+                                <h1 className="">{values.amount}</h1>
                               </div>
-                            </div>
+
+                              <div className="receipt-info">
+                                <h1 className="text-slate-500">
+                                  Date of purchase
+                                </h1>
+                                <h1 className=""> {values.boughtDate}</h1>
+                              </div>
+                              <div className="receipt-info">
+                                <h1 className="text-slate-500">Return Date</h1>
+                                <h1 className=""> {values.finalReturnDate}</h1>
+                              </div>
+                            </div>{" "}
                             {values.receiptImage.length > 0 && (
                               <Image
                                 width={200}
@@ -422,6 +378,41 @@ const Create = () => {
                             ))}
                           </div>
                         </div>
+                        {isMobile && (
+                          <div className=" flex flex-col gap-6">
+                            <div className="flex justify-between gap-3">
+                              <RegularButton
+                                styles={"bg-orange-400 border-green-900 w-full"}
+                                submit
+                                handleClick={() =>
+                                  handleStageClick(ReceiptStage.RECEIPT)
+                                }
+                              >
+                                <p className="text-green-900 text-sm">
+                                  Edit receipt
+                                </p>
+                              </RegularButton>
+                              <RegularButton
+                                styles={"bg-orange-400 border-green-900 w-full"}
+                                submit
+                                handleClick={() =>
+                                  handleStageClick(ReceiptStage.ITEMS)
+                                }
+                              >
+                                <p className="text-green-900  text-sm">
+                                  Edit receipt items
+                                </p>
+                              </RegularButton>
+                            </div>
+                            <RegularButton
+                              submit
+                              styles={"bg-green-900 border-green-900 "}
+                              handleClick={() => handleSubmit()}
+                            >
+                              <p className="text-white ">Submit</p>
+                            </RegularButton>
+                          </div>
+                        )}
                         {!isMobile && (
                           <div className="fixed bottom-0 left-0 border-t-[1.5px] border-green-800 bg-white w-full p-4 flex justify-between">
                             <div className="flex justify-between gap-3">
@@ -465,7 +456,7 @@ const Create = () => {
                           <div className="flex flex-col gap-4">
                             <div>
                               <input
-                                className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                                className="line-input "
                                 type="store"
                                 placeholder="Store"
                                 name="store"
@@ -478,7 +469,7 @@ const Create = () => {
 
                             <div>
                               <input
-                                className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                                className="line-input "
                                 type="amount"
                                 placeholder="Amount"
                                 name="amount"
@@ -490,7 +481,7 @@ const Create = () => {
                             </div>
                             <div>
                               <input
-                                className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                                className="line-input "
                                 placeholder="Card"
                                 type="card"
                                 name="card"
@@ -502,7 +493,7 @@ const Create = () => {
                             </div>
                             <div>
                               <input
-                                className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                                className="line-input "
                                 placeholder="Bought Date"
                                 type="boughtDate"
                                 name="boughtDate"
@@ -514,7 +505,7 @@ const Create = () => {
                             </div>
                             <div>
                               <input
-                                className="border-b-[1.5px] w-full bg  border-green-900 placeholder:text-green-900  focus:outline-none"
+                                className="line-input "
                                 type="finalReturnDate"
                                 placeholder="Final Return Date"
                                 name="finalReturnDate"

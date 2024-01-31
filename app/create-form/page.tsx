@@ -177,6 +177,7 @@ const Create = () => {
                               <div>
                                 <h1>Scan a Barcode</h1>
                                 <BarcodeScanner
+                                  setShowScanner={setShowScanner}
                                   onResult={(result) => {
                                     handleItemAdd(result.text, "barcode");
                                     setShowScanner(false);

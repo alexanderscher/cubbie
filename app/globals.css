@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+input {
+  -webkit-appearance: none; /* Chrome, Safari, Opera */
+  -moz-appearance: none; /* Firefox */
+  appearance: none; /* Standard */
+}
+
 .bg {
   background-color: #e2f1e2;
 }

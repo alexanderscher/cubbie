@@ -729,16 +729,11 @@ const ReceiptFormItems = ({
         <h1 className="text-lg text-orange-500">{item.description}</h1>
       </div>
       <div className="flex gap-6 ">
-        <div className="w-24 h-32 overflow-hidden relative flex items-center justify-center rounded-md">
-          {item.photo.length > 0 ? (
+        {item.photo.length > 0 && (
+          <div className="w-24 h-32 overflow-hidden relative flex items-center justify-center rounded-md">
             <Image src={item.photo[0].url} width={100} height={100} alt="img" />
-          ) : (
-            <button className="border-[1.5px] border-green-900 w-full h-full text-sm text-green-900 m-[3.5px]">
-              Add Image
-            </button>
-          )}
-        </div>
-
+          </div>
+        )}
         <div className="text-sm flex flex-col gap-3 items-start">
           <div>
             <h1 className="text-slate-400 font-bold">Amount</h1>

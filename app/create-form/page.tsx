@@ -54,15 +54,18 @@ const Create = () => {
   const isMobile = useIsMobile();
   const [isBarcode, setIsBarcode] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
+  const [receiptImageError, setReceiptImageError] = useState({
+    error: false,
+    message: "",
+  });
+  const [itemImageError, setItemImageError] = useState({
+    error: false,
+    message: "",
+  });
 
   const [item, setItem] = useState({
     description: "",
-    photo: [
-      {
-        url: "",
-        key: "",
-      },
-    ],
+    photo: [] as Image[],
     price: "",
     barcode: "",
     asset: false,
@@ -93,10 +96,6 @@ const Create = () => {
     setStage(stagePage);
   };
 
-  const deletePhoto = async (img: string) => {
-    deleteUploadThingImage(img);
-  };
-
   const handleError = (error: any) => {
     // console.error("Scanning error:", error);
   };
@@ -116,7 +115,7 @@ const Create = () => {
             console.log(values);
           }}
         >
-          {({ handleSubmit, setFieldValue, values }) => (
+          {({ handleSubmit, setFieldValue, values, handleChange }) => (
             <form
               onSubmit={handleSubmit}
               className="w-full flex flex-col gap-10"
@@ -129,10 +128,12 @@ const Create = () => {
                         <div className="left-tab">
                           <div className="flex flex-col gap-4">
                             <div>
+                              <p className="text-sm text-green-900">
+                                Description/Title
+                              </p>
                               <input
-                                className="line-input "
+                                className="w-full bg border-[1.5px] border-green-900 p-1 rounded-md focus:outline-none"
                                 type="description"
-                                placeholder="Description/Title"
                                 name="description"
                                 value={item.description}
                                 onChange={(e) => {
@@ -142,28 +143,31 @@ const Create = () => {
                             </div>
 
                             <div>
+                              <p className="text-sm text-green-900">Price</p>
                               <input
-                                className="line-input "
+                                className="w-full bg border-[1.5px] border-green-900 p-1 rounded-md focus:outline-none"
                                 type="price"
                                 value={item.price}
                                 name="price"
-                                placeholder="Price"
                                 onChange={(e) => {
                                   handleItemAdd(e.target.value, "price");
                                 }}
                               />
                             </div>
-                            <div>
+
+                            <div className="flex gap-4">
                               <button
+                                className="border-[1.5px] border-green-900 w-full p-3 rounded-md text-green-900"
                                 onClick={() => {
                                   setShowScanner(true);
                                   setIsBarcode(false);
                                 }}
                                 disabled={showScanner}
                               >
-                                Open Scanner
+                                Scan barcode
                               </button>
                               <button
+                                className="border-[1.5px] border-green-900 w-full p-3 rounded-md text-green-900"
                                 onClick={() => {
                                   setShowScanner(false);
                                   setIsBarcode(!isBarcode);
@@ -196,12 +200,14 @@ const Create = () => {
 
                             {item.barcode && !isBarcode && (
                               <div>
+                                <p className="text-sm text-green-900">
+                                  Barcode #
+                                </p>
                                 <input
-                                  className="line-input "
+                                  className="w-full bg border-[1.5px] border-green-900 p-1 rounded-md focus:outline-none"
                                   type="text"
                                   name="barcode"
                                   value={item.barcode}
-                                  placeholder="Barcode"
                                   onChange={(e) => {
                                     handleItemAdd(e.target.value, "barcode");
                                   }}
@@ -211,38 +217,91 @@ const Create = () => {
 
                             {isBarcode && (
                               <div>
+                                <p className="text-sm text-green-900">
+                                  Barcode #
+                                </p>
                                 <input
-                                  className="line-input "
+                                  className="w-full bg border-[1.5px] border-green-900 p-1 rounded-md focus:outline-none"
                                   type="text"
                                   name="barcode"
                                   value={item.barcode}
-                                  placeholder="Barcode"
                                   onChange={(e) => {
                                     handleItemAdd(e.target.value, "barcode");
                                   }}
                                 />
                               </div>
                             )}
-                            <p>Image</p>
-                            <UploadButton
-                              appearance={{
-                                button:
-                                  "ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed bg-green-900  after:bg-orange-00 w-full",
-                              }}
-                              endpoint="imageUploader"
-                              content={{
-                                allowedContent: (
-                                  <div className="text-[12px] mt-2"></div>
-                                ),
-                              }}
-                              onClientUploadComplete={(res) => {
-                                console.log("Files: ", res);
-                                handleItemAdd(res, "photo");
-                              }}
-                              onUploadError={(error: Error) => {
-                                alert(`ERROR! ${error.message}`);
-                              }}
-                            />
+                            <div>
+                              <UploadButton
+                                appearance={{
+                                  button:
+                                    "mt-2 h-[60px] ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed bg-green-900  after:bg-orange-00 w-full",
+                                }}
+                                endpoint="imageUploader"
+                                content={{
+                                  button:
+                                    item.photo.length > 0
+                                      ? "Replace Image"
+                                      : "Add image of item",
+                                  allowedContent: receiptImageError.error && (
+                                    <div className="">
+                                      <p className="text-red-500">
+                                        {receiptImageError.message}
+                                      </p>
+                                    </div>
+                                  ),
+                                }}
+                                onClientUploadComplete={(res) => {
+                                  console.log("Files: ", res);
+
+                                  if (item.photo.length === 0) {
+                                    handleItemAdd(res, "photo");
+                                  } else {
+                                    deleteUploadThingImage(item.photo[0].key);
+                                    handleItemAdd(res, "photo");
+                                  }
+                                }}
+                                onUploadError={(error: Error) => {
+                                  let errorString = "";
+                                  if (
+                                    error.message ==
+                                    "Unable to get presigned urls"
+                                  ) {
+                                    errorString =
+                                      "An error occured, please try  another image";
+                                  } else {
+                                    errorString = error.message;
+                                  }
+                                  setReceiptImageError({
+                                    error: true,
+                                    message: error.message,
+                                  });
+                                }}
+                              />
+                            </div>
+
+                            {item.photo.length > 0 && (
+                              <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md">
+                                <button
+                                  onClick={() => {
+                                    deleteUploadThingImage(item.photo[0].key);
+                                    setItem({
+                                      ...item,
+                                      photo: [],
+                                    });
+                                  }}
+                                  className="absolute top-0 right-0 m-1  bg-green-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-xs"
+                                >
+                                  X
+                                </button>
+                                <Image
+                                  width={150}
+                                  height={150}
+                                  src={item.photo[0].url}
+                                  alt=""
+                                />
+                              </div>
+                            )}
 
                             <RegularButton
                               submit
@@ -273,16 +332,16 @@ const Create = () => {
                                   <p>{item.description}</p>
                                   <p>{item.barcode}</p>
                                   <p>{item.price}</p>
-                                  <button
+                                  {/* <button
                                     onClick={() => {
                                       const currentItems = values.items;
                                       currentItems.splice(index, 1);
                                       setFieldValue("items", currentItems);
-                                      // deletePhoto(item.photo[0].key);
+                                      deletePhoto(item.photo[0].key);
                                     }}
                                   >
                                     remove
-                                  </button>
+                                  </button> */}
                                 </div>
                               </div>
                             ))}
@@ -455,90 +514,129 @@ const Create = () => {
                           <h1>Receipt</h1>
                           <div className="flex flex-col gap-4">
                             <div>
+                              <p className="text-sm text-green-900">Store</p>
                               <input
-                                className="line-input "
+                                className="w-full bg border-[1.5px] border-green-900 p-1 rounded-md focus:outline-none"
                                 type="store"
-                                placeholder="Store"
                                 name="store"
                                 value={values.store}
-                                onChange={(e) =>
-                                  setFieldValue("store", e.target.value)
-                                }
+                                onChange={handleChange("store")}
                               />
                             </div>
 
                             <div>
+                              <p className="text-sm text-green-900">Amount</p>
                               <input
-                                className="line-input "
+                                className="w-full bg border-[1.5px] border-green-900 p-1 rounded-md focus:outline-none"
                                 type="amount"
-                                placeholder="Amount"
                                 name="amount"
                                 value={values.amount}
-                                onChange={(e) =>
-                                  setFieldValue("amount", e.target.value)
-                                }
+                                onChange={handleChange("amount")}
                               />
                             </div>
                             <div>
+                              <p className="text-sm text-green-900">Card</p>
                               <input
-                                className="line-input "
-                                placeholder="Card"
+                                className="w-full bg border-[1.5px] border-green-900 p-1 rounded-md focus:outline-none"
                                 type="card"
                                 name="card"
                                 value={values.card}
-                                onChange={(e) =>
-                                  setFieldValue("card", e.target.value)
-                                }
+                                onChange={handleChange("card")}
                               />
                             </div>
                             <div>
+                              <p className="text-sm text-green-900">
+                                Purchase Date
+                              </p>
                               <input
-                                className="line-input "
-                                placeholder="Bought Date"
+                                className="w-full bg border-[1.5px] border-green-900 p-1 rounded-md focus:outline-none"
                                 type="boughtDate"
                                 name="boughtDate"
                                 value={values.boughtDate}
-                                onChange={(e) =>
-                                  setFieldValue("boughtDate", e.target.value)
-                                }
+                                onChange={handleChange("boughtDate")}
                               />
                             </div>
                             <div>
+                              <p className="text-sm text-green-900">
+                                Return Date
+                              </p>
                               <input
-                                className="line-input "
+                                className="w-full bg border-[1.5px] border-green-900 p-1 rounded-md focus:outline-none"
                                 type="finalReturnDate"
-                                placeholder="Final Return Date"
-                                name="finalReturnDate"
                                 value={values.finalReturnDate}
-                                onChange={(e) =>
-                                  setFieldValue(
-                                    "finalReturnDate",
-                                    e.target.value
-                                  )
-                                }
+                                onChange={handleChange("finalReturnDate")}
                               />
                             </div>
                             <div className="w-full">
                               <UploadButton
                                 appearance={{
                                   button:
-                                    "ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed bg-green-900  after:bg-orange-00 w-full",
+                                    "mt-2 h-[60px] ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed bg-green-900  after:bg-orange-00 w-full ",
                                 }}
                                 endpoint="imageUploader"
                                 content={{
-                                  allowedContent: (
-                                    <div className="text-[12px] mt-2"></div>
+                                  button:
+                                    values.receiptImage.length > 0
+                                      ? "Replace Image"
+                                      : "Add image of receipt",
+                                  allowedContent: itemImageError.error && (
+                                    <div className="">
+                                      <p className="text-red-500">
+                                        {itemImageError.message}
+                                      </p>
+                                    </div>
                                   ),
                                 }}
                                 onClientUploadComplete={(res) => {
                                   console.log("Files: ", res);
-                                  setFieldValue("receiptImage", res);
+                                  if (values.receiptImage.length === 0) {
+                                    setFieldValue("receiptImage", res);
+                                  } else {
+                                    deleteUploadThingImage(
+                                      values.receiptImage[0].key
+                                    );
+                                    setFieldValue("receiptImage", res);
+                                  }
                                 }}
                                 onUploadError={(error: Error) => {
-                                  alert(`ERROR! ${error.message}`);
+                                  let errorString = "";
+                                  if (
+                                    error.message ==
+                                    "Unable to get presigned urls"
+                                  ) {
+                                    errorString =
+                                      "An error occured, please try  another image";
+                                  } else {
+                                    errorString = error.message;
+                                  }
+                                  setItemImageError({
+                                    error: true,
+                                    message: errorString,
+                                  });
                                 }}
                               />
                             </div>
+                            {values.receiptImage.length > 0 && (
+                              <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md">
+                                <button
+                                  onClick={() => {
+                                    deleteUploadThingImage(
+                                      values.receiptImage[0].key
+                                    );
+                                    setFieldValue("receiptImage", []);
+                                  }}
+                                  className="absolute top-0 right-0 m-1  bg-green-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-xs"
+                                >
+                                  X
+                                </button>
+                                <Image
+                                  width={150}
+                                  height={150}
+                                  src={values.receiptImage[0].url}
+                                  alt=""
+                                />
+                              </div>
+                            )}
                           </div>
 
                           <RegularButton
@@ -660,9 +758,11 @@ const ReceiptFormItems = ({
         <h1 className="text-lg text-orange-500">{item.description}</h1>
       </div>
       <div className="flex gap-6 ">
-        {item.photo.length > 0 && (
-          <Image src={item.photo[0].url} width={100} height={100} alt="img" />
-        )}
+        <div className="w-24 h-32 overflow-hidden relative flex items-center justify-center rounded-md">
+          {item.photo.length > 0 && (
+            <Image src={item.photo[0].url} width={100} height={100} alt="img" />
+          )}
+        </div>
 
         <div className="text-sm flex flex-col gap-3 items-start">
           <div>

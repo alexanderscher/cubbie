@@ -20,6 +20,9 @@ input {
 input::placeholder {
   color: rgb(20 83 45);
 }
+img {
+  background-color: white;
+}
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
@@ -137,6 +140,7 @@ input:-webkit-autofill::first-line {
 
 /* CSS for scanner */
 .scanner-style {
+  background-color: black;
   width: 100%;
   max-width: 600px;
   height: 400px;

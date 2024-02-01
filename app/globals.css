@@ -79,7 +79,8 @@ input:-webkit-autofill::first-line {
   display: flex;
   flex-direction: column;
   gap: 30px;
-  width: 350px;
+  width: 50%;
+  max-width: 500px;
   flex-shrink: 0; /* Add this to prevent shrinking */
 }
 .mobile-form-items {
@@ -88,11 +89,6 @@ input:-webkit-autofill::first-line {
 
 .receipt-bar {
   width: 300px;
-}
-
-.receipt-info {
-  display: flex;
-  flex-direction: column;
 }
 
 .receipt-grid {
@@ -179,9 +175,7 @@ input:-webkit-autofill::first-line {
   .receipts {
     flex-direction: column;
   }
-  .receipt-info {
-    justify-content: space-between;
-  }
+
   .receipt-bar {
     width: 100%;
   }
@@ -198,6 +192,7 @@ input:-webkit-autofill::first-line {
     background-color: white;
     padding: 16px;
     justify-content: space-between;
+    z-index: 1000;
   }
   .navbarItems {
     display: none;
@@ -215,6 +210,7 @@ input:-webkit-autofill::first-line {
     flex-direction: column;
     gap: 30px;
     width: 100%;
+    max-width: 800px;
   }
   .mobile-form-items {
     display: flex;

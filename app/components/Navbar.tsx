@@ -4,7 +4,6 @@ import Link from "next/link";
 import React from "react";
 
 const Navbar = () => {
-  const isMobile = useIsMobile();
   return (
     <div className="flex justify-between mb-10">
       <div className="flex gap-3">

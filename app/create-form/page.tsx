@@ -126,13 +126,13 @@ const Create = () => {
                     return (
                       <div className="two-tab">
                         <div className="left-tab">
-                          <div className="flex flex-col gap-4">
+                          <div className="flex flex-col gap-8">
                             <div>
                               <p className="text-sm text-green-900">
                                 Description/Title
                               </p>
                               <input
-                                className="w-full bg border-[1.5px] border-green-900 p-1 rounded-md focus:outline-none"
+                                className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
                                 type="description"
                                 name="description"
                                 value={item.description}
@@ -145,7 +145,7 @@ const Create = () => {
                             <div>
                               <p className="text-sm text-green-900">Price</p>
                               <input
-                                className="w-full bg border-[1.5px] border-green-900 p-1 rounded-md focus:outline-none"
+                                className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
                                 type="price"
                                 value={item.price}
                                 name="price"
@@ -204,7 +204,7 @@ const Create = () => {
                                   Barcode #
                                 </p>
                                 <input
-                                  className="w-full bg border-[1.5px] border-green-900 p-1 rounded-md focus:outline-none"
+                                  className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
                                   type="text"
                                   name="barcode"
                                   value={item.barcode}
@@ -221,7 +221,7 @@ const Create = () => {
                                   Barcode #
                                 </p>
                                 <input
-                                  className="w-full bg border-[1.5px] border-green-900 p-1 rounded-md focus:outline-none"
+                                  className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
                                   type="text"
                                   name="barcode"
                                   value={item.barcode}
@@ -235,14 +235,11 @@ const Create = () => {
                               <UploadButton
                                 appearance={{
                                   button:
-                                    "mt-2 h-[60px] ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed bg-green-900  after:bg-orange-00 w-full",
+                                    "ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed bg-green-900  after:bg-orange-00 w-full h-[100px]",
                                 }}
                                 endpoint="imageUploader"
                                 content={{
-                                  button:
-                                    item.photo.length > 0
-                                      ? "Replace Image"
-                                      : "Add image of item",
+                                  button: "Add image of item",
                                   allowedContent: receiptImageError.error && (
                                     <div className="">
                                       <p className="text-red-500">
@@ -262,16 +259,6 @@ const Create = () => {
                                   }
                                 }}
                                 onUploadError={(error: Error) => {
-                                  let errorString = "";
-                                  if (
-                                    error.message ==
-                                    "Unable to get presigned urls"
-                                  ) {
-                                    errorString =
-                                      "An error occured, please try  another image";
-                                  } else {
-                                    errorString = error.message;
-                                  }
                                   setReceiptImageError({
                                     error: true,
                                     message: error.message,
@@ -316,33 +303,14 @@ const Create = () => {
                           </div>
                           <div className="mobile-form-items">
                             {values.items.map((item, index) => (
-                              <div key={index} className="flex gap-4">
-                                {item.photo.length > 0 && (
-                                  <div className="w-1/4 max-w-[300px]">
-                                    <Image
-                                      src={item.photo[0]?.url}
-                                      alt=""
-                                      width={100}
-                                      height={100}
-                                    />
-                                  </div>
-                                )}
-
-                                <div>
-                                  <p>{item.description}</p>
-                                  <p>{item.barcode}</p>
-                                  <p>{item.price}</p>
-                                  {/* <button
-                                    onClick={() => {
-                                      const currentItems = values.items;
-                                      currentItems.splice(index, 1);
-                                      setFieldValue("items", currentItems);
-                                      deletePhoto(item.photo[0].key);
-                                    }}
-                                  >
-                                    remove
-                                  </button> */}
-                                </div>
+                              <div key={index} className="flex gap-4 w-full">
+                                <ReceiptFormItems
+                                  // removeItem={removeItem}
+                                  item={item}
+                                  setFieldValue={setFieldValue}
+                                  index={index}
+                                  edit
+                                />
                               </div>
                             ))}
                           </div>
@@ -416,12 +384,14 @@ const Create = () => {
                               </div>
                             </div>{" "}
                             {values.receiptImage.length > 0 && (
-                              <Image
-                                width={200}
-                                height={200}
-                                src={values.receiptImage[0].url}
-                                alt=""
-                              />
+                              <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md">
+                                <Image
+                                  width={200}
+                                  height={200}
+                                  src={values.receiptImage[0].url}
+                                  alt=""
+                                />
+                              </div>
                             )}
                           </div>
 
@@ -516,7 +486,7 @@ const Create = () => {
                             <div>
                               <p className="text-sm text-green-900">Store</p>
                               <input
-                                className="w-full bg border-[1.5px] border-green-900 p-1 rounded-md focus:outline-none"
+                                className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
                                 type="store"
                                 name="store"
                                 value={values.store}
@@ -527,7 +497,7 @@ const Create = () => {
                             <div>
                               <p className="text-sm text-green-900">Amount</p>
                               <input
-                                className="w-full bg border-[1.5px] border-green-900 p-1 rounded-md focus:outline-none"
+                                className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
                                 type="amount"
                                 name="amount"
                                 value={values.amount}
@@ -537,7 +507,7 @@ const Create = () => {
                             <div>
                               <p className="text-sm text-green-900">Card</p>
                               <input
-                                className="w-full bg border-[1.5px] border-green-900 p-1 rounded-md focus:outline-none"
+                                className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
                                 type="card"
                                 name="card"
                                 value={values.card}
@@ -549,7 +519,7 @@ const Create = () => {
                                 Purchase Date
                               </p>
                               <input
-                                className="w-full bg border-[1.5px] border-green-900 p-1 rounded-md focus:outline-none"
+                                className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
                                 type="boughtDate"
                                 name="boughtDate"
                                 value={values.boughtDate}
@@ -561,7 +531,7 @@ const Create = () => {
                                 Return Date
                               </p>
                               <input
-                                className="w-full bg border-[1.5px] border-green-900 p-1 rounded-md focus:outline-none"
+                                className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
                                 type="finalReturnDate"
                                 value={values.finalReturnDate}
                                 onChange={handleChange("finalReturnDate")}
@@ -571,7 +541,7 @@ const Create = () => {
                               <UploadButton
                                 appearance={{
                                   button:
-                                    "mt-2 h-[60px] ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed bg-green-900  after:bg-orange-00 w-full ",
+                                    "mt-3 ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed bg-green-900  after:bg-orange-00 w-full h-[100px]",
                                 }}
                                 endpoint="imageUploader"
                                 content={{
@@ -680,42 +650,43 @@ const Preview = ({ values, setFieldValue }: PreviewProps) => {
     setFieldValue("items", newItems);
   };
   return (
-    <div className="flex flex-col gap-6 w-3/4  preview border-l-[1.5px] border-green-900 pl-4 ">
-      <div className="flex  gap-4">
-        <div className="flex flex-col gap-10 w-1/4 min-w-[200px]">
-          <div className="flex flex-col gap-4 receipt-bar">
+    <div className="flex flex-col gap-6  preview border-l-[1.5px] border-green-900 pl-4 ">
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-2 ">
             {values.store ? (
               <h1 className="text-green-900 text-2xl ">{values.store}</h1>
             ) : (
               <h1 className="text-green-900 text-2xl ">Store</h1>
             )}
-
-            <div className="receipt-info">
+            <div className="flex justify-between">
               <h1 className="text-slate-500">Total Amount</h1>
               <h1 className="">{values.amount}</h1>
             </div>
-            <div className="receipt-info">
+            <div className="flex justify-between">
               <h1 className="text-slate-500">Card</h1>
               <h1 className="">{values.card}</h1>
             </div>
 
-            <div className="receipt-info">
+            <div className="flex justify-between">
               <h1 className="text-slate-500">Date of purchase</h1>
               <h1 className=""> {values.boughtDate}</h1>
             </div>
-            <div className="receipt-info">
+            <div className="flex justify-between">
               <h1 className="text-slate-500">Return Date</h1>
               <h1 className=""> {values.finalReturnDate}</h1>
             </div>
           </div>
           {values.receiptImage.length > 0 && (
-            <div className="w-full">
-              <Image
-                width={150}
-                height={150}
-                src={values.receiptImage[0].url}
-                alt=""
-              />
+            <div className="w-full flex justify-end">
+              <div className="w-24 h-50 overflow-hidden relative flex items-center justify-center rounded-md">
+                <Image
+                  width={150}
+                  height={150}
+                  src={values.receiptImage[0].url}
+                  alt=""
+                />
+              </div>
             </div>
           )}
         </div>
@@ -753,14 +724,18 @@ const ReceiptFormItems = ({
   edit = false,
 }: ReceiptFormItemsProps) => {
   return (
-    <div className="border-t-[1.5px] border-black flex flex-col gap-4 ">
+    <div className="border-t-[1.5px] border-black flex flex-col gap-4 w-full">
       <div className="flex justify-between">
         <h1 className="text-lg text-orange-500">{item.description}</h1>
       </div>
       <div className="flex gap-6 ">
         <div className="w-24 h-32 overflow-hidden relative flex items-center justify-center rounded-md">
-          {item.photo.length > 0 && (
+          {item.photo.length > 0 ? (
             <Image src={item.photo[0].url} width={100} height={100} alt="img" />
+          ) : (
+            <button className="border-[1.5px] border-green-900 w-full h-full text-sm text-green-900 m-[3.5px]">
+              Add Image
+            </button>
           )}
         </div>
 

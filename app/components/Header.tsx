@@ -38,9 +38,9 @@ const Header = () => {
             </Link>
           </RegularButton>
           <RegularButton styles={archiveColor}>
-            {/* <Link href="/items"> */}
-            <p className="text-xs sm:text-sm">Archive</p>
-            {/* </Link> */}
+            <Link href="/archive">
+              <p className="text-xs sm:text-sm">Archive</p>
+            </Link>
           </RegularButton>
           <select className="border-[1.5px] w-[100px] bg border-black rounded-md p-1 placeholder:text-black focus:outline-none"></select>
           {/* <RegularButton styles={"bg-black border-black text-white"}>

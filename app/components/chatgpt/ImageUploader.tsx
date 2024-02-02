@@ -2,13 +2,21 @@
 import { convertStringToJson } from "@/utils/strToJson";
 import { ChangeEvent, useState, FormEvent, use, useEffect } from "react";
 
+interface Choices {
+  message: {
+    content: string;
+  };
+}
+
 export default function ImageUploader() {
   const [image, setImage] = useState<string>("");
-  const [json, setJson] = useState([]);
+  const [json, setJson] = useState<Choices[]>([]);
+
   const [openAIResponse, setOpenAIResponse] = useState<string>();
 
   useEffect(() => {
     if (json.length > 0) {
+      console.log(json);
       const response = json[0].message.content;
       const newJson = convertStringToJson(response);
       console.log(newJson);
@@ -26,7 +34,6 @@ export default function ImageUploader() {
 
     reader.onload = () => {
       if (typeof reader.result === "string") {
-        // console.log(reader.result);
         setImage(reader.result);
       }
     };

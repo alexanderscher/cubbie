@@ -3,9 +3,15 @@ import ImageUploader from "@/app/components/chatgpt/ImageUploader";
 import React, { useEffect, useState } from "react";
 import { convertStringToJson } from "@/utils/strToJson";
 
+interface Choices {
+  message: {
+    content: string;
+  };
+}
+
 const Archive = () => {
   const [inputText, setInputText] = useState("");
-  const [json, setJson] = useState([]);
+  const [json, setJson] = useState<Choices[]>([]);
 
   useEffect(() => {
     if (json.length > 0) {
@@ -15,7 +21,9 @@ const Archive = () => {
     }
   }, [json]);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (
+    event
+  ) => {
     event.preventDefault();
     const response = await fetch("/api/gpt/analyze-input", {
       method: "POST",
@@ -25,9 +33,7 @@ const Archive = () => {
       body: JSON.stringify({ text: inputText }),
     });
 
-    const data = await response.json(); //
-    // console.log(data);
-
+    const data = await response.json();
     setJson(data.choices);
   };
   return (

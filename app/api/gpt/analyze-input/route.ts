@@ -1,28 +1,25 @@
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
+  console.log("Request received");
   try {
     const json = await request.json();
-    const image = json.image;
+    console.log(json.text);
     const api_key = process.env.OPENAI_API_KEY;
 
     const payload = {
-      model: "gpt-4-vision-preview",
+      model: "gpt-3.5-turbo-0125",
+      response_format: { type: "json_object" },
       messages: [
         {
+          role: "system",
+          content:
+            'You are a helpful assistant designed to output JSON. This is text of an online email receipt. Please parse it and return the JSON object. Please do not include any explanations, only provide a valid JSON response following this format without deviation. It should look like this: items:[{name:"",price:"",item_barcode:""}]}} Please do not start the object with ``json. If this does not look like a receipt, please type: "This is not a receipt."',
+        },
+        {
           role: "user",
-          //@ts-ignore
 
-          content: [
-            {
-              type: "text",
-              text: 'This image should be an image of a receipt. I need you top extract the data on the receipt. Do not include any explanations, only provide a valid JSON response following this format without deviation. Please disregard any markings made by pen or pencil. Each item on the receipt will typically be in bold text. Please focus on the bold text as the item name.  {receipt:{store:"",date_purchased:"",total_amount:"",receipt_barcode:"",items:[{name:"",price:"",item_barcode:""}]}} Please do not start the object with ``json',
-            },
-            {
-              type: "image_url",
-              image_url: image,
-            },
-          ],
+          content: `Here is the text: ${json.text}`,
         },
       ],
       max_tokens: 300,
@@ -38,6 +35,7 @@ export async function POST(request: Request) {
     });
 
     const data = await response.json();
+    console.log(data);
     return new NextResponse(JSON.stringify(data), {
       status: response.status,
       headers: {

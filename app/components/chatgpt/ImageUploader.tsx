@@ -44,7 +44,7 @@ export default function ImageUploader() {
       return;
     }
 
-    const res = await fetch("/api/analyze-image", {
+    const res = await fetch("/api/gpt/analyze-image", {
       // Ensure the path is correct based on your routing
       method: "POST",
       headers: {
@@ -62,6 +62,7 @@ export default function ImageUploader() {
     }
 
     const data = await res.json();
+    console.log(data);
     setJson(data.choices);
   };
 

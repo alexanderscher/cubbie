@@ -1,4 +1,3 @@
-import { convertStringToJson } from "@/utils/strToJson";
 import React, { useEffect, useState } from "react";
 
 interface Choices {
@@ -14,7 +13,7 @@ const TextGpt = () => {
   useEffect(() => {
     if (json.length > 0) {
       const response = json[0].message.content;
-      const newJson = convertStringToJson(response);
+      const newJson = JSON.parse(response);
       console.log(newJson);
     }
   }, [json]);

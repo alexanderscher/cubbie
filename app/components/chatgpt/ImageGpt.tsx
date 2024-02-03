@@ -1,6 +1,5 @@
 "use client";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { convertStringToJson } from "@/utils/strToJson";
 import Image from "next/image";
 import { ChangeEvent, useState, FormEvent, use, useEffect } from "react";
 
@@ -10,20 +9,14 @@ interface Choices {
   };
 }
 
-export default function ImageUploader() {
+interface Props {
+  setFieldValue: any;
+}
+
+export default function ImageGpt({ setFieldValue }: Props) {
   const [image, setImage] = useState<string>("");
-  const [json, setJson] = useState<Choices[]>([]);
-
-  const [openAIResponse, setOpenAIResponse] = useState<string>();
-
-  useEffect(() => {
-    if (json.length > 0) {
-      console.log(json);
-      const response = json[0].message.content;
-      const newJson = convertStringToJson(response);
-      console.log(newJson);
-    }
-  }, [json]);
+  const [array, setJson] = useState([]);
+  console.log(array);
 
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files === null) {
@@ -33,28 +26,23 @@ export default function ImageUploader() {
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
-
     reader.onload = () => {
       if (typeof reader.result === "string") {
         setImage(reader.result);
       }
     };
-
     reader.onerror = (error) => {
       console.log("error: " + error);
     };
   }
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (image === "") {
-      alert("Upload an image.");
-      return;
-    }
+  const handleSubmit = async () => {
+    // if (image === "") {
+    //   alert("Upload an image.");
+    //   return;
+    // }
 
     const res = await fetch("/api/gpt/analyze-image", {
-      // Ensure the path is correct based on your routing
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -66,13 +54,29 @@ export default function ImageUploader() {
 
     if (!res.ok) {
       console.error("Failed to fetch data");
-      // Handle error
+
       return;
     }
 
     const data = await res.json();
-    console.log(data);
-    setJson(data.choices);
+    // console.log(convertStringToJson(data));
+    // const jsonData = convertStringToJson(data.choices[0].message.content);
+    console.log(data.choices[0].message.content);
+
+    var jsonObject = JSON.parse(data.choices[0].message.content);
+    // var jsonObject = JSON.parse(data);
+    console.log(jsonObject);
+
+    setFieldValue("amount", jsonObject.receipt.total_amount);
+    setFieldValue("boughtDate", jsonObject.receipt.date_purchased);
+
+    setFieldValue("items", jsonObject.receipt.items);
+
+    // setFieldValue("items", jsonObject.receipt.items);
+
+    // setFieldValue("items", jsonObject.items);
+
+    // setJson(data.choices);
   };
 
   return (
@@ -91,7 +95,7 @@ export default function ImageUploader() {
           </div>
         )}
         <div>
-          <form onSubmit={(e) => handleSubmit(e)}>
+          <div>
             <div className="flex flex-col mb-6">
               <input
                 type="file"
@@ -101,11 +105,11 @@ export default function ImageUploader() {
             </div>
 
             <div className="flex justify-center">
-              <RegularButton styles="" type="submit">
+              <RegularButton styles="" type="submit" handleClick={handleSubmit}>
                 Analzye Receipt
               </RegularButton>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>

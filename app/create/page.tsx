@@ -11,6 +11,7 @@ import { BarcodeScanner } from "@/app/components/BarcodeScanner";
 import LargeButton from "@/app/components/buttons/LargeButton";
 import TextGpt from "@/app/components/chatgpt/TextGpt";
 import ImageGpt from "@/app/components/chatgpt/ImageGpt";
+import Receipt from "@/app/components/Receipt";
 
 enum ReceiptStage {
   METHOD = "METHOD",
@@ -33,6 +34,7 @@ interface Image {
 }
 
 interface ReceiptInput {
+  type: string;
   store: string;
   receiptNumber: string;
   card: string;
@@ -44,6 +46,7 @@ interface ReceiptInput {
 }
 
 const DEFAULT_INPUT_VALUES: ReceiptInput = {
+  type: "",
   store: "",
   receiptNumber: "",
   card: "",
@@ -55,6 +58,7 @@ const DEFAULT_INPUT_VALUES: ReceiptInput = {
 };
 
 const Create = () => {
+  const isMobile = useIsMobile();
   const [stage, setStage] = useState<ReceiptStage>(ReceiptStage.METHOD);
   const [showScanner, setShowScanner] = useState(false);
   const [isBarcode, setIsBarcode] = useState(false);
@@ -69,7 +73,6 @@ const Create = () => {
 
   const handleItemAdd = (value: any, type: string) => {
     setItem({ ...item, [type]: value });
-    console.log(value);
   };
 
   const addItemToFormik = (setFieldValue: any, values: ReceiptInput) => {
@@ -96,23 +99,42 @@ const Create = () => {
   return (
     <div className="flex ">
       <div className="w-full flex flex-col gap-8 ">
-        <div className="flex justify-between items-center">
-          <h1 className="xs:text-3xl text-2xl text-green-900  ">
-            Create new receipt
-          </h1>
-        </div>
-
         <Formik
           initialValues={DEFAULT_INPUT_VALUES}
           onSubmit={(values) => {
             console.log(values);
           }}
         >
-          {({ handleSubmit, setFieldValue, values, handleChange }) => (
+          {({
+            handleSubmit,
+            setFieldValue,
+            values,
+            handleChange,
+            resetForm,
+          }) => (
             <form
               onSubmit={handleSubmit}
               className="w-full flex flex-col gap-10 "
             >
+              <div className="flex justify-between items-center">
+                <h1 className="xs:text-3xl text-2xl text-green-900  ">
+                  Create new receipt
+                </h1>
+                {stage !== ReceiptStage.METHOD && (
+                  <RegularButton
+                    submit
+                    styles={"bg-orange-400 border-green-900"}
+                    handleClick={() => {
+                      {
+                        setStage(ReceiptStage.METHOD);
+                        resetForm({ values: DEFAULT_INPUT_VALUES });
+                      }
+                    }}
+                  >
+                    <p className="text-green-900 ">Discard</p>
+                  </RegularButton>
+                )}
+              </div>
               {(() => {
                 switch (stage) {
                   case ReceiptStage.METHOD:
@@ -121,7 +143,7 @@ const Create = () => {
                         className="flex flex-col h-full justify-center items-center"
                         style={{ height: "calc(100vh - 250px)" }}
                       >
-                        <div className="w-[500px] gap-8 flex flex-col justify-center items-center">
+                        <div className="w-[600px] gap-8 flex flex-col justify-center items-center">
                           <div className="flex justify-start w-full">
                             <h1 className="text-2xl items-start text-green-800">
                               Choose Receipt Type
@@ -131,19 +153,31 @@ const Create = () => {
                           <div className="flex w-full gap-7">
                             <LargeButton
                               styles={"h-[200px] bg-green-100"}
-                              handleClick={() =>
-                                setStage(ReceiptStage.ONLINE_RECEIPT)
-                              }
+                              handleClick={() => {
+                                setFieldValue("type", "online");
+                                setStage(ReceiptStage.ONLINE_RECEIPT);
+                                // if (values.type !== "online") {
+                                //   resetForm({ values: DEFAULT_INPUT_VALUES });
+                                // }
+                              }}
                             >
                               <p>Online</p>
                             </LargeButton>
                             <LargeButton
                               styles={"h-[200px] bg-green-100"}
-                              handleClick={() =>
-                                setStage(ReceiptStage.IN_STORE_RECEIPT)
-                              }
+                              handleClick={() => {
+                                setFieldValue("type", "store");
+                                setStage(ReceiptStage.IN_STORE_RECEIPT);
+
+                                // if (values.type !== "store") {
+                                //   resetForm({ values: DEFAULT_INPUT_VALUES });
+                                // }
+                              }}
                             >
                               <p>In Store</p>
+                            </LargeButton>
+                            <LargeButton styles={"h-[200px] bg-green-100"}>
+                              <p>Edit Existing Receipt</p>
                             </LargeButton>
                           </div>
                         </div>
@@ -317,7 +351,7 @@ const Create = () => {
                   case ReceiptStage.ONLINE_ITEMS:
                     return (
                       <div className="two-tab ">
-                        <div className="left-tab h-screen pb-[200px]">
+                        <div className="left-tab pb-[200px]">
                           <TextGpt />
                           <div className="flex flex-col gap-8">
                             <div>
@@ -537,8 +571,8 @@ const Create = () => {
 
                   case ReceiptStage.IN_STORE_RECEIPT:
                     return (
-                      <div className="two-tab">
-                        <div className="left-tab h-screen">
+                      <div className="two-tab ">
+                        <div className="left-tab">
                           <ImageGpt setFieldValue={setFieldValue} />
                           <div className="flex gap-2">
                             <RegularButton
@@ -569,6 +603,148 @@ const Create = () => {
                           setFieldValue={setFieldValue}
                           values={values}
                         />
+                      </div>
+                    );
+                  case ReceiptStage.PREVIEW:
+                    return (
+                      <div className="flex flex-col gap-6">
+                        <div className="receipts ">
+                          <div className="flex flex-col gap-4">
+                            <div className="flex flex-col gap-4 receipt-bar">
+                              <h1 className="text-green-900 text-2xl ">
+                                {values.store}
+                              </h1>
+                              <h1 className="text-green-900 text-2xl ">
+                                {values.type}
+                              </h1>
+
+                              <div className="receipt-info">
+                                <h1 className="text-slate-500">
+                                  Number of items
+                                </h1>
+                                <h1 className="">{values.items.length}</h1>
+                              </div>
+                              <div className="receipt-info">
+                                <h1 className="text-slate-500">Total Amount</h1>
+                                <h1 className="">{values.amount}</h1>
+                              </div>
+
+                              <div className="receipt-info">
+                                <h1 className="text-slate-500">
+                                  Date of purchase
+                                </h1>
+                                <h1 className=""> {values.boughtDate}</h1>
+                              </div>
+                              <div className="receipt-info">
+                                <h1 className="text-slate-500">Return Date</h1>
+                                <h1 className=""> {values.finalReturnDate}</h1>
+                              </div>
+                            </div>{" "}
+                            {values.receiptImage.length > 0 && (
+                              <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md">
+                                <Image
+                                  width={200}
+                                  height={200}
+                                  src={values.receiptImage[0].url}
+                                  alt=""
+                                />
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="grid grid-cols-3 gap-10 receipt-grid mb-[100px]">
+                            {values.items.map((item, index) => (
+                              <div key={index}>
+                                <ReceiptFormItems
+                                  item={item}
+                                  index={index}
+                                  setFieldValue={setFieldValue}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        {isMobile && (
+                          <div className=" flex flex-col gap-6">
+                            <div className="flex justify-between gap-3">
+                              <RegularButton
+                                styles={"bg-orange-400 border-green-900 w-full"}
+                                submit
+                                handleClick={() => {
+                                  if (values.type === "online") {
+                                    setStage(ReceiptStage.ONLINE_RECEIPT);
+                                  }
+                                  if (values.type === "store") {
+                                    setStage(ReceiptStage.IN_STORE_RECEIPT);
+                                  }
+                                }}
+                              >
+                                <p className="text-green-900 text-sm">
+                                  Edit receipt
+                                </p>
+                              </RegularButton>
+                              {values.type === "online" && (
+                                <RegularButton
+                                  styles={
+                                    "bg-orange-400 border-green-900 w-full"
+                                  }
+                                  submit
+                                  // handleClick={() => setStage(ReceiptStage.ITEMS)}
+                                >
+                                  <p className="text-green-900  text-sm">
+                                    Edit receipt items
+                                  </p>
+                                </RegularButton>
+                              )}
+                            </div>
+                            <RegularButton
+                              submit
+                              styles={"bg-green-900 border-green-900 "}
+                              handleClick={() => handleSubmit()}
+                            >
+                              <p className="text-white ">Submit</p>
+                            </RegularButton>
+                          </div>
+                        )}
+                        {!isMobile && (
+                          <div className="fixed bottom-0 left-0 border-t-[1.5px] border-green-800 bg-white w-full p-4 flex justify-between">
+                            <div className="flex justify-between gap-3">
+                              <RegularButton
+                                styles={"bg-orange-400 border-green-900 "}
+                                handleClick={() => {
+                                  if (values.type === "online") {
+                                    setStage(ReceiptStage.ONLINE_RECEIPT);
+                                  }
+                                  if (values.type === "store") {
+                                    setStage(ReceiptStage.IN_STORE_RECEIPT);
+                                  }
+                                }}
+                              >
+                                <p className="text-green-900 text-sm">
+                                  Edit receipt
+                                </p>
+                              </RegularButton>
+                              {values.type === "online" && (
+                                <RegularButton
+                                  styles={"bg-orange-400 border-green-900 "}
+                                  handleClick={() =>
+                                    setStage(ReceiptStage.ONLINE_ITEMS)
+                                  }
+                                >
+                                  <p className="text-green-900  text-sm">
+                                    Edit receipt items
+                                  </p>
+                                </RegularButton>
+                              )}
+                            </div>
+                            <RegularButton
+                              styles={"bg-green-900 border-green-900 "}
+                              handleClick={() => handleSubmit()}
+                            >
+                              <p className="text-white text-sm">Submit</p>
+                            </RegularButton>
+                          </div>
+                        )}
                       </div>
                     );
                 }

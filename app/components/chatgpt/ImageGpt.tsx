@@ -3,12 +3,6 @@ import RegularButton from "@/app/components/buttons/RegularButton";
 import Image from "next/image";
 import { ChangeEvent, useState, FormEvent, use, useEffect } from "react";
 
-interface Choices {
-  message: {
-    content: string;
-  };
-}
-
 interface Props {
   setFieldValue: any;
 }
@@ -61,14 +55,14 @@ export default function ImageGpt({ setFieldValue }: Props) {
     const data = await res.json();
     // console.log(convertStringToJson(data));
     // const jsonData = convertStringToJson(data.choices[0].message.content);
-    console.log(data.choices[0].message.content);
+    // console.log(data.choices[0].message.content);
 
-    var jsonObject = JSON.parse(data.choices[0].message.content);
-    // var jsonObject = JSON.parse(data);
-    console.log(jsonObject);
+    // var jsonObject = JSON.parse(data.choices[0].message.content);
+    var jsonObject = JSON.parse(data);
 
     setFieldValue("amount", jsonObject.receipt.total_amount);
     setFieldValue("boughtDate", jsonObject.receipt.date_purchased);
+    setFieldValue("store", jsonObject.receipt.store);
 
     setFieldValue("items", jsonObject.receipt.items);
 

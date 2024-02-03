@@ -29,6 +29,7 @@ interface Image {
 
 interface ReceiptInput {
   store: string;
+  type: string;
   receiptNumber: string;
   card: string;
   amount: "";
@@ -40,6 +41,7 @@ interface ReceiptInput {
 
 const DEFAULT_INPUT_VALUES: ReceiptInput = {
   store: "",
+  type: "",
   receiptNumber: "",
   card: "",
   amount: "",

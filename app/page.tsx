@@ -13,10 +13,10 @@ export default function Home() {
   };
 
   return (
-    <main className="flex flex-col ">
+    <main className="flex flex-col pb-[400px]">
       <Header />
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-3 gap-6 ">
         {dataArray.map((item, index) => (
           <div key={index}>
             <Receipt />

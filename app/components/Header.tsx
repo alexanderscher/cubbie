@@ -1,12 +1,10 @@
 "use client";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { useIsMobile } from "@/utils/useIsMobile";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
 const Header = () => {
-  const isMobile = useIsMobile();
   const pathname = usePathname();
   const receiptColor =
     pathname === "/"
@@ -43,11 +41,6 @@ const Header = () => {
             </Link>
           </RegularButton>
           <select className="border-[1.5px] w-[100px] bg border-black rounded-md p-1 placeholder:text-black focus:outline-none"></select>
-          {/* <RegularButton styles={"bg-black border-black text-white"}>
-            <Link href="/create-receipt">
-              <p className="text-xs sm:text-sm">Create New</p>
-            </Link>
-          </RegularButton> */}
         </div>
       </div>
       <div className="flex gap-2">

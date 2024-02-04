@@ -82,13 +82,13 @@ const Create = () => {
               className="w-full flex flex-col gap-10 "
             >
               <div className="flex justify-between items-center">
-                <h1 className="xs:text-3xl text-2xl text-green-900  ">
+                <h1 className="xs:text-3xl text-2xl text-green-900 ">
                   Create new receipt
                 </h1>
                 {stage !== ReceiptStage.METHOD && (
                   <RegularButton
                     submit
-                    styles={"bg-orange-400 border-green-900"}
+                    styles="bg border-green-900"
                     handleClick={() => {
                       {
                         setStage(ReceiptStage.METHOD);
@@ -96,7 +96,7 @@ const Create = () => {
                       }
                     }}
                   >
-                    <p className="text-green-900 ">Discard</p>
+                    <p className="text-green-900 text-sm">Discard</p>
                   </RegularButton>
                 )}
               </div>
@@ -151,7 +151,7 @@ const Create = () => {
                   case ReceiptStage.ONLINE_RECEIPT:
                     return (
                       <div className="two-tab ">
-                        <div className="left-tab ">
+                        <div className="left-tab">
                           <h1>Receipt</h1>
                           <div className="flex flex-col gap-4">
                             <div>
@@ -395,7 +395,10 @@ const Create = () => {
                     return (
                       <div className="two-tab ">
                         <div className="left-tab">
-                          <ImageGpt setFieldValue={setFieldValue} />
+                          <ImageGpt
+                            setFieldValue={setFieldValue}
+                            values={values}
+                          />
                           {/* <div className="mobile-form-items ">
                             {values.items.map((item, index) => (
                               <div key={index} className="flex gap-4 w-full">

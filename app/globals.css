@@ -86,6 +86,7 @@ input:-webkit-autofill::first-line {
   width: 50%;
   max-width: 400px;
   flex-shrink: 0;
+
   /* padding-bottom: 200px; */
   /* height: 100vh; */
 }
@@ -102,6 +103,12 @@ input:-webkit-autofill::first-line {
 }
 .preview {
   width: 100%;
+  border-left: 1.5px solid rgb(20 83 45);
+  padding-left: 16px;
+  min-height: 100vh;
+  height: 100%;
+  overflow-y: auto; /* Enable vertical scrolling */
+  flex-grow: 1;
 }
 
 .box-style {
@@ -169,9 +176,12 @@ input:-webkit-autofill::first-line {
   .grid {
     grid-template-columns: 1fr;
   }
-  /* .preview {
-    display: none;
-  } */
+  .preview {
+    border-left: none;
+    padding-left: 0px;
+    height: auto;
+    min-height: auto;
+  }
   .header {
     flex-direction: column;
     align-items: start;
@@ -210,6 +220,7 @@ input:-webkit-autofill::first-line {
     display: flex;
     gap: 40px;
     flex-direction: column;
+    position: relative;
   }
   .left-tab {
     display: flex;

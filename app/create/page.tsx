@@ -342,7 +342,7 @@ const Create = () => {
                             </RegularButton>
                           </div>
                           {onlineType === "gpt" ? (
-                            <TextGpt />
+                            <TextGpt setFieldValue={setFieldValue} />
                           ) : (
                             <OnlineReceiptManual
                               setFieldValue={setFieldValue}

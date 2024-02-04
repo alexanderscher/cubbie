@@ -12,8 +12,6 @@ interface Props {
 
 export default function ImageGpt({ setFieldValue, values }: Props) {
   const [image, setImage] = useState<string>("");
-  console.log(image);
-  const [array, setJson] = useState([]);
 
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files === null) {
@@ -56,24 +54,18 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
     }
 
     const data = await res.json();
-    // console.log(convertStringToJson(data));
-    // const jsonData = convertStringToJson(data.choices[0].message.content);
-    // console.log(data.choices[0].message.content);
 
-    // var jsonObject = JSON.parse(data.choices[0].message.content);
-    var jsonObject = JSON.parse(data);
+    // const jsonObject = JSON.parse(data.choices[0].message.content);
+    // setFieldValue("items", jsonObject.receipt.items);
+    // setFieldValue("amount", jsonObject.receipt.total_amount);
+    // setFieldValue("boughtDate", jsonObject.receipt.date_purchased);
+    // setFieldValue("store", jsonObject.receipt.store);
 
+    const jsonObject = JSON.parse(data);
     setFieldValue("amount", jsonObject.receipt.total_amount);
     setFieldValue("boughtDate", jsonObject.receipt.date_purchased);
     setFieldValue("store", jsonObject.receipt.store);
-
     setFieldValue("items", jsonObject.receipt.items);
-
-    // setFieldValue("items", jsonObject.receipt.items);
-
-    // setFieldValue("items", jsonObject.items);
-
-    // setJson(data.choices);
   };
 
   return (

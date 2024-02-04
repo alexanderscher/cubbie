@@ -1,23 +1,12 @@
 import RegularButton from "@/app/components/buttons/RegularButton";
 import React, { useEffect, useState } from "react";
 
-interface Choices {
-  message: {
-    content: string;
-  };
+interface Props {
+  setFieldValue: any;
 }
 
-const TextGpt = () => {
+const TextGpt = ({ setFieldValue }: Props) => {
   const [inputText, setInputText] = useState("");
-  const [json, setJson] = useState<Choices[]>([]);
-
-  useEffect(() => {
-    if (json.length > 0) {
-      const response = json[0].message.content;
-      const newJson = JSON.parse(response);
-      console.log(newJson);
-    }
-  }, [json]);
 
   const handleSubmit = async () => {
     const response = await fetch("/api/gpt/analyze-input", {
@@ -29,7 +18,12 @@ const TextGpt = () => {
     });
 
     const data = await response.json();
-    setJson(data.choices);
+    console.log(data);
+    setFieldValue("items", data);
+
+    // const items = JSON.parse(data.choices[0].message.content);
+    // setFieldValue("items", items.items);
+    // console.log(items.items);
   };
   return (
     <div>

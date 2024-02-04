@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
 
-export async function POST(request: Request) {
-  console.log("Request received");
-
-  const data = `{
+const DATA = `{
     "receipt": {
       "store": "Macy's FORT COLLINS FOOTHILLS FASHION",
       "date_purchased": "4/28/2012",
@@ -34,7 +31,8 @@ export async function POST(request: Request) {
     }
   }`;
 
-  return new NextResponse(JSON.stringify(data), {
+export async function POST(request: Request) {
+  return new NextResponse(JSON.stringify(DATA), {
     headers: {
       "Content-Type": "application/json",
     },

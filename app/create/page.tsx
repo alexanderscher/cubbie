@@ -11,7 +11,6 @@ import { BarcodeScanner } from "@/app/components/BarcodeScanner";
 import LargeButton from "@/app/components/buttons/LargeButton";
 import TextGpt from "@/app/components/chatgpt/TextGpt";
 import ImageGpt from "@/app/components/chatgpt/ImageGpt";
-import Receipt from "@/app/components/Receipt";
 
 enum ReceiptStage {
   METHOD = "METHOD",
@@ -60,41 +59,7 @@ const DEFAULT_INPUT_VALUES: ReceiptInput = {
 const Create = () => {
   const isMobile = useIsMobile();
   const [stage, setStage] = useState<ReceiptStage>(ReceiptStage.METHOD);
-  const [showScanner, setShowScanner] = useState(false);
-  const [isBarcode, setIsBarcode] = useState(false);
-
-  const [item, setItem] = useState({
-    description: "",
-    photo: [] as Image[],
-    price: "",
-    barcode: "",
-    asset: false,
-  });
-
-  const handleItemAdd = (value: any, type: string) => {
-    setItem({ ...item, [type]: value });
-  };
-
-  const addItemToFormik = (setFieldValue: any, values: ReceiptInput) => {
-    const currentItems = values.items;
-    if (item.photo.length > 0 && item.photo[0].url === "") {
-      item.photo = [];
-    }
-
-    setFieldValue("items", [...currentItems, item]);
-
-    setItem({
-      description: "",
-      photo: [],
-      price: "",
-      barcode: "",
-      asset: false,
-    });
-  };
-
-  const handleError = (error: any) => {
-    // console.error("Scanning error:", error);
-  };
+  const [onlineType, setOnlineType] = useState("gpt");
 
   return (
     <div className="flex ">
@@ -186,7 +151,7 @@ const Create = () => {
                   case ReceiptStage.ONLINE_RECEIPT:
                     return (
                       <div className="two-tab ">
-                        <div className="left-tab h-screen">
+                        <div className="left-tab ">
                           <h1>Receipt</h1>
                           <div className="flex flex-col gap-4">
                             <div>
@@ -316,6 +281,7 @@ const Create = () => {
                               </div>
                             )}
                           </div>
+
                           <div className="flex gap-2">
                             <RegularButton
                               submit
@@ -351,195 +317,51 @@ const Create = () => {
                   case ReceiptStage.ONLINE_ITEMS:
                     return (
                       <div className="two-tab ">
-                        <div className="left-tab pb-[200px]">
-                          <TextGpt />
-                          <div className="flex flex-col gap-8">
-                            <div>
-                              <p className="text-sm text-green-900">
-                                Description/Title
-                              </p>
-                              <input
-                                className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
-                                type="description"
-                                name="description"
-                                value={item.description}
-                                onChange={(e) => {
-                                  handleItemAdd(e.target.value, "description");
-                                }}
-                              />
-                            </div>
-
-                            <div>
-                              <p className="text-sm text-green-900">Price</p>
-                              <input
-                                className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
-                                type="price"
-                                value={item.price}
-                                name="price"
-                                onChange={(e) => {
-                                  handleItemAdd(e.target.value, "price");
-                                }}
-                              />
-                            </div>
-
-                            <div className="flex gap-4">
-                              <button
-                                className="border-[1.5px] border-green-900 w-full p-3 rounded-md text-green-900"
-                                onClick={() => {
-                                  setShowScanner(true);
-                                  setIsBarcode(false);
-                                }}
-                                disabled={showScanner}
-                              >
-                                Scan barcode
-                              </button>
-                              <button
-                                className="border-[1.5px] border-green-900 w-full p-3 rounded-md text-green-900"
-                                onClick={() => {
-                                  setShowScanner(false);
-                                  setIsBarcode(!isBarcode);
-                                }}
-                              >
-                                Input barcode
-                              </button>
-                            </div>
-
-                            {showScanner && (
-                              <div>
-                                <h1>Scan a Barcode</h1>
-                                <BarcodeScanner
-                                  setShowScanner={setShowScanner}
-                                  onResult={(result) => {
-                                    handleItemAdd(result.text, "barcode");
-                                    setShowScanner(false);
-                                  }}
-                                  onError={handleError}
-                                />
-                                <button
-                                  onClick={() => {
-                                    setShowScanner(false);
-                                  }}
-                                >
-                                  Close Scanner
-                                </button>
-                              </div>
-                            )}
-
-                            {item.barcode && !isBarcode && (
-                              <div>
-                                <p className="text-sm text-green-900">
-                                  Barcode #
-                                </p>
-                                <input
-                                  className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
-                                  type="text"
-                                  name="barcode"
-                                  value={item.barcode}
-                                  onChange={(e) => {
-                                    handleItemAdd(e.target.value, "barcode");
-                                  }}
-                                />
-                              </div>
-                            )}
-
-                            {isBarcode && (
-                              <div>
-                                <p className="text-sm text-green-900">
-                                  Barcode #
-                                </p>
-                                <input
-                                  className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
-                                  type="text"
-                                  name="barcode"
-                                  value={item.barcode}
-                                  onChange={(e) => {
-                                    handleItemAdd(e.target.value, "barcode");
-                                  }}
-                                />
-                              </div>
-                            )}
-                            <div>
-                              <UploadButton
-                                appearance={{
-                                  button:
-                                    "ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed bg-green-900  after:bg-orange-00 w-full h-[100px]",
-                                }}
-                                endpoint="imageUploader"
-                                // content={{
-                                //   button: "Add image of item",
-                                //   allowedContent: receiptImageError.error && (
-                                //     <div className="">
-                                //       <p className="text-red-500">
-                                //         {receiptImageError.message}
-                                //       </p>
-                                //     </div>
-                                //   ),
-                                // }}
-                                onClientUploadComplete={(res) => {
-                                  console.log("Files: ", res);
-
-                                  if (item.photo.length === 0) {
-                                    handleItemAdd(res, "photo");
-                                  } else {
-                                    deleteUploadThingImage(item.photo[0].key);
-                                    handleItemAdd(res, "photo");
-                                  }
-                                }}
-                                // onUploadError={(error: Error) => {
-                                //   setReceiptImageError({
-                                //     error: true,
-                                //     message: error.message,
-                                //   });
-                                // }}
-                              />
-                            </div>
-
-                            {item.photo.length > 0 && (
-                              <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md">
-                                <button
-                                  onClick={() => {
-                                    deleteUploadThingImage(item.photo[0].key);
-                                    setItem({
-                                      ...item,
-                                      photo: [],
-                                    });
-                                  }}
-                                  className="absolute top-0 right-0 m-1  bg-green-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-xs"
-                                >
-                                  X
-                                </button>
-                                <Image
-                                  width={150}
-                                  height={150}
-                                  src={item.photo[0].url}
-                                  alt=""
-                                />
-                              </div>
-                            )}
+                        <div className="left-tab">
+                          <div className="w-full flex justify-between">
+                            <RegularButton
+                              styles={`${
+                                onlineType === "manual"
+                                  ? "bg-black text-white"
+                                  : "text-black"
+                              } border-black`}
+                              handleClick={() => setOnlineType("manual")}
+                            >
+                              <p className=" text-sm">Add Items Manually</p>
+                            </RegularButton>
 
                             <RegularButton
-                              submit
-                              styles={"border-green-900 bg-green-900 w-full"}
-                              handleClick={() => {
-                                addItemToFormik(setFieldValue, values);
-                                console.log(values);
-                              }}
+                              styles={`${
+                                onlineType === "gpt"
+                                  ? "bg-black text-white"
+                                  : "text-black"
+                              } border-black`}
+                              handleClick={() => setOnlineType("gpt")}
                             >
-                              <p className="text-white text-sm">Add Item</p>
+                              <p className=" text-sm">Analyze online receipt</p>
                             </RegularButton>
                           </div>
-                          <div className="mobile-form-items ">
+                          {onlineType === "gpt" ? (
+                            <TextGpt />
+                          ) : (
+                            <OnlineReceiptManual
+                              setFieldValue={setFieldValue}
+                              values={values}
+                            />
+                          )}
+
+                          {/* <div className="mobile-form-items ">
                             {values.items.map((item, index) => (
                               <div key={index} className="flex gap-4 w-full">
                                 <ReceiptFormItems
                                   item={item}
                                   setFieldValue={setFieldValue}
                                   index={index}
-                                  edit
+                                  values={values}
                                 />
                               </div>
                             ))}
-                          </div>
+                          </div> */}
                           <div className="flex gap-2 ">
                             <RegularButton
                               submit
@@ -574,6 +396,18 @@ const Create = () => {
                       <div className="two-tab ">
                         <div className="left-tab">
                           <ImageGpt setFieldValue={setFieldValue} />
+                          {/* <div className="mobile-form-items ">
+                            {values.items.map((item, index) => (
+                              <div key={index} className="flex gap-4 w-full">
+                                <ReceiptFormItems
+                                  item={item}
+                                  setFieldValue={setFieldValue}
+                                  index={index}
+                                  values={values}
+                                />
+                              </div>
+                            ))}
+                          </div> */}
                           <div className="flex gap-2">
                             <RegularButton
                               submit
@@ -657,6 +491,7 @@ const Create = () => {
                               <div key={index}>
                                 <ReceiptFormItems
                                   item={item}
+                                  values={values}
                                   index={index}
                                   setFieldValue={setFieldValue}
                                 />
@@ -665,7 +500,7 @@ const Create = () => {
                           </div>
                         </div>
                         {isMobile && (
-                          <div className=" flex flex-col gap-6">
+                          <div className=" flex flex-col gap-6 pb-[200px]">
                             <div className="flex justify-between gap-3">
                               <RegularButton
                                 styles={"bg-orange-400 border-green-900 w-full"}
@@ -759,18 +594,217 @@ const Create = () => {
 
 export default Create;
 
+const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
+  const [showScanner, setShowScanner] = useState(false);
+  const [isBarcode, setIsBarcode] = useState(false);
+
+  const [item, setItem] = useState({
+    description: "",
+    photo: [] as Image[],
+    price: "",
+    barcode: "",
+    asset: false,
+  });
+  const handleItemAdd = (value: any, type: string) => {
+    setItem({ ...item, [type]: value });
+  };
+  const addItemToFormik = (setFieldValue: any, values: ReceiptInput) => {
+    const currentItems = values.items;
+    if (item.photo.length > 0 && item.photo[0].url === "") {
+      item.photo = [];
+    }
+
+    setFieldValue("items", [...currentItems, item]);
+
+    setItem({
+      description: "",
+      photo: [],
+      price: "",
+      barcode: "",
+      asset: false,
+    });
+  };
+
+  const handleError = (error: any) => {
+    // console.error("Scanning error:", error);
+  };
+
+  return (
+    <div className="flex flex-col gap-8">
+      <div>
+        <p className="text-sm text-green-900">Description/Title</p>
+        <input
+          className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
+          type="description"
+          name="description"
+          value={item.description}
+          onChange={(e) => {
+            handleItemAdd(e.target.value, "description");
+          }}
+        />
+      </div>
+
+      <div>
+        <p className="text-sm text-green-900">Price</p>
+        <input
+          className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
+          type="price"
+          value={item.price}
+          name="price"
+          onChange={(e) => {
+            handleItemAdd(e.target.value, "price");
+          }}
+        />
+      </div>
+
+      <div className="flex gap-4">
+        <button
+          className="border-[1.5px] border-green-900 w-full p-3 rounded-md text-green-900"
+          onClick={() => {
+            setShowScanner(true);
+            setIsBarcode(false);
+          }}
+          disabled={showScanner}
+        >
+          Scan barcode
+        </button>
+        <button
+          className="border-[1.5px] border-green-900 w-full p-3 rounded-md text-green-900"
+          onClick={() => {
+            setShowScanner(false);
+            setIsBarcode(!isBarcode);
+          }}
+        >
+          Input barcode
+        </button>
+      </div>
+
+      {showScanner && (
+        <div>
+          <h1>Scan a Barcode</h1>
+          <BarcodeScanner
+            setShowScanner={setShowScanner}
+            onResult={(result) => {
+              handleItemAdd(result.text, "barcode");
+              setShowScanner(false);
+            }}
+            onError={handleError}
+          />
+          <button
+            onClick={() => {
+              setShowScanner(false);
+            }}
+          >
+            Close Scanner
+          </button>
+        </div>
+      )}
+
+      {item.barcode && !isBarcode && (
+        <div>
+          <p className="text-sm text-green-900">Barcode #</p>
+          <input
+            className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
+            type="text"
+            name="barcode"
+            value={item.barcode}
+            onChange={(e) => {
+              handleItemAdd(e.target.value, "barcode");
+            }}
+          />
+        </div>
+      )}
+
+      {isBarcode && (
+        <div>
+          <p className="text-sm text-green-900">Barcode #</p>
+          <input
+            className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
+            type="text"
+            name="barcode"
+            value={item.barcode}
+            onChange={(e) => {
+              handleItemAdd(e.target.value, "barcode");
+            }}
+          />
+        </div>
+      )}
+      <div>
+        <UploadButton
+          appearance={{
+            button:
+              "ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed bg-green-900  after:bg-orange-00 w-full h-[100px]",
+          }}
+          endpoint="imageUploader"
+          // content={{
+          //   button: "Add image of item",
+          //   allowedContent: receiptImageError.error && (
+          //     <div className="">
+          //       <p className="text-red-500">
+          //         {receiptImageError.message}
+          //       </p>
+          //     </div>
+          //   ),
+          // }}
+          onClientUploadComplete={(res) => {
+            console.log("Files: ", res);
+
+            if (item.photo.length === 0) {
+              handleItemAdd(res, "photo");
+            } else {
+              deleteUploadThingImage(item.photo[0].key);
+              handleItemAdd(res, "photo");
+            }
+          }}
+          // onUploadError={(error: Error) => {
+          //   setReceiptImageError({
+          //     error: true,
+          //     message: error.message,
+          //   });
+          // }}
+        />
+      </div>
+
+      {item.photo.length > 0 && (
+        <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md">
+          <button
+            onClick={() => {
+              deleteUploadThingImage(item.photo[0].key);
+              setItem({
+                ...item,
+                photo: [],
+              });
+            }}
+            className="absolute top-0 right-0 m-1  bg-green-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-xs"
+          >
+            X
+          </button>
+          <Image width={150} height={150} src={item.photo[0].url} alt="" />
+        </div>
+      )}
+
+      <RegularButton
+        submit
+        styles={"border-green-900 bg-green-900 w-full"}
+        handleClick={() => {
+          addItemToFormik(setFieldValue, values);
+          console.log(values);
+        }}
+      >
+        <p className="text-white text-sm">Add Item</p>
+      </RegularButton>
+    </div>
+  );
+};
+
 interface PreviewProps {
   values: ReceiptInput;
   setFieldValue: any;
 }
 
 const Preview = ({ values, setFieldValue }: PreviewProps) => {
-  const removeItem = (index: number) => {
-    const newItems = values.items.filter((_, i: number) => i !== index);
-    setFieldValue("items", newItems);
-  };
   return (
-    <div className="flex flex-col gap-6  preview border-l-[1.5px] border-green-900 pl-4 ">
+    <div className="flex flex-col gap-6  preview pb-[200px] ">
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2 ">
@@ -779,20 +813,20 @@ const Preview = ({ values, setFieldValue }: PreviewProps) => {
             ) : (
               <h1 className="text-green-900 text-2xl ">Store</h1>
             )}
-            <div className="flex justify-between">
+            <div className="flex justify-between ">
               <h1 className="text-slate-500">Total Amount</h1>
               <h1 className="">{values.amount}</h1>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between ">
               <h1 className="text-slate-500">Card</h1>
               <h1 className="">{values.card}</h1>
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between ">
               <h1 className="text-slate-500">Date of purchase</h1>
               <h1 className=""> {values.boughtDate}</h1>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between ">
               <h1 className="text-slate-500">Return Date</h1>
               <h1 className=""> {values.finalReturnDate}</h1>
             </div>
@@ -815,7 +849,7 @@ const Preview = ({ values, setFieldValue }: PreviewProps) => {
           {values.items.map((item, index) => (
             <div key={index}>
               <ReceiptFormItems
-                removeItem={removeItem}
+                values={values}
                 item={item}
                 setFieldValue={setFieldValue}
                 index={index}
@@ -833,16 +867,22 @@ interface ReceiptFormItemsProps {
   item: any;
   setFieldValue: any;
   index: number;
-  removeItem?: any;
+  values: ReceiptInput;
+
   edit?: boolean;
 }
 
 const ReceiptFormItems = ({
   item,
   index,
-  removeItem,
+  setFieldValue,
+  values,
   edit = false,
 }: ReceiptFormItemsProps) => {
+  const removeItem = (index: number) => {
+    const newItems = values.items.filter((_, i: number) => i !== index);
+    setFieldValue("items", newItems);
+  };
   return (
     <div className="border-t-[1.5px] border-black flex flex-col gap-4 w-full">
       <div className="flex justify-between">
@@ -863,15 +903,14 @@ const ReceiptFormItems = ({
             <h1 className="text-slate-400 font-bold">Barcode</h1>
             <h1>{item.barcode}</h1>
           </div>
-          {edit && (
-            <button
-              onClick={() => {
-                removeItem(index);
-              }}
-            >
-              Remove
-            </button>
-          )}
+
+          <button
+            onClick={() => {
+              removeItem(index);
+            }}
+          >
+            Remove
+          </button>
         </div>
       </div>
     </div>

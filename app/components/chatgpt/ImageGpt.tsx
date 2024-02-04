@@ -1,16 +1,19 @@
 "use client";
+import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
 import RegularButton from "@/app/components/buttons/RegularButton";
+import { UploadButton } from "@/utils/uploadthing";
 import Image from "next/image";
 import { ChangeEvent, useState, FormEvent, use, useEffect } from "react";
 
 interface Props {
   setFieldValue: any;
+  values: any;
 }
 
-export default function ImageGpt({ setFieldValue }: Props) {
+export default function ImageGpt({ setFieldValue, values }: Props) {
   const [image, setImage] = useState<string>("");
+  console.log(image);
   const [array, setJson] = useState([]);
-  console.log(array);
 
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files === null) {
@@ -91,6 +94,24 @@ export default function ImageGpt({ setFieldValue }: Props) {
         <div>
           <div>
             <div className="flex flex-col mb-6">
+              {/* <UploadButton
+                appearance={{
+                  button:
+                    "mt-3 ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed bg-green-900  after:bg-orange-00 w-full h-[100px]",
+                }}
+                endpoint="imageUploader"
+                content={{}}
+                onClientUploadComplete={(res) => {
+                  handleFileChange;
+                  if (values.receiptImage.length === 0) {
+                    setFieldValue("receiptImage", res);
+                  } else {
+                    deleteUploadThingImage(values.receiptImage[0].key);
+                    setFieldValue("receiptImage", res);
+                  }
+                }}
+                onUploadError={(error: Error) => {}}
+              /> */}
               <input
                 type="file"
                 className="text-sm border rounded-lg cursor-pointer"
@@ -98,9 +119,13 @@ export default function ImageGpt({ setFieldValue }: Props) {
               />
             </div>
 
-            <div className="flex justify-center">
-              <RegularButton styles="" type="submit" handleClick={handleSubmit}>
-                Analzye Receipt
+            <div className="w-full">
+              <RegularButton
+                styles="border-green-900 w-full bg-green-900"
+                type="submit"
+                handleClick={handleSubmit}
+              >
+                <p className="text-white">Upload Image</p>
               </RegularButton>
             </div>
           </div>

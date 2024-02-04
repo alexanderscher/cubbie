@@ -1,3 +1,4 @@
+import RegularButton from "@/app/components/buttons/RegularButton";
 import React, { useEffect, useState } from "react";
 
 interface Choices {
@@ -18,10 +19,7 @@ const TextGpt = () => {
     }
   }, [json]);
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (
-    event
-  ) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
     const response = await fetch("/api/gpt/analyze-input", {
       method: "POST",
       headers: {
@@ -35,15 +33,18 @@ const TextGpt = () => {
   };
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-          placeholder="Type something..."
-        />
-        <button type="submit">Analyze</button>
-      </form>
+      <textarea
+        value={inputText}
+        className="w-full border-[1.5px] border-green-900 p-2 mb-2 rounded-md focus:outline-none h-[300px] resize-none bg"
+        onChange={(e) => setInputText(e.target.value)}
+        placeholder="Copy and paste receipt items from email or website"
+      />
+      <RegularButton
+        styles={"bg-green-900 border-green-900 w-full"}
+        handleClick={handleSubmit}
+      >
+        <p className="text-white ">Analyze</p>
+      </RegularButton>
     </div>
   );
 };

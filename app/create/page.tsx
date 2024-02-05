@@ -22,7 +22,7 @@ enum ReceiptStage {
 
 interface ItemInput {
   description: string;
-  photo: [{ url: string; key: string }];
+  photo: [];
   price: number;
   barcode: string;
   asset: boolean;
@@ -216,78 +216,6 @@ const Create = () => {
                                 onChange={handleChange("finalReturnDate")}
                               />
                             </div>
-                            <div className="w-full">
-                              <UploadButton
-                                appearance={{
-                                  button:
-                                    "mt-3 ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed bg-green-900  after:bg-orange-00 w-full h-[100px]",
-                                }}
-                                endpoint="imageUploader"
-                                content={
-                                  {
-                                    // button:
-                                    //   values.receiptImage.length > 0
-                                    //     ? "Replace Image"
-                                    //     : "Add image of receipt",
-                                    // allowedContent: itemImageError.error && (
-                                    //   <div className="">
-                                    //     <p className="text-red-500">
-                                    //       {itemImageError.message}
-                                    //     </p>
-                                    //   </div>
-                                    // ),
-                                  }
-                                }
-                                onClientUploadComplete={(res) => {
-                                  console.log("Files: ", res);
-                                  if (values.receiptImage.length === 0) {
-                                    setFieldValue("receiptImage", res);
-                                  } else {
-                                    deleteUploadThingImage(
-                                      values.receiptImage[0].key
-                                    );
-                                    setFieldValue("receiptImage", res);
-                                  }
-                                }}
-                                onUploadError={(error: Error) => {
-                                  // let errorString = "";
-                                  // if (
-                                  //   error.message ==
-                                  //   "Unable to get presigned urls"
-                                  // ) {
-                                  //   errorString =
-                                  //     "An error occured, please try  another image";
-                                  // } else {
-                                  //   errorString = error.message;
-                                  // }
-                                  // setItemImageError({
-                                  //   error: true,
-                                  //   message: errorString,
-                                  // });
-                                }}
-                              />
-                            </div>
-                            {values.receiptImage.length > 0 && (
-                              <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md">
-                                <button
-                                  onClick={() => {
-                                    deleteUploadThingImage(
-                                      values.receiptImage[0].key
-                                    );
-                                    setFieldValue("receiptImage", []);
-                                  }}
-                                  className="absolute top-0 right-0 m-1  bg-green-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
-                                >
-                                  X
-                                </button>
-                                <Image
-                                  width={150}
-                                  height={150}
-                                  src={values.receiptImage[0].url}
-                                  alt=""
-                                />
-                              </div>
-                            )}
                           </div>
 
                           <div className="flex gap-2">
@@ -361,7 +289,10 @@ const Create = () => {
                             </RegularButton>
                           </div>
                           {onlineType === "gpt" ? (
-                            <TextGpt setFieldValue={setFieldValue} />
+                            <TextGpt
+                              setFieldValue={setFieldValue}
+                              values={values}
+                            />
                           ) : (
                             <OnlineReceiptManual
                               setFieldValue={setFieldValue}
@@ -764,7 +695,7 @@ const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
         <UploadButton
           appearance={{
             button:
-              "ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed bg-green-900  after:bg-orange-00 w-full h-[100px]",
+              "ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed   after:none w-full h-[100px]",
           }}
           endpoint="imageUploader"
           // content={{
@@ -778,8 +709,6 @@ const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
           //   ),
           // }}
           onClientUploadComplete={(res) => {
-            console.log("Files: ", res);
-
             if (item.photo.length === 0) {
               handleItemAdd(res, "photo");
             } else {
@@ -819,7 +748,6 @@ const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
         styles={"border-green-900 bg-green-900 w-full"}
         handleClick={() => {
           addItemToFormik(setFieldValue, values);
-          console.log(values);
         }}
       >
         <p className="text-white text-sm">Add Item</p>
@@ -905,7 +833,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                   name="boughtDate"
                   value={values.boughtDate}
                   onChange={handleChange}
-                  type="date" // Assuming the date format needs to be validated
+                  type="date"
                 />
               ) : (
                 <h1 className="text-green-900 text-sm">{values.boughtDate}</h1>
@@ -920,7 +848,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                   name="finalReturnDate"
                   value={values.finalReturnDate}
                   onChange={handleChange}
-                  type="date" // Assuming the date format needs to be validated
+                  type="date"
                 />
               ) : (
                 <h1 className="text-green-900 text-sm">
@@ -932,9 +860,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
 
           {values.receiptImage.length > 0 && (
             <div className="w-full flex justify-end">
-              {/* Placeholder for image display */}
               <div className="w-24 h-50 overflow-hidden relative flex items-center justify-center rounded-md">
-                {/* Assuming you have a component or method to display images */}
                 <Image
                   width={150}
                   height={150}
@@ -981,7 +907,12 @@ const ReceiptFormItems = ({
 
   const removeItem = (index: number) => {
     const newItems = values.items.filter((_, i: number) => i !== index);
+
     setFieldValue("items", newItems);
+
+    if (item.photo.length > 0) {
+      deleteUploadThingImage(item.photo[0].key);
+    }
   };
 
   const handleItemChange = (e: any, field: any) => {
@@ -1029,7 +960,54 @@ const ReceiptFormItems = ({
         )}
       </div>
 
-      <div className="flex gap-6 ">
+      <div className="flex gap-6">
+        <div className="w-[120px] h-[150px] flex items-center justify-center rounded-sm">
+          <div className="w-full h-full flex">
+            {item.photo.length > 0 ? (
+              <div>
+                <Image
+                  width={200}
+                  height={200}
+                  src={item.photo[0].url}
+                  alt=""
+                  className="w-full h-full object-contain"
+                />
+                {edit && <div>replace</div>}
+              </div>
+            ) : (
+              <UploadButton
+                appearance={{
+                  button:
+                    "ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed  after:none w-full h-[5000px] w-[120px]",
+                }}
+                endpoint="imageUploader"
+                content={{
+                  button: "Add image",
+                  allowedContent: " ",
+                }}
+                onClientUploadComplete={(res) => {
+                  const updatedItems = values.items.map((item, idx) => {
+                    if (idx === index) {
+                      return {
+                        ...item,
+                        photo: [
+                          ...item.photo,
+                          { url: res[0].url, key: res[0].key },
+                        ],
+                      };
+                    }
+                    return item;
+                  });
+
+                  setFieldValue("items", updatedItems);
+                }}
+                onUploadError={(error: Error) => {
+                  alert("erro");
+                }}
+              />
+            )}
+          </div>
+        </div>
         <div className="text-sm flex flex-col gap-3 items-start">
           <RegularButton
             handleClick={toggleAsset}
@@ -1041,6 +1019,7 @@ const ReceiptFormItems = ({
           >
             <p className="text-xs">Asset</p>
           </RegularButton>
+
           <div>
             <h1 className="text-slate-400 font-bold">Amount</h1>
             {edit ? (

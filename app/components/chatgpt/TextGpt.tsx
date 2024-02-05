@@ -1,19 +1,28 @@
+import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import React, { useEffect, useState } from "react";
 
 interface Props {
   setFieldValue: any;
+  values: any;
 }
 
-const TextGpt = ({ setFieldValue }: Props) => {
+const TextGpt = ({ setFieldValue, values }: Props) => {
   const [inputText, setInputText] = useState("");
   const [noText, setNoText] = useState(false);
   const [help, setHelp] = useState(false);
+  const [prompt, setPrompt] = useState(false);
 
-  const handleSubmit = async () => {
-    if (inputText === "") {
-      setNoText(true);
+  const run = async () => {
+    if (values.items.length > 0) {
+      for (let item of values.items) {
+        if (item.photo.length > 0) {
+          deleteUploadThingImage(item.photo[0].key);
+        }
+      }
     }
+    setPrompt(false);
+    setNoText(false);
 
     const response = await fetch("/api/gpt/analyze-input", {
       method: "POST",
@@ -24,12 +33,32 @@ const TextGpt = ({ setFieldValue }: Props) => {
     });
 
     const data = await response.json();
-    console.log(data);
-    setFieldValue("items", data);
+
+    const itemsWithAllProperties = data.map((item: any) => ({
+      description: item.description || "",
+      photo: item.photo || [],
+      price: item.price || 0,
+      barcode: item.barcode || "",
+      asset: item.hasOwnProperty("asset") ? item.asset : false, //
+    }));
+
+    setFieldValue("items", itemsWithAllProperties);
 
     // const items = JSON.parse(data.choices[0].message.content);
     // setFieldValue("items", items.items);
     // console.log(items.items);
+  };
+
+  const handleSubmit = async () => {
+    if (inputText === "") {
+      setNoText(true);
+    }
+
+    if (values.items.length > 0) {
+      setPrompt(true);
+    } else {
+      run();
+    }
   };
   return (
     <div className="flex flex-col gap-4">
@@ -59,6 +88,25 @@ const TextGpt = ({ setFieldValue }: Props) => {
       >
         <p className="text-white ">Analyze</p>
       </RegularButton>
+      {prompt && (
+        <div className="flex flex-col gap-4">
+          <p className="text-sm text-center text-black">
+            Are you sure you want to anaylze the text again? This will overwrite
+            your current items
+          </p>
+          <div className="flex gap-2">
+            <RegularButton styles={"bg border-black w-full"} handleClick={run}>
+              <p className="text-sm">Confirm</p>
+            </RegularButton>
+            <RegularButton
+              styles={"bg border-black w-full"}
+              handleClick={() => setPrompt(false)}
+            >
+              <p className="text-sm">Cancel</p>
+            </RegularButton>
+          </div>
+        </div>
+      )}
       {noText && (
         <p className="text-sm text-center text-red-500">
           Please enter some text to analyze. If you have a receipt, copy and

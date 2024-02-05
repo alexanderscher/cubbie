@@ -1,9 +1,9 @@
 "use client";
 import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { UploadButton } from "@/utils/uploadthing";
+import { useUploadThing } from "@/utils/uploadthing";
 import Image from "next/image";
-import { ChangeEvent, useState, FormEvent, use, useEffect } from "react";
+import { ChangeEvent, useState, useCallback } from "react";
 
 interface Props {
   setFieldValue: any;
@@ -12,30 +12,53 @@ interface Props {
 
 export default function ImageGpt({ setFieldValue, values }: Props) {
   const [image, setImage] = useState<string>("");
+  const [noImage, setNoImage] = useState(false);
+  const [help, setHelp] = useState(false);
 
-  function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
-    if (event.target.files === null) {
-      window.alert("No file selected. Choose a file.");
-      return;
-    }
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      if (typeof reader.result === "string") {
-        setImage(reader.result);
+  const { startUpload, permittedFileInfo } = useUploadThing("imageUploader", {
+    onClientUploadComplete: (res) => {
+      if (values.receiptImage.length === 0) {
+        setFieldValue("receiptImage", res);
+      } else {
+        deleteUploadThingImage(values.receiptImage[0].key);
+        setFieldValue("receiptImage", res);
       }
-    };
-    reader.onerror = (error) => {
-      console.log("error: " + error);
-    };
-  }
+      alert("uploaded successfully!");
+    },
+    onUploadError: () => {},
+    onUploadBegin: () => {},
+  });
+
+  const handleFileChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      if (event.target.files === null || event.target.files.length === 0) {
+        setNoImage(true);
+        window.alert("No file selected. Choose a file.");
+        return;
+      }
+
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          setImage(reader.result);
+          startUpload([file]);
+        }
+      };
+      reader.onerror = (error) => {
+        console.error("Error converting file to base64:", error);
+      };
+    },
+    [startUpload]
+  );
 
   const handleSubmit = async () => {
-    // if (image === "") {
-    //   alert("Upload an image.");
-    //   return;
-    // }
+    if (image === "") {
+      setNoImage(true);
+      // return;
+    }
 
     const res = await fetch("/api/gpt/analyze-image", {
       method: "POST",
@@ -70,8 +93,20 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
 
   return (
     <div>
-      <div>
-        <h2 className="text-xl font-bold mb-4">Upload Image of receipt</h2>
+      <div className="flex flex-col gap-4">
+        <button
+          className="w-[20px] border-[1.5px] border-orange-400 text-orange-400 rounded-md"
+          onClick={() => setHelp(!help)}
+        >
+          ?
+        </button>
+        {help && (
+          <p className="text-sm text-center text-orange-400">
+            We use OpenAI&apos;s GPT to analyze the image you upload. Take a
+            picture of the receipt and upload it. Then click the &quot;Analyze
+            Image&quot; button to get the receipt info and items.
+          </p>
+        )}
         {image !== "" && (
           <div className="mb-4 overflow-hidden">
             <Image
@@ -86,29 +121,24 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
         <div>
           <div>
             <div className="flex flex-col mb-6">
-              {/* <UploadButton
-                appearance={{
-                  button:
-                    "mt-3 ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed bg-green-900  after:bg-orange-00 w-full h-[100px]",
-                }}
-                endpoint="imageUploader"
-                content={{}}
-                onClientUploadComplete={(res) => {
-                  handleFileChange;
-                  if (values.receiptImage.length === 0) {
-                    setFieldValue("receiptImage", res);
-                  } else {
-                    deleteUploadThingImage(values.receiptImage[0].key);
-                    setFieldValue("receiptImage", res);
-                  }
-                }}
-                onUploadError={(error: Error) => {}}
-              /> */}
               <input
                 type="file"
-                className="text-sm border rounded-lg cursor-pointer"
                 onChange={(e) => handleFileChange(e)}
+                id="file-upload"
+                style={{ opacity: 0, position: "absolute", zIndex: -1 }}
               />
+              <RegularButton styles="border-green-900 w-full">
+                <label
+                  htmlFor="file-upload"
+                  className="text-green-900 w-full"
+                  style={{
+                    cursor: "pointer",
+                    display: "inline-block",
+                  }}
+                >
+                  Upload File
+                </label>
+              </RegularButton>
             </div>
 
             <div className="w-full">
@@ -117,11 +147,17 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
                 type="submit"
                 handleClick={handleSubmit}
               >
-                <p className="text-white">Upload Image</p>
+                <p className="text-white">Analyze Image</p>
               </RegularButton>
             </div>
           </div>
         </div>
+        {noImage && (
+          <p className="text-sm text-center text-red-500">
+            Please upload an image to analyze. If you have a receipt, take a
+            picture of the receipt and upload it.
+          </p>
+        )}
       </div>
     </div>
   );

@@ -31,5 +31,4 @@ export function calculateReturnDate(date, days) {
   return `${year}-${month}-${day}`;
 }
 
-// Example usage
 // console.log(calculateReturnDate("2023-01-01", 10));

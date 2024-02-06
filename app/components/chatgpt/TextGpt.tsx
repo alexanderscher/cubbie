@@ -38,7 +38,8 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
       description: item.description || "",
       photo: item.photo || [],
       price: item.price || 0,
-      barcode: item.barcode || "",
+      product_id: item.product_id || "",
+      barcode: "",
       asset: item.hasOwnProperty("asset") ? item.asset : false,
       character: "",
     }));

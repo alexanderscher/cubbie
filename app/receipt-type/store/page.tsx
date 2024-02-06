@@ -1,16 +1,12 @@
 "use client";
 
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { useIsMobile } from "@/utils/useIsMobile";
 import { Formik } from "formik";
 import React, { useState } from "react";
-import Image from "next/image";
 import ImageGpt from "@/app/components/chatgpt/ImageGpt";
-import { calculateReturnDate } from "@/utils/calculateReturnDate";
 import ReceiptManual from "@/app/components/createForm/ReceiptManual";
 import Preview from "@/app/components/createForm/Preview";
 import OnlineReceiptManual from "@/app/components/createForm/OnlineReceiptManual";
-import ReceiptFormItems from "@/app/components/createForm/ReceiptFormItems";
 import { ReceiptStoreStage } from "@/types/formTypes/form";
 import { useRouter } from "next/navigation";
 import { DEFAULT_INPUT_VALUES } from "@/constants/form";
@@ -20,7 +16,6 @@ import FinalStage from "@/app/components/createForm/FinalStage";
 DEFAULT_INPUT_VALUES.type = "Store";
 
 const Store = () => {
-  const isMobile = useIsMobile();
   const router = useRouter();
   const [stage, setStage] = useState<ReceiptStoreStage>(
     ReceiptStoreStage.IN_STORE_RECEIPT
@@ -30,18 +25,15 @@ const Store = () => {
     <div className="flex ">
       <div className="w-full flex flex-col gap-8 ">
         <Formik
-          initialValues={DEFAULT_INPUT_VALUES}
+          initialValues={{
+            ...DEFAULT_INPUT_VALUES,
+            type: "Store",
+          }}
           onSubmit={(values) => {
             console.log(values);
           }}
         >
-          {({
-            handleSubmit,
-            setFieldValue,
-            values,
-            handleChange,
-            resetForm,
-          }) => (
+          {({ handleSubmit, setFieldValue, values, handleChange }) => (
             <form
               onSubmit={handleSubmit}
               className="w-full flex flex-col gap-10 "

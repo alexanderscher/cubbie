@@ -1,14 +1,10 @@
 "use client";
 
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { useIsMobile } from "@/utils/useIsMobile";
 import { Formik } from "formik";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
+import React, { useState } from "react";
 import TextGpt from "@/app/components/chatgpt/TextGpt";
-import { calculateReturnDate } from "@/utils/calculateReturnDate";
 import ReceiptManual from "@/app/components/createForm/ReceiptManual";
-import ReceiptFormItems from "@/app/components/createForm/ReceiptFormItems";
 import OnlineReceiptManual from "@/app/components/createForm/OnlineReceiptManual";
 import Preview from "@/app/components/createForm/Preview";
 import { useRouter } from "next/navigation";
@@ -20,7 +16,6 @@ import FinalStage from "@/app/components/createForm/FinalStage";
 DEFAULT_INPUT_VALUES.type = "Online";
 
 const Online = () => {
-  const isMobile = useIsMobile();
   const [stage, setStage] = useState<ReceiptOnlineStage>(
     ReceiptOnlineStage.ONLINE_RECEIPT
   );
@@ -30,7 +25,10 @@ const Online = () => {
     <div className="flex ">
       <div className="w-full flex flex-col gap-8 ">
         <Formik
-          initialValues={DEFAULT_INPUT_VALUES}
+          initialValues={{
+            ...DEFAULT_INPUT_VALUES,
+            type: "Online",
+          }}
           onSubmit={(values) => {
             console.log(values);
           }}

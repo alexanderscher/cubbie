@@ -34,6 +34,7 @@ const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
       photo: [],
       price: null,
       barcode: "",
+      product_id: "",
       asset: false,
       character: "",
     });
@@ -73,9 +74,20 @@ const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
         <input
           className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
           value={item.character}
-          name="charatcer"
+          name="character"
           onChange={(e) => {
             handleItemAdd(e.target.value, "character");
+          }}
+        />
+      </div>
+      <div>
+        <p className="text-sm text-green-900">Product ID</p>
+        <input
+          className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
+          value={item.product_id}
+          name="product_id"
+          onChange={(e) => {
+            handleItemAdd(e.target.value, "product_id");
           }}
         />
       </div>

@@ -82,7 +82,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
 
               <div className="flex flex-col ">
                 <h1 className="text-slate-500 font-bold text-sm">
-                  Date of Purchase
+                  Purchase Date
                 </h1>
                 {edit ? (
                   <input

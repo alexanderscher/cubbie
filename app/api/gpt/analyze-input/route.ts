@@ -4,7 +4,7 @@ const DATA = [
   {
     description: "Utility Shirt",
     price: "$38.40",
-    barcode: "7627100014004",
+    product_id: "7627100014004",
   },
 ];
 
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
   //       {
   //         role: "system",
   //         content:
-  //           'You are a helpful assistant designed to output JSON. This is text of an online email receipt. Please parse it and return the JSON object. Please do not include any explanations, only provide a valid JSON response following this format without deviation. It should look like this: "items":[{"description":"","price":"","barcode":""}]}} Please do not start the object with ```json. If this does not look like a receipt, please type: "This is not a receipt."',
+  //           'You are a helpful assistant designed to output JSON. This is text of an online email receipt. Please parse it and return the JSON object. Please do not include any explanations, only provide a valid JSON response following this format without deviation. It should look like this: "items":[{"description":"","price":"","product_id":""}]}} Please do not start the object with ```json. If this does not look like a receipt, please type: "This is not a receipt."',
   //       },
   //       {
   //         role: "user",

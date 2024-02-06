@@ -2,7 +2,6 @@ export interface Photo {
   key: string;
   url: string;
 }
-
 export interface ItemInput {
   description: string;
   photo?: Photo[];
@@ -10,6 +9,7 @@ export interface ItemInput {
   barcode?: string;
   asset: boolean;
   character?: string;
+  product_id?: string;
 }
 
 export interface ReceiptInput {

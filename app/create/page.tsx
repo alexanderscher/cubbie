@@ -477,7 +477,7 @@ const Create = () => {
 
                               <div className="receipt-info">
                                 <h1 className="text-slate-500 font-bold text-sm">
-                                  Date of purchase
+                                  Purchase Date
                                 </h1>
                                 <h1 className=""> {values.boughtDate}</h1>
                               </div>
@@ -976,7 +976,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
 
               <div className="flex flex-col ">
                 <h1 className="text-slate-500 font-bold text-sm">
-                  Date of Purchase
+                  Purchase Date
                 </h1>
                 {edit ? (
                   <input

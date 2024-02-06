@@ -51,7 +51,7 @@ const FinalStage = ({
 
             <div className="receipt-info">
               <h1 className="text-slate-500 font-bold text-sm">
-                Date of purchase
+                Purchase Date
               </h1>
               <h1 className=""> {values.boughtDate}</h1>
             </div>
@@ -59,7 +59,7 @@ const FinalStage = ({
               <h1 className="text-slate-500 font-bold text-sm">Return Date</h1>
 
               {values.boughtDate && values.daysUntilReturn && (
-                <h1 className="text-green-900 text-sm">
+                <h1 className="">
                   {calculateReturnDate(
                     values.boughtDate,
                     values.daysUntilReturn

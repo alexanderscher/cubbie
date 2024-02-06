@@ -208,6 +208,30 @@ const ReceiptFormItems = ({
             )}
           </div>
           <div className="w-full">
+            <h1 className="text-slate-400 font-bold">Character</h1>
+            {edit ? (
+              <input
+                className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 w-full"
+                value={item.character}
+                onChange={(e) => handleItemChange(e, "character")}
+              />
+            ) : (
+              <h1>{item.character}</h1>
+            )}
+          </div>
+          <div className="w-full">
+            <h1 className="text-slate-400 font-bold">Product ID</h1>
+            {edit ? (
+              <input
+                className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 w-full"
+                value={item.product_id}
+                onChange={(e) => handleItemChange(e, "product_id")}
+              />
+            ) : (
+              <h1>{item.product_id}</h1>
+            )}
+          </div>
+          <div className="w-full">
             <h1 className="text-slate-400 font-bold">Barcode</h1>
             {edit ? (
               <div className="flex flex-col gap-4">
@@ -252,24 +276,12 @@ const ReceiptFormItems = ({
               <h1>{item.barcode}</h1>
             )}
           </div>
-          <div className="w-full">
-            <h1 className="text-slate-400 font-bold">Character</h1>
-            {edit ? (
-              <input
-                className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 w-full"
-                value={item.character}
-                onChange={(e) => handleItemChange(e, "character")}
-              />
-            ) : (
-              <h1>{item.character}</h1>
-            )}
-          </div>
 
           <RegularButton
-            styles="border-green-900"
+            styles="border-green-900 bg-green-900"
             handleClick={() => removeItem(index)}
           >
-            <p className="text-xs">Delete</p>
+            <p className="text-xs text-white">Delete</p>
           </RegularButton>
         </div>
       </div>

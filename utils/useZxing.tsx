@@ -21,6 +21,7 @@ export const useZxing = ({
       facingMode: "environment",
     },
   },
+
   hints = new Map([
     [
       DecodeHintType.POSSIBLE_FORMATS,

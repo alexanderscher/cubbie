@@ -11,6 +11,7 @@ import { BarcodeScanner } from "@/app/components/BarcodeScanner";
 import LargeButton from "@/app/components/buttons/LargeButton";
 import TextGpt from "@/app/components/chatgpt/TextGpt";
 import ImageGpt from "@/app/components/chatgpt/ImageGpt";
+import { calculateReturnDate } from "@/utils/calculateReturnDate";
 
 enum ReceiptStage {
   METHOD = "METHOD",
@@ -41,10 +42,15 @@ interface ReceiptInput {
   card: string;
   amount: "";
   boughtDate: string;
+  daysUntilReturn: number;
   finalReturnDate: string;
   receiptImage: Image[];
   items: ItemInput[];
+  onlineType: string;
+  storeType: string;
 }
+
+const TODAY = new Date().toISOString().split("T")[0];
 
 const DEFAULT_INPUT_VALUES: ReceiptInput = {
   type: "",
@@ -52,17 +58,20 @@ const DEFAULT_INPUT_VALUES: ReceiptInput = {
   receiptNumber: "",
   card: "",
   amount: "",
-  boughtDate: "",
+  boughtDate: TODAY,
+  daysUntilReturn: 30,
   finalReturnDate: "",
   receiptImage: [],
   items: [],
+  onlineType: "gpt",
+  storeType: "gpt",
 };
 
 const Create = () => {
   const isMobile = useIsMobile();
   const [stage, setStage] = useState<ReceiptStage>(ReceiptStage.METHOD);
-  const [onlineType, setOnlineType] = useState("gpt");
-  const [storeType, setStoreType] = useState("gpt");
+  // const [onlineType, setOnlineType] = useState("gpt");
+  // const [storeType, setStoreType] = useState("gpt");
 
   return (
     <div className="flex ">
@@ -222,27 +231,31 @@ const Create = () => {
                           <div className="w-full flex justify-between">
                             <RegularButton
                               styles={`${
-                                onlineType === "manual"
+                                values.onlineType === "manual"
                                   ? "bg-black text-white"
                                   : "text-black"
                               } border-black`}
-                              handleClick={() => setOnlineType("manual")}
+                              handleClick={() =>
+                                setFieldValue("onlineType", "manual")
+                              }
                             >
                               <p className=" text-sm">Add Items Manually</p>
                             </RegularButton>
 
                             <RegularButton
                               styles={`${
-                                onlineType === "gpt"
+                                values.onlineType === "gpt"
                                   ? "bg-black text-white"
                                   : "text-black"
                               } border-black`}
-                              handleClick={() => setOnlineType("gpt")}
+                              handleClick={() =>
+                                setFieldValue("onlineType", "gpt")
+                              }
                             >
                               <p className=" text-sm">Analyze online receipt</p>
                             </RegularButton>
                           </div>
-                          {onlineType === "gpt" ? (
+                          {values.onlineType === "gpt" ? (
                             <TextGpt
                               setFieldValue={setFieldValue}
                               values={values}
@@ -301,27 +314,31 @@ const Create = () => {
                           <div className="w-full flex justify-between">
                             <RegularButton
                               styles={`${
-                                storeType === "manual"
+                                values.storeType === "manual"
                                   ? "bg-black text-white"
                                   : "text-black"
                               } border-black`}
-                              handleClick={() => setStoreType("manual")}
+                              handleClick={() =>
+                                setFieldValue("storeType", "manual")
+                              }
                             >
                               <p className=" text-sm">Add Receipt Manually</p>
                             </RegularButton>
 
                             <RegularButton
                               styles={`${
-                                storeType === "gpt"
+                                values.storeType === "gpt"
                                   ? "bg-black text-white"
                                   : "text-black"
                               } border-black`}
-                              handleClick={() => setStoreType("gpt")}
+                              handleClick={() =>
+                                setFieldValue("storeType", "gpt")
+                              }
                             >
                               <p className=" text-sm">Analyze receipt image</p>
                             </RegularButton>
                           </div>
-                          {storeType === "gpt" ? (
+                          {values.storeType === "gpt" ? (
                             <ImageGpt
                               setFieldValue={setFieldValue}
                               values={values}
@@ -347,7 +364,7 @@ const Create = () => {
                                 Back: Receipt type
                               </p>
                             </RegularButton>
-                            {storeType === "gpt" ? (
+                            {values.storeType === "gpt" ? (
                               <RegularButton
                                 submit
                                 styles={"bg-orange-400 border-green-900 w-full"}
@@ -362,7 +379,7 @@ const Create = () => {
                                 submit
                                 styles={"bg-orange-400 border-green-900 w-full"}
                                 handleClick={() => {
-                                  setStage(ReceiptStage.PREVIEW);
+                                  setStage(ReceiptStage.IN_STORE_ITEMS_MANUAL);
                                 }}
                               >
                                 <p className="text-green-900 ">Add items</p>
@@ -371,6 +388,56 @@ const Create = () => {
                           </div>
                         </div>
 
+                        <Preview
+                          setFieldValue={setFieldValue}
+                          values={values}
+                          handleChange={handleChange}
+                        />
+                      </div>
+                    );
+
+                  case ReceiptStage.IN_STORE_ITEMS_MANUAL:
+                    return (
+                      <div className="two-tab ">
+                        <div className="left-tab">
+                          <div className="flex justify-between">
+                            <h1>In Store Items</h1>
+                            <RegularButton
+                              styles={
+                                "border-orange-400 text-orange-400 text-sm"
+                              }
+                            >
+                              <p> {values.type}</p>
+                            </RegularButton>
+                          </div>
+
+                          <OnlineReceiptManual
+                            setFieldValue={setFieldValue}
+                            values={values}
+                          />
+
+                          <div className="flex gap-2 ">
+                            <RegularButton
+                              submit
+                              styles={"bg-orange-400 border-green-900 w-full"}
+                              handleClick={() => {
+                                setStage(ReceiptStage.ONLINE_RECEIPT);
+                              }}
+                            >
+                              <p className="text-green-900 ">Back: Receipt</p>
+                            </RegularButton>
+
+                            <RegularButton
+                              submit
+                              styles={"bg-orange-400 border-green-900 w-full"}
+                              handleClick={() => {
+                                setStage(ReceiptStage.PREVIEW);
+                              }}
+                            >
+                              <p className="text-green-900 ">Preview</p>
+                            </RegularButton>
+                          </div>
+                        </div>
                         <Preview
                           setFieldValue={setFieldValue}
                           values={values}
@@ -419,9 +486,18 @@ const Create = () => {
                                 <h1 className="text-slate-500 font-bold text-sm">
                                   Return Date
                                 </h1>
-                                <h1 className=""> {values.finalReturnDate}</h1>
+
+                                {values.boughtDate &&
+                                  values.daysUntilReturn && (
+                                    <h1 className="text-green-900 text-sm">
+                                      {calculateReturnDate(
+                                        values.boughtDate,
+                                        values.daysUntilReturn
+                                      )}
+                                    </h1>
+                                  )}
                               </div>
-                            </div>{" "}
+                            </div>
                             {values.receiptImage.length > 0 && (
                               <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md">
                                 <Image
@@ -507,7 +583,8 @@ const Create = () => {
                                   Edit receipt
                                 </p>
                               </RegularButton>
-                              {values.type === "online" && (
+                              {(values.type === "online" ||
+                                values.storeType === "manual") && (
                                 <RegularButton
                                   styles={"bg-orange-400 border-green-900 "}
                                   handleClick={() =>
@@ -542,7 +619,7 @@ const Create = () => {
 
 export default Create;
 
-const ReceiptManual = ({ values, handleChange, setStage }: any) => {
+const ReceiptManual = ({ values, handleChange, setFieldValue }: any) => {
   return (
     <div className="">
       <div className="flex flex-col gap-4">
@@ -565,6 +642,8 @@ const ReceiptManual = ({ values, handleChange, setStage }: any) => {
             onChange={handleChange("amount")}
           />
         </div>
+        {values.store}
+
         <div>
           <p className="text-sm text-green-900">Card</p>
           <input
@@ -585,12 +664,14 @@ const ReceiptManual = ({ values, handleChange, setStage }: any) => {
           />
         </div>
         <div>
-          <p className="text-sm text-green-900">Return Date</p>
+          <p className="text-sm text-green-900">Number of days until return</p>
           <input
             className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
-            type="date"
-            value={values.finalReturnDate}
-            onChange={handleChange("finalReturnDate")}
+            value={values.daysUntilReturn}
+            onChange={(event) => {
+              const value = parseInt(event.target.value, 10);
+              setFieldValue("daysUntilReturn", isNaN(value) ? "" : value);
+            }}
           />
         </div>
       </div>
@@ -892,6 +973,32 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                   </h1>
                 )}
               </div>
+              <div className="flex flex-col ">
+                <h1 className="text-slate-500 font-bold text-sm">
+                  Days until return
+                </h1>
+                {edit ? (
+                  <input
+                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-green-900"
+                    name="daysUntilReturn"
+                    value={values.daysUntilReturn}
+                    onChange={(event) => {
+                      const value = parseInt(event.target.value, 10);
+                      setFieldValue(
+                        "daysUntilReturn",
+                        isNaN(value) ? "" : value
+                      );
+                    }}
+                  />
+                ) : (
+                  values.boughtDate &&
+                  values.daysUntilReturn && (
+                    <h1 className="text-green-900 text-sm">
+                      {values.daysUntilReturn}
+                    </h1>
+                  )
+                )}
+              </div>
 
               <div className="flex flex-col ">
                 <h1 className="text-slate-500 font-bold text-sm">
@@ -901,14 +1008,18 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                   <input
                     className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-green-900"
                     name="finalReturnDate"
-                    value={values.finalReturnDate}
-                    onChange={handleChange}
                     type="date"
                   />
                 ) : (
-                  <h1 className="text-green-900 text-sm">
-                    {values.finalReturnDate}
-                  </h1>
+                  values.boughtDate &&
+                  values.daysUntilReturn && (
+                    <h1 className="text-green-900 text-sm">
+                      {calculateReturnDate(
+                        values.boughtDate,
+                        values.daysUntilReturn
+                      )}
+                    </h1>
+                  )
                 )}
               </div>
             </div>

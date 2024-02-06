@@ -88,7 +88,17 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
     setFieldValue("amount", jsonObject.receipt.total_amount);
     setFieldValue("boughtDate", jsonObject.receipt.date_purchased);
     setFieldValue("store", jsonObject.receipt.store);
-    setFieldValue("items", jsonObject.receipt.items);
+
+    const itemsWithAllProperties = jsonObject.receipt.items.map(
+      (item: any) => ({
+        description: item.description || "",
+        photo: item.photo || [],
+        price: item.price || 0,
+        barcode: item.barcode || "",
+        asset: item.hasOwnProperty("asset") ? item.asset : false, //
+      })
+    );
+    setFieldValue("items", itemsWithAllProperties);
   };
 
   return (

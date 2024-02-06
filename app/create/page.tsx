@@ -17,6 +17,7 @@ enum ReceiptStage {
   ONLINE_RECEIPT = "ONLINE_RECEIPT",
   ONLINE_ITEMS = "ONLINE_ITEMS",
   IN_STORE_RECEIPT = "IN_STORE_RECEIPT",
+  IN_STORE_ITEMS_MANUAL = "IN_STORE_ITEMS",
   PREVIEW = "PREVIEW",
 }
 
@@ -61,6 +62,7 @@ const Create = () => {
   const isMobile = useIsMobile();
   const [stage, setStage] = useState<ReceiptStage>(ReceiptStage.METHOD);
   const [onlineType, setOnlineType] = useState("gpt");
+  const [storeType, setStoreType] = useState("gpt");
 
   return (
     <div className="flex ">
@@ -163,61 +165,12 @@ const Create = () => {
                               <p> {values.type}</p>
                             </RegularButton>
                           </div>
-
-                          <div className="flex flex-col gap-4">
-                            <div>
-                              <p className="text-sm text-green-900">Store</p>
-                              <input
-                                className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
-                                name="store"
-                                value={values.store}
-                                onChange={handleChange("store")}
-                              />
-                            </div>
-
-                            <div>
-                              <p className="text-sm text-green-900">Amount</p>
-                              <input
-                                className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
-                                name="amount"
-                                value={values.amount}
-                                onChange={handleChange("amount")}
-                              />
-                            </div>
-                            <div>
-                              <p className="text-sm text-green-900">Card</p>
-                              <input
-                                className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
-                                name="card"
-                                value={values.card}
-                                onChange={handleChange("card")}
-                              />
-                            </div>
-                            <div>
-                              <p className="text-sm text-green-900">
-                                Purchase Date
-                              </p>
-                              <input
-                                className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
-                                name="boughtDate"
-                                value={values.boughtDate}
-                                onChange={handleChange("boughtDate")}
-                                type="date"
-                              />
-                            </div>
-                            <div>
-                              <p className="text-sm text-green-900">
-                                Return Date
-                              </p>
-                              <input
-                                className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
-                                type="date"
-                                value={values.finalReturnDate}
-                                onChange={handleChange("finalReturnDate")}
-                              />
-                            </div>
-                          </div>
-
+                          <ReceiptManual
+                            setFieldValue={setFieldValue}
+                            values={values}
+                            handleChange={handleChange}
+                            setStage={setStage}
+                          />
                           <div className="flex gap-2">
                             <RegularButton
                               submit
@@ -244,6 +197,7 @@ const Create = () => {
                             </RegularButton>
                           </div>
                         </div>
+
                         <Preview
                           setFieldValue={setFieldValue}
                           values={values}
@@ -344,22 +298,43 @@ const Create = () => {
                               <p> {values.type}</p>
                             </RegularButton>
                           </div>
-                          <ImageGpt
-                            setFieldValue={setFieldValue}
-                            values={values}
-                          />
-                          {/* <div className="mobile-form-items ">
-                            {values.items.map((item, index) => (
-                              <div key={index} className="flex gap-4 w-full">
-                                <ReceiptFormItems
-                                  item={item}
-                                  setFieldValue={setFieldValue}
-                                  index={index}
-                                  values={values}
-                                />
-                              </div>
-                            ))}
-                          </div> */}
+                          <div className="w-full flex justify-between">
+                            <RegularButton
+                              styles={`${
+                                storeType === "manual"
+                                  ? "bg-black text-white"
+                                  : "text-black"
+                              } border-black`}
+                              handleClick={() => setStoreType("manual")}
+                            >
+                              <p className=" text-sm">Add Receipt Manually</p>
+                            </RegularButton>
+
+                            <RegularButton
+                              styles={`${
+                                storeType === "gpt"
+                                  ? "bg-black text-white"
+                                  : "text-black"
+                              } border-black`}
+                              handleClick={() => setStoreType("gpt")}
+                            >
+                              <p className=" text-sm">Analyze receipt image</p>
+                            </RegularButton>
+                          </div>
+                          {storeType === "gpt" ? (
+                            <ImageGpt
+                              setFieldValue={setFieldValue}
+                              values={values}
+                            />
+                          ) : (
+                            <ReceiptManual
+                              setFieldValue={setFieldValue}
+                              values={values}
+                              handleChange={handleChange}
+                              setStage={setStage}
+                            />
+                          )}
+
                           <div className="flex gap-2">
                             <RegularButton
                               submit
@@ -372,16 +347,27 @@ const Create = () => {
                                 Back: Receipt type
                               </p>
                             </RegularButton>
-
-                            <RegularButton
-                              submit
-                              styles={"bg-orange-400 border-green-900 w-full"}
-                              handleClick={() => {
-                                setStage(ReceiptStage.PREVIEW);
-                              }}
-                            >
-                              <p className="text-green-900 ">Preview</p>
-                            </RegularButton>
+                            {storeType === "gpt" ? (
+                              <RegularButton
+                                submit
+                                styles={"bg-orange-400 border-green-900 w-full"}
+                                handleClick={() => {
+                                  setStage(ReceiptStage.PREVIEW);
+                                }}
+                              >
+                                <p className="text-green-900 ">Preview</p>
+                              </RegularButton>
+                            ) : (
+                              <RegularButton
+                                submit
+                                styles={"bg-orange-400 border-green-900 w-full"}
+                                handleClick={() => {
+                                  setStage(ReceiptStage.PREVIEW);
+                                }}
+                              >
+                                <p className="text-green-900 ">Add items</p>
+                              </RegularButton>
+                            )}
                           </div>
                         </div>
 
@@ -555,6 +541,62 @@ const Create = () => {
 };
 
 export default Create;
+
+const ReceiptManual = ({ values, handleChange, setStage }: any) => {
+  return (
+    <div className="">
+      <div className="flex flex-col gap-4">
+        <div>
+          <p className="text-sm text-green-900">Store</p>
+          <input
+            className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
+            name="store"
+            value={values.store}
+            onChange={handleChange("store")}
+          />
+        </div>
+
+        <div>
+          <p className="text-sm text-green-900">Amount</p>
+          <input
+            className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
+            name="amount"
+            value={values.amount}
+            onChange={handleChange("amount")}
+          />
+        </div>
+        <div>
+          <p className="text-sm text-green-900">Card</p>
+          <input
+            className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
+            name="card"
+            value={values.card}
+            onChange={handleChange("card")}
+          />
+        </div>
+        <div>
+          <p className="text-sm text-green-900">Purchase Date</p>
+          <input
+            className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
+            name="boughtDate"
+            value={values.boughtDate}
+            onChange={handleChange("boughtDate")}
+            type="date"
+          />
+        </div>
+        <div>
+          <p className="text-sm text-green-900">Return Date</p>
+          <input
+            className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
+            type="date"
+            value={values.finalReturnDate}
+            onChange={handleChange("finalReturnDate")}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
   const [showScanner, setShowScanner] = useState(false);
@@ -775,13 +817,16 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
             {edit ? (
               <div className="flex justify-between">
                 <input
-                  className="text-green-900 text-xl bg-white border-b-[1.5px] border-green-900"
+                  className="text-green-900 text-xl bg-white border-b-[1.5px] bg border-green-900 w-full"
                   name="store"
                   value={values.store}
                   onChange={handleChange}
                 />
-                <button onClick={toggleEdit} className="mb-4">
-                  {edit ? "Save Changes" : "Edit"}
+                <button
+                  onClick={toggleEdit}
+                  className="text-sm text-orange-400"
+                >
+                  {edit ? "Save" : "Edit"}
                 </button>
               </div>
             ) : (
@@ -789,77 +834,85 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                 <h1 className="text-green-900 text-2xl">
                   {values.store || "Store Name"}
                 </h1>
-                <button onClick={toggleEdit} className="mb-4">
-                  {edit ? "Save Changes" : "Edit"}
+                <button
+                  onClick={toggleEdit}
+                  className="text-sm text-orange-400"
+                >
+                  {edit ? "Save" : "Edit"}
                 </button>
               </div>
             )}
 
-            <div className="flex flex-col ">
-              <h1 className="text-slate-500 font-bold text-sm">Total Amount</h1>
-              {edit ? (
-                <input
-                  className="text-green-900 text-sm bg-white border-b-[1.5px] border-green-900"
-                  name="amount"
-                  value={values.amount}
-                  onChange={handleChange}
-                />
-              ) : (
-                <h1 className="text-green-900 text-sm">{values.amount}</h1>
-              )}
-            </div>
-
-            <div className="flex flex-col ">
-              <h1 className="text-slate-500 font-bold text-sm">Card</h1>
-              {edit ? (
-                <input
-                  className="text-green-900 text-sm bg-white border-b-[1.5px] border-green-900"
-                  name="card"
-                  value={values.card}
-                  onChange={handleChange}
-                />
-              ) : (
-                <h1 className="text-green-900 text-sm">{values.card}</h1>
-              )}
-            </div>
-
-            <div className="flex flex-col ">
-              <h1 className="text-slate-500 font-bold text-sm">
-                Date of Purchase
-              </h1>
-              {edit ? (
-                <input
-                  className="text-green-900 text-sm bg-white border-b-[1.5px] border-green-900"
-                  name="boughtDate"
-                  value={values.boughtDate}
-                  onChange={handleChange}
-                  type="date"
-                />
-              ) : (
-                <h1 className="text-green-900 text-sm">{values.boughtDate}</h1>
-              )}
-            </div>
-
-            <div className="flex flex-col ">
-              <h1 className="text-slate-500 font-bold text-sm">Return Date</h1>
-              {edit ? (
-                <input
-                  className="text-green-900 text-sm bg-white border-b-[1.5px] border-green-900"
-                  name="finalReturnDate"
-                  value={values.finalReturnDate}
-                  onChange={handleChange}
-                  type="date"
-                />
-              ) : (
-                <h1 className="text-green-900 text-sm">
-                  {values.finalReturnDate}
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-col ">
+                <h1 className="text-slate-500 font-bold text-sm">
+                  Total Amount
                 </h1>
-              )}
-            </div>
-          </div>
+                {edit ? (
+                  <input
+                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-green-900"
+                    name="amount"
+                    value={values.amount}
+                    onChange={handleChange}
+                  />
+                ) : (
+                  <h1 className="text-green-900 text-sm">{values.amount}</h1>
+                )}
+              </div>
 
-          {values.receiptImage.length > 0 && (
-            <div className="w-full flex justify-end">
+              <div className="flex flex-col ">
+                <h1 className="text-slate-500 font-bold text-sm">Card</h1>
+                {edit ? (
+                  <input
+                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-green-900"
+                    name="card"
+                    value={values.card}
+                    onChange={handleChange}
+                  />
+                ) : (
+                  <h1 className="text-green-900 text-sm">{values.card}</h1>
+                )}
+              </div>
+
+              <div className="flex flex-col ">
+                <h1 className="text-slate-500 font-bold text-sm">
+                  Date of Purchase
+                </h1>
+                {edit ? (
+                  <input
+                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-green-900"
+                    name="boughtDate"
+                    value={values.boughtDate}
+                    onChange={handleChange}
+                    type="date"
+                  />
+                ) : (
+                  <h1 className="text-green-900 text-sm">
+                    {values.boughtDate}
+                  </h1>
+                )}
+              </div>
+
+              <div className="flex flex-col ">
+                <h1 className="text-slate-500 font-bold text-sm">
+                  Return Date
+                </h1>
+                {edit ? (
+                  <input
+                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-green-900"
+                    name="finalReturnDate"
+                    value={values.finalReturnDate}
+                    onChange={handleChange}
+                    type="date"
+                  />
+                ) : (
+                  <h1 className="text-green-900 text-sm">
+                    {values.finalReturnDate}
+                  </h1>
+                )}
+              </div>
+            </div>
+            {values.receiptImage.length > 0 && (
               <div className="w-24 h-50 overflow-hidden relative flex items-center justify-center rounded-md">
                 <Image
                   width={150}
@@ -868,8 +921,8 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                   alt=""
                 />
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         <div className="w-full flex flex-col gap-4">
@@ -936,26 +989,28 @@ const ReceiptFormItems = ({
         {edit ? (
           <div className="flex justify-between w-full">
             <input
-              className="text-lg text-orange-500"
+              className="text-lg text-orange-500  bg-white  bg border-green-900"
               value={item.description}
               onChange={(e) => handleItemChange(e, "description")}
             />
-            <h1
-              className="text-lg text-orange-500"
+            <button
+              className="text-sm text-orange-500"
               onClick={() => setEdit(false)}
             >
-              Done
-            </h1>
+              Save
+            </button>
           </div>
         ) : (
           <div className="flex justify-between w-full">
-            <h1 className="text-lg text-orange-500">{item.description}</h1>
-            <h1
-              className="text-lg text-orange-500"
+            <button className="text-lg text-orange-500">
+              {item.description}
+            </button>
+            <button
+              className="text-sm text-orange-500"
               onClick={() => setEdit(true)}
             >
               Edit
-            </h1>
+            </button>
           </div>
         )}
       </div>
@@ -972,7 +1027,41 @@ const ReceiptFormItems = ({
                   alt=""
                   className="w-full h-full object-contain"
                 />
-                {edit && <div>replace</div>}
+                {edit && (
+                  <div className="text-sm">
+                    <UploadButton
+                      appearance={{
+                        button:
+                          "ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed  after:none w-full h-[30px] w-[120px]",
+                      }}
+                      endpoint="imageUploader"
+                      content={{
+                        button: "Replace image",
+                        allowedContent: " ",
+                      }}
+                      onClientUploadComplete={(res) => {
+                        const updatedItems = values.items.map((item, idx) => {
+                          if (idx === index) {
+                            deleteUploadThingImage(item.photo[0].key);
+                            return {
+                              ...item,
+                              photo: [
+                                ...item.photo,
+                                { url: res[0].url, key: res[0].key },
+                              ],
+                            };
+                          }
+                          return item;
+                        });
+
+                        setFieldValue("items", updatedItems);
+                      }}
+                      onUploadError={(error: Error) => {
+                        alert("erro");
+                      }}
+                    />
+                  </div>
+                )}
               </div>
             ) : (
               <UploadButton
@@ -1024,6 +1113,7 @@ const ReceiptFormItems = ({
             <h1 className="text-slate-400 font-bold">Amount</h1>
             {edit ? (
               <input
+                className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-green-900"
                 value={item.price}
                 onChange={(e) => handleItemChange(e, "price")}
               />
@@ -1035,6 +1125,7 @@ const ReceiptFormItems = ({
             <h1 className="text-slate-400 font-bold">Barcode</h1>
             {edit ? (
               <input
+                className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-green-900"
                 value={item.barcode}
                 onChange={(e) => handleItemChange(e, "barcode")}
               />

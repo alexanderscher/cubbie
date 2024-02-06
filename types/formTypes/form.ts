@@ -25,3 +25,15 @@ export interface ReceiptInput {
   onlineType: string;
   storeType: string;
 }
+
+export enum ReceiptStoreStage {
+  IN_STORE_RECEIPT = "IN_STORE_RECEIPT",
+  IN_STORE_ITEMS_MANUAL = "IN_STORE_ITEMS",
+  PREVIEW = "PREVIEW",
+}
+
+export enum ReceiptOnlineStage {
+  ONLINE_RECEIPT = "ONLINE_RECEIPT",
+  ONLINE_ITEMS = "ONLINE_ITEMS",
+  PREVIEW = "PREVIEW",
+}

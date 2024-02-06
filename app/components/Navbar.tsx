@@ -12,7 +12,7 @@ const Navbar = () => {
         </h1>
       </div>
       <div className="flex gap-3">
-        <a href="/create" className="navbarItems">
+        <a href="/receipt-type" className="navbarItems">
           Create
         </a>
         <a href="" className="navbarItems">
@@ -25,7 +25,7 @@ const Navbar = () => {
         <a href="/">Account</a>
       </div>
       <div className="navbarMobile">
-        <a href="/create">Create</a>
+        <a href="/receipt-type">Create</a>
         <a href="">Return</a>
         <a href="/">Search</a>
         <a href="">Alerts</a>

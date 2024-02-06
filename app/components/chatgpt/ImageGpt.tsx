@@ -17,16 +17,13 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
 
   const { startUpload, permittedFileInfo } = useUploadThing("imageUploader", {
     onClientUploadComplete: (res) => {
-      if (values.receiptImage.length === 0) {
+      (async () => {
+        if (values.receiptImage.length !== 0) {
+          await deleteUploadThingImage(values.receiptImage[0].key);
+        }
         setFieldValue("receiptImage", res);
-      } else {
-        deleteUploadThingImage(values.receiptImage[0].key);
-        setFieldValue("receiptImage", res);
-      }
-      alert("uploaded successfully!");
+      })().catch(console.error);
     },
-    onUploadError: () => {},
-    onUploadBegin: () => {},
   });
 
   const handleFileChange = useCallback(
@@ -57,7 +54,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
   const handleSubmit = async () => {
     if (image === "") {
       setNoImage(true);
-      // return;
+      return;
     }
 
     const res = await fetch("/api/gpt/analyze-image", {
@@ -95,7 +92,8 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
         photo: item.photo || [],
         price: item.price || 0,
         barcode: item.barcode || "",
-        asset: item.hasOwnProperty("asset") ? item.asset : false, //
+        asset: item.hasOwnProperty("asset") ? item.asset : false,
+        character: "",
       })
     );
     setFieldValue("items", itemsWithAllProperties);
@@ -163,7 +161,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
           </div>
         </div>
         {noImage && (
-          <p className="text-sm text-center text-red-500">
+          <p className="text-sm text-center text-orange-800">
             Please upload an image to analyze. If you have a receipt, take a
             picture of the receipt and upload it.
           </p>

@@ -39,7 +39,8 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
       photo: item.photo || [],
       price: item.price || 0,
       barcode: item.barcode || "",
-      asset: item.hasOwnProperty("asset") ? item.asset : false, //
+      asset: item.hasOwnProperty("asset") ? item.asset : false,
+      character: "",
     }));
 
     setFieldValue("items", itemsWithAllProperties);
@@ -52,6 +53,7 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
   const handleSubmit = async () => {
     if (inputText === "") {
       setNoText(true);
+      return;
     }
 
     if (values.items.length > 0) {
@@ -108,7 +110,7 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
         </div>
       )}
       {noText && (
-        <p className="text-sm text-center text-red-500">
+        <p className="text-sm text-center text-orange-800">
           Please enter some text to analyze. If you have a receipt, copy and
           paste the items from the receipt.
         </p>

@@ -22,29 +22,29 @@ enum ReceiptStage {
   PREVIEW = "PREVIEW",
 }
 
-interface ItemInput {
-  description: string;
-  photo: [];
-  price: number;
-  barcode: string;
-  asset: boolean;
+interface Photo {
+  key: string;
+  url: string;
 }
 
-interface Image {
-  url: string;
-  key: string;
+interface ItemInput {
+  description: string;
+  photo?: Photo[];
+  price: number | null;
+  barcode?: string;
+  asset: boolean;
+  character?: string;
 }
 
 interface ReceiptInput {
   type: string;
   store: string;
-  receiptNumber: string;
-  card: string;
-  amount: "";
+  card?: string;
+  amount: number | null;
   boughtDate: string;
   daysUntilReturn: number;
   finalReturnDate: string;
-  receiptImage: Image[];
+  receiptImage?: Photo[];
   items: ItemInput[];
   onlineType: string;
   storeType: string;
@@ -55,9 +55,8 @@ const TODAY = new Date().toISOString().split("T")[0];
 const DEFAULT_INPUT_VALUES: ReceiptInput = {
   type: "",
   store: "",
-  receiptNumber: "",
   card: "",
-  amount: "",
+  amount: null,
   boughtDate: TODAY,
   daysUntilReturn: 30,
   finalReturnDate: "",
@@ -498,16 +497,17 @@ const Create = () => {
                                   )}
                               </div>
                             </div>
-                            {values.receiptImage.length > 0 && (
-                              <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md">
-                                <Image
-                                  width={200}
-                                  height={200}
-                                  src={values.receiptImage[0].url}
-                                  alt=""
-                                />
-                              </div>
-                            )}
+                            {values.receiptImage &&
+                              values.receiptImage.length > 0 && (
+                                <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md">
+                                  <Image
+                                    width={200}
+                                    height={200}
+                                    src={values.receiptImage[0].url}
+                                    alt=""
+                                  />
+                                </div>
+                              )}
                           </div>
 
                           <div className="grid grid-cols-3 gap-10 receipt-grid mb-[100px]">
@@ -683,19 +683,20 @@ const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
   const [showScanner, setShowScanner] = useState(false);
   const [isBarcode, setIsBarcode] = useState(false);
 
-  const [item, setItem] = useState({
+  const [item, setItem] = useState<ItemInput>({
     description: "",
-    photo: [] as Image[],
-    price: "",
+    photo: [],
+    price: null,
     barcode: "",
     asset: false,
+    character: "",
   });
   const handleItemAdd = (value: any, type: string) => {
     setItem({ ...item, [type]: value });
   };
   const addItemToFormik = (setFieldValue: any, values: ReceiptInput) => {
     const currentItems = values.items;
-    if (item.photo.length > 0 && item.photo[0].url === "") {
+    if (item.photo && item.photo?.length > 0) {
       item.photo = [];
     }
 
@@ -704,9 +705,10 @@ const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
     setItem({
       description: "",
       photo: [],
-      price: "",
+      price: null,
       barcode: "",
       asset: false,
+      character: "",
     });
   };
 
@@ -732,10 +734,21 @@ const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
         <p className="text-sm text-green-900">Price</p>
         <input
           className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
-          value={item.price}
+          value={item.price as number}
           name="price"
           onChange={(e) => {
             handleItemAdd(e.target.value, "price");
+          }}
+        />
+      </div>
+      <div>
+        <p className="text-sm text-green-900">Character</p>
+        <input
+          className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
+          value={item.character}
+          name="charatcer"
+          onChange={(e) => {
+            handleItemAdd(e.target.value, "character");
           }}
         />
       </div>
@@ -825,17 +838,20 @@ const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
           //   button: "Add image of item",
           //   allowedContent: receiptImageError.error && (
           //     <div className="">
-          //       <p className="text-red-500">
+          //       <p className="text-orange-800">
           //         {receiptImageError.message}
           //       </p>
           //     </div>
           //   ),
           // }}
           onClientUploadComplete={(res) => {
-            if (item.photo.length === 0) {
+            if (item.photo && item.photo.length === 0) {
               handleItemAdd(res, "photo");
             } else {
-              deleteUploadThingImage(item.photo[0].key);
+              if (item.photo && item.photo.length > 0) {
+                deleteUploadThingImage(item.photo[0]?.key);
+              }
+
               handleItemAdd(res, "photo");
             }
           }}
@@ -848,11 +864,14 @@ const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
         />
       </div>
 
-      {item.photo.length > 0 && (
+      {item.photo && item.photo.length > 0 && (
         <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md">
           <button
             onClick={() => {
-              deleteUploadThingImage(item.photo[0].key);
+              if (item.photo && item.photo.length > 0) {
+                deleteUploadThingImage(item.photo[0].key);
+              }
+
               setItem({
                 ...item,
                 photo: [],
@@ -933,7 +952,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                   <input
                     className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-green-900"
                     name="amount"
-                    value={values.amount}
+                    value={values.amount as number}
                     onChange={handleChange}
                   />
                 ) : (
@@ -1023,7 +1042,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                 )}
               </div>
             </div>
-            {values.receiptImage.length > 0 && (
+            {values.receiptImage && values.receiptImage.length > 0 && (
               <div className="w-24 h-50 overflow-hidden relative flex items-center justify-center rounded-md">
                 <Image
                   width={150}
@@ -1153,11 +1172,16 @@ const ReceiptFormItems = ({
                       onClientUploadComplete={(res) => {
                         const updatedItems = values.items.map((item, idx) => {
                           if (idx === index) {
-                            deleteUploadThingImage(item.photo[0].key);
+                            async () => {
+                              if (item.photo && item.photo.length > 0) {
+                                await deleteUploadThingImage(item.photo[0].key);
+                              }
+                            };
+
                             return {
                               ...item,
                               photo: [
-                                ...item.photo,
+                                ...(item.photo || []),
                                 { url: res[0].url, key: res[0].key },
                               ],
                             };
@@ -1191,7 +1215,7 @@ const ReceiptFormItems = ({
                       return {
                         ...item,
                         photo: [
-                          ...item.photo,
+                          ...(item.photo || []),
                           { url: res[0].url, key: res[0].key },
                         ],
                       };
@@ -1244,8 +1268,25 @@ const ReceiptFormItems = ({
               <h1>{item.barcode}</h1>
             )}
           </div>
+          <div>
+            <h1 className="text-slate-400 font-bold">Character</h1>
+            {edit ? (
+              <input
+                className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-green-900"
+                value={item.character}
+                onChange={(e) => handleItemChange(e, "character")}
+              />
+            ) : (
+              <h1>{item.character}</h1>
+            )}
+          </div>
 
-          <button onClick={() => removeItem(index)}>Remove</button>
+          <RegularButton
+            styles="border-green-900"
+            onClick={() => removeItem(index)}
+          >
+            <p className="text-xs">Delete</p>
+          </RegularButton>
         </div>
       </div>
     </div>

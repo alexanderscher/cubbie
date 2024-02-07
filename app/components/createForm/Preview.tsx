@@ -11,6 +11,7 @@ interface PreviewProps {
 }
 const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
   const [edit, setEdit] = useState(false);
+
   const toggleEdit = () => {
     setEdit(!edit);
   };
@@ -79,6 +80,23 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                   />
                 ) : (
                   <h1 className="text-green-900 text-sm">{values.card}</h1>
+                )}
+              </div>
+              <div className="flex flex-col ">
+                <h1 className="text-slate-500 font-bold text-sm">
+                  Tracking Number Link
+                </h1>
+                {edit ? (
+                  <input
+                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-green-900"
+                    name="trackingNumber"
+                    value={values.trackingNumber}
+                    onChange={handleChange}
+                  />
+                ) : (
+                  <h1 className="text-green-900 text-sm">
+                    {values.trackingNumber}
+                  </h1>
                 )}
               </div>
 

@@ -13,7 +13,6 @@ import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
 import { ReceiptOnlineStage } from "@/types/formTypes/form";
 import FinalStage from "@/app/components/createForm/FinalStage";
 import { ItemsSchema, ReceiptSchema } from "@/utils/receiptValidation";
-import { error } from "console";
 
 const getValidationSchema = (stage: ReceiptOnlineStage) => {
   switch (stage) {
@@ -34,8 +33,9 @@ const Online = () => {
     store: "",
     amount: "",
     itemError: "",
+    trackingNumber: "",
   });
-  console.log(errors);
+
   const router = useRouter();
 
   return (
@@ -68,7 +68,6 @@ const Online = () => {
                 </h1>
 
                 <RegularButton
-                  submit
                   styles="bg border-green-900"
                   handleClick={async () => {
                     if (values.receiptImage && values.receiptImage.length > 0) {
@@ -107,6 +106,7 @@ const Online = () => {
                             </RegularButton>
                           </div>
                           <ReceiptManual
+                            online
                             setFieldValue={setFieldValue}
                             values={values}
                             handleChange={handleChange}
@@ -115,7 +115,6 @@ const Online = () => {
                           />
                           <div className="flex gap-2">
                             <RegularButton
-                              submit
                               styles={"bg-orange-400 border-green-900 w-full"}
                               handleClick={() => {
                                 router.push("/receipt-type");
@@ -127,7 +126,6 @@ const Online = () => {
                             </RegularButton>
 
                             <RegularButton
-                              submit
                               styles={"bg-orange-400 border-green-900 w-full"}
                               handleClick={async () => {
                                 const error = await validateForm();
@@ -138,10 +136,20 @@ const Online = () => {
                                       error.store || prevErrors.store || "",
                                     amount:
                                       error.amount || prevErrors.amount || "",
+                                    trackingNumber:
+                                      error.trackingNumber ||
+                                      prevErrors.trackingNumber ||
+                                      "",
                                   }));
                                 }
                                 if (Object.keys(error).length === 0) {
                                   setStage(ReceiptOnlineStage.ONLINE_ITEMS);
+                                  setErrors((prevErrors) => ({
+                                    ...prevErrors,
+                                    store: "",
+                                    amount: "",
+                                    trackingNumber: "",
+                                  }));
                                 }
                               }}
                             >
@@ -220,7 +228,6 @@ const Online = () => {
 
                           <div className="flex gap-2 ">
                             <RegularButton
-                              submit
                               styles={"bg-orange-400 border-green-900 w-full"}
                               handleClick={() => {
                                 setStage(ReceiptOnlineStage.ONLINE_RECEIPT);
@@ -230,7 +237,6 @@ const Online = () => {
                             </RegularButton>
 
                             <RegularButton
-                              submit
                               styles={"bg-orange-400 border-green-900 w-full"}
                               handleClick={async () => {
                                 const error = await validateForm();

@@ -98,93 +98,92 @@ const ReceiptFormItems = ({
         )}
       </div>
 
-      <div className="flex gap-6">
-        <div className="w-[120px] h-[150px] flex items-center justify-center rounded-sm">
-          <div className="w-full h-full flex">
-            {item.photo.length > 0 ? (
-              <div className="w-full">
-                <Image
-                  width={200}
-                  height={200}
-                  src={item.photo[0].url}
-                  alt=""
-                  className="w-full h-full object-contain"
-                />
-                {edit && (
-                  <div className="text-sm">
-                    <UploadButton
-                      appearance={{
-                        button:
-                          "ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed  after:none w-full h-[30px] w-[120px]",
-                      }}
-                      endpoint="imageUploader"
-                      content={{
-                        button: "Replace image",
-                        allowedContent: " ",
-                      }}
-                      onClientUploadComplete={(res) => {
-                        const updatedItems = values.items.map((item, idx) => {
-                          if (idx === index) {
-                            async () => {
-                              if (item.photo && item.photo.length > 0) {
-                                await deleteUploadThingImage(item.photo[0].key);
-                              }
-                            };
-
-                            return {
-                              ...item,
-                              photo: [
-                                ...(item.photo || []),
-                                { url: res[0].url, key: res[0].key },
-                              ],
-                            };
-                          }
-                          return item;
-                        });
-
-                        setFieldValue("items", updatedItems);
-                      }}
-                      onUploadError={(error: Error) => {
-                        alert("error");
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
-            ) : (
-              <UploadButton
-                appearance={{
-                  button:
-                    "ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed  after:none w-full h-[5000px] w-[120px]",
-                }}
-                endpoint="imageUploader"
-                content={{
-                  button: "Add image",
-                  allowedContent: " ",
-                }}
-                onClientUploadComplete={(res) => {
-                  const updatedItems = values.items.map((item, idx) => {
-                    if (idx === index) {
-                      return {
-                        ...item,
-                        photo: [
-                          ...(item.photo || []),
-                          { url: res[0].url, key: res[0].key },
-                        ],
-                      };
-                    }
-                    return item;
-                  });
-
-                  setFieldValue("items", updatedItems);
-                }}
-                onUploadError={(error: Error) => {
-                  alert("error");
-                }}
+      <div className="w-full h-full flex gap-6">
+        <div className="w-[120px] h-[150px] flex items-center rounded-sm flex-shrink-0">
+          {item.photo.length > 0 ? (
+            <div className="w-full">
+              <Image
+                width={200}
+                height={200}
+                src={item.photo[0].url}
+                alt=""
+                className="w-full h-full object-cover"
               />
-            )}
-          </div>
+              {edit && (
+                <div className="text-sm">
+                  <UploadButton
+                    appearance={{
+                      button:
+                        "ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed  after:none w-full h-[30px] w-[120px]",
+                    }}
+                    endpoint="imageUploader"
+                    content={{
+                      button: "Replace image",
+                      allowedContent: " ",
+                    }}
+                    onClientUploadComplete={(res) => {
+                      const updatedItems = values.items.map((item, idx) => {
+                        if (idx === index) {
+                          async () => {
+                            if (item.photo && item.photo.length > 0) {
+                              await deleteUploadThingImage(item.photo[0].key);
+                            }
+                          };
+
+                          return {
+                            ...item,
+                            photo: [
+                              ...(item.photo || []),
+                              { url: res[0].url, key: res[0].key },
+                            ],
+                          };
+                        }
+                        return item;
+                      });
+
+                      setFieldValue("items", updatedItems);
+                    }}
+                    onUploadError={(error: Error) => {
+                      alert("error");
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+          ) : (
+            <UploadButton
+              appearance={{
+                button:
+                  "ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed  after:none w-full h-[150px] w-[120px] mt-10",
+              }}
+              endpoint="imageUploader"
+              content={{
+                button: "Add image",
+                allowedContent: " ",
+              }}
+              onClientUploadComplete={(res) => {
+                const updatedItems = values.items.map((item, idx) => {
+                  if (idx === index) {
+                    return {
+                      ...item,
+                      photo: [
+                        ...(item.photo || []),
+                        { url: res[0].url, key: res[0].key },
+                      ],
+                    };
+                  }
+                  return item;
+                });
+
+                setFieldValue("items", updatedItems);
+              }}
+              onUploadError={(error: Error) => {
+                alert("error");
+              }}
+            />
+          )}
         </div>
+
         <div className="text-sm flex flex-col gap-3 items-start w-full">
           <RegularButton
             handleClick={toggleAsset}

@@ -34,9 +34,44 @@ const Store = () => {
     amount: "",
     itemError: "",
     gptError: "",
+    itemFileError: "",
   });
   console.log(errors);
   const router = useRouter();
+
+  const validateSubmit = async (validateForm: any, values: any) => {
+    const error = await validateForm();
+
+    let itemFileError = "";
+
+    for (const item of values.items) {
+      const price = parseFloat(item.price);
+
+      const priceValid =
+        !isNaN(price) &&
+        price > 0 &&
+        item.price.trim() !== "" &&
+        `${price}` === item.price.trim();
+
+      if (!item.description || !priceValid) {
+        itemFileError = "All items must have a description and a valid price.";
+        break;
+      }
+    }
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      itemError:
+        typeof error.items === "string"
+          ? error.items
+          : prevErrors.itemError || "",
+      itemFileError,
+    }));
+
+    if (Object.keys(error).length === 0 && !itemFileError) {
+      setStage(ReceiptStoreStage.PREVIEW);
+    }
+  };
 
   return (
     <div className="flex ">
@@ -68,7 +103,6 @@ const Store = () => {
                 </h1>
 
                 <RegularButton
-                  submit
                   styles="bg border-green-900"
                   handleClick={async () => {
                     if (values.receiptImage && values.receiptImage.length > 0) {
@@ -202,6 +236,11 @@ const Store = () => {
                                     setStage(
                                       ReceiptStoreStage.IN_STORE_ITEMS_MANUAL
                                     );
+                                    setErrors((prevErrors) => ({
+                                      ...prevErrors,
+                                      store: "",
+                                      amount: "",
+                                    }));
                                   }
                                 }}
                               >
@@ -240,6 +279,11 @@ const Store = () => {
                               {errors.itemError}
                             </p>
                           )}
+                          {errors.itemFileError && (
+                            <p className=" text-orange-800 text-sm">
+                              {errors.itemFileError}
+                            </p>
+                          )}
                           <OnlineReceiptManual
                             setFieldValue={setFieldValue}
                             values={values}
@@ -247,7 +291,6 @@ const Store = () => {
 
                           <div className="flex gap-2 ">
                             <RegularButton
-                              submit
                               styles={"bg-orange-400 border-green-900 w-full"}
                               handleClick={() => {
                                 setStage(ReceiptStoreStage.IN_STORE_RECEIPT);
@@ -257,20 +300,9 @@ const Store = () => {
                             </RegularButton>
 
                             <RegularButton
-                              submit
                               styles={"bg-orange-400 border-green-900 w-full"}
                               handleClick={async () => {
-                                const error = await validateForm();
-                                setErrors((prevErrors) => ({
-                                  ...prevErrors,
-                                  itemError:
-                                    typeof error.items === "string"
-                                      ? error.items
-                                      : prevErrors.itemError || "",
-                                }));
-                                if (Object.keys(error).length === 0) {
-                                  setStage(ReceiptStoreStage.PREVIEW);
-                                }
+                                validateSubmit(validateForm, values);
                               }}
                             >
                               <p className="text-green-900 ">Preview</p>

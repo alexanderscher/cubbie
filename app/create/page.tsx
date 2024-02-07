@@ -98,7 +98,6 @@ const Create = () => {
                 </h1>
                 {stage !== ReceiptStage.METHOD && (
                   <RegularButton
-                    submit
                     styles="bg border-green-900"
                     handleClick={() => {
                       {

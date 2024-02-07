@@ -31,9 +31,11 @@ const FinalStage = ({
         <div className="flex flex-col gap-4">
           <h1>Preview Receipt</h1>
           <div className="flex flex-col gap-4 receipt-bar">
-            <h1 className="text-green-900 text-2xl ">{values.store}</h1>
+            <h1 className="text-green-900 text-2xl">{values.store}</h1>
             <RegularButton
-              styles={"border-orange-400 text-orange-400 text-sm w-[80px]"}
+              styles={
+                "border-orange-400 text-orange-400 w-[80px] flex justify-center items-center"
+              }
             >
               <p className="text-sm">{values.type}</p>
             </RegularButton>
@@ -48,6 +50,20 @@ const FinalStage = ({
               <h1 className="text-slate-500 font-bold text-sm">Total Amount</h1>
               <h1 className="">{values.amount}</h1>
             </div>
+            <div className="receipt-info">
+              <h1 className="text-slate-500 font-bold text-sm">Card</h1>
+              {values.card ? values.card : "None"}
+            </div>
+            {values.type === "Online" && (
+              <div className="receipt-info">
+                <h1 className="text-slate-500 font-bold text-sm">
+                  Tracking Number
+                </h1>
+                <h1 className="">
+                  {values.trackingNumber ? values.trackingNumber : "None"}
+                </h1>
+              </div>
+            )}
 
             <div className="receipt-info">
               <h1 className="text-slate-500 font-bold text-sm">
@@ -84,6 +100,7 @@ const FinalStage = ({
           {values.items.map((item: ItemInput, index: number) => (
             <div key={index}>
               <ReceiptFormItems
+                stage="Final"
                 item={item}
                 values={values}
                 index={index}
@@ -123,7 +140,6 @@ const FinalStage = ({
             </RegularButton>
           </div>
           <RegularButton
-            submit
             styles={"bg-green-900 border-green-900 "}
             handleClick={() => handleSubmit()}
           >

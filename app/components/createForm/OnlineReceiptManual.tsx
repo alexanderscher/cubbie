@@ -54,6 +54,11 @@ const OnlineReceiptManual = ({ setFieldValue, values, validateForm }: any) => {
         asset: false,
         character: "",
       });
+
+      setError({
+        description: "",
+        price: "",
+      });
     } catch (error) {
       let errorsObject = {};
 
@@ -92,7 +97,7 @@ const OnlineReceiptManual = ({ setFieldValue, values, validateForm }: any) => {
           }}
         />
         {error.description && (
-          <p className="text-red-600 text-xs">{error.description}</p>
+          <p className="text-orange-900 text-xs">{error.description}</p>
         )}
       </div>
 
@@ -106,7 +111,9 @@ const OnlineReceiptManual = ({ setFieldValue, values, validateForm }: any) => {
             handleItemAdd(e.target.value, "price");
           }}
         />
-        {error.price && <p className="text-red-600 text-xs">{error.price}</p>}
+        {error.price && (
+          <p className="text-orange-900 text-xs">{error.price}</p>
+        )}
       </div>
       <div>
         <p className="text-sm text-green-900">Character</p>
@@ -272,7 +279,6 @@ const OnlineReceiptManual = ({ setFieldValue, values, validateForm }: any) => {
       )}
 
       <RegularButton
-        submit
         styles={"border-green-900 bg-green-900 w-full"}
         handleClick={() => {
           addItemToFormik(setFieldValue, values);

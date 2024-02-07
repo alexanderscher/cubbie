@@ -9,6 +9,10 @@ export const ReceiptSchema = Yup.object({
 
   boughtDate: Yup.date().required("Bought date is required"),
   daysUntilReturn: Yup.number().required("Days until return is required"),
+  trackingNumber: Yup.string()
+    .url("The tracking number must be a valid URL")
+    .nullable()
+    .notRequired(),
 });
 
 export const ItemsSchema = Yup.object({

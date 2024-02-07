@@ -17,6 +17,7 @@ export interface ReceiptInput {
   store: string;
   card?: string;
   amount: number;
+  trackingNumber?: string;
   boughtDate: string;
   daysUntilReturn: number;
   finalReturnDate: string;

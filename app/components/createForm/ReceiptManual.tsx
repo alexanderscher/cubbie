@@ -5,6 +5,7 @@ const ReceiptManual = ({
   handleChange,
   setFieldValue,
   errors,
+  online = false,
 }: any) => {
   return (
     <div className="">
@@ -45,6 +46,21 @@ const ReceiptManual = ({
             onChange={handleChange("card")}
           />
         </div>
+        {online && (
+          <div>
+            <p className="text-sm text-green-900">Tracking Number Link</p>
+            <input
+              className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
+              name="trackingNumber"
+              value={values.trackingNumber}
+              onChange={handleChange("trackingNumber")}
+            />
+            {errors.trackingNumber && (
+              <p className="text-orange-800 text-xs">{errors.trackingNumber}</p>
+            )}
+          </div>
+        )}
+
         <div>
           <p className="text-sm text-green-900">Purchase Date</p>
 

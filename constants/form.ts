@@ -6,7 +6,7 @@ export const DEFAULT_INPUT_VALUES: ReceiptInput = {
   type: "",
   store: "",
   card: "",
-  amount: null,
+  amount: 0,
   boughtDate: TODAY,
   daysUntilReturn: 30,
   finalReturnDate: "",

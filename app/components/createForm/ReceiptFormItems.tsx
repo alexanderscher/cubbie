@@ -75,6 +75,7 @@ const ReceiptFormItems = ({
               onChange={(e) => handleItemChange(e, "description")}
             />
             <button
+              type="button"
               className="text-sm text-orange-500"
               onClick={() => setEdit(false)}
             >
@@ -83,10 +84,11 @@ const ReceiptFormItems = ({
           </div>
         ) : (
           <div className="flex justify-between w-full">
-            <button className="text-lg text-orange-500">
+            <button type="button" className="text-lg text-orange-500">
               {item.description}
             </button>
             <button
+              type="button"
               className="text-sm text-orange-500"
               onClick={() => setEdit(true)}
             >
@@ -241,6 +243,7 @@ const ReceiptFormItems = ({
                   onChange={(e) => handleItemChange(e, "barcode")}
                 />
                 <button
+                  type="button"
                   className="border-[1.5px] border-green-900 p-3 rounded-md text-green-900 w-[150px]"
                   onClick={() => {
                     setShowScanner(true);
@@ -263,6 +266,7 @@ const ReceiptFormItems = ({
                       onError={handleError}
                     />
                     <button
+                      type="button"
                       onClick={() => {
                         setShowScanner(false);
                       }}

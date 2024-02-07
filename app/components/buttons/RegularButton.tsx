@@ -14,11 +14,12 @@ const RegularButton = ({
   handleClick,
   styles,
   submit = false,
-  type,
+  type = "button",
   ...restProps
 }: Props) => {
   return (
     <button
+      type={type}
       className={`
        
       border-[1.5px] ${

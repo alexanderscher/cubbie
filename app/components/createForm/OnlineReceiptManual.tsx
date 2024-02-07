@@ -5,15 +5,28 @@ import { ItemInput, ReceiptInput } from "@/types/formTypes/form";
 import { UploadButton } from "@/utils/uploadthing";
 import Image from "next/image";
 import React, { useState } from "react";
+import * as Yup from "yup";
 
-const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
+const itemSchema = Yup.object({
+  description: Yup.string().required("Description is required"),
+  price: Yup.number()
+    .required("Price is required")
+    .typeError("Price must be a number")
+    .positive("Price must be positive"),
+});
+
+const OnlineReceiptManual = ({ setFieldValue, values, validateForm }: any) => {
   const [showScanner, setShowScanner] = useState(false);
   const [isBarcode, setIsBarcode] = useState(false);
+  const [error, setError] = useState({
+    description: "",
+    price: "",
+  });
 
   const [item, setItem] = useState<ItemInput>({
     description: "",
     photo: [],
-    price: null,
+    price: 0,
     barcode: "",
     asset: false,
     character: "",
@@ -21,23 +34,44 @@ const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
   const handleItemAdd = (value: any, type: string) => {
     setItem({ ...item, [type]: value });
   };
-  const addItemToFormik = (setFieldValue: any, values: ReceiptInput) => {
-    const currentItems = values.items;
-    if (item.photo && item.photo?.length > 0) {
-      item.photo = [];
+  const addItemToFormik = async (setFieldValue: any, values: ReceiptInput) => {
+    try {
+      await itemSchema.validate(item, { abortEarly: false });
+
+      const currentItems = values.items;
+      if (item.photo && item.photo?.length > 0) {
+        item.photo = [];
+      }
+
+      setFieldValue("items", [...currentItems, item]);
+
+      setItem({
+        description: "",
+        photo: [],
+        price: 0,
+        barcode: "",
+        product_id: "",
+        asset: false,
+        character: "",
+      });
+    } catch (error) {
+      let errorsObject = {};
+
+      if (error instanceof Yup.ValidationError) {
+        errorsObject = error.inner.reduce((acc, curr) => {
+          const key = curr.path || "unknownField";
+          acc[key] = curr.message;
+          return acc;
+        }, {} as Record<string, string>);
+      }
+
+      setError(
+        errorsObject as {
+          description: string;
+          price: string;
+        }
+      );
     }
-
-    setFieldValue("items", [...currentItems, item]);
-
-    setItem({
-      description: "",
-      photo: [],
-      price: null,
-      barcode: "",
-      product_id: "",
-      asset: false,
-      character: "",
-    });
   };
 
   const handleError = (error: any) => {
@@ -48,6 +82,7 @@ const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
     <div className="flex flex-col gap-6">
       <div>
         <p className="text-sm text-green-900">Description/Title</p>
+
         <input
           className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
           name="description"
@@ -56,6 +91,9 @@ const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
             handleItemAdd(e.target.value, "description");
           }}
         />
+        {error.description && (
+          <p className="text-red-600 text-xs">{error.description}</p>
+        )}
       </div>
 
       <div>
@@ -68,6 +106,7 @@ const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
             handleItemAdd(e.target.value, "price");
           }}
         />
+        {error.price && <p className="text-red-600 text-xs">{error.price}</p>}
       </div>
       <div>
         <p className="text-sm text-green-900">Character</p>
@@ -95,6 +134,7 @@ const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
 
       <div className="flex gap-4">
         <button
+          type="button"
           className="border-[1.5px] border-green-900 w-full p-3 rounded-md text-green-900"
           onClick={() => {
             setShowScanner(true);
@@ -105,6 +145,7 @@ const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
           Scan barcode
         </button>
         <button
+          type="button"
           className="border-[1.5px] border-green-900 w-full p-3 rounded-md text-green-900"
           onClick={() => {
             setShowScanner(false);
@@ -127,6 +168,7 @@ const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
             onError={handleError}
           />
           <button
+            type="button"
             onClick={() => {
               setShowScanner(false);
             }}
@@ -208,6 +250,7 @@ const OnlineReceiptManual = ({ setFieldValue, values }: any) => {
       {item.photo && item.photo.length > 0 && (
         <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md">
           <button
+            type="button"
             onClick={() => {
               async () => {
                 if (item.photo && item.photo.length > 0) {

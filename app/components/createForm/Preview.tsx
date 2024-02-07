@@ -29,6 +29,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                   onChange={handleChange}
                 />
                 <button
+                  type="button"
                   onClick={toggleEdit}
                   className="text-sm text-orange-400"
                 >
@@ -41,6 +42,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                   {values.store || "Store Name"}
                 </h1>
                 <button
+                  type="button"
                   onClick={toggleEdit}
                   className="text-sm text-orange-400"
                 >

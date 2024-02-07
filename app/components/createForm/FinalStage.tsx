@@ -159,6 +159,7 @@ const FinalStage = ({
             </RegularButton>
           </div>
           <RegularButton
+            type="submit"
             styles={"bg-green-900 border-green-900 "}
             handleClick={() => handleSubmit()}
           >

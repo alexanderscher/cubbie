@@ -12,13 +12,35 @@ import { DEFAULT_INPUT_VALUES } from "@/constants/form";
 import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
 import { ReceiptOnlineStage } from "@/types/formTypes/form";
 import FinalStage from "@/app/components/createForm/FinalStage";
+import * as Yup from "yup";
 
-DEFAULT_INPUT_VALUES.type = "Online";
+const onlineReceiptSchema = Yup.object({
+  store: Yup.string().required("Store is required"),
+  amount: Yup.number()
+    .required("Amount is required")
+    .typeError("Amount must be a number")
+    .positive("Amount must be positive"),
+
+  boughtDate: Yup.date().required("Bought date is required"),
+  daysUntilReturn: Yup.number().required("Days until return is required"),
+});
+
+const getValidationSchema = (stage: ReceiptOnlineStage) => {
+  switch (stage) {
+    case ReceiptOnlineStage.ONLINE_RECEIPT:
+      return onlineReceiptSchema;
+
+    default:
+      return undefined;
+  }
+};
 
 const Online = () => {
   const [stage, setStage] = useState<ReceiptOnlineStage>(
     ReceiptOnlineStage.ONLINE_RECEIPT
   );
+  const [errors, setErrors] = useState({});
+  console.log(errors);
   const router = useRouter();
 
   return (
@@ -32,8 +54,15 @@ const Online = () => {
           onSubmit={(values) => {
             console.log(values);
           }}
+          validationSchema={getValidationSchema(stage)}
         >
-          {({ handleSubmit, setFieldValue, values, handleChange }) => (
+          {({
+            handleSubmit,
+            setFieldValue,
+            values,
+            handleChange,
+            validateForm,
+          }) => (
             <form
               onSubmit={handleSubmit}
               className="w-full flex flex-col gap-10 "
@@ -87,6 +116,7 @@ const Online = () => {
                             values={values}
                             handleChange={handleChange}
                             setStage={setStage}
+                            errors={errors}
                           />
                           <div className="flex gap-2">
                             <RegularButton
@@ -104,12 +134,16 @@ const Online = () => {
                             <RegularButton
                               submit
                               styles={"bg-orange-400 border-green-900 w-full"}
-                              handleClick={() => {
-                                setStage(ReceiptOnlineStage.ONLINE_ITEMS);
+                              handleClick={async () => {
+                                const errors = await validateForm();
+                                setErrors(errors);
+                                if (Object.keys(errors).length === 0) {
+                                  setStage(ReceiptOnlineStage.ONLINE_ITEMS);
+                                }
                               }}
                             >
                               <p className="text-green-900 ">
-                                Next: Receipt items
+                                Next: Receipt Items
                               </p>
                             </RegularButton>
                           </div>
@@ -170,6 +204,7 @@ const Online = () => {
                             />
                           ) : (
                             <OnlineReceiptManual
+                              validateForm={validateForm}
                               setFieldValue={setFieldValue}
                               values={values}
                             />

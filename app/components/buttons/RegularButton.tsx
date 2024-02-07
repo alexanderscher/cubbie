@@ -13,7 +13,7 @@ const RegularButton = ({
   children,
   handleClick,
   styles,
-  submit = false,
+
   type = "button",
   ...restProps
 }: Props) => {
@@ -22,9 +22,9 @@ const RegularButton = ({
       type={type}
       className={`
        
-      border-[1.5px] ${
-        !submit ? "px-4 py-[6px]" : "px-6 py-[8px]"
-      } rounded-3xl ${styles}`}
+      border-[1.5px]
+       px-4 py-[6px]
+       rounded-3xl ${styles}`}
       onClick={handleClick}
       {...restProps}
     >

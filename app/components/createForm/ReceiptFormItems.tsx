@@ -70,7 +70,7 @@ const ReceiptFormItems = ({
         {edit ? (
           <div className="flex justify-between w-full">
             <input
-              className="text-lg text-orange-500  bg-white  bg border-green-900"
+              className="text-orange-500  bg-white  bg border-green-900"
               value={item.description}
               onChange={(e) => handleItemChange(e, "description")}
             />
@@ -84,7 +84,7 @@ const ReceiptFormItems = ({
           </div>
         ) : (
           <div className="flex justify-between w-full">
-            <button type="button" className="text-lg text-orange-500">
+            <button type="button" className="text-orange-500">
               {item.description}
             </button>
             <button

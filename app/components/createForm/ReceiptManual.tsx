@@ -19,7 +19,7 @@ const ReceiptManual = ({
             onChange={handleChange("store")}
           />
           {errors.store && (
-            <p className="text-red-500 text-xs">{errors.store}</p>
+            <p className="text-orange-800 text-xs">{errors.store}</p>
           )}
         </div>
 
@@ -32,7 +32,7 @@ const ReceiptManual = ({
             onChange={handleChange("amount")}
           />
           {errors.amount && (
-            <p className="text-red-500 text-xs">{errors.amount}</p>
+            <p className="text-orange-800 text-xs">{errors.amount}</p>
           )}
         </div>
 
@@ -56,7 +56,7 @@ const ReceiptManual = ({
             type="date"
           />
           {errors.boughtDate && (
-            <p className="text-red-500 text-xs">{errors.boughtDate}</p>
+            <p className="text-orange-800 text-xs">{errors.boughtDate}</p>
           )}
         </div>
         <div>
@@ -71,7 +71,7 @@ const ReceiptManual = ({
             }}
           />
           {errors.daysUntilReturn && (
-            <p className="text-red-500 text-xs">{errors.daysUntilReturn}</p>
+            <p className="text-orange-800 text-xs">{errors.daysUntilReturn}</p>
           )}
         </div>
       </div>

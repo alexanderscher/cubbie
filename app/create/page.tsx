@@ -301,7 +301,7 @@ const Create = () => {
                       <div className="two-tab ">
                         <div className="left-tab">
                           <div className="flex justify-between">
-                            <h1 className="text-lg ">In Store Receipt</h1>
+                            <h1 className="">In Store Receipt</h1>
                             <RegularButton
                               styles={
                                 "border-orange-400 text-orange-400 text-sm"
@@ -365,7 +365,6 @@ const Create = () => {
                             </RegularButton>
                             {values.storeType === "gpt" ? (
                               <RegularButton
-                                submit
                                 styles={"bg-orange-400 border-green-900 w-full"}
                                 handleClick={() => {
                                   setStage(ReceiptStage.PREVIEW);
@@ -375,7 +374,6 @@ const Create = () => {
                               </RegularButton>
                             ) : (
                               <RegularButton
-                                submit
                                 styles={"bg-orange-400 border-green-900 w-full"}
                                 handleClick={() => {
                                   setStage(ReceiptStage.IN_STORE_ITEMS_MANUAL);
@@ -1119,7 +1117,7 @@ const ReceiptFormItems = ({
         {edit ? (
           <div className="flex justify-between w-full">
             <input
-              className="text-lg text-orange-500  bg-white  bg border-green-900"
+              className="text-orange-500  bg-white  bg border-green-900"
               value={item.description}
               onChange={(e) => handleItemChange(e, "description")}
             />
@@ -1132,9 +1130,7 @@ const ReceiptFormItems = ({
           </div>
         ) : (
           <div className="flex justify-between w-full">
-            <button className="text-lg text-orange-500">
-              {item.description}
-            </button>
+            <button className="text-orange-500">{item.description}</button>
             <button
               className="text-sm text-orange-500"
               onClick={() => setEdit(true)}

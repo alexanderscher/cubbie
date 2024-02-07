@@ -86,9 +86,7 @@ input:-webkit-autofill::first-line {
   width: 50%;
   max-width: 400px;
   flex-shrink: 0;
-
-  /* padding-bottom: 200px; */
-  /* height: 100vh; */
+  padding-bottom: 50px;
 }
 .mobile-form-items {
   display: none;

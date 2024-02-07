@@ -12,26 +12,17 @@ import { DEFAULT_INPUT_VALUES } from "@/constants/form";
 import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
 import { ReceiptOnlineStage } from "@/types/formTypes/form";
 import FinalStage from "@/app/components/createForm/FinalStage";
-import * as Yup from "yup";
-
-const onlineReceiptSchema = Yup.object({
-  store: Yup.string().required("Store is required"),
-  amount: Yup.number()
-    .required("Amount is required")
-    .typeError("Amount must be a number")
-    .positive("Amount must be positive"),
-
-  boughtDate: Yup.date().required("Bought date is required"),
-  daysUntilReturn: Yup.number().required("Days until return is required"),
-});
+import { ItemsSchema, ReceiptSchema } from "@/utils/receiptValidation";
+import { error } from "console";
 
 const getValidationSchema = (stage: ReceiptOnlineStage) => {
   switch (stage) {
     case ReceiptOnlineStage.ONLINE_RECEIPT:
-      return onlineReceiptSchema;
-
+      return ReceiptSchema;
+    case ReceiptOnlineStage.ONLINE_ITEMS:
+      return ItemsSchema;
     default:
-      return undefined;
+      return;
   }
 };
 
@@ -39,7 +30,11 @@ const Online = () => {
   const [stage, setStage] = useState<ReceiptOnlineStage>(
     ReceiptOnlineStage.ONLINE_RECEIPT
   );
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({
+    store: "",
+    amount: "",
+    itemError: "",
+  });
   console.log(errors);
   const router = useRouter();
 
@@ -135,9 +130,17 @@ const Online = () => {
                               submit
                               styles={"bg-orange-400 border-green-900 w-full"}
                               handleClick={async () => {
-                                const errors = await validateForm();
-                                setErrors(errors);
-                                if (Object.keys(errors).length === 0) {
+                                const error = await validateForm();
+                                if (error) {
+                                  setErrors((prevErrors) => ({
+                                    ...prevErrors,
+                                    store:
+                                      error.store || prevErrors.store || "",
+                                    amount:
+                                      error.amount || prevErrors.amount || "",
+                                  }));
+                                }
+                                if (Object.keys(error).length === 0) {
                                   setStage(ReceiptOnlineStage.ONLINE_ITEMS);
                                 }
                               }}
@@ -197,6 +200,11 @@ const Online = () => {
                               <p className=" text-sm">Analyze online receipt</p>
                             </RegularButton>
                           </div>
+                          {errors.itemError && values.items.length === 0 && (
+                            <p className=" text-orange-800 text-sm">
+                              {errors.itemError}
+                            </p>
+                          )}
                           {values.onlineType === "gpt" ? (
                             <TextGpt
                               setFieldValue={setFieldValue}
@@ -224,8 +232,18 @@ const Online = () => {
                             <RegularButton
                               submit
                               styles={"bg-orange-400 border-green-900 w-full"}
-                              handleClick={() => {
-                                setStage(ReceiptOnlineStage.PREVIEW);
+                              handleClick={async () => {
+                                const error = await validateForm();
+                                setErrors((prevErrors) => ({
+                                  ...prevErrors,
+                                  itemError:
+                                    typeof error.items === "string"
+                                      ? error.items
+                                      : prevErrors.itemError || "",
+                                }));
+                                if (Object.keys(error).length === 0) {
+                                  setStage(ReceiptOnlineStage.PREVIEW);
+                                }
                               }}
                             >
                               <p className="text-green-900 ">Preview</p>

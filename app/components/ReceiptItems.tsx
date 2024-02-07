@@ -6,7 +6,7 @@ const ReceiptItems = () => {
   return (
     <div className="border-t-[1.5px] border-black flex flex-col gap-4 ">
       <div className="flex justify-between">
-        <h1 className="text-lg text-orange-500">Levi 501 Jeans</h1>
+        <h1 className="text-orange-500">Levi 501 Jeans</h1>
       </div>
       <div className="flex gap-6 ">
         {/* <img

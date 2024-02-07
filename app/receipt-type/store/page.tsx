@@ -12,14 +12,31 @@ import { useRouter } from "next/navigation";
 import { DEFAULT_INPUT_VALUES } from "@/constants/form";
 import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
 import FinalStage from "@/app/components/createForm/FinalStage";
+import { ItemsSchema, ReceiptSchema } from "@/utils/receiptValidation";
 
-DEFAULT_INPUT_VALUES.type = "Store";
+const getValidationSchema = (stage: ReceiptStoreStage) => {
+  switch (stage) {
+    case ReceiptStoreStage.IN_STORE_RECEIPT:
+      return ReceiptSchema;
+    case ReceiptStoreStage.IN_STORE_ITEMS_MANUAL:
+      return ItemsSchema;
+    default:
+      return;
+  }
+};
 
 const Store = () => {
-  const router = useRouter();
   const [stage, setStage] = useState<ReceiptStoreStage>(
     ReceiptStoreStage.IN_STORE_RECEIPT
   );
+  const [errors, setErrors] = useState({
+    store: "",
+    amount: "",
+    itemError: "",
+    gptError: "",
+  });
+  console.log(errors);
+  const router = useRouter();
 
   return (
     <div className="flex ">
@@ -29,11 +46,18 @@ const Store = () => {
             ...DEFAULT_INPUT_VALUES,
             type: "Store",
           }}
+          validationSchema={getValidationSchema(stage)}
           onSubmit={(values) => {
             console.log(values);
           }}
         >
-          {({ handleSubmit, setFieldValue, values, handleChange }) => (
+          {({
+            handleSubmit,
+            setFieldValue,
+            values,
+            handleChange,
+            validateForm,
+          }) => (
             <form
               onSubmit={handleSubmit}
               className="w-full flex flex-col gap-10 "
@@ -73,7 +97,7 @@ const Store = () => {
                       <div className="two-tab ">
                         <div className="left-tab">
                           <div className="flex justify-between">
-                            <h1 className="text-lg ">In Store Receipt</h1>
+                            <h1 className="">In Store Receipt</h1>
                             <RegularButton
                               styles={
                                 "border-orange-400 text-orange-400 text-sm"
@@ -109,6 +133,7 @@ const Store = () => {
                               <p className=" text-sm">Analyze receipt image</p>
                             </RegularButton>
                           </div>
+
                           {values.storeType === "gpt" ? (
                             <ImageGpt
                               setFieldValue={setFieldValue}
@@ -120,45 +145,72 @@ const Store = () => {
                               values={values}
                               handleChange={handleChange}
                               setStage={setStage}
+                              errors={errors}
                             />
                           )}
 
-                          <div className="flex gap-2">
-                            <RegularButton
-                              submit
-                              styles={"bg-orange-400 border-green-900 w-full"}
-                              handleClick={() => {
-                                router.push("/receipt-type");
-                              }}
-                            >
-                              <p className="text-green-900 ">
-                                Back: Receipt type
-                              </p>
-                            </RegularButton>
-                            {values.storeType === "gpt" ? (
+                          {values.storeType === "gpt" ? (
+                            <div className="flex gap-10">
                               <RegularButton
-                                submit
                                 styles={"bg-orange-400 border-green-900 w-full"}
                                 handleClick={() => {
+                                  router.push("/receipt-type");
+                                }}
+                              >
+                                <p className="text-green-900 text-sm ">
+                                  Back: Receipt type
+                                </p>
+                              </RegularButton>
+
+                              <RegularButton
+                                styles={"bg-orange-400 border-green-900 w-full"}
+                                handleClick={() => {
+                                  values.store === "";
+
                                   setStage(ReceiptStoreStage.PREVIEW);
                                 }}
                               >
-                                <p className="text-green-900 ">Preview</p>
+                                <p className="text-green-900 text-sm ">
+                                  Preview
+                                </p>
                               </RegularButton>
-                            ) : (
+                            </div>
+                          ) : (
+                            <div className="flex gap-10">
                               <RegularButton
-                                submit
                                 styles={"bg-orange-400 border-green-900 w-full"}
                                 handleClick={() => {
-                                  setStage(
-                                    ReceiptStoreStage.IN_STORE_ITEMS_MANUAL
-                                  );
+                                  router.push("/receipt-type");
                                 }}
                               >
-                                <p className="text-green-900 ">Add items</p>
+                                <p className="text-green-900 text-sm ">
+                                  Back: Receipt type
+                                </p>
                               </RegularButton>
-                            )}
-                          </div>
+                              <RegularButton
+                                styles={"bg-orange-400 border-green-900 w-full"}
+                                handleClick={async () => {
+                                  const error = await validateForm();
+                                  setErrors((prevErrors) => ({
+                                    ...prevErrors,
+                                    store:
+                                      error.store || prevErrors.store || "",
+                                    amount:
+                                      error.amount || prevErrors.amount || "",
+                                  }));
+                                  if (Object.keys(error).length === 0) {
+                                    setStage(
+                                      ReceiptStoreStage.IN_STORE_ITEMS_MANUAL
+                                    );
+                                  }
+                                }}
+                              >
+                                <p className="text-green-900 text-sm ">
+                                  Next: Add items
+                                </p>
+                              </RegularButton>
+                            </div>
+                          )}
                         </div>
 
                         <Preview
@@ -183,7 +235,11 @@ const Store = () => {
                               <p> {values.type}</p>
                             </RegularButton>
                           </div>
-
+                          {errors.itemError && values.items.length === 0 && (
+                            <p className=" text-orange-800 text-sm">
+                              {errors.itemError}
+                            </p>
+                          )}
                           <OnlineReceiptManual
                             setFieldValue={setFieldValue}
                             values={values}
@@ -203,8 +259,18 @@ const Store = () => {
                             <RegularButton
                               submit
                               styles={"bg-orange-400 border-green-900 w-full"}
-                              handleClick={() => {
-                                setStage(ReceiptStoreStage.PREVIEW);
+                              handleClick={async () => {
+                                const error = await validateForm();
+                                setErrors((prevErrors) => ({
+                                  ...prevErrors,
+                                  itemError:
+                                    typeof error.items === "string"
+                                      ? error.items
+                                      : prevErrors.itemError || "",
+                                }));
+                                if (Object.keys(error).length === 0) {
+                                  setStage(ReceiptStoreStage.PREVIEW);
+                                }
                               }}
                             >
                               <p className="text-green-900 ">Preview</p>

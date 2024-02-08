@@ -114,7 +114,7 @@ const ReceiptManual = ({
                 id="file-upload-receipt"
                 style={{ opacity: 0, position: "absolute", zIndex: -1 }}
               />
-              <LargeButton height="h-[150px]">
+              <LargeButton height="h-[100px]">
                 <label
                   className="w-full"
                   htmlFor="file-upload-receipt"

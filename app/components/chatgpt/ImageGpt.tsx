@@ -144,7 +144,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
                 id="file-upload-gpt"
                 style={{ opacity: 0, position: "absolute", zIndex: -1 }}
               />
-              <LargeButton height="h-[150px]">
+              <LargeButton height="h-[100px]">
                 <label
                   htmlFor="file-upload-gpt"
                   className="w-full h-full flex justify-center items-center"

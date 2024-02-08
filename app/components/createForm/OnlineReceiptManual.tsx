@@ -230,7 +230,7 @@ const OnlineReceiptManual = ({ setFieldValue, values, handleChange }: any) => {
           id="file-upload"
           style={{ opacity: 0, position: "absolute", zIndex: -1 }}
         />
-        <LargeButton height="h-[150px]">
+        <LargeButton height="h-[100px]">
           <label
             htmlFor="file-upload"
             className="w-full h-full flex justify-center items-center"

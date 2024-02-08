@@ -24,7 +24,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
             {edit ? (
               <div className="flex justify-between">
                 <input
-                  className="text-green-900 text-xl bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
+                  className="text-orange-500 text-xl bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
                   name="store"
                   value={values.store}
                   onChange={handleChange}
@@ -39,7 +39,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
               </div>
             ) : (
               <div className="flex justify-between">
-                <h1 className="text-green-900 text-2xl">
+                <h1 className="text-orange-500 text-2xl">
                   {values.store || "Store Name"}
                 </h1>
                 <button
@@ -59,13 +59,13 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                 </h1>
                 {edit ? (
                   <input
-                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
+                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
                     name="amount"
-                    value={values.amount as number}
+                    value={values.amount}
                     onChange={handleChange}
                   />
                 ) : (
-                  <h1 className="text-green-900 text-sm">{values.amount}</h1>
+                  <h1 className=" text-sm">{values.amount}</h1>
                 )}
               </div>
 
@@ -73,13 +73,13 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                 <h1 className="text-slate-400 font-bold text-sm">Card</h1>
                 {edit ? (
                   <input
-                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
+                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
                     name="card"
                     value={values.card}
                     onChange={handleChange}
                   />
                 ) : (
-                  <h1 className="text-green-900 text-sm">{values.card}</h1>
+                  <h1 className=" text-sm">{values.card}</h1>
                 )}
               </div>
               <div className="flex flex-col ">
@@ -88,15 +88,13 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                 </h1>
                 {edit ? (
                   <input
-                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
+                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
                     name="trackingNumber"
                     value={values.trackingNumber}
                     onChange={handleChange}
                   />
                 ) : (
-                  <h1 className="text-green-900 text-sm">
-                    {values.trackingNumber}
-                  </h1>
+                  <h1 className=" text-sm">{values.trackingNumber}</h1>
                 )}
               </div>
 
@@ -106,16 +104,14 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                 </h1>
                 {edit ? (
                   <input
-                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
+                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
                     name="boughtDate"
                     value={values.boughtDate}
                     onChange={handleChange}
                     type="date"
                   />
                 ) : (
-                  <h1 className="text-green-900 text-sm">
-                    {values.boughtDate}
-                  </h1>
+                  <h1 className=" text-sm">{values.boughtDate}</h1>
                 )}
               </div>
               <div className="flex flex-col ">
@@ -124,7 +120,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                 </h1>
                 {edit ? (
                   <input
-                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
+                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
                     name="daysUntilReturn"
                     value={values.daysUntilReturn}
                     onChange={(event) => {
@@ -138,9 +134,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                 ) : (
                   values.boughtDate &&
                   values.daysUntilReturn && (
-                    <h1 className="text-green-900 text-sm">
-                      {values.daysUntilReturn}
-                    </h1>
+                    <h1 className=" text-sm">{values.daysUntilReturn}</h1>
                   )
                 )}
               </div>
@@ -151,14 +145,14 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                 </h1>
                 {edit ? (
                   <input
-                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
+                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
                     name="finalReturnDate"
                     type="date"
                   />
                 ) : (
                   values.boughtDate &&
                   values.daysUntilReturn && (
-                    <h1 className="text-green-900 text-sm">
+                    <h1 className=" text-sm">
                       {calculateReturnDate(
                         values.boughtDate,
                         values.daysUntilReturn

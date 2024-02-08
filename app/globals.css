@@ -101,7 +101,7 @@ input:-webkit-autofill::first-line {
 }
 .preview {
   width: 100%;
-  border-left: 1.5px solid rgb(20 83 45);
+  border-left: 1.5px solid black;
   padding-left: 16px;
   min-height: 100vh;
   height: 100%;

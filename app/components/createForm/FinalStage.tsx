@@ -32,13 +32,6 @@ const FinalStage = ({
           <h1>Preview Receipt</h1>
           <div className="flex flex-col gap-4 receipt-bar">
             <h1 className="text-green-900 text-2xl">{values.store}</h1>
-            <RegularButton
-              styles={
-                "border-orange-400 text-orange-400 w-[80px] flex justify-center items-center"
-              }
-            >
-              <p className="text-sm">{values.type}</p>
-            </RegularButton>
 
             <div className="receipt-info">
               <h1 className="text-slate-400 font-bold text-sm">
@@ -114,7 +107,7 @@ const FinalStage = ({
         <div className=" flex flex-col gap-6 pb-[200px]">
           <div className="flex justify-between gap-3">
             <RegularButton
-              styles={"bg-orange-400 border-green-900 w-full"}
+              styles={" border-green-900 w-full"}
               handleClick={() => {
                 {
                   values.type === "Online"
@@ -127,7 +120,7 @@ const FinalStage = ({
             </RegularButton>
 
             <RegularButton
-              styles={"bg-orange-400 border-green-900 w-full"}
+              styles={" border-green-900 w-full"}
               handleClick={() => {
                 values.type === "Online"
                   ? setStage(ReceiptOnlineStage.ONLINE_ITEMS)
@@ -149,7 +142,7 @@ const FinalStage = ({
         <div className="fixed bottom-0 left-0 border-t-[1.5px] border-green-800 bg-white w-full p-4 flex justify-between">
           <div className="flex justify-between gap-3">
             <RegularButton
-              styles={"bg-orange-400 border-green-900 "}
+              styles={"border-green-900 "}
               handleClick={() => {
                 if (values.type === "Store") {
                   values.storeType === "gpt"
@@ -165,7 +158,7 @@ const FinalStage = ({
             {(values.storeType === "gpt" && values.type === "Online") ||
             (values.storeType !== "gpt" && values.type === "Store") ? (
               <RegularButton
-                styles={"bg-orange-400 border-green-900 "}
+                styles={"border-green-900 "}
                 handleClick={() => {
                   if (values.type === "Online") {
                     setStage(ReceiptOnlineStage.ONLINE_ITEMS);

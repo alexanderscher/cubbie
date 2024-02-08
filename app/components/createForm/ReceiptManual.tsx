@@ -104,6 +104,7 @@ const ReceiptManual = ({
             <p className="text-orange-800 text-xs">{errors.daysUntilReturn}</p>
           )}
         </div>
+
         {values.type === "Store" && (
           <div>
             <p className="text-sm text-green-900">Image receipt</p>
@@ -129,22 +130,27 @@ const ReceiptManual = ({
             </div>
           </div>
         )}
-      </div>
-      <div>
-        {values.receiptImage && (
-          <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md">
-            <button
-              type="button"
-              onClick={() => {
-                setFieldValue("receiptImage", "");
-              }}
-              className="absolute top-0 right-0 m-1  bg-green-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
-            >
-              X
-            </button>
-            <Image width={150} height={150} src={values.receiptImage} alt="" />
-          </div>
-        )}
+        <div>
+          {values.receiptImage && (
+            <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md">
+              <button
+                type="button"
+                onClick={() => {
+                  setFieldValue("receiptImage", "");
+                }}
+                className="absolute top-0 right-0 m-1  bg-green-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
+              >
+                X
+              </button>
+              <Image
+                width={150}
+                height={150}
+                src={values.receiptImage}
+                alt=""
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

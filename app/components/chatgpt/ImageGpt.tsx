@@ -159,11 +159,11 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
 
             <div className="w-full">
               <RegularButton
-                styles="border-green-900 w-full bg-green-900"
+                styles="border-green-900 w-full bg"
                 type="submit"
                 handleClick={handleSubmit}
               >
-                <p className="text-white">Analyze Image</p>
+                <p className="text-green-900">Analyze Image</p>
               </RegularButton>
             </div>
           </div>

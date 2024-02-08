@@ -83,14 +83,14 @@ const Online = () => {
                       <div className="two-tab ">
                         <div className="left-tab">
                           <div className="flex justify-between">
-                            <h1>Online Receipt</h1>
-                            <RegularButton
-                              styles={
-                                "border-orange-400 text-orange-400 text-sm"
-                              }
+                            <h1 className="text-orange-500 text-xl">
+                              Online Receipt
+                            </h1>
+                            {/* <RegularButton
+                              styles={"border-black text-black text-sm"}
                             >
                               <p>{values.type}</p>
-                            </RegularButton>
+                            </RegularButton> */}
                           </div>
                           <ReceiptManual
                             online
@@ -102,18 +102,18 @@ const Online = () => {
                           />
                           <div className="flex gap-2">
                             <RegularButton
-                              styles={"bg-orange-400 border-green-900 w-full"}
+                              styles={"bg-green-900 border-green-900 w-full"}
                               handleClick={() => {
                                 router.push("/receipt-type");
                               }}
                             >
-                              <p className="text-green-900 ">
+                              <p className="text-white text-sm">
                                 Back: Receipt type
                               </p>
                             </RegularButton>
 
                             <RegularButton
-                              styles={"bg-orange-400 border-green-900 w-full"}
+                              styles={"bg-green-900 border-green-900 w-full"}
                               handleClick={async () => {
                                 const error = await validateForm();
                                 if (error) {
@@ -140,7 +140,7 @@ const Online = () => {
                                 }
                               }}
                             >
-                              <p className="text-green-900 ">
+                              <p className="text-white text-sm">
                                 Next: Receipt Items
                               </p>
                             </RegularButton>
@@ -159,14 +159,14 @@ const Online = () => {
                       <div className="two-tab ">
                         <div className="left-tab">
                           <div className="flex justify-between">
-                            <h1>Online Receipt Items</h1>
-                            <RegularButton
-                              styles={
-                                "border-orange-400 text-orange-400 text-sm"
-                              }
+                            <h1 className="text-orange-500 text-xl">
+                              Online Receipt Items
+                            </h1>
+                            {/* <RegularButton
+                              styles={"border-black text-black text-sm"}
                             >
                               <p> {values.type}</p>
-                            </RegularButton>
+                            </RegularButton> */}
                           </div>
                           <div className="w-full flex justify-between">
                             <RegularButton
@@ -221,16 +221,18 @@ const Online = () => {
 
                           <div className="flex gap-2 ">
                             <RegularButton
-                              styles={"bg-orange-400 border-green-900 w-full"}
+                              styles={"bg-green-900 border-green-900 w-full"}
                               handleClick={() => {
                                 setStage(ReceiptOnlineStage.ONLINE_RECEIPT);
                               }}
                             >
-                              <p className="text-green-900 ">Back: Receipt</p>
+                              <p className="text-white text-sm">
+                                Back: Receipt
+                              </p>
                             </RegularButton>
 
                             <RegularButton
-                              styles={"bg-orange-400 border-green-900 w-full"}
+                              styles={"bg-green-900 border-green-900 w-full"}
                               handleClick={async () => {
                                 const error = await validateForm();
                                 setErrors((prevErrors) => ({
@@ -261,7 +263,7 @@ const Online = () => {
                                 }
                               }}
                             >
-                              <p className="text-green-900 ">Preview</p>
+                              <p className="text-white text-sm">Preview</p>
                             </RegularButton>
                           </div>
                         </div>

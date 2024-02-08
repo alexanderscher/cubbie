@@ -78,10 +78,10 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
       />
 
       <RegularButton
-        styles={"bg-green-900 border-green-900 w-full"}
+        styles={"bg border-green-900 w-full"}
         handleClick={handleSubmit}
       >
-        <p className="text-white ">Analyze</p>
+        <p className="text-green-900">Analyze</p>
       </RegularButton>
       {prompt && (
         <div className="flex flex-col gap-4">

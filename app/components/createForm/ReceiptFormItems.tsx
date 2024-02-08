@@ -56,40 +56,6 @@ const ReceiptFormItems = ({
 
   return (
     <div className="border-t-[1.5px] border-black flex flex-col gap-4 w-full">
-      <div className="flex justify-between">
-        {edit && stage !== "Final" ? (
-          <div className="flex justify-between w-full">
-            <input
-              className="text-orange-500 border-b-[1.5px] border-slate-400 focus:outline-none bg-white bg w-full"
-              value={item.description}
-              onChange={(e) => handleItemChange(e, "description")}
-            />
-            <button
-              type="button"
-              className="text-sm text-orange-500"
-              onClick={() => setEdit(false)}
-            >
-              Save
-            </button>
-          </div>
-        ) : (
-          <div className="flex justify-between w-full">
-            <button type="button" className="text-orange-500">
-              {item.description}
-            </button>
-            {stage !== "Final" && (
-              <button
-                type="button"
-                className="text-sm text-orange-500"
-                onClick={() => setEdit(true)}
-              >
-                Edit
-              </button>
-            )}
-          </div>
-        )}
-      </div>
-
       <div className="w-full h-full flex gap-6">
         {stage === "Final" && item.photo && (
           <div className="w-[120px] h-[150px] flex items-center rounded-sm flex-shrink-0">
@@ -105,7 +71,7 @@ const ReceiptFormItems = ({
           </div>
         )}
         {stage !== "Final" && (
-          <div className="w-[120px] h-[150px] flex items-center rounded-sm flex-shrink-0">
+          <div className="w-[120px] h-[150px] flex items-center rounded-sm flex-shrink-0 mt-5">
             {item.photo ? (
               <div className="w-full">
                 {edit ? (
@@ -183,25 +149,36 @@ const ReceiptFormItems = ({
           </div>
         )}
 
-        <div className="text-sm flex flex-col gap-3 items-start w-full">
-          {stage !== "Final" ? (
+        <div className="text-sm flex flex-col gap-3 items-start w-full mt-5">
+          {edit && stage !== "Final" ? (
+            <input
+              className="text-orange-500 border-b-[1.5px] border-slate-400 focus:outline-none bg-white bg w-full"
+              value={item.description}
+              onChange={(e) => handleItemChange(e, "description")}
+            />
+          ) : (
+            <button type="button" className="text-orange-500 text-lg">
+              {item.description}
+            </button>
+          )}
+          {/* {stage !== "Final" ? (
             <RegularButton
               handleClick={toggleAsset}
               styles={
                 item.asset
-                  ? "bg-blue-500 text-white"
-                  : "border-blue-500 text-blue-500"
+                  ? "bg-orange-500 text-white"
+                  : "border-orange-500 text-orange-500"
               }
             >
               <p className="text-xs">Asset</p>
             </RegularButton>
           ) : (
             asset && (
-              <RegularButton styles={"border-blue-500 text-blue-500"}>
+              <RegularButton styles={"border-orange-500 text-orange-500"}>
                 <p className="text-xs">Asset</p>
               </RegularButton>
             )
-          )}
+          )} */}
 
           <div className="w-full">
             <h1 className="text-slate-400 font-bold">Amount</h1>
@@ -285,13 +262,22 @@ const ReceiptFormItems = ({
               <h1>{item.barcode}</h1>
             )}
           </div>
-
-          <RegularButton
-            styles="border-green-900 bg-green-900"
-            handleClick={() => removeItem(index)}
-          >
-            <p className="text-xs text-white">Delete</p>
-          </RegularButton>
+          {stage !== "Final" && (
+            <div className="flex gap-2">
+              <RegularButton
+                styles="bg border-black "
+                handleClick={() => removeItem(index)}
+              >
+                <p className="text-xs">Delete</p>
+              </RegularButton>
+              <RegularButton
+                styles="bg border-black "
+                handleClick={() => setEdit(!edit)}
+              >
+                <p className="text-xs">{edit ? "Save" : "Edit"}</p>
+              </RegularButton>
+            </div>
+          )}
         </div>
       </div>
     </div>

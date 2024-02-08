@@ -262,12 +262,12 @@ const OnlineReceiptManual = ({ setFieldValue, values, handleChange }: any) => {
       )}
 
       <RegularButton
-        styles={"border-green-900 bg-green-900 w-full"}
+        styles={"border-black  bg-black w-full"}
         handleClick={() => {
           addItemToFormik(setFieldValue, values);
         }}
       >
-        <p className="text-white text-sm">Add Item</p>
+        <p className="text-white text-md">Add Item</p>
       </RegularButton>
     </div>
   );

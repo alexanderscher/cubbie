@@ -1,4 +1,5 @@
 import { BarcodeScanner } from "@/app/components/BarcodeScanner";
+import LargeButton from "@/app/components/buttons/LargeButton";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { ItemInput, ReceiptInput } from "@/types/formTypes/form";
 import Image from "next/image";
@@ -229,10 +230,10 @@ const OnlineReceiptManual = ({ setFieldValue, values, handleChange }: any) => {
           id="file-upload"
           style={{ opacity: 0, position: "absolute", zIndex: -1 }}
         />
-        <RegularButton styles="border-green-900 w-full">
+        <LargeButton>
           <label
+            className="w-full"
             htmlFor="file-upload"
-            className="text-green-900 w-full"
             style={{
               cursor: "pointer",
               display: "inline-block",
@@ -240,7 +241,7 @@ const OnlineReceiptManual = ({ setFieldValue, values, handleChange }: any) => {
           >
             Upload File
           </label>
-        </RegularButton>
+        </LargeButton>
       </div>
 
       {item.photo && (

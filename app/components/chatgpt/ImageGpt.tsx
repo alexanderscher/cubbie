@@ -1,5 +1,6 @@
 "use client";
 import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
+import LargeButton from "@/app/components/buttons/LargeButton";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { useUploadThing } from "@/utils/uploadthing";
 import Image from "next/image";
@@ -14,6 +15,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
   const [image, setImage] = useState<string>("");
   const [noImage, setNoImage] = useState(false);
   const [help, setHelp] = useState(false);
+  const [prompt, setPrompt] = useState(false);
 
   // const { startUpload, permittedFileInfo } = useUploadThing("imageUploader", {
   //   onClientUploadComplete: (res) => {
@@ -51,12 +53,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
     []
   );
 
-  const handleSubmit = async () => {
-    if (image === "") {
-      setNoImage(true);
-      return;
-    }
-
+  const run = async () => {
     const res = await fetch("/api/gpt/analyze-image", {
       method: "POST",
       headers: {
@@ -100,6 +97,18 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
     setFieldValue("items", itemsWithAllProperties);
   };
 
+  const handleSubmit = async () => {
+    if (image === "") {
+      setNoImage(true);
+      return;
+    }
+    if (values.items) {
+      setPrompt(true);
+    } else {
+      run();
+    }
+  };
+
   return (
     <div>
       <div className="flex flex-col gap-4">
@@ -136,10 +145,10 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
                 id="file-upload"
                 style={{ opacity: 0, position: "absolute", zIndex: -1 }}
               />
-              <RegularButton styles="border-green-900 w-full">
+              <LargeButton styles="border-green-900 w-full">
                 <label
+                  className="w-full"
                   htmlFor="file-upload"
-                  className="text-green-900 w-full"
                   style={{
                     cursor: "pointer",
                     display: "inline-block",
@@ -147,7 +156,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
                 >
                   Upload File
                 </label>
-              </RegularButton>
+              </LargeButton>
             </div>
 
             <div className="w-full">
@@ -161,6 +170,28 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
             </div>
           </div>
         </div>
+        {prompt && (
+          <div className="flex flex-col gap-4">
+            <p className="text-sm text-center text-black">
+              Are you sure you want to anaylze? This will overwrite your current
+              items
+            </p>
+            <div className="flex gap-2">
+              <RegularButton
+                styles={"bg border-black w-full"}
+                handleClick={run}
+              >
+                <p className="text-sm">Confirm</p>
+              </RegularButton>
+              <RegularButton
+                styles={"bg border-black w-full"}
+                handleClick={() => setPrompt(false)}
+              >
+                <p className="text-sm">Cancel</p>
+              </RegularButton>
+            </div>
+          </div>
+        )}
         {noImage && (
           <p className="text-sm text-center text-orange-800">
             Please upload an image to analyze. If you have a receipt, take a

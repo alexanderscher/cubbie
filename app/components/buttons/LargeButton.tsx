@@ -17,9 +17,9 @@ const LargeButton = ({
   ...restProps
 }: Props) => {
   return (
-    <div className="flex w-full">
+    <div className="flex w-full h-[80px]">
       <button
-        className={`border-[1.5px] border-green-900 w-full p-3 rounded-md text-green-900 ${styles}`}
+        className={`border-[1.5px] text-green-900 border-green-900 w-full p-3 rounded-md h-full ${styles}`}
         onClick={handleClick}
         {...restProps}
       >

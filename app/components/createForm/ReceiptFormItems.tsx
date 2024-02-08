@@ -1,4 +1,5 @@
 import { BarcodeScanner } from "@/app/components/BarcodeScanner";
+import LargeButton from "@/app/components/buttons/LargeButton";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { ReceiptInput } from "@/types/formTypes/form";
 import Image from "next/image";
@@ -145,7 +146,7 @@ const ReceiptFormItems = ({
                 )}
               </div>
             ) : (
-              <div className="flex flex-col mb-6">
+              <div className="flex flex-col h-full">
                 <input
                   type="file"
                   onChange={(e) => {
@@ -166,10 +167,13 @@ const ReceiptFormItems = ({
                   id="file-upload-item"
                   style={{ opacity: 0, position: "absolute", zIndex: -1 }}
                 />
-                <RegularButton styles="border-green-900 w-full">
+                <button
+                  className="h-full border-[1.5px] border-green-900 p-3 rounded-md text-green-900 w-[150px
+                ]"
+                >
                   <label
+                    className="w-full"
                     htmlFor="file-upload-item"
-                    className="text-green-900 w-full"
                     style={{
                       cursor: "pointer",
                       display: "inline-block",
@@ -177,7 +181,7 @@ const ReceiptFormItems = ({
                   >
                     Upload File
                   </label>
-                </RegularButton>
+                </button>
               </div>
             )}
           </div>

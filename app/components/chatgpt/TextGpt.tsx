@@ -14,9 +14,9 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
   const [prompt, setPrompt] = useState(false);
 
   const run = async () => {
-    if (values.items.length > 0) {
+    if (values.items) {
       for (let item of values.items) {
-        if (item.photo.length > 0) {
+        if (item.photo) {
           deleteUploadThingImage(item.photo[0].key);
         }
       }
@@ -57,7 +57,7 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
       return;
     }
 
-    if (values.items.length > 0) {
+    if (values.items) {
       setPrompt(true);
     } else {
       run();
@@ -94,8 +94,8 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
       {prompt && (
         <div className="flex flex-col gap-4">
           <p className="text-sm text-center text-black">
-            Are you sure you want to anaylze the text again? This will overwrite
-            your current items
+            Are you sure you want to anaylze? This will overwrite your current
+            items
           </p>
           <div className="flex gap-2">
             <RegularButton styles={"bg border-black w-full"} handleClick={run}>

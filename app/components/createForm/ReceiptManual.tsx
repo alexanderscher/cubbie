@@ -1,3 +1,4 @@
+import LargeButton from "@/app/components/buttons/LargeButton";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import Image from "next/image";
 import React, { ChangeEvent } from "react";
@@ -100,26 +101,31 @@ const ReceiptManual = ({
             <p className="text-orange-800 text-xs">{errors.daysUntilReturn}</p>
           )}
         </div>
-        <div className="flex flex-col mb-6">
-          <input
-            type="file"
-            onChange={handleFileChange}
-            id="file-upload-receipt"
-            style={{ opacity: 0, position: "absolute", zIndex: -1 }}
-          />
-          <RegularButton styles="border-green-900 w-full">
-            <label
-              htmlFor="file-upload-receipt"
-              className="text-green-900 w-full"
-              style={{
-                cursor: "pointer",
-                display: "inline-block",
-              }}
-            >
-              Upload File
-            </label>
-          </RegularButton>
-        </div>
+        {values.type === "Store" && (
+          <div>
+            <p className="text-sm text-green-900">Image receipt</p>
+            <div className="flex flex-col ">
+              <input
+                type="file"
+                onChange={handleFileChange}
+                id="file-upload-receipt"
+                style={{ opacity: 0, position: "absolute", zIndex: -1 }}
+              />
+              <LargeButton>
+                <label
+                  className="w-full"
+                  htmlFor="file-upload-receipt"
+                  style={{
+                    cursor: "pointer",
+                    display: "inline-block",
+                  }}
+                >
+                  Upload File
+                </label>
+              </LargeButton>
+            </div>
+          </div>
+        )}
       </div>
       <div>
         {values.receiptImage && (

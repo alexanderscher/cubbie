@@ -1,6 +1,5 @@
-import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 interface Props {
   setFieldValue: any;
@@ -14,13 +13,6 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
   const [prompt, setPrompt] = useState(false);
 
   const run = async () => {
-    if (values.items) {
-      for (let item of values.items) {
-        if (item.photo) {
-          deleteUploadThingImage(item.photo[0].key);
-        }
-      }
-    }
     setPrompt(false);
     setNoText(false);
 
@@ -57,7 +49,7 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
       return;
     }
 
-    if (values.items) {
+    if (values.items.length > 0) {
       setPrompt(true);
     } else {
       run();

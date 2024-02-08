@@ -36,63 +36,14 @@ const Store = () => {
   );
   const [errors, setErrors] = useState({
     store: "",
+    items: "",
     amount: "",
-    itemError: "",
     gptError: "",
     itemFileError: "",
+    itemField: "",
   });
   console.log(errors);
   const router = useRouter();
-
-  const validateSubmit = async (
-    validateForm: any,
-    values: any,
-    stage: string
-  ) => {
-    const error = await validateForm();
-    console.log(error);
-
-    let errorMess = "";
-
-    for (const item of values.items) {
-      const price = parseFloat(item.price);
-
-      const priceValid =
-        !isNaN(price) &&
-        price > 0 &&
-        item.price.trim() !== "" &&
-        `${price}` === item.price.trim();
-
-      if (!item.description || !priceValid) {
-        errorMess = "All items must have a description and a valid price.";
-        break;
-      }
-    }
-
-    if (stage === "gpt") {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        gptError:
-          typeof error.items === "string"
-            ? error.items
-            : prevErrors.itemError || "",
-        errorMess,
-      }));
-    } else {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        itemError:
-          typeof error.items === "string"
-            ? error.items
-            : prevErrors.itemError || "",
-        errorMess,
-      }));
-    }
-
-    if (Object.keys(error).length === 0 && !errorMess) {
-      setStage(ReceiptStoreStage.PREVIEW);
-    }
-  };
 
   return (
     <div className="flex ">
@@ -159,6 +110,13 @@ const Store = () => {
                               handleClick={() => {
                                 setFieldValue("storeType", "gpt");
                                 setStage(ReceiptStoreStage.IN_STORE_GPT);
+                                setErrors({
+                                  ...errors,
+                                  gptError: "",
+                                  items: "",
+                                  itemField: "",
+                                  itemFileError: "",
+                                });
                               }}
                             >
                               <p className=" text-sm">Analyze receipt image</p>
@@ -239,11 +197,17 @@ const Store = () => {
                               <p> {values.type}</p>
                             </RegularButton>
                           </div>
-                          {errors.itemError && values.items.length === 0 && (
+                          {errors.items && (
                             <p className=" text-orange-800 text-sm">
-                              {errors.itemError}
+                              {errors.items}
                             </p>
                           )}
+                          {errors.itemField && (
+                            <p className=" text-orange-800 text-sm">
+                              {errors.itemField}
+                            </p>
+                          )}
+
                           {errors.itemFileError && (
                             <p className=" text-orange-800 text-sm">
                               {errors.itemFileError}
@@ -267,7 +231,35 @@ const Store = () => {
                             <RegularButton
                               styles={"bg-orange-400 border-green-900 w-full"}
                               handleClick={async () => {
-                                validateSubmit(validateForm, values, "notgpt");
+                                const error = await validateForm();
+
+                                setErrors((prevErrors) => ({
+                                  ...prevErrors,
+                                  items:
+                                    typeof error.items === "string"
+                                      ? error.items
+                                      : prevErrors.items || "",
+                                }));
+
+                                for (const item of values.items) {
+                                  if (
+                                    item.description === "" ||
+                                    item.price === ""
+                                  ) {
+                                    setErrors((prevErrors) => ({
+                                      ...prevErrors,
+                                      itemField:
+                                        "Decsription and price are required for each item.",
+                                    }));
+                                    return;
+                                  }
+                                }
+                                if (
+                                  Object.keys(error).length === 0 &&
+                                  !errors.itemField
+                                ) {
+                                  setStage(ReceiptStoreStage.PREVIEW);
+                                }
                               }}
                             >
                               <p className="text-green-900 ">Preview</p>
@@ -301,6 +293,13 @@ const Store = () => {
                               styles={"border-black"}
                               handleClick={() => {
                                 setFieldValue("storeType", "manual");
+                                setErrors({
+                                  ...errors,
+                                  gptError: "",
+                                  items: "",
+                                  itemField: "",
+                                  itemFileError: "",
+                                });
                                 setStage(ReceiptStoreStage.IN_STORE_RECEIPT);
                               }}
                             >
@@ -314,17 +313,23 @@ const Store = () => {
                             </RegularButton>
                           </div>
                           {errors.gptError && (
-                            <p className=" text-orange-800 text-sm">
+                            <p className=" text-orange-800 text-sm text-center">
                               {errors.gptError}
                             </p>
                           )}
+                          {errors.itemField && (
+                            <p className=" text-orange-800 text-sm text-center">
+                              {errors.itemField}
+                            </p>
+                          )}
+
                           <ImageGpt
                             setFieldValue={setFieldValue}
                             values={values}
                           />
-                          {errors.itemError && (
+                          {errors.items && (
                             <p className=" text-orange-800 text-sm text-center">
-                              {errors.itemError}
+                              {errors.items}
                             </p>
                           )}
 
@@ -341,8 +346,34 @@ const Store = () => {
                             </RegularButton>
                             <RegularButton
                               styles={"bg-orange-400 border-green-900 w-full"}
-                              handleClick={() => {
-                                validateSubmit(validateForm, values, "gpt");
+                              handleClick={async () => {
+                                const error = await validateForm();
+                                setErrors((prevErrors) => ({
+                                  ...prevErrors,
+                                  gptError:
+                                    typeof error.items === "string"
+                                      ? error.items
+                                      : prevErrors.items || "",
+                                }));
+                                for (const item of values.items) {
+                                  if (
+                                    item.description === "" ||
+                                    item.price === ""
+                                  ) {
+                                    setErrors((prevErrors) => ({
+                                      ...prevErrors,
+                                      itemField:
+                                        "Decsription and price are required for each item.",
+                                    }));
+                                    return;
+                                  }
+                                }
+                                if (
+                                  Object.keys(error).length === 0 &&
+                                  !errors.itemField
+                                ) {
+                                  setStage(ReceiptStoreStage.PREVIEW);
+                                }
                               }}
                             >
                               <p className="text-green-900 text-sm ">Preview</p>

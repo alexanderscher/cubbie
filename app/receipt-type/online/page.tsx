@@ -33,6 +33,7 @@ const Online = () => {
     amount: "",
     itemError: "",
     trackingNumber: "",
+    itemField: "",
   });
 
   const router = useRouter();
@@ -199,6 +200,11 @@ const Online = () => {
                               {errors.itemError}
                             </p>
                           )}
+                          {errors.itemField && (
+                            <p className=" text-orange-800 text-sm">
+                              {errors.itemField}
+                            </p>
+                          )}
                           {values.onlineType === "gpt" ? (
                             <TextGpt
                               setFieldValue={setFieldValue}
@@ -234,7 +240,23 @@ const Online = () => {
                                       ? error.items
                                       : prevErrors.itemError || "",
                                 }));
-                                if (Object.keys(error).length === 0) {
+                                for (const item of values.items) {
+                                  if (
+                                    item.description === "" ||
+                                    item.price === ""
+                                  ) {
+                                    setErrors((prevErrors) => ({
+                                      ...prevErrors,
+                                      itemField:
+                                        "Decsription and price are required for each item.",
+                                    }));
+                                    return;
+                                  }
+                                }
+                                if (
+                                  Object.keys(error).length === 0 &&
+                                  !errors.itemField
+                                ) {
                                   setStage(ReceiptOnlineStage.PREVIEW);
                                 }
                               }}

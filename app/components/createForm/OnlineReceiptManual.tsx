@@ -5,13 +5,12 @@ import { ItemInput, ReceiptInput } from "@/types/formTypes/form";
 import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
 import * as Yup from "yup";
+import MaskedInput from "react-text-mask";
+import { CURRENCY_MASK } from "@/constants/form";
 
 const itemSchema = Yup.object({
   description: Yup.string().required("Description is required"),
-  price: Yup.number()
-    .required("Price is required")
-    .typeError("Price must be a number")
-    .positive("Price must be positive"),
+  price: Yup.string().required("Price is required"),
 });
 
 const OnlineReceiptManual = ({ setFieldValue, values, handleChange }: any) => {
@@ -26,7 +25,7 @@ const OnlineReceiptManual = ({ setFieldValue, values, handleChange }: any) => {
   const [item, setItem] = useState<ItemInput>({
     description: "",
     photo: "",
-    price: 0,
+    price: "",
     barcode: "",
     asset: false,
     character: "",
@@ -56,7 +55,7 @@ const OnlineReceiptManual = ({ setFieldValue, values, handleChange }: any) => {
       setItem({
         description: "",
         photo: "",
-        price: 0,
+        price: "",
         barcode: "",
         product_id: "",
         asset: false,
@@ -111,10 +110,11 @@ const OnlineReceiptManual = ({ setFieldValue, values, handleChange }: any) => {
 
       <div>
         <p className="text-sm text-green-900">Price</p>
-        <input
+        <MaskedInput
+          mask={CURRENCY_MASK}
           className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
-          value={item.price as number}
-          name="price"
+          guide={false}
+          value={item.price}
           onChange={(e) => {
             handleItemAdd(e.target.value, "price");
           }}
@@ -230,13 +230,12 @@ const OnlineReceiptManual = ({ setFieldValue, values, handleChange }: any) => {
           id="file-upload"
           style={{ opacity: 0, position: "absolute", zIndex: -1 }}
         />
-        <LargeButton>
+        <LargeButton height="h-[150px]">
           <label
-            className="w-full"
             htmlFor="file-upload"
+            className="w-full h-full flex justify-center items-center"
             style={{
               cursor: "pointer",
-              display: "inline-block",
             }}
           >
             Upload File

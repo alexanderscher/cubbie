@@ -24,7 +24,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
             {edit ? (
               <div className="flex justify-between">
                 <input
-                  className="text-green-900 text-xl bg-white border-b-[1.5px] bg border-green-900 w-full"
+                  className="text-green-900 text-xl bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
                   name="store"
                   value={values.store}
                   onChange={handleChange}
@@ -54,12 +54,12 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
 
             <div className="flex flex-col gap-3">
               <div className="flex flex-col ">
-                <h1 className="text-slate-500 font-bold text-sm">
+                <h1 className="text-slate-400 font-bold text-sm">
                   Total Amount
                 </h1>
                 {edit ? (
                   <input
-                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-green-900"
+                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
                     name="amount"
                     value={values.amount as number}
                     onChange={handleChange}
@@ -70,10 +70,10 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
               </div>
 
               <div className="flex flex-col ">
-                <h1 className="text-slate-500 font-bold text-sm">Card</h1>
+                <h1 className="text-slate-400 font-bold text-sm">Card</h1>
                 {edit ? (
                   <input
-                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-green-900"
+                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
                     name="card"
                     value={values.card}
                     onChange={handleChange}
@@ -83,12 +83,12 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                 )}
               </div>
               <div className="flex flex-col ">
-                <h1 className="text-slate-500 font-bold text-sm">
+                <h1 className="text-slate-400 font-bold text-sm">
                   Tracking Number Link
                 </h1>
                 {edit ? (
                   <input
-                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-green-900"
+                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
                     name="trackingNumber"
                     value={values.trackingNumber}
                     onChange={handleChange}
@@ -101,12 +101,12 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
               </div>
 
               <div className="flex flex-col ">
-                <h1 className="text-slate-500 font-bold text-sm">
+                <h1 className="text-slate-400 font-bold text-sm">
                   Purchase Date
                 </h1>
                 {edit ? (
                   <input
-                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-green-900"
+                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
                     name="boughtDate"
                     value={values.boughtDate}
                     onChange={handleChange}
@@ -119,12 +119,12 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                 )}
               </div>
               <div className="flex flex-col ">
-                <h1 className="text-slate-500 font-bold text-sm">
+                <h1 className="text-slate-400 font-bold text-sm">
                   Days until return
                 </h1>
                 {edit ? (
                   <input
-                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-green-900"
+                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
                     name="daysUntilReturn"
                     value={values.daysUntilReturn}
                     onChange={(event) => {
@@ -146,12 +146,12 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
               </div>
 
               <div className="flex flex-col ">
-                <h1 className="text-slate-500 font-bold text-sm">
+                <h1 className="text-slate-400 font-bold text-sm">
                   Return Date
                 </h1>
                 {edit ? (
                   <input
-                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-green-900"
+                    className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
                     name="finalReturnDate"
                     type="date"
                   />

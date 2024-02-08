@@ -1,8 +1,6 @@
 "use client";
-import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
 import LargeButton from "@/app/components/buttons/LargeButton";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { useUploadThing } from "@/utils/uploadthing";
 import Image from "next/image";
 import { ChangeEvent, useState, useCallback } from "react";
 
@@ -95,6 +93,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
       })
     );
     setFieldValue("items", itemsWithAllProperties);
+    setNoImage(false);
   };
 
   const handleSubmit = async () => {
@@ -102,7 +101,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
       setNoImage(true);
       return;
     }
-    if (values.items) {
+    if (values.items.lenght > 0) {
       setPrompt(true);
     } else {
       run();
@@ -141,17 +140,16 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
             <div className="flex flex-col mb-6">
               <input
                 type="file"
-                onChange={(e) => handleFileChange(e)}
-                id="file-upload"
+                onChange={handleFileChange}
+                id="file-upload-gpt"
                 style={{ opacity: 0, position: "absolute", zIndex: -1 }}
               />
-              <LargeButton styles="border-green-900 w-full">
+              <LargeButton height="h-[150px]">
                 <label
-                  className="w-full"
-                  htmlFor="file-upload"
+                  htmlFor="file-upload-gpt"
+                  className="w-full h-full flex justify-center items-center"
                   style={{
                     cursor: "pointer",
-                    display: "inline-block",
                   }}
                 >
                   Upload File

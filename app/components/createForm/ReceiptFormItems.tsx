@@ -60,7 +60,7 @@ const ReceiptFormItems = ({
         {edit && stage !== "Final" ? (
           <div className="flex justify-between w-full">
             <input
-              className="text-orange-500  bg-white  bg border-green-900"
+              className="text-orange-500 border-b-[1.5px] border-slate-400 focus:outline-none bg-white bg w-full"
               value={item.description}
               onChange={(e) => handleItemChange(e, "description")}
             />
@@ -167,21 +167,17 @@ const ReceiptFormItems = ({
                   id="file-upload-item"
                   style={{ opacity: 0, position: "absolute", zIndex: -1 }}
                 />
-                <button
-                  className="h-full border-[1.5px] border-green-900 p-3 rounded-md text-green-900 w-[150px
-                ]"
-                >
+                <LargeButton height="h-full">
                   <label
-                    className="w-full"
                     htmlFor="file-upload-item"
+                    className="w-full h-full flex justify-center items-center"
                     style={{
                       cursor: "pointer",
-                      display: "inline-block",
                     }}
                   >
                     Upload File
                   </label>
-                </button>
+                </LargeButton>
               </div>
             )}
           </div>
@@ -211,7 +207,7 @@ const ReceiptFormItems = ({
             <h1 className="text-slate-400 font-bold">Amount</h1>
             {edit ? (
               <input
-                className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 w-full"
+                className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
                 value={item.price}
                 onChange={(e) => handleItemChange(e, "price")}
               />
@@ -223,7 +219,7 @@ const ReceiptFormItems = ({
             <h1 className="text-slate-400 font-bold">Character</h1>
             {edit ? (
               <input
-                className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 w-full"
+                className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
                 value={item.character}
                 onChange={(e) => handleItemChange(e, "character")}
               />
@@ -235,7 +231,7 @@ const ReceiptFormItems = ({
             <h1 className="text-slate-400 font-bold">Product ID</h1>
             {edit ? (
               <input
-                className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 w-full"
+                className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
                 value={item.product_id}
                 onChange={(e) => handleItemChange(e, "product_id")}
               />
@@ -248,7 +244,7 @@ const ReceiptFormItems = ({
             {edit ? (
               <div className="flex flex-col gap-4">
                 <input
-                  className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 w-full"
+                  className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
                   value={item.barcode}
                   onChange={(e) => handleItemChange(e, "barcode")}
                 />

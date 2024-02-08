@@ -6,7 +6,7 @@ export const DEFAULT_INPUT_VALUES: ReceiptInput = {
   type: "",
   store: "",
   card: "",
-  amount: 0,
+  amount: "",
   trackingNumber: "",
   boughtDate: TODAY,
   daysUntilReturn: 30,
@@ -16,3 +16,17 @@ export const DEFAULT_INPUT_VALUES: ReceiptInput = {
   onlineType: "gpt",
   storeType: "gpt",
 };
+
+export const CURRENCY_MASK = [
+  "$",
+  /\d/,
+  /\d/,
+  /\d/,
+  ",",
+  /\d/,
+  /\d/,
+  /\d/,
+  ".",
+  /\d/,
+  /\d/,
+];

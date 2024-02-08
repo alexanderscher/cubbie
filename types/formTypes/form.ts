@@ -5,7 +5,7 @@ export interface Photo {
 export interface ItemInput {
   description: string;
   photo?: string;
-  price: number;
+  price: string;
   barcode?: string;
   asset: boolean;
   character?: string;
@@ -16,7 +16,7 @@ export interface ReceiptInput {
   type: string;
   store: string;
   card?: string;
-  amount: number;
+  amount: string;
   trackingNumber?: string;
   boughtDate: string;
   daysUntilReturn: number;

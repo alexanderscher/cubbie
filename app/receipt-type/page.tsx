@@ -19,19 +19,19 @@ const ReceiptType = () => {
 
         <div className="flex w-full gap-7">
           <LargeButton
-            styles={"h-[200px] bg-green-100"}
+            height="h-[150px]"
             handleClick={() => router.push("/receipt-type/online")}
           >
             <p>Online</p>
           </LargeButton>
           <LargeButton
-            styles={"h-[200px] bg-green-100"}
+            height="h-[150px]"
             handleClick={() => router.push("/receipt-type/store")}
           >
             <p>In Store</p>
           </LargeButton>
           <LargeButton
-            styles={"h-[200px] bg-green-100"}
+            height="h-[150px]"
             handleClick={() => router.push("/receipt-type/memo")}
           >
             <p>Memo</p>

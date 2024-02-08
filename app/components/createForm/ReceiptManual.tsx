@@ -1,7 +1,8 @@
 import LargeButton from "@/app/components/buttons/LargeButton";
-import RegularButton from "@/app/components/buttons/RegularButton";
+import { CURRENCY_MASK } from "@/constants/form";
 import Image from "next/image";
 import React, { ChangeEvent } from "react";
+import MaskedInput from "react-text-mask";
 
 const ReceiptManual = ({
   values,
@@ -18,6 +19,7 @@ const ReceiptManual = ({
       setFieldValue("receiptImage", src);
     }
   };
+
   return (
     <div className="">
       <div className="flex flex-col gap-4">
@@ -37,9 +39,10 @@ const ReceiptManual = ({
 
         <div>
           <p className="text-sm text-green-900">Amount</p>
-          <input
+          <MaskedInput
+            mask={CURRENCY_MASK}
             className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
-            name="amount"
+            guide={false}
             value={values.amount}
             onChange={handleChange("amount")}
           />
@@ -111,7 +114,7 @@ const ReceiptManual = ({
                 id="file-upload-receipt"
                 style={{ opacity: 0, position: "absolute", zIndex: -1 }}
               />
-              <LargeButton>
+              <LargeButton height="h-[150px]">
                 <label
                   className="w-full"
                   htmlFor="file-upload-receipt"

@@ -41,22 +41,22 @@ const FinalStage = ({
             </RegularButton>
 
             <div className="receipt-info">
-              <h1 className="text-slate-500 font-bold text-sm">
+              <h1 className="text-slate-400 font-bold text-sm">
                 Number of items
               </h1>
               <h1 className="">{values.items.length}</h1>
             </div>
             <div className="receipt-info">
-              <h1 className="text-slate-500 font-bold text-sm">Total Amount</h1>
+              <h1 className="text-slate-400 font-bold text-sm">Total Amount</h1>
               <h1 className="">{values.amount}</h1>
             </div>
             <div className="receipt-info">
-              <h1 className="text-slate-500 font-bold text-sm">Card</h1>
+              <h1 className="text-slate-400 font-bold text-sm">Card</h1>
               {values.card ? values.card : "None"}
             </div>
             {values.type === "Online" && (
               <div className="receipt-info">
-                <h1 className="text-slate-500 font-bold text-sm">
+                <h1 className="text-slate-400 font-bold text-sm">
                   Tracking Number
                 </h1>
                 <h1 className="">
@@ -66,13 +66,13 @@ const FinalStage = ({
             )}
 
             <div className="receipt-info">
-              <h1 className="text-slate-500 font-bold text-sm">
+              <h1 className="text-slate-400 font-bold text-sm">
                 Purchase Date
               </h1>
               <h1 className=""> {values.boughtDate}</h1>
             </div>
             <div className="receipt-info">
-              <h1 className="text-slate-500 font-bold text-sm">Return Date</h1>
+              <h1 className="text-slate-400 font-bold text-sm">Return Date</h1>
 
               {values.boughtDate && values.daysUntilReturn && (
                 <h1 className="">
@@ -163,7 +163,7 @@ const FinalStage = ({
               <p className="text-green-900 text-sm">Edit receipt</p>
             </RegularButton>
             {(values.storeType === "gpt" && values.type === "Online") ||
-            (values.storeType !== "gpt" && values.type === "InStore") ? (
+            (values.storeType !== "gpt" && values.type === "Store") ? (
               <RegularButton
                 styles={"bg-orange-400 border-green-900 "}
                 handleClick={() => {

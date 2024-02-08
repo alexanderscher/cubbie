@@ -1,8 +1,6 @@
-import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
 import { BarcodeScanner } from "@/app/components/BarcodeScanner";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { ReceiptInput } from "@/types/formTypes/form";
-import { UploadButton } from "@/utils/uploadthing";
 import Image from "next/image";
 import React, { useState } from "react";
 
@@ -11,6 +9,7 @@ interface ReceiptFormItemsProps {
   setFieldValue: any;
   index: number;
   values: ReceiptInput;
+  stage?: string;
 }
 
 const ReceiptFormItems = ({
@@ -18,21 +17,12 @@ const ReceiptFormItems = ({
   index,
   setFieldValue,
   values,
+  stage,
 }: ReceiptFormItemsProps) => {
   const [edit, setEdit] = useState(false);
   const [asset, setAsset] = useState(false);
 
   const removeItem = async (index: number) => {
-    const item = values.items[index];
-
-    if (item && item.photo && item.photo.length > 0) {
-      try {
-        await deleteUploadThingImage(item.photo[0].key);
-        console.log("Photo deleted successfully");
-      } catch (error) {
-        console.error("Error deleting photo:", error);
-      }
-    }
     const newItems = values.items.filter((_, i) => i !== index);
 
     setFieldValue("items", newItems);
@@ -49,7 +39,6 @@ const ReceiptFormItems = ({
     setFieldValue("items", newItems);
   };
   const [showScanner, setShowScanner] = useState(false);
-  const [isBarcode, setIsBarcode] = useState(false);
 
   const handleError = (error: any) => {
     // console.error("Scanning error:", error);
@@ -67,7 +56,7 @@ const ReceiptFormItems = ({
   return (
     <div className="border-t-[1.5px] border-black flex flex-col gap-4 w-full">
       <div className="flex justify-between">
-        {edit ? (
+        {edit && stage !== "Final" ? (
           <div className="flex justify-between w-full">
             <input
               className="text-orange-500  bg-white  bg border-green-900"
@@ -87,114 +76,132 @@ const ReceiptFormItems = ({
             <button type="button" className="text-orange-500">
               {item.description}
             </button>
-            <button
-              type="button"
-              className="text-sm text-orange-500"
-              onClick={() => setEdit(true)}
-            >
-              Edit
-            </button>
+            {stage !== "Final" && (
+              <button
+                type="button"
+                className="text-sm text-orange-500"
+                onClick={() => setEdit(true)}
+              >
+                Edit
+              </button>
+            )}
           </div>
         )}
       </div>
 
       <div className="w-full h-full flex gap-6">
-        <div className="w-[120px] h-[150px] flex items-center rounded-sm flex-shrink-0">
-          {item.photo.length > 0 ? (
+        {stage === "Final" && item.photo && (
+          <div className="w-[120px] h-[150px] flex items-center rounded-sm flex-shrink-0">
             <div className="w-full">
               <Image
                 width={200}
                 height={200}
-                src={item.photo[0].url}
+                src={item.photo}
                 alt=""
                 className="w-full h-full object-cover"
               />
-              {edit && (
-                <div className="text-sm">
-                  <UploadButton
-                    appearance={{
-                      button:
-                        "ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed  after:none w-full h-[30px] w-[120px]",
-                    }}
-                    endpoint="imageUploader"
-                    content={{
-                      button: "Replace image",
-                      allowedContent: " ",
-                    }}
-                    onClientUploadComplete={(res) => {
-                      const updatedItems = values.items.map((item, idx) => {
-                        if (idx === index) {
-                          async () => {
-                            if (item.photo && item.photo.length > 0) {
-                              await deleteUploadThingImage(item.photo[0].key);
-                            }
-                          };
-
-                          return {
-                            ...item,
-                            photo: [
-                              ...(item.photo || []),
-                              { url: res[0].url, key: res[0].key },
-                            ],
-                          };
-                        }
-                        return item;
-                      });
-
-                      setFieldValue("items", updatedItems);
-                    }}
-                    onUploadError={(error: Error) => {
-                      alert("error");
-                    }}
-                  />
-                </div>
-              )}
             </div>
-          ) : (
-            <UploadButton
-              appearance={{
-                button:
-                  "ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed  after:none w-full h-[150px] w-[120px] mt-10",
-              }}
-              endpoint="imageUploader"
-              content={{
-                button: "Add image",
-                allowedContent: " ",
-              }}
-              onClientUploadComplete={(res) => {
-                const updatedItems = values.items.map((item, idx) => {
-                  if (idx === index) {
-                    return {
-                      ...item,
-                      photo: [
-                        ...(item.photo || []),
-                        { url: res[0].url, key: res[0].key },
-                      ],
-                    };
-                  }
-                  return item;
-                });
-
-                setFieldValue("items", updatedItems);
-              }}
-              onUploadError={(error: Error) => {
-                alert("error");
-              }}
-            />
-          )}
-        </div>
+          </div>
+        )}
+        {stage !== "Final" && (
+          <div className="w-[120px] h-[150px] flex items-center rounded-sm flex-shrink-0">
+            {item.photo ? (
+              <div className="w-full">
+                {edit ? (
+                  <div className="text-sm">
+                    {item.photo && (
+                      <div className=" relative flex items-center justify-center ">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFieldValue("items", [
+                              ...values.items.slice(0, index),
+                              { ...values.items[index], photo: "" },
+                              ...values.items.slice(index + 1),
+                            ]);
+                          }}
+                          className="absolute top-0 right-0 m-1  bg-green-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
+                        >
+                          X
+                        </button>
+                        <Image
+                          width={200}
+                          height={200}
+                          src={item.photo}
+                          alt=""
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Image
+                    width={200}
+                    height={200}
+                    src={item.photo}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                )}
+              </div>
+            ) : (
+              <div className="flex flex-col mb-6">
+                <input
+                  type="file"
+                  onChange={(e) => {
+                    console.log("File input changed");
+                    if (e.target.files && e.target.files[0]) {
+                      const file = e.target.files[0];
+                      console.log("Selected file:", file);
+                      const src = URL.createObjectURL(file);
+                      console.log("Blob URL:", src);
+                      const newItems = [
+                        ...values.items.slice(0, index),
+                        { ...values.items[index], photo: src },
+                        ...values.items.slice(index + 1),
+                      ];
+                      setFieldValue("items", newItems);
+                    }
+                  }}
+                  id="file-upload-item"
+                  style={{ opacity: 0, position: "absolute", zIndex: -1 }}
+                />
+                <RegularButton styles="border-green-900 w-full">
+                  <label
+                    htmlFor="file-upload-item"
+                    className="text-green-900 w-full"
+                    style={{
+                      cursor: "pointer",
+                      display: "inline-block",
+                    }}
+                  >
+                    Upload File
+                  </label>
+                </RegularButton>
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="text-sm flex flex-col gap-3 items-start w-full">
-          <RegularButton
-            handleClick={toggleAsset}
-            styles={
-              item.asset
-                ? "bg-blue-500 text-white"
-                : "border-blue-500 text-blue-500"
-            }
-          >
-            <p className="text-xs">Asset</p>
-          </RegularButton>
+          {stage !== "Final" ? (
+            <RegularButton
+              handleClick={toggleAsset}
+              styles={
+                item.asset
+                  ? "bg-blue-500 text-white"
+                  : "border-blue-500 text-blue-500"
+              }
+            >
+              <p className="text-xs">Asset</p>
+            </RegularButton>
+          ) : (
+            asset && (
+              <RegularButton styles={"border-blue-500 text-blue-500"}>
+                <p className="text-xs">Asset</p>
+              </RegularButton>
+            )
+          )}
 
           <div className="w-full">
             <h1 className="text-slate-400 font-bold">Amount</h1>
@@ -246,7 +253,6 @@ const ReceiptFormItems = ({
                   className="border-[1.5px] border-green-900 p-3 rounded-md text-green-900 w-[150px]"
                   onClick={() => {
                     setShowScanner(true);
-                    setIsBarcode(false);
                   }}
                   disabled={showScanner}
                 >

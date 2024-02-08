@@ -1,4 +1,6 @@
-import React from "react";
+import RegularButton from "@/app/components/buttons/RegularButton";
+import Image from "next/image";
+import React, { ChangeEvent } from "react";
 
 const ReceiptManual = ({
   values,
@@ -7,6 +9,14 @@ const ReceiptManual = ({
   errors,
   online = false,
 }: any) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const src = URL.createObjectURL(file);
+
+      setFieldValue("receiptImage", src);
+    }
+  };
   return (
     <div className="">
       <div className="flex flex-col gap-4">
@@ -90,6 +100,42 @@ const ReceiptManual = ({
             <p className="text-orange-800 text-xs">{errors.daysUntilReturn}</p>
           )}
         </div>
+        <div className="flex flex-col mb-6">
+          <input
+            type="file"
+            onChange={handleFileChange}
+            id="file-upload-receipt"
+            style={{ opacity: 0, position: "absolute", zIndex: -1 }}
+          />
+          <RegularButton styles="border-green-900 w-full">
+            <label
+              htmlFor="file-upload-receipt"
+              className="text-green-900 w-full"
+              style={{
+                cursor: "pointer",
+                display: "inline-block",
+              }}
+            >
+              Upload File
+            </label>
+          </RegularButton>
+        </div>
+      </div>
+      <div>
+        {values.receiptImage && (
+          <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md">
+            <button
+              type="button"
+              onClick={() => {
+                setFieldValue("receiptImage", "");
+              }}
+              className="absolute top-0 right-0 m-1  bg-green-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
+            >
+              X
+            </button>
+            <Image width={150} height={150} src={values.receiptImage} alt="" />
+          </div>
+        )}
       </div>
     </div>
   );

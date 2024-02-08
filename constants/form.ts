@@ -11,7 +11,7 @@ export const DEFAULT_INPUT_VALUES: ReceiptInput = {
   boughtDate: TODAY,
   daysUntilReturn: 30,
   finalReturnDate: "",
-  receiptImage: [],
+  receiptImage: "",
   items: [],
   onlineType: "gpt",
   storeType: "gpt",

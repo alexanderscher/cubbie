@@ -168,12 +168,12 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                 )}
               </div>
             </div>
-            {values.receiptImage && values.receiptImage.length > 0 && (
+            {values.receiptImage && (
               <div className="w-24 h-50 overflow-hidden relative flex items-center justify-center rounded-md">
                 <Image
                   width={150}
                   height={150}
-                  src={values.receiptImage[0].url}
+                  src={values.receiptImage}
                   alt=""
                 />
               </div>

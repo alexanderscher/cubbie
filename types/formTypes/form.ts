@@ -4,7 +4,7 @@ export interface Photo {
 }
 export interface ItemInput {
   description: string;
-  photo?: Photo[];
+  photo?: string;
   price: number;
   barcode?: string;
   asset: boolean;
@@ -21,7 +21,7 @@ export interface ReceiptInput {
   boughtDate: string;
   daysUntilReturn: number;
   finalReturnDate: string;
-  receiptImage?: Photo[];
+  receiptImage?: "";
   items: ItemInput[];
   onlineType: string;
   storeType: string;
@@ -30,6 +30,7 @@ export interface ReceiptInput {
 export enum ReceiptStoreStage {
   IN_STORE_RECEIPT = "IN_STORE_RECEIPT",
   IN_STORE_ITEMS_MANUAL = "IN_STORE_ITEMS",
+  IN_STORE_GPT = "IN_STORE_GPT",
   PREVIEW = "PREVIEW",
 }
 

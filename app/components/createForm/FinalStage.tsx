@@ -84,12 +84,12 @@ const FinalStage = ({
               )}
             </div>
           </div>
-          {values.receiptImage && values.receiptImage.length > 0 && (
+          {values.receiptImage && (
             <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md">
               <Image
                 width={200}
                 height={200}
-                src={values.receiptImage[0].url}
+                src={values.receiptImage}
                 alt=""
               />
             </div>
@@ -115,7 +115,6 @@ const FinalStage = ({
           <div className="flex justify-between gap-3">
             <RegularButton
               styles={"bg-orange-400 border-green-900 w-full"}
-              submit
               handleClick={() => {
                 {
                   values.type === "Online"
@@ -129,7 +128,6 @@ const FinalStage = ({
 
             <RegularButton
               styles={"bg-orange-400 border-green-900 w-full"}
-              submit
               handleClick={() => {
                 values.type === "Online"
                   ? setStage(ReceiptOnlineStage.ONLINE_ITEMS)
@@ -153,26 +151,32 @@ const FinalStage = ({
             <RegularButton
               styles={"bg-orange-400 border-green-900 "}
               handleClick={() => {
-                {
-                  values.type === "Online"
-                    ? setStage(ReceiptOnlineStage.ONLINE_RECEIPT)
+                if (values.type === "Store") {
+                  values.storeType === "gpt"
+                    ? setStage(ReceiptStoreStage.IN_STORE_GPT)
                     : setStage(ReceiptStoreStage.IN_STORE_RECEIPT);
+                } else {
+                  setStage(ReceiptStoreStage.IN_STORE_ITEMS_MANUAL);
                 }
               }}
             >
               <p className="text-green-900 text-sm">Edit receipt</p>
             </RegularButton>
-
-            <RegularButton
-              styles={"bg-orange-400 border-green-900 "}
-              handleClick={() => {
-                values.type === "Online"
-                  ? setStage(ReceiptOnlineStage.ONLINE_ITEMS)
-                  : setStage(ReceiptStoreStage.IN_STORE_ITEMS_MANUAL);
-              }}
-            >
-              <p className="text-green-900  text-sm">Edit receipt items</p>
-            </RegularButton>
+            {(values.storeType === "gpt" && values.type === "Online") ||
+            (values.storeType !== "gpt" && values.type === "InStore") ? (
+              <RegularButton
+                styles={"bg-orange-400 border-green-900 "}
+                handleClick={() => {
+                  if (values.type === "Online") {
+                    setStage(ReceiptOnlineStage.ONLINE_ITEMS);
+                  } else {
+                    setStage(ReceiptStoreStage.IN_STORE_ITEMS_MANUAL);
+                  }
+                }}
+              >
+                <p className="text-green-900  text-sm">Edit receipt items</p>
+              </RegularButton>
+            ) : null}
           </div>
           <RegularButton
             type="submit"

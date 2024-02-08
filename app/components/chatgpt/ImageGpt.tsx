@@ -15,16 +15,16 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
   const [noImage, setNoImage] = useState(false);
   const [help, setHelp] = useState(false);
 
-  const { startUpload, permittedFileInfo } = useUploadThing("imageUploader", {
-    onClientUploadComplete: (res) => {
-      (async () => {
-        if (values.receiptImage.length !== 0) {
-          await deleteUploadThingImage(values.receiptImage[0].key);
-        }
-        setFieldValue("receiptImage", res);
-      })().catch(console.error);
-    },
-  });
+  // const { startUpload, permittedFileInfo } = useUploadThing("imageUploader", {
+  //   onClientUploadComplete: (res) => {
+  //     (async () => {
+  //       if (values.receiptImage.length !== 0) {
+  //         await deleteUploadThingImage(values.receiptImage[0].key);
+  //       }
+  //       setFieldValue("receiptImage", res);
+  //     })().catch(console.error);
+  //   },
+  // });
 
   const handleFileChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -41,14 +41,14 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
       reader.onload = () => {
         if (typeof reader.result === "string") {
           setImage(reader.result);
-          startUpload([file]);
+          // startUpload([file]);
         }
       };
       reader.onerror = (error) => {
         console.error("Error converting file to base64:", error);
       };
     },
-    [startUpload]
+    []
   );
 
   const handleSubmit = async () => {
@@ -85,11 +85,12 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
     setFieldValue("amount", jsonObject.receipt.total_amount);
     setFieldValue("boughtDate", jsonObject.receipt.date_purchased);
     setFieldValue("store", jsonObject.receipt.store);
+    setFieldValue("receiptImage", image);
 
     const itemsWithAllProperties = jsonObject.receipt.items.map(
       (item: any) => ({
         description: item.description || "",
-        photo: item.photo || [],
+        photo: item.photo || "",
         price: item.price || 0,
         barcode: item.barcode || "",
         asset: item.hasOwnProperty("asset") ? item.asset : false,

@@ -36,7 +36,7 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
 
     const itemsWithAllProperties = data.map((item: any) => ({
       description: item.description || "",
-      photo: item.photo || [],
+      photo: item.photo || "",
       price: item.price || 0,
       product_id: item.product_id || "",
       barcode: "",

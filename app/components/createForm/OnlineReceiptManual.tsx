@@ -1,10 +1,8 @@
-import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
 import { BarcodeScanner } from "@/app/components/BarcodeScanner";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { ItemInput, ReceiptInput } from "@/types/formTypes/form";
-import { UploadButton } from "@/utils/uploadthing";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import * as Yup from "yup";
 
 const itemSchema = Yup.object({
@@ -15,9 +13,10 @@ const itemSchema = Yup.object({
     .positive("Price must be positive"),
 });
 
-const OnlineReceiptManual = ({ setFieldValue, values, validateForm }: any) => {
+const OnlineReceiptManual = ({ setFieldValue, values, handleChange }: any) => {
   const [showScanner, setShowScanner] = useState(false);
   const [isBarcode, setIsBarcode] = useState(false);
+
   const [error, setError] = useState({
     description: "",
     price: "",
@@ -25,12 +24,24 @@ const OnlineReceiptManual = ({ setFieldValue, values, validateForm }: any) => {
 
   const [item, setItem] = useState<ItemInput>({
     description: "",
-    photo: [],
+    photo: "",
     price: 0,
     barcode: "",
     asset: false,
     character: "",
   });
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const src = URL.createObjectURL(file);
+
+      setItem({
+        ...item,
+        photo: src,
+      });
+    }
+  };
   const handleItemAdd = (value: any, type: string) => {
     setItem({ ...item, [type]: value });
   };
@@ -39,15 +50,11 @@ const OnlineReceiptManual = ({ setFieldValue, values, validateForm }: any) => {
       await itemSchema.validate(item, { abortEarly: false });
 
       const currentItems = values.items;
-      if (item.photo && item.photo?.length > 0) {
-        item.photo = [];
-      }
-
       setFieldValue("items", [...currentItems, item]);
 
       setItem({
         description: "",
-        photo: [],
+        photo: "",
         price: 0,
         barcode: "",
         product_id: "",
@@ -91,7 +98,7 @@ const OnlineReceiptManual = ({ setFieldValue, values, validateForm }: any) => {
         <input
           className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
           name="description"
-          value={item.description}
+          value={item.description || ""}
           onChange={(e) => {
             handleItemAdd(e.target.value, "description");
           }}
@@ -119,7 +126,7 @@ const OnlineReceiptManual = ({ setFieldValue, values, validateForm }: any) => {
         <p className="text-sm text-green-900">Character</p>
         <input
           className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
-          value={item.character}
+          value={item.character || ""}
           name="character"
           onChange={(e) => {
             handleItemAdd(e.target.value, "character");
@@ -130,7 +137,7 @@ const OnlineReceiptManual = ({ setFieldValue, values, validateForm }: any) => {
         <p className="text-sm text-green-900">Product ID</p>
         <input
           className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
-          value={item.product_id}
+          value={item.product_id || ""}
           name="product_id"
           onChange={(e) => {
             handleItemAdd(e.target.value, "product_id");
@@ -192,7 +199,7 @@ const OnlineReceiptManual = ({ setFieldValue, values, validateForm }: any) => {
             className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
             type="text"
             name="barcode"
-            value={item.barcode}
+            value={item.barcode || ""}
             onChange={(e) => {
               handleItemAdd(e.target.value, "barcode");
             }}
@@ -207,7 +214,7 @@ const OnlineReceiptManual = ({ setFieldValue, values, validateForm }: any) => {
             className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
             type="text"
             name="barcode"
-            value={item.barcode}
+            value={item.barcode || ""}
             onChange={(e) => {
               handleItemAdd(e.target.value, "barcode");
             }}
@@ -215,66 +222,42 @@ const OnlineReceiptManual = ({ setFieldValue, values, validateForm }: any) => {
         </div>
       )}
       <p className="text-sm text-green-900">Image of tag or item</p>
-      <div>
-        <UploadButton
-          appearance={{
-            button:
-              "ut-ready:bg-[#e2f1e2] border-[1.5px] border-green-900 text-green-900 ut-uploading:cursor-not-allowed   after:none w-full h-[100px]",
-          }}
-          endpoint="imageUploader"
-          // content={{
-          //   button: "Add image of item",
-          //   allowedContent: receiptImageError.error && (
-          //     <div className="">
-          //       <p className="text-orange-800">
-          //         {receiptImageError.message}
-          //       </p>
-          //     </div>
-          //   ),
-          // }}
-          onClientUploadComplete={(res) => {
-            async () => {
-              if (item.photo && item.photo.length === 0) {
-                handleItemAdd(res, "photo");
-              } else {
-                if (item.photo && item.photo.length > 0) {
-                  await deleteUploadThingImage(item.photo[0]?.key);
-                }
-
-                handleItemAdd(res, "photo");
-              }
-            };
-          }}
-          // onUploadError={(error: Error) => {
-          //   setReceiptImageError({
-          //     error: true,
-          //     message: error.message,
-          //   });
-          // }}
+      <div className="flex flex-col mb-6">
+        <input
+          type="file"
+          onChange={handleFileChange}
+          id="file-upload"
+          style={{ opacity: 0, position: "absolute", zIndex: -1 }}
         />
+        <RegularButton styles="border-green-900 w-full">
+          <label
+            htmlFor="file-upload"
+            className="text-green-900 w-full"
+            style={{
+              cursor: "pointer",
+              display: "inline-block",
+            }}
+          >
+            Upload File
+          </label>
+        </RegularButton>
       </div>
 
-      {item.photo && item.photo.length > 0 && (
+      {item.photo && (
         <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md">
           <button
             type="button"
             onClick={() => {
-              async () => {
-                if (item.photo && item.photo.length > 0) {
-                  await deleteUploadThingImage(item.photo[0].key);
-                }
-              };
-
               setItem({
                 ...item,
-                photo: [],
+                photo: "",
               });
             }}
             className="absolute top-0 right-0 m-1  bg-green-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
           >
             X
           </button>
-          <Image width={150} height={150} src={item.photo[0].url} alt="" />
+          <Image width={150} height={150} src={item.photo} alt="" />
         </div>
       )}
 

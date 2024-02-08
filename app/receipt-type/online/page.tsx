@@ -9,17 +9,16 @@ import OnlineReceiptManual from "@/app/components/createForm/OnlineReceiptManual
 import Preview from "@/app/components/createForm/Preview";
 import { useRouter } from "next/navigation";
 import { DEFAULT_INPUT_VALUES } from "@/constants/form";
-import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
 import { ReceiptOnlineStage } from "@/types/formTypes/form";
 import FinalStage from "@/app/components/createForm/FinalStage";
-import { ItemsSchema, ReceiptSchema } from "@/utils/receiptValidation";
+import { ITEMS_SCHEMA, RECEIPT_SCHEMA } from "@/utils/receiptValidation";
 
 const getValidationSchema = (stage: ReceiptOnlineStage) => {
   switch (stage) {
     case ReceiptOnlineStage.ONLINE_RECEIPT:
-      return ReceiptSchema;
+      return RECEIPT_SCHEMA;
     case ReceiptOnlineStage.ONLINE_ITEMS:
-      return ItemsSchema;
+      return ITEMS_SCHEMA;
     default:
       return;
   }
@@ -70,19 +69,6 @@ const Online = () => {
                 <RegularButton
                   styles="bg border-green-900"
                   handleClick={async () => {
-                    if (values.receiptImage && values.receiptImage.length > 0) {
-                      await deleteUploadThingImage(values.receiptImage[0].key);
-                    }
-
-                    if (values.items && values.items.length > 0) {
-                      for (const item of values.items) {
-                        if (item.photo && item.photo.length > 0) {
-                          console.log("discard", item.photo[0].key);
-                          await deleteUploadThingImage(item.photo[0].key);
-                        }
-                      }
-                    }
-
                     router.push("/receipt-type");
                   }}
                 >
@@ -220,6 +206,7 @@ const Online = () => {
                             />
                           ) : (
                             <OnlineReceiptManual
+                              handleChange={handleChange}
                               validateForm={validateForm}
                               setFieldValue={setFieldValue}
                               values={values}

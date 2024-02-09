@@ -181,7 +181,7 @@ const ReceiptFormItems = ({
           )} */}
 
           <div className="w-full">
-            <h1 className="text-slate-400 font-bold">Amount</h1>
+            <h1 className="text-slate-400 font-bold">AMOUNT</h1>
             {edit ? (
               <input
                 className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
@@ -193,7 +193,7 @@ const ReceiptFormItems = ({
             )}
           </div>
           <div className="w-full">
-            <h1 className="text-slate-400 font-bold">Character</h1>
+            <h1 className="text-slate-400 font-bold">CHARACTER</h1>
             {edit ? (
               <input
                 className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
@@ -205,7 +205,7 @@ const ReceiptFormItems = ({
             )}
           </div>
           <div className="w-full">
-            <h1 className="text-slate-400 font-bold">Product ID</h1>
+            <h1 className="text-slate-400 font-bold">PRODUCT ID</h1>
             {edit ? (
               <input
                 className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
@@ -217,7 +217,7 @@ const ReceiptFormItems = ({
             )}
           </div>
           <div className="w-full">
-            <h1 className="text-slate-400 font-bold">Barcode</h1>
+            <h1 className="text-slate-400 font-bold">BARCODE</h1>
             {edit ? (
               <div className="flex flex-col gap-4">
                 <input

@@ -24,11 +24,11 @@ const page = () => {
             <h1 className="">5</h1>
           </div>
           <div className="receipt-info">
-            <h1 className="text-slate-400">Total Amount</h1>
+            <h1 className="text-slate-400">TOTAL AMOUNT</h1>
             <h1 className="">$300.00</h1>
           </div>
           <div className="receipt-info">
-            <h1 className="text-slate-400">Card</h1>
+            <h1 className="text-slate-400">CARD</h1>
             <h1 className="">SB 1332</h1>
           </div>
         </div>

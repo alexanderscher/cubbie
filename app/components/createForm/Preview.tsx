@@ -55,7 +55,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
             <div className="flex flex-col gap-3">
               <div className="flex flex-col ">
                 <h1 className="text-slate-400 font-bold text-sm">
-                  Total Amount
+                  TOTAL AMOUNT
                 </h1>
                 {edit ? (
                   <input
@@ -70,7 +70,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
               </div>
 
               <div className="flex flex-col ">
-                <h1 className="text-slate-400 font-bold text-sm">Card</h1>
+                <h1 className="text-slate-400 font-bold text-sm">CARD</h1>
                 {edit ? (
                   <input
                     className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
@@ -84,7 +84,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
               </div>
               <div className="flex flex-col ">
                 <h1 className="text-slate-400 font-bold text-sm">
-                  Tracking Number Link
+                  TRACKING NUMBER LINK
                 </h1>
                 {edit ? (
                   <input
@@ -100,7 +100,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
 
               <div className="flex flex-col ">
                 <h1 className="text-slate-400 font-bold text-sm">
-                  Purchase Date
+                  PURCHASE DATE
                 </h1>
                 {edit ? (
                   <input
@@ -116,7 +116,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
               </div>
               <div className="flex flex-col ">
                 <h1 className="text-slate-400 font-bold text-sm">
-                  Days until return
+                  DAYS UNTIL RETURN
                 </h1>
                 {edit ? (
                   <input

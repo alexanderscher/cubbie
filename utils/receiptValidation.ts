@@ -4,7 +4,7 @@ export const RECEIPT_SCHEMA = Yup.object({
   store: Yup.string().required("Store is required"),
   amount: Yup.string().required("Amount is required"),
   boughtDate: Yup.date().required("Bought date is required"),
-  daysUntilReturn: Yup.number().required("Days until return is required"),
+  daysUntilReturn: Yup.number().required("DAYS UNTIL RETURN is required"),
   trackingNumber: Yup.string()
     .url("The tracking number must be a valid URL")
     .nullable()

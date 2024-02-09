@@ -185,6 +185,7 @@ input:-webkit-autofill::first-line {
     padding-left: 0px;
     height: auto;
     min-height: auto;
+    max-width: 500px;
   }
   .header {
     flex-direction: column;
@@ -225,14 +226,18 @@ input:-webkit-autofill::first-line {
     gap: 40px;
     flex-direction: column;
     position: relative;
+    justify-content: center;
+    align-items: center;
   }
   .left-tab {
     display: flex;
     border-right: none;
     flex-direction: column;
+    justify-content: center;
+
     gap: 30px;
     width: 100%;
-    max-width: 800px;
+    max-width: 500px;
   }
   .mobile-form-items {
     display: flex;
@@ -248,5 +253,16 @@ input:-webkit-autofill::first-line {
 @media (max-width: 700px) {
   .grid-home {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 550px) {
+  .left-tab {
+    display: flex;
+    border-right: none;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+    max-width: 800px;
   }
 }

@@ -35,22 +35,22 @@ const FinalStage = ({
 
             <div className="receipt-info">
               <h1 className="text-slate-400 font-bold text-sm">
-                Number of items
+                NUMBER OF ITEMS
               </h1>
               <h1 className="">{values.items.length}</h1>
             </div>
             <div className="receipt-info">
-              <h1 className="text-slate-400 font-bold text-sm">Total Amount</h1>
+              <h1 className="text-slate-400 font-bold text-sm">TOTAL AMOUNT</h1>
               <h1 className="">{values.amount}</h1>
             </div>
             <div className="receipt-info">
-              <h1 className="text-slate-400 font-bold text-sm">Card</h1>
+              <h1 className="text-slate-400 font-bold text-sm">CARD</h1>
               {values.card ? values.card : "None"}
             </div>
             {values.type === "Online" && (
               <div className="receipt-info">
                 <h1 className="text-slate-400 font-bold text-sm">
-                  Tracking Number
+                  TRACKING NUMBER
                 </h1>
                 <h1 className="">
                   {values.trackingNumber ? values.trackingNumber : "None"}
@@ -60,12 +60,12 @@ const FinalStage = ({
 
             <div className="receipt-info">
               <h1 className="text-slate-400 font-bold text-sm">
-                Purchase Date
+                PURCHASE DATE
               </h1>
               <h1 className=""> {values.boughtDate}</h1>
             </div>
             <div className="receipt-info">
-              <h1 className="text-slate-400 font-bold text-sm">Return Date</h1>
+              <h1 className="text-slate-400 font-bold text-sm">RETURN DATE</h1>
 
               {values.boughtDate && values.daysUntilReturn && (
                 <h1 className="">

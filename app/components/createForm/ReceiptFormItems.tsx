@@ -1,13 +1,13 @@
 import { BarcodeScanner } from "@/app/components/BarcodeScanner";
 import LargeButton from "@/app/components/buttons/LargeButton";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { ReceiptInput } from "@/types/formTypes/form";
+import { ItemInput, ReceiptInput } from "@/types/formTypes/form";
 import Image from "next/image";
 import React, { useState } from "react";
 
 interface ReceiptFormItemsProps {
-  item: any;
-  setFieldValue: any;
+  item: ItemInput;
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
   index: number;
   values: ReceiptInput;
   stage?: string;

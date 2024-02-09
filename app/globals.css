@@ -160,6 +160,12 @@ input:-webkit-autofill::first-line {
   position: relative;
 }
 
+.receipt-types {
+  display: flex;
+  width: 100%;
+  gap: 30px;
+}
+
 @media (max-width: 1300px) {
   /* Adjust for medium screens */
   .grid-home {
@@ -247,6 +253,12 @@ input:-webkit-autofill::first-line {
   }
   .buttons-margin {
     margin-bottom: 300px;
+  }
+  .receipt-types {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 30px;
   }
 }
 

@@ -1,9 +1,10 @@
 import RegularButton from "@/app/components/buttons/RegularButton";
+import { ReceiptInput } from "@/types/formTypes/form";
 import React, { useState } from "react";
 
 interface Props {
-  setFieldValue: any;
-  values: any;
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
+  values: ReceiptInput;
 }
 
 const TextGpt = ({ setFieldValue, values }: Props) => {

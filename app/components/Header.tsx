@@ -1,6 +1,5 @@
 "use client";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 

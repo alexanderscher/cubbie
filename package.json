@@ -23,6 +23,8 @@
     "quagga": "^0.12.1",
     "react": "^18",
     "react-barcode-qrcode-scanner": "^0.1.3",
+    "react-currency-input-field": "^3.6.14",
+    "react-currency-masked-input": "^2.5.0",
     "react-dom": "^18",
     "react-text-mask": "^5.5.0",
     "react-webcam": "^7.2.0",

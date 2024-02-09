@@ -16,17 +16,3 @@ export const DEFAULT_INPUT_VALUES: ReceiptInput = {
   onlineType: "gpt",
   storeType: "gpt",
 };
-
-export const CURRENCY_MASK = [
-  "$",
-  /\d/,
-  /\d/,
-  /\d/,
-  ",",
-  /\d/,
-  /\d/,
-  /\d/,
-  ".",
-  /\d/,
-  /\d/,
-];

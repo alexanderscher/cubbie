@@ -13,9 +13,9 @@ import React from "react";
 
 interface FinalStageProps {
   values: any;
-  setStage: any;
-  setFieldValue: any;
-  handleSubmit: any;
+  setStage: (stage: any) => void;
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
+  handleSubmit: () => void;
 }
 
 const FinalStage = ({
@@ -29,9 +29,8 @@ const FinalStage = ({
     <div className="flex flex-col gap-6">
       <div className="receipts ">
         <div className="flex flex-col gap-4">
-          <h1>Preview Receipt</h1>
           <div className="flex flex-col gap-4 receipt-bar">
-            <h1 className="text-green-900 text-2xl">{values.store}</h1>
+            <h1 className="text-orange-500 text-2xl">{values.store}</h1>
 
             <div className="receipt-info">
               <h1 className="text-slate-400 font-bold text-sm">

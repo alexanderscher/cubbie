@@ -145,7 +145,7 @@ const Store = () => {
                               }}
                             >
                               <p className="text-white text-sm ">
-                                Back: Receipt type
+                                Back: Receipt types
                               </p>
                             </RegularButton>
                             <RegularButton
@@ -283,7 +283,9 @@ const Store = () => {
                       <div className="two-tab ">
                         <div className="left-tab">
                           <div className="flex justify-between">
-                            <h1 className="">In Store Receipt</h1>
+                            <h1 className="text-orange-500 text-xl">
+                              In Store Receipt
+                            </h1>
                             {/* <RegularButton
                               styles={
                                 "border-orange-400 text-orange-400 text-sm"
@@ -345,7 +347,7 @@ const Store = () => {
                               }}
                             >
                               <p className="text-white text-sm ">
-                                Back: Receipt type
+                                Back: Receipt types
                               </p>
                             </RegularButton>
                             <RegularButton
@@ -426,7 +428,7 @@ export default Store;
 //           router.push("/receipt-type");
 //         }}
 //       >
-//         <p className="text-green-900 text-sm ">Back: Receipt type</p>
+//         <p className="text-green-900 text-sm ">Back: Receipt types</p>
 //       </RegularButton>
 
 //       <RegularButton

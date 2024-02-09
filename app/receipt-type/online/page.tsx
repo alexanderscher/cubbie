@@ -108,7 +108,7 @@ const Online = () => {
                               }}
                             >
                               <p className="text-white text-sm">
-                                Back: Receipt type
+                                Back: Receipt types
                               </p>
                             </RegularButton>
 

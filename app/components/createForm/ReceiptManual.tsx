@@ -1,8 +1,15 @@
 import LargeButton from "@/app/components/buttons/LargeButton";
-import { CURRENCY_MASK } from "@/constants/form";
 import Image from "next/image";
 import React, { ChangeEvent } from "react";
-import MaskedInput from "react-text-mask";
+import CurrencyInput from "react-currency-input-field";
+
+interface ReceiptManualProps {
+  values: any;
+  handleChange: any;
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
+  errors: any;
+  online?: boolean;
+}
 
 const ReceiptManual = ({
   values,
@@ -10,7 +17,7 @@ const ReceiptManual = ({
   setFieldValue,
   errors,
   online = false,
-}: any) => {
+}: ReceiptManualProps) => {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -18,6 +25,9 @@ const ReceiptManual = ({
 
       setFieldValue("receiptImage", src);
     }
+  };
+  const handleCurrencyChange = (value: string | undefined) => {
+    setFieldValue("amount", value || "");
   };
 
   return (
@@ -39,12 +49,14 @@ const ReceiptManual = ({
 
         <div>
           <p className="text-sm text-green-900">Amount</p>
-          <MaskedInput
-            mask={CURRENCY_MASK}
+          <CurrencyInput
+            id="amount"
+            name="amount"
             className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
-            guide={false}
-            value={values.amount}
-            onChange={handleChange("amount")}
+            placeholder=""
+            defaultValue={0.0}
+            decimalsLimit={2}
+            onValueChange={handleCurrencyChange}
           />
           {errors.amount && (
             <p className="text-orange-800 text-sm">{errors.amount}</p>

@@ -3,10 +3,11 @@ import { ReceiptInput } from "@/types/formTypes/form";
 import { calculateReturnDate } from "@/utils/calculateReturnDate";
 import Image from "next/image";
 import React, { useState } from "react";
+import CurrencyInput from "react-currency-input-field";
 
 interface PreviewProps {
   values: ReceiptInput;
-  setFieldValue: any;
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
   handleChange: any;
 }
 const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
@@ -16,53 +17,46 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
     setEdit(!edit);
   };
 
+  const handleCurrencyChange = (value: string | undefined) => {
+    setFieldValue("amount", value || "");
+  };
+
   return (
     <div className="flex flex-col gap-6 preview pb-[200px]">
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-2 ">
-            {edit ? (
-              <div className="flex justify-between">
-                <input
-                  className="text-orange-500 text-xl bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
-                  name="store"
-                  value={values.store}
-                  onChange={handleChange}
-                />
-                {/* <button
-                  type="button"
-                  onClick={toggleEdit}
-                  className="text-sm text-orange-400"
-                >
-                  {edit ? "Save" : "Edit"}
-                </button> */}
-              </div>
-            ) : (
-              <div className="flex justify-between">
-                <h1 className="text-orange-500 text-2xl">
-                  {values.store || "Store Name"}
-                </h1>
-                {/* <button
-                  type="button"
-                  onClick={toggleEdit}
-                  className="text-sm text-orange-400"
-                >
-                  {edit ? "Save" : "Edit"}
-                </button> */}
-              </div>
-            )}
-
-            <div className="flex flex-col gap-3">
+          <div className="flex gap-[100px]">
+            <div className="flex flex-col gap-3 w-full">
+              {edit ? (
+                <div className="flex justify-between">
+                  <input
+                    className="text-orange-500 text-xl bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
+                    name="store"
+                    value={values.store}
+                    onChange={handleChange}
+                  />
+                </div>
+              ) : (
+                <div className="flex justify-between">
+                  <h1 className="text-orange-500 text-2xl">
+                    {values.store || "Store Name"}
+                  </h1>
+                </div>
+              )}
               <div className="flex flex-col ">
                 <h1 className="text-slate-400 font-bold text-sm">
                   TOTAL AMOUNT
                 </h1>
                 {edit ? (
-                  <input
-                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
+                  <CurrencyInput
+                    id="amount"
                     name="amount"
+                    className="text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
+                    placeholder=""
                     value={values.amount}
-                    onChange={handleChange}
+                    defaultValue={0.0}
+                    decimalsLimit={2}
+                    onValueChange={handleCurrencyChange}
                   />
                 ) : (
                   <h1 className=" text-sm">{values.amount}</h1>
@@ -162,31 +156,49 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                 )}
               </div>
             </div>
-            {values.receiptImage && (
-              <div className="w-[100px] h-[120px] overflow-hidden relative flex items-center justify-center rounded-sm">
-                <Image
-                  width={150}
-                  height={150}
-                  src={values.receiptImage}
-                  alt=""
-                />
-              </div>
-            )}
           </div>
-        </div>
-
-        <div className="w-full flex flex-col gap-4">
-          {values.items.map((item, index) => (
-            <div key={index}>
-              <ReceiptFormItems
-                item={item}
-                index={index}
-                setFieldValue={setFieldValue}
-                values={values}
+          {values.receiptImage && (
+            <div className="w-[150px] h-[180px] overflow-hidden relative flex items-center justify-center rounded-sm">
+              <Image
+                width={150}
+                height={150}
+                src={values.receiptImage}
+                alt=""
               />
+              {edit && (
+                <button
+                  onClick={() => {
+                    setFieldValue("receiptImage", "");
+                  }}
+                  type="button"
+                  className="absolute top-0 right-0 m-1  bg-green-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
+                >
+                  X
+                </button>
+              )}
             </div>
-          ))}
+          )}
         </div>
+        <button
+          type="button"
+          onClick={toggleEdit}
+          className="text-sm text-orange-400 text-start"
+        >
+          {edit ? "Save" : "Edit"}
+        </button>
+      </div>
+
+      <div className="w-full flex flex-col gap-4">
+        {values.items.map((item, index) => (
+          <div key={index}>
+            <ReceiptFormItems
+              item={item}
+              index={index}
+              setFieldValue={setFieldValue}
+              values={values}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );

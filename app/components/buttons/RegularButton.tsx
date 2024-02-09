@@ -19,7 +19,6 @@ const RegularButton = ({
   type = "button",
   ...restProps
 }: Props) => {
-  console.log("href", href);
   if (href) {
     return (
       <Link href={href}>

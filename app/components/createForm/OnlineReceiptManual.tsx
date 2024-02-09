@@ -5,15 +5,22 @@ import { ItemInput, ReceiptInput } from "@/types/formTypes/form";
 import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
 import * as Yup from "yup";
-import MaskedInput from "react-text-mask";
-import { CURRENCY_MASK } from "@/constants/form";
 
+import CurrencyInput from "react-currency-input-field";
 const itemSchema = Yup.object({
   description: Yup.string().required("Description is required"),
   price: Yup.string().required("Price is required"),
 });
 
-const OnlineReceiptManual = ({ setFieldValue, values, handleChange }: any) => {
+interface OnlineReceiptManualProps {
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
+  values: ReceiptInput;
+}
+
+const OnlineReceiptManual = ({
+  setFieldValue,
+  values,
+}: OnlineReceiptManualProps) => {
   const [showScanner, setShowScanner] = useState(false);
   const [isBarcode, setIsBarcode] = useState(false);
 
@@ -45,6 +52,11 @@ const OnlineReceiptManual = ({ setFieldValue, values, handleChange }: any) => {
   const handleItemAdd = (value: any, type: string) => {
     setItem({ ...item, [type]: value });
   };
+
+  const handleCurrencyChange = (value: string | undefined) => {
+    setFieldValue("amount", value || "");
+  };
+
   const addItemToFormik = async (setFieldValue: any, values: ReceiptInput) => {
     try {
       await itemSchema.validate(item, { abortEarly: false });
@@ -110,14 +122,16 @@ const OnlineReceiptManual = ({ setFieldValue, values, handleChange }: any) => {
 
       <div>
         <p className="text-sm text-green-900">Price</p>
-        <MaskedInput
-          mask={CURRENCY_MASK}
+
+        <CurrencyInput
+          id="amount"
+          name="amount"
           className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
-          guide={false}
-          value={item.price}
-          onChange={(e) => {
-            handleItemAdd(e.target.value, "price");
-          }}
+          placeholder=""
+          value={values.amount}
+          defaultValue={0.0}
+          decimalsLimit={2}
+          onValueChange={handleCurrencyChange}
         />
         {error.price && (
           <p className="text-orange-900 text-sm">{error.price}</p>

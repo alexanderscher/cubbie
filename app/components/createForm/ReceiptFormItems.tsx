@@ -55,23 +55,23 @@ const ReceiptFormItems = ({
   };
 
   return (
-    <div className="border-t-[1.5px] border-black flex flex-col gap-4 w-full">
+    <div className="border-t-[1.5px] border-black flex flex-col gap-4 w-full pt-5">
       <div className="w-full h-full flex gap-6">
         {stage === "Final" && item.photo && (
-          <div className="w-[120px] h-[150px] flex items-center rounded-sm flex-shrink-0">
-            <div className="w-full">
+          <div className="w-[120px] h-[150px] overflow-hidden relative flex items-center justify-center  flex-shrink-0 rounded-sm">
+            <div className="w-full h-full flex-shrink-0">
               <Image
                 width={200}
                 height={200}
                 src={item.photo}
                 alt=""
-                className="w-full h-full object-cover"
+                className="object-contain"
               />
             </div>
           </div>
         )}
         {stage !== "Final" && (
-          <div className="w-[120px] h-[150px] flex items-center rounded-sm flex-shrink-0 mt-5">
+          <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 r">
             {item.photo ? (
               <div className="w-full">
                 {edit ? (
@@ -96,7 +96,7 @@ const ReceiptFormItems = ({
                           height={200}
                           src={item.photo}
                           alt=""
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover rounded-sm"
                         />
                       </div>
                     )}
@@ -107,12 +107,12 @@ const ReceiptFormItems = ({
                     height={200}
                     src={item.photo}
                     alt=""
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover rounded-sm"
                   />
                 )}
               </div>
             ) : (
-              <div className="flex flex-col h-full">
+              <div className="flex flex-col h-full w-full">
                 <input
                   type="file"
                   onChange={(e) => {
@@ -149,7 +149,7 @@ const ReceiptFormItems = ({
           </div>
         )}
 
-        <div className="text-sm flex flex-col gap-3 items-start w-full mt-5">
+        <div className="text-sm flex flex-col gap-3 items-start w-full ">
           {edit && stage !== "Final" ? (
             <input
               className="text-orange-500 border-b-[1.5px] border-slate-400 focus:outline-none bg-white bg w-full"
@@ -170,12 +170,12 @@ const ReceiptFormItems = ({
                   : "border-orange-500 text-orange-500"
               }
             >
-              <p className="text-xs">Asset</p>
+              <p className="text-sm">Asset</p>
             </RegularButton>
           ) : (
             asset && (
               <RegularButton styles={"border-orange-500 text-orange-500"}>
-                <p className="text-xs">Asset</p>
+                <p className="text-sm">Asset</p>
               </RegularButton>
             )
           )} */}
@@ -227,7 +227,7 @@ const ReceiptFormItems = ({
                 />
                 <button
                   type="button"
-                  className="border-[1.5px] border-green-900 p-3 rounded-md text-green-900 w-[150px]"
+                  className="border-[1.5px] border-green-900 p-3 rounded-sm text-green-900 w-[150px]"
                   onClick={() => {
                     setShowScanner(true);
                   }}
@@ -268,13 +268,13 @@ const ReceiptFormItems = ({
                 styles="bg border-black "
                 handleClick={() => removeItem(index)}
               >
-                <p className="text-xs">Delete</p>
+                <p className="text-sm">Delete</p>
               </RegularButton>
               <RegularButton
                 styles="bg border-black "
                 handleClick={() => setEdit(!edit)}
               >
-                <p className="text-xs">{edit ? "Save" : "Edit"}</p>
+                <p className="text-sm">{edit ? "Save" : "Edit"}</p>
               </RegularButton>
             </div>
           )}

@@ -78,7 +78,7 @@ const FinalStage = ({
             </div>
           </div>
           {values.receiptImage && (
-            <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md">
+            <div className="w-24 h-50 overflow-hidden relative flex items-center justify-center rounded-sm">
               <Image
                 width={200}
                 height={200}
@@ -89,9 +89,9 @@ const FinalStage = ({
           )}
         </div>
 
-        <div className="grid grid-cols-3 gap-10 receipt-grid mb-[100px]">
+        <div className="w-full gap-10  mb-[100px]">
           {values.items.map((item: ItemInput, index: number) => (
-            <div key={index}>
+            <div key={index} className="pt-5">
               <ReceiptFormItems
                 stage="Final"
                 item={item}

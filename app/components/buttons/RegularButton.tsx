@@ -42,7 +42,7 @@ const RegularButton = ({
         type={type}
         className={`
       border-[1.5px]
-       px-5 py-[6px]
+       px-5 py-[8px]
        rounded-3xl ${styles}`}
         onClick={handleClick}
         {...restProps}

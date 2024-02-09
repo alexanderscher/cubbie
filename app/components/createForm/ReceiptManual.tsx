@@ -33,7 +33,7 @@ const ReceiptManual = ({
             onChange={handleChange("store")}
           />
           {errors.store && (
-            <p className="text-orange-800 text-xs">{errors.store}</p>
+            <p className="text-orange-800 text-sm">{errors.store}</p>
           )}
         </div>
 
@@ -47,7 +47,7 @@ const ReceiptManual = ({
             onChange={handleChange("amount")}
           />
           {errors.amount && (
-            <p className="text-orange-800 text-xs">{errors.amount}</p>
+            <p className="text-orange-800 text-sm">{errors.amount}</p>
           )}
         </div>
 
@@ -70,7 +70,7 @@ const ReceiptManual = ({
               onChange={handleChange("trackingNumber")}
             />
             {errors.trackingNumber && (
-              <p className="text-orange-800 text-xs">{errors.trackingNumber}</p>
+              <p className="text-orange-800 text-sm">{errors.trackingNumber}</p>
             )}
           </div>
         )}
@@ -86,7 +86,7 @@ const ReceiptManual = ({
             type="date"
           />
           {errors.boughtDate && (
-            <p className="text-orange-800 text-xs">{errors.boughtDate}</p>
+            <p className="text-orange-800 text-sm">{errors.boughtDate}</p>
           )}
         </div>
         <div>
@@ -101,7 +101,7 @@ const ReceiptManual = ({
             }}
           />
           {errors.daysUntilReturn && (
-            <p className="text-orange-800 text-xs">{errors.daysUntilReturn}</p>
+            <p className="text-orange-800 text-sm">{errors.daysUntilReturn}</p>
           )}
         </div>
 
@@ -115,7 +115,7 @@ const ReceiptManual = ({
                 id="file-upload-receipt"
                 style={{ opacity: 0, position: "absolute", zIndex: -1 }}
               />
-              <LargeButton height="h-[100px]">
+              <LargeButton height="h-[80px]">
                 <label
                   className="w-full"
                   htmlFor="file-upload-receipt"

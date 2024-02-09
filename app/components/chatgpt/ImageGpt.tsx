@@ -94,6 +94,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
     );
     setFieldValue("items", itemsWithAllProperties);
     setNoImage(false);
+    setPrompt(false);
   };
 
   const handleSubmit = async () => {
@@ -101,7 +102,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
       setNoImage(true);
       return;
     }
-    if (values.items.lenght > 0) {
+    if (values.items.length > 0) {
       setPrompt(true);
     } else {
       run();
@@ -124,27 +125,17 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
             Image&quot; button to get the receipt info and items.
           </p>
         )}
-        {image !== "" && (
-          <div className="mb-4 overflow-hidden">
-            <Image
-              src={image}
-              height={300}
-              width={300}
-              alt="Uploaded Image"
-              className="w-full object-contain max-h-72"
-            />
-          </div>
-        )}
+
         <div>
-          <div>
-            <div className="flex flex-col mb-6">
+          <div className="flex flex-col gap-5">
+            <div className="flex flex-col">
               <input
                 type="file"
                 onChange={handleFileChange}
                 id="file-upload-gpt"
                 style={{ opacity: 0, position: "absolute", zIndex: -1 }}
               />
-              <LargeButton height="h-[100px]">
+              <LargeButton height="h-[80px]">
                 <label
                   htmlFor="file-upload-gpt"
                   className="w-full h-full flex justify-center items-center"
@@ -156,10 +147,28 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
                 </label>
               </LargeButton>
             </div>
+            {image !== "" && (
+              <div className="w-[100px] h-[120px] overflow-hidden rounded-sm relative">
+                <button
+                  onClick={() => setImage("")}
+                  type="button"
+                  className="absolute top-0 right-0 m-1  bg-green-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
+                >
+                  X
+                </button>
+                <Image
+                  src={image}
+                  height={200}
+                  width={200}
+                  alt="Uploaded Image"
+                  className="w-full object-contain"
+                />
+              </div>
+            )}
 
             <div className="w-full">
               <RegularButton
-                styles="border-green-900 w-full bg"
+                styles="border-green-900 bg w-full "
                 type="submit"
                 handleClick={handleSubmit}
               >
@@ -174,19 +183,13 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
               Are you sure you want to anaylze? This will overwrite your current
               items
             </p>
-            <div className="flex gap-2">
-              <RegularButton
-                styles={"bg border-black w-full"}
-                handleClick={run}
-              >
-                <p className="text-sm">Confirm</p>
-              </RegularButton>
-              <RegularButton
-                styles={"bg border-black w-full"}
-                handleClick={() => setPrompt(false)}
-              >
-                <p className="text-sm">Cancel</p>
-              </RegularButton>
+            <div className="flex gap-2 justify-center items-center">
+              <button onClick={run}>
+                <p className="text-sm text-orange-500">Confirm</p>
+              </button>
+              <button onClick={() => setPrompt(false)}>
+                <p className="text-sm text-orange-500">Cancel</p>
+              </button>
             </div>
           </div>
         )}

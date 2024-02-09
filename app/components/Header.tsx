@@ -26,13 +26,13 @@ const Header = () => {
         <h1 className="text-3xl text-green-900 ">Inventory</h1>
         <div className="flex gap-2">
           <RegularButton href="/" styles={receiptColor}>
-            <p className="text-xs sm:text-sm">Receipts</p>
+            <p className="text-sm sm:text-sm">Receipts</p>
           </RegularButton>
           <RegularButton styles={itemColor} href="/items">
-            <p className="text-xs sm:text-sm">Items</p>
+            <p className="text-sm sm:text-sm">Items</p>
           </RegularButton>
           <RegularButton styles={archiveColor} href="/archive">
-            <p className="text-xs sm:text-sm">Archive</p>
+            <p className="text-sm sm:text-sm">Archive</p>
           </RegularButton>
           <select className="border-[1.5px] w-[100px] bg border-black rounded-md p-1 placeholder:text-black focus:outline-none"></select>
         </div>

@@ -29,26 +29,26 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                   value={values.store}
                   onChange={handleChange}
                 />
-                <button
+                {/* <button
                   type="button"
                   onClick={toggleEdit}
                   className="text-sm text-orange-400"
                 >
                   {edit ? "Save" : "Edit"}
-                </button>
+                </button> */}
               </div>
             ) : (
               <div className="flex justify-between">
                 <h1 className="text-orange-500 text-2xl">
                   {values.store || "Store Name"}
                 </h1>
-                <button
+                {/* <button
                   type="button"
                   onClick={toggleEdit}
                   className="text-sm text-orange-400"
                 >
                   {edit ? "Save" : "Edit"}
-                </button>
+                </button> */}
               </div>
             )}
 
@@ -163,7 +163,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
               </div>
             </div>
             {values.receiptImage && (
-              <div className="w-24 h-50 overflow-hidden relative flex items-center justify-center rounded-md">
+              <div className="w-[100px] h-[120px] overflow-hidden relative flex items-center justify-center rounded-sm">
                 <Image
                   width={150}
                   height={150}

@@ -104,7 +104,7 @@ const OnlineReceiptManual = ({ setFieldValue, values, handleChange }: any) => {
           }}
         />
         {error.description && (
-          <p className="text-orange-900 text-xs">{error.description}</p>
+          <p className="text-orange-900 text-sm">{error.description}</p>
         )}
       </div>
 
@@ -120,7 +120,7 @@ const OnlineReceiptManual = ({ setFieldValue, values, handleChange }: any) => {
           }}
         />
         {error.price && (
-          <p className="text-orange-900 text-xs">{error.price}</p>
+          <p className="text-orange-900 text-sm">{error.price}</p>
         )}
       </div>
       <div>
@@ -230,7 +230,7 @@ const OnlineReceiptManual = ({ setFieldValue, values, handleChange }: any) => {
           id="file-upload"
           style={{ opacity: 0, position: "absolute", zIndex: -1 }}
         />
-        <LargeButton height="h-[100px]">
+        <LargeButton height="h-[80px]">
           <label
             htmlFor="file-upload"
             className="w-full h-full flex justify-center items-center"

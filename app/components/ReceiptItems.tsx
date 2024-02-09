@@ -30,7 +30,7 @@ const ReceiptItems = () => {
             <h1>123123</h1>
           </div>
           {/* <RegularButton styles={"w-full border-green-900 "}>
-            <p className="text-xs text-green-900">Return</p>
+            <p className="text-sm text-green-900">Return</p>
           </RegularButton> */}
         </div>
       </div>

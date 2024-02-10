@@ -1,6 +1,7 @@
 import ReceiptFormItems from "@/app/components/createForm/ReceiptFormItems";
 import { ReceiptInput } from "@/types/formTypes/form";
 import { calculateReturnDate } from "@/utils/calculateReturnDate";
+import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import React, { useState } from "react";
 import CurrencyInput from "react-currency-input-field";
@@ -59,7 +60,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                     onValueChange={handleCurrencyChange}
                   />
                 ) : (
-                  <h1 className=" text-sm">{values.amount}</h1>
+                  <h1 className=" text-sm">{formatCurrency(values.amount)}</h1>
                 )}
               </div>
 

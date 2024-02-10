@@ -7,6 +7,7 @@ import {
   ReceiptStoreStage,
 } from "@/types/formTypes/form";
 import { calculateReturnDate } from "@/utils/calculateReturnDate";
+import { formatCurrency } from "@/utils/formatCurrency";
 import { useIsMobile } from "@/utils/useIsMobile";
 import Image from "next/image";
 import React from "react";
@@ -40,7 +41,7 @@ const FinalStage = ({
             </div>
             <div className="receipt-info">
               <h1 className="text-slate-400 font-bold text-sm">TOTAL AMOUNT</h1>
-              <h1 className="">{values.amount}</h1>
+              <h1 className="">{formatCurrency(values.amount)}</h1>
             </div>
             <div className="receipt-info">
               <h1 className="text-slate-400 font-bold text-sm">CARD</h1>

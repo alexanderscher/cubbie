@@ -133,7 +133,6 @@ const Store = () => {
                             setFieldValue={setFieldValue}
                             values={values}
                             handleChange={handleChange}
-                            setStage={setStage}
                             errors={errors}
                           />
 

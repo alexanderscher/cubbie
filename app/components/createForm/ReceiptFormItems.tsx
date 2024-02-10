@@ -119,6 +119,12 @@ const ReceiptFormItems = ({
                     console.log("File input changed");
                     if (e.target.files && e.target.files[0]) {
                       const file = e.target.files[0];
+                      if (!file.type.match("image.*")) {
+                        alert("Please upload an image file");
+                        //  setUnvalidImage(true);
+                        return;
+                      }
+
                       console.log("Selected file:", file);
                       const src = URL.createObjectURL(file);
                       console.log("Blob URL:", src);

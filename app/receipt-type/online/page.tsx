@@ -97,7 +97,6 @@ const Online = () => {
                             setFieldValue={setFieldValue}
                             values={values}
                             handleChange={handleChange}
-                            setStage={setStage}
                             errors={errors}
                           />
                           <div className="flex gap-2">
@@ -212,8 +211,6 @@ const Online = () => {
                             />
                           ) : (
                             <OnlineReceiptManual
-                              handleChange={handleChange}
-                              validateForm={validateForm}
                               setFieldValue={setFieldValue}
                               values={values}
                             />

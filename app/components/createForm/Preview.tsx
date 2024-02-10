@@ -55,7 +55,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                     className="text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
                     placeholder=""
                     value={values.amount}
-                    defaultValue={0.0}
+                    defaultValue={values.amount || ""}
                     decimalsLimit={2}
                     onValueChange={handleCurrencyChange}
                   />

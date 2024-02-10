@@ -82,14 +82,14 @@ export async function POST(request: Request) {
   //   });
   // } catch (error) {
   //   console.error(error);
-  //   return new NextResponse(
-  //     JSON.stringify({ error: "Internal Server Error" }),
-  //     {
-  //       status: 500,
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     }
-  //   );
+  // return new NextResponse(
+  //   JSON.stringify({ error: "Internal Server Error" }),
+  //   {
+  //     status: 500,
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   }
+  // );
   // }
 }

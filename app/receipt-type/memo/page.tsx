@@ -219,7 +219,7 @@ const Memo = () => {
                                 setStage(ReceiptStoreStage.IN_STORE_RECEIPT);
                               }}
                             >
-                              <p className="text-white ">Back: Receipt</p>
+                              <p className="text-white">Back: Receipt</p>
                             </RegularButton>
 
                             <RegularButton

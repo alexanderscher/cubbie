@@ -21,6 +21,12 @@ const ReceiptManual = ({
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      if (!file.type.match("image.*")) {
+        alert("Please upload an image file");
+        //  setUnvalidImage(true);
+        return;
+      }
+
       const src = URL.createObjectURL(file);
 
       setFieldValue("receiptImage", src);
@@ -54,7 +60,7 @@ const ReceiptManual = ({
             name="amount"
             className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
             placeholder=""
-            defaultValue={0.0}
+            defaultValue={values.amount || ""}
             decimalsLimit={2}
             onValueChange={handleCurrencyChange}
           />

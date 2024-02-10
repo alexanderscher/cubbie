@@ -18,17 +18,9 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
   const [help, setHelp] = useState(false);
   const [prompt, setPrompt] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  // const { startUpload, permittedFileInfo } = useUploadThing("imageUploader", {
-  //   onClientUploadComplete: (res) => {
-  //     (async () => {
-  //       if (values.receiptImage.length !== 0) {
-  //         await deleteUploadThingImage(values.receiptImage[0].key);
-  //       }
-  //       setFieldValue("receiptImage", res);
-  //     })().catch(console.error);
-  //   },
-  // });
+  const [noReceipt, setNoReceipt] = useState(false);
+  const [unvalidImage, setUnvalidImage] = useState(false);
+  const [apiError, setApiError] = useState(false);
 
   const OnlineGptCall = async () => {
     const res = await fetch("/api/gpt/analyze-image", {
@@ -42,12 +34,22 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
     });
 
     if (!res.ok) {
+      setApiError(true);
+      setLoading(false);
       console.error("Failed to fetch data");
 
       return;
     }
 
     const data = await res.json();
+
+    // if (data.choices[0].message.content === "This is not a receipt.") {
+    //   setNoReceipt(true);
+    //   setNoImage(false);
+    //   setPrompt(false);
+    //   setLoading(false);
+    //   return;
+    // }
 
     // const jsonObject = JSON.parse(data.choices[0].message.content);
     // setFieldValue("items", jsonObject.receipt.items);
@@ -75,6 +77,8 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
     setNoImage(false);
     setPrompt(false);
     setLoading(false);
+    setNoReceipt(false);
+    setApiError(false);
   };
 
   const MemoGptCall = async () => {
@@ -90,58 +94,77 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
     });
 
     if (!res.ok) {
-      console.error("Failed to fetch data");
+      setApiError(true);
+      setLoading(false);
 
       return;
     }
 
     const data = await res.json();
 
-    const jsonObject = JSON.parse(data.choices[0].message.content);
-    setFieldValue("items", jsonObject.receipt.items);
-    setFieldValue("amount", jsonObject.receipt.total_amount);
-    setFieldValue("boughtDate", jsonObject.receipt.date_purchased);
-    setFieldValue("store", jsonObject.receipt.store);
+    // if (data.choices[0].message.content === "This is not a receipt.") {
+    //   setError({ no_receipt: true });
+    //   setNoImage(false);
+    //   setPrompt(false);
+    //   setLoading(false);
+    //   return;
+    // }
 
-    // const jsonObject = JSON.parse(data);
+    // console.log(data.choices[0].message.content);
+
+    // const jsonObject = JSON.parse(data.choices[0].message.content);
+    // setFieldValue("items", jsonObject.receipt.items);
     // setFieldValue("amount", jsonObject.receipt.total_amount);
     // setFieldValue("boughtDate", jsonObject.receipt.date_purchased);
     // setFieldValue("store", jsonObject.receipt.store);
-    // setFieldValue("receiptImage", image);
-    // const itemsWithAllProperties = jsonObject.receipt.items.map(
-    //   (item: any) => ({
-    //     description: item.description || "",
-    //     photo: item.photo || "",
-    //     price: item.price || 0,
-    //     barcode: item.barcode || "",
-    //     product_id: item.product_id || "",
-    //     asset: item.hasOwnProperty("asset") ? item.asset : false,
-    //     character: "",
-    //   })
-    // );
-    // setFieldValue("items", itemsWithAllProperties);
+
+    const jsonObject = JSON.parse(data);
+    setFieldValue("amount", jsonObject.receipt.total_amount);
+    setFieldValue("boughtDate", jsonObject.receipt.date_purchased);
+    setFieldValue("store", jsonObject.receipt.store);
+    setFieldValue("receiptImage", image);
+    const itemsWithAllProperties = jsonObject.receipt.items.map(
+      (item: any) => ({
+        description: item.description || "",
+        photo: item.photo || "",
+        price: item.price || 0,
+        barcode: item.barcode || "",
+        product_id: item.product_id || "",
+        asset: item.hasOwnProperty("asset") ? item.asset : false,
+        character: "",
+      })
+    );
+    setFieldValue("items", itemsWithAllProperties);
 
     setNoImage(false);
     setPrompt(false);
     setLoading(false);
+    setNoReceipt(false);
+    setApiError(false);
   };
 
   const handleFileChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       if (event.target.files === null || event.target.files.length === 0) {
         setNoImage(true);
-        window.alert("No file selected. Choose a file.");
         return;
       }
 
       const file = event.target.files[0];
+
+      if (!file.type.match("image.*")) {
+        setUnvalidImage(true);
+        return;
+      }
+
       const reader = new FileReader();
 
       reader.readAsDataURL(file);
       reader.onload = () => {
         if (typeof reader.result === "string") {
           setImage(reader.result);
-          // startUpload([file]);
+          setNoImage(false);
+          setUnvalidImage(false);
         }
       };
       reader.onerror = (error) => {
@@ -259,10 +282,27 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
             </div>
           </div>
         )}
+        {noReceipt && (
+          <p className="text-sm text-center text-orange-800">
+            The image you&apos;ve uploaded doesn&apos;t seem to be a receipt.
+            Please ensure you upload a valid receipt, or try uploading a
+            higher-quality image for better recognition.
+          </p>
+        )}
         {noImage && (
           <p className="text-sm text-center text-orange-800">
             Please upload an image to analyze. If you have a receipt, take a
             picture of the receipt and upload it.
+          </p>
+        )}
+        {unvalidImage && (
+          <p className="text-sm text-center text-orange-800">
+            Please upload a valid image file.
+          </p>
+        )}
+        {apiError && (
+          <p className="text-sm text-center text-orange-800">
+            There was an error analyzing the image. Please try again.
           </p>
         )}
       </div>

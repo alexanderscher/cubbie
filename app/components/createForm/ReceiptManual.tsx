@@ -1,4 +1,5 @@
 import LargeButton from "@/app/components/buttons/LargeButton";
+import { Field } from "formik";
 import Image from "next/image";
 import React, { ChangeEvent } from "react";
 import CurrencyInput from "react-currency-input-field";
@@ -77,6 +78,9 @@ const ReceiptManual = ({
             value={values.card}
             onChange={handleChange("card")}
           />
+        </div>
+        <div>
+          <input type="checkbox" name="" id="" />
         </div>
         {online && (
           <div>

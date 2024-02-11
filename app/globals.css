@@ -8,6 +8,11 @@ input {
   appearance: none;
 }
 
+input[type="checkbox"] {
+  height: 50px;
+  display: inline !important;
+}
+
 .green-bg {
   /* color: rgb(41, 86, 48); */
   background-color: rgb(41, 86, 48);

@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Receipt {
+  id                Int      @id @default(autoincrement())
+  type              String
+  store             String
+  card              String
+  amount            Int
+  tracking_number   String
+  bought_date       DateTime
+  days_until_return Int
+  final_return_date DateTime
+  receipt_image     String
+  items             Items[]
+}
+
+model Items {
+  id          Int     @id @default(autoincrement())
+  description String
+  photo       String
+  price       Int
+  barcode     String
+  asset       Boolean
+  character   String
+  product_id  String
+  receipt_id  Int
+  receipt     Receipt @relation(fields: [receipt_id], references: [id])
+}

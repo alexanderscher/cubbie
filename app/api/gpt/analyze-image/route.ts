@@ -52,7 +52,7 @@ export async function POST(request: Request) {
   //         content: [
   //           {
   //             type: "text",
-  //             text: 'This image should be an image of a receipt. I need you to extract the data on the receipt. Do not include any explanations, only provide a valid JSON response following this format without deviation. Each item on the receipt will typically be in bold text. The bar code will be a long number. This will usually be under the item name. Please focus on the bold text as the item name.  {"receipt":{"store":"","date_purchased":"","total_amount":"","items":[{"description":"","price":"","barcode":""}]}} Please do not start the object with ```json. If this does not look like a receipt, please type: "This is not a receipt."',
+  //             text: 'Extract data from an image of a receipt and format the response in JSON without explanations. Focus on bold text for item names. Include the store name, purchase date, total amount, and each item's description, price, and barcode (noted as a long number typically found under the item name). Format the response as follows:  {"receipt":{"store":"","date_purchased":"","total_amount":"","items":[{"description":"","price":"","barcode":""}]}} Please do not start the object with ```json. If this does not look like a receipt, please type: "This is not a receipt."',
   //           },
   //           {
   //             type: "image_url",

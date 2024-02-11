@@ -26,7 +26,7 @@ export async function POST(request: Request) {
   //       {
   //         role: "system",
   //         content:
-  //           'You are a helpful assistant designed to output JSON. This is text of an online email receipt. Please parse it and return the JSON object. Please do not include any explanations, only provide a valid JSON response following this format without deviation. There will also be a product id or a upc barcode. If the title says UPC, fill it in the barcode field. If it says product id or item id please fill it in the product_id field. If there is no title, and does not appear to be UPC number, fill it in as the product_id. I need the price and total amount to be only the number values. For example if the price or total amount you read is USD 294.00 please change it to 294. If the price has a "$" in it, please remove it. It should look like this: "items":[{"description":"","price":"","product_id":""}]}} Please do not start the object with ```json. If text is not a receipt or have anything to do with inventory, please type: {"error":"This is not a receipt."} ',
+  //           'Use the title to determine if a number is a 'UPC' (barcode) or 'product id/item id'. If it's 'UPC', fill in the 'barcode' field; otherwise, use 'product_id'. If there's no title or it's unclear, treat it as 'product_id'. Format 'price' and 'total amount' as numeric values without currency symbols or text (e.g., convert 'USD 294.00' or '$294' to 294). If the text does not resemble a receipt or relate to inventory, return: {"error":"This is not a receipt."}  Format the JSON response as follows: "items":[{"description":"","price":"","product_id":""}]}} Please do not start the object with ```json. ',
   //       },
   //       {
   //         role: "user",

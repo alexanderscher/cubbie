@@ -16,6 +16,7 @@ import {
   ITEMS_SCHEMA,
   RECEIPT_SCHEMA,
 } from "@/utils/receiptValidation";
+import { useUploadThing } from "@/utils/uploadthing";
 
 const getValidationSchema = (stage: ReceiptStoreStage) => {
   switch (stage) {
@@ -56,6 +57,8 @@ const Store = () => {
           validationSchema={getValidationSchema(stage)}
           onSubmit={(values) => {
             console.log(values);
+            if (values.receiptImageFile instanceof File) {
+            }
           }}
         >
           {({

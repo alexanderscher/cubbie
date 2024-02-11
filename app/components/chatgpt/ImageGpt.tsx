@@ -166,13 +166,14 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
           setNoImage(false);
           setInvalidImage(false);
           setFieldValue("receiptImage", reader.result);
+          setFieldValue("receiptImageFile", [file]);
         }
       };
       reader.onerror = (error) => {
         console.error("Error converting file to base64:", error);
       };
     },
-    []
+    [setFieldValue]
   );
 
   const handleSubmit = async () => {

@@ -133,7 +133,7 @@ const FinalStage = ({
         </div>
       )}
       {!isMobile && (
-        <div className="fixed bottom-0 left-0 border-t-[1.5px] border-green-800 bg-green-50 w-full p-4 flex justify-between">
+        <div className="fixed bottom-0 left-0 border-t-[1.5px] border-emerald-900 bg-green-50 w-full p-4 flex justify-between">
           <div className="flex justify-between gap-3">
             <RegularButton
               styles={"border-emerald-900 "}

@@ -152,7 +152,7 @@ const ReceiptManual = ({
         )}
         <div>
           {values.receiptImage && (
-            <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md">
+            <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-sm">
               <button
                 type="button"
                 onClick={() => {

@@ -97,7 +97,7 @@ const ReceiptFormItems = ({
                           height={200}
                           src={item.photo}
                           alt=""
-                          className="w-full h-full object-cover rounded-sm"
+                          className="w-full h-full object-cover rounded-md"
                         />
                       </div>
                     )}
@@ -108,7 +108,7 @@ const ReceiptFormItems = ({
                     height={200}
                     src={item.photo}
                     alt=""
-                    className="w-full h-full object-cover rounded-sm"
+                    className="w-full h-full object-cover rounded-md"
                   />
                 )}
               </div>
@@ -234,7 +234,7 @@ const ReceiptFormItems = ({
                 />
                 <button
                   type="button"
-                  className="border-[1.5px] border-emerald-900 p-3 rounded-sm text-emerald-900  w-[150px]"
+                  className="border-[1.5px] border-emerald-900 p-3 rounded-md text-emerald-900  w-[150px]"
                   onClick={() => {
                     setShowScanner(true);
                   }}

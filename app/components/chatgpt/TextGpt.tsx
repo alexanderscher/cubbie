@@ -12,10 +12,16 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
   const [noText, setNoText] = useState(false);
   const [help, setHelp] = useState(false);
   const [prompt, setPrompt] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [promptError, setPromptError] = useState(false);
+  const [apiError, setApiError] = useState(false);
 
   const run = async () => {
     setPrompt(false);
     setNoText(false);
+    setPromptError(false);
+    setApiError(false);
+    setLoading(true);
 
     const response = await fetch("/api/gpt/analyze-input", {
       method: "POST",
@@ -24,6 +30,14 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
       },
       body: JSON.stringify({ text: inputText }),
     });
+
+    if (!response.ok) {
+      setApiError(true);
+      setLoading(false);
+      console.error("Failed to fetch data");
+
+      return;
+    }
 
     const data = await response.json();
 
@@ -38,10 +52,20 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
     }));
 
     setFieldValue("items", itemsWithAllProperties);
+    console.log(data);
 
     // const items = JSON.parse(data.choices[0].message.content);
+    // if (items.error) {
+    //   setLoading(false);
+    //   setPromptError(true);
+    //   setPrompt(false);
+
+    //   return;
+    // }
     // setFieldValue("items", items.items);
-    // console.log(items.items);
+    // setPrompt(false);
+
+    setLoading(false);
   };
 
   const handleSubmit = async () => {
@@ -59,13 +83,13 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
   return (
     <div className="flex flex-col gap-4">
       <button
-        className="w-[20px] border-[1.5px] border-orange-400 text-orange-400 rounded-md"
+        className="w-[20px] border-[1.5px] border-orange-600 text-orange-600 rounded-md"
         onClick={() => setHelp(!help)}
       >
         ?
       </button>
       {help && (
-        <p className="text-sm text-center text-orange-400">
+        <p className="text-sm text-center text-orange-600">
           We use OpenAI&apos;s GPT to analyze the text you enter. Go to your
           online receipt or email and copy and paste the items from the receipt.
           Then click the &quot;Analyze&quot; button to get the items.
@@ -73,16 +97,18 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
       )}
       <textarea
         value={inputText}
-        className="w-full border-[1.5px] border-green-900 p-2 mb-2 rounded-md focus:outline-none h-[300px] resize-none bg"
+        className="w-full border-[1.5px] border-emerald-900 p-2 mb-2 rounded-md focus:outline-none h-[300px] resize-none bg"
         onChange={(e) => setInputText(e.target.value)}
         placeholder="Copy and paste receipt items from email or website"
       />
 
       <RegularButton
-        styles={"bg border-green-900 w-full"}
+        styles={"bg border-emerald-900 w-full"}
         handleClick={handleSubmit}
       >
-        <p className="text-green-900">Analyze</p>
+        <p className="text-emerald-900 ">
+          {loading ? "Analyzing..." : "Analyze Text"}
+        </p>
       </RegularButton>
       {prompt && (
         <div className="flex flex-col gap-4">
@@ -103,10 +129,22 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
           </div>
         </div>
       )}
+      {promptError && (
+        <p className="text-sm text-center text-orange-800">
+          The text you&apos;ve submitted doesn&apos;t seem to be from a receipt.
+          Please ensure you submit text from a valid receipt, or try providing a
+          more specific part of the receipt for better recognition.
+        </p>
+      )}
       {noText && (
         <p className="text-sm text-center text-orange-800">
           Please enter some text to analyze. If you have a receipt, copy and
           paste the items from the receipt.
+        </p>
+      )}
+      {apiError && (
+        <p className="text-sm text-center text-orange-800">
+          There was an error analyzing the text. Please try again.
         </p>
       )}
     </div>

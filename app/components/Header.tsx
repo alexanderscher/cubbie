@@ -7,22 +7,22 @@ const Header = () => {
   const pathname = usePathname();
   const receiptColor =
     pathname === "/"
-      ? "bg-green-900 border-green-900 text-white"
-      : "bg border-green-900 text-green-900";
+      ? "bg-emerald-900 border-emerald-900 text-white"
+      : "bg border-emerald-900 text-emerald-900 ";
 
   const itemColor =
     pathname === "/items"
-      ? "bg-green-900 border-green-900 text-white"
-      : "bg border-green-900 text-green-900";
+      ? "bg-emerald-900 border-emerald-900 text-white"
+      : "bg border-emerald-900 text-emerald-900 ";
 
   const archiveColor =
     pathname === "/archive"
-      ? "bg-green-900 border-green-900 text-white"
-      : "bg border-green-900 text-green-900";
+      ? "bg-emerald-900 border-emerald-900 text-white"
+      : "bg border-emerald-900 text-emerald-900 ";
   return (
     <div className="flex flex-col gap-6  ">
       <div className="header">
-        <h1 className="text-3xl text-green-900 ">Inventory</h1>
+        <h1 className="text-2xl text-emerald-900  ">Inventory</h1>
         <div className="flex gap-2">
           <RegularButton href="/" styles={receiptColor}>
             <p className="text-sm sm:text-sm">Receipts</p>

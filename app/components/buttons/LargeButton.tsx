@@ -21,7 +21,7 @@ const LargeButton = ({
   return (
     <div className={`flex w-full ${height}`}>
       <button
-        className={`border-[1.5px] text-green-900 border-green-900 w-full p-3 rounded-md h-full ${styles}`}
+        className={`border-[1.5px] text-emerald-900  border-emerald-900 w-full p-3 rounded-md h-full ${styles}`}
         onClick={handleClick}
         {...restProps}
       >

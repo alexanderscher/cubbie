@@ -10,7 +10,7 @@ const Receipt = () => {
     <div className="border-t-[1.5px] border-black flex flex-col gap-2 ">
       <div className="flex justify-between mb-2">
         <div>
-          <h1 className="text-xl text-orange-500">
+          <h1 className="text-xl text-orange-600">
             <Link href="/receipt">Uniqlo</Link>
           </h1>
         </div>
@@ -51,8 +51,8 @@ const Receipt = () => {
       </div>
 
       <div className="flex flex-col gap-2 mt-3">
-        <RegularButton styles={"w-full border-green-900 "}>
-          <p className="text-sm text-green-900">Edit</p>
+        <RegularButton styles={"w-full border-emerald-900 "}>
+          <p className="text-sm text-emerald-900 ">Edit</p>
         </RegularButton>
       </div>
     </div>

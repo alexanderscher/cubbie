@@ -7,7 +7,7 @@ const page = () => {
   return (
     <div className="receipts ">
       <div className="flex flex-col gap-4 receipt-bar">
-        <h1 className="text-green-900 text-2xl ">Macys</h1>
+        <h1 className="text-emerald-900  text-2xl ">Macys</h1>
         <div>
           <div className="receipt-info">
             <h1 className="text-slate-400">Store</h1>

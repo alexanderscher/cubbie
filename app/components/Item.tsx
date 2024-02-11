@@ -8,7 +8,7 @@ const Item = () => {
     <div className="border-t-[1.5px] border-black flex flex-col gap-4 ">
       <div className="flex justify-between">
         <div>
-          <h1 className="text-orange-500">Macys</h1>
+          <h1 className="text-orange-600">Macys</h1>
           <h1 className="text-lg">Levi 501 Jeans</h1>
           <h1 className="text-lg">12321312</h1>
         </div>
@@ -33,28 +33,28 @@ const Item = () => {
         </div>
         <div className="text-sm flex flex-col gap-1 ">
           <div>
-            <h1 className="text-slate-400 font-bold">Order Date</h1>
+            <h1 className="text-slate-400 ">Order Date</h1>
             <h1>1/1/25</h1>
           </div>
           <div>
-            <h1 className="text-slate-400 font-bold">Return Date</h1>
+            <h1 className="text-slate-400 ">Return Date</h1>
             <h1>1/1/25</h1>
           </div>
 
           <div>
-            <h1 className="text-slate-400 font-bold">Amount</h1>
+            <h1 className="text-slate-400 ">Amount</h1>
             <h1>$300.00</h1>
           </div>
         </div>
       </div>
 
       <div className="flex flex-col gap-2 mt-2">
-        <RegularButton styles={"w-full border-green-900 "}>
-          <p className="text-sm text-green-900">Edit</p>
+        <RegularButton styles={"w-full border-emerald-900 "}>
+          <p className="text-sm text-emerald-900 ">Edit</p>
         </RegularButton>
 
-        <RegularButton styles={"w-full border-green-900 "}>
-          <p className="text-sm text-green-900">View Receipt</p>
+        <RegularButton styles={"w-full border-emerald-900 "}>
+          <p className="text-sm text-emerald-900 ">View Receipt</p>
         </RegularButton>
       </div>
     </div>

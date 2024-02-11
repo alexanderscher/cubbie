@@ -71,15 +71,15 @@ const Memo = () => {
               className="w-full flex flex-col gap-10 "
             >
               <div className="flex justify-between items-center">
-                <h1 className="sm:text-3xl text-2xl text-green-900 ">
+                <h1 className="sm:text-3xl text-2xl text-emerald-900  ">
                   Create New Memo
                 </h1>
 
                 <RegularButton
-                  styles="bg border-green-900"
+                  styles="bg border-emerald-900"
                   handleClick={() => router.push("/receipt-type")}
                 >
-                  <p className="text-green-900 text-sm">Discard</p>
+                  <p className="text-emerald-900  text-sm">Discard</p>
                 </RegularButton>
               </div>
               {(() => {
@@ -89,9 +89,9 @@ const Memo = () => {
                       <div className="two-tab ">
                         <div className="left-tab">
                           <div className="flex justify-between">
-                            <h1 className="text-orange-500 text-xl">Memo</h1>
+                            <h1 className="text-orange-600 text-xl">Memo</h1>
                           </div>
-                          <div className="w-full flex justify-between">
+                          <div className="receipt-button-container">
                             <RegularButton
                               styles={"bg-black text-white border-black"}
                             >
@@ -129,17 +129,19 @@ const Memo = () => {
 
                           <div className="flex gap-10">
                             <RegularButton
-                              styles={"bg-green-900 border-green-900 w-full"}
+                              styles={
+                                "bg-emerald-900 border-emerald-900 w-full"
+                              }
                               handleClick={() => {
                                 router.push("/receipt-type");
                               }}
                             >
-                              <p className="text-white text-sm ">
-                                Back: Receipt types
-                              </p>
+                              <p className="text-white text-sm ">Back</p>
                             </RegularButton>
                             <RegularButton
-                              styles={"bg-green-900 border-green-900 w-full"}
+                              styles={
+                                "bg-emerald-900 border-emerald-900 w-full"
+                              }
                               handleClick={async () => {
                                 const error = await validateForm();
                                 setErrors((prevErrors) => ({
@@ -160,9 +162,7 @@ const Memo = () => {
                                 }
                               }}
                             >
-                              <p className="text-white text-sm ">
-                                Next: Add items
-                              </p>
+                              <p className="text-white text-sm ">Next</p>
                             </RegularButton>
                           </div>
                         </div>
@@ -180,12 +180,12 @@ const Memo = () => {
                       <div className="two-tab ">
                         <div className="left-tab">
                           <div className="flex justify-between">
-                            <h1 className="text-orange-500 text-xl">
+                            <h1 className="text-orange-600 text-xl">
                               In Store Items
                             </h1>
                             {/* <RegularButton
                               styles={
-                                "border-orange-400 text-orange-400 text-sm"
+                                "border-orange-600 text-orange-600 text-sm"
                               }
                             >
                               <p> {values.type}</p>
@@ -214,16 +214,20 @@ const Memo = () => {
 
                           <div className="flex gap-2 ">
                             <RegularButton
-                              styles={"bg-green-900 border-green-900 w-full"}
+                              styles={
+                                "bg-emerald-900 border-emerald-900 w-full"
+                              }
                               handleClick={() => {
                                 setStage(ReceiptStoreStage.IN_STORE_RECEIPT);
                               }}
                             >
-                              <p className="text-white">Back: Receipt</p>
+                              <p className="text-white">Receipt</p>
                             </RegularButton>
 
                             <RegularButton
-                              styles={"bg-green-900 border-green-900 w-full"}
+                              styles={
+                                "bg-emerald-900 border-emerald-900 w-full"
+                              }
                               handleClick={async () => {
                                 const error = await validateForm();
 
@@ -273,16 +277,16 @@ const Memo = () => {
                       <div className="two-tab ">
                         <div className="left-tab">
                           <div className="flex justify-between">
-                            <h1 className="text-orange-500 text-xl">Memo</h1>
+                            <h1 className="text-orange-600 text-xl">Memo</h1>
                             {/* <RegularButton
                               styles={
-                                "border-orange-400 text-orange-400 text-sm"
+                                "border-orange-600 text-orange-600 text-sm"
                               }
                             >
                               <p> {values.type}</p>
                             </RegularButton> */}
                           </div>
-                          <div className="w-full flex justify-between">
+                          <div className="receipt-button-container">
                             <RegularButton
                               styles={"border-black"}
                               handleClick={() => {
@@ -329,17 +333,19 @@ const Memo = () => {
 
                           <div className="flex gap-10">
                             <RegularButton
-                              styles={"bg-green-900 border-green-900 w-full"}
+                              styles={
+                                "bg-emerald-900 border-emerald-900 w-full"
+                              }
                               handleClick={() => {
                                 router.push("/receipt-type");
                               }}
                             >
-                              <p className="text-white text-sm ">
-                                Back: Receipt types
-                              </p>
+                              <p className="text-white text-sm ">Back</p>
                             </RegularButton>
                             <RegularButton
-                              styles={"bg-green-900 border-green-900 w-full"}
+                              styles={
+                                "bg-emerald-900 border-emerald-900 w-full"
+                              }
                               handleClick={async () => {
                                 const error = await validateForm();
                                 setErrors((prevErrors) => ({

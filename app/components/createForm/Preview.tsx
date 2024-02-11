@@ -31,7 +31,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
               {edit ? (
                 <div className="flex justify-between">
                   <input
-                    className="text-orange-500 text-xl bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
+                    className="text-orange-600 text-xl bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
                     name="store"
                     value={values.store}
                     onChange={handleChange}
@@ -39,15 +39,13 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                 </div>
               ) : (
                 <div className="flex justify-between">
-                  <h1 className="text-orange-500 text-2xl">
+                  <h1 className="text-orange-600 text-2xl">
                     {values.store || "Store Name"}
                   </h1>
                 </div>
               )}
               <div className="flex flex-col ">
-                <h1 className="text-slate-400 font-bold text-sm">
-                  TOTAL AMOUNT
-                </h1>
+                <h1 className="text-slate-400  text-sm">TOTAL AMOUNT</h1>
                 {edit ? (
                   <CurrencyInput
                     id="amount"
@@ -65,7 +63,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
               </div>
 
               <div className="flex flex-col ">
-                <h1 className="text-slate-400 font-bold text-sm">CARD</h1>
+                <h1 className="text-slate-400  text-sm">CARD</h1>
                 {edit ? (
                   <input
                     className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
@@ -78,7 +76,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                 )}
               </div>
               <div className="flex flex-col ">
-                <h1 className="text-slate-400 font-bold text-sm">
+                <h1 className="text-slate-400  text-sm">
                   TRACKING NUMBER LINK
                 </h1>
                 {edit ? (
@@ -94,9 +92,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
               </div>
 
               <div className="flex flex-col ">
-                <h1 className="text-slate-400 font-bold text-sm">
-                  PURCHASE DATE
-                </h1>
+                <h1 className="text-slate-400  text-sm">PURCHASE DATE</h1>
                 {edit ? (
                   <input
                     className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
@@ -110,9 +106,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                 )}
               </div>
               <div className="flex flex-col ">
-                <h1 className="text-slate-400 font-bold text-sm">
-                  DAYS UNTIL RETURN
-                </h1>
+                <h1 className="text-slate-400  text-sm">DAYS UNTIL RETURN</h1>
                 {edit ? (
                   <input
                     className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
@@ -135,9 +129,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
               </div>
 
               <div className="flex flex-col ">
-                <h1 className="text-slate-400 font-bold text-sm">
-                  Return Date
-                </h1>
+                <h1 className="text-slate-400  text-sm">Return Date</h1>
                 {edit ? (
                   <input
                     className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
@@ -172,7 +164,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                     setFieldValue("receiptImage", "");
                   }}
                   type="button"
-                  className="absolute top-0 right-0 m-1  bg-green-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
+                  className="absolute top-0 right-0 m-1  bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
                 >
                   X
                 </button>
@@ -183,7 +175,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
         <button
           type="button"
           onClick={toggleEdit}
-          className="text-sm text-orange-400 text-start"
+          className="text-sm text-orange-600 text-start"
         >
           {edit ? "Save" : "Edit"}
         </button>

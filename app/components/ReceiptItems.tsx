@@ -6,7 +6,7 @@ const ReceiptItems = () => {
   return (
     <div className="border-t-[1.5px] border-black flex flex-col gap-4 ">
       <div className="flex justify-between">
-        <h1 className="text-orange-500">Levi 501 Jeans</h1>
+        <h1 className="text-orange-600">Levi 501 Jeans</h1>
       </div>
       <div className="flex gap-6 ">
         {/* <img
@@ -22,15 +22,15 @@ const ReceiptItems = () => {
 
         <div className="text-sm flex flex-col gap-3 ">
           <div>
-            <h1 className="text-slate-400 font-bold">Amount</h1>
+            <h1 className="text-slate-400 ">Amount</h1>
             <h1>200</h1>
           </div>
           <div>
-            <h1 className="text-slate-400 font-bold">Barcode</h1>
+            <h1 className="text-slate-400 ">Barcode</h1>
             <h1>123123</h1>
           </div>
-          {/* <RegularButton styles={"w-full border-green-900 "}>
-            <p className="text-sm text-green-900">Return</p>
+          {/* <RegularButton styles={"w-full border-emerald-900 "}>
+            <p className="text-sm text-emerald-900 ">Return</p>
           </RegularButton> */}
         </div>
       </div>

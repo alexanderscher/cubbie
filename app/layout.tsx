@@ -5,6 +5,11 @@ import Navbar from "@/app/components/Navbar";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
+import localFont from "next/font/local";
+
+const myFont = localFont({
+  src: "../font/SuisseIntl-Medium.woff",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="p-4  bg-[#e2f1e2]">
+      <body className={`p-4  bg-[#e2f1e2] ${myFont.className}`}>
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <Navbar />
         {children}

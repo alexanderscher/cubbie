@@ -2,6 +2,7 @@ import { BarcodeScanner } from "@/app/components/BarcodeScanner";
 import LargeButton from "@/app/components/buttons/LargeButton";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { ItemInput, ReceiptInput } from "@/types/formTypes/form";
+import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import React, { useState } from "react";
 
@@ -87,7 +88,7 @@ const ReceiptFormItems = ({
                               ...values.items.slice(index + 1),
                             ]);
                           }}
-                          className="absolute top-0 right-0 m-1  bg-green-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
+                          className="absolute top-0 right-0 m-1  bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
                         >
                           X
                         </button>
@@ -158,12 +159,12 @@ const ReceiptFormItems = ({
         <div className="text-sm flex flex-col gap-3 items-start w-full ">
           {edit && stage !== "Final" ? (
             <input
-              className="text-orange-500 border-b-[1.5px] border-slate-400 focus:outline-none bg-white bg w-full"
+              className="text-orange-600 border-b-[1.5px] border-slate-400 focus:outline-none bg-white bg w-full"
               value={item.description}
               onChange={(e) => handleItemChange(e, "description")}
             />
           ) : (
-            <button type="button" className="text-orange-500 text-lg">
+            <button type="button" className="text-orange-600 text-lg">
               {item.description}
             </button>
           )}
@@ -172,37 +173,37 @@ const ReceiptFormItems = ({
               handleClick={toggleAsset}
               styles={
                 item.asset
-                  ? "bg-orange-500 text-white"
-                  : "border-orange-500 text-orange-500"
+                  ? "bg-orange-600 text-white"
+                  : "border-orange-600 text-orange-600"
               }
             >
               <p className="text-sm">Asset</p>
             </RegularButton>
           ) : (
             asset && (
-              <RegularButton styles={"border-orange-500 text-orange-500"}>
+              <RegularButton styles={"border-orange-600 text-orange-600"}>
                 <p className="text-sm">Asset</p>
               </RegularButton>
             )
           )} */}
 
           <div className="w-full">
-            <h1 className="text-slate-400 font-bold">AMOUNT</h1>
+            <h1 className="text-slate-400 ">AMOUNT</h1>
             {edit ? (
               <input
-                className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
+                className="text-emerald-900  text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
                 value={item.price}
                 onChange={(e) => handleItemChange(e, "price")}
               />
             ) : (
-              <h1>{item.price}</h1>
+              <h1>{formatCurrency(item.price)}</h1>
             )}
           </div>
           <div className="w-full">
-            <h1 className="text-slate-400 font-bold">CHARACTER</h1>
+            <h1 className="text-slate-400 ">CHARACTER</h1>
             {edit ? (
               <input
-                className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
+                className="text-emerald-900  text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
                 value={item.character}
                 onChange={(e) => handleItemChange(e, "character")}
               />
@@ -211,10 +212,10 @@ const ReceiptFormItems = ({
             )}
           </div>
           <div className="w-full">
-            <h1 className="text-slate-400 font-bold">PRODUCT ID</h1>
+            <h1 className="text-slate-400 ">PRODUCT ID</h1>
             {edit ? (
               <input
-                className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
+                className="text-emerald-900  text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
                 value={item.product_id}
                 onChange={(e) => handleItemChange(e, "product_id")}
               />
@@ -223,17 +224,17 @@ const ReceiptFormItems = ({
             )}
           </div>
           <div className="w-full">
-            <h1 className="text-slate-400 font-bold">BARCODE</h1>
+            <h1 className="text-slate-400 ">BARCODE</h1>
             {edit ? (
               <div className="flex flex-col gap-4">
                 <input
-                  className="text-green-900 text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
+                  className="text-emerald-900  text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
                   value={item.barcode}
                   onChange={(e) => handleItemChange(e, "barcode")}
                 />
                 <button
                   type="button"
-                  className="border-[1.5px] border-green-900 p-3 rounded-sm text-green-900 w-[150px]"
+                  className="border-[1.5px] border-emerald-900 p-3 rounded-sm text-emerald-900  w-[150px]"
                   onClick={() => {
                     setShowScanner(true);
                   }}

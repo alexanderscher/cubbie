@@ -63,17 +63,17 @@ const Online = () => {
               className="w-full flex flex-col gap-10 "
             >
               <div className="flex justify-between items-center">
-                <h1 className="sm:text-3xl text-2xl text-green-900 ">
+                <h1 className="sm:text-3xl text-2xl text-emerald-900  ">
                   Create New Receipt
                 </h1>
 
                 <RegularButton
-                  styles="bg border-green-900"
+                  styles="bg border-emerald-900"
                   handleClick={async () => {
                     router.push("/receipt-type");
                   }}
                 >
-                  <p className="text-green-900 text-sm">Discard</p>
+                  <p className="text-emerald-900  text-sm">Discard</p>
                 </RegularButton>
               </div>
               {(() => {
@@ -83,7 +83,7 @@ const Online = () => {
                       <div className="two-tab ">
                         <div className="left-tab">
                           <div className="flex justify-between">
-                            <h1 className="text-orange-500 text-xl">
+                            <h1 className="text-orange-600 text-xl">
                               Online Receipt
                             </h1>
                             {/* <RegularButton
@@ -101,18 +101,20 @@ const Online = () => {
                           />
                           <div className="flex gap-2">
                             <RegularButton
-                              styles={"bg-green-900 border-green-900 w-full"}
+                              styles={
+                                "bg-emerald-900 border-emerald-900 w-full"
+                              }
                               handleClick={() => {
                                 router.push("/receipt-type");
                               }}
                             >
-                              <p className="text-white text-sm">
-                                Back: Receipt types
-                              </p>
+                              <p className="text-white text-sm">Back</p>
                             </RegularButton>
 
                             <RegularButton
-                              styles={"bg-green-900 border-green-900 w-full"}
+                              styles={
+                                "bg-emerald-900 border-emerald-900 w-full"
+                              }
                               handleClick={async () => {
                                 const error = await validateForm();
                                 if (error) {
@@ -139,9 +141,7 @@ const Online = () => {
                                 }
                               }}
                             >
-                              <p className="text-white text-sm">
-                                Next: Receipt Items
-                              </p>
+                              <p className="text-white text-sm">Next</p>
                             </RegularButton>
                           </div>
                         </div>
@@ -158,7 +158,7 @@ const Online = () => {
                       <div className="two-tab ">
                         <div className="left-tab">
                           <div className="flex justify-between">
-                            <h1 className="text-orange-500 text-xl">
+                            <h1 className="text-orange-600 text-xl">
                               Online Receipt Items
                             </h1>
                             {/* <RegularButton
@@ -167,7 +167,7 @@ const Online = () => {
                               <p> {values.type}</p>
                             </RegularButton> */}
                           </div>
-                          <div className="w-full flex justify-between">
+                          <div className="receipt-button-container">
                             <RegularButton
                               styles={`${
                                 values.onlineType === "manual"
@@ -218,18 +218,20 @@ const Online = () => {
 
                           <div className="flex gap-2 ">
                             <RegularButton
-                              styles={"bg-green-900 border-green-900 w-full"}
+                              styles={
+                                "bg-emerald-900 border-emerald-900 w-full"
+                              }
                               handleClick={() => {
                                 setStage(ReceiptOnlineStage.ONLINE_RECEIPT);
                               }}
                             >
-                              <p className="text-white text-sm">
-                                Back: Receipt
-                              </p>
+                              <p className="text-white text-sm">Back</p>
                             </RegularButton>
 
                             <RegularButton
-                              styles={"bg-green-900 border-green-900 w-full"}
+                              styles={
+                                "bg-emerald-900 border-emerald-900 w-full"
+                              }
                               handleClick={async () => {
                                 const error = await validateForm();
                                 setErrors((prevErrors) => ({

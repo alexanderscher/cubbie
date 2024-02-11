@@ -19,7 +19,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
   const [prompt, setPrompt] = useState(false);
   const [loading, setLoading] = useState(false);
   const [noReceipt, setNoReceipt] = useState(false);
-  const [unvalidImage, setUnvalidImage] = useState(false);
+  const [invalidImage, setInvalidImage] = useState(false);
   const [apiError, setApiError] = useState(false);
 
   const OnlineGptCall = async () => {
@@ -103,7 +103,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
     const data = await res.json();
 
     // if (data.choices[0].message.content === "This is not a receipt.") {
-    //   setError({ no_receipt: true });
+    //   setNoreceipt(true);
     //   setNoImage(false);
     //   setPrompt(false);
     //   setLoading(false);
@@ -153,7 +153,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
       const file = event.target.files[0];
 
       if (!file.type.match("image.*")) {
-        setUnvalidImage(true);
+        setInvalidImage(true);
         return;
       }
 
@@ -164,7 +164,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
         if (typeof reader.result === "string") {
           setImage(reader.result);
           setNoImage(false);
-          setUnvalidImage(false);
+          setInvalidImage(false);
         }
       };
       reader.onerror = (error) => {
@@ -191,13 +191,13 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
     <div>
       <div className="flex flex-col gap-4">
         <button
-          className="w-[20px] border-[1.5px] border-orange-400 text-orange-400 rounded-md"
+          className="w-[20px] border-[1.5px] border-orange-600 text-orange-600 rounded-md"
           onClick={() => setHelp(!help)}
         >
           ?
         </button>
         {help && (
-          <p className="text-sm text-center text-orange-400">
+          <p className="text-sm text-center text-orange-600">
             We use OpenAI&apos;s GPT to analyze the image you upload. Take a
             picture of the receipt and upload it. Then click the &quot;Analyze
             Image&quot; button to get the receipt info and items.
@@ -230,7 +230,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
                 <button
                   onClick={() => setImage("")}
                   type="button"
-                  className="absolute top-0 right-0 m-1  bg-green-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
+                  className="absolute top-0 right-0 m-1  bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
                 >
                   X
                 </button>
@@ -246,13 +246,13 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
 
             <div className="w-full">
               <RegularButton
-                styles="border-green-900 bg w-full "
+                styles="border-emerald-900 bg w-full "
                 type="submit"
                 handleClick={() => {
                   !loading && handleSubmit();
                 }}
               >
-                <p className="text-green-900">
+                <p className="text-emerald-900 ">
                   {" "}
                   {loading ? "Analyzing..." : "Analyze Image"}
                 </p>
@@ -274,10 +274,10 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
                     : OnlineGptCall();
                 }}
               >
-                <p className="text-sm text-orange-500">Confirm</p>
+                <p className="text-sm text-orange-600">Confirm</p>
               </button>
               <button onClick={() => setPrompt(false)}>
-                <p className="text-sm text-orange-500">Cancel</p>
+                <p className="text-sm text-orange-600">Cancel</p>
               </button>
             </div>
           </div>
@@ -295,7 +295,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
             picture of the receipt and upload it.
           </p>
         )}
-        {unvalidImage && (
+        {invalidImage && (
           <p className="text-sm text-center text-orange-800">
             Please upload a valid image file.
           </p>

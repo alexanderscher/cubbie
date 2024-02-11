@@ -61,7 +61,7 @@ const OnlineReceiptManual = ({
   };
 
   const handleCurrencyChange = (value: string | undefined) => {
-    setFieldValue("amount", value || "");
+    setItem({ ...item, price: value || "" });
   };
 
   const addItemToFormik = async (setFieldValue: any, values: ReceiptInput) => {
@@ -112,10 +112,10 @@ const OnlineReceiptManual = ({
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <p className="text-sm text-green-900">Description/Title</p>
+        <p className="text-sm text-emerald-900 ">Description/Title</p>
 
         <input
-          className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
+          className="w-full bg border-[1.5px] border-emerald-900 p-2 rounded-md focus:outline-none"
           name="description"
           value={item.description || ""}
           onChange={(e) => {
@@ -128,15 +128,15 @@ const OnlineReceiptManual = ({
       </div>
 
       <div>
-        <p className="text-sm text-green-900">Price</p>
+        <p className="text-sm text-emerald-900 ">Price</p>
 
         <CurrencyInput
-          id="amount"
-          name="amount"
-          className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
+          id="price"
+          name="price"
+          className="w-full bg border-[1.5px] border-emerald-900 p-2 rounded-md focus:outline-none"
           placeholder=""
-          value={values.amount}
-          defaultValue={values.amount || ""}
+          value={item.price}
+          defaultValue={item.price || ""}
           decimalsLimit={2}
           onValueChange={handleCurrencyChange}
         />
@@ -145,9 +145,9 @@ const OnlineReceiptManual = ({
         )}
       </div>
       <div>
-        <p className="text-sm text-green-900">Character</p>
+        <p className="text-sm text-emerald-900 ">Character</p>
         <input
-          className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
+          className="w-full bg border-[1.5px] border-emerald-900 p-2 rounded-md focus:outline-none"
           value={item.character || ""}
           name="character"
           onChange={(e) => {
@@ -156,9 +156,9 @@ const OnlineReceiptManual = ({
         />
       </div>
       <div>
-        <p className="text-sm text-green-900">Product ID</p>
+        <p className="text-sm text-emerald-900 ">Product ID</p>
         <input
-          className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
+          className="w-full bg border-[1.5px] border-emerald-900 p-2 rounded-md focus:outline-none"
           value={item.product_id || ""}
           name="product_id"
           onChange={(e) => {
@@ -166,12 +166,12 @@ const OnlineReceiptManual = ({
           }}
         />
       </div>
-      <p className="text-sm text-green-900">Barcode</p>
+      <p className="text-sm text-emerald-900 ">Barcode</p>
 
       <div className="flex gap-4">
         <button
           type="button"
-          className="border-[1.5px] border-green-900 w-full p-3 rounded-md text-green-900"
+          className="border-[1.5px] border-emerald-900 w-full p-3 rounded-md text-emerald-900 "
           onClick={() => {
             setShowScanner(true);
             setIsBarcode(false);
@@ -182,7 +182,7 @@ const OnlineReceiptManual = ({
         </button>
         <button
           type="button"
-          className="border-[1.5px] border-green-900 w-full p-3 rounded-md text-green-900"
+          className="border-[1.5px] border-emerald-900 w-full p-3 rounded-md text-emerald-900 "
           onClick={() => {
             setShowScanner(false);
             setIsBarcode(!isBarcode);
@@ -216,9 +216,9 @@ const OnlineReceiptManual = ({
 
       {item.barcode && !isBarcode && (
         <div>
-          <p className="text-sm text-green-900">Barcode #</p>
+          <p className="text-sm text-emerald-900 ">Barcode #</p>
           <input
-            className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
+            className="w-full bg border-[1.5px] border-emerald-900 p-2 rounded-md focus:outline-none"
             type="text"
             name="barcode"
             value={item.barcode || ""}
@@ -231,9 +231,9 @@ const OnlineReceiptManual = ({
 
       {isBarcode && (
         <div>
-          <p className="text-sm text-green-900">Barcode #</p>
+          <p className="text-sm text-emerald-900 ">Barcode #</p>
           <input
-            className="w-full bg border-[1.5px] border-green-900 p-2 rounded-md focus:outline-none"
+            className="w-full bg border-[1.5px] border-emerald-900 p-2 rounded-md focus:outline-none"
             type="text"
             name="barcode"
             value={item.barcode || ""}
@@ -243,7 +243,7 @@ const OnlineReceiptManual = ({
           />
         </div>
       )}
-      <p className="text-sm text-green-900">Image of tag or item</p>
+      <p className="text-sm text-emerald-900 ">Image of tag or item</p>
       <div className="flex flex-col mb-6">
         <input
           type="file"
@@ -274,7 +274,7 @@ const OnlineReceiptManual = ({
                 photo: "",
               });
             }}
-            className="absolute top-0 right-0 m-1  bg-green-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
+            className="absolute top-0 right-0 m-1  bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
           >
             X
           </button>

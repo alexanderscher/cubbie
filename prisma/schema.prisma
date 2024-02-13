@@ -17,7 +17,7 @@ model Receipt {
   card              String
   amount            Int
   tracking_number   String
-  pruchase_date       DateTime
+  purchase_date       DateTime
   days_until_return Int
   return_date DateTime
   receipt_image     String

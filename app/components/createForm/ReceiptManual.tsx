@@ -33,7 +33,7 @@ const ReceiptManual = ({
       const src = URL.createObjectURL(file);
 
       setFieldValue("receiptImage", src);
-      setFieldValue("receiptImageFile", [file]);
+      setFieldValue("receiptImageFile", file.name);
     }
   };
   const handleCurrencyChangeAmount = (value: string | undefined) => {

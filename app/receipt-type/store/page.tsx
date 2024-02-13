@@ -7,7 +7,7 @@ import ImageGpt from "@/app/components/chatgpt/ImageGpt";
 import ReceiptManual from "@/app/components/createForm/ReceiptManual";
 import Preview from "@/app/components/createForm/Preview";
 import OnlineReceiptManual from "@/app/components/createForm/OnlineReceiptManual";
-import { ReceiptStoreStage } from "@/types/formTypes/form";
+import { ReceiptInput, ReceiptStoreStage } from "@/types/formTypes/form";
 import { useRouter } from "next/navigation";
 import { DEFAULT_INPUT_VALUES } from "@/constants/form";
 import FinalStage from "@/app/components/createForm/FinalStage";
@@ -34,6 +34,17 @@ const Store = () => {
   const [stage, setStage] = useState<ReceiptStoreStage>(
     ReceiptStoreStage.IN_STORE_GPT
   );
+
+  const submitDB = async (values: any) => {
+    const response = await fetch("/api/upload", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // Add this line
+      },
+      body: JSON.stringify(values),
+    });
+    const data = await response.json();
+  };
   const [errors, setErrors] = useState({
     store: "",
     items: "",
@@ -42,7 +53,7 @@ const Store = () => {
     itemFileError: "",
     itemField: "",
   });
-  console.log(errors);
+
   const router = useRouter();
 
   return (
@@ -56,8 +67,8 @@ const Store = () => {
           validationSchema={getValidationSchema(stage)}
           onSubmit={(values) => {
             console.log(values);
-            if (values.receiptImageFile instanceof File) {
-            }
+
+            submitDB(values);
           }}
         >
           {({
@@ -66,7 +77,6 @@ const Store = () => {
             values,
             handleChange,
             validateForm,
-            resetForm,
           }) => (
             <form
               onSubmit={handleSubmit}
@@ -181,6 +191,7 @@ const Store = () => {
                         <Preview
                           setFieldValue={setFieldValue}
                           values={values}
+                          stage={stage}
                         />
                       </div>
                     );
@@ -277,6 +288,7 @@ const Store = () => {
                         <Preview
                           setFieldValue={setFieldValue}
                           values={values}
+                          stage={stage}
                         />
                       </div>
                     );
@@ -395,6 +407,7 @@ const Store = () => {
                         <Preview
                           setFieldValue={setFieldValue}
                           values={values}
+                          stage={stage}
                         />
                       </div>
                     );

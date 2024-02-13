@@ -356,7 +356,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                           }
                           const src = URL.createObjectURL(file);
                           setFieldValue("receiptImage", src);
-                          setFieldValue("receiptImageFile", [file]);
+                          setFieldValue("receiptImageFile", file.name);
                         }
                       }}
                       id="file-upload-item"

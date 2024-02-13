@@ -216,7 +216,7 @@ const ReceiptFormItems = ({
                       setEditState((prevState) => ({
                         ...prevState,
                         photo: src,
-                        photoFile: [file],
+                        photoFile: file,
                       }));
                     }
                   }}

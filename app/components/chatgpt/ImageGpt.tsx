@@ -167,7 +167,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
           setNoImage(false);
           setInvalidImage(false);
           setFieldValue("receiptImage", reader.result);
-          setFieldValue("receiptImageFile", [file]);
+          setFieldValue("receiptImageFile", file.name);
         }
       };
       reader.onerror = (error) => {

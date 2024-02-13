@@ -3,8 +3,15 @@ import LargeButton from "@/app/components/buttons/LargeButton";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { ItemInput, ReceiptInput } from "@/types/formTypes/form";
 import { formatCurrency } from "@/utils/formatCurrency";
+import { ITEMS_SCHEMA } from "@/utils/receiptValidation";
 import Image from "next/image";
 import React, { useState } from "react";
+import CurrencyInput from "react-currency-input-field";
+import * as Yup from "yup";
+
+interface FormErrors {
+  [key: string]: string;
+}
 
 interface ReceiptFormItemsProps {
   item: ItemInput;
@@ -22,37 +29,73 @@ const ReceiptFormItems = ({
   stage,
 }: ReceiptFormItemsProps) => {
   const [edit, setEdit] = useState(false);
-  const [asset, setAsset] = useState(false);
+  const [showScanner, setShowScanner] = useState(false);
+  const [errors, setErrors] = useState({
+    description: "",
+    price: "",
+  });
+
+  const toggleEdit = () => {
+    setEdit(!edit);
+
+    if (edit) {
+      const updatedItem = values.items[index] as any;
+      Object.keys(editState).forEach((key) => {
+        if (key in editState) {
+          updatedItem[key as keyof ItemInput] =
+            editState[key as keyof ItemInput];
+        }
+      });
+
+      setFieldValue("items", [
+        ...values.items.slice(0, index),
+        updatedItem,
+        ...values.items.slice(index + 1),
+      ]);
+    }
+  };
+
+  const [editState, setEditState] = useState<ItemInput>({} as ItemInput);
 
   const removeItem = async (index: number) => {
     const newItems = values.items.filter((_, i) => i !== index);
-
     setFieldValue("items", newItems);
+  };
+
+  const handleBarcodeResult = (barcodeValue: string) => {
+    const fieldName = "barcode";
+    setEditState((prevState) => ({
+      ...prevState,
+      [fieldName]: barcodeValue,
+    }));
   };
 
   const handleItemChange = (
-    e: React.ChangeEvent<HTMLInputElement> | string,
-    field: string
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const value = typeof e === "string" ? e : e.target.value;
+    const { name, value, type } = event.target;
+    let parsedValue = value;
 
-    const newItems = [...values.items];
-    newItems[index] = { ...newItems[index], [field]: value };
-    setFieldValue("items", newItems);
+    if (type === "number" || name === "price") {
+      const numericValue = parseInt(value, 10);
+      parsedValue = isNaN(numericValue) ? "" : numericValue.toString();
+      setEditState((prevState) => ({
+        ...prevState,
+        [name]: parsedValue,
+      }));
+    } else {
+      setEditState((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
   };
-  const [showScanner, setShowScanner] = useState(false);
 
-  const handleError = (error: any) => {
-    // console.error("Scanning error:", error);
-  };
-
-  const toggleAsset = () => {
-    setAsset(!asset);
-    setFieldValue("items", [
-      ...values.items.slice(0, index),
-      { ...values.items[index], asset: !asset },
-      ...values.items.slice(index + 1),
-    ]);
+  const handleCurrencyChange = (value: string | undefined) => {
+    setEditState((prevState) => ({
+      ...prevState,
+      price: value || "",
+    }));
   };
 
   return (
@@ -160,67 +203,69 @@ const ReceiptFormItems = ({
           {edit && stage !== "Final" ? (
             <input
               className="text-orange-600 border-b-[1.5px] border-slate-400 focus:outline-none bg-white bg w-full"
-              value={item.description}
-              onChange={(e) => handleItemChange(e, "description")}
+              value={editState.description || ""}
+              name="description"
+              onChange={handleItemChange}
             />
-          ) : (
+          ) : item.description ? (
             <button type="button" className="text-orange-600 text-lg">
               {item.description}
             </button>
-          )}
-          {/* {stage !== "Final" ? (
-            <RegularButton
-              handleClick={toggleAsset}
-              styles={
-                item.asset
-                  ? "bg-orange-600 text-white"
-                  : "border-orange-600 text-orange-600"
-              }
-            >
-              <p className="text-sm">Asset</p>
-            </RegularButton>
           ) : (
-            asset && (
-              <RegularButton styles={"border-orange-600 text-orange-600"}>
-                <p className="text-sm">Asset</p>
-              </RegularButton>
-            )
-          )} */}
+            <h1 className="text-orange-900">Description is required</h1>
+          )}
+          {item.price && item.price >= values.assetAmount && !edit && (
+            <p className="">Asset</p>
+          )}
 
           <div className="w-full">
             <h1 className="text-slate-400 ">AMOUNT</h1>
             {edit ? (
-              <input
-                className="text-emerald-900  text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
-                value={item.price}
-                onChange={(e) => handleItemChange(e, "price")}
+              <CurrencyInput
+                id="price"
+                name="price"
+                className="text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
+                placeholder=""
+                value={editState.price}
+                defaultValue={editState.price || ""}
+                decimalsLimit={2}
+                onValueChange={handleCurrencyChange}
               />
-            ) : (
+            ) : item.price ? (
               <h1>{formatCurrency(item.price)}</h1>
+            ) : (
+              <h1 className="text-orange-900">Price is required</h1>
             )}
           </div>
+
           <div className="w-full">
             <h1 className="text-slate-400 ">CHARACTER</h1>
             {edit ? (
               <input
-                className="text-emerald-900  text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
-                value={item.character}
-                onChange={(e) => handleItemChange(e, "character")}
+                className="  text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
+                name="character"
+                value={editState.character || ""}
+                onChange={handleItemChange}
               />
-            ) : (
+            ) : item.character ? (
               <h1>{item.character}</h1>
+            ) : (
+              <h1 className="text-slate-600">None</h1>
             )}
           </div>
           <div className="w-full">
             <h1 className="text-slate-400 ">PRODUCT ID</h1>
             {edit ? (
               <input
-                className="text-emerald-900  text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
-                value={item.product_id}
-                onChange={(e) => handleItemChange(e, "product_id")}
+                className="  text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
+                name="product_id"
+                value={editState.product_id}
+                onChange={handleItemChange}
               />
-            ) : (
+            ) : item.product_id ? (
               <h1>{item.product_id}</h1>
+            ) : (
+              <h1 className="text-slate-600">None</h1>
             )}
           </div>
           <div className="w-full">
@@ -228,13 +273,14 @@ const ReceiptFormItems = ({
             {edit ? (
               <div className="flex flex-col gap-4">
                 <input
-                  className="text-emerald-900  text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
-                  value={item.barcode}
-                  onChange={(e) => handleItemChange(e, "barcode")}
+                  className="  text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
+                  name="barcode"
+                  value={editState.barcode}
+                  onChange={handleItemChange}
                 />
                 <button
                   type="button"
-                  className="border-[1.5px] border-emerald-900 p-3 rounded-md text-emerald-900  w-[150px]"
+                  className="border-[1.5px] border-emerald-900 p-3 rounded-md   w-[150px]"
                   onClick={() => {
                     setShowScanner(true);
                   }}
@@ -249,10 +295,13 @@ const ReceiptFormItems = ({
                     <BarcodeScanner
                       setShowScanner={setShowScanner}
                       onResult={(result) => {
-                        handleItemChange(result.text, "barcode");
+                        handleBarcodeResult(result.text);
+
                         setShowScanner(false);
                       }}
-                      onError={handleError}
+                      onError={() => {
+                        console.log("Error");
+                      }}
                     />
                     <button
                       type="button"
@@ -265,8 +314,10 @@ const ReceiptFormItems = ({
                   </div>
                 )}
               </div>
-            ) : (
+            ) : item.barcode ? (
               <h1>{item.barcode}</h1>
+            ) : (
+              <h1 className="text-slate-600">None</h1>
             )}
           </div>
           {stage !== "Final" && (
@@ -277,12 +328,17 @@ const ReceiptFormItems = ({
               >
                 <p className="text-sm">Delete</p>
               </RegularButton>
-              <RegularButton
-                styles="bg border-black "
-                handleClick={() => setEdit(!edit)}
-              >
+              <RegularButton styles="bg border-black " handleClick={toggleEdit}>
                 <p className="text-sm">{edit ? "Save" : "Edit"}</p>
               </RegularButton>
+              {edit && (
+                <RegularButton
+                  styles="bg border-black "
+                  handleClick={() => setEdit(false)}
+                >
+                  <p className="text-sm">Cancel</p>
+                </RegularButton>
+              )}
             </div>
           )}
         </div>

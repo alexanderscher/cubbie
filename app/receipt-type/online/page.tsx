@@ -34,6 +34,8 @@ const Online = () => {
     itemError: "",
     trackingNumber: "",
     itemField: "",
+    daysUntilReturn: "",
+    boughtDate: "",
   });
 
   const router = useRouter();
@@ -86,11 +88,6 @@ const Online = () => {
                             <h1 className="text-orange-600 text-xl">
                               Online Receipt
                             </h1>
-                            {/* <RegularButton
-                              styles={"border-black text-black text-sm"}
-                            >
-                              <p>{values.type}</p>
-                            </RegularButton> */}
                           </div>
                           <ReceiptManual
                             online
@@ -128,8 +125,17 @@ const Online = () => {
                                       error.trackingNumber ||
                                       prevErrors.trackingNumber ||
                                       "",
+                                    daysUntilReturn:
+                                      error.daysUntilReturn ||
+                                      prevErrors.daysUntilReturn ||
+                                      "",
+                                    boughtDate:
+                                      error.boughtDate ||
+                                      prevErrors.boughtDate ||
+                                      "",
                                   }));
                                 }
+
                                 if (Object.keys(error).length === 0) {
                                   setStage(ReceiptOnlineStage.ONLINE_ITEMS);
                                   setErrors((prevErrors) => ({

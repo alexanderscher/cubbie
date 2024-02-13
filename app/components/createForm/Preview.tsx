@@ -1,10 +1,17 @@
+"use client";
 import ReceiptFormItems from "@/app/components/createForm/ReceiptFormItems";
 import { ReceiptInput } from "@/types/formTypes/form";
 import { calculateReturnDate } from "@/utils/calculateReturnDate";
 import { formatCurrency } from "@/utils/formatCurrency";
+import { RECEIPT_SCHEMA } from "@/utils/receiptValidation";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CurrencyInput from "react-currency-input-field";
+import * as Yup from "yup";
+
+interface FormErrors {
+  [key: string]: string; // This allows any string to be used as an index, with string values
+}
 
 interface PreviewProps {
   values: ReceiptInput;
@@ -13,15 +20,88 @@ interface PreviewProps {
 }
 const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
   const [edit, setEdit] = useState(false);
+  const [editState, setEditState] = useState<ReceiptInput>({} as ReceiptInput);
+  const [errors, setErrors] = useState({
+    store: "",
+    amount: "",
+    boughtDate: "",
+    daysUntilReturn: "",
+    trackingNumber: "",
+  });
+  useEffect(() => {
+    setEditState(values);
+  }, [values]);
 
   const toggleEdit = () => {
     setEdit(!edit);
+
+    if (edit) {
+      try {
+        RECEIPT_SCHEMA.validateSync(editState, { abortEarly: false });
+
+        Object.keys(editState).forEach((key) => {
+          setFieldValue(key, editState[key as keyof ReceiptInput]);
+          setErrors((prevState) => ({
+            ...prevState,
+            [key]: "",
+          }));
+        });
+      } catch (validationError) {
+        console.error(validationError);
+
+        if (validationError instanceof Yup.ValidationError) {
+          const errors = validationError.inner.reduce((acc, curr) => {
+            if (curr.path) {
+              acc[curr.path] = curr.message;
+            }
+            return acc;
+          }, {} as FormErrors);
+          console.log(errors);
+          setErrors((prevState) => ({
+            ...prevState,
+            ...errors,
+          }));
+        }
+        return;
+      }
+    }
   };
 
-  const handleCurrencyChange = (value: string | undefined) => {
-    setFieldValue("amount", value || "");
+  const handleEditChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value, type } = event.target;
+    let parsedValue = value;
+
+    if (type === "number" || name === "daysUntilReturn") {
+      const numericValue = parseInt(value, 10);
+      parsedValue = isNaN(numericValue) ? "" : numericValue.toString();
+      setEditState((prevState) => ({
+        ...prevState,
+        [name]: parsedValue,
+      }));
+    } else {
+      setEditState((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
   };
 
+  const handleCurrencyChangeAmount = (value: string | undefined) => {
+    setEditState((prevState) => ({
+      ...prevState,
+      amount: value || "",
+    }));
+  };
+
+  // Adjusted to update editState for assetAmount similarly
+  const handleCurrencyChangeAsset = (value: string | undefined) => {
+    setEditState((prevState) => ({
+      ...prevState,
+      assetAmount: value || "",
+    }));
+  };
   return (
     <div className="flex flex-col gap-6 preview pb-[200px]">
       <div className="flex flex-col gap-4">
@@ -33,8 +113,8 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                   <input
                     className="text-orange-600 text-xl bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
                     name="store"
-                    value={values.store}
-                    onChange={handleChange}
+                    value={editState.store}
+                    onChange={handleEditChange}
                   />
                 </div>
               ) : (
@@ -44,6 +124,9 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                   </h1>
                 </div>
               )}
+              {errors.store && (
+                <p className="text-orange-900 text-sm">{errors.store}</p>
+              )}
               <div className="flex flex-col ">
                 <h1 className="text-slate-400  text-sm">TOTAL AMOUNT</h1>
                 {edit ? (
@@ -52,13 +135,39 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                     name="amount"
                     className="text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
                     placeholder=""
-                    value={values.amount}
-                    defaultValue={values.amount || ""}
+                    value={editState.amount}
+                    defaultValue={editState.amount || ""}
                     decimalsLimit={2}
-                    onValueChange={handleCurrencyChange}
+                    onValueChange={handleCurrencyChangeAmount}
                   />
-                ) : (
+                ) : values.amount ? (
                   <h1 className=" text-sm">{formatCurrency(values.amount)}</h1>
+                ) : (
+                  <h1 className="text-slate-600 text-sm">None</h1>
+                )}
+                {errors.amount && (
+                  <p className="text-orange-900 text-sm">{errors.amount}</p>
+                )}
+              </div>
+              <div className="flex flex-col ">
+                <h1 className="text-slate-400  text-sm">ASSET AMOUNT</h1>
+                {edit ? (
+                  <CurrencyInput
+                    id="assetAmount"
+                    name="assetAmount"
+                    className="text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
+                    placeholder=""
+                    value={editState.assetAmount}
+                    defaultValue={editState.assetAmount || ""}
+                    decimalsLimit={2}
+                    onValueChange={handleCurrencyChangeAsset}
+                  />
+                ) : values.assetAmount ? (
+                  <h1 className=" text-sm">
+                    {formatCurrency(values.assetAmount)}
+                  </h1>
+                ) : (
+                  <h1 className="text-slate-600 text-sm">None</h1>
                 )}
               </div>
 
@@ -68,11 +177,13 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                   <input
                     className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
                     name="card"
-                    value={values.card}
-                    onChange={handleChange}
+                    value={editState.card}
+                    onChange={handleEditChange}
                   />
-                ) : (
+                ) : values.card ? (
                   <h1 className=" text-sm">{values.card}</h1>
+                ) : (
+                  <h1 className="text-slate-600 text-sm">None</h1>
                 )}
               </div>
               <div className="flex flex-col ">
@@ -83,11 +194,18 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                   <input
                     className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
                     name="trackingNumber"
-                    value={values.trackingNumber}
-                    onChange={handleChange}
+                    value={editState.trackingNumber}
+                    onChange={handleEditChange}
                   />
-                ) : (
+                ) : values.trackingNumber ? (
                   <h1 className=" text-sm">{values.trackingNumber}</h1>
+                ) : (
+                  <h1 className="text-slate-600 text-sm">None</h1>
+                )}
+                {errors.trackingNumber && (
+                  <p className="text-orange-900 text-sm">
+                    {errors.trackingNumber}
+                  </p>
                 )}
               </div>
 
@@ -97,12 +215,16 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                   <input
                     className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
                     name="boughtDate"
-                    value={values.boughtDate}
-                    onChange={handleChange}
+                    value={editState.boughtDate}
+                    onChange={handleEditChange}
                     type="date"
                   />
-                ) : (
+                ) : values.boughtDate ? (
                   <h1 className=" text-sm">{values.boughtDate}</h1>
+                ) : (
+                  <h1 className="text-orange-900 text-sm">
+                    Purchase date is required
+                  </h1>
                 )}
               </div>
               <div className="flex flex-col ">
@@ -111,41 +233,41 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                   <input
                     className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
                     name="daysUntilReturn"
-                    value={values.daysUntilReturn}
-                    onChange={(event) => {
-                      const value = parseInt(event.target.value, 10);
-                      setFieldValue(
-                        "daysUntilReturn",
-                        isNaN(value) ? "" : value
-                      );
-                    }}
+                    value={editState.daysUntilReturn}
+                    onChange={handleEditChange}
+
+                    // onChange={(event) => {
+                    //   const value = parseInt(event.target.value, 10);
+                    //   setFieldValue(
+                    //     "daysUntilReturn",
+                    //     isNaN(value) ? "" : value
+                    //   );
+                    // }}
                   />
+                ) : values.daysUntilReturn ? (
+                  <h1 className=" text-sm">{values.daysUntilReturn}</h1>
                 ) : (
-                  values.boughtDate &&
-                  values.daysUntilReturn && (
-                    <h1 className=" text-sm">{values.daysUntilReturn}</h1>
-                  )
+                  <h1 className="text-orange-900 text-sm">
+                    Days until return is required
+                  </h1>
+                )}
+                {errors.daysUntilReturn && (
+                  <p className="text-orange-900 text-sm">
+                    {errors.daysUntilReturn}
+                  </p>
                 )}
               </div>
 
               <div className="flex flex-col ">
                 <h1 className="text-slate-400  text-sm">Return Date</h1>
-                {edit ? (
-                  <input
-                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
-                    name="finalReturnDate"
-                    type="date"
-                  />
-                ) : (
-                  values.boughtDate &&
-                  values.daysUntilReturn && (
-                    <h1 className=" text-sm">
-                      {calculateReturnDate(
-                        values.boughtDate,
-                        values.daysUntilReturn
-                      )}
-                    </h1>
-                  )
+
+                {values.boughtDate && values.daysUntilReturn && (
+                  <h1 className=" text-sm">
+                    {calculateReturnDate(
+                      values.boughtDate,
+                      values.daysUntilReturn
+                    )}
+                  </h1>
                 )}
               </div>
             </div>

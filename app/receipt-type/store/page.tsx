@@ -16,7 +16,6 @@ import {
   ITEMS_SCHEMA,
   RECEIPT_SCHEMA,
 } from "@/utils/receiptValidation";
-import { useUploadThing } from "@/utils/uploadthing";
 
 const getValidationSchema = (stage: ReceiptStoreStage) => {
   switch (stage) {

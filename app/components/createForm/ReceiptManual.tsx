@@ -1,5 +1,5 @@
+"use client";
 import LargeButton from "@/app/components/buttons/LargeButton";
-import { Field } from "formik";
 import Image from "next/image";
 import React, { ChangeEvent } from "react";
 import CurrencyInput from "react-currency-input-field";
@@ -19,6 +19,8 @@ const ReceiptManual = ({
   errors,
   online = false,
 }: ReceiptManualProps) => {
+  const [help, setHelp] = React.useState(false);
+
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -33,8 +35,12 @@ const ReceiptManual = ({
       setFieldValue("receiptImage", src);
     }
   };
-  const handleCurrencyChange = (value: string | undefined) => {
+  const handleCurrencyChangeAmount = (value: string | undefined) => {
     setFieldValue("amount", value || "");
+  };
+
+  const handleCurrencyChangeAsset = (value: string | undefined) => {
+    setFieldValue("assetAmount", value || "");
   };
 
   return (
@@ -63,10 +69,38 @@ const ReceiptManual = ({
             placeholder=""
             defaultValue={values.amount || ""}
             decimalsLimit={2}
-            onValueChange={handleCurrencyChange}
+            onValueChange={handleCurrencyChangeAmount}
           />
           {errors.amount && (
             <p className="text-orange-800 text-sm">{errors.amount}</p>
+          )}
+        </div>
+        <div>
+          <div className="flex gap-2 items-center mb-2">
+            <p className="text-sm text-emerald-900 ">Asset Amount</p>
+            <button
+              className="w-[20px] border-[1.5px] border-orange-600 text-orange-600 rounded-md text-xs"
+              onClick={() => setHelp(!help)}
+            >
+              ?
+            </button>
+          </div>
+
+          <CurrencyInput
+            id="assetAmount"
+            name="assetAmount"
+            className="w-full bg border-[1.5px] border-emerald-900 p-2 rounded-md focus:outline-none"
+            placeholder=""
+            defaultValue={values.assetAmount || ""}
+            decimalsLimit={2}
+            onValueChange={handleCurrencyChangeAsset}
+          />
+          {help && (
+            <p className="text-xs text-center text-orange-600 mt-2">
+              Asset amount determine which item is considered an asset. An asset
+              is an item that is worth more than a certain amount. This amount
+              is determined by the user.
+            </p>
           )}
         </div>
 
@@ -79,9 +113,7 @@ const ReceiptManual = ({
             onChange={handleChange("card")}
           />
         </div>
-        <div>
-          <input type="checkbox" name="" id="" />
-        </div>
+
         {online && (
           <div>
             <p className="text-sm text-emerald-900 ">Tracking Number Link</p>

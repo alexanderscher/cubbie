@@ -17,6 +17,11 @@ export const ITEMS_SCHEMA = Yup.object({
     .required("Items are required"),
 });
 
+export const ITEMS_CONTENT_SCHEMA = Yup.object({
+  description: Yup.string().required("Description is required"),
+  price: Yup.string().required("Price is required"),
+});
+
 export const GPT_IMAGE_SCHEMA = Yup.object().shape({
   items: Yup.array()
     .min(1, "At least one item is required")

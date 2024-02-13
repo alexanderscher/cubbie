@@ -33,6 +33,7 @@ const ReceiptManual = ({
       const src = URL.createObjectURL(file);
 
       setFieldValue("receiptImage", src);
+      setFieldValue("receiptImageFile", [file]);
     }
   };
   const handleCurrencyChangeAmount = (value: string | undefined) => {
@@ -97,9 +98,8 @@ const ReceiptManual = ({
           />
           {help && (
             <p className="text-xs text-center text-orange-600 mt-2">
-              Asset amount determine which item is considered an asset. An asset
-              is an item that is worth more than a certain amount. This amount
-              is determined by the user.
+              Asset amount determines which item is considered an asset. An
+              asset is an item that is worth more than a certain amount.
             </p>
           )}
         </div>

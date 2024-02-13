@@ -1,6 +1,11 @@
 "use client";
+import LargeButton from "@/app/components/buttons/LargeButton";
 import ReceiptFormItems from "@/app/components/createForm/ReceiptFormItems";
-import { ReceiptInput } from "@/types/formTypes/form";
+import {
+  ReceiptInput,
+  ReceiptOnlineStage,
+  ReceiptStoreStage,
+} from "@/types/formTypes/form";
 import { calculateReturnDate } from "@/utils/calculateReturnDate";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { RECEIPT_SCHEMA } from "@/utils/receiptValidation";
@@ -10,15 +15,15 @@ import CurrencyInput from "react-currency-input-field";
 import * as Yup from "yup";
 
 interface FormErrors {
-  [key: string]: string; // This allows any string to be used as an index, with string values
+  [key: string]: string;
 }
 
 interface PreviewProps {
   values: ReceiptInput;
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
-  handleChange: any;
+  stage: ReceiptOnlineStage | ReceiptStoreStage;
 }
-const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
+const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
   const [edit, setEdit] = useState(false);
   const [editState, setEditState] = useState<ReceiptInput>({} as ReceiptInput);
   const [errors, setErrors] = useState({
@@ -33,7 +38,9 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
   }, [values]);
 
   const toggleEdit = () => {
-    setEdit(!edit);
+    if (!edit) {
+      setEdit(true);
+    }
 
     if (edit) {
       try {
@@ -46,9 +53,8 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
             [key]: "",
           }));
         });
+        setEdit(false);
       } catch (validationError) {
-        console.error(validationError);
-
         if (validationError instanceof Yup.ValidationError) {
           const errors = validationError.inner.reduce((acc, curr) => {
             if (curr.path) {
@@ -56,7 +62,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
             }
             return acc;
           }, {} as FormErrors);
-          console.log(errors);
+
           setErrors((prevState) => ({
             ...prevState,
             ...errors,
@@ -272,7 +278,7 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
               </div>
             </div>
           </div>
-          {values.receiptImage && (
+          {/* {values.receiptImage && (
             <div className="w-[150px] h-[180px] overflow-hidden relative flex items-center justify-center rounded-sm">
               <Image
                 width={150}
@@ -292,8 +298,88 @@ const Preview = ({ values, setFieldValue, handleChange }: PreviewProps) => {
                 </button>
               )}
             </div>
+          )} */}
+
+          {stage !== ReceiptOnlineStage.PREVIEW && values.receiptImage && (
+            <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 ">
+              <div className="w-full">
+                {edit ? (
+                  <div className="text-sm">
+                    {values.receiptImage && (
+                      <div className=" relative flex items-center justify-center ">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFieldValue("receiptImage", "");
+                            setFieldValue("receiptImageFile", []);
+                          }}
+                          className="absolute top-0 right-0 m-1  bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
+                        >
+                          X
+                        </button>
+                        <Image
+                          width={200}
+                          height={200}
+                          src={values.receiptImage}
+                          alt=""
+                          className="w-full h-full object-cover rounded-md"
+                        />
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Image
+                    width={200}
+                    height={200}
+                    src={values.receiptImage}
+                    alt=""
+                    className="w-full h-full object-cover rounded-md"
+                  />
+                )}
+              </div>
+            </div>
+          )}
+          {stage !== ReceiptOnlineStage.PREVIEW && !values.receiptImage && (
+            <div>
+              {edit && (
+                <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 ">
+                  <div className="flex flex-col h-full w-full">
+                    <input
+                      type="file"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          const file = e.target.files[0];
+                          if (!file.type.match("image.*")) {
+                            alert("Please upload an image file");
+                            //  setUnvalidImage(true);
+                            return;
+                          }
+                          const src = URL.createObjectURL(file);
+                          setFieldValue("receiptImage", src);
+                          setFieldValue("receiptImageFile", [file]);
+                        }
+                      }}
+                      id="file-upload-item"
+                      style={{ opacity: 0, position: "absolute", zIndex: -1 }}
+                    />
+                    <LargeButton height="h-full">
+                      <label
+                        htmlFor="file-upload-item"
+                        className="w-full h-full flex justify-center items-center"
+                        style={{
+                          cursor: "pointer",
+                        }}
+                      >
+                        Upload File
+                      </label>
+                    </LargeButton>
+                  </div>
+                </div>
+              )}
+            </div>
           )}
         </div>
+
         <button
           type="button"
           onClick={toggleEdit}

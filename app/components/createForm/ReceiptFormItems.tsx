@@ -3,7 +3,7 @@ import LargeButton from "@/app/components/buttons/LargeButton";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { ItemInput, ReceiptInput } from "@/types/formTypes/form";
 import { formatCurrency } from "@/utils/formatCurrency";
-import { ITEMS_SCHEMA } from "@/utils/receiptValidation";
+import { ITEMS_CONTENT_SCHEMA } from "@/utils/receiptValidation";
 import Image from "next/image";
 import React, { useState } from "react";
 import CurrencyInput from "react-currency-input-field";
@@ -12,7 +12,6 @@ import * as Yup from "yup";
 interface FormErrors {
   [key: string]: string;
 }
-
 interface ReceiptFormItemsProps {
   item: ItemInput;
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
@@ -35,27 +34,66 @@ const ReceiptFormItems = ({
     price: "",
   });
 
+  const [editState, setEditState] = useState<ItemInput>({
+    description: item.description,
+    price: item.price,
+    character: item.character,
+    product_id: item.product_id,
+    barcode: item.barcode,
+    asset: item.asset,
+    photo: item.photo,
+    photoFile: item.photoFile,
+  });
+
+  const [initialEditState, setInitialEditState] =
+    useState<ItemInput>(editState);
+
+  const [tempPhoto, setTempPhoto] = useState({ url: "", file: null });
+
   const toggleEdit = () => {
-    setEdit(!edit);
-
+    if (!edit) {
+      setInitialEditState(editState);
+      setEdit(true);
+    }
     if (edit) {
-      const updatedItem = values.items[index] as any;
-      Object.keys(editState).forEach((key) => {
-        if (key in editState) {
-          updatedItem[key as keyof ItemInput] =
-            editState[key as keyof ItemInput];
-        }
-      });
+      try {
+        ITEMS_CONTENT_SCHEMA.validateSync(editState, { abortEarly: false });
+        const updatedItem = { ...values.items[index], ...editState };
 
-      setFieldValue("items", [
-        ...values.items.slice(0, index),
-        updatedItem,
-        ...values.items.slice(index + 1),
-      ]);
+        setFieldValue("items", [
+          ...values.items.slice(0, index),
+          updatedItem,
+          ...values.items.slice(index + 1),
+        ]);
+        setEdit(false);
+        setErrors({
+          description: "",
+          price: "",
+        });
+      } catch (validationError) {
+        if (validationError instanceof Yup.ValidationError) {
+          const errors = validationError.inner.reduce((acc, curr) => {
+            if (curr.path) {
+              acc[curr.path] = curr.message;
+            }
+            return acc;
+          }, {} as FormErrors);
+
+          setErrors((prevState) => ({
+            ...prevState,
+            ...errors,
+          }));
+        }
+        return;
+      }
     }
   };
 
-  const [editState, setEditState] = useState<ItemInput>({} as ItemInput);
+  const handleCancel = () => {
+    setEditState(initialEditState); // Revert to initial state
+    setEdit(false);
+    setErrors({ description: "", price: "" }); // Optionally clear any errors
+  };
 
   const removeItem = async (index: number) => {
     const newItems = values.items.filter((_, i) => i !== index);
@@ -114,48 +152,53 @@ const ReceiptFormItems = ({
             </div>
           </div>
         )}
-        {stage !== "Final" && (
-          <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 r">
-            {item.photo ? (
-              <div className="w-full">
-                {edit ? (
-                  <div className="text-sm">
-                    {item.photo && (
-                      <div className=" relative flex items-center justify-center ">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setFieldValue("items", [
-                              ...values.items.slice(0, index),
-                              { ...values.items[index], photo: "" },
-                              ...values.items.slice(index + 1),
-                            ]);
-                          }}
-                          className="absolute top-0 right-0 m-1  bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
-                        >
-                          X
-                        </button>
-                        <Image
-                          width={200}
-                          height={200}
-                          src={item.photo}
-                          alt=""
-                          className="w-full h-full object-cover rounded-md"
-                        />
-                      </div>
-                    )}
+
+        {stage !== "Final" && editState.photo && (
+          <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 ">
+            {edit ? (
+              <div className="text-sm">
+                {editState.photo && (
+                  <div className=" relative flex items-center justify-center ">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditState((prevState) => ({
+                          ...prevState,
+                          photo: "",
+                          photoFile: [],
+                        }));
+                      }}
+                      className="absolute top-0 right-0 m-1  bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
+                    >
+                      X
+                    </button>
+                    <Image
+                      width={200}
+                      height={200}
+                      src={editState.photo}
+                      alt=""
+                      className="w-full h-full object-cover rounded-md"
+                    />
                   </div>
-                ) : (
-                  <Image
-                    width={200}
-                    height={200}
-                    src={item.photo}
-                    alt=""
-                    className="w-full h-full object-cover rounded-md"
-                  />
                 )}
               </div>
             ) : (
+              <div className=" relative flex items-center justify-center ">
+                <Image
+                  width={200}
+                  height={200}
+                  src={editState.photo}
+                  alt=""
+                  className="w-full h-full object-cover rounded-md"
+                />
+              </div>
+            )}
+          </div>
+        )}
+        {stage !== "Final" &&
+          !editState.photo &&
+          (edit ? (
+            <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 ">
               <div className="flex flex-col h-full w-full">
                 <input
                   type="file"
@@ -165,19 +208,16 @@ const ReceiptFormItems = ({
                       const file = e.target.files[0];
                       if (!file.type.match("image.*")) {
                         alert("Please upload an image file");
-                        //  setUnvalidImage(true);
                         return;
                       }
 
-                      console.log("Selected file:", file);
                       const src = URL.createObjectURL(file);
-                      console.log("Blob URL:", src);
-                      const newItems = [
-                        ...values.items.slice(0, index),
-                        { ...values.items[index], photo: src },
-                        ...values.items.slice(index + 1),
-                      ];
-                      setFieldValue("items", newItems);
+
+                      setEditState((prevState) => ({
+                        ...prevState,
+                        photo: src,
+                        photoFile: file,
+                      }));
                     }
                   }}
                   id="file-upload-item"
@@ -195,28 +235,53 @@ const ReceiptFormItems = ({
                   </label>
                 </LargeButton>
               </div>
-            )}
-          </div>
-        )}
+            </div>
+          ) : (
+            <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 ">
+              <div className="flex flex-col h-full w-full">
+                <LargeButton height="h-full">
+                  <label
+                    htmlFor="file-upload-item"
+                    className="w-full h-full flex justify-center items-center"
+                    style={{
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      setEdit(true);
+                    }}
+                  >
+                    Edit
+                  </label>
+                </LargeButton>
+              </div>
+            </div>
+          ))}
 
         <div className="text-sm flex flex-col gap-3 items-start w-full ">
-          {edit && stage !== "Final" ? (
-            <input
-              className="text-orange-600 border-b-[1.5px] border-slate-400 focus:outline-none bg-white bg w-full"
-              value={editState.description || ""}
-              name="description"
-              onChange={handleItemChange}
-            />
-          ) : item.description ? (
-            <button type="button" className="text-orange-600 text-lg">
-              {item.description}
-            </button>
-          ) : (
-            <h1 className="text-orange-900">Description is required</h1>
-          )}
-          {item.price && item.price >= values.assetAmount && !edit && (
-            <p className="">Asset</p>
-          )}
+          <div className="w-full">
+            {edit && stage !== "Final" ? (
+              <input
+                className="text-orange-600 border-b-[1.5px] border-slate-400 focus:outline-none bg-white bg w-full"
+                value={editState.description || ""}
+                name="description"
+                onChange={handleItemChange}
+              />
+            ) : item.description ? (
+              <button type="button" className="text-orange-600 text-lg">
+                {item.description}
+              </button>
+            ) : (
+              <h1 className="text-orange-900">Description is required</h1>
+            )}
+            {errors.description && (
+              <p className="text-orange-900">{errors.description}</p>
+            )}
+          </div>
+
+          {values.assetAmount &&
+            item.price &&
+            item.price >= values.assetAmount &&
+            !edit && <p className="">Asset</p>}
 
           <div className="w-full">
             <h1 className="text-slate-400 ">AMOUNT</h1>
@@ -236,6 +301,7 @@ const ReceiptFormItems = ({
             ) : (
               <h1 className="text-orange-900">Price is required</h1>
             )}
+            {errors.price && <p className="text-orange-900">{errors.price}</p>}
           </div>
 
           <div className="w-full">
@@ -334,7 +400,7 @@ const ReceiptFormItems = ({
               {edit && (
                 <RegularButton
                   styles="bg border-black "
-                  handleClick={() => setEdit(false)}
+                  handleClick={handleCancel}
                 >
                   <p className="text-sm">Cancel</p>
                 </RegularButton>

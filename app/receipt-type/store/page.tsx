@@ -181,7 +181,6 @@ const Store = () => {
                         <Preview
                           setFieldValue={setFieldValue}
                           values={values}
-                          handleChange={handleChange}
                         />
                       </div>
                     );
@@ -278,7 +277,6 @@ const Store = () => {
                         <Preview
                           setFieldValue={setFieldValue}
                           values={values}
-                          handleChange={handleChange}
                         />
                       </div>
                     );
@@ -397,7 +395,6 @@ const Store = () => {
                         <Preview
                           setFieldValue={setFieldValue}
                           values={values}
-                          handleChange={handleChange}
                         />
                       </div>
                     );

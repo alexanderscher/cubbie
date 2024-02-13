@@ -155,7 +155,7 @@ const Online = () => {
                         <Preview
                           setFieldValue={setFieldValue}
                           values={values}
-                          handleChange={handleChange}
+                          stage={stage}
                         />
                       </div>
                     );
@@ -275,7 +275,7 @@ const Online = () => {
                         <Preview
                           setFieldValue={setFieldValue}
                           values={values}
-                          handleChange={handleChange}
+                          stage={stage}
                         />
                       </div>
                     );

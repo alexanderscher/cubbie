@@ -5,7 +5,7 @@ export interface Photo {
 export interface ItemInput {
   description: string;
   photo?: string;
-  photoFile?: File;
+  photoFile?: File[];
   price: string;
   barcode?: string;
   asset: boolean;
@@ -24,7 +24,7 @@ export interface ReceiptInput {
   daysUntilReturn: number;
   finalReturnDate: string;
   receiptImage?: "";
-  receiptImageFile?: File;
+  receiptImageFile?: [];
   items: ItemInput[];
   onlineType: string;
   storeType: string;

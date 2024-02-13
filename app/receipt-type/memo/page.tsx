@@ -170,7 +170,7 @@ const Memo = () => {
                         <Preview
                           setFieldValue={setFieldValue}
                           values={values}
-                          handleChange={handleChange}
+                          stage={stage}
                         />
                       </div>
                     );
@@ -267,7 +267,7 @@ const Memo = () => {
                         <Preview
                           setFieldValue={setFieldValue}
                           values={values}
-                          handleChange={handleChange}
+                          stage={stage}
                         />
                       </div>
                     );
@@ -384,7 +384,7 @@ const Memo = () => {
                         <Preview
                           setFieldValue={setFieldValue}
                           values={values}
-                          handleChange={handleChange}
+                          stage={stage}
                         />
                       </div>
                     );

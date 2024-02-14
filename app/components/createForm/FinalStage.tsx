@@ -16,15 +16,9 @@ interface FinalStageProps {
   values: any;
   setStage: (stage: any) => void;
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
-  handleSubmit: () => void;
 }
 
-const FinalStage = ({
-  values,
-  setStage,
-  setFieldValue,
-  handleSubmit,
-}: FinalStageProps) => {
+const FinalStage = ({ values, setStage, setFieldValue }: FinalStageProps) => {
   const isMobile = useIsMobile();
   return (
     <div className="flex flex-col gap-6">
@@ -125,8 +119,8 @@ const FinalStage = ({
             </RegularButton>
           </div>
           <RegularButton
+            type="submit"
             styles={"bg-emerald-900 border-emerald-900 "}
-            handleClick={() => handleSubmit()}
           >
             <p className="text-white ">Submit</p>
           </RegularButton>
@@ -165,10 +159,10 @@ const FinalStage = ({
               </RegularButton>
             ) : null}
           </div>
+
           <RegularButton
             type="submit"
             styles={"bg-emerald-900 border-emerald-900 "}
-            handleClick={() => handleSubmit()}
           >
             <p className="text-white text-sm">Submit</p>
           </RegularButton>

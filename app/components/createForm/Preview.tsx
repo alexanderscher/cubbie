@@ -311,7 +311,6 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                           type="button"
                           onClick={() => {
                             setFieldValue("receiptImage", "");
-                            setFieldValue("receiptImageFile", []);
                           }}
                           className="absolute top-0 right-0 m-1  bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
                         >
@@ -356,7 +355,6 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                           }
                           const src = URL.createObjectURL(file);
                           setFieldValue("receiptImage", src);
-                          setFieldValue("receiptImageFile", file.name);
                         }
                       }}
                       id="file-upload-item"

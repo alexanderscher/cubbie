@@ -286,7 +286,6 @@ const Online = () => {
                         values={values}
                         setStage={setStage}
                         setFieldValue={setFieldValue}
-                        handleSubmit={handleSubmit}
                       />
                     );
                 }

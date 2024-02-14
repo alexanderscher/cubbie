@@ -221,7 +221,7 @@ input:-webkit-autofill::first-line {
 
   .header {
     flex-direction: column;
-    align-items: start;
+    align-items: flex-start;
     gap: 20px;
     /* align-items: center; */
   }
@@ -310,6 +310,6 @@ input:-webkit-autofill::first-line {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    align-items: start;
+    align-items: flex-start;
   }
 }

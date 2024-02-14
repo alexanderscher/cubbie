@@ -39,12 +39,13 @@ const Store = () => {
     const response = await fetch("/api/upload", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json", // Add this line
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(values),
     });
     const data = await response.json();
   };
+
   const [errors, setErrors] = useState({
     store: "",
     items: "",
@@ -66,8 +67,6 @@ const Store = () => {
           }}
           validationSchema={getValidationSchema(stage)}
           onSubmit={(values) => {
-            console.log(values);
-
             submitDB(values);
           }}
         >
@@ -417,7 +416,6 @@ const Store = () => {
                         values={values}
                         setStage={setStage}
                         setFieldValue={setFieldValue}
-                        handleSubmit={handleSubmit}
                       />
                     );
                 }

@@ -17,17 +17,20 @@ model Receipt {
   card              String
   amount            Int
   tracking_number   String
-  purchase_date       DateTime
+  purchase_date     DateTime
   days_until_return Int
-  return_date DateTime
-  receipt_image     String
+  return_date       DateTime
+  receipt_image_url String
+  receipt_image_key String
   items             Items[]
+  archive           Boolean
 }
 
 model Items {
   id          Int     @id @default(autoincrement())
   description String
-  photo       String
+  photo_url   String
+  photo_key   String
   price       Int
   barcode     String
   asset       Boolean

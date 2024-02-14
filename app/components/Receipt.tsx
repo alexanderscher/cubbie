@@ -30,7 +30,7 @@ const Receipt = () => {
         <h1>$300.00</h1>
       </div>
       <div className="flex justify-between">
-        <h1 className="text-slate-400">CARD</h1>
+        <h1 className="text-slate-400">Card</h1>
         <h1>SB 1332</h1>
       </div>
       <div className="flex justify-between items-start">

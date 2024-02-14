@@ -1,7 +1,7 @@
 "use server";
 
-import { UTApi } from "uploadthing/server";
-const utapi = new UTApi();
+import { utapi } from "@/app/server/uploadthing";
+
 export const deleteUploadThingImage = async (fileKey: string) => {
   const result = await utapi.deleteFiles(fileKey);
   console.log(fileKey);

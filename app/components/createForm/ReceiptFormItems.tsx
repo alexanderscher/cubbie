@@ -28,6 +28,8 @@ const ReceiptFormItems = ({
   stage,
 }: ReceiptFormItemsProps) => {
   const [edit, setEdit] = useState(false);
+  const [invalidImage, setInvalidImage] = useState(false);
+
   const [showScanner, setShowScanner] = useState(false);
   const [errors, setErrors] = useState({
     description: "",
@@ -42,13 +44,10 @@ const ReceiptFormItems = ({
     barcode: item.barcode,
     asset: item.asset,
     photo: item.photo,
-    photoFile: item.photoFile,
   });
 
   const [initialEditState, setInitialEditState] =
     useState<ItemInput>(editState);
-
-  const [tempPhoto, setTempPhoto] = useState({ url: "", file: null });
 
   const toggleEdit = () => {
     if (!edit) {
@@ -165,7 +164,6 @@ const ReceiptFormItems = ({
                         setEditState((prevState) => ({
                           ...prevState,
                           photo: "",
-                          photoFile: [],
                         }));
                       }}
                       className="absolute top-0 right-0 m-1  bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
@@ -211,13 +209,28 @@ const ReceiptFormItems = ({
                         return;
                       }
 
-                      const src = URL.createObjectURL(file);
+                      if (!file.type.match("image.*")) {
+                        setInvalidImage(true);
+                        return;
+                      }
 
-                      setEditState((prevState) => ({
-                        ...prevState,
-                        photo: src,
-                        photoFile: file,
-                      }));
+                      const reader = new FileReader();
+                      reader.readAsDataURL(file);
+                      reader.onload = () => {
+                        if (typeof reader.result === "string") {
+                          setEditState((prevState) => ({
+                            ...prevState,
+                            photo: reader.result as string,
+                          }));
+                          setInvalidImage(false);
+                        }
+                      };
+                      reader.onerror = (error) => {
+                        console.error(
+                          "Error converting file to base64:",
+                          error
+                        );
+                      };
                     }
                   }}
                   id="file-upload-item"

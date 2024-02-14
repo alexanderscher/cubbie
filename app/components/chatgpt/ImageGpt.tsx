@@ -167,7 +167,6 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
           setNoImage(false);
           setInvalidImage(false);
           setFieldValue("receiptImage", reader.result);
-          setFieldValue("receiptImageFile", file.name);
         }
       };
       reader.onerror = (error) => {
@@ -281,7 +280,6 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
             <div className="w-full">
               <RegularButton
                 styles="border-emerald-900 bg w-full "
-                type="submit"
                 handleClick={() => {
                   !loading && handleSubmit();
                 }}

@@ -22,6 +22,7 @@ export async function POST(request: Request) {
       receiptImage,
       items,
       memo,
+      assetAmount,
     } = json;
 
     const requiredFields = ["type", "store", "amount", "items"];
@@ -61,6 +62,9 @@ export async function POST(request: Request) {
     const processItems = async (items: ItemInput[]) => {
       const itemsArray = await Promise.all(
         items.map(async (item) => {
+          const price = parseFloat(item.price);
+          console.log(item.price, price);
+
           let itemPhotoUrl = "";
           let itemPhotoKey = "";
 
@@ -78,9 +82,9 @@ export async function POST(request: Request) {
             description: item.description,
             photo_url: itemPhotoUrl,
             photo_key: itemPhotoKey,
-            price: parseInt(item.price),
+            price: parseFloat(item.price),
             barcode: item.barcode,
-            asset: item.asset,
+            asset: assetAmount > parseFloat(item.price) ? true : false,
             character: item.character,
             product_id: item.product_id,
           };
@@ -107,7 +111,7 @@ export async function POST(request: Request) {
         type,
         store,
         card,
-        amount: parseInt(amount),
+        amount: parseFloat(amount),
         tracking_number: trackingNumber,
         purchase_date: purchase_date,
         days_until_return: daysUntilReturn,

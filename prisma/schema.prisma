@@ -15,7 +15,7 @@ model Receipt {
   type              String
   store             String
   card              String
-  amount            Int
+  amount            Float
   tracking_number   String
   purchase_date     DateTime
   days_until_return Int
@@ -32,7 +32,7 @@ model Items {
   description String
   photo_url   String?
   photo_key   String?
-  price       Int
+  price       Float
   barcode     String?
   asset       Boolean
   character   String?

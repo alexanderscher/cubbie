@@ -28,6 +28,8 @@ const Online = () => {
   const [stage, setStage] = useState<ReceiptOnlineStage>(
     ReceiptOnlineStage.ONLINE_RECEIPT
   );
+  const [loading, setLoading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
   const [errors, setErrors] = useState({
     store: "",
     amount: "",
@@ -37,6 +39,25 @@ const Online = () => {
     daysUntilReturn: "",
     boughtDate: "",
   });
+
+  const submitDB = async (values: any) => {
+    setLoading(true);
+    const response = await fetch("/api/upload", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...values, memo: false }),
+    });
+    const data = await response.json();
+
+    if (data.error) {
+      setUploadError(data.error);
+    } else {
+      setUploadError("");
+    }
+    setLoading(false);
+  };
 
   const router = useRouter();
 
@@ -49,7 +70,7 @@ const Online = () => {
             type: "Online",
           }}
           onSubmit={(values) => {
-            console.log(values);
+            submitDB(values);
           }}
           validationSchema={getValidationSchema(stage)}
         >
@@ -286,6 +307,9 @@ const Online = () => {
                         values={values}
                         setStage={setStage}
                         setFieldValue={setFieldValue}
+                        loading={loading}
+                        uploadError={uploadError}
+                        setUploadError={setUploadError}
                       />
                     );
                 }

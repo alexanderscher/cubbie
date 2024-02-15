@@ -24,18 +24,19 @@ model Receipt {
   receipt_image_key String
   items             Items[]
   archive           Boolean
+  memo              Boolean
 }
 
 model Items {
   id          Int     @id @default(autoincrement())
   description String
-  photo_url   String
-  photo_key   String
+  photo_url   String?
+  photo_key   String?
   price       Int
-  barcode     String
+  barcode     String?
   asset       Boolean
-  character   String
-  product_id  String
+  character   String?
+  product_id  String?
   receipt_id  Int
   receipt     Receipt @relation(fields: [receipt_id], references: [id])
 }

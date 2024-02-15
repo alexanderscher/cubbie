@@ -153,7 +153,7 @@ const ReceiptFormItems = ({
         )}
 
         {stage !== "Final" && editState.photo && (
-          <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 ">
+          <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 overflow-hidden rounded-md ">
             {edit ? (
               <div className="text-sm">
                 {editState.photo && (
@@ -196,7 +196,7 @@ const ReceiptFormItems = ({
         {stage !== "Final" &&
           !editState.photo &&
           (edit ? (
-            <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 ">
+            <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 overflow-hidden rounded-md ">
               <div className="flex flex-col h-full w-full">
                 <input
                   type="file"
@@ -250,7 +250,7 @@ const ReceiptFormItems = ({
               </div>
             </div>
           ) : (
-            <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 ">
+            <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 overflow-hidden rounded-md ">
               <div className="flex flex-col h-full w-full">
                 <LargeButton height="h-full">
                   <label

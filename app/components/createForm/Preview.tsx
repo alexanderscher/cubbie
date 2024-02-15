@@ -6,7 +6,7 @@ import {
   ReceiptOnlineStage,
   ReceiptStoreStage,
 } from "@/types/formTypes/form";
-import { calculateReturnDate } from "@/utils/calculateReturnDate";
+import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { RECEIPT_SCHEMA } from "@/utils/receiptValidation";
 import Image from "next/image";
@@ -226,7 +226,9 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                     type="date"
                   />
                 ) : values.boughtDate ? (
-                  <h1 className=" text-sm">{values.boughtDate}</h1>
+                  <h1 className=" text-sm">
+                    {formatDateToMMDDYY(values.boughtDate)}
+                  </h1>
                 ) : (
                   <h1 className="text-orange-900 text-sm">
                     Purchase date is required
@@ -301,7 +303,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
           )} */}
 
           {stage !== ReceiptOnlineStage.PREVIEW && values.receiptImage && (
-            <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 ">
+            <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 overflow-hidden rounded-md ">
               <div className="w-full">
                 {edit ? (
                   <div className="text-sm">
@@ -312,7 +314,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                           onClick={() => {
                             setFieldValue("receiptImage", "");
                           }}
-                          className="absolute top-0 right-0 m-1  bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
+                          className="absolute top-0 right-0 m-1  bg-emerald-900 text-white  h-6 w-6 flex items-center justify-center text-sm"
                         >
                           X
                         </button>
@@ -322,6 +324,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                           src={values.receiptImage}
                           alt=""
                           className="w-full h-full object-cover rounded-md"
+                          style={{ maxWidth: "100%", maxHeight: "100%" }}
                         />
                       </div>
                     )}
@@ -333,6 +336,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                     src={values.receiptImage}
                     alt=""
                     className="w-full h-full object-cover rounded-md"
+                    style={{ maxWidth: "100%", maxHeight: "100%" }}
                   />
                 )}
               </div>
@@ -341,7 +345,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
           {stage !== ReceiptOnlineStage.PREVIEW && !values.receiptImage && (
             <div>
               {edit && (
-                <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 ">
+                <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 overflow-hidden rounded-md ">
                   <div className="flex flex-col h-full w-full">
                     <input
                       type="file"

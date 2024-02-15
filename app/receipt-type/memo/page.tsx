@@ -43,6 +43,28 @@ const Memo = () => {
     itemField: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+
+  const submitDB = async (values: any) => {
+    setLoading(true);
+    const response = await fetch("/api/upload", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...values, memo: true }),
+    });
+    const data = await response.json();
+
+    if (data.error) {
+      setUploadError(data.error);
+    } else {
+      setUploadError("");
+    }
+    setLoading(false);
+  };
+
   const router = useRouter();
 
   return (
@@ -55,7 +77,7 @@ const Memo = () => {
           }}
           validationSchema={getValidationSchema(stage)}
           onSubmit={(values) => {
-            console.log(values);
+            submitDB(values);
           }}
         >
           {({
@@ -394,6 +416,9 @@ const Memo = () => {
                         values={values}
                         setStage={setStage}
                         setFieldValue={setFieldValue}
+                        loading={loading}
+                        uploadError={uploadError}
+                        setUploadError={setUploadError}
                       />
                     );
                 }

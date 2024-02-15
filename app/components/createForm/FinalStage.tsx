@@ -6,7 +6,7 @@ import {
   ReceiptOnlineStage,
   ReceiptStoreStage,
 } from "@/types/formTypes/form";
-import { calculateReturnDate } from "@/utils/calculateReturnDate";
+import { calculateReturnDate } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { useIsMobile } from "@/utils/useIsMobile";
 import Image from "next/image";
@@ -16,9 +16,19 @@ interface FinalStageProps {
   values: any;
   setStage: (stage: any) => void;
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
+  loading: boolean;
+  uploadError: string;
+  setUploadError: (value: string) => void;
 }
 
-const FinalStage = ({ values, setStage, setFieldValue }: FinalStageProps) => {
+const FinalStage = ({
+  values,
+  setStage,
+  setFieldValue,
+  loading,
+  uploadError,
+  setUploadError,
+}: FinalStageProps) => {
   const isMobile = useIsMobile();
   return (
     <div className="flex flex-col gap-6">
@@ -159,13 +169,38 @@ const FinalStage = ({ values, setStage, setFieldValue }: FinalStageProps) => {
               </RegularButton>
             ) : null}
           </div>
+          {loading ? (
+            <RegularButton styles={"bg-emerald-900 border-emerald-900 "}>
+              <p className="text-white text-sm">Uploading...</p>
+            </RegularButton>
+          ) : (
+            <RegularButton
+              type="submit"
+              styles={"bg-emerald-900 border-emerald-900 "}
+            >
+              <p className="text-white text-sm">Submit</p>
+            </RegularButton>
+          )}
+        </div>
+      )}
+      {uploadError && (
+        <div className="fixed inset-0 flex items-center justify-center z-40">
+          <div className="p-8 z-50 max-w-[700px] w-3/4 bg-white h-[200px] rounded-md border-black border-[2px] shadow-lg">
+            <div className="flex flex-col justify-between h-full">
+              <p className="">
+                <span className="text-orange-900">Error: </span>
+                {uploadError}
+              </p>
 
-          <RegularButton
-            type="submit"
-            styles={"bg-emerald-900 border-emerald-900 "}
-          >
-            <p className="text-white text-sm">Submit</p>
-          </RegularButton>
+              <button
+                type="submit"
+                className="text-end "
+                onClick={() => setUploadError("")}
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

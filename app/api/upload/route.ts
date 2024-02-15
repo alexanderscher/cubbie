@@ -84,7 +84,7 @@ export async function POST(request: Request) {
             photo_key: itemPhotoKey,
             price: parseFloat(item.price),
             barcode: item.barcode,
-            asset: assetAmount > parseFloat(item.price) ? true : false,
+            asset: assetAmount >= parseFloat(item.price) ? true : false,
             character: item.character,
             product_id: item.product_id,
           };

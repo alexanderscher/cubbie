@@ -144,7 +144,7 @@ const FinalStage = ({
                     ? setStage(ReceiptStoreStage.IN_STORE_GPT)
                     : setStage(ReceiptStoreStage.IN_STORE_RECEIPT);
                 } else {
-                  setStage(ReceiptStoreStage.IN_STORE_ITEMS_MANUAL);
+                  setStage(ReceiptOnlineStage.ONLINE_RECEIPT);
                 }
               }}
             >

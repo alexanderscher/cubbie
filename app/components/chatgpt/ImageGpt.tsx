@@ -1,7 +1,7 @@
 "use client";
 import LargeButton from "@/app/components/buttons/LargeButton";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { ReceiptInput } from "@/types/formTypes/form";
+import { ReceiptInput } from "@/types/form";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ChangeEvent, useState, useCallback } from "react";
@@ -209,33 +209,6 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
             Image&quot; button to get the receipt info and items.
           </p>
         )}
-        {/* <div>
-          <div className="flex gap-2 items-center mb-2">
-            <p className="text-sm text-emerald-900 ">Asset Amount</p>
-            <button
-              className="w-[20px] border-[1.5px] border-orange-600 text-orange-600 rounded-md text-xs"
-              onClick={() => setAssetHelp(!assetHelp)}
-            >
-              ?
-            </button>
-          </div>
-
-          <CurrencyInput
-            id="assetAmount"
-            name="assetAmount"
-            className="w-full bg border-[1.5px] border-emerald-900 p-2 rounded-md focus:outline-none"
-            placeholder=""
-            defaultValue={values.assetAmount || ""}
-            decimalsLimit={2}
-            onValueChange={handleCurrencyChangeAsset}
-          />
-          {assetHelp && (
-            <p className="text-xs text-center text-orange-600 mt-2">
-              Asset amount determines which item is considered an asset. An
-              asset is an item that is worth more than a certain amount.
-            </p>
-          )}
-        </div> */}
 
         <div>
           <div className="flex flex-col gap-5">
@@ -259,11 +232,11 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
               </LargeButton>
             </div>
             {image !== "" && (
-              <div className="w-[100px] h-[120px] overflow-hidden rounded-sm relative">
+              <div className="w-[100px] h-[120px] overflow-hidden rounded-md relative">
                 <button
                   onClick={() => setImage("")}
                   type="button"
-                  className="absolute top-0 right-0 m-1  bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
+                  className="absolute top-0 right-0 m-1  bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm mt-1"
                 >
                   X
                 </button>

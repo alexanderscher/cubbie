@@ -5,7 +5,6 @@ interface Props {
   handleClick?: () => void;
   styles?: string;
   restProps?: any;
-  type?: "button" | "submit" | "reset" | undefined;
   height?: string;
 }
 
@@ -15,12 +14,12 @@ const LargeButton = ({
   styles,
   height,
 
-  type,
   ...restProps
 }: Props) => {
   return (
     <div className={`flex w-full ${height}`}>
       <button
+        type="button"
         className={`border-[1.5px] text-emerald-900  border-emerald-900 w-full p-3 rounded-md h-full ${styles}`}
         onClick={handleClick}
         {...restProps}

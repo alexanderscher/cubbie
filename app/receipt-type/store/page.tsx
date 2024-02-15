@@ -16,6 +16,7 @@ import {
   ITEMS_SCHEMA,
   RECEIPT_SCHEMA,
 } from "@/utils/receiptValidation";
+import Loading from "@/app/components/Loading";
 
 const getValidationSchema = (stage: ReceiptStoreStage) => {
   switch (stage) {
@@ -54,6 +55,9 @@ const Store = () => {
       setUploadError("");
     }
     setLoading(false);
+    if (response.ok) {
+      router.push("/");
+    }
   };
 
   const [errors, setErrors] = useState({
@@ -438,36 +442,9 @@ const Store = () => {
           )}
         </Formik>
       </div>
+      {loading && <Loading loading={loading} />}
     </div>
   );
 };
 
 export default Store;
-
-// {
-//   <div className="flex flex-col gap-4">
-//     {" "}
-//     {errors.gptError && (
-//       <p className=" text-orange-800 text-sm text-center">{errors.gptError}</p>
-//     )}
-//     <div className="flex gap-10">
-//       <RegularButton
-//         styles={"bg-emerald-900 border-emerald-900 w-full"}
-//         handleClick={() => {
-//           router.push("/receipt-type");
-//         }}
-//       >
-//         <p className="text-emerald-900  text-sm ">Back</p>
-//       </RegularButton>
-
-//       <RegularButton
-//         styles={"bg-emerald-900 border-emerald-900 w-full"}
-//         handleClick={() => {
-//           validateSubmit(validateForm, values);
-//         }}
-//       >
-//         <p className="text-emerald-900  text-sm ">Preview</p>
-//       </RegularButton>
-//     </div>
-//   </div>;
-// }

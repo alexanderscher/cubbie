@@ -2,7 +2,7 @@
 import RegularButton from "@/app/components/buttons/RegularButton";
 import ReceiptFormItems from "@/app/components/createForm/ReceiptFormItems";
 import { ReceiptOnlineStage, ReceiptStoreStage } from "@/constants/form";
-import { ItemInput } from "@/types/formTypes/form";
+import { ItemInput } from "@/types/form";
 import { calculateReturnDate } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { useIsMobile } from "@/utils/useIsMobile";

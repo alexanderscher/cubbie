@@ -1,7 +1,7 @@
 import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
 import { handleUpload } from "@/app/actions/uploadPhoto";
 import prisma from "@/prisma/client";
-import { ItemInput } from "@/types/formTypes/form";
+import { ItemInput } from "@/types/form";
 import { calculateReturnDate } from "@/utils/Date";
 import { NextResponse } from "next/server";
 
@@ -120,6 +120,7 @@ export async function POST(request: Request) {
         receipt_image_key: receiptFileKey,
         archive: false,
         memo,
+        created_at: new Date().toISOString(),
         items: {
           create: itemsArray,
         },

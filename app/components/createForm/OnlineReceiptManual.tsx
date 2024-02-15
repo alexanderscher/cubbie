@@ -1,7 +1,7 @@
 import { BarcodeScanner } from "@/app/components/BarcodeScanner";
 import LargeButton from "@/app/components/buttons/LargeButton";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { ItemInput, ReceiptInput } from "@/types/formTypes/form";
+import { ItemInput, ReceiptInput } from "@/types/form";
 import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
 import * as Yup from "yup";

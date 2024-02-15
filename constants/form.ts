@@ -1,4 +1,4 @@
-import { ReceiptInput } from "@/types/formTypes/form";
+import { ReceiptInput } from "@/types/form";
 
 const TODAY = new Date().toISOString().split("T")[0];
 

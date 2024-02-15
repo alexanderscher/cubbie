@@ -12,6 +12,7 @@ import { DEFAULT_INPUT_VALUES, ReceiptOnlineStage } from "@/constants/form";
 
 import FinalStage from "@/app/components/createForm/FinalStage";
 import { ITEMS_SCHEMA, RECEIPT_SCHEMA } from "@/utils/receiptValidation";
+import Loading from "@/app/components/Loading";
 
 const getValidationSchema = (stage: ReceiptOnlineStage) => {
   switch (stage) {
@@ -57,6 +58,10 @@ const Online = () => {
       setUploadError("");
     }
     setLoading(false);
+
+    if (response.ok) {
+      router.push("/");
+    }
   };
 
   const router = useRouter();
@@ -318,6 +323,7 @@ const Online = () => {
           )}
         </Formik>
       </div>
+      {loading && <Loading loading={loading} />}
     </div>
   );
 };

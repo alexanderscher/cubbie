@@ -1,7 +1,7 @@
 import { BarcodeScanner } from "@/app/components/BarcodeScanner";
 import LargeButton from "@/app/components/buttons/LargeButton";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { ItemInput, ReceiptInput } from "@/types/formTypes/form";
+import { ItemInput, ReceiptInput } from "@/types/form";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { ITEMS_CONTENT_SCHEMA } from "@/utils/receiptValidation";
 import Image from "next/image";
@@ -166,7 +166,7 @@ const ReceiptFormItems = ({
                           photo: "",
                         }));
                       }}
-                      className="absolute top-0 right-0 m-1  bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
+                      className="absolute top-0 right-0 m-1  bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm mt-3"
                     >
                       X
                     </button>

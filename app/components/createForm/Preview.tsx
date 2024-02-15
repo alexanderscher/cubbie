@@ -2,7 +2,7 @@
 import LargeButton from "@/app/components/buttons/LargeButton";
 import ReceiptFormItems from "@/app/components/createForm/ReceiptFormItems";
 import { ReceiptOnlineStage, ReceiptStoreStage } from "@/constants/form";
-import { ReceiptInput } from "@/types/formTypes/form";
+import { ReceiptInput } from "@/types/form";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { RECEIPT_SCHEMA } from "@/utils/receiptValidation";
@@ -277,27 +277,6 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
               </div>
             </div>
           </div>
-          {/* {values.receiptImage && (
-            <div className="w-[150px] h-[180px] overflow-hidden relative flex items-center justify-center rounded-sm">
-              <Image
-                width={150}
-                height={150}
-                src={values.receiptImage}
-                alt=""
-              />
-              {edit && (
-                <button
-                  onClick={() => {
-                    setFieldValue("receiptImage", "");
-                  }}
-                  type="button"
-                  className="absolute top-0 right-0 m-1  bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
-                >
-                  X
-                </button>
-              )}
-            </div>
-          )} */}
 
           {stage !== ReceiptOnlineStage.PREVIEW && values.receiptImage && (
             <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 overflow-hidden rounded-md ">
@@ -311,7 +290,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                           onClick={() => {
                             setFieldValue("receiptImage", "");
                           }}
-                          className="absolute top-0 right-0 m-1  bg-emerald-900 text-white  h-6 w-6 flex items-center justify-center text-sm"
+                          className="absolute top-0 right-0 m-1  bg-emerald-900 text-white  h-6 w-6 flex items-center justify-center text-sm rounded-full mt-3"
                         >
                           X
                         </button>
@@ -351,19 +330,28 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                           const file = e.target.files[0];
                           if (!file.type.match("image.*")) {
                             alert("Please upload an image file");
-                            //  setUnvalidImage(true);
                             return;
                           }
-                          const src = URL.createObjectURL(file);
-                          setFieldValue("receiptImage", src);
+
+                          const reader = new FileReader();
+                          reader.readAsDataURL(file);
+
+                          reader.onload = () => {
+                            if (typeof reader.result === "string") {
+                              setFieldValue(
+                                "receiptImage",
+                                reader.result as string
+                              );
+                            }
+                          };
                         }
                       }}
-                      id="file-upload-item"
+                      id="file-upload-receipt"
                       style={{ opacity: 0, position: "absolute", zIndex: -1 }}
                     />
                     <LargeButton height="h-full">
                       <label
-                        htmlFor="file-upload-item"
+                        htmlFor="file-upload-receipt"
                         className="w-full h-full flex justify-center items-center"
                         style={{
                           cursor: "pointer",

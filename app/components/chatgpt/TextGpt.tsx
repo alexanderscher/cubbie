@@ -1,5 +1,5 @@
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { ReceiptInput } from "@/types/formTypes/form";
+import { ReceiptInput } from "@/types/form";
 import React, { useState } from "react";
 
 interface Props {

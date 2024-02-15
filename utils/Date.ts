@@ -10,7 +10,7 @@ export function calculateReturnDate(date: string, days: number) {
   return `${month}/${day}/${year}`;
 }
 
-export function formatDateToMMDDYY(dateString: string): string {
+export function formatDateToMMDDYY(dateString: any): string {
   const date = new Date(dateString);
   let dd: string = date.getDate().toString();
   let mm: string = (date.getMonth() + 1).toString(); // January is 0!

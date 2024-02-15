@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
     "@ericblade/quagga2": "^1.8.4",
     "@prisma/client": "^5.9.1",
     "@uploadthing/react": "^6.2.2",
@@ -27,6 +29,7 @@
     "react-currency-input-field": "^3.6.14",
     "react-currency-masked-input": "^2.5.0",
     "react-dom": "^18",
+    "react-spinners": "^0.13.8",
     "react-text-mask": "^5.5.0",
     "react-webcam": "^7.2.0",
     "scandit-web-datacapture-core": "^6.22.0-beta.1",

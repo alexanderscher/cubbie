@@ -23,7 +23,6 @@ export interface ReceiptInput {
   daysUntilReturn: number;
   finalReturnDate: string;
   receiptImage?: string;
-
   items: ItemInput[];
   onlineType: string;
   storeType: string;

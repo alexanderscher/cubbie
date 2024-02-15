@@ -25,6 +25,7 @@ model Receipt {
   items             Items[]
   archive           Boolean
   memo              Boolean
+  created_at        DateTime
 }
 
 model Items {

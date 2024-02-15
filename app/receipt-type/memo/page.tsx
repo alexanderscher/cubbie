@@ -15,6 +15,7 @@ import {
   ITEMS_SCHEMA,
   RECEIPT_SCHEMA,
 } from "@/utils/receiptValidation";
+import Loading from "@/app/components/Loading";
 
 const getValidationSchema = (stage: ReceiptStoreStage) => {
   switch (stage) {
@@ -62,6 +63,9 @@ const Memo = () => {
       setUploadError("");
     }
     setLoading(false);
+    if (response.ok) {
+      router.push("/");
+    }
   };
 
   const router = useRouter();
@@ -85,7 +89,6 @@ const Memo = () => {
             values,
             handleChange,
             validateForm,
-            resetForm,
           }) => (
             <form
               onSubmit={handleSubmit}
@@ -426,6 +429,7 @@ const Memo = () => {
           )}
         </Formik>
       </div>
+      {loading && <Loading loading={loading} />}
     </div>
   );
 };

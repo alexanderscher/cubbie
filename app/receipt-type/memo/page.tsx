@@ -7,9 +7,8 @@ import ImageGpt from "@/app/components/chatgpt/ImageGpt";
 import ReceiptManual from "@/app/components/createForm/ReceiptManual";
 import Preview from "@/app/components/createForm/Preview";
 import OnlineReceiptManual from "@/app/components/createForm/OnlineReceiptManual";
-import { ReceiptStoreStage } from "@/types/formTypes/form";
 import { useRouter } from "next/navigation";
-import { DEFAULT_INPUT_VALUES } from "@/constants/form";
+import { DEFAULT_INPUT_VALUES, ReceiptStoreStage } from "@/constants/form";
 import FinalStage from "@/app/components/createForm/FinalStage";
 import {
   GPT_IMAGE_SCHEMA,

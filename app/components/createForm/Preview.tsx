@@ -1,11 +1,8 @@
 "use client";
 import LargeButton from "@/app/components/buttons/LargeButton";
 import ReceiptFormItems from "@/app/components/createForm/ReceiptFormItems";
-import {
-  ReceiptInput,
-  ReceiptOnlineStage,
-  ReceiptStoreStage,
-} from "@/types/formTypes/form";
+import { ReceiptOnlineStage, ReceiptStoreStage } from "@/constants/form";
+import { ReceiptInput } from "@/types/formTypes/form";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { RECEIPT_SCHEMA } from "@/utils/receiptValidation";

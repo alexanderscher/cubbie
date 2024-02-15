@@ -8,8 +8,8 @@ import ReceiptManual from "@/app/components/createForm/ReceiptManual";
 import OnlineReceiptManual from "@/app/components/createForm/OnlineReceiptManual";
 import Preview from "@/app/components/createForm/Preview";
 import { useRouter } from "next/navigation";
-import { DEFAULT_INPUT_VALUES } from "@/constants/form";
-import { ReceiptOnlineStage } from "@/types/formTypes/form";
+import { DEFAULT_INPUT_VALUES, ReceiptOnlineStage } from "@/constants/form";
+
 import FinalStage from "@/app/components/createForm/FinalStage";
 import { ITEMS_SCHEMA, RECEIPT_SCHEMA } from "@/utils/receiptValidation";
 

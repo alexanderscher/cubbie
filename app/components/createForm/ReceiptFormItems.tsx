@@ -294,7 +294,7 @@ const ReceiptFormItems = ({
           {values.assetAmount &&
             item.price &&
             item.price >= values.assetAmount &&
-            !edit && <p className="">Asset</p>}
+            !edit && <p className="text-emerald-900">Asset</p>}
 
           <div className="w-full">
             <h1 className="text-slate-400 ">AMOUNT</h1>
@@ -402,20 +402,25 @@ const ReceiptFormItems = ({
           {stage !== "Final" && (
             <div className="flex gap-2">
               <RegularButton
+                small
                 styles="bg border-black "
                 handleClick={() => removeItem(index)}
               >
-                <p className="text-sm">Delete</p>
+                <p className="text-xs">Delete</p>
               </RegularButton>
-              <RegularButton styles="bg border-black " handleClick={toggleEdit}>
-                <p className="text-sm">{edit ? "Save" : "Edit"}</p>
+              <RegularButton
+                small
+                styles="bg border-black "
+                handleClick={toggleEdit}
+              >
+                <p className="text-xs">{edit ? "Save" : "Edit"}</p>
               </RegularButton>
               {edit && (
                 <RegularButton
                   styles="bg border-black "
                   handleClick={handleCancel}
                 >
-                  <p className="text-sm">Cancel</p>
+                  <p className="text-xs">Cancel</p>
                 </RegularButton>
               )}
             </div>

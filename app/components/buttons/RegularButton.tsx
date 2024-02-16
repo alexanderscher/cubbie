@@ -9,6 +9,7 @@ interface Props {
   restProps?: any;
   type?: "button" | "submit" | "reset" | undefined;
   href?: string;
+  small?: boolean;
 }
 
 const RegularButton = ({
@@ -17,6 +18,7 @@ const RegularButton = ({
   styles,
   href = "",
   type = "button",
+  small = false,
   ...restProps
 }: Props) => {
   if (href) {
@@ -24,9 +26,9 @@ const RegularButton = ({
       <Link href={href}>
         <button
           type={type}
-          className={`
+          className={` ${small ? "px-2 py-[6px]" : "px-5 py-[8px]"}
       border-[1.5px]
-       px-5 py-[6px]
+       
        rounded-3xl ${styles}`}
           onClick={handleClick}
           {...restProps}
@@ -39,9 +41,9 @@ const RegularButton = ({
     return (
       <button
         type={type}
-        className={`
+        className={` ${small ? "px-5 py-[6px]" : "px-5 py-[8px]"}
       border-[1.5px]
-       px-5 py-[8px]
+       
        rounded-3xl ${styles}`}
         onClick={handleClick}
         {...restProps}

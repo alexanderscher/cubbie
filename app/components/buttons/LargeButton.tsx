@@ -6,6 +6,8 @@ interface Props {
   styles?: string;
   restProps?: any;
   height?: string;
+  text?: string;
+  border?: string;
 }
 
 const LargeButton = ({
@@ -13,6 +15,8 @@ const LargeButton = ({
   handleClick,
   styles,
   height,
+  text = "text-emerald-900",
+  border = "border-emerald-900",
 
   ...restProps
 }: Props) => {
@@ -20,7 +24,7 @@ const LargeButton = ({
     <div className={`flex w-full ${height}`}>
       <button
         type="button"
-        className={`border-[1.5px] text-emerald-900  border-emerald-900 w-full p-3 rounded-md h-full ${styles}`}
+        className={`border-[1.5px]  w-full p-3 rounded-md h-full ${text} ${border} ${styles}`}
         onClick={handleClick}
         {...restProps}
       >

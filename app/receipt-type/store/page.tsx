@@ -97,7 +97,7 @@ const Store = () => {
               className="w-full flex flex-col gap-10 "
             >
               <div className="flex justify-between items-center">
-                <h1 className="sm:text-3xl text-2xl text-emerald-900  ">
+                <h1 className="sm:text-lg text-lg text-emerald-900  ">
                   Create New Receipt
                 </h1>
 
@@ -115,7 +115,7 @@ const Store = () => {
                       <div className="two-tab ">
                         <div className="left-tab">
                           <div className="flex justify-between">
-                            <h1 className="text-orange-600 text-xl">
+                            <h1 className="text-orange-600 text-lg">
                               In Store Receipt
                             </h1>
                             {/* <RegularButton
@@ -215,7 +215,7 @@ const Store = () => {
                       <div className="two-tab ">
                         <div className="left-tab">
                           <div className="flex justify-between">
-                            <h1 className="text-orange-600 text-xl">
+                            <h1 className="text-orange-600 text-lg">
                               In Store Items
                             </h1>
                             {/* <RegularButton
@@ -312,7 +312,7 @@ const Store = () => {
                       <div className="two-tab ">
                         <div className="left-tab">
                           <div className="flex justify-between">
-                            <h1 className="text-orange-600 text-xl">
+                            <h1 className="text-orange-600 text-lg">
                               In Store Receipt
                             </h1>
                             {/* <RegularButton

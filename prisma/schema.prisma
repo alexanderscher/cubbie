@@ -29,7 +29,7 @@ model Receipt {
 }
 
 model Items {
-  id          Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   description String
   photo_url   String?
   photo_key   String?
@@ -39,5 +39,6 @@ model Items {
   character   String?
   product_id  String?
   receipt_id  Int
-  receipt     Receipt @relation(fields: [receipt_id], references: [id])
+  receipt     Receipt  @relation(fields: [receipt_id], references: [id])
+  created_at  DateTime
 }

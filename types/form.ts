@@ -18,10 +18,10 @@ export interface ReceiptInput {
   card?: string;
   amount: string;
   assetAmount: string;
-  trackingNumber?: string;
-  boughtDate: string;
-  daysUntilReturn: number;
-  finalReturnDate: string;
+  tracking_number?: string;
+  purchase_date: string;
+  days_until_return: number;
+  return_date: string;
   receiptImage?: string;
   items: ItemInput[];
   onlineType: string;

@@ -16,9 +16,9 @@ export async function POST(request: Request) {
       store,
       card,
       amount,
-      trackingNumber,
-      boughtDate,
-      daysUntilReturn,
+      tracking_number,
+      purchase_date,
+      days_until_return,
       receiptImage,
       items,
       memo,
@@ -87,6 +87,7 @@ export async function POST(request: Request) {
             asset: assetAmount >= parseFloat(item.price) ? true : false,
             character: item.character,
             product_id: item.product_id,
+            created_at: new Date().toISOString(),
           };
         })
       );
@@ -96,12 +97,12 @@ export async function POST(request: Request) {
 
     const itemsArray = await processItems(items);
 
-    const finalReturnDate = calculateReturnDate(boughtDate, daysUntilReturn);
+    const return_date = calculateReturnDate(purchase_date, days_until_return);
 
-    const dateObjectPurchase = new Date(boughtDate);
-    const purchase_date = dateObjectPurchase.toISOString();
-    const dateObjectReturn = new Date(finalReturnDate);
-    const return_date = dateObjectReturn.toISOString();
+    const dateObjectPurchase = new Date(purchase_date);
+    const purchaseDate = dateObjectPurchase.toISOString();
+    const dateObjectReturn = new Date(return_date);
+    const returnDate = dateObjectReturn.toISOString();
 
     console.log("purchase_date:", purchase_date);
     console.log("return_date:", return_date);
@@ -112,10 +113,10 @@ export async function POST(request: Request) {
         store,
         card,
         amount: parseFloat(amount),
-        tracking_number: trackingNumber,
-        purchase_date: purchase_date,
-        days_until_return: daysUntilReturn,
-        return_date: return_date,
+        tracking_number: tracking_number,
+        purchase_date: purchaseDate,
+        days_until_return: days_until_return,
+        return_date: returnDate,
         receipt_image_url: receiptFileUrl,
         receipt_image_key: receiptFileKey,
         archive: false,

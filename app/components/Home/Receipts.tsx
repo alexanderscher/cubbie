@@ -1,5 +1,5 @@
 "use client";
-import Receipt from "@/app/components/Receipt";
+import Receipt from "@/app/components/receiptComponents/Receipt";
 import { Receipt as ReceiptType } from "@/types/receipt";
 import React, { useEffect, useState } from "react";
 
@@ -16,7 +16,7 @@ const Receipts = () => {
   }, []);
 
   return (
-    <div className="grid grid-home grid-cols-4 gap-8 ">
+    <div className="grid grid-home grid-cols-3 gap-6 ">
       {receipts.map((receipt: ReceiptType) => (
         <Receipt key={receipt.id} receipt={receipt} />
       ))}

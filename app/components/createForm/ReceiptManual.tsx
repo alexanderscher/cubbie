@@ -119,12 +119,14 @@ const ReceiptManual = ({
             <p className="text-sm text-emerald-900 ">Tracking Number Link</p>
             <input
               className="w-full bg border-[1.5px] border-emerald-900 p-2 rounded-md focus:outline-none"
-              name="trackingNumber"
-              value={values.trackingNumber}
-              onChange={handleChange("trackingNumber")}
+              name="tracking_number"
+              value={values.tracking_number}
+              onChange={handleChange("tracking_number")}
             />
-            {errors.trackingNumber && (
-              <p className="text-orange-800 text-sm">{errors.trackingNumber}</p>
+            {errors.tracking_number && (
+              <p className="text-orange-800 text-sm">
+                {errors.tracking_number}
+              </p>
             )}
           </div>
         )}
@@ -134,13 +136,13 @@ const ReceiptManual = ({
 
           <input
             className="w-full bg border-[1.5px] border-emerald-900 p-2 rounded-md focus:outline-none"
-            name="boughtDate"
-            value={values.boughtDate}
-            onChange={handleChange("boughtDate")}
+            name="purchase_date"
+            value={values.purchase_date}
+            onChange={handleChange("purchase_date")}
             type="date"
           />
-          {errors.boughtDate && (
-            <p className="text-orange-800 text-sm">{errors.boughtDate}</p>
+          {errors.purchase_date && (
+            <p className="text-orange-800 text-sm">{errors.purchase_date}</p>
           )}
         </div>
         <div>
@@ -150,14 +152,16 @@ const ReceiptManual = ({
 
           <input
             className="w-full bg border-[1.5px] border-emerald-900 p-2 rounded-md focus:outline-none"
-            value={values.daysUntilReturn}
+            value={values.days_until_return}
             onChange={(event) => {
               const value = parseInt(event.target.value, 10);
-              setFieldValue("daysUntilReturn", isNaN(value) ? "" : value);
+              setFieldValue("days_until_return", isNaN(value) ? "" : value);
             }}
           />
-          {errors.daysUntilReturn && (
-            <p className="text-orange-800 text-sm">{errors.daysUntilReturn}</p>
+          {errors.days_until_return && (
+            <p className="text-orange-800 text-sm">
+              {errors.days_until_return}
+            </p>
           )}
         </div>
 

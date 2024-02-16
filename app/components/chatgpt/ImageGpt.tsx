@@ -55,12 +55,12 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
     // const jsonObject = JSON.parse(data.choices[0].message.content);
     // setFieldValue("items", jsonObject.receipt.items);
     // setFieldValue("amount", jsonObject.receipt.total_amount);
-    // setFieldValue("boughtDate", jsonObject.receipt.date_purchased);
+    // setFieldValue("purchase_date", jsonObject.receipt.date_purchased);
     // setFieldValue("store", jsonObject.receipt.store);
 
     const jsonObject = JSON.parse(data);
     setFieldValue("amount", jsonObject.receipt.total_amount);
-    setFieldValue("boughtDate", jsonObject.receipt.date_purchased);
+    setFieldValue("purchase_date", jsonObject.receipt.date_purchased);
     setFieldValue("store", jsonObject.receipt.store);
     setFieldValue("receiptImage", image);
 
@@ -116,12 +116,12 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
     // const jsonObject = JSON.parse(data.choices[0].message.content);
     // setFieldValue("items", jsonObject.receipt.items);
     // setFieldValue("amount", jsonObject.receipt.total_amount);
-    // setFieldValue("boughtDate", jsonObject.receipt.date_purchased);
+    // setFieldValue("purchase_date", jsonObject.receipt.date_purchased);
     // setFieldValue("store", jsonObject.receipt.store);
 
     const jsonObject = JSON.parse(data);
     setFieldValue("amount", jsonObject.receipt.total_amount);
-    setFieldValue("boughtDate", jsonObject.receipt.date_purchased);
+    setFieldValue("purchase_date", jsonObject.receipt.date_purchased);
     setFieldValue("store", jsonObject.receipt.store);
     setFieldValue("receiptImage", image);
     const itemsWithAllProperties = jsonObject.receipt.items.map(

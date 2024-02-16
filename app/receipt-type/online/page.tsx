@@ -35,10 +35,10 @@ const Online = () => {
     store: "",
     amount: "",
     itemError: "",
-    trackingNumber: "",
+    tracking_number: "",
     itemField: "",
-    daysUntilReturn: "",
-    boughtDate: "",
+    days_until_return: "",
+    purchase_date: "",
   });
 
   const submitDB = async (values: any) => {
@@ -90,8 +90,8 @@ const Online = () => {
               onSubmit={handleSubmit}
               className="w-full flex flex-col gap-10 "
             >
-              <div className="flex justify-between items-center">
-                <h1 className="sm:text-3xl text-2xl text-emerald-900  ">
+              <div className="flex justify-between items-center w-full">
+                <h1 className="sm:text-lg text-lg text-emerald-900 w-3/4 ">
                   Create New Receipt
                 </h1>
 
@@ -111,7 +111,7 @@ const Online = () => {
                       <div className="two-tab ">
                         <div className="left-tab">
                           <div className="flex justify-between">
-                            <h1 className="text-orange-600 text-xl">
+                            <h1 className="text-orange-600 text-lg">
                               Online Receipt
                             </h1>
                           </div>
@@ -147,17 +147,17 @@ const Online = () => {
                                       error.store || prevErrors.store || "",
                                     amount:
                                       error.amount || prevErrors.amount || "",
-                                    trackingNumber:
-                                      error.trackingNumber ||
-                                      prevErrors.trackingNumber ||
+                                    tracking_number:
+                                      error.tracking_number ||
+                                      prevErrors.tracking_number ||
                                       "",
-                                    daysUntilReturn:
-                                      error.daysUntilReturn ||
-                                      prevErrors.daysUntilReturn ||
+                                    days_until_return:
+                                      error.days_until_return ||
+                                      prevErrors.days_until_return ||
                                       "",
-                                    boughtDate:
-                                      error.boughtDate ||
-                                      prevErrors.boughtDate ||
+                                    purchase_date:
+                                      error.purchase_date ||
+                                      prevErrors.purchase_date ||
                                       "",
                                   }));
                                 }
@@ -168,7 +168,7 @@ const Online = () => {
                                     ...prevErrors,
                                     store: "",
                                     amount: "",
-                                    trackingNumber: "",
+                                    tracking_number: "",
                                   }));
                                 }
                               }}
@@ -190,7 +190,7 @@ const Online = () => {
                       <div className="two-tab ">
                         <div className="left-tab">
                           <div className="flex justify-between">
-                            <h1 className="text-orange-600 text-xl">
+                            <h1 className="text-orange-600 text-lg">
                               Online Receipt Items
                             </h1>
                             {/* <RegularButton

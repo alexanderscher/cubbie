@@ -26,9 +26,9 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
   const [errors, setErrors] = useState({
     store: "",
     amount: "",
-    boughtDate: "",
-    daysUntilReturn: "",
-    trackingNumber: "",
+    purchase_date: "",
+    days_until_return: "",
+    tracking_number: "",
   });
   useEffect(() => {
     setEditState(values);
@@ -76,7 +76,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
     const { name, value, type } = event.target;
     let parsedValue = value;
 
-    if (type === "number" || name === "daysUntilReturn") {
+    if (type === "number" || name === "days_until_return") {
       const numericValue = parseInt(value, 10);
       parsedValue = isNaN(numericValue) ? "" : numericValue.toString();
       setEditState((prevState) => ({
@@ -114,7 +114,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
               {edit ? (
                 <div className="flex justify-between">
                   <input
-                    className="text-orange-600 text-xl bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
+                    className="text-orange-600 text-lg bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
                     name="store"
                     value={editState.store}
                     onChange={handleEditChange}
@@ -122,7 +122,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                 </div>
               ) : (
                 <div className="flex justify-between">
-                  <h1 className="text-orange-600 text-2xl">
+                  <h1 className="text-orange-600 text-lg">
                     {values.store || "Store Name"}
                   </h1>
                 </div>
@@ -196,18 +196,18 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                 {edit ? (
                   <input
                     className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
-                    name="trackingNumber"
-                    value={editState.trackingNumber}
+                    name="tracking_number"
+                    value={editState.tracking_number}
                     onChange={handleEditChange}
                   />
-                ) : values.trackingNumber ? (
-                  <h1 className=" text-sm">{values.trackingNumber}</h1>
+                ) : values.tracking_number ? (
+                  <h1 className=" text-sm">{values.tracking_number}</h1>
                 ) : (
                   <h1 className="text-slate-600 text-sm">None</h1>
                 )}
-                {errors.trackingNumber && (
+                {errors.tracking_number && (
                   <p className="text-orange-900 text-sm">
-                    {errors.trackingNumber}
+                    {errors.tracking_number}
                   </p>
                 )}
               </div>
@@ -217,14 +217,14 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                 {edit ? (
                   <input
                     className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
-                    name="boughtDate"
-                    value={editState.boughtDate}
+                    name="purchase_date"
+                    value={editState.purchase_date}
                     onChange={handleEditChange}
                     type="date"
                   />
-                ) : values.boughtDate ? (
+                ) : values.purchase_date ? (
                   <h1 className=" text-sm">
-                    {formatDateToMMDDYY(values.boughtDate)}
+                    {formatDateToMMDDYY(values.purchase_date)}
                   </h1>
                 ) : (
                   <h1 className="text-orange-900 text-sm">
@@ -237,28 +237,28 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                 {edit ? (
                   <input
                     className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
-                    name="daysUntilReturn"
-                    value={editState.daysUntilReturn}
+                    name="days_until_return"
+                    value={editState.days_until_return}
                     onChange={handleEditChange}
 
                     // onChange={(event) => {
                     //   const value = parseInt(event.target.value, 10);
                     //   setFieldValue(
-                    //     "daysUntilReturn",
+                    //     "days_until_return",
                     //     isNaN(value) ? "" : value
                     //   );
                     // }}
                   />
-                ) : values.daysUntilReturn ? (
-                  <h1 className=" text-sm">{values.daysUntilReturn}</h1>
+                ) : values.days_until_return ? (
+                  <h1 className=" text-sm">{values.days_until_return}</h1>
                 ) : (
                   <h1 className="text-orange-900 text-sm">
                     Days until return is required
                   </h1>
                 )}
-                {errors.daysUntilReturn && (
+                {errors.days_until_return && (
                   <p className="text-orange-900 text-sm">
-                    {errors.daysUntilReturn}
+                    {errors.days_until_return}
                   </p>
                 )}
               </div>
@@ -266,11 +266,11 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
               <div className="flex flex-col ">
                 <h1 className="text-slate-400  text-sm">Return Date</h1>
 
-                {values.boughtDate && values.daysUntilReturn && (
+                {values.purchase_date && values.days_until_return && (
                   <h1 className=" text-sm">
                     {calculateReturnDate(
-                      values.boughtDate,
-                      values.daysUntilReturn
+                      values.purchase_date,
+                      values.days_until_return
                     )}
                   </h1>
                 )}

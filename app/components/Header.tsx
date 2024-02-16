@@ -20,25 +20,25 @@ const Header = () => {
       ? "bg-emerald-900 border-emerald-900 text-white"
       : "bg border-emerald-900 text-emerald-900 ";
   return (
-    <div className="flex flex-col gap-6  ">
+    <div className="flex flex-col gap-6 mb-10">
       <div className="header">
-        <h1 className="text-2xl text-emerald-900  ">Inventory</h1>
+        <h1 className="text-lg text-emerald-900  ">Inventory</h1>
         <div className="flex gap-2">
           <RegularButton href="/" styles={receiptColor}>
-            <p className="text-sm sm:text-sm">Receipts</p>
+            <p className="text-xs">Receipts</p>
           </RegularButton>
           <RegularButton styles={itemColor} href="/items">
-            <p className="text-sm sm:text-sm">Items</p>
+            <p className="text-xs">Items</p>
           </RegularButton>
           <RegularButton styles={archiveColor} href="/archive">
-            <p className="text-sm sm:text-sm">Archive</p>
+            <p className="text-xs">Archive</p>
           </RegularButton>
           <select className="border-[1.5px] w-[100px] bg border-black rounded-md p-1 placeholder:text-black focus:outline-none"></select>
         </div>
       </div>
-      <div className="flex gap-2">
+      {/* <div className="flex gap-2">
         <input className="searchBar" placeholder="Search"></input>
-      </div>
+      </div> */}
     </div>
   );
 };

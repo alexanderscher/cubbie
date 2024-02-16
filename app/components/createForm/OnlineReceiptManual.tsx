@@ -288,7 +288,7 @@ const OnlineReceiptManual = ({
           addItemToFormik(setFieldValue, values);
         }}
       >
-        <p className="text-white text-md">Add Item</p>
+        <p className="text-white text-lg">Add Item</p>
       </RegularButton>
     </div>
   );

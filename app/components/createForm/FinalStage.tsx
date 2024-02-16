@@ -231,7 +231,7 @@ const ReceiptPageForm = ({ receiptInfo, setFieldValue }: ReceiptPageProps) => {
         </div>
       </div>
 
-      <div className="w-full gap-10  mb-[100px]">
+      <div className="w-full gap-10  mb-[100px] ">
         {receiptInfo.items.map((item: ItemInput, index: number) => (
           <div key={index} className="pb-5">
             <ReceiptFormItems

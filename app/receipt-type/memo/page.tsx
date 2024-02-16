@@ -113,11 +113,11 @@ const Memo = () => {
                           <div className="flex justify-between">
                             <h1 className="text-orange-600 text-lg">Memo</h1>
                           </div>
-                          <div className="receipt-button-container">
+                          <div className="flex justify-between w-full">
                             <RegularButton
                               styles={"bg-black text-white border-black"}
                             >
-                              <p className=" text-sm">Add Memo Manually</p>
+                              <p className="text-xs ">Add Memo Manually</p>
                             </RegularButton>
 
                             <RegularButton
@@ -134,7 +134,7 @@ const Memo = () => {
                                 });
                               }}
                             >
-                              <p className=" text-sm">Analyze memo image</p>
+                              <p className="text-xs ">Analyze memo image</p>
                             </RegularButton>
                           </div>
                           {errors.itemFileError && (
@@ -158,7 +158,7 @@ const Memo = () => {
                                 router.push("/receipt-type");
                               }}
                             >
-                              <p className="text-white text-sm ">Back</p>
+                              <p className="text-white text-sm">Back</p>
                             </RegularButton>
                             <RegularButton
                               styles={
@@ -184,7 +184,7 @@ const Memo = () => {
                                 }
                               }}
                             >
-                              <p className="text-white text-sm ">Next</p>
+                              <p className="text-white text-sm">Next</p>
                             </RegularButton>
                           </div>
                         </div>
@@ -308,7 +308,7 @@ const Memo = () => {
                               <p> {values.type}</p>
                             </RegularButton> */}
                           </div>
-                          <div className="receipt-button-container">
+                          <div className="w-full flex justify-between">
                             <RegularButton
                               styles={"border-black"}
                               handleClick={() => {
@@ -323,13 +323,13 @@ const Memo = () => {
                                 setStage(ReceiptStoreStage.IN_STORE_RECEIPT);
                               }}
                             >
-                              <p className=" text-sm">Add Memo Manually</p>
+                              <p className="text-xs ">Add Memo Manually</p>
                             </RegularButton>
 
                             <RegularButton
                               styles={"bg-black text-white border-black"}
                             >
-                              <p className=" text-sm">Analyze memo image</p>
+                              <p className="text-xs ">Analyze memo image</p>
                             </RegularButton>
                           </div>
                           {errors.gptError && (
@@ -362,7 +362,7 @@ const Memo = () => {
                                 router.push("/receipt-type");
                               }}
                             >
-                              <p className="text-white text-sm ">Back</p>
+                              <p className="text-white text-sm">Back</p>
                             </RegularButton>
                             <RegularButton
                               styles={
@@ -398,7 +398,7 @@ const Memo = () => {
                                 }
                               }}
                             >
-                              <p className="text-white text-sm ">Preview</p>
+                              <p className="text-white text-sm">Preview</p>
                             </RegularButton>
                           </div>
                         </div>

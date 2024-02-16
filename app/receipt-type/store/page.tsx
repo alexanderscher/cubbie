@@ -126,11 +126,11 @@ const Store = () => {
                               <p> {values.type}</p>
                             </RegularButton> */}
                           </div>
-                          <div className="receipt-button-container">
+                          <div className="w-full flex justify-between">
                             <RegularButton
                               styles={"bg-black text-white border-black"}
                             >
-                              <p className=" text-sm">Add Receipt Manually</p>
+                              <p className=" text-xs">Add Receipt Manually</p>
                             </RegularButton>
 
                             <RegularButton
@@ -147,7 +147,7 @@ const Store = () => {
                                 });
                               }}
                             >
-                              <p className=" text-sm">Analyze receipt image</p>
+                              <p className=" text-xs">Analyze receipt image</p>
                             </RegularButton>
                           </div>
                           {errors.itemFileError && (
@@ -171,7 +171,7 @@ const Store = () => {
                                 router.push("/receipt-type");
                               }}
                             >
-                              <p className="text-white text-sm ">Back</p>
+                              <p className="text-white text-sm">Back</p>
                             </RegularButton>
                             <RegularButton
                               styles={
@@ -197,7 +197,7 @@ const Store = () => {
                                 }
                               }}
                             >
-                              <p className="text-white text-sm ">Next</p>
+                              <p className="text-white text-sm">Next</p>
                             </RegularButton>
                           </div>
                         </div>
@@ -323,7 +323,7 @@ const Store = () => {
                               <p> {values.type}</p>
                             </RegularButton> */}
                           </div>
-                          <div className="receipt-button-container">
+                          <div className="flex justify-between w-full">
                             <RegularButton
                               styles={"border-black"}
                               handleClick={() => {
@@ -338,13 +338,13 @@ const Store = () => {
                                 setStage(ReceiptStoreStage.IN_STORE_RECEIPT);
                               }}
                             >
-                              <p className=" text-sm">Add Receipt Manually</p>
+                              <p className="text-xs ">Add Receipt Manually</p>
                             </RegularButton>
 
                             <RegularButton
                               styles={"bg-black text-white border-black"}
                             >
-                              <p className=" text-sm">Analyze receipt image</p>
+                              <p className="text-xs ">Analyze receipt image</p>
                             </RegularButton>
                           </div>
                           {errors.gptError && (
@@ -377,7 +377,7 @@ const Store = () => {
                                 router.push("/receipt-type");
                               }}
                             >
-                              <p className="text-white text-sm ">Back</p>
+                              <p className="text-white text-sm">Back</p>
                             </RegularButton>
                             <RegularButton
                               styles={
@@ -413,7 +413,7 @@ const Store = () => {
                                 }
                               }}
                             >
-                              <p className="text-white text-sm ">Preview</p>
+                              <p className="text-white text-sm">Preview</p>
                             </RegularButton>
                           </div>
                         </div>

@@ -199,7 +199,7 @@ const Online = () => {
                               <p> {values.type}</p>
                             </RegularButton> */}
                           </div>
-                          <div className="receipt-button-container">
+                          <div className="flex justify-between w-full">
                             <RegularButton
                               styles={`${
                                 values.onlineType === "manual"
@@ -210,7 +210,7 @@ const Online = () => {
                                 setFieldValue("onlineType", "manual")
                               }
                             >
-                              <p className=" text-sm">Add Items Manually</p>
+                              <p className="text-xs ">Add Items Manually</p>
                             </RegularButton>
 
                             <RegularButton
@@ -223,7 +223,7 @@ const Online = () => {
                                 setFieldValue("onlineType", "gpt")
                               }
                             >
-                              <p className=" text-sm">Analyze online receipt</p>
+                              <p className="text-xs ">Analyze online receipt</p>
                             </RegularButton>
                           </div>
                           {errors.itemError && values.items.length === 0 && (

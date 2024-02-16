@@ -26,7 +26,7 @@ const RegularButton = ({
       <Link href={href}>
         <button
           type={type}
-          className={` ${small ? "px-2 py-[6px]" : "px-5 py-[8px]"}
+          className={` ${small ? "px-4 py-[6px]" : "px-6 py-[8px]"}
       border-[1.5px]
        
        rounded-3xl ${styles}`}
@@ -41,7 +41,7 @@ const RegularButton = ({
     return (
       <button
         type={type}
-        className={` ${small ? "px-5 py-[6px]" : "px-5 py-[8px]"}
+        className={` ${small ? "px-4 py-[6px]" : "px-6 py-[8px]"}
       border-[1.5px]
        
        rounded-3xl ${styles}`}

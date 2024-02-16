@@ -9,6 +9,7 @@ export interface Item {
   character?: string;
   product_id?: string;
   receipt_id: number;
+  receipt: Receipt;
 }
 
 export interface Receipt {

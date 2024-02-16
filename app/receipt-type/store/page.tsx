@@ -256,7 +256,7 @@ const Store = () => {
                                 setStage(ReceiptStoreStage.IN_STORE_RECEIPT);
                               }}
                             >
-                              <p className="text-white ">Back</p>
+                              <p className="text-white text-sm">Back</p>
                             </RegularButton>
 
                             <RegularButton
@@ -295,7 +295,7 @@ const Store = () => {
                                 }
                               }}
                             >
-                              <p className="text-white ">Preview</p>
+                              <p className="text-white text-sm">Preview</p>
                             </RegularButton>
                           </div>
                         </div>

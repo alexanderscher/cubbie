@@ -76,6 +76,7 @@ const Memo = () => {
         <Formik
           initialValues={{
             ...DEFAULT_INPUT_VALUES,
+            type: "Store",
           }}
           validationSchema={getValidationSchema(stage)}
           onSubmit={(values) => {
@@ -283,7 +284,7 @@ const Memo = () => {
                                 }
                               }}
                             >
-                              <p className="text-white ">Preview</p>
+                              <p className="text-white text-sm">Preview</p>
                             </RegularButton>
                           </div>
                         </div>

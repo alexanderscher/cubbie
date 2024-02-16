@@ -73,32 +73,15 @@ const FinalStage = ({
             <RegularButton
               styles={"border-emerald-900 "}
               handleClick={() => {
-                if (values.type === "Store") {
-                  values.storeType === "gpt"
-                    ? setStage(ReceiptStoreStage.IN_STORE_GPT)
-                    : setStage(ReceiptStoreStage.IN_STORE_RECEIPT);
+                if (values.type === "Online") {
+                  setStage(ReceiptOnlineStage.ONLINE_ITEMS);
                 } else {
-                  setStage(ReceiptOnlineStage.ONLINE_RECEIPT);
+                  setStage(ReceiptStoreStage.IN_STORE_GPT);
                 }
               }}
             >
-              <p className="text-emerald-900  text-sm">Edit receipt</p>
+              <p className="text-emerald-900   text-sm">Edit receipt</p>
             </RegularButton>
-            {(values.storeType === "gpt" && values.type === "Online") ||
-            (values.storeType !== "gpt" && values.type === "Store") ? (
-              <RegularButton
-                styles={"border-emerald-900 "}
-                handleClick={() => {
-                  if (values.type === "Online") {
-                    setStage(ReceiptOnlineStage.ONLINE_ITEMS);
-                  } else {
-                    setStage(ReceiptStoreStage.IN_STORE_ITEMS_MANUAL);
-                  }
-                }}
-              >
-                <p className="text-emerald-900   text-sm">Edit receipt items</p>
-              </RegularButton>
-            ) : null}
           </div>
           {loading ? (
             <RegularButton styles={"bg-emerald-900 border-emerald-900 "}>

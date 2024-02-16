@@ -5,13 +5,13 @@ import React, { useEffect, useState } from "react";
 
 const Receipts = () => {
   const [receipts, setReceipts] = useState([]);
-  const fetchReceipts = async () => {
-    const res = await fetch("/api/receipt");
-    const data = await res.json();
-    setReceipts(data.receipts);
-  };
 
   useEffect(() => {
+    const fetchReceipts = async () => {
+      const res = await fetch("/api/receipt");
+      const data = await res.json();
+      setReceipts(data.receipts);
+    };
     fetchReceipts();
   }, []);
 

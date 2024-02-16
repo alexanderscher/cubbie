@@ -11,13 +11,12 @@ const ReceiptPage = () => {
   const { id } = useParams();
   const [receipt, setReceipt] = useState({} as ReceiptType);
 
-  const fetchReceipt = async () => {
-    const res = await fetch(`/api/receipt/${id}`);
-    const data = await res.json();
-    setReceipt(data.receipt);
-  };
-
   useEffect(() => {
+    const fetchReceipt = async () => {
+      const res = await fetch(`/api/receipt/${id}`);
+      const data = await res.json();
+      setReceipt(data.receipt);
+    };
     fetchReceipt();
   }, []);
 

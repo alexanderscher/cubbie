@@ -22,7 +22,7 @@ const Header = () => {
   return (
     <div className="flex flex-col gap-6 mb-10">
       <div className="header">
-        <h1 className="text-lg text-emerald-900  ">Inventory</h1>
+        <h1 className="text-2xl text-emerald-900  ">Inventory</h1>
         <div className="flex gap-2">
           <RegularButton href="/" styles={receiptColor}>
             <p className="text-xs">Receipts</p>

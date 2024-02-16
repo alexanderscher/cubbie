@@ -9,7 +9,7 @@ const Navbar = () => {
     <div className="flex flex-col gap-4 mb-10">
       <div className="flex justify-between ">
         <div className="flex gap-3">
-          <h1 className="text-lg font-bold">
+          <h1 className="text-xl font-bold">
             <Link href="/">STICKY NOTES</Link>
           </h1>
         </div>

@@ -1,17 +1,13 @@
-"use client";
 import Header from "@/app/components/Header";
-import Item from "@/app/components/Item";
+import Items from "@/app/components/Home/Items";
 
-import React, { useEffect, useState } from "react";
-
-const Items = () => {
+const HomeItems = () => {
   return (
     <div>
       <Header />
-
       <Items />
     </div>
   );
 };
 
-export default Items;
+export default HomeItems;

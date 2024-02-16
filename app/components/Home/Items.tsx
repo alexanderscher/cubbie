@@ -1,8 +1,6 @@
 "use client";
-import Header from "@/app/components/Header";
 import Item from "@/app/components/Item";
 import { Item as ItemType } from "@/types/receipt";
-
 import React, { useEffect, useState } from "react";
 
 const Items = () => {

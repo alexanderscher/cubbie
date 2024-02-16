@@ -91,7 +91,7 @@ const Online = () => {
               className="w-full flex flex-col gap-10 "
             >
               <div className="flex justify-between items-center w-full">
-                <h1 className="sm:text-lg text-lg text-emerald-900 w-3/4 ">
+                <h1 className="text-2xl text-emerald-900 w-3/4 ">
                   Create New Receipt
                 </h1>
 

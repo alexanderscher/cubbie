@@ -95,9 +95,7 @@ const Memo = () => {
               className="w-full flex flex-col gap-10 "
             >
               <div className="flex justify-between items-center">
-                <h1 className="sm:text-lg text-lg text-emerald-900  ">
-                  Create New Memo
-                </h1>
+                <h1 className="text-2xl text-emerald-900  ">Create New Memo</h1>
 
                 <RegularButton
                   styles="bg border-emerald-900"

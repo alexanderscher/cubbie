@@ -15,34 +15,41 @@ const Item = ({ item }: Props) => {
   return (
     <div className="border-t-[1.5px] border-black flex flex-col gap-4 ">
       <div className="flex justify-between">
-        <div>
-          <h1 className="text-orange-600">{item.description}</h1>
-        </div>
-
-        <h1 className="text-sm">
-          Created on {formatDateToMMDDYY(item.receipt.created_at)}
-        </h1>
-      </div>
-      <div className="flex gap-6 items-start">
-        {item.photo_url && (
-          <div className=" ">
-            <Image
-              src={item.photo_url}
-              alt="jeans"
-              width={160}
-              height={160}
-              style={{
-                padding: "",
-                objectFit: "contain",
-                width: "100%",
-                height: "100%",
-                borderRadius: "2px",
-              }}
-            />
+        <div className="flex justify-between w-full">
+          <div>
+            <p className="text-orange-600">{item.description}</p>
+            <p className="text-sm">
+              Created on {formatDateToMMDDYY(item.receipt.created_at)}
+            </p>
           </div>
-        )}
 
+          <a
+            href={`/receipt/${item.receipt_id}`}
+            className="text-slate-400 text-sm"
+          >
+            View receipt
+          </a>
+        </div>
+      </div>
+      <div className="flex w-full justify-between">
         <div className="text-sm flex flex-col gap-1 ">
+          <div>
+            <h1 className="text-slate-400 ">Store</h1>
+            <h1>{item.receipt.store}</h1>
+          </div>
+          {item.barcode && (
+            <div>
+              <h1 className="text-slate-400 ">Barcode</h1>
+              <h1>{item.barcode}</h1>
+            </div>
+          )}
+          {item.product_id && (
+            <div>
+              <h1 className="text-slate-400 ">Prodcut ID</h1>
+              <h1>{item.product_id}</h1>
+            </div>
+          )}
+
           <div>
             <h1 className="text-slate-400 ">Order Date</h1>
             <h1>{formatDateToMMDDYY(item.receipt.purchase_date)}</h1>
@@ -56,15 +63,39 @@ const Item = ({ item }: Props) => {
             <h1 className="text-slate-400 ">Amount</h1>
             <h1>{formatCurrency(item.price)}</h1>
           </div>
+          {item.character && (
+            <div>
+              <h1 className="text-slate-400 ">Character</h1>
+              <h1>{item.character}</h1>
+            </div>
+          )}
+          {item.asset && (
+            <div>
+              <h1 className="text-slate-400 ">Asset</h1>
+              <h1>Asset</h1>
+            </div>
+          )}
         </div>
+        {item.photo_url && (
+          <div className="w-[130px] h-[200px] overflow-hidden relative flex items-center justify-center  flex-shrink-0 rounded-sm">
+            <div className="w-full h-full flex-shrink-0">
+              <Image
+                width={200}
+                height={200}
+                src={item.photo_url}
+                alt=""
+                className="object-contain"
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* <div className="flex flex-col gap-2 mt-2">
-        <RegularButton styles={"w-full border-emerald-900 "}>
-          <p className="text-sm text-emerald-900 ">Edit</p>
-        </RegularButton>
-
-        <RegularButton styles={"w-full border-emerald-900 "}>
+        <RegularButton
+          href={`/receipt/${item.receipt_id}`}
+          styles={"w-full border-emerald-900 "}
+        >
           <p className="text-sm text-emerald-900 ">View Receipt</p>
         </RegularButton>
       </div> */}

@@ -110,9 +110,9 @@ const ReceiptPage = () => {
         </div>
       </div>
 
-      <div className="w-full gap-10  mb-[100px]">
+      <div className="grid grid-home grid-cols-3 w-full gap-10  mb-[100px]">
         {receipt.items.map((item: Item, index: number) => (
-          <div key={index} className="pb-5">
+          <div key={index}>
             <ReceiptItems item={item} key={index} />
           </div>
         ))}
@@ -131,9 +131,12 @@ const ReceiptItems = ({ item }: ReceiptItemsProps) => {
   return (
     <div className="border-t-[1.5px] border-black flex flex-col gap-4 w-full pt-3">
       <div className="w-full h-full flex gap-6">
-        <div className="text-sm flex flex-col gap-3 items-start w-full max-w-[200px] ">
+        <div className="text-sm flex flex-col gap-3 items-start w-full ">
           <div className="w-full">
-            <button type="button" className="text-orange-600 text-lg">
+            <button
+              type="button"
+              className="text-orange-600 text-lg text-start"
+            >
               {item.description}
             </button>
           </div>
@@ -168,20 +171,20 @@ const ReceiptItems = ({ item }: ReceiptItemsProps) => {
               <h1>{item.barcode}</h1>
             </div>
           )}
-        </div>
-        {item.photo_url && (
-          <div className="w-[120px] h-[150px] overflow-hidden relative flex items-center justify-center  flex-shrink-0 rounded-sm">
-            <div className="w-full h-full flex-shrink-0">
-              <Image
-                width={200}
-                height={200}
-                src={item.photo_url}
-                alt=""
-                className="object-contain"
-              />
+          {item.photo_url && (
+            <div className="w-[120px] h-[150px] overflow-hidden relative flex items-center justify-center  flex-shrink-0 rounded-sm">
+              <div className="w-full h-full flex-shrink-0">
+                <Image
+                  width={200}
+                  height={200}
+                  src={item.photo_url}
+                  alt=""
+                  className="object-contain"
+                />
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

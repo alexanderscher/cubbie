@@ -90,7 +90,7 @@ input:-webkit-autofill::first-line {
 
 .receipts {
   display: flex;
-  gap: 30px;
+  gap: 50px;
 }
 
 .receipt-button-container {

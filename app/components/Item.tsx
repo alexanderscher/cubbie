@@ -54,14 +54,11 @@ const Item = ({ item }: Props) => {
       )}
       <div className="pt-4">
         <p className="text-slate-400 text-xs ">
-          Purchased on {formatDateToMMDDYY(item.receipt.purchase_date)}
-        </p>
-        <p className="text-slate-400 text-xs ">
           Return by {formatDateToMMDDYY(item.receipt.return_date)}
         </p>
       </div>
 
-      <div className="border-t-[1.5px] border-slate-300 flex flex-col gap-2 text-sm">
+      <div className="border-t-[1.5px] border-slate-300 flex flex-col  text-sm">
         <TruncateText text={item.receipt.store} maxLength={30} styles={""} />
         <p className="">{formatCurrency(item.price)}</p>
       </div>

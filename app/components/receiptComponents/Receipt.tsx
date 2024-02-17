@@ -58,15 +58,16 @@ const Receipt = ({ receipt }: ReceiptProps) => {
         </div>
       )}
       <div className="pt-4">
+        <p className="text-slate-400 text-xs ">
+          Return by {formatDateToMMDDYY(receipt.return_date)}
+        </p>
+      </div>
+      <div className="">
         <div className="border-t-[1.5px] border-slate-300  flex flex-col text-sm">
-          <div className="flex gap-3 mt-2">
+          <div className="flex gap-2 mt-2">
             <p className=" ">{receipt.items.length} items | </p>
             <p className=" ">{formatCurrency(receipt.amount)}</p>
           </div>
-
-          <p className=" ">
-            Return by {formatDateToMMDDYY(receipt.return_date)}
-          </p>
         </div>
       </div>
     </div>

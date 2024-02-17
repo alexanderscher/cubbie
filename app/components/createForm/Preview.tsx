@@ -106,7 +106,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
     }));
   };
   return (
-    <div className="flex flex-col gap-6 preview pb-[200px]">
+    <div className="flex flex-col gap-6 preview pb-[200px] ">
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-6">
           <div className="flex gap-[100px]">

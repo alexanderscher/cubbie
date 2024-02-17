@@ -1,10 +1,12 @@
 "use client";
 import Receipt from "@/app/components/receiptComponents/Receipt";
 import { Receipt as ReceiptType } from "@/types/receipt";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const Receipts = () => {
   const [receipts, setReceipts] = useState([]);
+  const pathname = usePathname();
 
   useEffect(() => {
     const fetchReceipts = async () => {
@@ -15,11 +17,24 @@ const Receipts = () => {
     fetchReceipts();
   }, []);
 
+  if (pathname !== "/") {
+    return (
+      <div className="boxes">
+        {receipts
+          .filter((receipt: ReceiptType) => receipt.memo === true)
+          .map((receipt: ReceiptType) => (
+            <Receipt key={receipt.id} receipt={receipt} />
+          ))}
+      </div>
+    );
+  }
   return (
-    <div className="grid grid-home grid-cols-3 gap-6 ">
-      {receipts.map((receipt: ReceiptType) => (
-        <Receipt key={receipt.id} receipt={receipt} />
-      ))}
+    <div className="boxes">
+      {receipts
+        .filter((receipt: ReceiptType) => receipt.memo === false)
+        .map((receipt: ReceiptType) => (
+          <Receipt key={receipt.id} receipt={receipt} />
+        ))}
     </div>
   );
 };

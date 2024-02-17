@@ -25,7 +25,7 @@ const Receipt = ({ receipt }: ReceiptProps) => {
         <div className="w-full  overflow-hidden relative flex justify-center items-center">
           <div className="w-full h-full flex justify-center items-center">
             <Image
-              src="/receipt.png"
+              src="/receipt-placeholder.png"
               alt=""
               width={50}
               height={50}

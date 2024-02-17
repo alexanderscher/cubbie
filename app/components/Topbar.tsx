@@ -11,7 +11,7 @@ const Topbar = () => {
       {menu && (
         <div className="menu p-4">
           <button onClick={() => setMenu(!menu)}>Close</button>
-          <div className="navbar-items">
+          <div className="flex gap-2 text-white">
             <a href="/">Receipts</a>
             <a href="/">Search</a>
             <a href="/receipt-type">Dashboard</a>

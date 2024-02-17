@@ -26,4 +26,5 @@ export interface ReceiptInput {
   items: ItemInput[];
   onlineType: string;
   storeType: string;
+  memo: boolean;
 }

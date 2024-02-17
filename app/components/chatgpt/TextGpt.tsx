@@ -83,6 +83,7 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
   return (
     <div className="flex flex-col gap-4">
       <button
+        type="button"
         className="w-[20px] border-[1.5px] border-orange-600 text-orange-600 rounded-md"
         onClick={() => setHelp(!help)}
       >

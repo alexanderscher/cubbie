@@ -24,28 +24,24 @@ const Header = ({ type }: HeaderProps) => {
       ? "bg-black border-black text-white"
       : "bg border-black text-black ";
 
-  const archiveColor =
-    pathname === "/archive"
-      ? "bg-black border-black text-white"
-      : "bg border-black text-black ";
   return (
     <div className="flex flex-col gap-6 mb-4">
-      <div className="header">
+      <div className="flex justify-between">
         <h1 className="text-3xl text-emerald-900  ">{type}</h1>
-        <div className="flex gap-2 flex-wrap">
-          <RegularButton href="/" styles={receiptColor}>
-            <p className="text-xs">Receipts</p>
-          </RegularButton>
-          <RegularButton href="/memo" styles={memoColor}>
-            <p className="text-xs">Memos</p>
-          </RegularButton>
-          <RegularButton styles={itemColor} href="/items">
-            <p className="text-xs">Items</p>
-          </RegularButton>
-          <RegularButton styles={archiveColor} href="/archive">
-            <p className="text-xs">Archive</p>
-          </RegularButton>
-        </div>
+        <RegularButton href="/receipt-type" styles="bg-emerald-900 text-white">
+          <p className="text-xs">Create new</p>
+        </RegularButton>
+      </div>
+      <div className="flex gap-2 flex-wrap">
+        <RegularButton href="/" styles={receiptColor}>
+          <p className="text-xs">Receipts</p>
+        </RegularButton>
+        <RegularButton href="/memo" styles={memoColor}>
+          <p className="text-xs">Memos</p>
+        </RegularButton>
+        <RegularButton styles={itemColor} href="/items">
+          <p className="text-xs">Items</p>
+        </RegularButton>
       </div>
       <div className="flex justify-between">
         <div className="w-[250px]">

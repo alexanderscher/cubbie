@@ -5,8 +5,8 @@ const Navbar = () => {
     <div className="navbar-fixed p-2">
       <div className="navbar-items">
         <a href="/">Receipts</a>
-        <a href="/receipt-type">Upload</a>
-        <a href="/items">Search</a>
+        <a href="/">Search</a>
+        <a href="/receipt-type">Dashboard</a>
         <a href="/">Account</a>
       </div>
 

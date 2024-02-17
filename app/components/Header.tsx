@@ -11,25 +11,33 @@ const Header = ({ type }: HeaderProps) => {
   const pathname = usePathname();
   const receiptColor =
     pathname === "/"
-      ? "bg-emerald-900 border-emerald-900 text-white"
-      : "bg border-emerald-900 text-emerald-900 ";
+      ? "bg-black border-black text-white"
+      : "bg border-black text-black ";
+
+  const memoColor =
+    pathname === "/memo"
+      ? "bg-black border-black text-white"
+      : "bg border-black text-black ";
 
   const itemColor =
     pathname === "/items"
-      ? "bg-emerald-900 border-emerald-900 text-white"
-      : "bg border-emerald-900 text-emerald-900 ";
+      ? "bg-black border-black text-white"
+      : "bg border-black text-black ";
 
   const archiveColor =
     pathname === "/archive"
-      ? "bg-emerald-900 border-emerald-900 text-white"
-      : "bg border-emerald-900 text-emerald-900 ";
+      ? "bg-black border-black text-white"
+      : "bg border-black text-black ";
   return (
     <div className="flex flex-col gap-6 mb-10">
       <div className="header">
-        <h1 className="text-2xl text-emerald-900  ">{type}</h1>
+        <h1 className="text-3xl text-emerald-900  ">{type}</h1>
         <div className="flex gap-2">
           <RegularButton href="/" styles={receiptColor}>
             <p className="text-xs">Receipts</p>
+          </RegularButton>
+          <RegularButton href="/memo" styles={memoColor}>
+            <p className="text-xs">Memos</p>
           </RegularButton>
           <RegularButton styles={itemColor} href="/items">
             <p className="text-xs">Items</p>
@@ -40,13 +48,13 @@ const Header = ({ type }: HeaderProps) => {
         </div>
       </div>
       <div className="flex justify-between">
-        <div className="w-[300px]">
+        <div className="w-[250px]">
           <input
-            className="searchBar placeholder:text-black placeholder:text-sm "
-            placeholder="Search Receipts"
+            className="searchBar  placeholder:text-sm "
+            placeholder={`Search ${type}`}
           ></input>
         </div>
-        <div>filter</div>
+        <div className="text-slate-400">Updated at</div>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import Receipts from "@/app/components/Home/Receipts";
 export default function Home() {
   return (
     <main className="flex flex-col pb-[400px]">
+      <Header type="Receipts" />
       <Receipts />
     </main>
   );

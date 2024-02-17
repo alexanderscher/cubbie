@@ -6,6 +6,7 @@ import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
 import localFont from "next/font/local";
+import Topbar from "@/app/components/Topbar";
 
 const myFont = localFont({
   src: "../font/SuisseIntl-Medium.woff",
@@ -25,6 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`bg-[#e2f1e2] ${myFont.className}`}>
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
+        <Topbar />
         <div className="flex">
           <Navbar />
 

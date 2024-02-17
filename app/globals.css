@@ -13,6 +13,13 @@ input[type="checkbox"] {
   display: inline !important;
 }
 
+.title {
+  display: none;
+}
+.topbar {
+  display: none;
+}
+
 .overflow {
   color: var(--colors--primary-text);
   flex: 1;
@@ -29,6 +36,13 @@ input[type="checkbox"] {
   font-weight: 600;
 }
 
+.navbar-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: white;
+}
+
 .navbar-fixed {
   position: fixed;
   top: 0;
@@ -36,7 +50,17 @@ input[type="checkbox"] {
   width: 140px;
   height: 100%;
   z-index: 1000;
-  /* background-color: white; */
+  border-right: #064e3b 1.5px solid;
+  background-color: #064e3b;
+}
+
+.menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 140px;
+  height: 100%;
+  z-index: 1000;
   border-right: #064e3b 1.5px solid;
   background-color: #064e3b;
 }
@@ -98,7 +122,7 @@ input:-webkit-autofill::first-line {
 }
 
 .searchBar {
-  border: 1.5px solid black;
+  border: 1.5px solid #064e3b;
   width: 100%;
   background-color: #e2f1e2;
   border-radius: 8px;
@@ -327,20 +351,15 @@ input:-webkit-autofill::first-line {
 
 @media (max-width: 550px) {
   .navbar-fixed {
-    top: auto;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: 60px;
-    z-index: 1000;
-    /* background-color: #064e3b; */
-    border-top: #064e3b 1.5px solid;
-    border-right: none;
-    background-color: white;
+    display: none;
+  }
+
+  .topbar {
+    display: flex;
   }
 
   .main-content {
-    padding-top: 60px;
+    /* padding-top: 60px; */
     margin-left: 0px;
     width: 100%;
     padding-bottom: 100px;
@@ -352,6 +371,14 @@ input:-webkit-autofill::first-line {
     gap: 30px;
     width: 100%;
     max-width: 800px;
+  }
+  .boxes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  .box {
+    width: 100%;
   }
 }
 
@@ -372,18 +399,24 @@ input:-webkit-autofill::first-line {
 
 .box {
   width: 100%;
-  max-width: 300px;
-  padding-top: 10px;
-  padding-bottom: 50px;
-  border-top: 1.5px solid black;
-  /* border-radius: 10px; */
+  max-width: 250px;
+  /* padding-top: 10px; */
+  border: 2px solid #064e3b;
+  background-color: rgb(241, 241, 241);
+  border-radius: 5px;
+  /* padding: 15px; */
+  padding-bottom: 30px;
   display: flex;
   flex-direction: column;
   gap: 6px;
   position: relative;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 550px) {
+  .title {
+    display: block;
+  }
+
   .boxes {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

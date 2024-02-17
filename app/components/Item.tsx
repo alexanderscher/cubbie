@@ -1,5 +1,4 @@
 "use client";
-import RegularButton from "@/app/components/buttons/RegularButton";
 import Shirt from "@/app/components/placeholderImages/Shirt";
 import { TruncateText } from "@/app/components/text/Truncate";
 import { Item as ItemType } from "@/types/receipt";

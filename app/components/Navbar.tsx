@@ -3,7 +3,7 @@ import React from "react";
 const Navbar = () => {
   return (
     <div className="navbar-fixed p-2">
-      <div className="navbar-items">
+      <div className="navbar-items text-xs">
         <a href="/">Receipts</a>
         <a href="/">Search</a>
         <a href="/receipt-type">Dashboard</a>

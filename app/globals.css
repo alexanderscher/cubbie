@@ -57,10 +57,10 @@ input[type="checkbox"] {
 .menu {
   position: fixed;
 
-  bottom: 0;
-  left: 0; /* Add this line to align it to the left */
-  width: 100%; /* Change to 100% to extend the width across the bottom */
-  height: 80px; /* Adjust height as needed */
+  top: 0;
+  right: 0; /* Add this line to align it to the left */
+  width: 150px; /* Change to 100% to extend the width across the bottom */
+  height: 100%; /* Adjust height as needed */
   z-index: 1000;
   background-color: #064e3b;
 }
@@ -237,7 +237,7 @@ input:-webkit-autofill::first-line {
 .receipt-types {
   display: flex;
   width: 100%;
-  gap: 30px;
+  gap: 15px;
 }
 
 .modal-backdrop {
@@ -335,12 +335,12 @@ input:-webkit-autofill::first-line {
   .buttons-margin {
     margin-bottom: 300px;
   }
-  .receipt-types {
+  /* .receipt-types {
     display: flex;
     flex-direction: column;
     width: 100%;
     gap: 30px;
-  }
+  } */
 }
 
 @media (max-width: 700px) {
@@ -400,6 +400,21 @@ input:-webkit-autofill::first-line {
 .box {
   width: 100%;
   max-width: 250px;
+  /* padding-top: 10px; */
+  border: 2px solid #064e3b;
+  background-color: rgb(241, 241, 241);
+  border-radius: 5px;
+  /* padding: 15px; */
+  padding-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+}
+
+.box-item {
+  width: 100%;
+  max-width: 200px;
   /* padding-top: 10px; */
   border: 2px solid #064e3b;
   background-color: rgb(241, 241, 241);

@@ -1,5 +1,7 @@
 "use client";
 import NonClickableButton from "@/app/components/buttons/NonClickableButton";
+import Shirt from "@/app/components/placeholderImages/Shirt";
+import { TruncateText } from "@/app/components/text/Truncate";
 import { Item, Receipt as ReceiptType } from "@/types/receipt";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
@@ -18,104 +20,67 @@ const ReceiptPage = () => {
       setReceipt(data.receipt);
     };
     fetchReceipt();
-  }, []);
+  }, [id]);
 
   if (!receipt.items) return <div>Loading</div>;
   return (
-    <div className="receipts ">
-      <div className="flex flex-col gap-4 ">
-        <div className="flex flex-col gap-1 receipt-bar border-t-[1.5px] border-black pt-3">
-          <div className="flex justify-between w-full">
-            <h1 className="text-orange-600 text-xl">{receipt.store}</h1>
-            <div className="flex gap-2 items-start mt-2">
-              {receipt.memo ? (
-                <NonClickableButton small styles="bg border-black">
-                  <p className="text-xs text-black">Memo</p>
-                </NonClickableButton>
-              ) : (
-                <NonClickableButton small styles="bg-black border-black">
-                  <p className="text-xs text-white">Receipt</p>
-                </NonClickableButton>
-              )}
-            </div>
+    <div className="flex justify-center items-center">
+      <div className=" w-full rounded-sm p-4">
+        <div className="  overflow-hidden relative flex justify-center items-center">
+          <div className="w-full h-full flex justify-center items-center">
+            <Image
+              src="/receipt-placeholder.png"
+              alt=""
+              width={50}
+              height={50}
+              className="object-cover "
+              style={{ objectFit: "cover", objectPosition: "center" }}
+            />
           </div>
-
-          <h1 className="mt-4">Details</h1>
-          <div className="flex justify-between max-w-[500px]">
-            <h1 className="text-slate-400  text-sm">Created on</h1>
-            <h1 className="">{formatDateToMMDDYY(receipt.created_at)}</h1>
+        </div>
+        <div className="text-2xl text-orange-600">{receipt.store}</div>
+        <div className="flex flex-wrap gap-6 mt-5">
+          <div className="flex gap-3   ">
+            <p className="text-slate-500">Total Price:</p>
+            <p>{receipt.amount}</p>
           </div>
-          <div className="flex justify-between max-w-[500px]">
-            <h1 className="text-slate-400  text-sm">Type</h1>
-            {!receipt.memo &&
-              (receipt.type == "Online" ? (
-                <p className="text-sm ">{receipt.type}</p>
-              ) : (
-                <p className="text-sm ">In-{receipt.type}</p>
-              ))}
+          <div className="flex gap-3   ">
+            <p className="text-slate-500">Total Quantities:</p>
+            <p>{receipt.items.length}</p>
           </div>
-
-          <div className="flex justify-between max-w-[500px]">
-            <h1 className="text-slate-400  text-sm">Number of Items</h1>
-            <h1 className="">{receipt.items.length}</h1>
+          <div className="flex gap-3   ">
+            <p className="text-slate-500">Purchase Date:</p>
+            <p>{formatDateToMMDDYY(receipt.purchase_date)}</p>
           </div>
-          <div className="flex justify-between max-w-[500px]">
-            <h1 className="text-slate-400  text-sm">Total Amount</h1>
-            <h1 className="">{receipt.amount}</h1>
+          <div className="flex gap-3   ">
+            <p className="text-slate-500">Reutrn Date:</p>
+            <p>{formatDateToMMDDYY(receipt.return_date)}</p>
           </div>
           {receipt.card && (
-            <div className="flex justify-between max-w-[500px]">
-              <h1 className="text-slate-400  text-sm">Card</h1>
-              {receipt.card}
+            <div className="flex gap-3   ">
+              <p className="text-slate-500">Card:</p>
+              <p>{receipt.card}</p>
+            </div>
+          )}
+          {receipt.tracking_number && (
+            <div className="flex gap-3   ">
+              <p className="text-slate-500">Tracking Link:</p>
+              <p>{receipt.tracking_number}</p>
             </div>
           )}
 
-          {receipt.type === "Online" && receipt.tracking_number && (
-            <div className="flex justify-between max-w-[500px]">
-              <h1 className="text-slate-400  text-sm">Tracking Link</h1>
-              <a className="" href={receipt.tracking_number} target="_blank">
-                {receipt.tracking_number}
-              </a>
-            </div>
-          )}
-
-          <div className="flex justify-between max-w-[500px]">
-            <h1 className="text-slate-400  text-sm">Purchase Date</h1>
-            <h1 className=""> {formatDateToMMDDYY(receipt.purchase_date)}</h1>
-          </div>
-          <div className="flex justify-between max-w-[500px]">
-            <h1 className="text-slate-400  text-sm">Return Date</h1>
-
-            {receipt.purchase_date && receipt.days_until_return && (
-              <h1 className="">{formatDateToMMDDYY(receipt.return_date)}</h1>
-            )}
+          <div className="flex gap-3   ">
+            <p className="text-slate-500">Type:</p>
+            <p>{receipt.type}</p>
           </div>
         </div>
-        <div className="w-full">
-          {receipt.receipt_image_url && (
-            <div
-              className="w-full h-full overflow-hidden relative flex items-center justify-center rounded-sm "
-              style={{ height: "300px" }}
-            >
-              <Image
-                layout="fill"
-                objectFit="cover"
-                objectPosition="center"
-                src={receipt.receipt_image_url}
-                alt=""
-                className="absolute"
-              />
-            </div>
-          )}
-        </div>
-      </div>
 
-      <div className="grid grid-home grid-cols-3 w-full gap-10  mb-[100px]">
-        {receipt.items.map((item: Item, index: number) => (
-          <div key={index}>
-            <ReceiptItems item={item} key={index} />
-          </div>
-        ))}
+        <div className="boxes mt-10">
+          {receipt.items.length > 0 &&
+            receipt.items.map((item: any) => (
+              <ReceiptItems key={item.id} item={item} />
+            ))}
+        </div>
       </div>
     </div>
   );
@@ -129,61 +94,42 @@ interface ReceiptItemsProps {
 
 const ReceiptItems = ({ item }: ReceiptItemsProps) => {
   return (
-    <div className="border-t-[1.5px] border-black flex flex-col gap-4 w-full pt-3">
-      <div className="w-full h-full flex gap-6">
-        <div className="text-sm flex flex-col gap-3 items-start w-full ">
-          <div className="w-full">
-            <button
-              type="button"
-              className="text-orange-600 text-lg text-start"
-            >
-              {item.description}
-            </button>
+    <div className="box-item ">
+      {item.photo_url && (
+        <div className="w-full h-[140px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col ">
+          <Image
+            src={item.photo_url}
+            alt=""
+            width={200}
+            height={200}
+            className="w-full h-full object-cover rounded-t-sm"
+            style={{ objectPosition: "top" }}
+          />
+        </div>
+      )}
+      <div className="p-4 flex flex-col gap-2 justify-between">
+        <div>
+          {!item.photo_url && <Shirt />}
+          <TruncateText
+            text={item.description}
+            maxLength={30}
+            styles={"text-orange-600"}
+          />
+
+          <div className="">
+            {/* <p className="text-slate-400 text-xs ">
+              Return by {formatDateToMMDDYY(item.receipt.return_date)}
+            </p> */}
           </div>
-          {item.asset && (
-            <div className="w-full">
-              <h1>{item.asset}</h1>
-            </div>
-          )}
-          <div className="w-full">
-            <h1 className="text-slate-400 ">AMOUNT</h1>
 
-            <h1>{formatCurrency(item.price)}</h1>
-          </div>
-          {item.character && (
-            <div className="w-full">
-              <h1 className="text-slate-400 ">CHARACTER</h1>
-
-              <h1>{item.character}</h1>
-            </div>
-          )}
-          {item.product_id && (
-            <div className="w-full">
-              <h1 className="text-slate-400 ">PRODUCT ID</h1>
-
-              <h1>{item.product_id}</h1>
-            </div>
-          )}
-          {item.barcode && (
-            <div className="w-full">
-              <h1 className="text-slate-400 ">BARCODE</h1>
-
-              <h1>{item.barcode}</h1>
-            </div>
-          )}
-          {item.photo_url && (
-            <div className="w-[120px] h-[150px] overflow-hidden relative flex items-center justify-center  flex-shrink-0 rounded-sm">
-              <div className="w-full h-full flex-shrink-0">
-                <Image
-                  width={200}
-                  height={200}
-                  src={item.photo_url}
-                  alt=""
-                  className="object-contain"
-                />
-              </div>
-            </div>
-          )}
+          {/* <div className="border-t-[1.5px] border-slate-300 flex flex-col  text-sm">
+            <TruncateText
+              text={item.receipt.store}
+              maxLength={20}
+              styles={""}
+            />
+            <p className="">{formatCurrency(item.price)}</p>
+          </div> */}
         </div>
       </div>
     </div>

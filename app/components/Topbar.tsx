@@ -5,13 +5,13 @@ import React, { useState } from "react";
 const Topbar = () => {
   const [menu, setMenu] = useState(false);
   return (
-    <div className="topbar p-4 justify-between">
-      <h1>Sticky Notes</h1>
+    <div className="topbar p-4 justify-between border-b-[1.5px] border-emerald-900 bg-white text-emerald-900">
+      <a href="/">Sticky Notes</a>
       <button onClick={() => setMenu(!menu)}>Menu</button>
       {menu && (
         <div className="menu p-4">
           <button onClick={() => setMenu(!menu)}>Close</button>
-          <div className="flex gap-2 text-white">
+          <div className="flex flex-col gap-2 text-white ">
             <a href="/">Receipts</a>
             <a href="/">Search</a>
             <a href="/receipt-type">Dashboard</a>
@@ -26,11 +26,3 @@ const Topbar = () => {
 };
 
 export default Topbar;
-
-const Menu = () => {
-  return (
-    <div className="menu">
-      <h1>Close</h1>
-    </div>
-  );
-};

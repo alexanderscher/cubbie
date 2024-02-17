@@ -29,10 +29,10 @@ const Header = ({ type }: HeaderProps) => {
       ? "bg-black border-black text-white"
       : "bg border-black text-black ";
   return (
-    <div className="flex flex-col gap-6 mb-10">
+    <div className="flex flex-col gap-6 mb-4">
       <div className="header">
         <h1 className="text-3xl text-emerald-900  ">{type}</h1>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <RegularButton href="/" styles={receiptColor}>
             <p className="text-xs">Receipts</p>
           </RegularButton>
@@ -54,7 +54,7 @@ const Header = ({ type }: HeaderProps) => {
             placeholder={`Search ${type}`}
           ></input>
         </div>
-        <div className="text-slate-400">Updated at</div>
+        {/* <div className="text-slate-400">Updated at</div> */}
       </div>
     </div>
   );

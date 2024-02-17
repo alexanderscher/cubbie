@@ -1,17 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 
 const Navbar = () => {
   return (
     <div className="navbar-fixed p-2">
-      <div className="flex flex-col text-white gap-10 ">
-        <div className="flex flex-col">
-          <a href="/">Receipts</a>
-          <a href="/memo">Memos</a>
-          <a href="/items">Items</a>
-          <a href="/receipt-type">Upload</a>
-          <a href="/items">Search</a>
-          <a href="/">Account</a>
-        </div>
+      <div className="navbar-items">
+        <a href="/">Receipts</a>
+        <a href="/receipt-type">Upload</a>
+        <a href="/items">Search</a>
+        <a href="/">Account</a>
+      </div>
+
+      <div className="p-4 title">
+        <a href="/" className="text-black">
+          Sticky Notes
+        </a>
       </div>
     </div>
   );

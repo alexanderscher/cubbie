@@ -1,5 +1,6 @@
 "use client";
 import RegularButton from "@/app/components/buttons/RegularButton";
+import Shirt from "@/app/components/placeholderImages/Shirt";
 import { TruncateText } from "@/app/components/text/Truncate";
 import { Item as ItemType } from "@/types/receipt";
 import { formatDateToMMDDYY } from "@/utils/Date";
@@ -14,53 +15,43 @@ interface Props {
 const Item = ({ item }: Props) => {
   console.log(item);
   return (
-    <div className="box  ">
-      <TruncateText
-        text={item.description}
-        maxLength={30}
-        styles={"text-orange-600"}
-      />
-      <p className="text-slate-400 text-xs">
-        Posted on {formatDateToMMDDYY(item.receipt.created_at)}
-      </p>
-
+    <div className="box ">
       {item.photo_url && (
-        <div className="w-full h-[200px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col mt-3">
-          <div className="w-full h-full">
-            <Image
-              src={item.photo_url}
-              alt=""
-              width={200}
-              height={200}
-              className="w-full h-full object-cover"
-              style={{ objectPosition: "top" }}
-            />
-          </div>
+        <div className="w-full h-[140px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col ">
+          <Image
+            src={item.photo_url}
+            alt=""
+            width={200}
+            height={200}
+            className="w-full h-full object-cover rounded-t-sm"
+            style={{ objectPosition: "top" }}
+          />
         </div>
       )}
-      {!item.photo_url && (
-        <div className="w-full h-[200px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col mt-3">
-          <div className="w-full h-full ">
-            <Image
-              src={"/image-placeholder.svg"}
-              alt=""
-              width={200}
-              height={200}
-              className="w-full h-full object-fit"
-              style={{ objectPosition: "top" }}
-            />
-          </div>
-        </div>
-      )}
-      <div className="pt-4">
-        <p className="text-slate-400 text-xs ">
-          Return by {formatDateToMMDDYY(item.receipt.return_date)}
-        </p>
-      </div>
+      <div className="p-4 flex flex-col gap-2 justify-between">
+        <div>
+          {!item.photo_url && <Shirt />}
+          <TruncateText
+            text={item.description}
+            maxLength={30}
+            styles={"text-orange-600"}
+          />
 
-      <div className="border-t-[1.5px] border-slate-300 flex flex-col  text-sm">
-        <TruncateText text={item.receipt.store} maxLength={30} styles={""} />
-        <p className="">{formatCurrency(item.price)}</p>
+          <div className="">
+            <p className="text-slate-400 text-xs ">
+              Return by {formatDateToMMDDYY(item.receipt.return_date)}
+            </p>
+          </div>
+
+          <div className="border-t-[1.5px] border-slate-300 flex flex-col  text-sm">
+            <TruncateText
+              text={item.receipt.store}
+              maxLength={20}
+              styles={""}
+            />
+            <p className="">{formatCurrency(item.price)}</p>
+          </div>
+        </div>
       </div>
     </div>
   );

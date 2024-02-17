@@ -27,6 +27,7 @@ export const BarcodeScanner = ({
     isModalOpen && (
       <div className="modal-style">
         <button
+          type="button"
           className="close-button-style"
           onClick={() => {
             setIsModalOpen(false);

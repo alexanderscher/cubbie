@@ -400,8 +400,8 @@ const ReceiptFormItems = ({
             )}
           </div>
           {stage !== "Final" && (
-            <div className="flex flex-col w-full gap-3">
-              <div className="flex gap-1">
+            <div className="flex flex-col w-full max-w-[300px] gap-4">
+              <div className="flex gap-4">
                 {" "}
                 <RegularButton
                   small

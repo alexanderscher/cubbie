@@ -3,7 +3,7 @@ import NonClickableButton from "@/app/components/buttons/NonClickableButton";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import ReceiptFormItems from "@/app/components/createForm/ReceiptFormItems";
 import { ReceiptOnlineStage, ReceiptStoreStage } from "@/constants/form";
-import { ItemInput } from "@/types/form";
+import { ItemInput, ReceiptInput } from "@/types/form";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 
@@ -31,10 +31,8 @@ const FinalStage = ({
   const isMobile = useIsMobile();
   return (
     <div className="flex flex-col gap-6">
-      <ReceiptPageForm receiptInfo={values} setFieldValue={setFieldValue} />
-
       {isMobile && (
-        <div className=" flex flex-col gap-6 pb-[200px]">
+        <div className=" flex flex-col gap-6 ">
           <div className="flex justify-between gap-3">
             <RegularButton
               styles={" border-emerald-900 w-full"}
@@ -68,9 +66,11 @@ const FinalStage = ({
           </RegularButton>
         </div>
       )}
+      <ReceiptPageForm values={values} setFieldValue={setFieldValue} />
+
       {!isMobile && (
-        <div className="fixed bottom-0 left-0 border-t-[1.5px] border-emerald-900 bg-green-50 w-full p-4 flex justify-between">
-          <div className="flex justify-between gap-3">
+        <div className="fixed bottom-0 left-0 border-t-[1.5px] border-emerald-900 bg-green-50 w-full p-4 flex justify-between ">
+          <div className="flex justify-between gap-3 ml-[140px]">
             <RegularButton
               styles={"border-emerald-900 "}
               handleClick={() => {
@@ -108,7 +108,7 @@ const FinalStage = ({
               </p>
 
               <button
-                type="submit"
+                type="button"
                 className="text-end "
                 onClick={() => setUploadError("")}
               >
@@ -125,19 +125,19 @@ const FinalStage = ({
 export default FinalStage;
 
 interface ReceiptPageProps {
-  receiptInfo: any;
+  values: ReceiptInput;
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
 }
 
-const ReceiptPageForm = ({ receiptInfo, setFieldValue }: ReceiptPageProps) => {
+const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
   return (
     <div className="receipts ">
       <div className="flex flex-col gap-4 ">
         <div className="flex flex-col gap-1 receipt-bar border-t-[1.5px] border-black pt-3">
           <div className="flex justify-between w-full">
-            <h1 className="text-orange-600 text-xl">{receiptInfo.store}</h1>
+            <h1 className="text-orange-600 text-xl">{values.store}</h1>
             <div className="flex gap-2 items-start mt-2">
-              {receiptInfo.memo ? (
+              {values.memo ? (
                 <NonClickableButton small styles="bg border-black">
                   <p className="text-xs text-black">Memo</p>
                 </NonClickableButton>
@@ -153,59 +153,51 @@ const ReceiptPageForm = ({ receiptInfo, setFieldValue }: ReceiptPageProps) => {
 
           <div className="flex justify-between max-w-[500px]">
             <h1 className="text-slate-400  text-sm">Type</h1>
-            {!receiptInfo.memo &&
-              (receiptInfo.type == "Online" ? (
-                <p className="text-sm ">{receiptInfo.type}</p>
+            {!values.memo &&
+              (values.type == "Online" ? (
+                <p className="text-sm ">{values.type}</p>
               ) : (
-                <p className="text-sm ">In-{receiptInfo.type}</p>
+                <p className="text-sm ">In-{values.type}</p>
               ))}
           </div>
 
           <div className="flex justify-between max-w-[500px]">
             <h1 className="text-slate-400  text-sm">Number of Items</h1>
-            <h1 className="">{receiptInfo.items.length}</h1>
+            <h1 className="">{values.items.length}</h1>
           </div>
           <div className="flex justify-between max-w-[500px]">
             <h1 className="text-slate-400  text-sm">Total Amount</h1>
-            <h1 className="">{receiptInfo.amount}</h1>
+            <h1 className="">{values.amount}</h1>
           </div>
-          {receiptInfo.card && (
+          {values.card && (
             <div className="flex justify-between max-w-[500px]">
               <h1 className="text-slate-400  text-sm">Card</h1>
-              {receiptInfo.card}
+              {values.card}
             </div>
           )}
 
-          {receiptInfo.type === "Online" && (
+          {values.type === "Online" && (
             <div className="flex justify-between max-w-[500px]">
               <h1 className="text-slate-400  text-sm">Tracking Link</h1>
-              <a
-                className=""
-                href={receiptInfo.tracking_number}
-                target="_blank"
-              >
-                {receiptInfo.tracking_number
-                  ? receiptInfo.tracking_number
-                  : "None"}
+              <a className="" href={values.tracking_number} target="_blank">
+                {values.tracking_number ? values.tracking_number : "None"}
               </a>
             </div>
           )}
 
           <div className="flex justify-between max-w-[500px]">
             <h1 className="text-slate-400  text-sm">Purchase Date</h1>
-            <h1 className="">
-              {formatDateToMMDDYY(receiptInfo.purchase_date)}
-            </h1>
+            <h1 className="">{formatDateToMMDDYY(values.purchase_date)}</h1>
           </div>
           <div className="flex justify-between max-w-[500px]">
             <h1 className="text-slate-400  text-sm">Return Date</h1>
 
-            {receiptInfo.purchase_date && receiptInfo.days_until_return && (
+            {values.purchase_date && values.days_until_return && (
               <h1 className="">
                 {formatDateToMMDDYY(
                   calculateReturnDate(
-                    receiptInfo.purchase_date,
-                    receiptInfo.days_until_return
+                    values.purchase_date,
+                    values.days_until_return
                   )
                 )}
               </h1>
@@ -213,7 +205,7 @@ const ReceiptPageForm = ({ receiptInfo, setFieldValue }: ReceiptPageProps) => {
           </div>
         </div>
         <div className="w-full">
-          {receiptInfo.receipt_image_url && (
+          {values.receiptImage && (
             <div
               className="w-full h-full overflow-hidden relative flex items-center justify-center rounded-sm "
               style={{ height: "300px" }}
@@ -222,7 +214,7 @@ const ReceiptPageForm = ({ receiptInfo, setFieldValue }: ReceiptPageProps) => {
                 layout="fill"
                 objectFit="cover"
                 objectPosition="center"
-                src={receiptInfo.receipt_image_url}
+                src={values.receiptImage}
                 alt=""
                 className="absolute"
               />
@@ -232,13 +224,14 @@ const ReceiptPageForm = ({ receiptInfo, setFieldValue }: ReceiptPageProps) => {
       </div>
 
       <div className="w-full gap-10  mb-[100px] ">
-        {receiptInfo.items.map((item: ItemInput, index: number) => (
+        {values.items.map((item: ItemInput, index: number) => (
           <div key={index} className="pb-5">
             <ReceiptFormItems
               setFieldValue={setFieldValue}
               item={item}
               index={index}
-              values={receiptInfo}
+              values={values}
+              stage={"Final"}
             />
           </div>
         ))}

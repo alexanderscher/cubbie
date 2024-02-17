@@ -13,8 +13,10 @@ const Topbar = () => {
           <button onClick={() => setMenu(!menu)}>Close</button>
           <div className="navbar-items">
             <a href="/">Receipts</a>
-            <a href="/receipt-type">Upload</a>
-            <a href="/items">Search</a>
+            <a href="/">Search</a>
+            <a href="/receipt-type">Dashboard</a>
+            <a href="/receipt-type">Calender</a>
+            <a href="/receipt-type">Notifications</a>
             <a href="/">Account</a>
           </div>
         </div>

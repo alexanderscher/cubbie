@@ -7,6 +7,8 @@ const Navbar = () => {
         <a href="/">Receipts</a>
         <a href="/">Search</a>
         <a href="/receipt-type">Dashboard</a>
+        <a href="/receipt-type">Calender</a>
+        <a href="/receipt-type">Notifications</a>
         <a href="/">Account</a>
       </div>
 

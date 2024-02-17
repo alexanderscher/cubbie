@@ -23,10 +23,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`p-4  bg-[#e2f1e2] ${myFont.className}`}>
+      <body className={`bg-[#e2f1e2] ${myFont.className}`}>
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
-        <Navbar />
-        {children}
+        <div className="flex">
+          <Navbar />
+
+          <div className="p-4 main-content"> {children}</div>
+        </div>
       </body>
     </html>
   );

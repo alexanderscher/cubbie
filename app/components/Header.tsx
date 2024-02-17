@@ -3,7 +3,11 @@ import RegularButton from "@/app/components/buttons/RegularButton";
 import { usePathname } from "next/navigation";
 import React from "react";
 
-const Header = () => {
+interface HeaderProps {
+  type: string;
+}
+
+const Header = ({ type }: HeaderProps) => {
   const pathname = usePathname();
   const receiptColor =
     pathname === "/"
@@ -22,7 +26,7 @@ const Header = () => {
   return (
     <div className="flex flex-col gap-6 mb-10">
       <div className="header">
-        <h1 className="text-2xl text-emerald-900  ">Inventory</h1>
+        <h1 className="text-2xl text-emerald-900  ">{type}</h1>
         <div className="flex gap-2">
           <RegularButton href="/" styles={receiptColor}>
             <p className="text-xs">Receipts</p>
@@ -33,12 +37,17 @@ const Header = () => {
           <RegularButton styles={archiveColor} href="/archive">
             <p className="text-xs">Archive</p>
           </RegularButton>
-          <select className="border-[1.5px] w-[100px] bg border-black rounded-md p-1 placeholder:text-black focus:outline-none"></select>
         </div>
       </div>
-      {/* <div className="flex gap-2">
-        <input className="searchBar" placeholder="Search"></input>
-      </div> */}
+      <div className="flex justify-between">
+        <div className="w-[300px]">
+          <input
+            className="searchBar placeholder:text-black placeholder:text-sm "
+            placeholder="Search Receipts"
+          ></input>
+        </div>
+        <div>filter</div>
+      </div>
     </div>
   );
 };

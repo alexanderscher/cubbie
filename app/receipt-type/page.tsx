@@ -12,7 +12,7 @@ const ReceiptType = () => {
     >
       <div className="w-full sm:w-[600px] gap-8 flex flex-col justify-center items-center">
         <div className="flex justify-start w-full">
-          <h1 className="text-lg items-start text-emerald-900">
+          <h1 className="text-2xl items-start text-emerald-900">
             Choose Receipt Type
           </h1>
         </div>

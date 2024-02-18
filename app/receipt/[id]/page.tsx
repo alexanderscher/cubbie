@@ -24,58 +24,74 @@ const ReceiptPage = () => {
 
   if (!receipt.items) return <div>Loading</div>;
   return (
-    <div className="flex justify-center items-center">
-      <div className=" w-full rounded-sm p-4">
-        <div className="  overflow-hidden relative flex justify-center items-center">
-          <div className="w-full h-full flex justify-center items-center">
-            <Image
-              src="/receipt-placeholder.png"
-              alt=""
-              width={50}
-              height={50}
-              className="object-cover "
-              style={{ objectFit: "cover", objectPosition: "center" }}
-            />
-          </div>
+    <div className="flex justify-center items-center max-w-[800px]">
+      <div className=" w-full p-4 flex flex-col gap-6">
+        <div className="text-2xl text-orange-600 border-b-[1.5px] border-slate-400">
+          {receipt.store}
         </div>
-        <div className="text-2xl text-orange-600">{receipt.store}</div>
-        <div className="flex flex-wrap gap-6 mt-5">
-          <div className="flex gap-3   ">
-            <p className="text-slate-500">Total Price:</p>
-            <p>{receipt.amount}</p>
-          </div>
-          <div className="flex gap-3   ">
-            <p className="text-slate-500">Total Quantities:</p>
-            <p>{receipt.items.length}</p>
-          </div>
-          <div className="flex gap-3   ">
-            <p className="text-slate-500">Purchase Date:</p>
-            <p>{formatDateToMMDDYY(receipt.purchase_date)}</p>
-          </div>
-          <div className="flex gap-3   ">
-            <p className="text-slate-500">Reutrn Date:</p>
-            <p>{formatDateToMMDDYY(receipt.return_date)}</p>
-          </div>
-          {receipt.card && (
-            <div className="flex gap-3   ">
-              <p className="text-slate-500">Card:</p>
+
+        <div className="receipt-page">
+          {receipt.receipt_image_url && (
+            <div className="sm:max-w-[300px] sm:w-1/2 w-full">
+              <div
+                className="w-full h-full overflow-hidden relative flex items-center justify-center rounded-sm "
+                style={{ height: "300px" }}
+              >
+                <Image
+                  layout="fill"
+                  objectFit="cover"
+                  objectPosition="top"
+                  src={receipt.receipt_image_url}
+                  alt=""
+                  className="absolute"
+                />
+              </div>
+            </div>
+          )}
+          {!receipt.receipt_image_url && (
+            <div className="sm:max-w-[200px] sm:w-1/2 w-full">
+              <div className="w-full overflow-hidden relative flex items-center justify-center rounded-sm sm:h-[200px] h-[100px]">
+                <Image
+                  // layout="fill"
+                  objectFit="cover"
+                  objectPosition="top"
+                  width={80}
+                  height={80}
+                  src={"/receipt-placeholder.png"}
+                  alt=""
+                  className="absolute bg"
+                />
+              </div>
+            </div>
+          )}
+
+          <div className="w-1/2 flex flex-col gap-2 text-sm">
+            <div>
+              <p className="text-slate-400">Total amount</p>
+              <p>{formatCurrency(receipt.amount)}</p>
+            </div>
+            <div>
+              <p className="text-slate-400">Purchase date</p>
+              <p>{formatDateToMMDDYY(receipt.purchase_date)}</p>
+            </div>
+            <div>
+              <p className="text-slate-400">Return Date</p>
+              <p>{formatDateToMMDDYY(receipt.return_date)}</p>
+            </div>
+            <div>
+              <p className="text-slate-400">Card</p>
+              sdfvsd
               <p>{receipt.card}</p>
             </div>
-          )}
-          {receipt.tracking_number && (
-            <div className="flex gap-3   ">
-              <p className="text-slate-500">Tracking Link:</p>
+            <div>
+              <p className="text-slate-400">Tracking Link</p>
+              efscsdc
               <p>{receipt.tracking_number}</p>
             </div>
-          )}
-
-          <div className="flex gap-3   ">
-            <p className="text-slate-500">Type:</p>
-            <p>{receipt.type}</p>
           </div>
         </div>
 
-        <div className="boxes mt-10">
+        <div className="boxes border-t-[1.5px] border-slate-400 pt-10">
           {receipt.items.length > 0 &&
             receipt.items.map((item: any) => (
               <ReceiptItems key={item.id} item={item} />

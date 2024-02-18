@@ -48,7 +48,7 @@ const ReceiptPage = () => {
               </div>
             </div>
           )}
-          {!receipt.receipt_image_url && (
+          {/* {!receipt.receipt_image_url && (
             <div className="sm:max-w-[200px] sm:w-1/2 w-full">
               <div className="w-full overflow-hidden relative flex items-center justify-center rounded-sm sm:h-[200px] h-[100px]">
                 <Image
@@ -63,7 +63,7 @@ const ReceiptPage = () => {
                 />
               </div>
             </div>
-          )}
+          )} */}
 
           <div className="w-1/2 flex flex-col gap-2 text-sm">
             <div>

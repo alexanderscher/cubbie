@@ -13,8 +13,6 @@ export async function GET(
     },
   });
 
-  console.log(receipt);
-
   return new NextResponse(
     JSON.stringify({
       receipt,

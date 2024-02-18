@@ -54,6 +54,11 @@ input[type="checkbox"] {
   background-color: #064e3b;
 }
 
+.receipt-page {
+  display: flex;
+  gap: 20px;
+}
+
 .menu {
   position: fixed;
 
@@ -430,6 +435,12 @@ input:-webkit-autofill::first-line {
 @media (max-width: 550px) {
   .title {
     display: block;
+  }
+
+  .receipt-page {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
 
   .boxes {

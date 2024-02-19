@@ -152,7 +152,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
           <h1 className="mt-4">Details</h1>
 
           <div className="flex justify-between max-w-[500px]">
-            <h1 className="text-slate-400  text-sm">Type</h1>
+            <h1 className="text-slate-500  text-sm">Type</h1>
             {!values.memo &&
               (values.type == "Online" ? (
                 <p className="text-sm ">{values.type}</p>
@@ -162,23 +162,23 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
           </div>
 
           <div className="flex justify-between max-w-[500px]">
-            <h1 className="text-slate-400  text-sm">Number of Items</h1>
+            <h1 className="text-slate-500  text-sm">Number of Items</h1>
             <h1 className="">{values.items.length}</h1>
           </div>
           <div className="flex justify-between max-w-[500px]">
-            <h1 className="text-slate-400  text-sm">Total Amount</h1>
+            <h1 className="text-slate-500  text-sm">Total Amount</h1>
             <h1 className="">{values.amount}</h1>
           </div>
           {values.card && (
             <div className="flex justify-between max-w-[500px]">
-              <h1 className="text-slate-400  text-sm">Card</h1>
+              <h1 className="text-slate-500  text-sm">Card</h1>
               {values.card}
             </div>
           )}
 
           {values.type === "Online" && (
             <div className="flex justify-between max-w-[500px]">
-              <h1 className="text-slate-400  text-sm">Tracking Link</h1>
+              <h1 className="text-slate-500  text-sm">Tracking Link</h1>
               <a className="" href={values.tracking_number} target="_blank">
                 {values.tracking_number ? values.tracking_number : "None"}
               </a>
@@ -186,11 +186,11 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
           )}
 
           <div className="flex justify-between max-w-[500px]">
-            <h1 className="text-slate-400  text-sm">Purchase Date</h1>
+            <h1 className="text-slate-500  text-sm">Purchase Date</h1>
             <h1 className="">{formatDateToMMDDYY(values.purchase_date)}</h1>
           </div>
           <div className="flex justify-between max-w-[500px]">
-            <h1 className="text-slate-400  text-sm">Return Date</h1>
+            <h1 className="text-slate-500  text-sm">Return Date</h1>
 
             {values.purchase_date && values.days_until_return && (
               <h1 className="">

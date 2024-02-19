@@ -29,7 +29,7 @@ const Header = ({ type }: HeaderProps) => {
       <div className="flex justify-between">
         <h1 className="text-3xl text-emerald-900  ">{type}</h1>
         <RegularButton href="/receipt-type" styles="bg-emerald-900 text-white">
-          <p className="text-xs">Create new</p>
+          <p className="text-sm">Create new</p>
         </RegularButton>
       </div>
       <div className="flex gap-2 flex-wrap">
@@ -44,13 +44,13 @@ const Header = ({ type }: HeaderProps) => {
         </RegularButton>
       </div>
       <div className="flex justify-between">
-        <div className="w-[250px]">
+        <div className="w-[290px]">
           <input
-            className="searchBar  placeholder:text-sm "
+            className="searchBar  placeholder:text-sm placeholder:text-black "
             placeholder={`Search ${type}`}
           ></input>
         </div>
-        {/* <div className="text-slate-400">Updated at</div> */}
+        {/* <div className="text-slate-500">Updated at</div> */}
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ const ReceiptType = () => {
   const router = useRouter();
   return (
     <div
-      className="flex flex-col h-full justify-center items-center"
+      className="p-4 flex flex-col h-full justify-center items-center"
       style={{ height: "calc(100vh - 250px)" }}
     >
       <div className="w-full sm:w-[600px] gap-8 flex flex-col justify-center items-center">
@@ -17,7 +17,7 @@ const ReceiptType = () => {
           </h1>
         </div>
 
-        <div className="receipt-types">
+        <div className="receipt-types ">
           <LargeButton
             height="h-[150px]"
             handleClick={() => router.push("/receipt-type/online")}

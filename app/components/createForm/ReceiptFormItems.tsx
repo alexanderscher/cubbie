@@ -274,7 +274,7 @@ const ReceiptFormItems = ({
           <div className="w-full">
             {edit && stage !== "Final" ? (
               <input
-                className="text-orange-600 border-b-[1.5px] border-slate-400 focus:outline-none bg-white bg w-full"
+                className="text-orange-600 border-b-[1.5px] border-slate-500 focus:outline-none bg-white bg w-full"
                 value={editState.description || ""}
                 name="description"
                 onChange={handleItemChange}
@@ -297,12 +297,12 @@ const ReceiptFormItems = ({
             !edit && <p className="text-emerald-900">Asset</p>}
 
           <div className="w-full">
-            <h1 className="text-slate-400 ">AMOUNT</h1>
+            <h1 className="text-slate-500 ">AMOUNT</h1>
             {edit ? (
               <CurrencyInput
                 id="price"
                 name="price"
-                className="text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
+                className="text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none w-full"
                 placeholder=""
                 value={editState.price}
                 defaultValue={editState.price || ""}
@@ -318,10 +318,10 @@ const ReceiptFormItems = ({
           </div>
 
           <div className="w-full">
-            <h1 className="text-slate-400 ">CHARACTER</h1>
+            <h1 className="text-slate-500 ">CHARACTER</h1>
             {edit ? (
               <input
-                className="  text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
+                className="  text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none w-full"
                 name="character"
                 value={editState.character || ""}
                 onChange={handleItemChange}
@@ -333,10 +333,10 @@ const ReceiptFormItems = ({
             )}
           </div>
           <div className="w-full">
-            <h1 className="text-slate-400 ">PRODUCT ID</h1>
+            <h1 className="text-slate-500 ">PRODUCT ID</h1>
             {edit ? (
               <input
-                className="  text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
+                className="  text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none w-full"
                 name="product_id"
                 value={editState.product_id}
                 onChange={handleItemChange}
@@ -348,11 +348,11 @@ const ReceiptFormItems = ({
             )}
           </div>
           <div className="w-full">
-            <h1 className="text-slate-400 ">BARCODE</h1>
+            <h1 className="text-slate-500 ">BARCODE</h1>
             {edit ? (
               <div className="flex flex-col gap-4">
                 <input
-                  className="  text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
+                  className="  text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none w-full"
                   name="barcode"
                   value={editState.barcode}
                   onChange={handleItemChange}

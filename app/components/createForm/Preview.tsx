@@ -114,7 +114,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
               {edit ? (
                 <div className="flex justify-between">
                   <input
-                    className="text-orange-600 text-lg bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none w-full"
+                    className="text-orange-600 text-lg bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none w-full"
                     name="store"
                     value={editState.store}
                     onChange={handleEditChange}
@@ -131,12 +131,12 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                 <p className="text-orange-900 text-sm">{errors.store}</p>
               )}
               <div className="flex flex-col ">
-                <h1 className="text-slate-400  text-sm">TOTAL AMOUNT</h1>
+                <h1 className="text-slate-500  text-sm">TOTAL AMOUNT</h1>
                 {edit ? (
                   <CurrencyInput
                     id="amount"
                     name="amount"
-                    className="text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
+                    className="text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none"
                     placeholder=""
                     value={editState.amount}
                     defaultValue={editState.amount || ""}
@@ -153,12 +153,12 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                 )}
               </div>
               <div className="flex flex-col ">
-                <h1 className="text-slate-400  text-sm">ASSET AMOUNT</h1>
+                <h1 className="text-slate-500  text-sm">ASSET AMOUNT</h1>
                 {edit ? (
                   <CurrencyInput
                     id="assetAmount"
                     name="assetAmount"
-                    className="text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
+                    className="text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none"
                     placeholder=""
                     value={editState.assetAmount}
                     defaultValue={editState.assetAmount || ""}
@@ -175,10 +175,10 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
               </div>
 
               <div className="flex flex-col ">
-                <h1 className="text-slate-400  text-sm">CARD</h1>
+                <h1 className="text-slate-500  text-sm">CARD</h1>
                 {edit ? (
                   <input
-                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
+                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none"
                     name="card"
                     value={editState.card}
                     onChange={handleEditChange}
@@ -190,12 +190,12 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                 )}
               </div>
               <div className="flex flex-col ">
-                <h1 className="text-slate-400  text-sm">
+                <h1 className="text-slate-500  text-sm">
                   TRACKING NUMBER LINK
                 </h1>
                 {edit ? (
                   <input
-                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
+                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none"
                     name="tracking_number"
                     value={editState.tracking_number}
                     onChange={handleEditChange}
@@ -213,10 +213,10 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
               </div>
 
               <div className="flex flex-col ">
-                <h1 className="text-slate-400  text-sm">PURCHASE DATE</h1>
+                <h1 className="text-slate-500  text-sm">PURCHASE DATE</h1>
                 {edit ? (
                   <input
-                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
+                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none"
                     name="purchase_date"
                     value={editState.purchase_date}
                     onChange={handleEditChange}
@@ -233,10 +233,10 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                 )}
               </div>
               <div className="flex flex-col ">
-                <h1 className="text-slate-400  text-sm">DAYS UNTIL RETURN</h1>
+                <h1 className="text-slate-500  text-sm">DAYS UNTIL RETURN</h1>
                 {edit ? (
                   <input
-                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-400 focus:outline-none"
+                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none"
                     name="days_until_return"
                     value={editState.days_until_return}
                     onChange={handleEditChange}
@@ -264,7 +264,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
               </div>
 
               <div className="flex flex-col ">
-                <h1 className="text-slate-400  text-sm">Return Date</h1>
+                <h1 className="text-slate-500  text-sm">Return Date</h1>
 
                 {values.purchase_date && values.days_until_return && (
                   <h1 className=" text-sm">

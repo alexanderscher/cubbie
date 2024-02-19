@@ -3,7 +3,7 @@ import React from "react";
 
 const Shirt = () => {
   return (
-    <div className="w-full h-[100px] overflow-hidden relative flex justify-center items-center">
+    <div className="w-full h-[140px] overflow-hidden relative flex justify-center items-center">
       <div className="w-full h-full flex justify-center items-center">
         <Image
           src="/clothes.png"

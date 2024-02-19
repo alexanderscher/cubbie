@@ -17,9 +17,9 @@ const Receipt = ({ receipt }: ReceiptProps) => {
   console.log(receipt);
 
   return (
-    <div className="box">
+    <div className="box pb-6">
       <div className="p-4 flex flex-col gap-2">
-        <p className="text-slate-400 text-xs text-end">
+        <p className="text-slate-500 text-xs text-end">
           {formatDateToMMDDYY(receipt.created_at)}
         </p>
         <div className="w-full  overflow-hidden relative flex justify-center items-center">
@@ -42,7 +42,7 @@ const Receipt = ({ receipt }: ReceiptProps) => {
           />
         </a>
 
-        <p className="text-slate-400 text-xs ">
+        <p className="text-slate-500 text-xs ">
           Return by {formatDateToMMDDYY(receipt.return_date)}
         </p>
 

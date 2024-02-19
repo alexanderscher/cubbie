@@ -22,11 +22,11 @@ const ReceiptItems = () => {
 
         <div className="text-sm flex flex-col gap-3 ">
           <div>
-            <h1 className="text-slate-400 ">Amount</h1>
+            <h1 className="text-slate-500 ">Amount</h1>
             <h1>200</h1>
           </div>
           <div>
-            <h1 className="text-slate-400 ">Barcode</h1>
+            <h1 className="text-slate-500 ">Barcode</h1>
             <h1>123123</h1>
           </div>
           {/* <RegularButton styles={"w-full border-emerald-900 "}>

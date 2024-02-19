@@ -5,6 +5,7 @@ import { Item as ItemType } from "@/types/receipt";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 interface Props {
@@ -12,7 +13,6 @@ interface Props {
 }
 
 const Item = ({ item }: Props) => {
-  console.log(item);
   return (
     <div className="box ">
       {item.photo_url && (
@@ -29,17 +29,22 @@ const Item = ({ item }: Props) => {
       )}
       <div className="p-4 flex flex-col gap-2 justify-between">
         <div>
-          {!item.photo_url && <Shirt />}
-          <TruncateText
-            text={item.description}
-            maxLength={30}
-            styles={"text-orange-600"}
-          />
+          <Link href={`/item/${item.id}`}>
+            {!item.photo_url && <Shirt />}
+            <TruncateText
+              text={item.description}
+              maxLength={30}
+              styles={"text-orange-600"}
+            />
+          </Link>
 
           <div className="">
-            <p className="text-slate-400 text-xs ">
-              Return by {formatDateToMMDDYY(item.receipt.return_date)}
-            </p>
+            {item.barcode && (
+              <p className="text-sm text-slate-500">{item.barcode}</p>
+            )}
+            {item.product_id && (
+              <p className="text-sm text-slate-500">{item.product_id}</p>
+            )}
           </div>
 
           <div className="border-t-[1.5px] border-slate-300 flex flex-col  text-sm">
@@ -48,9 +53,13 @@ const Item = ({ item }: Props) => {
               maxLength={20}
               styles={""}
             />
+
             <p className="">{formatCurrency(item.price)}</p>
           </div>
         </div>
+        <p className="text-slate-500 text-xs pt-3 text-end">
+          Return by {formatDateToMMDDYY(item.receipt.return_date)}
+        </p>
       </div>
     </div>
   );

@@ -56,13 +56,13 @@ const ReceiptPage = () => {
           <div className="flex flex-col gap-2">
             {!receipt.receipt_image_url && (
               <div className="w-full  overflow-hidden relative flex justify-center items-center">
-                <div className="w-full h-full flex justify-center items-center">
+                <div className="w-full h-full flex justify-center items-center rounded-md">
                   <Image
                     src="/receipt-placeholder.png"
                     alt=""
                     width={50}
                     height={50}
-                    className="object-cover "
+                    className="object-cover"
                     style={{ objectFit: "cover", objectPosition: "center" }}
                   />
                 </div>

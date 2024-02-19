@@ -1,0 +1,17 @@
+.receipts {
+  display: flex;
+  gap: 50px;
+}
+
+.receiptBar {
+  width: 100%;
+}
+
+@media (max-width: 800px) {
+  .receipts {
+    flex-direction: column;
+  }
+  .receiptBar {
+    width: 100%;
+  }
+}

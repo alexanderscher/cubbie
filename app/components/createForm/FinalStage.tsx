@@ -5,8 +5,7 @@ import ReceiptFormItems from "@/app/components/createForm/ReceiptFormItems";
 import { ReceiptOnlineStage, ReceiptStoreStage } from "@/constants/form";
 import { ItemInput, ReceiptInput } from "@/types/form";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
-import { formatCurrency } from "@/utils/formatCurrency";
-
+import styles from "./form.module.css";
 import { useIsMobile } from "@/utils/useIsMobile";
 import Image from "next/image";
 import React from "react";
@@ -131,9 +130,11 @@ interface ReceiptPageProps {
 
 const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
   return (
-    <div className="receipts ">
+    <div className={`${styles.receipts}`}>
       <div className="flex flex-col gap-4 ">
-        <div className="flex flex-col gap-1 receipt-bar border-t-[1.5px] border-black pt-3">
+        <div
+          className={`flex flex-col gap-1 ${styles.receiptBar} border-t-[1.5px] border-black pt-3`}
+        >
           <div className="flex justify-between w-full">
             <h1 className="text-orange-600 text-xl">{values.store}</h1>
             <div className="flex gap-2 items-start mt-2">

@@ -1,4 +1,4 @@
-import { BarcodeScanner } from "@/app/components/BarcodeScanner";
+import { BarcodeScanner } from "@/app/components/createForm/barcode/BarcodeScanner";
 import LargeButton from "@/app/components/buttons/LargeButton";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { ItemInput, ReceiptInput } from "@/types/form";

@@ -1,4 +1,5 @@
 "use client";
+import styles from "./upload.module.css";
 import LargeButton from "@/app/components/buttons/LargeButton";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -17,7 +18,7 @@ const ReceiptType = () => {
           </h1>
         </div>
 
-        <div className="receipt-types ">
+        <div className={`${styles.receiptTypes} `}>
           <LargeButton
             height="h-[150px]"
             handleClick={() => router.push("/receipt-type/online")}

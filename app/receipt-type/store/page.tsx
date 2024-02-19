@@ -1,5 +1,5 @@
 "use client";
-
+import styles from "../upload.module.css";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { Formik } from "formik";
 import React, { useState } from "react";
@@ -112,8 +112,8 @@ const Store = () => {
                 switch (stage) {
                   case ReceiptStoreStage.IN_STORE_RECEIPT:
                     return (
-                      <div className="two-tab ">
-                        <div className="left-tab">
+                      <div className={`${styles.twoTab}`}>
+                        <div className={`${styles.leftTab}`}>
                           <div className="flex justify-between">
                             <h1 className="text-orange-600 text-lg">
                               In Store Receipt
@@ -212,8 +212,8 @@ const Store = () => {
 
                   case ReceiptStoreStage.IN_STORE_ITEMS_MANUAL:
                     return (
-                      <div className="two-tab ">
-                        <div className="left-tab">
+                      <div className={`${styles.twoTab}`}>
+                        <div className={`${styles.leftTab}`}>
                           <div className="flex justify-between">
                             <h1 className="text-orange-600 text-lg">
                               In Store Items
@@ -309,8 +309,8 @@ const Store = () => {
 
                   case ReceiptStoreStage.IN_STORE_GPT:
                     return (
-                      <div className="two-tab ">
-                        <div className="left-tab">
+                      <div className={`${styles.twoTab}`}>
+                        <div className={`${styles.leftTab}`}>
                           <div className="flex justify-between">
                             <h1 className="text-orange-600 text-lg">
                               In Store Receipt

@@ -1,0 +1,54 @@
+.topbar {
+  display: none;
+}
+
+.navbarItems {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: white;
+}
+
+.title {
+  display: none;
+}
+
+.menu {
+  position: fixed;
+
+  top: 0;
+  right: 0; /* Add this line to align it to the left */
+  width: 150px; /* Change to 100% to extend the width across the bottom */
+  height: 100%; /* Adjust height as needed */
+  z-index: 1000;
+  background-color: #064e3b;
+}
+
+.navbarFixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 140px;
+  height: 100%;
+  z-index: 1000;
+  border-right: #064e3b 1.5px solid;
+  background-color: #064e3b;
+}
+
+@media (max-width: 550px) {
+  .navbarFixed {
+    display: none;
+  }
+
+  .title {
+    display: block;
+  }
+
+  .topbar {
+    display: flex;
+  }
+
+  .navbarFixed {
+    display: none;
+  }
+}

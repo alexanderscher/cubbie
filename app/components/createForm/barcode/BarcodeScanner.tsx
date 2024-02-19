@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import Webcam from "react-webcam";
+import styles from "./barcode.module.css";
 import { useZxing } from "@/utils/useZxing";
 
 type BarcodeScannerProps = {
@@ -25,10 +26,10 @@ export const BarcodeScanner = ({
 
   return (
     isModalOpen && (
-      <div className="modal-style">
+      <div className={`${styles.modalStyle}`}>
         <button
           type="button"
-          className="close-button-style"
+          className={`${styles.closeButtonStyle}`}
           onClick={() => {
             setIsModalOpen(false);
             setShowScanner(false);
@@ -36,13 +37,17 @@ export const BarcodeScanner = ({
         >
           Close
         </button>
-        <div className="scanner-style">
+        <div className={`${styles.scannerStyle}`}>
+          {" "}
           <Webcam
             ref={webcamRef}
             screenshotFormat="image/jpeg"
             videoConstraints={{ facingMode: "environment" }}
           />
-          <div className="box-style"></div>
+          <div
+            style={{ transform: "translate(-50%, -50%)" }}
+            className="absolute border-[3px] w-[300px] h-[200px] left-[50%] top-[50%] "
+          ></div>
           <video ref={zxingRef} style={{ display: "none" }}></video>
         </div>
       </div>

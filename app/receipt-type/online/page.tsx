@@ -1,5 +1,5 @@
 "use client";
-
+import styles from "../upload.module.css";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { Formik } from "formik";
 import React, { useState } from "react";
@@ -108,8 +108,8 @@ const Online = () => {
                 switch (stage) {
                   case ReceiptOnlineStage.ONLINE_RECEIPT:
                     return (
-                      <div className="two-tab ">
-                        <div className="left-tab">
+                      <div className={`${styles.twoTab}`}>
+                        <div className={`${styles.leftTab}`}>
                           <div className="flex justify-between">
                             <h1 className="text-orange-600 text-lg">
                               Online Receipt
@@ -187,8 +187,8 @@ const Online = () => {
                     );
                   case ReceiptOnlineStage.ONLINE_ITEMS:
                     return (
-                      <div className="two-tab ">
-                        <div className="left-tab">
+                      <div className={`${styles.twoTab}`}>
+                        <div className={`${styles.leftTab}`}>
                           <div className="flex justify-between">
                             <h1 className="text-orange-600 text-lg">
                               Online Receipt Items

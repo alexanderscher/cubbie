@@ -1,15 +1,17 @@
 "use client";
-import Navbar from "@/app/components/Navbar";
+import styles from "./navbar.module.css";
 import React, { useState } from "react";
 
 const Topbar = () => {
   const [menu, setMenu] = useState(false);
   return (
-    <div className="topbar p-4 justify-between border-b-[1.5px] border-emerald-900 bg-white text-emerald-900">
+    <div
+      className={`${styles.topbar} p-4 justify-between border-b-[1.5px] border-emerald-900 bg-white text-emerald-900`}
+    >
       <a href="/">Sticky Notes</a>
       <button onClick={() => setMenu(!menu)}>Menu</button>
       {menu && (
-        <div className="menu p-4">
+        <div className={`${styles.menu} p-4`}>
           <button onClick={() => setMenu(!menu)}>Close</button>
           <div className="flex flex-col gap-2 text-white ">
             <a href="/">Receipts</a>

@@ -2,6 +2,7 @@
 import { useParams } from "next/navigation";
 import { Item as ItemType } from "@/types/receipt";
 import React, { useEffect, useState } from "react";
+import RegularButton from "@/app/components/buttons/RegularButton";
 
 const ItemID = () => {
   const { id } = useParams();
@@ -15,12 +16,16 @@ const ItemID = () => {
       setItem(data.item);
     };
     fetchItem();
-    console.log(item);
   }, [id]);
 
   return (
-    <div>
-      <div></div>
+    <div className="flex flex-col gap-6">
+      <div className="flex justify-between w-full">
+        <h1 className="text-3xl text-orange-600">{item.receipt.store}</h1>
+        <RegularButton styles="bg-emerald-900">
+          <p className="text-white text-sm">Edit</p>
+        </RegularButton>
+      </div>
       <div></div>
     </div>
   );

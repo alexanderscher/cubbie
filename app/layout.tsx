@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/app/components/Navbar";
-import Navbar from "@/app/components/Navbar";
+import Header from "@/app/components/navbar/Navbar";
+import Navbar from "@/app/components/navbar/Navbar";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
 import localFont from "next/font/local";
-import Topbar from "@/app/components/Topbar";
+import Topbar from "@/app/components/navbar/Topbar";
 import Head from "next/head";
 
 const myFont = localFont({

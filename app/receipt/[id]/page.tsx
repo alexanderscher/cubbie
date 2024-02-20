@@ -26,11 +26,13 @@ const ReceiptPage = () => {
 
   if (!receipt.items) return <div>Loading</div>;
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 min-h-screen pb-20 max-w-[1070px]">
       <div className="flex justify-between items-center w-full">
         <h1 className="text-2xl text-orange-600 w-3/4">{receipt.store}</h1>
         <RegularButton styles="bg-emerald-900">
-          <p className="text-white text-sm">Edit</p>
+          <Link href={`/receipt/${receipt.id}/edit`}>
+            <p className="text-white text-sm">Edit</p>
+          </Link>
         </RegularButton>
       </div>
       <div className="flex bg-white rounded-md text-sm border-emerald-900 border-[1.5px] p-4">
@@ -50,19 +52,19 @@ const ReceiptPage = () => {
       </div>
       <div className={`${styles.receipt} h-[700px]`}>
         <div className={`${styles.receiptLeft}  flex flex-col gap-2`}>
-          <p className="text-lg text-emerald-900">Receipt Info</p>
           <div
-            className={` border-emerald-900 border-[1.5px] rounded-md p-4 bg-white flex flex-col gap-4`}
+            className={` border-emerald-900 border-[1.5px] rounded-md  bg-white flex flex-col gap-4 p-4`}
           >
+            <p className="text-lg text-emerald-900">Receipt Information</p>
             {!receipt.receipt_image_url && (
               <div className="w-full  overflow-hidden relative flex justify-center items-center ">
                 <div className="w-full h-full flex justify-center items-start ">
                   <Image
                     src="/receipt_b.png"
                     alt=""
-                    width={50}
-                    height={50}
-                    className="object-cover bg-white"
+                    width={60}
+                    height={60}
+                    className="object-cover bg-white pt-4"
                     style={{ objectFit: "cover", objectPosition: "center" }}
                   />
                 </div>
@@ -70,60 +72,56 @@ const ReceiptPage = () => {
             )}
 
             {receipt.receipt_image_url && (
-              <div className="w-full h-[300px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col rounded-md">
-                <Image
-                  src={receipt.receipt_image_url}
-                  alt=""
-                  width={400}
-                  height={400}
-                  className="w-full h-full object-cover rounded-t-sm"
-                  style={{ objectPosition: "top" }}
-                />
+              <div className="w-full h-[400px] overflow-hidden relative flex justify-center items-center flex-shrink-0  rounded-md">
+                <div className="w-[300px] flex justify-center">
+                  <Image
+                    src={receipt.receipt_image_url}
+                    width={280}
+                    height={280}
+                    alt="Receipt Image"
+                    className="object-contain rounded-md"
+                    layout="intrinsic"
+                  />
+                </div>
               </div>
             )}
 
-            <div className="flex flex-col gap-3 text-sm">
-              <div>
+            <div className="flex flex-col gap-6 text-sm ">
+              <div className="w-full  border-slate-400 border-b-[1.5px] pb-2 ">
                 <p className="text-slate-500 text-xs">Quantity</p>
-                <p>{receipt.items.length}</p>
+                <p className="">{receipt.items.length}</p>
               </div>
-              <div>
+              <div className="w-full  border-slate-400 border-b-[1.5px] pb-2 ">
                 <p className="text-slate-500 text-xs">Updated at</p>
-                <p>{formatDateToMMDDYY(receipt.created_at)}</p>
+                <p className="">{formatDateToMMDDYY(receipt.created_at)}</p>
               </div>
-              <div>
+              <div className="w-full  border-slate-400 border-b-[1.5px] pb-2 ">
                 <p className="text-slate-500 text-xs">Receipt Type</p>
-                <p>{receipt.type}</p>
+                <p className="">{receipt.type}</p>
               </div>
 
-              {receipt.card ? (
-                <div>
-                  <p className="text-slate-500 text-xs">Card used</p>
-                  <p>{receipt.card}</p>
-                </div>
-              ) : (
-                <div>
-                  <p className="text-slate-500 text-xs">Card used</p>
-                  <p>None</p>
-                </div>
-              )}
-              {receipt.tracking_number ? (
-                <div>
-                  <p className="text-slate-500 text-xs">Tracking Link</p>
-                  <p>{receipt.tracking_number}</p>
-                </div>
-              ) : (
-                <div>
-                  {" "}
-                  <p className="text-slate-500 text-xs">Tracking Link</p>
-                  <p>None</p>
-                </div>
-              )}
+              <div className="w-full  border-slate-400 border-b-[1.5px] pb-2 ">
+                <p className="text-slate-500 text-xs">Card</p>
+                <p className="">{receipt.card ? receipt.card : "None"}</p>
+              </div>
+
+              <div className="w-full  border-slate-400 border-b-[1.5px] pb-2 ">
+                <p className="text-slate-500 text-xs">Tracking Link</p>
+                <p className="">
+                  {receipt.tracking_number ? receipt.tracking_number : "None"}
+                </p>
+              </div>
+              <div className="w-full  border-slate-400 border-b-[1.5px] pb-2 ">
+                <p className="text-slate-500 text-xs">Asset Amount</p>
+                <p className="">
+                  {receipt.asset_amount ? receipt.asset_amount : "None"}
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 lg:w-1/2 w-full">
           <p className="text-lg text-emerald-900">Items</p>
           <div className={`${styles.boxes}`}>
             {receipt.items.length > 0 &&

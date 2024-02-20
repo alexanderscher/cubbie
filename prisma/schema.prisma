@@ -16,12 +16,13 @@ model Receipt {
   store             String
   card              String
   amount            Float
-  tracking_number   String
+  tracking_number   String?
   purchase_date     DateTime
   days_until_return Int
+  asset_amount      Int?
   return_date       DateTime
-  receipt_image_url String
-  receipt_image_key String
+  receipt_image_url String?
+  receipt_image_key String?
   items             Items[]
   archive           Boolean
   memo              Boolean

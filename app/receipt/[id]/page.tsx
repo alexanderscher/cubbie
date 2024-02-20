@@ -26,13 +26,13 @@ const ReceiptPage = () => {
   if (!receipt.items) return <div>Loading</div>;
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex justify-between w-full">
+      <div className="flex justify-between items-center w-full">
         <h1 className="text-2xl text-orange-600 w-3/4">{receipt.store}</h1>
         <RegularButton styles="bg-emerald-900">
           <p className="text-white text-sm">Edit</p>
         </RegularButton>
       </div>
-      <div className="flex bg-white rounded-md text-sm border-emerald-900 border-[1.5px] p-2">
+      <div className="flex bg-white rounded-md text-sm border-emerald-900 border-[1.5px] p-4">
         <div className="w-1/4 border-r-[1.5px] border-slate-300 ">
           <p className="text-slate-500 text-xs">Total amount</p>
           <p>{formatCurrency(receipt.amount)}</p>
@@ -51,79 +51,85 @@ const ReceiptPage = () => {
           <p>{formatDateToMMDDYY(receipt.return_date)}</p>
         </div>
       </div>
-      <div className={`${styles.receipt} h-[600px]`}>
-        <div
-          className={`${styles.receiptLeft} border-emerald-900 border-[1.5px] rounded-md p-4 bg-white">
-          <div className="flex flex-col gap-4`}
-        >
-          {!receipt.receipt_image_url && (
-            <div className="w-full  overflow-hidden relative flex justify-center items-center ">
-              <div className="w-full h-full flex justify-center items-start ">
+      <div className={`${styles.receipt} h-[700px]`}>
+        <div className={`${styles.receiptLeft}  flex flex-col gap-2`}>
+          <p className="text-lg text-emerald-900">Receipt Info</p>
+          <div
+            className={` border-emerald-900 border-[1.5px] rounded-md p-4 bg-white flex flex-col gap-4`}
+          >
+            {!receipt.receipt_image_url && (
+              <div className="w-full  overflow-hidden relative flex justify-center items-center ">
+                <div className="w-full h-full flex justify-center items-start ">
+                  <Image
+                    src="/receipt-placeholder.png"
+                    alt=""
+                    width={50}
+                    height={50}
+                    className="object-cover bg-white"
+                    style={{ objectFit: "cover", objectPosition: "center" }}
+                  />
+                </div>
+              </div>
+            )}
+
+            {receipt.receipt_image_url && (
+              <div className="w-full h-[300px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col rounded-sm">
                 <Image
-                  src="/receipt-placeholder.png"
+                  src={receipt.receipt_image_url}
                   alt=""
-                  width={50}
-                  height={50}
-                  className="object-cover bg-white"
-                  style={{ objectFit: "cover", objectPosition: "center" }}
+                  width={400}
+                  height={400}
+                  className="w-full h-full object-cover rounded-t-sm"
+                  style={{ objectPosition: "top" }}
                 />
               </div>
-            </div>
-          )}
-
-          {receipt.receipt_image_url && (
-            <div className="w-full h-[300px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col rounded-sm">
-              <Image
-                src={receipt.receipt_image_url}
-                alt=""
-                width={400}
-                height={400}
-                className="w-full h-full object-cover rounded-t-sm"
-                style={{ objectPosition: "top" }}
-              />
-            </div>
-          )}
-
-          <div className="flex flex-col gap-3 text-sm">
-            <div>
-              <p className="text-slate-500">Updated at</p>
-              <p>{formatDateToMMDDYY(receipt.created_at)}</p>
-            </div>
-            <div>
-              <p className="text-slate-500">Receipt Type</p>
-              <p>{receipt.type}</p>
-            </div>
-
-            {receipt.card ? (
-              <div>
-                <p className="text-slate-500">Card used</p>
-                <p>{receipt.card}</p>
-              </div>
-            ) : (
-              <div>
-                <p className="text-slate-500">Card used</p>
-                <p>None</p>
-              </div>
             )}
-            {receipt.tracking_number ? (
+
+            <div className="flex flex-col gap-3 text-sm">
               <div>
-                <p className="text-slate-500">Tracking Link</p>
-                <p>{receipt.tracking_number}</p>
+                <p className="text-slate-500">Updated at</p>
+                <p>{formatDateToMMDDYY(receipt.created_at)}</p>
               </div>
-            ) : (
               <div>
-                {" "}
-                <p className="text-slate-500">Tracking Link</p>
-                <p>None</p>
+                <p className="text-slate-500">Receipt Type</p>
+                <p>{receipt.type}</p>
               </div>
-            )}
+
+              {receipt.card ? (
+                <div>
+                  <p className="text-slate-500">Card used</p>
+                  <p>{receipt.card}</p>
+                </div>
+              ) : (
+                <div>
+                  <p className="text-slate-500">Card used</p>
+                  <p>None</p>
+                </div>
+              )}
+              {receipt.tracking_number ? (
+                <div>
+                  <p className="text-slate-500">Tracking Link</p>
+                  <p>{receipt.tracking_number}</p>
+                </div>
+              ) : (
+                <div>
+                  {" "}
+                  <p className="text-slate-500">Tracking Link</p>
+                  <p>None</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-        <div className="boxes">
-          {receipt.items.length > 0 &&
-            receipt.items.map((item: any) => (
-              <ReceiptItems key={item.id} item={item} />
-            ))}
+
+        <div className="flex flex-col gap-2">
+          <p className="text-lg text-emerald-900">Items</p>
+          <div className="boxes">
+            {receipt.items.length > 0 &&
+              receipt.items.map((item: any) => (
+                <ReceiptItems key={item.id} item={item} />
+              ))}
+          </div>
         </div>
       </div>
     </div>

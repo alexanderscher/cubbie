@@ -4,14 +4,15 @@
 }
 
 .receiptLeft {
-  min-width: 300px;
-  max-width: 600px;
-  background-color: white;
+  min-width: 400px;
+  max-width: 400px;
+  /* width: 50%; */
 }
 
 .boxItems {
-  width: 100%;
-  max-width: 200px;
+  /* width: 100%; */
+  min-width: 200px;
+  max-width: 300px;
   border: 1.5px solid #064e3b;
   background-color: rgb(241, 241, 241);
   border-radius: 5px;
@@ -29,6 +30,8 @@
   }
   .receiptLeft {
     max-width: 100%;
+    min-width: 100%;
+    width: 100%;
   }
 }
 

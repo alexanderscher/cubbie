@@ -8,6 +8,7 @@ import RegularButton from "@/app/components/buttons/RegularButton";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
+import Shirt from "@/app/components/placeholderImages/Shirt";
 
 const ItemID = () => {
   const { id } = useParams();
@@ -35,24 +36,10 @@ const ItemID = () => {
 
       <div className={`${styles.receipt}`}>
         <div
-          className={`w-full sm:w-1/2 border-emerald-900 border-[1.5px] rounded-md p-6 bg-white flex flex-col gap-4`}
+          className={`w-full md:w-1/2 border-emerald-900 border-[1.5px] rounded-md p-6 bg-white flex flex-col gap-4`}
         >
-          {" "}
-          <p className="">Item Info</p>
-          {!item.photo_url && (
-            <div className="w-full  overflow-hidden relative flex justify-center items-center ">
-              <div className="w-full h-full flex justify-center items-start ">
-                <Image
-                  src="/clothes.png"
-                  alt=""
-                  width={50}
-                  height={50}
-                  className="object-cover bg-white"
-                  style={{ objectFit: "cover", objectPosition: "center" }}
-                />
-              </div>
-            </div>
-          )}
+          <p className="text-lg text-emerald-900">Item Info</p>
+          {!item.photo_url && <Shirt />}
           {item.photo_url && (
             <div className="w-full h-[300px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col rounded-sm">
               <Image
@@ -86,12 +73,12 @@ const ItemID = () => {
             <p>{item.receipt.store}</p>
           </div>
         </div>
-        <div className={` w-full sm:w-1/2`}>
+        <div className={`w-full md:w-1/2`}>
           <div className={`${styles.receiptLeft}  flex flex-col gap-2`}>
             <div
               className={` border-emerald-900 border-[1.5px] rounded-md p-6 bg-white flex flex-col gap-4`}
             >
-              <p className="">Recipt Info</p>
+              <p className="text-lg text-emerald-900">Receipt Info</p>
               <div className="flex flex-col gap-3 text-sm">
                 <div className="flex flex-col gap-3 text-sm">
                   <div>

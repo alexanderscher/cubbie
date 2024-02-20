@@ -1,22 +1,70 @@
 import React from "react";
 import styles from "./navbar.module.css";
+import Image from "next/image";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
     <div className={`${styles.navbarFixed} p-2`}>
       <div className={`${styles.navbarItems} text-sm`}>
-        <a href="/">Receipts</a>
-        <a href="/">Search</a>
-        <a href="/receipt-type">Dashboard</a>
-        <a href="/receipt-type">Calender</a>
-        <a href="/receipt-type">Notifications</a>
-        <a href="/">Account</a>
+        <Link href="/">Sticky Notes</Link>
+        <Link href="/">
+          <Image
+            src="/receipt_w.png"
+            alt=""
+            width={25}
+            height={25}
+            className="object-cover "
+            style={{ objectFit: "cover", objectPosition: "center" }}
+          />
+        </Link>
+
+        <Link href="/">
+          <Image
+            src="/search_w.png"
+            alt=""
+            width={30}
+            height={30}
+            className="object-cover "
+            style={{ objectFit: "cover", objectPosition: "center" }}
+          />
+        </Link>
+        <Link href="/">
+          <Image
+            src="/account_w.png"
+            alt=""
+            width={30}
+            height={30}
+            className="object-cover "
+            style={{ objectFit: "cover", objectPosition: "center" }}
+          />
+        </Link>
+        <Link href="/">
+          <Image
+            src="/calendar_w.png"
+            alt=""
+            width={30}
+            height={30}
+            className="object-cover "
+            style={{ objectFit: "cover", objectPosition: "center" }}
+          />
+        </Link>
+        <Link href="/">
+          <Image
+            src="/notification_w.png"
+            alt=""
+            width={30}
+            height={30}
+            className="object-cover "
+            style={{ objectFit: "cover", objectPosition: "center" }}
+          />
+        </Link>
       </div>
 
       <div className={`${styles.title} p-4`}>
-        <a href="/" className="text-black">
+        <Link href="/" className="text-black">
           Sticky Notes
-        </a>
+        </Link>
       </div>
     </div>
   );

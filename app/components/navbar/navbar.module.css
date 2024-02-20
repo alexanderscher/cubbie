@@ -5,7 +5,10 @@
 .navbarItems {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 50px;
   color: white;
 }
 
@@ -15,10 +18,9 @@
 
 .menu {
   position: fixed;
-
   top: 0;
   right: 0; /* Add this line to align it to the left */
-  width: 150px; /* Change to 100% to extend the width across the bottom */
+  width: 100px; /* Change to 100% to extend the width across the bottom */
   height: 100%; /* Adjust height as needed */
   z-index: 1000;
   background-color: #064e3b;
@@ -28,7 +30,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 140px;
+  width: 110px;
   height: 100%;
   z-index: 1000;
   border-right: #064e3b 1.5px solid;

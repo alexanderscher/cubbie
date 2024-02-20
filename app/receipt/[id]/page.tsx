@@ -7,6 +7,7 @@ import { Item, Receipt as ReceiptType } from "@/types/receipt";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -33,16 +34,12 @@ const ReceiptPage = () => {
         </RegularButton>
       </div>
       <div className="flex bg-white rounded-md text-sm border-emerald-900 border-[1.5px] p-4">
-        <div className="w-1/4 border-r-[1.5px] border-slate-300 ">
+        <div className="w-1/3 border-r-[1.5px] border-slate-300 ">
           <p className="text-slate-500 text-xs">Total amount</p>
           <p>{formatCurrency(receipt.amount)}</p>
         </div>
-        <div className="w-1/4 border-r-[1.5px] border-slate-300 pl-4 pr-2">
-          <p className="text-slate-500 text-xs">Quantity</p>
-          <p>{receipt.items.length}</p>
-        </div>
-        <div className="w-1/4 border-r-[1.5px] border-slate-300 pl-4 pr-2">
-          <p className="text-slate-500 text-xs">Purchase date</p>
+        <div className="w-1/3 border-r-[1.5px] border-slate-300 pl-4 pr-2">
+          <p className="text-slate-500 text-xs">Purcahse Date</p>
           <p>{formatDateToMMDDYY(receipt.purchase_date)}</p>
         </div>
 
@@ -61,7 +58,7 @@ const ReceiptPage = () => {
               <div className="w-full  overflow-hidden relative flex justify-center items-center ">
                 <div className="w-full h-full flex justify-center items-start ">
                   <Image
-                    src="/receipt-placeholder.png"
+                    src="/receipt_b.png"
                     alt=""
                     width={50}
                     height={50}
@@ -73,7 +70,7 @@ const ReceiptPage = () => {
             )}
 
             {receipt.receipt_image_url && (
-              <div className="w-full h-[300px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col rounded-sm">
+              <div className="w-full h-[300px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col rounded-md">
                 <Image
                   src={receipt.receipt_image_url}
                   alt=""
@@ -87,34 +84,38 @@ const ReceiptPage = () => {
 
             <div className="flex flex-col gap-3 text-sm">
               <div>
-                <p className="text-slate-500">Updated at</p>
+                <p className="text-slate-500 text-xs">Quantity</p>
+                <p>{receipt.items.length}</p>
+              </div>
+              <div>
+                <p className="text-slate-500 text-xs">Updated at</p>
                 <p>{formatDateToMMDDYY(receipt.created_at)}</p>
               </div>
               <div>
-                <p className="text-slate-500">Receipt Type</p>
+                <p className="text-slate-500 text-xs">Receipt Type</p>
                 <p>{receipt.type}</p>
               </div>
 
               {receipt.card ? (
                 <div>
-                  <p className="text-slate-500">Card used</p>
+                  <p className="text-slate-500 text-xs">Card used</p>
                   <p>{receipt.card}</p>
                 </div>
               ) : (
                 <div>
-                  <p className="text-slate-500">Card used</p>
+                  <p className="text-slate-500 text-xs">Card used</p>
                   <p>None</p>
                 </div>
               )}
               {receipt.tracking_number ? (
                 <div>
-                  <p className="text-slate-500">Tracking Link</p>
+                  <p className="text-slate-500 text-xs">Tracking Link</p>
                   <p>{receipt.tracking_number}</p>
                 </div>
               ) : (
                 <div>
                   {" "}
-                  <p className="text-slate-500">Tracking Link</p>
+                  <p className="text-slate-500 text-xs">Tracking Link</p>
                   <p>None</p>
                 </div>
               )}
@@ -124,7 +125,7 @@ const ReceiptPage = () => {
 
         <div className="flex flex-col gap-2">
           <p className="text-lg text-emerald-900">Items</p>
-          <div className="boxes">
+          <div className={`${styles.boxes}`}>
             {receipt.items.length > 0 &&
               receipt.items.map((item: any) => (
                 <ReceiptItems key={item.id} item={item} />
@@ -144,15 +145,15 @@ interface ReceiptItemsProps {
 
 const ReceiptItems = ({ item }: ReceiptItemsProps) => {
   return (
-    <div className={`${styles.boxItems}`}>
+    <div className={`${styles.box}`}>
       {item.photo_url && (
-        <div className="w-full h-[140px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col ">
+        <div className="w-full h-[110px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col ">
           <Image
             src={item.photo_url}
             alt=""
             width={200}
             height={200}
-            className="w-full h-full object-cover rounded-t-sm"
+            className="w-full h-full object-cover rounded-t-md"
             style={{ objectPosition: "top" }}
           />
         </div>
@@ -160,11 +161,13 @@ const ReceiptItems = ({ item }: ReceiptItemsProps) => {
       <div className="p-4 flex flex-col gap-2 justify-between">
         <div>
           {!item.photo_url && <Shirt />}
-          <TruncateText
-            text={item.description}
-            maxLength={30}
-            styles={"text-orange-600"}
-          />
+          <Link href={`/item/${item.id}`}>
+            <TruncateText
+              text={item.description}
+              maxLength={30}
+              styles={"text-orange-600"}
+            />
+          </Link>
 
           <div className="text-sm">
             <p className="">{formatCurrency(item.price)}</p>

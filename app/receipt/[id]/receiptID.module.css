@@ -9,20 +9,25 @@
   /* width: 50%; */
 }
 
-.boxItems {
-  /* width: 100%; */
-  min-width: 200px;
-  max-width: 300px;
+.boxes {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.box {
+  width: 100%;
+  max-width: 250px;
   border: 1.5px solid #064e3b;
   background-color: rgb(241, 241, 241);
-  border-radius: 5px;
+  border-radius: 0.375rem;
   display: flex;
   flex-direction: column;
   gap: 6px;
   position: relative;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .receipt {
     display: flex;
     flex-direction: column;
@@ -33,11 +38,12 @@
     min-width: 100%;
     width: 100%;
   }
-}
-
-@media (max-width: 550px) {
-  .boxItems {
-    max-width: 100%;
+  .boxes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  .box {
     width: 100%;
   }
 }

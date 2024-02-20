@@ -22,18 +22,18 @@ const Item = ({ item }: Props) => {
             alt=""
             width={200}
             height={200}
-            className="w-full h-full object-cover rounded-t-md"
+            className="w-full h-full object-cover rounded-t-lg"
             style={{ objectPosition: "top" }}
           />
         </div>
       )}
       <div className="p-4 flex flex-col gap-2 justify-between">
         <div>
-          <Link href={`/item/${item.id}`}>
+          <Link href={`/item/${item.id}`} className="sm:text-lg text-sm">
             {!item.photo_url && <Shirt />}
             <TruncateText
               text={item.description}
-              maxLength={30}
+              maxLength={18}
               styles={"text-orange-600"}
             />
           </Link>
@@ -45,7 +45,7 @@ const Item = ({ item }: Props) => {
           <div className="border-t-[1.5px] border-slate-300 flex flex-col  text-sm">
             <TruncateText
               text={item.receipt.store}
-              maxLength={20}
+              maxLength={15}
               styles={""}
             />
 

@@ -38,5 +38,6 @@
 @media (max-width: 550px) {
   .boxItems {
     max-width: 100%;
+    width: 100%;
   }
 }

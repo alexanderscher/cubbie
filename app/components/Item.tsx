@@ -16,13 +16,13 @@ const Item = ({ item }: Props) => {
   return (
     <div className="box ">
       {item.photo_url && (
-        <div className="w-full h-[140px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col">
+        <div className="w-full h-[120px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col">
           <Image
             src={item.photo_url}
             alt=""
             width={200}
             height={200}
-            className="w-full h-full object-cover rounded-t-sm"
+            className="w-full h-full object-cover rounded-t-md"
             style={{ objectPosition: "top" }}
           />
         </div>
@@ -38,14 +38,9 @@ const Item = ({ item }: Props) => {
             />
           </Link>
 
-          <div className="">
-            {item.barcode && (
-              <p className="text-sm text-slate-500">{item.barcode}</p>
-            )}
-            {item.product_id && (
-              <p className="text-sm text-slate-500">{item.product_id}</p>
-            )}
-          </div>
+          <p className="text-slate-500 text-xs ">
+            Return by {formatDateToMMDDYY(item.receipt.return_date)}
+          </p>
 
           <div className="border-t-[1.5px] border-slate-300 flex flex-col  text-sm">
             <TruncateText
@@ -56,10 +51,11 @@ const Item = ({ item }: Props) => {
 
             <p className="">{formatCurrency(item.price)}</p>
           </div>
+          {/* <div className="">
+            {item.barcode && <p className="text-sm 00">{item.barcode}</p>}
+            {item.product_id && <p className="text-sm 00">{item.product_id}</p>}
+          </div> */}
         </div>
-        <p className="text-slate-500 text-xs pt-3 text-end">
-          Return by {formatDateToMMDDYY(item.receipt.return_date)}
-        </p>
       </div>
     </div>
   );

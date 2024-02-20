@@ -4,9 +4,9 @@
 }
 
 .receiptLeft {
+  width: 50%;
   min-width: 400px;
-  max-width: 400px;
-  /* width: 50%; */
+  max-width: 450px;
 }
 
 .boxes {
@@ -45,5 +45,15 @@
   }
   .box {
     width: 100%;
+  }
+}
+
+@media (max-width: 375px) {
+  .boxes {
+    display: flex;
+  }
+  .box {
+    width: 100%;
+    max-width: 100%;
   }
 }

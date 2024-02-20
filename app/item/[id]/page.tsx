@@ -38,39 +38,37 @@ const ItemID = () => {
         <div
           className={`w-full md:w-1/2 border-emerald-900 border-[1.5px] rounded-md p-6 bg-white flex flex-col gap-4`}
         >
-          <p className="text-lg text-emerald-900">Item Info</p>
+          <p className="text-lg text-emerald-900">Item Information</p>
           {!item.photo_url && <Shirt />}
           {item.photo_url && (
-            <div className="w-full h-[300px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col rounded-sm">
-              <Image
-                src={item.photo_url}
-                alt=""
-                width={400}
-                height={400}
-                className="w-full h-full object-cover rounded-t-sm"
-                style={{ objectPosition: "top" }}
-              />
+            <div className="w-full h-[400px] overflow-hidden relative flex justify-center items-center flex-shrink-0  rounded-md">
+              <div className="w-[300px] flex justify-center">
+                <Image
+                  src={item.photo_url}
+                  width={280}
+                  height={280}
+                  alt="Receipt Image"
+                  className="object-contain rounded-md"
+                  layout="intrinsic"
+                />
+              </div>
             </div>
           )}
           <div className="w-full  border-emerald-900 border-b-[1.5px]   pb-2">
-            <p className="text-xs">Store</p>
-            <p>{item.receipt.store}</p>
+            <p className="text-xs">Price</p>
+            <p>{formatCurrency(item.price)}</p>
           </div>
           <div className="w-full  border-emerald-900 border-b-[1.5px]   pb-2">
-            <p className="text-xs">Store</p>
-            <p>{item.receipt.store}</p>
+            <p className="text-xs">Barcode</p>
+            <p>{item.barcode ? item.barcode : "None"}</p>
           </div>
           <div className="w-full  border-emerald-900 border-b-[1.5px]   pb-2">
-            <p className="text-xs">Store</p>
-            <p>{item.receipt.store}</p>
+            <p className="text-xs">Character</p>
+            <p>{item.character ? item.character : "None"}</p>
           </div>
           <div className="w-full  border-emerald-900 border-b-[1.5px]   pb-2">
-            <p className="text-xs">Store</p>
-            <p>{item.receipt.store}</p>
-          </div>
-          <div className="w-full  border-emerald-900 border-b-[1.5px]   pb-2">
-            <p className="text-xs">Store</p>
-            <p>{item.receipt.store}</p>
+            <p className="text-xs">Product ID</p>
+            <p>{item.product_id ? item.product_id : "None"}</p>
           </div>
         </div>
         <div className={`w-full md:w-1/2`}>
@@ -78,9 +76,13 @@ const ItemID = () => {
             <div
               className={` border-emerald-900 border-[1.5px] rounded-md p-6 bg-white flex flex-col gap-4`}
             >
-              <p className="text-lg text-emerald-900">Receipt Info</p>
+              <p className="text-lg text-emerald-900">Receipt Information</p>
               <div className="flex flex-col gap-3 text-sm">
                 <div className="flex flex-col gap-3 text-sm">
+                  <div>
+                    <p className="text-slate-500">Store</p>
+                    <p>{item.receipt.store}</p>
+                  </div>
                   <div>
                     <p className="text-slate-500">Updated at</p>
                     <p>{formatDateToMMDDYY(item.receipt.created_at)}</p>

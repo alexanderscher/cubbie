@@ -14,7 +14,7 @@ model Receipt {
   id                Int      @id @default(autoincrement())
   type              String
   store             String
-  card              String
+  card              String?
   amount            Float
   tracking_number   String?
   purchase_date     DateTime

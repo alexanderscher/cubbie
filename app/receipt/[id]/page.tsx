@@ -1,15 +1,14 @@
 "use client";
-import styles from "./receiptID.module.css";
+import styles from "@/app/receipt/receiptID.module.css";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import Shirt from "@/app/components/placeholderImages/Shirt";
-import { TruncateText } from "@/app/components/text/Truncate";
-import { Item, Receipt as ReceiptType } from "@/types/receipt";
+import { Receipt as ReceiptType } from "@/types/receipt";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { ReceiptItems } from "@/app/components/receiptComponents/ReceiptItems";
 
 const ReceiptPage = () => {
   const { id } = useParams();
@@ -23,10 +22,11 @@ const ReceiptPage = () => {
     };
     fetchReceipt();
   }, [id]);
+  console.log(receipt);
 
   if (!receipt.items) return <div>Loading</div>;
   return (
-    <div className="flex flex-col gap-8 min-h-screen pb-20 max-w-[1070px]">
+    <div className="flex flex-col gap-8  max-w-[1060px] h-full pb-[200px]">
       <div className="flex justify-between items-center w-full">
         <h1 className="text-2xl text-orange-600 w-3/4">{receipt.store}</h1>
         <RegularButton styles="bg-emerald-900">
@@ -35,7 +35,7 @@ const ReceiptPage = () => {
           </Link>
         </RegularButton>
       </div>
-      <div className="flex bg-white rounded-md text-sm border-emerald-900 border-[1.5px] p-4">
+      <div className="flex bg-white rounded-md text-sm shadow p-4">
         <div className="w-1/3 border-r-[1.5px] border-slate-300 ">
           <p className="text-slate-500 text-xs">Total amount</p>
           <p>{formatCurrency(receipt.amount)}</p>
@@ -53,7 +53,7 @@ const ReceiptPage = () => {
       <div className={`${styles.receipt} h-[700px]`}>
         <div className={`${styles.receiptLeft}  flex flex-col gap-2`}>
           <div
-            className={` border-emerald-900 border-[1.5px] rounded-md  bg-white flex flex-col gap-4 p-4`}
+            className={`shadow rounded-md  bg-white flex flex-col gap-4 p-6`}
           >
             <p className="text-lg text-emerald-900">Receipt Information</p>
             {!receipt.receipt_image_url && (
@@ -114,19 +114,25 @@ const ReceiptPage = () => {
               <div className="w-full  border-slate-400 border-b-[1.5px] pb-2 ">
                 <p className="text-slate-500 text-xs">Asset Amount</p>
                 <p className="">
-                  {receipt.asset_amount ? receipt.asset_amount : "None"}
+                  {receipt.asset_amount
+                    ? formatCurrency(receipt.asset_amount)
+                    : "None"}
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 lg:w-1/2 w-full">
+        <div className="flex flex-col gap-2 lg:w-1/2 w-full pb-[200px]">
           <p className="text-lg text-emerald-900">Items</p>
-          <div className={`${styles.boxes}`}>
+          <div className={`${styles.boxes} `}>
             {receipt.items.length > 0 &&
               receipt.items.map((item: any) => (
-                <ReceiptItems key={item.id} item={item} />
+                <ReceiptItems
+                  key={item.id}
+                  item={item}
+                  asset_amount={receipt.asset_amount}
+                />
               ))}
           </div>
         </div>
@@ -136,44 +142,3 @@ const ReceiptPage = () => {
 };
 
 export default ReceiptPage;
-
-interface ReceiptItemsProps {
-  item: Item;
-}
-
-const ReceiptItems = ({ item }: ReceiptItemsProps) => {
-  return (
-    <div className={`${styles.box}`}>
-      {item.photo_url && (
-        <div className="w-full h-[110px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col ">
-          <Image
-            src={item.photo_url}
-            alt=""
-            width={200}
-            height={200}
-            className="w-full h-full object-cover rounded-t-md"
-            style={{ objectPosition: "top" }}
-          />
-        </div>
-      )}
-      <div className="p-4 flex flex-col gap-2 justify-between">
-        <div>
-          {!item.photo_url && <Shirt />}
-          <Link href={`/item/${item.id}`}>
-            <TruncateText
-              text={item.description}
-              maxLength={30}
-              styles={"text-orange-600"}
-            />
-          </Link>
-
-          <div className="text-sm">
-            <p className="">{formatCurrency(item.price)}</p>
-            {item.barcode && <p className="">{item.barcode}</p>}
-            {item.product_id && <p className="">{item.product_id}</p>}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};

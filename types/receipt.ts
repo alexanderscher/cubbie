@@ -14,6 +14,7 @@ export interface Receipt {
   archive: boolean;
   memo: boolean;
   created_at: Date;
+  asset_amount: number;
 }
 
 export interface Item {

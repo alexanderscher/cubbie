@@ -18,8 +18,9 @@
 .box {
   width: 100%;
   max-width: 250px;
-  border: 1.5px solid #064e3b;
-  background-color: rgb(241, 241, 241);
+
+  background-color: white;
+
   border-radius: 0.375rem;
   display: flex;
   flex-direction: column;

@@ -21,3 +21,16 @@ export function formatDateToMMDDYY(dateString: any): string {
 
   return mm + "/" + dd + "/" + yy;
 }
+
+export const formatDateToYYYYMMDD = (date: any) => {
+  if (!date) return "";
+
+  // If date is already a string, assuming it's in ISO format
+  const dateObj = typeof date === "string" ? new Date(date) : date;
+
+  const year = dateObj.getFullYear();
+  const month = `0${dateObj.getMonth() + 1}`.slice(-2); // getMonth() is zero-based
+  const day = `0${dateObj.getDate()}`.slice(-2);
+
+  return `${year}-${month}-${day}`;
+};

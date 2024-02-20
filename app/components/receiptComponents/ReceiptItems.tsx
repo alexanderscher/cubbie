@@ -1,41 +1,52 @@
-import RegularButton from "@/app/components/buttons/RegularButton";
+import styles from "@/app/receipt/receiptID.module.css";
+import Shirt from "@/app/components/placeholderImages/Shirt";
+import { TruncateText } from "@/app/components/text/Truncate";
+import { Item } from "@/types/receipt";
+import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
-import React from "react";
+import Link from "next/link";
 
-const ReceiptItems = () => {
+interface ReceiptItemsProps {
+  item: Item;
+  asset_amount: number;
+}
+
+export const ReceiptItems = ({ item, asset_amount }: ReceiptItemsProps) => {
   return (
-    <div className="border-t-[1.5px] border-black flex flex-col gap-4 ">
-      <div className="flex justify-between">
-        <h1 className="text-orange-600">Levi 501 Jeans</h1>
-      </div>
-      <div className="flex gap-6 ">
-        {/* <img
-          src={item.photo[0].url}
-          style={{
-            padding: "",
-            objectFit: "contain",
-            width: "50%",
-            height: "50%",
-            borderRadius: "2px",
-          }}
-        /> */}
+    <div className={`${styles.box} shadow`}>
+      {item.photo_url && (
+        <div className="w-full h-[110px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col ">
+          <Image
+            src={item.photo_url}
+            alt=""
+            width={200}
+            height={200}
+            className="w-full h-full object-cover rounded-t-md"
+            style={{ objectPosition: "top" }}
+          />
+        </div>
+      )}
+      <div className="p-4 flex flex-col gap-2 justify-between">
+        <div>
+          {!item.photo_url && <Shirt />}
+          <Link href={`/item/${item.id}`}>
+            <TruncateText
+              text={item.description}
+              maxLength={30}
+              styles={"text-orange-600"}
+            />
+          </Link>
 
-        <div className="text-sm flex flex-col gap-3 ">
-          <div>
-            <h1 className="text-slate-500 ">Amount</h1>
-            <h1>200</h1>
+          <div className="text-sm">
+            {asset_amount > item.price && (
+              <p className="text-emerald-900">Asset</p>
+            )}
+            <p className="">{formatCurrency(item.price)}</p>
+            {item.barcode && <p className="">{item.barcode}</p>}
+            {item.product_id && <p className="">{item.product_id}</p>}
           </div>
-          <div>
-            <h1 className="text-slate-500 ">Barcode</h1>
-            <h1>123123</h1>
-          </div>
-          {/* <RegularButton styles={"w-full border-emerald-900 "}>
-            <p className="text-sm text-emerald-900 ">Return</p>
-          </RegularButton> */}
         </div>
       </div>
     </div>
   );
 };
-
-export default ReceiptItems;

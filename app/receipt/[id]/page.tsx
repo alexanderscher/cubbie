@@ -24,7 +24,7 @@ const ReceiptPage = () => {
   }, [id]);
   console.log(receipt);
 
-  if (!receipt.items) return <div>Loading</div>;
+  if (!receipt.items) return <div className="min-h-screen">Loading</div>;
   return (
     <div className="flex flex-col gap-8  w-full h-full ">
       <div className="flex justify-between items-center w-full">
@@ -41,17 +41,17 @@ const ReceiptPage = () => {
           <p className="text-slate-500 text-xs">Total amount</p>
           <p>{formatCurrency(receipt.amount)}</p>
         </div>
-        <div className="w-1/3 border-r-[1.5px] border-slate-300 pl-4 pr-2">
-          <p className="text-slate-500 text-xs">Purcahse Date</p>
+        <div className="w-1/3 border-r-[1.5px] border-slate-300 pl-2 pr-2">
+          <p className="text-slate-500 text-xs">Purchase Date</p>
           <p>{formatDateToMMDDYY(receipt.purchase_date)}</p>
         </div>
 
-        <div className="pl-4 pr-2">
+        <div className="pl-2 pr-2">
           <p className="text-slate-500 text-xs">Return Date</p>
           <p>{formatDateToMMDDYY(receipt.return_date)}</p>
         </div>
       </div>
-      <div className={`${styles.receipt} h-[700px]`}>
+      <div className={`${styles.receipt} `}>
         <div className={`${styles.receiptLeft}  flex flex-col gap-2`}>
           <div
             className={`shadow rounded-md  bg-white flex flex-col gap-4 p-6`}

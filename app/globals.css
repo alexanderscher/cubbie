@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top);
+}
+
 body {
   overflow-y: auto; /* Keep vertical scrolling */
   scrollbar-width: none; /* For Firefox */
@@ -28,7 +32,7 @@ input[type="checkbox"] {
 }
 
 .main-content {
-  margin-left: 115px;
+  padding-left: 120px;
   width: 100%;
   height: 100%;
 }
@@ -105,7 +109,7 @@ input:-webkit-autofill::first-line {
 
 @media (max-width: 550px) {
   .main-content {
-    margin-left: 0px;
+    padding: 16px;
     width: 100%;
   }
 

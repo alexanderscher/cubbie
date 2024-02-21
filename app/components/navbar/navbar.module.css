@@ -30,7 +30,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 110px;
+  width: 100px;
   height: 100%;
   z-index: 1000;
   border-right: #064e3b 1.5px solid;
@@ -48,6 +48,7 @@
 
   .topbar {
     display: flex;
+    padding-top: env(safe-area-inset-top);
   }
 
   .navbarFixed {

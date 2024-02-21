@@ -280,7 +280,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
           </div>
 
           {stage !== ReceiptOnlineStage.PREVIEW && values.receiptImage && (
-            <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 overflow-hidden rounded-md ">
+            <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 overflow-hidden rounded-lg ">
               <div className="w-full">
                 {edit ? (
                   <div className="text-sm">
@@ -300,7 +300,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                           height={200}
                           src={values.receiptImage}
                           alt=""
-                          className="w-full h-full object-cover rounded-md"
+                          className="w-full h-full object-cover rounded-lg"
                           style={{ maxWidth: "100%", maxHeight: "100%" }}
                         />
                       </div>
@@ -312,7 +312,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                     height={200}
                     src={values.receiptImage}
                     alt=""
-                    className="w-full h-full object-cover rounded-md"
+                    className="w-full h-full object-cover rounded-lg"
                     style={{ maxWidth: "100%", maxHeight: "100%" }}
                   />
                 )}
@@ -322,7 +322,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
           {stage !== ReceiptOnlineStage.PREVIEW && !values.receiptImage && (
             <div>
               {edit && (
-                <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 overflow-hidden rounded-md ">
+                <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 overflow-hidden rounded-lg ">
                   <div className="flex flex-col h-full w-full">
                     <input
                       type="file"

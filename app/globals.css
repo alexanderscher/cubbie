@@ -6,15 +6,6 @@
   --safe-area-inset-top: env(safe-area-inset-top);
 }
 
-body {
-  overflow-y: auto; /* Keep vertical scrolling */
-  scrollbar-width: none; /* For Firefox */
-  -ms-overflow-style: none; /* For Internet Explorer 10+ */
-}
-
-body::-webkit-scrollbar {
-  display: none; /* Hide scrollbar for Chrome, Safari, and newer versions of Opera */
-}
 input {
   -webkit-appearance: none;
   -moz-appearance: none;

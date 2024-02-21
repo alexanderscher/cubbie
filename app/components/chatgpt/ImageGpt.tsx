@@ -198,7 +198,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
       <div className="flex flex-col gap-4">
         <button
           type="button"
-          className="w-[20px] border-[1.5px] border-orange-600 text-orange-600 rounded-md"
+          className="w-[20px] border-[1.5px] border-orange-600 text-orange-600 rounded-lg"
           onClick={() => setHelp(!help)}
         >
           ?
@@ -233,7 +233,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
               </LargeButton>
             </div>
             {image !== "" && (
-              <div className="w-[100px] h-[120px] overflow-hidden rounded-md relative">
+              <div className="w-[100px] h-[120px] overflow-hidden rounded-lg relative">
                 <button
                   onClick={() => setImage("")}
                   type="button"

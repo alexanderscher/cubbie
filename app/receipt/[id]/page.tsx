@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { ReceiptItems } from "@/app/components/receiptComponents/ReceiptItems";
+import HeaderNav from "@/app/components/navbar/HeaderNav";
 
 const ReceiptPage = () => {
   const { id } = useParams();
@@ -27,6 +28,7 @@ const ReceiptPage = () => {
   if (!receipt.items) return <div className="min-h-screen">Loading</div>;
   return (
     <div className="flex flex-col gap-8  w-full h-full ">
+      <HeaderNav receipt={receipt} />
       <div className="flex justify-between items-center w-full">
         <h1 className="text-2xl text-orange-600 w-3/4">{receipt.store}</h1>
         <RegularButton
@@ -36,7 +38,7 @@ const ReceiptPage = () => {
           <p className="text-white text-sm">Edit</p>
         </RegularButton>
       </div>
-      <div className="flex bg-white rounded-md text-sm shadow p-4">
+      <div className="flex bg-white rounded-lg text-sm shadow p-4">
         <div className="w-1/3 border-r-[1.5px] border-slate-300 ">
           <p className="text-slate-500 text-xs">Total amount</p>
           <p>{formatCurrency(receipt.amount)}</p>
@@ -54,7 +56,7 @@ const ReceiptPage = () => {
       <div className={`${styles.receipt} `}>
         <div className={`${styles.receiptLeft}  flex flex-col gap-2`}>
           <div
-            className={`shadow rounded-md  bg-white flex flex-col gap-4 p-6`}
+            className={`shadow rounded-lg  bg-white flex flex-col gap-4 p-6`}
           >
             <p className="text-xl text-emerald-900">Receipt Information</p>
             {!receipt.receipt_image_url && (
@@ -74,13 +76,13 @@ const ReceiptPage = () => {
 
             {receipt.receipt_image_url && (
               <div className="w-full flex justify-center items-center  ">
-                <div className=" w-[200px] max-h-[200px]  rounded-md overflow-hidden">
+                <div className=" w-[200px] max-h-[200px]  rounded-lg overflow-hidden">
                   <Image
                     src={receipt.receipt_image_url}
                     width={280}
                     height={280}
                     alt="Receipt Image"
-                    className="object-contain rounded-md"
+                    className="object-contain rounded-lg"
                     layout="intrinsic"
                   />
                 </div>
@@ -93,7 +95,7 @@ const ReceiptPage = () => {
                 <p className="">{receipt.items.length}</p>
               </div>
               <div className="w-full  border-slate-400 border-b-[1.5px] pb-2 ">
-                <p className="text-slate-500 text-xs">Updated at</p>
+                <p className="text-slate-500 text-xs">Created at</p>
                 <p className="">{formatDateToMMDDYY(receipt.created_at)}</p>
               </div>
               <div className="w-full  border-slate-400 border-b-[1.5px] pb-2 ">

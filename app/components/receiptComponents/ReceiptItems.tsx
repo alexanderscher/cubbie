@@ -22,11 +22,7 @@ export const ReceiptItems = ({
 }: ReceiptItemsProps) => {
   const pathname = usePathname();
   return (
-    <div
-      className={`${styles.box} shadow relative  ${
-        index === length - 1 ? styles.lastItemMargin : ""
-      }`}
-    >
+    <div className={`${styles.box} shadow relative `}>
       {item.photo_url && (
         <div className="w-full h-[110px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col ">
           <Image

@@ -13,6 +13,7 @@
   display: flex;
   gap: 30px;
   flex-wrap: wrap;
+  padding-bottom: 40px;
 }
 
 .box {
@@ -24,9 +25,6 @@
   flex-direction: column;
   gap: 6px;
   position: relative;
-}
-.lastItemMargin {
-  margin-bottom: 50px;
 }
 
 .boxContainer {

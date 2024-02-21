@@ -26,14 +26,21 @@ const ReceiptManual = ({
       const file = e.target.files[0];
       if (!file.type.match("image.*")) {
         alert("Please upload an image file");
-        //  setUnvalidImage(true);
+
         return;
       }
 
-      const src = URL.createObjectURL(file);
+      const reader = new FileReader();
 
-      setFieldValue("receiptImage", src);
-      setFieldValue("receiptImageFile", file.name);
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          setFieldValue("receiptImage", reader.result);
+        }
+      };
+      reader.onerror = (error) => {
+        console.error("Error converting file to base64:", error);
+      };
     }
   };
   const handleCurrencyChangeAmount = (value: string | undefined) => {

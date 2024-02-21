@@ -48,12 +48,20 @@ const OnlineReceiptManual = ({
         return;
       }
 
-      const src = URL.createObjectURL(file);
+      const reader = new FileReader();
 
-      setItem({
-        ...item,
-        photo: src,
-      });
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          setItem({
+            ...item,
+            photo: reader.result,
+          });
+        }
+      };
+      reader.onerror = (error) => {
+        console.error("Error converting file to base64:", error);
+      };
     }
   };
   const handleItemAdd = (value: any, type: string) => {

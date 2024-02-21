@@ -15,9 +15,11 @@ const Items = () => {
   }, []);
 
   return (
-    <div className="boxes">
+    <div className="boxes pb-20">
       {items.length > 0 &&
-        items.map((item: ItemType) => <Item key={item.id} item={item} />)}
+        items.map((item: ItemType, index: number) => (
+          <Item key={item.id} item={item} index={index} length={items.length} />
+        ))}
     </div>
   );
 };

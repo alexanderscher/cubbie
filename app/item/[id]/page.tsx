@@ -36,9 +36,9 @@ const ItemID = () => {
 
       <div className={`${styles.receipt}`}>
         <div
-          className={`w-full md:w-1/2 border-emerald-900 border-[1.5px] rounded-md p-6 bg-white flex flex-col gap-4`}
+          className={`w-full shadow rounded-md p-6 bg-white flex flex-col gap-4`}
         >
-          <p className="text-lg text-emerald-900">Item Information</p>
+          <p className="text-xl text-emerald-900">Item Information</p>
           {!item.photo_url && <Shirt />}
           {item.photo_url && (
             <div className="w-full flex justify-center items-center  ">
@@ -54,29 +54,29 @@ const ItemID = () => {
               </div>
             </div>
           )}
-          <div className="w-full  border-emerald-900 border-b-[1.5px]   pb-2">
+          <div className="w-full  border-slate-400 border-b-[1.5px]   pb-2">
             <p className="text-xs">Price</p>
             <p>{formatCurrency(item.price)}</p>
           </div>
-          <div className="w-full  border-emerald-900 border-b-[1.5px]   pb-2">
+          <div className="w-full  border-slate-400 border-b-[1.5px]   pb-2">
             <p className="text-xs">Barcode</p>
             <p>{item.barcode ? item.barcode : "None"}</p>
           </div>
-          <div className="w-full  border-emerald-900 border-b-[1.5px]   pb-2">
+          <div className="w-full  border-slate-400 border-b-[1.5px]   pb-2">
             <p className="text-xs">Character</p>
             <p>{item.character ? item.character : "None"}</p>
           </div>
-          <div className="w-full  border-emerald-900 border-b-[1.5px]   pb-2">
+          <div className="w-full  border-slate-400 border-b-[1.5px]   pb-2">
             <p className="text-xs">Product ID</p>
             <p>{item.product_id ? item.product_id : "None"}</p>
           </div>
         </div>
-        <div className={`w-full md:w-1/2`}>
+        <div className={`w-full`}>
           <div className={`${styles.receiptLeft}  flex flex-col gap-2`}>
             <div
-              className={` border-emerald-900 border-[1.5px] rounded-md p-6 bg-white flex flex-col gap-4`}
+              className={` shadow rounded-md p-6 bg-white flex flex-col gap-4`}
             >
-              <p className="text-lg text-emerald-900">Receipt Information</p>
+              <p className="text-xl text-emerald-900">Receipt Information</p>
               <div className="flex flex-col gap-3 text-sm">
                 <div className="flex flex-col gap-3 text-sm">
                   <div>

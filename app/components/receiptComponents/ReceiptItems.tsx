@@ -10,12 +10,23 @@ import { usePathname } from "next/navigation";
 interface ReceiptItemsProps {
   item: Item;
   asset_amount: number;
+  index: number;
+  length: number;
 }
 
-export const ReceiptItems = ({ item, asset_amount }: ReceiptItemsProps) => {
+export const ReceiptItems = ({
+  item,
+  asset_amount,
+  index,
+  length,
+}: ReceiptItemsProps) => {
   const pathname = usePathname();
   return (
-    <div className={`${styles.box} shadow relative`}>
+    <div
+      className={`${styles.box} shadow relative  ${
+        index === length - 1 ? styles.lastItemMargin : ""
+      }`}
+    >
       {item.photo_url && (
         <div className="w-full h-[110px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col ">
           <Image

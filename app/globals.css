@@ -2,15 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+body,
 html {
-  height: 100%;
-}
-
-body {
   min-height: 100%;
-  margin: 0;
+  overflow-y: auto; /* This allows the page to scroll vertically if the content overflows */
 }
-
 input {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -24,11 +20,11 @@ input[type="checkbox"] {
 
 .page {
   padding: 20px;
-  padding-bottom: 200px;
+  /* padding-bottom: 200px; */
 }
 
 .main-content {
-  margin-left: 130px;
+  margin-left: 115px;
   width: 100%;
   height: 100%;
 }
@@ -116,12 +112,6 @@ input:-webkit-autofill::first-line {
   }
   .box {
     width: 100%;
-  }
-}
-
-@media (max-width: 450px) {
-  .page {
-    padding: 10px;
   }
 }
 

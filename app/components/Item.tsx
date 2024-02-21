@@ -10,11 +10,14 @@ import React from "react";
 
 interface Props {
   item: ItemType;
+  index: number;
+  length: number;
 }
 
-const Item = ({ item }: Props) => {
+const Item = ({ item, index, length }: Props) => {
   return (
-    <div className="box ">
+    // <div className={` ${index === length - 1 ? "lastItemMargin" : ""} `}>
+    <div className="box">
       {item.photo_url && (
         <div className="w-full h-[120px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col">
           <Image
@@ -58,6 +61,7 @@ const Item = ({ item }: Props) => {
         </div>
       </div>
     </div>
+    // </div>
   );
 };
 

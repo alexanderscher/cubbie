@@ -38,10 +38,12 @@ export async function PUT(
     tracking_number,
     edit_image,
     receipt_image_key,
+    receipt_image_url,
     purchase_date,
     return_date,
     asset_amount,
   } = json;
+
   const uploadedFileKeys = [];
 
   try {
@@ -54,7 +56,15 @@ export async function PUT(
         receiptFileKey = uploadResults[0].key;
         uploadedFileKeys.push(receiptFileKey);
       }
+      if (receipt_image_key) {
+        await deleteUploadThingImage(receipt_image_key);
+      }
     }
+
+    if (receipt_image_url === "" && receipt_image_key !== "") {
+      await deleteUploadThingImage(receipt_image_key);
+    }
+
     const updatedReceipt = await prisma.receipt.update({
       where: {
         id: parseInt(params.id),
@@ -63,8 +73,10 @@ export async function PUT(
         type,
         store,
         card,
-        receipt_image_url: receiptFileUrl,
-        receipt_image_key: receiptFileKey,
+        receipt_image_url:
+          receiptFileUrl === "" ? receipt_image_url : receiptFileUrl,
+        receipt_image_key:
+          receiptFileUrl === "" ? receipt_image_key : receiptFileKey,
         tracking_number,
         purchase_date: new Date(purchase_date).toISOString(),
         return_date: new Date(return_date).toISOString(),
@@ -72,12 +84,11 @@ export async function PUT(
       },
     });
 
-    // const updatedReceipt = {};
-
     return new NextResponse(JSON.stringify(updatedReceipt), {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
+    console.error(error);
     if (uploadedFileKeys.length > 0) {
       uploadedFileKeys.forEach(async (key) => {
         await deleteUploadThingImage(key);

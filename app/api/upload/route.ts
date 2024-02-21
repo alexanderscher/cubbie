@@ -25,6 +25,8 @@ export async function POST(request: Request) {
       assetAmount,
     } = json;
 
+    console.log(receiptImage);
+
     const requiredFields = ["type", "store", "amount", "items"];
 
     const missingFields: string[] = [];

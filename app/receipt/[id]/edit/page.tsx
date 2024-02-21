@@ -8,7 +8,7 @@ import { formatDateToYYYYMMDD } from "@/utils/Date";
 
 import { Formik } from "formik";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { ReceiptItems } from "@/app/components/receiptComponents/ReceiptItems";
 import { formatCurrency } from "@/utils/formatCurrency";
@@ -22,6 +22,7 @@ type ExtendedReceiptType = ReceiptType & {
 };
 
 const ReceiptPage = () => {
+  const router = useRouter();
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [uploadError, setUploadError] = useState("");
@@ -61,14 +62,20 @@ const ReceiptPage = () => {
       const file = e.target.files[0];
       if (!file.type.match("image.*")) {
         alert("Please upload an image file");
-        //  setUnvalidImage(true);
+
         return;
       }
-
-      const src = URL.createObjectURL(file);
-      setFieldValue("receipt_image_url", "");
-
-      setFieldValue("edit_image", src);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          setFieldValue("receipt_image_url", "");
+          setFieldValue("edit_image", reader.result);
+        }
+      };
+      reader.onerror = (error) => {
+        console.error("Error converting file to base64:", error);
+      };
     }
   };
 
@@ -94,10 +101,12 @@ const ReceiptPage = () => {
           const data = await res.json();
           if (data.error) {
             setUploadError(data.error);
+            setLoading(false);
           } else {
             setUploadError("");
+            setLoading(false);
+            router.push(`/receipt/${id}`);
           }
-          setLoading(false);
         };
 
         update();
@@ -165,7 +174,7 @@ const ReceiptPage = () => {
           <div className={`${styles.receipt} h-[700px] `}>
             <div className={`${styles.receiptLeft}  flex flex-col gap-2 `}>
               <div className={` rounded-md  bg-white flex flex-col gap-4 p-8`}>
-                <p className="text-lg text-emerald-900">Receipt Information</p>
+                <p className="text-xl text-emerald-900">Receipt Information</p>
                 {!values.receipt_image_url && !values.edit_image && (
                   <div className="w-full h-[200px] overflow-hidden  border-[1.5px] border-dashed rounded-md bg-slate-100">
                     <input
@@ -200,13 +209,13 @@ const ReceiptPage = () => {
                 )}
                 {values.edit_image && (
                   <div className="w-full flex justify-center items-center relative group">
-                    <div className="relative w-[300px] max-h-[400px] rounded-md overflow-hidden">
+                    <div className="relative  w-[200px] max-h-[400px] rounded-md overflow-hidden">
                       <Image
                         src={values.edit_image}
                         width={300}
                         height={300}
                         alt="Receipt Image"
-                        className="object-contain rounded-md"
+                        className="object-contain rounded-md w-full"
                         layout="intrinsic"
                       />
                       <div className="absolute inset-0 rounded-md bg-slate-200 bg-opacity-0 group-hover:bg-opacity-50 flex justify-center items-center transition-opacity duration-300 opacity-0 group-hover:opacity-100 cursor-pointer">
@@ -244,13 +253,13 @@ const ReceiptPage = () => {
 
                 {values.receipt_image_url && (
                   <div className="w-full flex justify-center items-center relative group">
-                    <div className="relative w-[300px] h-[400px] rounded-md overflow-hidden">
+                    <div className="relative  w-[200px] max-h-[400px] rounded-md overflow-hidden">
                       <Image
                         src={values.receipt_image_url}
                         width={300}
                         height={300}
                         alt="Receipt Image"
-                        className="object-contain rounded-md"
+                        className="object-contain rounded-md w-full"
                         layout="intrinsic"
                       />
                       <div className="absolute inset-0 rounded-md bg-slate-200 bg-opacity-0 group-hover:bg-opacity-50 flex justify-center items-center transition-opacity duration-300 opacity-0 group-hover:opacity-100 cursor-pointer">
@@ -313,11 +322,11 @@ const ReceiptPage = () => {
                           : "Select type"}
                       </option>
 
-                      {values.type !== "store" && (
-                        <option value="store">Store</option>
+                      {values.type !== "Store" && (
+                        <option value="Store">Store</option>
                       )}
-                      {values.type !== "online" && (
-                        <option value="online">Online</option>
+                      {values.type !== "Online" && (
+                        <option value="Online">Online</option>
                       )}
                     </select>
                   </div>
@@ -395,7 +404,7 @@ const ReceiptPage = () => {
             <div
               className={`flex flex-col gap-2 pb-[200px] ${styles.boxContainer}`}
             >
-              <p className="text-lg text-emerald-900">Items</p>
+              {/* <p className="text-lg text-emerald-900">Items</p> */}
               <div className={`${styles.boxes} `}>
                 {receipt.items.length > 0 &&
                   receipt.items.map((item: any) => (
@@ -414,7 +423,7 @@ const ReceiptPage = () => {
               onClose={() => setUploadError("")}
             />
           )}
-          {/* <Loading loading={loading} /> */}
+          {loading && <Loading loading={loading} />}
         </div>
       )}
     </Formik>

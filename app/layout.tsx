@@ -9,6 +9,7 @@ import localFont from "next/font/local";
 
 import Head from "next/head";
 import Topbar from "@/app/components/navbar/Topbar";
+import Footer from "@/app/components/Footer";
 
 const myFont = localFont({
   src: "../font/SuisseIntl-Medium.woff",
@@ -36,7 +37,9 @@ export default function RootLayout({
         <div className="flex">
           <Navbar />
 
-          <div className="page main-content "> {children}</div>
+          <div className="page main-content ">
+            <main className="flex-grow">{children}</main>
+          </div>
         </div>
       </body>
     </html>

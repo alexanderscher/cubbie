@@ -12,8 +12,8 @@ const Navbar = () => {
           <Image
             src="/receipt_w.png"
             alt=""
-            width={25}
-            height={25}
+            width={35}
+            height={35}
             className="object-cover "
             style={{ objectFit: "cover", objectPosition: "center" }}
           />
@@ -23,8 +23,8 @@ const Navbar = () => {
           <Image
             src="/search_w.png"
             alt=""
-            width={30}
-            height={30}
+            width={35}
+            height={35}
             className="object-cover "
             style={{ objectFit: "cover", objectPosition: "center" }}
           />
@@ -33,8 +33,8 @@ const Navbar = () => {
           <Image
             src="/account_w.png"
             alt=""
-            width={30}
-            height={30}
+            width={35}
+            height={35}
             className="object-cover "
             style={{ objectFit: "cover", objectPosition: "center" }}
           />
@@ -43,8 +43,8 @@ const Navbar = () => {
           <Image
             src="/calendar_w.png"
             alt=""
-            width={30}
-            height={30}
+            width={35}
+            height={35}
             className="object-cover "
             style={{ objectFit: "cover", objectPosition: "center" }}
           />
@@ -53,8 +53,8 @@ const Navbar = () => {
           <Image
             src="/notification_w.png"
             alt=""
-            width={30}
-            height={30}
+            width={35}
+            height={35}
             className="object-cover "
             style={{ objectFit: "cover", objectPosition: "center" }}
           />

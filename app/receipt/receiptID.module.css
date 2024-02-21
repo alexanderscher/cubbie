@@ -25,6 +25,9 @@
   gap: 6px;
   position: relative;
 }
+.lastItemMargin {
+  margin-bottom: 50px;
+}
 
 .boxContainer {
   width: 100%;
@@ -48,6 +51,7 @@
   }
   .box {
     width: 100%;
+    max-width: 100%;
   }
 }
 

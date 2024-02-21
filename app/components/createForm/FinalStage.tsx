@@ -9,6 +9,7 @@ import styles from "./form.module.css";
 import { useIsMobile } from "@/utils/useIsMobile";
 import Image from "next/image";
 import React from "react";
+import ErrorModal from "@/app/components/error/Modal";
 
 interface FinalStageProps {
   values: any;
@@ -98,24 +99,10 @@ const FinalStage = ({
         </div>
       )}
       {uploadError && (
-        <div className="fixed inset-0 flex items-center justify-center z-40">
-          <div className="p-8 z-50 max-w-[700px] w-3/4 bg-white h-[200px] rounded-md border-black border-[2px] shadow-lg">
-            <div className="flex flex-col justify-between h-full">
-              <p className="">
-                <span className="text-orange-900">Error: </span>
-                {uploadError}
-              </p>
-
-              <button
-                type="button"
-                className="text-end "
-                onClick={() => setUploadError("")}
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
+        <ErrorModal
+          errorMessage={uploadError}
+          onClose={() => setUploadError("")}
+        />
       )}
     </div>
   );

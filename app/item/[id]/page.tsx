@@ -41,8 +41,8 @@ const ItemID = () => {
           <p className="text-lg text-emerald-900">Item Information</p>
           {!item.photo_url && <Shirt />}
           {item.photo_url && (
-            <div className="w-full h-[400px] overflow-hidden relative flex justify-center items-center flex-shrink-0  rounded-md">
-              <div className="w-[300px] flex justify-center">
+            <div className="w-full flex justify-center items-center  ">
+              <div className=" max-h-[400px] rounded-md overflow-hidden">
                 <Image
                   src={item.photo_url}
                   width={280}

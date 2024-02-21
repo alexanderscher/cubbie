@@ -5,6 +5,7 @@ import { Item } from "@/types/receipt";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface ReceiptItemsProps {
   item: Item;
@@ -12,8 +13,9 @@ interface ReceiptItemsProps {
 }
 
 export const ReceiptItems = ({ item, asset_amount }: ReceiptItemsProps) => {
+  const pathname = usePathname();
   return (
-    <div className={`${styles.box} shadow`}>
+    <div className={`${styles.box} shadow relative`}>
       {item.photo_url && (
         <div className="w-full h-[110px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col ">
           <Image
@@ -46,6 +48,11 @@ export const ReceiptItems = ({ item, asset_amount }: ReceiptItemsProps) => {
             {item.product_id && <p className="">{item.product_id}</p>}
           </div>
         </div>
+        {pathname.endsWith("edit") && (
+          <p className="text-sm text-center border-t-[1.5px] pt-2 text-emerald-900">
+            Edit
+          </p>
+        )}
       </div>
     </div>
   );

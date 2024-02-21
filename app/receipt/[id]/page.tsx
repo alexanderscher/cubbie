@@ -26,13 +26,14 @@ const ReceiptPage = () => {
 
   if (!receipt.items) return <div>Loading</div>;
   return (
-    <div className="flex flex-col gap-8  max-w-[1060px] h-full pb-[200px]">
+    <div className="flex flex-col gap-8  w-full h-full pb-[200px]">
       <div className="flex justify-between items-center w-full">
         <h1 className="text-2xl text-orange-600 w-3/4">{receipt.store}</h1>
-        <RegularButton styles="bg-emerald-900">
-          <Link href={`/receipt/${receipt.id}/edit`}>
-            <p className="text-white text-sm">Edit</p>
-          </Link>
+        <RegularButton
+          styles="bg-emerald-900"
+          href={`/receipt/${receipt.id}/edit`}
+        >
+          <p className="text-white text-sm">Edit</p>
         </RegularButton>
       </div>
       <div className="flex bg-white rounded-md text-sm shadow p-4">
@@ -72,8 +73,8 @@ const ReceiptPage = () => {
             )}
 
             {receipt.receipt_image_url && (
-              <div className="w-full h-[400px] overflow-hidden relative flex justify-center items-center flex-shrink-0  rounded-md">
-                <div className="w-[300px] flex justify-center">
+              <div className="w-full flex justify-center items-center  ">
+                <div className=" w-[300px] max-h-[400px]  rounded-md overflow-hidden">
                   <Image
                     src={receipt.receipt_image_url}
                     width={280}
@@ -123,7 +124,9 @@ const ReceiptPage = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 lg:w-1/2 w-full pb-[200px]">
+        <div
+          className={`flex flex-col gap-2 pb-[200px] ${styles.boxContainer}`}
+        >
           <p className="text-lg text-emerald-900">Items</p>
           <div className={`${styles.boxes} `}>
             {receipt.items.length > 0 &&

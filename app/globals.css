@@ -2,10 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-body,
-html {
-  min-height: 100%;
-  overflow-y: auto; /* This allows the page to scroll vertically if the content overflows */
+body {
+  overflow-y: auto; /* Keep vertical scrolling */
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer 10+ */
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome, Safari, and newer versions of Opera */
 }
 input {
   -webkit-appearance: none;

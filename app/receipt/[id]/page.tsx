@@ -26,7 +26,7 @@ const ReceiptPage = () => {
 
   if (!receipt.items) return <div>Loading</div>;
   return (
-    <div className="flex flex-col gap-8  w-full h-full pb-[500px]">
+    <div className="flex flex-col gap-8  w-full h-full ">
       <div className="flex justify-between items-center w-full">
         <h1 className="text-2xl text-orange-600 w-3/4">{receipt.store}</h1>
         <RegularButton
@@ -74,7 +74,7 @@ const ReceiptPage = () => {
 
             {receipt.receipt_image_url && (
               <div className="w-full flex justify-center items-center  ">
-                <div className=" w-[200px] max-h-[400px]  rounded-md overflow-hidden">
+                <div className=" w-[200px] max-h-[200px]  rounded-md overflow-hidden">
                   <Image
                     src={receipt.receipt_image_url}
                     width={280}

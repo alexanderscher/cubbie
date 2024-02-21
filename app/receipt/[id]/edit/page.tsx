@@ -16,6 +16,7 @@ import { EDIT_RECEIPT_SCHEMA } from "@/utils/editValidation";
 import CurrencyInput from "react-currency-input-field";
 import Loading from "@/app/components/Loading";
 import ErrorModal from "@/app/components/error/Modal";
+import HeaderNav from "@/app/components/navbar/HeaderNav";
 
 type ExtendedReceiptType = ReceiptType & {
   edit_image: string;
@@ -79,7 +80,7 @@ const ReceiptPage = () => {
     }
   };
 
-  if (!receipt.items) return <div className="min-h-screen">Loading</div>;
+  if (!receipt.items) return <div className="mi">Loading</div>;
   return (
     <Formik
       initialValues={{
@@ -122,6 +123,7 @@ const ReceiptPage = () => {
         setFieldValue,
       }) => (
         <div className="flex flex-col gap-8  w-full h-full pb-[200px]">
+          <HeaderNav receipt={receipt} />
           <div className="flex justify-between items-center w-full">
             <h1 className="text-2xl text-orange-600 w-3/4">{receipt.store}</h1>
             <div className="flex gap-2">
@@ -160,7 +162,7 @@ const ReceiptPage = () => {
               )}
             </div>
           </div>
-          <div className="flex bg-white rounded-md text-sm shadow p-4">
+          <div className="flex bg-white rounded-lg text-sm shadow p-4">
             <div className="w-1/2 border-r-[1.5px] border-slate-300 ">
               <p className="text-slate-500 text-xs">Total amount</p>
               <p>{formatCurrency(receipt.amount)}</p>
@@ -173,10 +175,16 @@ const ReceiptPage = () => {
 
           <div className={`${styles.receipt} `}>
             <div className={`${styles.receiptLeft}  flex flex-col gap-2 `}>
-              <div className={` rounded-md  bg-white flex flex-col gap-4 p-6`}>
-                <p className="text-xl text-emerald-900">Receipt Information</p>
+              <div className={` rounded-lg  bg-white flex flex-col gap-4 p-6`}>
+                <div>
+                  {" "}
+                  <p className="text-xl text-emerald-900">
+                    Receipt Information
+                  </p>
+                </div>
+
                 {!values.receipt_image_url && !values.edit_image && (
-                  <div className="w-full h-[200px] overflow-hidden  border-[1.5px] border-dashed rounded-md bg-slate-100">
+                  <div className="w-full h-[200px] overflow-hidden  border-[1.5px] border-dashed rounded-lg bg-slate-100">
                     <input
                       type="file"
                       onChange={(e) => handleFileChange(e, setFieldValue)}
@@ -209,16 +217,16 @@ const ReceiptPage = () => {
                 )}
                 {values.edit_image && (
                   <div className="w-full flex justify-center items-center relative group">
-                    <div className="relative  w-[200px] max-h-[400px] rounded-md overflow-hidden">
+                    <div className="relative  w-[200px] max-h-[400px] rounded-lg overflow-hidden">
                       <Image
                         src={values.edit_image}
                         width={300}
                         height={300}
                         alt="Receipt Image"
-                        className="object-contain rounded-md w-full"
+                        className="object-contain rounded-lg w-full"
                         layout="intrinsic"
                       />
-                      <div className="absolute inset-0 rounded-md bg-slate-200 bg-opacity-0 group-hover:bg-opacity-50 flex justify-center items-center transition-opacity duration-300 opacity-0 group-hover:opacity-100 cursor-pointer">
+                      <div className="absolute inset-0 rounded-lg bg-slate-200 bg-opacity-0 group-hover:bg-opacity-50 flex justify-center items-center transition-opacity duration-300 opacity-0 group-hover:opacity-100 cursor-pointer">
                         <button
                           className="absolute text-black top-0 left-0 m-2"
                           onClick={() => {
@@ -253,16 +261,16 @@ const ReceiptPage = () => {
 
                 {values.receipt_image_url && (
                   <div className="w-full flex justify-center items-center relative group">
-                    <div className="relative  w-[200px] max-h-[400px] rounded-md overflow-hidden">
+                    <div className="relative  w-[200px] max-h-[400px] rounded-lg overflow-hidden">
                       <Image
                         src={values.receipt_image_url}
                         width={300}
                         height={300}
                         alt="Receipt Image"
-                        className="object-contain rounded-md w-full"
+                        className="object-contain rounded-lg w-full"
                         layout="intrinsic"
                       />
-                      <div className="absolute inset-0 rounded-md bg-slate-200 bg-opacity-0 group-hover:bg-opacity-50 flex justify-center items-center transition-opacity duration-300 opacity-0 group-hover:opacity-100 cursor-pointer">
+                      <div className="absolute inset-0 rounded-lg bg-slate-200 bg-opacity-0 group-hover:bg-opacity-50 flex justify-center items-center transition-opacity duration-300 opacity-0 group-hover:opacity-100 cursor-pointer">
                         <button
                           className="absolute text-black top-0 left-0 m-2"
                           onClick={() => {
@@ -301,7 +309,7 @@ const ReceiptPage = () => {
                     <input
                       value={values.store}
                       onChange={handleChange("store")}
-                      className="w-full border-[1.5px] border-slate-300 rounded-md p-2"
+                      className="w-full border-[1.5px] border-slate-300 rounded-lg p-2"
                     />
                     {errorM.store && (
                       <p className="text-orange-900 text-xs">{errorM.store}</p>
@@ -313,7 +321,7 @@ const ReceiptPage = () => {
                       name="type"
                       value={values.type}
                       onChange={handleChange}
-                      className="w-full border-[1.5px] border-slate-300 rounded-md p-2"
+                      className="w-full border-[1.5px] border-slate-300 rounded-lg p-2"
                     >
                       <option value={values.type}>
                         {values.type
@@ -337,7 +345,7 @@ const ReceiptPage = () => {
                       type="date"
                       value={formatDateToYYYYMMDD(values.purchase_date)}
                       onChange={handleChange("purchase_date")}
-                      className="w-full border-[1.5px] border-slate-300 rounded-md p-2"
+                      className="w-full border-[1.5px] border-slate-300 rounded-lg p-2"
                     />
                     {errorM.purchase_date && (
                       <p className="text-orange-900 text-xs">
@@ -352,7 +360,7 @@ const ReceiptPage = () => {
                       type="date"
                       value={formatDateToYYYYMMDD(values.return_date)}
                       onChange={handleChange("return_date")}
-                      className="w-full border-[1.5px] border-slate-300 rounded-md p-2"
+                      className="w-full border-[1.5px] border-slate-300 rounded-lg p-2"
                     />
                     {errorM.return_date && (
                       <p className="text-orange-900 text-xs">
@@ -366,7 +374,7 @@ const ReceiptPage = () => {
                     <input
                       value={values.card}
                       onChange={handleChange("card")}
-                      className="w-full border-[1.5px] border-slate-300 rounded-md p-2"
+                      className="w-full border-[1.5px] border-slate-300 rounded-lg p-2"
                     />
                   </div>
                   <div className="w-full">
@@ -374,7 +382,7 @@ const ReceiptPage = () => {
                     <CurrencyInput
                       id="asset_amount"
                       name="asset_amount"
-                      className="w-full border-[1.5px] border-slate-300 rounded-md p-2"
+                      className="w-full border-[1.5px] border-slate-300 rounded-lg p-2"
                       placeholder=""
                       value={values.asset_amount}
                       defaultValue={values.asset_amount || ""}
@@ -389,7 +397,7 @@ const ReceiptPage = () => {
                     <input
                       value={values.tracking_number}
                       onChange={handleChange("tracking_number")}
-                      className="w-full border-[1.5px] border-slate-300 rounded-md p-2"
+                      className="w-full border-[1.5px] border-slate-300 rounded-lg p-2"
                     />
                     {errorM.tracking_number && (
                       <p className="text-orange-900 text-xs">

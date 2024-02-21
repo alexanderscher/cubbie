@@ -50,7 +50,7 @@ const Header = ({ type }: HeaderProps) => {
             placeholder={`Search ${type}`}
           ></input>
         </div>
-        {/* <div className="text-slate-500">Updated at</div> */}
+        {/* <div className="text-slate-500">Created at</div> */}
       </div>
     </div>
   );

@@ -9,3 +9,8 @@ export const EDIT_RECEIPT_SCHEMA = Yup.object({
     .nullable()
     .notRequired(),
 });
+
+export const EDIT_ITEM_SCHEMA = Yup.object({
+  description: Yup.string().required("Description is required"),
+  price: Yup.string().required("Price is required"),
+});

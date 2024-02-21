@@ -84,7 +84,7 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
     <div className="flex flex-col gap-4">
       <button
         type="button"
-        className="w-[20px] border-[1.5px] border-orange-600 text-orange-600 rounded-md"
+        className="w-[20px] border-[1.5px] border-orange-600 text-orange-600 rounded-lg"
         onClick={() => setHelp(!help)}
       >
         ?
@@ -98,7 +98,7 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
       )}
       <textarea
         value={inputText}
-        className="w-full border-[1.5px] border-emerald-900 p-2 mb-2 rounded-md focus:outline-none h-[300px] resize-none bg"
+        className="w-full border-[1.5px] border-emerald-900 p-2 mb-2 rounded-lg focus:outline-none h-[300px] resize-none bg"
         onChange={(e) => setInputText(e.target.value)}
         placeholder="Copy and paste receipt items from email or website"
       />

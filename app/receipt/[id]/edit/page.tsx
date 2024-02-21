@@ -407,8 +407,10 @@ const ReceiptPage = () => {
               {/* <p className="text-lg text-emerald-900">Items</p> */}
               <div className={`${styles.boxes} `}>
                 {receipt.items.length > 0 &&
-                  receipt.items.map((item: any) => (
+                  receipt.items.map((item: any, index: number) => (
                     <ReceiptItems
+                      index={index}
+                      length={receipt.items.length}
                       key={item.id}
                       item={item}
                       asset_amount={receipt.asset_amount}

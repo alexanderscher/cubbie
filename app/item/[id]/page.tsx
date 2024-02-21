@@ -24,7 +24,7 @@ const ItemID = () => {
     fetchItem();
   }, [id]);
 
-  if (!item.receipt) return <div>Loading</div>;
+  if (!item.receipt) return <div className="min-h-screen">Loading</div>;
   return (
     <div className="flex flex-col gap-6  max-w-[1000px]">
       <div className="flex justify-between w-full ">

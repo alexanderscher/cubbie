@@ -79,7 +79,7 @@ const ReceiptPage = () => {
     }
   };
 
-  if (!receipt.items) return <div>Loading</div>;
+  if (!receipt.items) return <div className="min-h-screen">Loading</div>;
   return (
     <Formik
       initialValues={{
@@ -171,9 +171,9 @@ const ReceiptPage = () => {
             </div>
           </div>
 
-          <div className={`${styles.receipt} h-[700px] `}>
+          <div className={`${styles.receipt} `}>
             <div className={`${styles.receiptLeft}  flex flex-col gap-2 `}>
-              <div className={` rounded-md  bg-white flex flex-col gap-4 p-8`}>
+              <div className={` rounded-md  bg-white flex flex-col gap-4 p-6`}>
                 <p className="text-xl text-emerald-900">Receipt Information</p>
                 {!values.receipt_image_url && !values.edit_image && (
                   <div className="w-full h-[200px] overflow-hidden  border-[1.5px] border-dashed rounded-md bg-slate-100">

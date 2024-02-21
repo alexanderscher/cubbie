@@ -28,17 +28,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Head>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <meta name="theme-color" content="#ffffff" />{" "}
+        <meta name="theme-color" content="#ecd96f" />
       </Head>
-      <body className={`bg-[#e2f1e2] ${myFont.className}`}>
+      <body className={` ${myFont.className}`}>
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <Topbar />
-        <div className="flex">
+        <div className="flex bg-[#e2f1e2]">
           <Navbar />
 
-          <div className="page main-content ">
-            <main className="flex-grow">{children}</main>
+          <div className="page main-content bg-[#e2f1e2] min-h-screen">
+            <main className="">{children}</main>
           </div>
         </div>
       </body>

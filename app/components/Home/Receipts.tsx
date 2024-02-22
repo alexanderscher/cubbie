@@ -1,26 +1,19 @@
 "use client";
+import { useSearchContext } from "@/app/components/context/SearchContext";
 import Receipt from "@/app/components/receiptComponents/Receipt";
 import { Receipt as ReceiptType } from "@/types/receipt";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useState } from "react";
 
 const Receipts = () => {
-  const [receipts, setReceipts] = useState([]);
-  const pathname = usePathname();
+  const { filteredData } = useSearchContext();
 
-  useEffect(() => {
-    const fetchReceipts = async () => {
-      const res = await fetch("/api/receipt");
-      const data = await res.json();
-      setReceipts(data.receipts);
-    };
-    fetchReceipts();
-  }, []);
+  console.log(filteredData);
+  const pathname = usePathname();
 
   if (pathname !== "/") {
     return (
       <div className="boxes">
-        {receipts
+        {filteredData
           .filter((receipt: ReceiptType) => receipt.memo === true)
           .map((receipt: ReceiptType) => (
             <Receipt key={receipt.id} receipt={receipt} />
@@ -30,7 +23,7 @@ const Receipts = () => {
   }
   return (
     <div className="boxes">
-      {receipts
+      {filteredData
         .filter((receipt: ReceiptType) => receipt.memo === false)
         .map((receipt: ReceiptType) => (
           <Receipt key={receipt.id} receipt={receipt} />

@@ -10,11 +10,12 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { ReceiptItems } from "@/app/components/receiptComponents/ReceiptItems";
 import HeaderNav from "@/app/components/navbar/HeaderNav";
+import ImageModal from "@/app/components/images/ImageModal";
 
 const ReceiptPage = () => {
   const { id } = useParams();
   const [receipt, setReceipt] = useState({} as ReceiptType);
-
+  const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     const fetchReceipt = async () => {
       const res = await fetch(`/api/receipt/${id}`);
@@ -82,12 +83,19 @@ const ReceiptPage = () => {
                     width={280}
                     height={280}
                     alt="Receipt Image"
-                    className="object-contain rounded-lg"
+                    className="object-contain rounded-lg cursor-pointer"
                     layout="intrinsic"
+                    onClick={() => setIsOpen(true)}
                   />
                 </div>
               </div>
             )}
+            <ImageModal
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              imageUrl={receipt.receipt_image_url}
+              altText="Your Image Description"
+            />
 
             <div className="flex flex-col gap-4 text-sm ">
               <div className="w-full  border-slate-400 border-b-[1.5px] pb-2 ">

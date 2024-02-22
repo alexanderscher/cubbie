@@ -17,6 +17,7 @@ import CurrencyInput from "react-currency-input-field";
 import Loading from "@/app/components/Loading";
 import ErrorModal from "@/app/components/error/Modal";
 import HeaderNav from "@/app/components/navbar/HeaderNav";
+import ImageModal from "@/app/components/images/ImageModal";
 
 type ExtendedReceiptType = ReceiptType & {
   edit_image: string;
@@ -24,6 +25,7 @@ type ExtendedReceiptType = ReceiptType & {
 
 const ReceiptPage = () => {
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [uploadError, setUploadError] = useState("");
@@ -300,6 +302,12 @@ const ReceiptPage = () => {
                         </label>
                       </div>
                     </div>
+                    <ImageModal
+                      isOpen={isOpen}
+                      setIsOpen={setIsOpen}
+                      imageUrl={values.receipt_image_url}
+                      altText="Your Image Description"
+                    />
                   </div>
                 )}
 

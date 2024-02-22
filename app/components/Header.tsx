@@ -1,14 +1,48 @@
 "use client";
 import RegularButton from "@/app/components/buttons/RegularButton";
+import { useSearchContext } from "@/app/components/context/SearchContext";
+import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
+import SearchBar from "@/app/components/search/SearchBar";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { use, useEffect } from "react";
 
 interface HeaderProps {
   type: string;
 }
 
 const Header = ({ type }: HeaderProps) => {
+  const [data, setData] = React.useState([]);
+  const { setFilteredData } = useSearchContext();
+  const { setFilteredItemData } = useSearchItemContext();
+
   const pathname = usePathname();
+
+  console.log(data);
+
+  useEffect(() => {
+    if (pathname === "/items") {
+      const fetchItems = async () => {
+        const res = await fetch("/api/items");
+        const data = await res.json();
+        setData(data.items);
+        setFilteredItemData(data.items);
+      };
+      fetchItems();
+    }
+  }, [pathname, setFilteredItemData]);
+
+  useEffect(() => {
+    if (pathname !== "/items") {
+      const fetchReceipts = async () => {
+        const res = await fetch("/api/receipt");
+        const data = await res.json();
+        setData(data.receipts);
+        setFilteredData(data.receipts);
+      };
+      fetchReceipts();
+    }
+  }, [pathname, setFilteredData]);
+
   const receiptColor =
     pathname === "/"
       ? "bg-black border-black text-white"
@@ -43,15 +77,10 @@ const Header = ({ type }: HeaderProps) => {
           <p className="text-xs">Items</p>
         </RegularButton>
       </div>
-      <div className="flex justify-between">
-        <div className="w-[290px]">
-          <input
-            className="searchBar  placeholder:text-sm placeholder:text-black "
-            placeholder={`Search ${type}`}
-          ></input>
-        </div>
-        {/* <div className="text-slate-500">Created at</div> */}
-      </div>
+      <SearchBar
+        data={data}
+        type={pathname === "/items" ? "item" : "receipt"}
+      />
     </div>
   );
 };

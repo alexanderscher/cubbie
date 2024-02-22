@@ -10,11 +10,9 @@ import React from "react";
 
 interface Props {
   item: ItemType;
-  index: number;
-  length: number;
 }
 
-const Item = ({ item, index, length }: Props) => {
+const Item = ({ item }: Props) => {
   return (
     // <div className={` ${index === length - 1 ? "lastItemMargin" : ""} `}>
     <div className="box">

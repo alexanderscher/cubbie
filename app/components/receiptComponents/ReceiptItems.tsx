@@ -1,3 +1,4 @@
+"use client";
 import styles from "@/app/receipt/receiptID.module.css";
 import Shirt from "@/app/components/placeholderImages/Shirt";
 import { TruncateText } from "@/app/components/text/Truncate";
@@ -6,6 +7,8 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import ImageModal from "@/app/components/images/ImageModal";
+import { useState } from "react";
 
 interface ReceiptItemsProps {
   item: Item;
@@ -21,6 +24,7 @@ export const ReceiptItems = ({
   length,
 }: ReceiptItemsProps) => {
   const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div className={`${styles.box} shadow relative `}>
       {item.photo_url && (
@@ -30,8 +34,15 @@ export const ReceiptItems = ({
             alt=""
             width={200}
             height={200}
-            className="w-full h-full object-cover rounded-t-md"
+            className="w-full h-full object-cover rounded-t-md cursor-pointer"
+            onClick={() => setIsOpen(true)}
             style={{ objectPosition: "top" }}
+          />
+          <ImageModal
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            imageUrl={item.photo_url}
+            altText="Your Image Description"
           />
         </div>
       )}

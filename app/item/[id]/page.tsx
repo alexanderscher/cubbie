@@ -11,10 +11,12 @@ import Image from "next/image";
 import Shirt from "@/app/components/placeholderImages/Shirt";
 import Link from "next/link";
 import HeaderItemNav from "@/app/components/navbar/HeaderItemNav";
+import ImageModal from "@/app/components/images/ImageModal";
 
 const ItemID = () => {
   const { id } = useParams();
 
+  const [isOpen, setIsOpen] = useState(false);
   const [item, setItem] = useState({} as ItemType);
 
   useEffect(() => {
@@ -51,12 +53,20 @@ const ItemID = () => {
                   width={280}
                   height={280}
                   alt="Receipt Image"
-                  className="object-contain rounded-lg"
+                  className="object-contain rounded-lg cursor-pointer"
                   layout="intrinsic"
+                  onClick={() => setIsOpen(true)}
                 />
               </div>
+              <ImageModal
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                imageUrl={item.photo_url}
+                altText="Your Image Description"
+              />
             </div>
           )}
+
           <div className="w-full  border-slate-400 border-b-[1.5px]   pb-2">
             <p className="text-xs">Price</p>
             <p>{formatCurrency(item.price)}</p>

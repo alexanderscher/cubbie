@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/app/components/navbar/Navbar";
 import Navbar from "@/app/components/navbar/Navbar";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
@@ -9,7 +8,8 @@ import localFont from "next/font/local";
 
 import Head from "next/head";
 import Topbar from "@/app/components/navbar/Topbar";
-import Footer from "@/app/components/Footer";
+import { SearchProvider } from "@/app/components/context/SearchContext";
+import { SearchItemProvider } from "@/app/components/context/SearchtemContext";
 
 const myFont = localFont({
   src: "../font/SuisseIntl-Medium.woff",

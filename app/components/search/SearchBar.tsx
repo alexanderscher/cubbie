@@ -6,9 +6,11 @@ import React, { useState } from "react";
 interface Props {
   data: any;
   type: string;
+  searchType: string;
 }
 
-function SearchBar({ data, type }: Props) {
+function SearchBar({ data, type, searchType }: Props) {
+  console.log(searchType);
   const [searchTerm, setSearchTerm] = useState("");
   const { setFilteredData } = useSearchContext();
   const { setFilteredItemData } = useSearchItemContext();
@@ -61,8 +63,8 @@ function SearchBar({ data, type }: Props) {
     <div className="relative">
       <div className="w-[290px]">
         <input
-          className="searchBar shadow  placeholder:text-sm placeholder:text-black "
-          placeholder="Search"
+          className="searchBar  placeholder:text-sm placeholder:text-black "
+          placeholder={`Search ${searchType}`}
           value={searchTerm}
           onChange={handleChange}
         ></input>

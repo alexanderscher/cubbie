@@ -7,6 +7,8 @@
   width: 50%;
   min-width: 400px;
   max-width: 450px;
+  border: 1px solid #064e3b;
+  border-radius: 8px;
 }
 
 .boxes {
@@ -19,6 +21,7 @@
 .box {
   width: 100%;
   max-width: 250px;
+  border: 1px solid #064e3b;
   background-color: white;
   border-radius: 0.5rem;
   display: flex;

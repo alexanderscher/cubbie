@@ -10,7 +10,7 @@ const Topbar = () => {
   const [menu, setMenu] = useState(false);
   return (
     <div
-      className={`${styles.topbar} p-4 justify-between  bg-emerald-900 text-white`}
+      className={`${styles.topbar} p-4 h-[70px] justify-between  bg-emerald-900 text-white`}
     >
       <Link href="/">Sticky Notes</Link>
       <button onClick={() => setMenu(!menu)}>Menu</button>

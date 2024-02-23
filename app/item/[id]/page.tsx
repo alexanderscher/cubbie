@@ -12,6 +12,7 @@ import Shirt from "@/app/components/placeholderImages/Shirt";
 import Link from "next/link";
 import HeaderItemNav from "@/app/components/navbar/HeaderItemNav";
 import ImageModal from "@/app/components/images/ImageModal";
+import { TruncateText } from "@/app/components/text/Truncate";
 
 const ItemID = () => {
   const { id } = useParams();

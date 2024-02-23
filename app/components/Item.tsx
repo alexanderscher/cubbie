@@ -30,7 +30,7 @@ const Item = ({ item }: Props) => {
       )}
       <div className="p-4 flex flex-col gap-2 justify-between">
         <div>
-          <Link href={`/item/${item.id}`} className="sm:text-lg text-sm">
+          <Link href={`/item/${item.id}`} className="sm:text-lg text-xs">
             {!item.photo_url && <Shirt />}
             <TruncateText
               text={item.description}
@@ -43,7 +43,7 @@ const Item = ({ item }: Props) => {
             Return by {formatDateToMMDDYY(item.receipt.return_date)}
           </p>
 
-          <div className="border-t-[1px] border-slate-300 flex flex-col  text-sm">
+          <div className="border-t-[1px] border-slate-300 flex flex-col  text-xs">
             <TruncateText
               text={item.receipt.store}
               maxLength={15}
@@ -52,10 +52,9 @@ const Item = ({ item }: Props) => {
 
             <p className="">{formatCurrency(item.price)}</p>
           </div>
-          {/* <div className="">
-            {item.barcode && <p className="text-sm 00">{item.barcode}</p>}
-            {item.product_id && <p className="text-sm 00">{item.product_id}</p>}
-          </div> */}
+          <div className="">
+            {item.barcode && <p className="text-xs">{item.barcode}</p>}
+          </div>
         </div>
       </div>
     </div>

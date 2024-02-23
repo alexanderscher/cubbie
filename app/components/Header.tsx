@@ -59,11 +59,14 @@ const Header = ({ type }: HeaderProps) => {
       : "bg border-black text-black ";
 
   return (
-    <div className="flex flex-col gap-6 mb-4">
-      <div className="flex justify-between">
+    <div className="flex flex-col gap-6 pb-4 ">
+      <div className="flex justify-between pb-2">
         <h1 className="text-3xl text-emerald-900  ">{type}</h1>
-        <RegularButton href="/receipt-type" styles="bg-emerald-900 text-white">
-          <p className="text-sm">Create new</p>
+        <RegularButton
+          href="/receipt-type"
+          styles="bg-emerald-900 border-emerald-900 text-white"
+        >
+          <p className="text-xs">Create new</p>
         </RegularButton>
       </div>
       <div className="flex gap-2 flex-wrap">
@@ -79,6 +82,7 @@ const Header = ({ type }: HeaderProps) => {
       </div>
       <SearchBar
         data={data}
+        searchType={type}
         type={pathname === "/items" ? "item" : "receipt"}
       />
     </div>

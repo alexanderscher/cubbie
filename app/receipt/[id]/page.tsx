@@ -27,7 +27,7 @@ const ReceiptPage = () => {
 
   if (!receipt.items) return <div className="min-h-screen">Loading</div>;
   return (
-    <div className="flex flex-col gap-8  w-full h-full ">
+    <div className="flex flex-col gap-8  w-full h-fullå ">
       <HeaderNav receipt={receipt} />
       <div className="flex justify-between items-center w-full">
         <h1 className="text-2xl text-orange-600 w-3/4">{receipt.store}</h1>
@@ -35,10 +35,10 @@ const ReceiptPage = () => {
           styles="bg-emerald-900"
           href={`/receipt/${receipt.id}/edit`}
         >
-          <p className="text-white text-sm">Edit</p>
+          <p className="text-white text-xs">Edit</p>
         </RegularButton>
       </div>
-      <div className="flex bg-white rounded-lg text-sm shadow p-4">
+      <div className="flex bg-white border-[1px] border-emerald-900 rounded-lg text-sm shadow p-4">
         <div className="w-1/3 border-r-[1px] border-slate-300 ">
           <p className="text-slate-500 text-xs">Total amount</p>
           <p>{formatCurrency(receipt.amount)}</p>

@@ -138,7 +138,7 @@ const ReceiptFormItems = ({
   return (
     <div className="border-t-[1px] border-black flex flex-col gap-4 w-full pt-5">
       <div className="w-full h-full flex gap-6">
-        {stage === "Final" && item.photo && (
+        {/* {stage === "Final" && item.photo && (
           <div className="w-[120px] h-[150px] overflow-hidden relative flex items-center justify-center  flex-shrink-0 rounded-sm">
             <div className="w-full h-full flex-shrink-0">
               <Image
@@ -150,7 +150,7 @@ const ReceiptFormItems = ({
               />
             </div>
           </div>
-        )}
+        )} */}
 
         {stage !== "Final" && editState.photo && (
           <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 overflow-hidden rounded-lg ">

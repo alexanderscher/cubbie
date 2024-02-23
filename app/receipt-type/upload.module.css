@@ -30,6 +30,9 @@
 }
 
 @media (max-width: 800px) {
+  .receiptContainer {
+    justify-content: center;
+  }
   .receipt-types {
     display: flex;
     flex-direction: column;

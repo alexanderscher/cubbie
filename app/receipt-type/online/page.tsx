@@ -173,8 +173,8 @@ const Online = () => {
                 case ReceiptOnlineStage.ONLINE_ITEMS:
                   return (
                     <div>
-                      <div className=" flex justify-center items-center">
-                        <div className="p-4 flex flex-col gap-6 max-w-[600px] w-full">
+                      <div className="flex justify-center items-center w-full">
+                        <div className="flex flex-col gap-6 max-w-[600px] w-full">
                           <div className="flex flex-col gap-6">
                             <h1 className="text-2xl text-orange-600">
                               {values.store}
@@ -272,36 +272,10 @@ const Online = () => {
                                   "bg-emerald-900 border-emerald-900 w-full"
                                 }
                                 handleClick={async () => {
-                                  const error = await validateForm();
-                                  setErrors((prevErrors) => ({
-                                    ...prevErrors,
-                                    itemError:
-                                      typeof error.items === "string"
-                                        ? error.items
-                                        : prevErrors.itemError || "",
-                                  }));
-                                  for (const item of values.items) {
-                                    if (
-                                      item.description === "" ||
-                                      item.price === ""
-                                    ) {
-                                      setErrors((prevErrors) => ({
-                                        ...prevErrors,
-                                        itemField:
-                                          "Decsription and price are required for each item.",
-                                      }));
-                                      return;
-                                    }
-                                  }
-                                  if (
-                                    Object.keys(error).length === 0 &&
-                                    !errors.itemField
-                                  ) {
-                                    setStage(ReceiptOnlineStage.PREVIEW);
-                                  }
+                                  setStage(ReceiptOnlineStage.PREVIEW);
                                 }}
                               >
-                                <p className="text-white text-sm">Preview</p>
+                                <p className="text-white text-sm">Items</p>
                               </RegularButton>
                             </div>
                           </BottomBar>

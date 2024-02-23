@@ -17,12 +17,7 @@ interface ReceiptItemsProps {
   length: number;
 }
 
-export const ReceiptItems = ({
-  item,
-  asset_amount,
-  index,
-  length,
-}: ReceiptItemsProps) => {
+export const ReceiptItems = ({ item, asset_amount }: ReceiptItemsProps) => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   return (

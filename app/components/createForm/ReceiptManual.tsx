@@ -62,7 +62,7 @@ const ReceiptManual = ({
   };
 
   return (
-    <div className="flex flex-col gap-10 max-w-[1000px]">
+    <div className="flex flex-col gap-10 max-w-[1000px]  w-full">
       <div className="flex flex-col gap-2">
         <input
           className="w-full bg border-b-[1px] border-emerald-900  focus:outline-none focus:border-emerald-900 placeholder:text-3xl placeholder:text-orange-600 h-[50px] text-3xl text-orange-600"

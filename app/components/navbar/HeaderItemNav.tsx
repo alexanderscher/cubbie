@@ -1,40 +1,40 @@
-import { Item } from "@/types/receipt";
-import Image from "next/image";
+import RegularButton from "@/app/components/buttons/RegularButton";
+import { Item, Receipt } from "@/types/receipt";
 import Link from "next/link";
 import React from "react";
 
-interface HeaderItemNavProps {
+interface HeaderNavProps {
   item: Item;
 }
 
-const HeaderItemNav = ({ item }: HeaderItemNavProps) => {
+const HeaderNav = ({ item }: HeaderNavProps) => {
   return (
-    <div className="flex gap-4 text-sm text-slate-600 items-center">
-      <Link
-        className="hover:text-orange-600"
-        href={item.receipt.memo ? "/memo" : "/"}
-      >
-        {item.receipt.memo ? "Memos" : "Receipts"}
-      </Link>
-      <div>
-        <Image
-          width={10}
-          height={10}
-          alt="greater than"
-          src="/greaterthan.png"
-        ></Image>
+    <div className="flex flex-wrap justify-between items-center gap-4 border-b-[1px] border-emerald-900 pb-4">
+      <div className="flex gap-3">
+        <Link href={item.receipt.memo ? "/memo" : "/"}>
+          <p className="text-emerald-900 hover:text-orange-600 text-sm">
+            {item.receipt.memo ? "Memos" : "Receipts"}
+          </p>
+        </Link>
+        <p className="text-emerald-900 text-sm">/</p>
+        <Link href={`/receipt/${item.receipt.id}`}>
+          <p className="text-emerald-900 text-sm hover:text-orange-600">
+            {item.receipt.store}
+          </p>
+        </Link>
+
+        <p className="text-emerald-900 text-sm">/</p>
+        <p className="text-emerald-900 text-sm">{item.description}</p>
       </div>
 
-      <Link
-        className="hover:text-orange-600"
-        href={`/receipt/${item.receipt_id}`}
+      <RegularButton
+        href="/receipt-type"
+        styles="bg border-emerald-900 text-emerald-900"
       >
-        {item.receipt.store}
-      </Link>
-      <p>{">"}</p>
-      <p>{item.description}</p>
+        <p className="text-xs">Create new</p>
+      </RegularButton>
     </div>
   );
 };
 
-export default HeaderItemNav;
+export default HeaderNav;

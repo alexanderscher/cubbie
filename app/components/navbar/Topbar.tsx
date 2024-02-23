@@ -10,14 +10,22 @@ const Topbar = () => {
   const [menu, setMenu] = useState(false);
   return (
     <div
-      className={`${styles.topbar} p-4 h-[70px] justify-between  bg-emerald-900 text-white`}
+      className={`${styles.topbar} p-4 justify-between  bg-emerald-900 text-white`}
     >
       <Link href="/">Sticky Notes</Link>
       <button onClick={() => setMenu(!menu)}>Menu</button>
       {menu && (
-        <div className={`${styles.menu} p-4 border-l-[1px]`}>
-          <div className={`${styles.navbarItems}`}>
-            <button onClick={() => setMenu(!menu)}>Close</button>
+        <div className={`${styles.menu} p-4 `}>
+          <div className="flex flex-col gap-3 p-2">
+            <Link href="/" className="flex ">
+              <p className="text-white text-4xl">Receipts</p>
+            </Link>
+            <p className="text-white text-4xl">Search</p>
+            <p className="text-white text-4xl">Account</p>
+            <p className="text-white text-4xl">Notifications</p>
+            <p className="text-white text-4xl">Calender</p>
+          </div>
+          {/* <div className={`${styles.navbarItems}`}>
             <div
               className={`${styles.linkWrapper} ${
                 pathname === "/" ||
@@ -80,7 +88,7 @@ const Topbar = () => {
                 style={{ objectFit: "cover", objectPosition: "center" }}
               />
             </Link>
-          </div>
+          </div> */}
         </div>
       )}
     </div>

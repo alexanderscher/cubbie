@@ -87,7 +87,7 @@ const ReceiptManual = ({
                 <CurrencyInput
                   id="amount"
                   name="amount"
-                  className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900"
+                  className="w-full border-[1px] bg border-emerald-900 p-2 rounded focus:outline-none focus:border-emerald-900"
                   placeholder=""
                   defaultValue={values.amount || ""}
                   decimalsLimit={2}
@@ -102,7 +102,7 @@ const ReceiptManual = ({
               <p className="text-sm text-slate-500 ">Asset Amount</p>
               {/* <button
                 type="button"
-                className="w-[20px] border-[1px] border-orange-600 text-orange-600 rounded-md text-xs"
+                className="w-[20px] border-[1px] border-orange-600 text-orange-600 rounded text-xs"
                 onClick={() => setHelp(!help)}
               >
                 ?
@@ -111,7 +111,7 @@ const ReceiptManual = ({
               <CurrencyInput
                 id="assetAmount"
                 name="assetAmount"
-                className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900"
+                className="w-full border-[1px] bg border-emerald-900 p-2 rounded focus:outline-none focus:border-emerald-900"
                 placeholder=""
                 defaultValue={values.assetAmount || ""}
                 decimalsLimit={2}
@@ -129,7 +129,7 @@ const ReceiptManual = ({
           <div className="w-full">
             <p className="text-sm text-slate-500 ">Card</p>
             <input
-              className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900"
+              className="w-full border-[1px] bg border-emerald-900 p-2 rounded focus:outline-none focus:border-emerald-900"
               name="card"
               value={values.card}
               onChange={handleChange("card")}
@@ -141,7 +141,7 @@ const ReceiptManual = ({
               <p className="text-sm text-slate-500 ">Tracking Number Link</p>
               <div className="flex flex-col gap-2">
                 <input
-                  className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900"
+                  className="w-full border-[1px] bg border-emerald-900 p-2 rounded focus:outline-none focus:border-emerald-900"
                   name="tracking_number"
                   value={values.tracking_number}
                   onChange={handleChange("tracking_number")}
@@ -160,7 +160,7 @@ const ReceiptManual = ({
               <p className="text-sm text-slate-500 ">Purchase Date</p>
               <div className="flex flex-col gap-2">
                 <input
-                  className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900"
+                  className="w-full border-[1px] bg border-emerald-900 p-2 rounded focus:outline-none focus:border-emerald-900"
                   name="purchase_date"
                   value={values.purchase_date}
                   onChange={handleChange("purchase_date")}
@@ -177,7 +177,7 @@ const ReceiptManual = ({
               <p className="text-sm text-slate-500 ">Days until return</p>
 
               <input
-                className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900 "
+                className="w-full border-[1px] bg border-emerald-900 p-2 rounded focus:outline-none focus:border-emerald-900 "
                 value={values.days_until_return}
                 onChange={(event) => {
                   const value = parseInt(event.target.value, 10);
@@ -192,10 +192,10 @@ const ReceiptManual = ({
             </div>
           </div>
         </div>
-        <div className={styles.imageInput}>
+        <div className={`${styles.imageInput} relative`}>
           <h1 className="text-emerald-900 text-xl">Receipt Image</h1>
           <div
-            className={`${styles.imageSize} border-[1px] border-emerald-900 w-full h-full flex flex-col gap-3 justify-center items-center rounded-md`}
+            className={`${styles.imageSize} border-[1px] border-emerald-900 w-full h-full flex flex-col gap-3 justify-center items-center rounded relative`}
             onClick={handleContainerClick} // Add click handler to the container
             style={{ cursor: "pointer" }} // Make the cursor indicate a clickable area
           >
@@ -226,7 +226,7 @@ const ReceiptManual = ({
           </div>
           <div className="relative w-24 h-24">
             {values.receiptImage && (
-              <div className="w-24 h-24 overflow-hidden flex items-center justify-center rounded-md">
+              <div className="w-24 h-24 overflow-hidden flex items-center justify-center rounded">
                 <button
                   type="button"
                   onClick={() => {

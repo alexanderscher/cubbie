@@ -22,7 +22,7 @@ const NonClickableButton = ({
   return (
     <div
       className={` ${small ? "px-3 py-[6px]" : "px-5 py-[8px]"}
-      border-[1.5px]
+      border-[1px]
        
        rounded-3xl ${styles}`}
       onClick={handleClick}

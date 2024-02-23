@@ -13,6 +13,9 @@ import { DEFAULT_INPUT_VALUES, ReceiptOnlineStage } from "@/constants/form";
 import FinalStage from "@/app/components/createForm/FinalStage";
 import { ITEMS_SCHEMA, RECEIPT_SCHEMA } from "@/utils/receiptValidation";
 import Loading from "@/app/components/Loading";
+import BottomBar from "@/app/components/createForm/BottomBar";
+import { formatCurrency } from "@/utils/formatCurrency";
+import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 
 const getValidationSchema = (stage: ReceiptOnlineStage) => {
   switch (stage) {
@@ -67,77 +70,64 @@ const Online = () => {
   const router = useRouter();
 
   return (
-    <div className="flex ">
-      <div className="w-full flex flex-col gap-8 ">
-        <Formik
-          initialValues={{
-            ...DEFAULT_INPUT_VALUES,
-            type: "Online",
-          }}
-          onSubmit={(values) => {
-            submitDB(values);
-          }}
-          validationSchema={getValidationSchema(stage)}
-        >
-          {({
-            handleSubmit,
-            setFieldValue,
-            values,
-            handleChange,
-            validateForm,
-          }) => (
-            <form
-              onSubmit={handleSubmit}
-              className="w-full flex flex-col gap-10 "
-            >
-              <div className="flex justify-between items-center w-full">
-                <h1 className="text-2xl text-emerald-900 w-3/4 ">
-                  Create New Receipt
-                </h1>
+    <div className={"flex min-h-screen"}>
+      <Formik
+        initialValues={{
+          ...DEFAULT_INPUT_VALUES,
+          type: "Online",
+        }}
+        onSubmit={(values) => {
+          submitDB(values);
+        }}
+        validationSchema={getValidationSchema(stage)}
+      >
+        {({
+          handleSubmit,
+          setFieldValue,
+          values,
+          handleChange,
+          validateForm,
+        }) => (
+          <form onSubmit={handleSubmit} className="w-full flex flex-col ">
+            {/* <div className="flex justify-between items-center w-full">
+              <h1 className="text-2xl text-emerald-900 w-3/4 ">
+                Create New Receipt
+              </h1>
 
-                <RegularButton
-                  styles="bg border-emerald-900"
-                  handleClick={async () => {
-                    router.push("/receipt-type");
-                  }}
-                >
-                  <p className="text-emerald-900  text-sm">Discard</p>
-                </RegularButton>
-              </div>
-              {(() => {
-                switch (stage) {
-                  case ReceiptOnlineStage.ONLINE_RECEIPT:
-                    return (
-                      <div className={`${styles.twoTab}`}>
-                        <div className={`${styles.leftTab}`}>
-                          <div className="flex justify-between">
-                            <h1 className="text-orange-600 text-lg">
-                              Online Receipt
-                            </h1>
-                          </div>
-                          <ReceiptManual
-                            online
-                            setFieldValue={setFieldValue}
-                            values={values}
-                            handleChange={handleChange}
-                            errors={errors}
-                          />
-                          <div className="flex gap-2">
+              <RegularButton
+                styles="bg border-emerald-900"
+                handleClick={async () => {
+                  router.push("/receipt-type");
+                }}
+              >
+                <p className="text-emerald-900  text-sm">Discard</p>
+              </RegularButton>
+            </div> */}
+            {(() => {
+              switch (stage) {
+                case ReceiptOnlineStage.ONLINE_RECEIPT:
+                  return (
+                    <div>
+                      <div>
+                        <ReceiptManual
+                          online
+                          setFieldValue={setFieldValue}
+                          values={values}
+                          handleChange={handleChange}
+                          errors={errors}
+                        />
+                        <BottomBar>
+                          <div className="flex gap-3 ">
                             <RegularButton
-                              styles={
-                                "bg-emerald-900 border-emerald-900 w-full"
-                              }
+                              styles={"bg-emerald-900 border-emerald-900 "}
                               handleClick={() => {
                                 router.push("/receipt-type");
                               }}
                             >
                               <p className="text-white text-sm">Back</p>
                             </RegularButton>
-
                             <RegularButton
-                              styles={
-                                "bg-emerald-900 border-emerald-900 w-full"
-                              }
+                              styles={"bg-emerald-900 border-emerald-900 "}
                               handleClick={async () => {
                                 const error = await validateForm();
                                 if (error) {
@@ -176,28 +166,49 @@ const Online = () => {
                               <p className="text-white text-sm">Next</p>
                             </RegularButton>
                           </div>
-                        </div>
-
-                        <Preview
-                          setFieldValue={setFieldValue}
-                          values={values}
-                          stage={stage}
-                        />
+                        </BottomBar>
                       </div>
-                    );
-                  case ReceiptOnlineStage.ONLINE_ITEMS:
-                    return (
-                      <div className={`${styles.twoTab}`}>
-                        <div className={`${styles.leftTab}`}>
-                          <div className="flex justify-between">
-                            <h1 className="text-orange-600 text-lg">
-                              Online Receipt Items
+                    </div>
+                  );
+                case ReceiptOnlineStage.ONLINE_ITEMS:
+                  return (
+                    <div>
+                      <div className=" flex justify-center items-center">
+                        <div className="p-4 flex flex-col gap-6 max-w-[600px] w-full">
+                          <div className="flex flex-col gap-6">
+                            <h1 className="text-2xl text-orange-600">
+                              {values.store}
                             </h1>
-                            {/* <RegularButton
-                              styles={"border-black text-black text-sm"}
-                            >
-                              <p> {values.type}</p>
-                            </RegularButton> */}
+                            <div className="flex  rounded-lg text-sm border-[1px] border-emerald-900 p-4">
+                              <div className="w-1/3 border-r-[1px] border-slate-300 ">
+                                <p className="text-slate-500 text-xs">
+                                  Total amount
+                                </p>
+                                <p>{formatCurrency(values.amount)}</p>
+                              </div>
+                              <div className="w-1/3 border-r-[1px] border-slate-300 pl-2 pr-2">
+                                <p className="text-slate-500 text-xs">
+                                  Purchase Date
+                                </p>
+                                <p>
+                                  {formatDateToMMDDYY(values.purchase_date)}
+                                </p>
+                              </div>
+
+                              <div className="pl-2 pr-2">
+                                <p className="text-slate-500 text-xs">
+                                  Return Date
+                                </p>
+                                <p>
+                                  {formatDateToMMDDYY(
+                                    calculateReturnDate(
+                                      values.purchase_date,
+                                      values.days_until_return
+                                    )
+                                  )}
+                                </p>
+                              </div>
+                            </div>
                           </div>
                           <div className="flex justify-between w-full">
                             <RegularButton
@@ -207,7 +218,7 @@ const Online = () => {
                                   : "text-black"
                               } border-black`}
                               handleClick={() =>
-                                setFieldValue("onlineType", "manual")
+                                setStage(ReceiptOnlineStage.PREVIEW)
                               }
                             >
                               <p className="text-xs ">Add Items Manually</p>
@@ -236,93 +247,86 @@ const Online = () => {
                               {errors.itemField}
                             </p>
                           )}
-                          {values.onlineType === "gpt" ? (
+                          {values.onlineType === "gpt" && (
                             <TextGpt
                               setFieldValue={setFieldValue}
                               values={values}
-                            />
-                          ) : (
-                            <OnlineReceiptManual
-                              setFieldValue={setFieldValue}
-                              values={values}
+                              setStage={setStage}
                             />
                           )}
+                          <BottomBar>
+                            <div className="flex gap-2 ">
+                              <RegularButton
+                                styles={
+                                  "bg-emerald-900 border-emerald-900 w-full"
+                                }
+                                handleClick={() => {
+                                  setStage(ReceiptOnlineStage.ONLINE_RECEIPT);
+                                }}
+                              >
+                                <p className="text-white text-sm">Back</p>
+                              </RegularButton>
 
-                          <div className="flex gap-2 ">
-                            <RegularButton
-                              styles={
-                                "bg-emerald-900 border-emerald-900 w-full"
-                              }
-                              handleClick={() => {
-                                setStage(ReceiptOnlineStage.ONLINE_RECEIPT);
-                              }}
-                            >
-                              <p className="text-white text-sm">Back</p>
-                            </RegularButton>
-
-                            <RegularButton
-                              styles={
-                                "bg-emerald-900 border-emerald-900 w-full"
-                              }
-                              handleClick={async () => {
-                                const error = await validateForm();
-                                setErrors((prevErrors) => ({
-                                  ...prevErrors,
-                                  itemError:
-                                    typeof error.items === "string"
-                                      ? error.items
-                                      : prevErrors.itemError || "",
-                                }));
-                                for (const item of values.items) {
-                                  if (
-                                    item.description === "" ||
-                                    item.price === ""
-                                  ) {
-                                    setErrors((prevErrors) => ({
-                                      ...prevErrors,
-                                      itemField:
-                                        "Decsription and price are required for each item.",
-                                    }));
-                                    return;
+                              <RegularButton
+                                styles={
+                                  "bg-emerald-900 border-emerald-900 w-full"
+                                }
+                                handleClick={async () => {
+                                  const error = await validateForm();
+                                  setErrors((prevErrors) => ({
+                                    ...prevErrors,
+                                    itemError:
+                                      typeof error.items === "string"
+                                        ? error.items
+                                        : prevErrors.itemError || "",
+                                  }));
+                                  for (const item of values.items) {
+                                    if (
+                                      item.description === "" ||
+                                      item.price === ""
+                                    ) {
+                                      setErrors((prevErrors) => ({
+                                        ...prevErrors,
+                                        itemField:
+                                          "Decsription and price are required for each item.",
+                                      }));
+                                      return;
+                                    }
                                   }
-                                }
-                                if (
-                                  Object.keys(error).length === 0 &&
-                                  !errors.itemField
-                                ) {
-                                  setStage(ReceiptOnlineStage.PREVIEW);
-                                }
-                              }}
-                            >
-                              <p className="text-white text-sm">Preview</p>
-                            </RegularButton>
-                          </div>
+                                  if (
+                                    Object.keys(error).length === 0 &&
+                                    !errors.itemField
+                                  ) {
+                                    setStage(ReceiptOnlineStage.PREVIEW);
+                                  }
+                                }}
+                              >
+                                <p className="text-white text-sm">Preview</p>
+                              </RegularButton>
+                            </div>
+                          </BottomBar>
                         </div>
-                        <Preview
-                          setFieldValue={setFieldValue}
-                          values={values}
-                          stage={stage}
-                        />
                       </div>
-                    );
+                    </div>
+                  );
 
-                  case ReceiptOnlineStage.PREVIEW:
-                    return (
-                      <FinalStage
-                        values={values}
-                        setStage={setStage}
-                        setFieldValue={setFieldValue}
-                        loading={loading}
-                        uploadError={uploadError}
-                        setUploadError={setUploadError}
-                      />
-                    );
-                }
-              })()}
-            </form>
-          )}
-        </Formik>
-      </div>
+                case ReceiptOnlineStage.PREVIEW:
+                  return (
+                    <FinalStage
+                      values={values}
+                      setStage={setStage}
+                      setFieldValue={setFieldValue}
+                      loading={loading}
+                      uploadError={uploadError}
+                      setUploadError={setUploadError}
+                    />
+                  );
+              }
+            })()}
+          </form>
+        )}
+      </Formik>
+
       {loading && <Loading loading={loading} />}
     </div>
   );

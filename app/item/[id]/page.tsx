@@ -67,19 +67,19 @@ const ItemID = () => {
             </div>
           )}
 
-          <div className="w-full  border-slate-400 border-b-[1.5px]   pb-2">
+          <div className="w-full  border-slate-400 border-b-[1px]   pb-2">
             <p className="text-xs">Price</p>
             <p>{formatCurrency(item.price)}</p>
           </div>
-          <div className="w-full  border-slate-400 border-b-[1.5px]   pb-2">
+          <div className="w-full  border-slate-400 border-b-[1px]   pb-2">
             <p className="text-xs">Barcode</p>
             <p>{item.barcode ? item.barcode : "None"}</p>
           </div>
-          <div className="w-full  border-slate-400 border-b-[1.5px]   pb-2">
+          <div className="w-full  border-slate-400 border-b-[1px]   pb-2">
             <p className="text-xs">Character</p>
             <p>{item.character ? item.character : "None"}</p>
           </div>
-          <div className="w-full  border-slate-400 border-b-[1.5px]   pb-2">
+          <div className="w-full  border-slate-400 border-b-[1px]   pb-2">
             <p className="text-xs">Product ID</p>
             <p>{item.product_id ? item.product_id : "None"}</p>
           </div>

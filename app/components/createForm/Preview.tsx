@@ -115,7 +115,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
               {edit ? (
                 <div className="flex justify-between">
                   <input
-                    className="text-orange-600 text-lg bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none w-full"
+                    className="text-orange-600 text-lg bg-white border-b-[1px] bg border-slate-500 focus:outline-none w-full"
                     name="store"
                     value={editState.store}
                     onChange={handleEditChange}
@@ -137,7 +137,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                   <CurrencyInput
                     id="amount"
                     name="amount"
-                    className="text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none"
+                    className="text-sm bg-white border-b-[1px] bg border-slate-500 focus:outline-none"
                     placeholder=""
                     value={editState.amount}
                     defaultValue={editState.amount || ""}
@@ -159,7 +159,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                   <CurrencyInput
                     id="assetAmount"
                     name="assetAmount"
-                    className="text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none"
+                    className="text-sm bg-white border-b-[1px] bg border-slate-500 focus:outline-none"
                     placeholder=""
                     value={editState.assetAmount}
                     defaultValue={editState.assetAmount || ""}
@@ -179,7 +179,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                 <h1 className="text-slate-500  text-sm">CARD</h1>
                 {edit ? (
                   <input
-                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none"
+                    className=" text-sm bg-white border-b-[1px] bg border-slate-500 focus:outline-none"
                     name="card"
                     value={editState.card}
                     onChange={handleEditChange}
@@ -196,7 +196,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                 </h1>
                 {edit ? (
                   <input
-                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none"
+                    className=" text-sm bg-white border-b-[1px] bg border-slate-500 focus:outline-none"
                     name="tracking_number"
                     value={editState.tracking_number}
                     onChange={handleEditChange}
@@ -217,7 +217,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                 <h1 className="text-slate-500  text-sm">PURCHASE DATE</h1>
                 {edit ? (
                   <input
-                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none"
+                    className=" text-sm bg-white border-b-[1px] bg border-slate-500 focus:outline-none"
                     name="purchase_date"
                     value={editState.purchase_date}
                     onChange={handleEditChange}
@@ -237,7 +237,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                 <h1 className="text-slate-500  text-sm">DAYS UNTIL RETURN</h1>
                 {edit ? (
                   <input
-                    className=" text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none"
+                    className=" text-sm bg-white border-b-[1px] bg border-slate-500 focus:outline-none"
                     name="days_until_return"
                     value={editState.days_until_return}
                     onChange={handleEditChange}

@@ -5,12 +5,11 @@ import { Receipt as ReceiptType } from "@/types/receipt";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { ReceiptItems } from "@/app/components/receiptComponents/ReceiptItems";
 import HeaderNav from "@/app/components/navbar/HeaderNav";
 import ImageModal from "@/app/components/images/ImageModal";
+import { ReceiptItems } from "@/app/components/ReceiptItems";
 
 const ReceiptPage = () => {
   const { id } = useParams();
@@ -40,11 +39,11 @@ const ReceiptPage = () => {
         </RegularButton>
       </div>
       <div className="flex bg-white rounded-lg text-sm shadow p-4">
-        <div className="w-1/3 border-r-[1.5px] border-slate-300 ">
+        <div className="w-1/3 border-r-[1px] border-slate-300 ">
           <p className="text-slate-500 text-xs">Total amount</p>
           <p>{formatCurrency(receipt.amount)}</p>
         </div>
-        <div className="w-1/3 border-r-[1.5px] border-slate-300 pl-2 pr-2">
+        <div className="w-1/3 border-r-[1px] border-slate-300 pl-2 pr-2">
           <p className="text-slate-500 text-xs">Purchase Date</p>
           <p>{formatDateToMMDDYY(receipt.purchase_date)}</p>
         </div>
@@ -98,31 +97,31 @@ const ReceiptPage = () => {
             />
 
             <div className="flex flex-col gap-4 text-sm ">
-              <div className="w-full  border-slate-400 border-b-[1.5px] pb-2 ">
+              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
                 <p className="text-slate-500 text-xs">Quantity</p>
                 <p className="">{receipt.items.length}</p>
               </div>
-              <div className="w-full  border-slate-400 border-b-[1.5px] pb-2 ">
+              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
                 <p className="text-slate-500 text-xs">Created at</p>
                 <p className="">{formatDateToMMDDYY(receipt.created_at)}</p>
               </div>
-              <div className="w-full  border-slate-400 border-b-[1.5px] pb-2 ">
+              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
                 <p className="text-slate-500 text-xs">Receipt Type</p>
                 <p className="">{receipt.type}</p>
               </div>
 
-              <div className="w-full  border-slate-400 border-b-[1.5px] pb-2 ">
+              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
                 <p className="text-slate-500 text-xs">Card</p>
                 <p className="">{receipt.card ? receipt.card : "None"}</p>
               </div>
 
-              <div className="w-full  border-slate-400 border-b-[1.5px] pb-2 ">
+              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
                 <p className="text-slate-500 text-xs">Tracking Link</p>
                 <p className="">
                   {receipt.tracking_number ? receipt.tracking_number : "None"}
                 </p>
               </div>
-              <div className="w-full  border-slate-400 border-b-[1.5px] pb-2 ">
+              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
                 <p className="text-slate-500 text-xs">Asset Amount</p>
                 <p className="">
                   {receipt.asset_amount

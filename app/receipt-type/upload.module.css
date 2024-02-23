@@ -1,21 +1,32 @@
+.receiptContainer {
+  display: flex;
+  gap: 30px;
+  justify-content: space-between;
+}
+
 .receiptTypes {
   display: flex;
   width: 100%;
   gap: 15px;
 }
 
-.twoTab {
+.receiptInputs {
+  min-width: 450px;
   display: flex;
-  gap: 30px;
+  flex-direction: column;
+  gap: 15px;
 }
-.leftTab {
+
+.imageInput {
+  min-width: 300px;
+  width: 100%;
+  max-width: 450px;
   display: flex;
   flex-direction: column;
   gap: 30px;
-  width: 50%;
-  max-width: 400px;
-  flex-shrink: 0;
-  padding-bottom: 50px;
+}
+.imageSize {
+  height: 300px;
 }
 
 @media (max-width: 800px) {
@@ -25,31 +36,21 @@
     width: 100%;
     gap: 30px;
   }
-
-  .twoTab {
-    display: flex;
-    gap: 40px;
-    flex-direction: column;
-    position: relative;
-    justify-content: center;
-    align-items: center;
+  .imageSize {
+    height: 130px;
   }
-  .leftTab {
-    display: flex;
-    border-right: none;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
+  .receiptContainer {
+    flex-wrap: wrap;
   }
 }
 
-@media (max-width: 550px) {
-  .leftTab {
-    display: flex;
-    border-right: none;
-    flex-direction: column;
-    gap: 30px;
+@media (max-width: 600px) {
+  .receiptInputs {
+    min-width: 100%;
+  }
+  .imageInput {
+    min-width: 100%;
     width: 100%;
-    max-width: 800px;
+    max-width: 100%;
   }
 }

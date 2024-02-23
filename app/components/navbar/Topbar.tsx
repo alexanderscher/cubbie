@@ -15,7 +15,7 @@ const Topbar = () => {
       <Link href="/">Sticky Notes</Link>
       <button onClick={() => setMenu(!menu)}>Menu</button>
       {menu && (
-        <div className={`${styles.menu} p-4 border-l-[1.5px]`}>
+        <div className={`${styles.menu} p-4 border-l-[1px]`}>
           <div className={`${styles.navbarItems}`}>
             <button onClick={() => setMenu(!menu)}>Close</button>
             <div

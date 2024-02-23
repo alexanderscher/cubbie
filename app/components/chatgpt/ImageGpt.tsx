@@ -198,7 +198,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
       <div className="flex flex-col gap-4">
         <button
           type="button"
-          className="w-[20px] border-[1.5px] border-orange-600 text-orange-600 rounded-lg"
+          className="w-[20px] border-[1px] border-orange-600 text-orange-600 rounded-lg"
           onClick={() => setHelp(!help)}
         >
           ?

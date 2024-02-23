@@ -69,7 +69,7 @@ const FinalStage = ({
       <ReceiptPageForm values={values} setFieldValue={setFieldValue} />
 
       {!isMobile && (
-        <div className="fixed bottom-0 left-0 border-t-[1.5px] border-emerald-900 bg-green-50 w-full p-4 flex justify-between ">
+        <div className="fixed bottom-0 left-0 border-t-[1px] border-emerald-900 bg-green-50 w-full p-4 flex justify-between ">
           <div className="flex justify-between gap-3 ml-[140px]">
             <RegularButton
               styles={"border-emerald-900 "}
@@ -120,7 +120,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
     <div className={`${styles.receipts}`}>
       <div className="flex flex-col gap-4 ">
         <div
-          className={`flex flex-col gap-1 ${styles.receiptBar} border-t-[1.5px] border-black pt-3`}
+          className={`flex flex-col gap-1 ${styles.receiptBar} border-t-[1px] border-black pt-3`}
         >
           <div className="flex justify-between w-full">
             <h1 className="text-orange-600 text-xl">{values.store}</h1>

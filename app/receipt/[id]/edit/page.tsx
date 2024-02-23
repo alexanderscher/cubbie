@@ -10,7 +10,6 @@ import { Formik } from "formik";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { ReceiptItems } from "@/app/components/receiptComponents/ReceiptItems";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { EDIT_RECEIPT_SCHEMA } from "@/utils/editValidation";
 import CurrencyInput from "react-currency-input-field";
@@ -18,6 +17,7 @@ import Loading from "@/app/components/Loading";
 import ErrorModal from "@/app/components/error/Modal";
 import HeaderNav from "@/app/components/navbar/HeaderNav";
 import ImageModal from "@/app/components/images/ImageModal";
+import { ReceiptItems } from "@/app/components/ReceiptItems";
 
 type ExtendedReceiptType = ReceiptType & {
   edit_image: string;
@@ -165,7 +165,7 @@ const ReceiptPage = () => {
             </div>
           </div>
           <div className="flex bg-white rounded-lg text-sm shadow p-4">
-            <div className="w-1/2 border-r-[1.5px] border-slate-300 ">
+            <div className="w-1/2 border-r-[1px] border-slate-300 ">
               <p className="text-slate-500 text-xs">Total amount</p>
               <p>{formatCurrency(receipt.amount)}</p>
             </div>
@@ -186,7 +186,7 @@ const ReceiptPage = () => {
                 </div>
 
                 {!values.receipt_image_url && !values.edit_image && (
-                  <div className="w-full h-[200px] overflow-hidden  border-[1.5px] border-dashed rounded-lg bg-slate-100">
+                  <div className="w-full h-[200px] overflow-hidden  border-[1px] border-dashed rounded-lg bg-slate-100">
                     <input
                       type="file"
                       onChange={(e) => handleFileChange(e, setFieldValue)}
@@ -317,7 +317,7 @@ const ReceiptPage = () => {
                     <input
                       value={values.store}
                       onChange={handleChange("store")}
-                      className="w-full border-[1.5px] border-slate-300 rounded-lg p-2"
+                      className="w-full border-[1px] border-slate-300 rounded-lg p-2"
                     />
                     {errorM.store && (
                       <p className="text-orange-900 text-xs">{errorM.store}</p>
@@ -329,7 +329,7 @@ const ReceiptPage = () => {
                       name="type"
                       value={values.type}
                       onChange={handleChange}
-                      className="w-full border-[1.5px] border-slate-300 rounded-lg p-2"
+                      className="w-full border-[1px] border-slate-300 rounded-lg p-2"
                     >
                       <option value={values.type}>
                         {values.type
@@ -353,7 +353,7 @@ const ReceiptPage = () => {
                       type="date"
                       value={formatDateToYYYYMMDD(values.purchase_date)}
                       onChange={handleChange("purchase_date")}
-                      className="w-full border-[1.5px] border-slate-300 rounded-lg p-2"
+                      className="w-full border-[1px] border-slate-300 rounded-lg p-2"
                     />
                     {errorM.purchase_date && (
                       <p className="text-orange-900 text-xs">
@@ -368,7 +368,7 @@ const ReceiptPage = () => {
                       type="date"
                       value={formatDateToYYYYMMDD(values.return_date)}
                       onChange={handleChange("return_date")}
-                      className="w-full border-[1.5px] border-slate-300 rounded-lg p-2"
+                      className="w-full border-[1px] border-slate-300 rounded-lg p-2"
                     />
                     {errorM.return_date && (
                       <p className="text-orange-900 text-xs">
@@ -382,7 +382,7 @@ const ReceiptPage = () => {
                     <input
                       value={values.card}
                       onChange={handleChange("card")}
-                      className="w-full border-[1.5px] border-slate-300 rounded-lg p-2"
+                      className="w-full border-[1px] border-slate-300 rounded-lg p-2"
                     />
                   </div>
                   <div className="w-full">
@@ -390,7 +390,7 @@ const ReceiptPage = () => {
                     <CurrencyInput
                       id="asset_amount"
                       name="asset_amount"
-                      className="w-full border-[1.5px] border-slate-300 rounded-lg p-2"
+                      className="w-full border-[1px] border-slate-300 rounded-lg p-2"
                       placeholder=""
                       value={values.asset_amount}
                       defaultValue={values.asset_amount || ""}
@@ -405,7 +405,7 @@ const ReceiptPage = () => {
                     <input
                       value={values.tracking_number}
                       onChange={handleChange("tracking_number")}
-                      className="w-full border-[1.5px] border-slate-300 rounded-lg p-2"
+                      className="w-full border-[1px] border-slate-300 rounded-lg p-2"
                     />
                     {errorM.tracking_number && (
                       <p className="text-orange-900 text-xs">

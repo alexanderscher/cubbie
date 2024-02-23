@@ -3,6 +3,7 @@ export interface Photo {
   url: string;
 }
 export interface ItemInput {
+  [key: string]: any;
   description: string;
   photo?: string;
   price: string;

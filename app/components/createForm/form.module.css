@@ -7,6 +7,25 @@
   width: 100%;
 }
 
+.boxes {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  padding-bottom: 40px;
+}
+
+.box {
+  width: 100%;
+  max-width: 300px;
+  min-width: 300px;
+  background-color: white;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+}
+
 .preview {
   background-color: white;
   width: 100%;
@@ -22,5 +41,8 @@
   }
   .receiptBar {
     width: 100%;
+  }
+  .box {
+    max-width: 100%;
   }
 }

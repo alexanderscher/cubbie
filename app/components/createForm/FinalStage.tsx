@@ -1,7 +1,5 @@
 "use client";
-import NonClickableButton from "@/app/components/buttons/NonClickableButton";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import ReceiptFormItems from "@/app/components/createForm/ReceiptFormItems";
 import { ReceiptOnlineStage, ReceiptStoreStage } from "@/constants/form";
 import { ItemInput, ReceiptInput } from "@/types/form";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
@@ -19,6 +17,8 @@ import Shirt from "@/app/components/placeholderImages/Shirt";
 import { TruncateText } from "@/app/components/text/Truncate";
 import CurrencyInput from "react-currency-input-field";
 import LargeButton from "@/app/components/buttons/LargeButton";
+import { BarcodeScanner } from "@/app/components/createForm/barcode/BarcodeScanner";
+import { useRouter } from "next/navigation";
 
 interface FinalStageProps {
   values: any;
@@ -37,38 +37,48 @@ const FinalStage = ({
   uploadError,
   setUploadError,
 }: FinalStageProps) => {
-  const isMobile = useIsMobile();
+  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 max-w-[1000px]">
       <ReceiptPageForm values={values} setFieldValue={setFieldValue} />
-
       <BottomBar>
-        <div className="flex gap-2 ">
+        <div className="flex justify-between w-full">
           <RegularButton
-            styles={"border-emerald-900 "}
-            handleClick={() => {
-              if (values.type === "Online") {
-                setStage(ReceiptOnlineStage.ONLINE_ITEMS);
-              } else {
-                setStage(ReceiptStoreStage.IN_STORE_GPT);
-              }
+            styles="bg-white border-emerald-900"
+            handleClick={async () => {
+              router.push("/receipt-type");
             }}
           >
-            <p className="text-emerald-900 text-sm">Back</p>
+            <p className="text-emerald-900  text-xs">Discard</p>
           </RegularButton>
-
-          {loading ? (
-            <RegularButton styles={"bg-emerald-900 border-emerald-900 "}>
-              <p className="text-white text-sm">Uploading...</p>
-            </RegularButton>
-          ) : (
+          <div className="flex gap-2 ">
             <RegularButton
-              type="submit"
-              styles={"bg-emerald-900 border-emerald-900 "}
+              styles={"border-emerald-900 "}
+              handleClick={() => {
+                if (values.type === "Online") {
+                  setStage(ReceiptOnlineStage.ONLINE_ITEMS);
+                } else {
+                  setStage(ReceiptStoreStage.IN_STORE_GPT);
+                }
+              }}
             >
-              <p className="text-white text-sm">Submit</p>
+              <p className="text-emerald-900 text-sm">Back</p>
             </RegularButton>
-          )}
+
+            {loading ? (
+              <RegularButton styles={"bg-emerald-900 border-emerald-900 "}>
+                <p className="text-white text-sm">Uploading...</p>
+              </RegularButton>
+            ) : (
+              <RegularButton
+                type="submit"
+                styles={"bg-emerald-900 border-emerald-900 "}
+              >
+                <p className="text-white text-sm">Submit</p>
+              </RegularButton>
+            )}
+          </div>
         </div>
       </BottomBar>
 
@@ -93,8 +103,16 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
   return (
     <div className="flex flex-col gap-8  w-full h-full ">
-      <div className="flex justify-between items-center w-full">
-        <h1 className="text-2xl text-orange-600 w-3/4">{values.store}</h1>
+      <div className="flex justify-between items-center gap-4">
+        <h1 className="text-2xl text-orange-600 ">{values.store}</h1>
+        <RegularButton
+          styles={"bg-emerald-900 text-white text-xs"}
+          handleClick={() => {
+            setIsOpen(true);
+          }}
+        >
+          Add Item
+        </RegularButton>
       </div>
       <div className="flex border-[1px] border-emerald-900 rounded-lg text-sm  p-4">
         <div className="w-1/3 border-r-[1px] border-slate-300 ">
@@ -204,20 +222,21 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
                   item={item}
                   index={index}
                   items={values.items}
-                  setFieldValue={setFieldValue} // Pass setFieldValue to the child
+                  setFieldValue={setFieldValue}
                   asset_amount={parseInt(values.assetAmount)}
                 />
-                // <ReceiptFormItems
-                //   key={item.id}
-                //   item={item}
-                //   index={index}
-                //   setFieldValue={setFieldValue}
-                //   values={values}
-                // />
               ))}
           </div>
         </div>
       </div>
+      {isOpen && (
+        <AddItemModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          items={values.items}
+          setFieldValue={setFieldValue}
+        />
+      )}
     </div>
   );
 };
@@ -238,7 +257,9 @@ const ReceiptItems = ({
   items,
   setFieldValue,
 }: ReceiptItemsProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [showScanner, setShowScanner] = useState(false);
+
+  console.log("Item", item);
 
   const handleItemChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const key = e.target.name as ItemInputKey;
@@ -255,132 +276,329 @@ const ReceiptItems = ({
     setFieldValue("items", updatedItems);
   };
 
+  const removeItem = async (index: number) => {
+    const updatedItems = [...items];
+    const newItems = updatedItems.filter((_, i) => i !== index);
+    setFieldValue("items", newItems);
+  };
+
+  const handleBarcodeResult = (barcodeValue: string) => {
+    const updatedItems = [...items];
+    updatedItems[index].barcode = barcodeValue || "";
+    setFieldValue("items", updatedItems);
+  };
+
   return (
-    <div className="border-t-[1px] border-black flex flex-col gap-4 w-full pt-5">
+    <div className="border-t-[1px] border-black flex flex-col gap-4 w-full pt-5 ">
       <div className="w-full h-full flex gap-6">
-        {/* <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 overflow-hidden rounded-lg ">
-          <div className=" relative flex items-center justify-center ">
-            <Image
-              width={200}
-              height={200}
-              src={item.photo}
-              alt=""
-              className="w-full h-full object-cover rounded-lg"
-            />
-          </div>
-        </div> */}
-
-        <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 overflow-hidden rounded-lg relative">
-          <div className="flex flex-col h-full w-full">
-            <input
-              type="file"
-              // onChange={(e) => {
-              //   console.log("File input changed");
-              //   if (e.target.files && e.target.files[0]) {
-              //     const file = e.target.files[0];
-              //     if (!file.type.match("image.*")) {
-              //       alert("Please upload an image file");
-              //       return;
-              //     }
-
-              //     if (!file.type.match("image.*")) {
-              //       setInvalidImage(true);
-              //       return;
-              //     }
-
-              //     const reader = new FileReader();
-              //     reader.readAsDataURL(file);
-              //     reader.onload = () => {
-              //       if (typeof reader.result === "string") {
-              //         setitem((prevState) => ({
-              //           ...prevState,
-              //           photo: reader.result as string,
-              //         }));
-              //         setInvalidImage(false);
-              //       }
-              //     };
-              //     reader.onerror = (error) => {
-              //       console.error("Error converting file to base64:", error);
-              //     };
-              //   }
-              // }}
-              id="file-upload-item"
-              style={{ opacity: 0, position: "absolute", zIndex: -1 }}
-            />
-            <LargeButton height="h-full">
-              <label
-                htmlFor="file-upload-item"
-                className="w-full h-full flex justify-center items-center"
-                style={{
-                  cursor: "pointer",
+        <div className="w-[120px] h-[150px] flex items-center flex-shrink-0 overflow-visible rounded-lg relative">
+          {item.photo && (
+            <div className="relative flex items-center justify-center w-full h-full">
+              <button
+                type="button"
+                onClick={() => {
+                  const updatedItems = [...items];
+                  updatedItems[index].photo = "";
+                  setFieldValue("items", updatedItems);
                 }}
+                className="absolute z-10 -top-2 -right-2 m-1 bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm leading-none"
+                style={{ lineHeight: "1" }}
               >
-                Upload File
-              </label>
-            </LargeButton>
-          </div>
+                &times;
+              </button>
+              <Image
+                width={200}
+                height={200}
+                src={item.photo}
+                alt=""
+                className="w-full h-full object-cover rounded-lg"
+              />
+            </div>
+          )}
+          {!item.photo && (
+            <div className="flex flex-col h-full w-full">
+              <input
+                type="file"
+                onChange={(e) => {
+                  console.log("File input changed");
+                  if (e.target.files && e.target.files[0]) {
+                    const file = e.target.files[0];
+                    if (!file.type.match("image.*")) {
+                      alert("Please upload an image file");
+                      return;
+                    }
+
+                    // if (!file.type.match("image.*")) {
+                    //   setInvalidImage(true);
+                    //   return;
+                    // }
+
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = () => {
+                      if (typeof reader.result === "string") {
+                        const updatedItems = [...items];
+                        updatedItems[index].photo = reader.result;
+                        setFieldValue("items", updatedItems);
+                        // setInvalidImage(false);
+                      }
+                    };
+                    reader.onerror = (error) => {
+                      console.error("Error converting file to base64:", error);
+                    };
+                  }
+                }}
+                id="file-upload-item"
+                style={{ opacity: 0, position: "absolute", zIndex: -1 }}
+              />
+              <LargeButton height="h-full">
+                <label
+                  htmlFor="file-upload-item"
+                  className="w-full h-full flex justify-center items-center"
+                  style={{
+                    cursor: "pointer",
+                  }}
+                >
+                  Upload File
+                </label>
+              </LargeButton>
+            </div>
+          )}
         </div>
 
         <div className="text-sm flex flex-col gap-3 items-start w-full ">
           <div className="w-full">
-            <h1 className="text-slate-500 ">AMOUNT</h1>
+            <h1 className="text-slate-500 text-xs">Description</h1>
+
+            <input
+              className="  text-sm bg-white border-[1px] rounded p-2 bg border-emerald-900 focus:outline-none w-full"
+              name="character"
+              value={item.description || ""}
+              onChange={handleItemChange}
+            />
+          </div>
+          <div className="w-full">
+            <h1 className="text-slate-500 text-xs">Amount</h1>
 
             <CurrencyInput
               id="price"
               name="price"
-              className="text-sm bg-white border-[1px] rounded-md p-2 bg border-slate-500 focus:outline-none w-full"
+              className="text-sm bg-white border-[1px] rounded p-2 bg border-emerald-900 focus:outline-none w-full"
               placeholder=""
               value={item.price}
               defaultValue={item.price || ""}
               decimalsLimit={2}
               onValueChange={handleCurrencyChange}
             />
-
-            {/* {errors.price && <p className="text-orange-900">{errors.price}</p>} */}
           </div>
 
           <div className="w-full">
-            <h1 className="text-slate-500 ">CHARACTER</h1>
+            <h1 className="text-slate-500 text-xs">Character</h1>
 
             <input
-              className="  text-sm bg-white border-[1px] rounded-md p-2 bg border-slate-500 focus:outline-none w-full"
+              className="  text-sm bg-white border-[1px] rounded p-2 bg border-emerald-900 focus:outline-none w-full"
               name="character"
               value={item.character || ""}
               onChange={handleItemChange}
             />
           </div>
+
           <div className="w-full">
-            <h1 className="text-slate-500 ">PRODUCT ID</h1>
+            <h1 className="text-slate-500 text-xs">Product ID</h1>
 
             <input
-              className="  text-sm bg-white border-[1px] rounded-md p-2 bg border-slate-500 focus:outline-none w-full"
+              className="  text-sm bg-white border-[1px] rounded p-2 bg border-emerald-900 focus:outline-none w-full"
               name="product_id"
               value={item.product_id}
               onChange={handleItemChange}
             />
           </div>
           <div className="w-full">
-            <h1 className="text-slate-500 ">BARCODE</h1>
+            <h1 className="text-slate-500 text-xs">Barcode</h1>
 
-            <div className="flex flex-col gap-4">
+            <div className="flex  w-full gap-2">
               <input
-                className="  text-sm bg-white border-[1px] rounded-md p-2 bg border-slate-500 focus:outline-none w-full"
+                className="w-full  text-sm bg-white border-[1px] rounded p-2 bg border-emerald-900 focus:outline-none "
                 name="barcode"
                 value={item.barcode}
                 onChange={handleItemChange}
               />
-              {/* <button
+              <button
+                type="button"
+                className="w-[40px] border-[1px] border-emerald-900 p-3 rounded flex justify-center items-center  "
+                onClick={() => {
+                  setShowScanner(true);
+                }}
+                disabled={showScanner}
+              >
+                <div className="w-[40px]">
+                  <Image
+                    src="/barcode_b.png"
+                    alt="barcode"
+                    width={50}
+                    height={50}
+                  ></Image>
+                </div>
+              </button>
+
+              {showScanner && (
+                <div className="w-full">
+                  <h1>Scan a Barcode</h1>
+                  <BarcodeScanner
+                    setShowScanner={setShowScanner}
+                    onResult={(result) => {
+                      handleBarcodeResult(result.text);
+
+                      setShowScanner(false);
+                    }}
+                    onError={() => {
+                      console.log("Error");
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowScanner(false);
+                    }}
+                  >
+                    Close Scanner
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="w-full flex justify-end mt-2">
+            <RegularButton
+              small
+              styles="bg-emerald-900 border-emerald-900  w-full"
+              handleClick={() => removeItem(index)}
+            >
+              <p className="text-xs text-white">Delete</p>
+            </RegularButton>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface AddItemModalProps {
+  isOpen: boolean;
+  setIsOpen: (value: boolean) => void;
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
+  items: ItemInput[];
+}
+
+const AddItemModal = ({
+  isOpen,
+  setIsOpen,
+  setFieldValue,
+  items,
+}: AddItemModalProps) => {
+  const [newItem, setNewItem] = useState({
+    description: "",
+    price: "",
+    barcode: "",
+    product_id: "",
+    character: "",
+    photo: "",
+  });
+
+  const [showScanner, setShowScanner] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNewItem({ ...newItem, [name]: value });
+  };
+
+  const handleCurrencyChange = (value: string | undefined) => {
+    setNewItem({ ...newItem, price: value || "" });
+  };
+
+  const handleSubmit = () => {
+    setFieldValue("items", [...items, newItem]);
+    setIsOpen(false);
+    setNewItem({
+      description: "",
+      price: "",
+      barcode: "",
+      product_id: "",
+      character: "",
+      photo: "",
+    });
+  };
+
+  const handleBarcodeResult = (barcodeValue: string) => {
+    setNewItem({ ...newItem, barcode: barcodeValue });
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+      <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full">
+        <div className="flex justify-between items-center border-b border-gray-200 px-5 py-4 bg-slate-100 rounded-t-lg">
+          <h3 className="text-lg text-emerald-900">Add Item</h3>
+          <button
+            type="button"
+            className="text-gray-400 hover:text-gray-500"
+            onClick={() => setIsOpen(false)}
+          >
+            <span className="text-2xl">&times;</span>
+          </button>
+        </div>
+        <div className="p-6">
+          <div className="space-y-4">
+            <div>
+              <p className="text-xs text-emerald-900">Description</p>
+              <input
+                type="text"
+                name="description"
+                value={newItem.description}
+                onChange={handleChange}
+                className="w-full p-2 border-[1px] border-emerald-900 rounded"
+              />
+            </div>
+            <div>
+              <p className="text-xs text-emerald-900">Price</p>
+              <CurrencyInput
+                id="price"
+                name="price"
+                className="text-sm bg-white border-[1px] rounded p-2  border-emerald-900 focus:outline-none w-full"
+                placeholder=""
+                value={newItem.price}
+                defaultValue={newItem.price || ""}
+                decimalsLimit={2}
+                onValueChange={handleCurrencyChange}
+              />
+            </div>
+            <div>
+              <p className="text-xs text-emerald-900">Barcode</p>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  name="barcode"
+                  value={newItem.barcode}
+                  onChange={handleChange}
+                  className="w-full p-2 border-[1px] border-emerald-900 rounded"
+                />
+                <button
                   type="button"
-                  className="border-[1px] border-emerald-900 p-3 rounded-lg   w-[150px]"
+                  className="w-[40px] border-[1px] border-emerald-900 p-3 rounded flex justify-center items-center  "
                   onClick={() => {
                     setShowScanner(true);
                   }}
                   disabled={showScanner}
                 >
-                  Scan barcode
-                </button> */}
+                  <div className="w-[40px]">
+                    <Image
+                      src="/barcode_b.png"
+                      alt="barcode"
+                      width={50}
+                      height={50}
+                    ></Image>
+                  </div>
+                </button>
 
-              {/* {showScanner && (
+                {showScanner && (
                   <div className="w-full">
                     <h1>Scan a Barcode</h1>
                     <BarcodeScanner
@@ -403,40 +621,127 @@ const ReceiptItems = ({
                       Close Scanner
                     </button>
                   </div>
-                )} */}
-            </div>
-          </div>
-          {/* {stage !== "Final" && (
-            <div className="flex flex-col w-full max-w-[300px] gap-4">
-              <div className="flex gap-4">
-                {" "}
-                <RegularButton
-                  small
-                  styles="bg border-black w-full"
-                  handleClick={() => removeItem(index)}
-                >
-                  <p className="text-xs">Delete</p>
-                </RegularButton>
-                <RegularButton
-                  small
-                  styles="bg border-black w-full"
-                  handleClick={toggleEdit}
-                >
-                  <p className="text-xs">{edit ? "Save" : "Edit"}</p>
-                </RegularButton>
+                )}
               </div>
-
-              {edit && (
-                <RegularButton
-                  small
-                  styles="bg border-black "
-                  handleClick={handleCancel}
-                >
-                  <p className="text-xs">Cancel</p>
-                </RegularButton>
-              )}
             </div>
-          )} */}
+
+            <div>
+              <p className="text-xs text-emerald-900">Product ID</p>
+              <input
+                type="text"
+                name="product_id"
+                value={newItem.product_id}
+                onChange={handleChange}
+                className="w-full p-2 border-[1px] border-emerald-900 rounded"
+              />
+            </div>
+            <div>
+              <p className="text-xs text-emerald-900">Character</p>
+              <input
+                type="text"
+                name="character"
+                value={newItem.character}
+                onChange={handleChange}
+                className="w-full p-2 border-[1px] border-emerald-900 rounded"
+              />
+            </div>
+            <div>
+              <p className="text-xs text-emerald-900">Image</p>
+
+              <div className="relative w-full h-[70px] overflow-hidden border-[1px] border-dashed rounded-lg bg-slate-100 flex flex-col border-emerald-900 justify-center items-center ">
+                <input
+                  type="file"
+                  onChange={(e) => {
+                    console.log("File input changed");
+                    if (e.target.files && e.target.files[0]) {
+                      const file = e.target.files[0];
+                      if (!file.type.match("image.*")) {
+                        alert("Please upload an image file");
+                        return;
+                      }
+
+                      // if (!file.type.match("image.*")) {
+                      //   setInvalidImage(true);
+                      //   return;
+                      // }
+
+                      const reader = new FileReader();
+                      reader.readAsDataURL(file);
+                      reader.onload = () => {
+                        if (typeof reader.result === "string") {
+                          setNewItem({ ...newItem, photo: reader.result });
+                          // setInvalidImage(false);
+                        }
+                      };
+                      reader.onerror = (error) => {
+                        console.error(
+                          "Error converting file to base64:",
+                          error
+                        );
+                      };
+                    }
+                  }}
+                  id="add-photo"
+                  className="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer"
+                />
+                <Image
+                  src="/image_b.png"
+                  alt=""
+                  width={40}
+                  height={40}
+                  className="object-cover z-0"
+                  style={{
+                    objectFit: "cover",
+                    objectPosition: "center",
+                  }}
+                />
+                <label
+                  htmlFor="add-photo"
+                  className="absolute inset-0 w-full h-full flex flex-col justify-center items-center "
+                >
+                  {/* You can add additional text or icons here */}
+                </label>
+              </div>
+            </div>
+            {newItem.photo && (
+              <div className="w-24 h-24 flex items-center flex-shrink-0 overflow-visible rounded-lg relative">
+                {newItem.photo && (
+                  <div className="relative flex items-center justify-center w-full h-full">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setNewItem({
+                          ...newItem,
+                          photo: "",
+                        });
+                      }}
+                      className="absolute z-10 -top-2 -right-2 m-1 bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm leading-none"
+                      style={{ lineHeight: "1" }}
+                    >
+                      &times;
+                    </button>
+                    <Image
+                      width={200}
+                      height={200}
+                      src={newItem.photo}
+                      alt=""
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="flex justify-end mt-6">
+            <RegularButton
+              type="button"
+              styles="bg-emerald-900 text-white"
+              handleClick={handleSubmit}
+            >
+              <p className="text-xs">Add Item</p>
+            </RegularButton>
+          </div>
         </div>
       </div>
     </div>

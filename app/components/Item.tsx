@@ -14,7 +14,6 @@ interface Props {
 
 const Item = ({ item }: Props) => {
   return (
-    // <div className={` ${index === length - 1 ? "lastItemMargin" : ""} `}>
     <div className="box">
       {item.photo_url && (
         <div className="w-full h-[120px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col">

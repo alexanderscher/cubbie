@@ -56,7 +56,7 @@ const ReceiptPage = () => {
       <div className={`${styles.receipt} `}>
         <div className={`${styles.receiptLeft}  flex flex-col gap-2`}>
           <div
-            className={`shadow rounded-lg  bg-white flex flex-col gap-4 p-6`}
+            className={`shadow rounded-lg  bg-white flex flex-col gap-4 p-6  border-[1px] border-emerald-900 `}
           >
             <p className="text-xl text-emerald-900">Receipt Information</p>
             {!receipt.receipt_image_url && (

@@ -117,54 +117,66 @@ const Online = () => {
                           errors={errors}
                         />
                         <BottomBar>
-                          <div className="flex gap-3 ">
+                          <div className="flex justify-between w-full">
                             <RegularButton
-                              styles={"bg-emerald-900 border-emerald-900 "}
-                              handleClick={() => {
+                              styles="bg-white border-emerald-900"
+                              handleClick={async () => {
                                 router.push("/receipt-type");
                               }}
                             >
-                              <p className="text-white text-sm">Back</p>
+                              <p className="text-emerald-900  text-xs">
+                                Discard
+                              </p>
                             </RegularButton>
-                            <RegularButton
-                              styles={"bg-emerald-900 border-emerald-900 "}
-                              handleClick={async () => {
-                                const error = await validateForm();
-                                if (error) {
-                                  setErrors((prevErrors) => ({
-                                    ...prevErrors,
-                                    store:
-                                      error.store || prevErrors.store || "",
-                                    amount:
-                                      error.amount || prevErrors.amount || "",
-                                    tracking_number:
-                                      error.tracking_number ||
-                                      prevErrors.tracking_number ||
-                                      "",
-                                    days_until_return:
-                                      error.days_until_return ||
-                                      prevErrors.days_until_return ||
-                                      "",
-                                    purchase_date:
-                                      error.purchase_date ||
-                                      prevErrors.purchase_date ||
-                                      "",
-                                  }));
-                                }
+                            <div className="flex gap-3 ">
+                              <RegularButton
+                                styles={"bg-emerald-900 border-emerald-900 "}
+                                handleClick={() => {
+                                  router.push("/receipt-type");
+                                }}
+                              >
+                                <p className="text-white text-xs">Back</p>
+                              </RegularButton>
+                              <RegularButton
+                                styles={"bg-emerald-900 border-emerald-900 "}
+                                handleClick={async () => {
+                                  const error = await validateForm();
+                                  if (error) {
+                                    setErrors((prevErrors) => ({
+                                      ...prevErrors,
+                                      store:
+                                        error.store || prevErrors.store || "",
+                                      amount:
+                                        error.amount || prevErrors.amount || "",
+                                      tracking_number:
+                                        error.tracking_number ||
+                                        prevErrors.tracking_number ||
+                                        "",
+                                      days_until_return:
+                                        error.days_until_return ||
+                                        prevErrors.days_until_return ||
+                                        "",
+                                      purchase_date:
+                                        error.purchase_date ||
+                                        prevErrors.purchase_date ||
+                                        "",
+                                    }));
+                                  }
 
-                                if (Object.keys(error).length === 0) {
-                                  setStage(ReceiptOnlineStage.ONLINE_ITEMS);
-                                  setErrors((prevErrors) => ({
-                                    ...prevErrors,
-                                    store: "",
-                                    amount: "",
-                                    tracking_number: "",
-                                  }));
-                                }
-                              }}
-                            >
-                              <p className="text-white text-sm">Next</p>
-                            </RegularButton>
+                                  if (Object.keys(error).length === 0) {
+                                    setStage(ReceiptOnlineStage.ONLINE_ITEMS);
+                                    setErrors((prevErrors) => ({
+                                      ...prevErrors,
+                                      store: "",
+                                      amount: "",
+                                      tracking_number: "",
+                                    }));
+                                  }
+                                }}
+                              >
+                                <p className="text-white text-xs">Next</p>
+                              </RegularButton>
+                            </div>
                           </div>
                         </BottomBar>
                       </div>

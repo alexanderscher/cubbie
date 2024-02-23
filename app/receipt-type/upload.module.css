@@ -17,6 +17,10 @@
   gap: 15px;
 }
 
+.boxes {
+  height: 130px;
+}
+
 .imageInput {
   min-width: 300px;
   width: 100%;
@@ -50,6 +54,12 @@
 @media (max-width: 600px) {
   .receiptInputs {
     min-width: 100%;
+  }
+  .receiptTypes {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
   }
   .imageInput {
     min-width: 100%;

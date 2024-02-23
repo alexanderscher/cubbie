@@ -36,13 +36,13 @@ const ItemID = () => {
       <div className="flex justify-between w-full ">
         <h1 className="text-2xl text-orange-600">{item.description}</h1>
         <RegularButton styles="bg-emerald-900" href={`/item/${id}/edit`}>
-          <p className="text-white text-sm">Edit</p>
+          <p className="text-white text-xs">Edit</p>
         </RegularButton>
       </div>
 
       <div className={`${styles.receipt}`}>
         <div
-          className={`w-full shadow rounded-lg p-8 bg-white flex flex-col gap-4`}
+          className={`w-full  rounded-lg p-8 bg-white flex flex-col gap-4  border-[1px] border-emerald-900 `}
         >
           <p className="text-xl text-emerald-900">Item Information</p>
           {!item.photo_url && <Shirt />}
@@ -88,46 +88,37 @@ const ItemID = () => {
         <div className={`w-full`}>
           <div className={`${styles.receiptLeft}  flex flex-col gap-2`}>
             <div
-              className={` shadow rounded-lg p-8 bg-white flex flex-col gap-4`}
+              className={` rounded-lg p-8 bg-white flex flex-col gap-4  border-[1px] border-emerald-900 `}
             >
               <p className="text-xl text-emerald-900">Receipt Information</p>
               <div className="flex flex-col gap-3 text-sm">
                 <div className="flex flex-col gap-3 text-sm">
-                  <div>
+                  <div className="border-slate-400 border-b-[1px] ">
                     <p className="text-slate-500">Store</p>
                     <p>{item.receipt.store}</p>
                   </div>
-                  <div>
+                  <div className="border-slate-400 border-b-[1px] ">
                     <p className="text-slate-500">Created at</p>
                     <p>{formatDateToMMDDYY(item.receipt.created_at)}</p>
                   </div>
-                  <div>
+                  <div className="border-slate-400 border-b-[1px] ">
                     <p className="text-slate-500">Receipt Type</p>
                     <p>{item.receipt.type}</p>
                   </div>
 
-                  {item.receipt.card ? (
-                    <div>
-                      <p className="text-slate-500">Card used</p>
-                      <p>{item.receipt.card}</p>
-                    </div>
-                  ) : (
-                    <div>
-                      <p className="text-slate-500">Card used</p>
-                      <p>None</p>
-                    </div>
-                  )}
-                  {item.receipt.tracking_number ? (
-                    <div>
-                      <p className="text-slate-500">Tracking Link</p>
-                      <p>{item.receipt.tracking_number}</p>
-                    </div>
-                  ) : (
-                    <div>
-                      <p className="text-slate-500">Tracking Link</p>
-                      <p>None</p>
-                    </div>
-                  )}
+                  <div className="border-slate-400 border-b-[1px] ">
+                    <p className="text-slate-500">Card used</p>
+                    <p>{item.receipt.card ? item.receipt.card : "None"}</p>
+                  </div>
+
+                  <div className="border-slate-400 border-b-[1px] ">
+                    <p className="text-slate-500">Tracking Link</p>
+                    <p>
+                      {item.receipt.tracking_number
+                        ? item.receipt.tracking_number
+                        : "None"}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

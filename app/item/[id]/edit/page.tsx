@@ -147,7 +147,7 @@ const ItemID = () => {
 
           <div className={`${styles.receipt}`}>
             <div
-              className={`w-full shadow rounded-lg p-8 bg-white flex flex-col gap-4`}
+              className={`w-full border-[1px] border-emerald-900 rounded-lg p-6 bg-white flex flex-col gap-4`}
             >
               <p className="text-xl text-emerald-900">Item Information</p>
               {!values.photo_url && !values.edit_image && (
@@ -310,9 +310,9 @@ const ItemID = () => {
               </div>
             </div>
             <div className={`w-full`}>
-              <div className={`${styles.receiptLeft}  flex flex-col gap-2`}>
+              <div className={`${styles.receiptLeft}   flex flex-col gap-2`}>
                 <div
-                  className={` shadow rounded-lg p-8 bg-white flex flex-col gap-4`}
+                  className={` border-[1px] border-emerald-900 rounded-lg p-6 bg-white flex flex-col gap-4`}
                 >
                   <p className="text-xl text-emerald-900">
                     Receipt Information

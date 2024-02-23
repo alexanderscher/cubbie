@@ -12,7 +12,7 @@ const ToggleButton = ({ children, handleClick, value, styles }: Props) => {
     <button
       className={`${
         value ? "bg-emerald-900 text-white" : "text-emerald-900 "
-      } border-[1.5px] px-4 py-[6px] rounded-3xl border-emerald-900 ${styles}`}
+      } border-[1px] px-4 py-[6px] rounded-3xl border-emerald-900 ${styles}`}
       onClick={handleClick}
     >
       {children}

@@ -68,7 +68,7 @@ export const ReceiptItems = ({
         </div>
         {pathname.endsWith("edit") && (
           <Link
-            className="text-sm text-center border-t-[1.5px] pt-2 text-emerald-900"
+            className="text-sm text-center border-t-[1px] pt-2 text-emerald-900"
             href={`/item/${item.id}/edit`}
           >
             Edit

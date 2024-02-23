@@ -136,7 +136,7 @@ const ReceiptFormItems = ({
   };
 
   return (
-    <div className="border-t-[1.5px] border-black flex flex-col gap-4 w-full pt-5">
+    <div className="border-t-[1px] border-black flex flex-col gap-4 w-full pt-5">
       <div className="w-full h-full flex gap-6">
         {stage === "Final" && item.photo && (
           <div className="w-[120px] h-[150px] overflow-hidden relative flex items-center justify-center  flex-shrink-0 rounded-sm">
@@ -274,7 +274,7 @@ const ReceiptFormItems = ({
           <div className="w-full">
             {edit && stage !== "Final" ? (
               <input
-                className="text-orange-600 border-b-[1.5px] border-slate-500 focus:outline-none bg-white bg w-full"
+                className="text-orange-600 border-b-[1px] border-slate-500 focus:outline-none bg-white bg w-full"
                 value={editState.description || ""}
                 name="description"
                 onChange={handleItemChange}
@@ -302,7 +302,7 @@ const ReceiptFormItems = ({
               <CurrencyInput
                 id="price"
                 name="price"
-                className="text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none w-full"
+                className="text-sm bg-white border-b-[1px] bg border-slate-500 focus:outline-none w-full"
                 placeholder=""
                 value={editState.price}
                 defaultValue={editState.price || ""}
@@ -321,7 +321,7 @@ const ReceiptFormItems = ({
             <h1 className="text-slate-500 ">CHARACTER</h1>
             {edit ? (
               <input
-                className="  text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none w-full"
+                className="  text-sm bg-white border-b-[1px] bg border-slate-500 focus:outline-none w-full"
                 name="character"
                 value={editState.character || ""}
                 onChange={handleItemChange}
@@ -336,7 +336,7 @@ const ReceiptFormItems = ({
             <h1 className="text-slate-500 ">PRODUCT ID</h1>
             {edit ? (
               <input
-                className="  text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none w-full"
+                className="  text-sm bg-white border-b-[1px] bg border-slate-500 focus:outline-none w-full"
                 name="product_id"
                 value={editState.product_id}
                 onChange={handleItemChange}
@@ -352,14 +352,14 @@ const ReceiptFormItems = ({
             {edit ? (
               <div className="flex flex-col gap-4">
                 <input
-                  className="  text-sm bg-white border-b-[1.5px] bg border-slate-500 focus:outline-none w-full"
+                  className="  text-sm bg-white border-b-[1px] bg border-slate-500 focus:outline-none w-full"
                   name="barcode"
                   value={editState.barcode}
                   onChange={handleItemChange}
                 />
                 <button
                   type="button"
-                  className="border-[1.5px] border-emerald-900 p-3 rounded-lg   w-[150px]"
+                  className="border-[1px] border-emerald-900 p-3 rounded-lg   w-[150px]"
                   onClick={() => {
                     setShowScanner(true);
                   }}

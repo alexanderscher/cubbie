@@ -3,6 +3,7 @@ import { Receipt as ReceiptType } from "@/types/receipt";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
+import Link from "next/link";
 
 interface ReceiptProps {
   receipt: ReceiptType;
@@ -27,20 +28,20 @@ const Receipt = ({ receipt }: ReceiptProps) => {
             />
           </div>
         </div>
-        <a href={`receipt/${receipt.id}`} className="sm:text-lg text-sm">
+        <Link href={`/receipt/${receipt.id}`}>
           <TruncateText
             text={receipt.store}
             maxLength={15}
             styles={"text-orange-600"}
           />
-        </a>
+        </Link>
 
         <p className="text-slate-500 text-xs ">
           Return by {formatDateToMMDDYY(receipt.return_date)}
         </p>
 
         <div className="">
-          <div className="border-t-[1.5px] border-slate-300  flex flex-col text-xs sm:text-sm">
+          <div className="border-t-[1px] border-slate-300  flex flex-col text-xs sm:text-sm">
             <div className="flex gap-1 mt-2">
               <p className=" ">{receipt.items.length} items | </p>
               <p className=" ">{formatCurrency(receipt.amount)}</p>

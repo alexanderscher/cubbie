@@ -151,7 +151,7 @@ const ItemID = () => {
             >
               <p className="text-xl text-emerald-900">Item Information</p>
               {!values.photo_url && !values.edit_image && (
-                <div className="w-full h-[200px] overflow-hidden  border-[1.5px] border-dashed rounded-lg bg-slate-100">
+                <div className="w-full h-[200px] overflow-hidden  border-[1px] border-dashed rounded-lg bg-slate-100">
                   <input
                     type="file"
                     onChange={(e) => handleFileChange(e, setFieldValue)}
@@ -274,7 +274,7 @@ const ItemID = () => {
                 <CurrencyInput
                   id="price"
                   name="price"
-                  className="w-full border-[1.5px] border-slate-300 rounded-lg p-2"
+                  className="w-full border-[1px] border-slate-300 rounded-lg p-2"
                   placeholder=""
                   value={values.price}
                   defaultValue={values.price || ""}
@@ -289,7 +289,7 @@ const ItemID = () => {
                 <input
                   value={values.barcode}
                   onChange={handleChange("barcode")}
-                  className="w-full border-[1.5px] border-slate-300 rounded-lg p-2"
+                  className="w-full border-[1px] border-slate-300 rounded-lg p-2"
                 />
               </div>
               <div className="w-full ">
@@ -297,7 +297,7 @@ const ItemID = () => {
                 <input
                   value={values.character}
                   onChange={handleChange("character")}
-                  className="w-full border-[1.5px] border-slate-300 rounded-lg p-2"
+                  className="w-full border-[1px] border-slate-300 rounded-lg p-2"
                 />
               </div>
               <div className="w-full ">
@@ -305,7 +305,7 @@ const ItemID = () => {
                 <input
                   value={values.product_id}
                   onChange={handleChange("product_id")}
-                  className="w-full border-[1.5px] border-slate-300 rounded-lg p-2"
+                  className="w-full border-[1px] border-slate-300 rounded-lg p-2"
                 />
               </div>
             </div>

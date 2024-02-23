@@ -8,7 +8,7 @@ const ReceiptType = () => {
   const router = useRouter();
   return (
     <div
-      className="p-4 flex flex-col h-full justify-center items-center"
+      className=" flex flex-col h-full justify-center items-center"
       style={{ height: "calc(100vh - 250px)" }}
     >
       <div className="w-full sm:w-[600px] gap-8 flex flex-col justify-center items-center">
@@ -20,19 +20,25 @@ const ReceiptType = () => {
 
         <div className={`${styles.receiptTypes} `}>
           <LargeButton
-            height="h-[150px]"
+            border={"none"}
+            height={styles.boxes}
+            styles="shadow"
             handleClick={() => router.push("/receipt-type/online")}
           >
             <p>Online</p>
           </LargeButton>
           <LargeButton
-            height="h-[150px]"
+            border={"none"}
+            height={styles.boxes}
+            styles="shadow"
             handleClick={() => router.push("/receipt-type/store")}
           >
             <p>In Store</p>
           </LargeButton>
           <LargeButton
-            height="h-[150px]"
+            border={"none"}
+            height={styles.boxes}
+            styles="shadow"
             handleClick={() => router.push("/receipt-type/memo")}
           >
             <p>Memo</p>

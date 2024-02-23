@@ -43,7 +43,7 @@ const Item = ({ item }: Props) => {
             Return by {formatDateToMMDDYY(item.receipt.return_date)}
           </p>
 
-          <div className="border-t-[1.5px] border-slate-300 flex flex-col  text-sm">
+          <div className="border-t-[1px] border-slate-300 flex flex-col  text-sm">
             <TruncateText
               text={item.receipt.store}
               maxLength={15}

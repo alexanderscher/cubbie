@@ -1,13 +1,15 @@
 import RegularButton from "@/app/components/buttons/RegularButton";
+import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
 import React, { useState } from "react";
 
 interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
   values: ReceiptInput;
+  setStage: (stage: any) => void;
 }
 
-const TextGpt = ({ setFieldValue, values }: Props) => {
+const TextGpt = ({ setFieldValue, values, setStage }: Props) => {
   const [inputText, setInputText] = useState("");
   const [noText, setNoText] = useState(false);
   const [help, setHelp] = useState(false);
@@ -52,7 +54,7 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
     }));
 
     setFieldValue("items", itemsWithAllProperties);
-    console.log(data);
+    setStage(ReceiptStoreStage.PREVIEW);
 
     // const items = JSON.parse(data.choices[0].message.content);
     // if (items.error) {
@@ -81,10 +83,10 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
     }
   };
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 ">
       <button
         type="button"
-        className="w-[20px] border-[1.5px] border-orange-600 text-orange-600 rounded-lg"
+        className="w-[20px] border-[1px] border-orange-600 text-orange-600 rounded-lg"
         onClick={() => setHelp(!help)}
       >
         ?
@@ -98,7 +100,7 @@ const TextGpt = ({ setFieldValue, values }: Props) => {
       )}
       <textarea
         value={inputText}
-        className="w-full border-[1.5px] border-emerald-900 p-2 mb-2 rounded-lg focus:outline-none h-[300px] resize-none bg"
+        className="w-full border-[1px] border-emerald-900 p-2 mb-2 rounded-lg focus:outline-none h-[300px] resize-none bg"
         onChange={(e) => setInputText(e.target.value)}
         placeholder="Copy and paste receipt items from email or website"
       />

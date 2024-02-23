@@ -27,7 +27,7 @@ const RegularButton = ({
         <button
           type={type}
           className={` ${small ? "px-4 py-[6px]" : "px-6 py-[8px]"}
-      border-[1.5px]
+      border-[1px]
        
        rounded-3xl ${styles}`}
           onClick={handleClick}
@@ -42,7 +42,7 @@ const RegularButton = ({
       <button
         type={type}
         className={` ${small ? "px-4 py-[6px]" : "px-6 py-[8px]"}
-      border-[1.5px]
+      border-[1px]
        
        rounded-3xl ${styles}`}
         onClick={handleClick}

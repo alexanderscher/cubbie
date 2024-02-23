@@ -11,7 +11,7 @@ interface ReceiptProps {
 
 const Receipt = ({ receipt }: ReceiptProps) => {
   return (
-    <div className="box sm:pb-6 pb-4">
+    <div className="box sm:pb-6 pb-4 p-1">
       <div className="sm:p-4 p-2 flex flex-col gap-2">
         <p className="text-slate-500 text-xs text-end">
           {formatDateToMMDDYY(receipt.created_at)}
@@ -32,7 +32,7 @@ const Receipt = ({ receipt }: ReceiptProps) => {
           <TruncateText
             text={receipt.store}
             maxLength={15}
-            styles={"text-orange-600"}
+            styles={"text-orange-600 text-xs sm:text-lg"}
           />
         </Link>
 

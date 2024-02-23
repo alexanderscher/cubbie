@@ -135,7 +135,7 @@ const ReceiptPage = () => {
                     styles="bg  border-emerald-900"
                     href={`/receipt/${id}`}
                   >
-                    <p className="text-emerald-900 text-sm">Discard</p>
+                    <p className="text-emerald-900 text-xs">Discard</p>
                   </RegularButton>
                   <RegularButton
                     styles="bg-emerald-900  border-emerald-900"
@@ -154,12 +154,12 @@ const ReceiptPage = () => {
                       }
                     }}
                   >
-                    <p className="text-white text-sm">Save</p>
+                    <p className="text-white text-xs">Save</p>
                   </RegularButton>
                 </div>
               ) : (
                 <RegularButton styles="bg-emerald-900" href={`/receipt/${id}`}>
-                  <p className="text-white text-sm">Cancel</p>
+                  <p className="text-white text-xs">Cancel</p>
                 </RegularButton>
               )}
             </div>

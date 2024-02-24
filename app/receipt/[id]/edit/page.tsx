@@ -3,7 +3,7 @@
 import styles from "@/app/receipt/receiptID.module.css";
 import RegularButton from "@/app/components/buttons/RegularButton";
 
-import { Receipt as ReceiptType } from "@/types/receipt";
+import { Item, Receipt as ReceiptType } from "@/types/receipt";
 import { formatDateToYYYYMMDD } from "@/utils/Date";
 
 import { Formik } from "formik";
@@ -167,7 +167,13 @@ const ReceiptPage = () => {
           <div className="flex bg-white rounded-lg text-sm shadow p-4">
             <div className="w-1/2 border-r-[1px] border-slate-300 ">
               <p className="text-slate-500 text-xs">Total amount</p>
-              <p>{formatCurrency(receipt.amount)}</p>
+              <p>
+                {formatCurrency(
+                  receipt.items.reduce((acc: number, curr: Item) => {
+                    return acc + curr.price;
+                  }, 0)
+                )}
+              </p>
             </div>
             <div className="w-1/2 pl-4 ">
               <p className="text-slate-500 text-xs">Quantity</p>

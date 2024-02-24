@@ -131,7 +131,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
               {errors.store && (
                 <p className="text-orange-900 text-sm">{errors.store}</p>
               )}
-              <div className="flex flex-col ">
+              {/* <div className="flex flex-col ">
                 <h1 className="text-slate-500  text-sm">TOTAL AMOUNT</h1>
                 {edit ? (
                   <CurrencyInput
@@ -152,7 +152,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
                 {errors.amount && (
                   <p className="text-orange-900 text-sm">{errors.amount}</p>
                 )}
-              </div>
+              </div> */}
               <div className="flex flex-col ">
                 <h1 className="text-slate-500  text-sm">ASSET AMOUNT</h1>
                 {edit ? (

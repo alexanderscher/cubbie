@@ -1,21 +1,18 @@
 "use client";
-import styles from "../upload.module.css";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { Formik } from "formik";
 import React, { useState } from "react";
 import TextGpt from "@/app/components/chatgpt/TextGpt";
 import ReceiptManual from "@/app/components/createForm/ReceiptManual";
-import OnlineReceiptManual from "@/app/components/createForm/OnlineReceiptManual";
-import Preview from "@/app/components/createForm/Preview";
 import { useRouter } from "next/navigation";
 import { DEFAULT_INPUT_VALUES, ReceiptOnlineStage } from "@/constants/form";
-
 import FinalStage from "@/app/components/createForm/FinalStage";
 import { ITEMS_SCHEMA, RECEIPT_SCHEMA } from "@/utils/receiptValidation";
 import Loading from "@/app/components/Loading";
 import BottomBar from "@/app/components/createForm/BottomBar";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
+import ErrorModal from "@/app/components/error/Modal";
 
 const getValidationSchema = (stage: ReceiptOnlineStage) => {
   switch (stage) {
@@ -76,8 +73,19 @@ const Online = () => {
           ...DEFAULT_INPUT_VALUES,
           type: "Online",
         }}
-        onSubmit={(values) => {
-          submitDB(values);
+        onSubmit={async (values) => {
+          console.log("values", values);
+          try {
+            await ITEMS_SCHEMA.validate(values, { abortEarly: false });
+
+            submitDB(values);
+          } catch (error) {
+            // console.log("error", error);
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              itemError: "At least one item is required",
+            }));
+          }
         }}
         validationSchema={getValidationSchema(stage)}
       >
@@ -89,20 +97,6 @@ const Online = () => {
           validateForm,
         }) => (
           <form onSubmit={handleSubmit} className="w-full flex flex-col ">
-            {/* <div className="flex justify-between items-center w-full">
-              <h1 className="text-2xl text-emerald-900 w-3/4 ">
-                Create New Receipt
-              </h1>
-
-              <RegularButton
-                styles="bg border-emerald-900"
-                handleClick={async () => {
-                  router.push("/receipt-type");
-                }}
-              >
-                <p className="text-emerald-900  text-sm">Discard</p>
-              </RegularButton>
-            </div> */}
             {(() => {
               switch (stage) {
                 case ReceiptOnlineStage.ONLINE_RECEIPT:
@@ -146,8 +140,7 @@ const Online = () => {
                                       ...prevErrors,
                                       store:
                                         error.store || prevErrors.store || "",
-                                      amount:
-                                        error.amount || prevErrors.amount || "",
+
                                       tracking_number:
                                         error.tracking_number ||
                                         prevErrors.tracking_number ||
@@ -192,13 +185,7 @@ const Online = () => {
                               {values.store}
                             </h1>
                             <div className="flex  rounded-lg text-sm border-[1px] border-emerald-900 p-4">
-                              <div className="w-1/3 border-r-[1px] border-slate-300 ">
-                                <p className="text-slate-500 text-xs">
-                                  Total amount
-                                </p>
-                                <p>{formatCurrency(values.amount)}</p>
-                              </div>
-                              <div className="w-1/3 border-r-[1px] border-slate-300 pl-2 pr-2">
+                              <div className="w-1/2 border-r-[1px] border-slate-300 pl-2 pr-2">
                                 <p className="text-slate-500 text-xs">
                                   Purchase Date
                                 </p>
@@ -312,6 +299,14 @@ const Online = () => {
           </form>
         )}
       </Formik>
+      {errors.itemError && (
+        <ErrorModal
+          errorMessage={errors.itemError}
+          onClose={() =>
+            setErrors((prevErrors) => ({ ...prevErrors, itemError: "" }))
+          }
+        />
+      )}
 
       {loading && <Loading loading={loading} />}
     </div>

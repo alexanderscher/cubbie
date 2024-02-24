@@ -1,5 +1,5 @@
 import { TruncateText } from "@/app/components/text/Truncate";
-import { Receipt as ReceiptType } from "@/types/receipt";
+import { Item, Receipt as ReceiptType } from "@/types/receipt";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
@@ -44,7 +44,13 @@ const Receipt = ({ receipt }: ReceiptProps) => {
           <div className="border-t-[1px] border-slate-300  flex flex-col text-xs sm:text-sm">
             <div className="flex gap-1 mt-2">
               <p className=" ">{receipt.items.length} items | </p>
-              <p className=" ">{formatCurrency(receipt.amount)}</p>
+              <p className=" ">
+                {formatCurrency(
+                  receipt.items.reduce((acc: number, curr: Item) => {
+                    return acc + curr.price;
+                  }, 0)
+                )}
+              </p>
             </div>
           </div>
         </div>

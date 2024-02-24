@@ -15,7 +15,6 @@ export async function POST(request: Request) {
       type,
       store,
       card,
-      amount,
       tracking_number,
       purchase_date,
       days_until_return,
@@ -27,7 +26,7 @@ export async function POST(request: Request) {
 
     console.log(receiptImage);
 
-    const requiredFields = ["type", "store", "amount", "items"];
+    const requiredFields = ["type", "store", "items"];
 
     const missingFields: string[] = [];
 
@@ -114,7 +113,9 @@ export async function POST(request: Request) {
         type,
         store,
         card,
-        amount: parseFloat(amount),
+        amount: items.reduce((acc: number, curr: ItemInput) => {
+          return acc + parseFloat(curr.price);
+        }, 0),
         tracking_number: tracking_number,
         purchase_date: purchaseDate,
         days_until_return: days_until_return,

@@ -70,7 +70,7 @@ export async function PUT(
       },
       data: {
         description,
-        price,
+        price: parseFloat(price),
         barcode,
         character,
         product_id,

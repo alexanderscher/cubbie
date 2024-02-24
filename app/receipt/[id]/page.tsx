@@ -1,7 +1,7 @@
 "use client";
 import styles from "@/app/receipt/receiptID.module.css";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { Receipt as ReceiptType } from "@/types/receipt";
+import { Item, Receipt as ReceiptType } from "@/types/receipt";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
@@ -41,7 +41,13 @@ const ReceiptPage = () => {
       <div className="flex bg-white border-[1px] border-emerald-900 rounded-lg text-sm shadow p-4">
         <div className="w-1/3 border-r-[1px] border-slate-300 ">
           <p className="text-slate-500 text-xs">Total amount</p>
-          <p>{formatCurrency(receipt.amount)}</p>
+          <p>
+            {formatCurrency(
+              receipt.items.reduce((acc: number, curr: Item) => {
+                return acc + curr.price;
+              }, 0)
+            )}
+          </p>
         </div>
         <div className="w-1/3 border-r-[1px] border-slate-300 pl-2 pr-2">
           <p className="text-slate-500 text-xs">Purchase Date</p>

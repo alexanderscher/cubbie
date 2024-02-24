@@ -5,16 +5,13 @@ import { ItemInput, ReceiptInput } from "@/types/form";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import styles from "./form.module.css";
 import stylesReceipt from "@/app/receipt/receiptID.module.css";
-
-import { useIsMobile } from "@/utils/useIsMobile";
+import * as Yup from "yup";
 import Image from "next/image";
 import React, { useState } from "react";
 import ErrorModal from "@/app/components/error/Modal";
 import BottomBar from "@/app/components/createForm/BottomBar";
 import { formatCurrency } from "@/utils/formatCurrency";
 import ImageModal from "@/app/components/images/ImageModal";
-import Shirt from "@/app/components/placeholderImages/Shirt";
-import { TruncateText } from "@/app/components/text/Truncate";
 import CurrencyInput from "react-currency-input-field";
 import LargeButton from "@/app/components/buttons/LargeButton";
 import { BarcodeScanner } from "@/app/components/createForm/barcode/BarcodeScanner";
@@ -38,7 +35,7 @@ const FinalStage = ({
   setUploadError,
 }: FinalStageProps) => {
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="flex flex-col gap-6 max-w-[1000px]">
       <ReceiptPageForm values={values} setFieldValue={setFieldValue} />
@@ -63,19 +60,19 @@ const FinalStage = ({
                 }
               }}
             >
-              <p className="text-emerald-900 text-sm">Back</p>
+              <p className="text-emerald-900 text-xs">Back</p>
             </RegularButton>
 
             {loading ? (
               <RegularButton styles={"bg-emerald-900 border-emerald-900 "}>
-                <p className="text-white text-sm">Uploading...</p>
+                <p className="text-white text-xs">Uploading...</p>
               </RegularButton>
             ) : (
               <RegularButton
                 type="submit"
                 styles={"bg-emerald-900 border-emerald-900 "}
               >
-                <p className="text-white text-sm">Submit</p>
+                <p className="text-white text-xs">Submit</p>
               </RegularButton>
             )}
           </div>
@@ -117,7 +114,13 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
       <div className="flex border-[1px] border-emerald-900 rounded-lg text-sm  p-4">
         <div className="w-1/3 border-r-[1px] border-slate-300 ">
           <p className="text-slate-500 text-xs">Total amount</p>
-          <p>{formatCurrency(values.amount)}</p>
+          <p>
+            {formatCurrency(
+              values.items.reduce((acc: number, curr: ItemInput) => {
+                return acc + parseFloat(curr.price);
+              }, 0)
+            )}
+          </p>
         </div>
         <div className="w-1/3 border-r-[1px] border-slate-300 pl-2 pr-2">
           <p className="text-slate-500 text-xs">Purchase Date</p>
@@ -201,14 +204,14 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
                   {values.tracking_number ? values.tracking_number : "None"}
                 </p>
               </div>
-              {/* <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
+              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
                 <p className="text-slate-500 text-xs">Asset Amount</p>
                 <p className="">
-                  {values.asset_amount
-                    ? formatCurrency(values.asset_amount)
+                  {values.assetAmount
+                    ? formatCurrency(values.assetAmount)
                     : "None"}
                 </p>
-              </div> */}
+              </div>
             </div>
           </div>
         </div>
@@ -515,17 +518,51 @@ const AddItemModal = ({
     setNewItem({ ...newItem, price: value || "" });
   };
 
-  const handleSubmit = () => {
-    setFieldValue("items", [...items, newItem]);
-    setIsOpen(false);
-    setNewItem({
-      description: "",
-      price: "",
-      barcode: "",
-      product_id: "",
-      character: "",
-      photo: "",
-    });
+  const [error, setError] = useState({
+    description: "",
+    price: "",
+  });
+
+  const itemSchema = Yup.object({
+    description: Yup.string().required("Description is required"),
+    price: Yup.string().required("Price is required"),
+  });
+
+  const handleSubmit = async () => {
+    try {
+      await itemSchema.validate(newItem, { abortEarly: false });
+      setFieldValue("items", [...items, newItem]);
+      setIsOpen(false);
+      setNewItem({
+        description: "",
+        price: "",
+        barcode: "",
+        product_id: "",
+        character: "",
+        photo: "",
+      });
+      setError({
+        description: "",
+        price: "",
+      });
+    } catch (error) {
+      let errorsObject = {};
+
+      if (error instanceof Yup.ValidationError) {
+        errorsObject = error.inner.reduce((acc, curr) => {
+          const key = curr.path || "unknownField";
+          acc[key] = curr.message;
+          return acc;
+        }, {} as Record<string, string>);
+      }
+
+      setError(
+        errorsObject as {
+          description: string;
+          price: string;
+        }
+      );
+    }
   };
 
   const handleBarcodeResult = (barcodeValue: string) => {
@@ -556,6 +593,9 @@ const AddItemModal = ({
                 onChange={handleChange}
                 className="w-full p-2 border-[1px] border-emerald-900 rounded"
               />
+              {error.description && (
+                <p className="text-orange-900 text-xs">{error.description}</p>
+              )}
             </div>
             <div>
               <p className="text-xs text-emerald-900">Price</p>
@@ -569,6 +609,9 @@ const AddItemModal = ({
                 decimalsLimit={2}
                 onValueChange={handleCurrencyChange}
               />
+              {error.price && (
+                <p className="text-orange-900 text-xs">{error.price}</p>
+              )}
             </div>
             <div>
               <p className="text-xs text-emerald-900">Barcode</p>
@@ -698,9 +741,7 @@ const AddItemModal = ({
                 <label
                   htmlFor="add-photo"
                   className="absolute inset-0 w-full h-full flex flex-col justify-center items-center "
-                >
-                  {/* You can add additional text or icons here */}
-                </label>
+                ></label>
               </div>
             </div>
             {newItem.photo && (

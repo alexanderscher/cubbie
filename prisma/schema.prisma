@@ -15,7 +15,6 @@ model Receipt {
   type              String
   store             String
   card              String?
-  amount            Float
   tracking_number   String?
   purchase_date     DateTime
   days_until_return Int

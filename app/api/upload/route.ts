@@ -113,9 +113,7 @@ export async function POST(request: Request) {
         type,
         store,
         card,
-        amount: items.reduce((acc: number, curr: ItemInput) => {
-          return acc + parseFloat(curr.price);
-        }, 0),
+
         tracking_number: tracking_number,
         purchase_date: purchaseDate,
         days_until_return: days_until_return,

@@ -73,6 +73,7 @@ export async function PUT(
         type,
         store,
         card,
+
         receipt_image_url:
           receiptFileUrl === "" ? receipt_image_url : receiptFileUrl,
         receipt_image_key:

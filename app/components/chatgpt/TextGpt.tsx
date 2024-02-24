@@ -86,16 +86,16 @@ const TextGpt = ({ setFieldValue, values, setStage }: Props) => {
     <div className="flex flex-col gap-4 ">
       <button
         type="button"
-        className="w-[20px] border-[1px] border-orange-600 text-orange-600 rounded-lg"
+        className="w-[20px] border-[1px] border-orange-600 text-orange-600 rounded"
         onClick={() => setHelp(!help)}
       >
         ?
       </button>
       {help && (
         <p className="text-sm text-center text-orange-600">
-          We use OpenAI&apos;s GPT to analyze the text you enter. Go to your
-          online receipt or email and copy and paste the items from the receipt.
-          Then click the &quot;Analyze&quot; button to get the items.
+          We use AI to analyze the text you enter. Go to your online receipt or
+          email and copy and paste the items from the receipt. Then click the
+          &quot;Analyze&quot; button to get the items.
         </p>
       )}
       <textarea

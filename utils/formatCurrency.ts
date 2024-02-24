@@ -9,7 +9,7 @@ export const formatCurrency = (
 
   // Check for invalid or zero values
   if (isNaN(numericAmount) || numericAmount === 0) {
-    return "";
+    return "$0.00";
   }
 
   // Format the amount

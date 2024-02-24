@@ -53,9 +53,6 @@ const ReceiptManual = ({
       };
     }
   };
-  const handleCurrencyChangeAmount = (value: string | undefined) => {
-    setFieldValue("amount", value || "");
-  };
 
   const handleCurrencyChangeAsset = (value: string | undefined) => {
     setFieldValue("assetAmount", value || "");
@@ -81,24 +78,7 @@ const ReceiptManual = ({
         <div className={styles.receiptInputs}>
           <h1 className="text-emerald-900 text-xl">Receipt Details</h1>
           <div className="flex gap-2 w-full">
-            <div className="w-1/2 ">
-              <p className="text-sm text-slate-500 ">Amount*</p>
-              <div className="flex flex-col gap-2">
-                <CurrencyInput
-                  id="amount"
-                  name="amount"
-                  className="w-full border-[1px] bg border-emerald-900 p-2 rounded focus:outline-none focus:border-emerald-900"
-                  placeholder=""
-                  defaultValue={values.amount || ""}
-                  decimalsLimit={2}
-                  onValueChange={handleCurrencyChangeAmount}
-                />
-                {errors.amount && (
-                  <p className="text-orange-800 text-sm">{errors.amount}</p>
-                )}
-              </div>
-            </div>
-            <div className="w-1/2">
+            <div className="w-full">
               <p className="text-sm text-slate-500 ">Asset Amount</p>
               {/* <button
                 type="button"

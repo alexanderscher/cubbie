@@ -205,9 +205,9 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
         </button>
         {help && (
           <p className="text-sm text-center text-orange-600">
-            We use OpenAI&apos;s GPT to analyze the image you upload. Take a
-            picture of the receipt and upload it. Then click the &quot;Analyze
-            Image&quot; button to get the receipt info and items.
+            We use AI to analyze the image you upload. Take a picture of the
+            receipt and upload it. Then click the &quot;Analyze Image&quot;
+            button to get the receipt info and items.
           </p>
         )}
 

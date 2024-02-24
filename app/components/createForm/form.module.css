@@ -7,6 +7,19 @@
   width: 100%;
 }
 
+.receipt {
+  display: flex;
+  gap: 40px;
+}
+
+.receiptLeft {
+  width: 50%;
+  min-width: 320px;
+  max-width: 450px;
+
+  border-radius: 8px;
+}
+
 .boxes {
   display: flex;
   gap: 30px;
@@ -44,5 +57,18 @@
   }
   .box {
     max-width: 100%;
+  }
+}
+
+@media (max-width: 800px) {
+  .receipt {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .receiptLeft {
+    max-width: 100%;
+    min-width: 100%;
+    width: 100%;
   }
 }

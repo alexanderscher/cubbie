@@ -139,8 +139,8 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
           </p>
         </div>
       </div>
-      <div className={`${stylesReceipt.receipt} `}>
-        <div className={`${stylesReceipt.receiptLeft}  flex flex-col gap-2`}>
+      <div className={`${styles.receipt} `}>
+        <div className={`${styles.receiptLeft}  flex flex-col gap-2`}>
           <div
             className={`border-[1px] border-emerald-900 rounded-lg  flex flex-col gap-4 p-6`}
           >
@@ -570,7 +570,7 @@ const AddItemModal = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]">
       <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full">
         <div className="flex justify-between items-center border-b border-gray-200 px-5 py-4 bg-slate-100 rounded-t-lg">
           <h3 className="text-lg text-emerald-900">Add Item</h3>

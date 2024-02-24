@@ -172,39 +172,72 @@ const ReceiptManual = ({
             </div>
           </div>
         </div>
-        <div className={`${styles.imageInput} relative`}>
+
+        <div className={`${styles.imageInput} relative pb-[200px]`}>
           <h1 className="text-emerald-900 text-xl">Receipt Image</h1>
-          <div
-            className={`${styles.imageSize} border-[1px] border-emerald-900 w-full h-full flex flex-col gap-3 justify-center items-center rounded relative`}
-            onClick={handleContainerClick} // Add click handler to the container
-            style={{ cursor: "pointer" }} // Make the cursor indicate a clickable area
-          >
-            <input
-              type="file"
-              onChange={handleFileChange}
-              id="file-upload"
-              style={{ opacity: 0, position: "absolute", zIndex: -1 }}
-              ref={fileInputRef} // Attach the ref to the file input
-            />
-            <Image
-              src="/image_b.png"
-              alt=""
-              width={40}
-              height={40}
-              className="object-cover pt-4"
-              style={{
-                objectFit: "cover",
-                objectPosition: "center",
-              }}
-            />
-            <label
-              htmlFor="file-upload"
-              className="justify-center items-center"
+          {!values.receiptImage && (
+            <div
+              className={`${styles.imageSize} border-[1px] border-emerald-900 w-full h-full flex flex-col gap-3 justify-center items-center rounded relative`}
+              onClick={handleContainerClick} // Add click handler to the container
+              style={{ cursor: "pointer" }} // Make the cursor indicate a clickable area
             >
-              Upload File
-            </label>
-          </div>
-          <div className="relative w-24 h-24">
+              <input
+                type="file"
+                onChange={handleFileChange}
+                id="file-upload"
+                style={{ opacity: 0, position: "absolute", zIndex: -1 }}
+                ref={fileInputRef} // Attach the ref to the file input
+              />
+              <Image
+                src="/image_b.png"
+                alt=""
+                width={40}
+                height={40}
+                className="object-cover pt-4"
+                style={{
+                  objectFit: "cover",
+                  objectPosition: "center",
+                }}
+              />
+              <label
+                htmlFor="file-upload"
+                className="justify-center items-center"
+              >
+                Upload File
+              </label>
+            </div>
+          )}
+          {values.receiptImage && (
+            <div
+              className={`border-[1px] border-emerald-900 ${styles.imageSize} flex flex-col gap-3 justify-center items-center rounded relative `}
+              style={{ cursor: "pointer" }}
+              // Set explicit dimensions for the container (e.g., w-[300px] h-[300px]) to ensure it never changes size.
+            >
+              <Image
+                src={values.receiptImage}
+                alt=""
+                width={150} // Consider removing these width and height attributes
+                height={150} // since you're controlling the size via CSS.
+                className="object-contain max-w-full max-h-full" // Change to object-contain and add max-w-full max-h-full to ensure the image scales down/up to fit.
+                style={{
+                  objectFit: "contain", // Change to contain to ensure the image fits without stretching.
+                  objectPosition: "center", // Keeps the image centered.
+                  maxWidth: "100%", // Ensure the image does not exceed the container's width.
+                  maxHeight: "100%", // Ensure the image does not exceed the container's height.
+                }}
+              />
+              <div
+                className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 opacity-0 hover:opacity-100 rounded"
+                // Tailwind classes for styling the overlay
+                // absolute positioning, full width and height, centered content, semi-transparent background
+                // initially invisible (opacity-0), becomes visible on hover (hover:opacity-100)
+              >
+                <span className="text-white font-bold">Replace</span>
+              </div>
+            </div>
+          )}
+
+          {/* <div className="relative w-24 h-24">
             {values.receiptImage && (
               <div className="w-24 h-24 overflow-hidden flex items-center justify-center rounded">
                 <button
@@ -224,7 +257,7 @@ const ReceiptManual = ({
                 />
               </div>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

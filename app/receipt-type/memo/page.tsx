@@ -149,7 +149,7 @@ const Memo = () => {
                             errors={errors}
                           />
 
-                          <div className="flex gap-10">
+                          {/* <div className="flex gap-10">
                             <RegularButton
                               styles={
                                 "bg-emerald-900 border-emerald-900 w-full"
@@ -186,7 +186,7 @@ const Memo = () => {
                             >
                               <p className="text-white text-sm">Next</p>
                             </RegularButton>
-                          </div>
+                          </div> */}
                         </div>
 
                         <Preview

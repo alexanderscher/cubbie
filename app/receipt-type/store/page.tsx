@@ -162,7 +162,7 @@ const Store = () => {
                             errors={errors}
                           />
 
-                          <div className="flex gap-10">
+                          {/* <div className="flex gap-10">
                             <RegularButton
                               styles={
                                 "bg-emerald-900 border-emerald-900 w-full"
@@ -183,7 +183,7 @@ const Store = () => {
                                   ...prevErrors,
                                   store: error.store || prevErrors.store || "",
                                   amount:
-                                    error.amount || prevErrors.amount || "",
+                                    error.amount || prevErrors || "",
                                 }));
                                 if (Object.keys(error).length === 0) {
                                   setStage(
@@ -199,7 +199,7 @@ const Store = () => {
                             >
                               <p className="text-white text-sm">Next</p>
                             </RegularButton>
-                          </div>
+                          </div> */}
                         </div>
 
                         <Preview

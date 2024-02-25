@@ -21,10 +21,12 @@
   background-color: #fff;
   border: none;
   border-radius: 0.5rem;
+  position: relative;
 }
 
 .scannerStyle {
   background-color: black;
+  position: relative;
   width: 100%;
   max-width: 600px;
   height: 400px;

@@ -35,7 +35,7 @@ const Receipt = ({ receipt }: ReceiptProps) => {
             styles={"text-orange-600 text-xs sm:text-lg"}
           />
         </Link>
-        <div className="flex gap-1 text-sm">
+        <div className="flex gap-1 text-xs">
           <p className=" ">
             {receipt.items.length}{" "}
             {receipt.items.length === 1 ? "item" : "items"} |

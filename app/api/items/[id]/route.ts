@@ -41,7 +41,6 @@ export async function PUT(
     character,
     product_id,
   } = json;
-  console.log("json", json);
 
   const uploadedFileKeys = [];
 

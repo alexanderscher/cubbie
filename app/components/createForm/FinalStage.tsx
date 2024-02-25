@@ -651,8 +651,8 @@ const AddItemModal = ({
 
                         setShowScanner(false);
                       }}
-                      onError={() => {
-                        console.log("Error");
+                      onError={(error) => {
+                        console.log(error);
                       }}
                     />
                     <button

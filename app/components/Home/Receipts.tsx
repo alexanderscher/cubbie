@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 const Receipts = () => {
   const { filteredData } = useSearchContext();
 
-  console.log(filteredData);
   const pathname = usePathname();
 
   if (pathname !== "/") {

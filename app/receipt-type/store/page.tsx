@@ -5,8 +5,6 @@ import { Formik } from "formik";
 import React, { useState } from "react";
 import ImageGpt from "@/app/components/chatgpt/ImageGpt";
 import ReceiptManual from "@/app/components/createForm/ReceiptManual";
-import Preview from "@/app/components/createForm/Preview";
-import OnlineReceiptManual from "@/app/components/createForm/OnlineReceiptManual";
 
 import { useRouter } from "next/navigation";
 import { DEFAULT_INPUT_VALUES, ReceiptStoreStage } from "@/constants/form";
@@ -18,6 +16,7 @@ import {
 } from "@/utils/receiptValidation";
 import Loading from "@/app/components/Loading";
 import BottomBar from "@/app/components/createForm/BottomBar";
+import SearchAllItems from "@/app/components/search/AllItems";
 
 const getValidationSchema = (stage: ReceiptStoreStage) => {
   switch (stage) {

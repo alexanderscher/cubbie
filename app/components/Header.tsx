@@ -17,8 +17,6 @@ const Header = ({ type }: HeaderProps) => {
 
   const pathname = usePathname();
 
-  console.log(data);
-
   useEffect(() => {
     if (pathname === "/items") {
       const fetchItems = async () => {

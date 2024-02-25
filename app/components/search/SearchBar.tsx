@@ -10,7 +10,6 @@ interface Props {
 }
 
 function SearchBar({ data, type, searchType }: Props) {
-  console.log(searchType);
   const [searchTerm, setSearchTerm] = useState("");
   const { setFilteredData } = useSearchContext();
   const { setFilteredItemData } = useSearchItemContext();

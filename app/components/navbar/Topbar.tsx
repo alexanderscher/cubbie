@@ -20,7 +20,9 @@ const Topbar = () => {
             <Link href="/" className="flex ">
               <p className="text-white text-4xl">Receipts</p>
             </Link>
-            <p className="text-white text-4xl">Search</p>
+            <Link href="/search">
+              <p className="text-white text-4xl">Search</p>
+            </Link>
             <p className="text-white text-4xl">Account</p>
             <p className="text-white text-4xl">Notifications</p>
             <p className="text-white text-4xl">Calender</p>

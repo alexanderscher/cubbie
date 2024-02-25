@@ -33,7 +33,7 @@ const Navbar = () => {
           </Link>
         </div>
         <div className={styles.linkWrapper}>
-          <Link href="/">
+          <Link href="/search">
             <Image
               src="/search_w.png"
               alt=""

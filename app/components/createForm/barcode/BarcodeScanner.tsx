@@ -38,7 +38,6 @@ export const BarcodeScanner = ({
           Close
         </button>
         <div className={`${styles.scannerStyle}`}>
-          {" "}
           <Webcam
             ref={webcamRef}
             screenshotFormat="image/jpeg"
@@ -46,7 +45,7 @@ export const BarcodeScanner = ({
           />
           <div
             style={{ transform: "translate(-50%, -50%)" }}
-            className="absolute border-[3px] w-[300px] h-[200px] left-[50%] top-[50%] "
+            className="absolute border-[3px] w-[300px] h-[200px] left-[50%] top-[50%] rounded-md"
           ></div>
           <video ref={zxingRef} style={{ display: "none" }}></video>
         </div>

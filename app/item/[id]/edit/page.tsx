@@ -72,7 +72,6 @@ const ItemID = () => {
         ...item,
       }}
       onSubmit={(values) => {
-        console.log(values);
         setLoading(true);
 
         const update = async () => {

@@ -21,8 +21,8 @@ const Receipt = ({ receipt }: ReceiptProps) => {
             <Image
               src="/receipt_b.png"
               alt=""
-              width={38}
-              height={38}
+              width={30}
+              height={30}
               className="object-cover "
               style={{ objectFit: "cover", objectPosition: "center" }}
             />

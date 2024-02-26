@@ -94,25 +94,25 @@ const ItemID = () => {
               <div className="flex flex-col gap-3 text-sm">
                 <div className="flex flex-col gap-3 text-sm">
                   <div className="border-slate-400 border-b-[1px] ">
-                    <p className="text-slate-500">Store</p>
+                    <p className="text-slate-400">Store</p>
                     <p>{item.receipt.store}</p>
                   </div>
                   <div className="border-slate-400 border-b-[1px] ">
-                    <p className="text-slate-500">Created at</p>
+                    <p className="text-slate-400">Created at</p>
                     <p>{formatDateToMMDDYY(item.receipt.created_at)}</p>
                   </div>
                   <div className="border-slate-400 border-b-[1px] ">
-                    <p className="text-slate-500">Receipt Type</p>
+                    <p className="text-slate-400">Receipt Type</p>
                     <p>{item.receipt.type}</p>
                   </div>
 
                   <div className="border-slate-400 border-b-[1px] ">
-                    <p className="text-slate-500">Card used</p>
+                    <p className="text-slate-400">Card used</p>
                     <p>{item.receipt.card ? item.receipt.card : "None"}</p>
                   </div>
 
                   <div className="border-slate-400 border-b-[1px] ">
-                    <p className="text-slate-500">Tracking Link</p>
+                    <p className="text-slate-400">Tracking Link</p>
                     <p>
                       {item.receipt.tracking_number
                         ? item.receipt.tracking_number

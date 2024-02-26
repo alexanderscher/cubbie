@@ -40,7 +40,7 @@ const ReceiptPage = () => {
       </div>
       <div className="flex bg-white border-[1px] border-emerald-900 rounded-lg text-sm shadow p-4">
         <div className="w-1/3 border-r-[1px] border-slate-300 ">
-          <p className="text-slate-500 text-xs">Total amount</p>
+          <p className="text-slate-400 text-xs">Total amount</p>
           <p>
             {formatCurrency(
               receipt.items.reduce((acc: number, curr: Item) => {
@@ -50,12 +50,12 @@ const ReceiptPage = () => {
           </p>
         </div>
         <div className="w-1/3 border-r-[1px] border-slate-300 pl-2 pr-2">
-          <p className="text-slate-500 text-xs">Purchase Date</p>
+          <p className="text-slate-400 text-xs">Purchase Date</p>
           <p>{formatDateToMMDDYY(receipt.purchase_date)}</p>
         </div>
 
         <div className="pl-2 pr-2">
-          <p className="text-slate-500 text-xs">Return Date</p>
+          <p className="text-slate-400 text-xs">Return Date</p>
           <p>{formatDateToMMDDYY(receipt.return_date)}</p>
         </div>
       </div>
@@ -104,31 +104,31 @@ const ReceiptPage = () => {
 
             <div className="flex flex-col gap-4 text-sm ">
               <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
-                <p className="text-slate-500 text-xs">Quantity</p>
+                <p className="text-slate-400 text-xs">Quantity</p>
                 <p className="">{receipt.items.length}</p>
               </div>
               <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
-                <p className="text-slate-500 text-xs">Created at</p>
+                <p className="text-slate-400 text-xs">Created at</p>
                 <p className="">{formatDateToMMDDYY(receipt.created_at)}</p>
               </div>
               <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
-                <p className="text-slate-500 text-xs">Receipt Type</p>
+                <p className="text-slate-400 text-xs">Receipt Type</p>
                 <p className="">{receipt.type}</p>
               </div>
 
               <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
-                <p className="text-slate-500 text-xs">Card</p>
+                <p className="text-slate-400 text-xs">Card</p>
                 <p className="">{receipt.card ? receipt.card : "None"}</p>
               </div>
 
               <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
-                <p className="text-slate-500 text-xs">Tracking Link</p>
+                <p className="text-slate-400 text-xs">Tracking Link</p>
                 <p className="">
                   {receipt.tracking_number ? receipt.tracking_number : "None"}
                 </p>
               </div>
               <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
-                <p className="text-slate-500 text-xs">Asset Amount</p>
+                <p className="text-slate-400 text-xs">Asset Amount</p>
                 <p className="">
                   {receipt.asset_amount
                     ? formatCurrency(receipt.asset_amount)

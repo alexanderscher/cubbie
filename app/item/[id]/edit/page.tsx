@@ -269,7 +269,7 @@ const ItemID = () => {
                 </div>
               )}
               <div className="w-full">
-                <p className="text-slate-500 text-xs">Price</p>
+                <p className="text-slate-400 text-xs">Price</p>
                 <CurrencyInput
                   id="price"
                   name="price"
@@ -284,7 +284,7 @@ const ItemID = () => {
                 />
               </div>
               <div className="w-full ">
-                <p className="text-slate-500 text-xs">Barcode</p>
+                <p className="text-slate-400 text-xs">Barcode</p>
                 <input
                   value={values.barcode}
                   onChange={handleChange("barcode")}
@@ -292,7 +292,7 @@ const ItemID = () => {
                 />
               </div>
               <div className="w-full ">
-                <p className="text-slate-500 text-xs">Character</p>
+                <p className="text-slate-400 text-xs">Character</p>
                 <input
                   value={values.character}
                   onChange={handleChange("character")}
@@ -300,7 +300,7 @@ const ItemID = () => {
                 />
               </div>
               <div className="w-full ">
-                <p className="text-slate-500 text-xs">Product ID</p>
+                <p className="text-slate-400 text-xs">Product ID</p>
                 <input
                   value={values.product_id}
                   onChange={handleChange("product_id")}
@@ -320,37 +320,37 @@ const ItemID = () => {
                   <div className="flex flex-col gap-3 text-sm">
                     <div className="flex flex-col gap-3 text-sm">
                       <div>
-                        <p className="text-slate-500">Store</p>
+                        <p className="text-slate-400">Store</p>
                         <p>{item.receipt.store}</p>
                       </div>
                       <div>
-                        <p className="text-slate-500">Created at</p>
+                        <p className="text-slate-400">Created at</p>
                         <p>{formatDateToMMDDYY(item.receipt.created_at)}</p>
                       </div>
                       <div>
-                        <p className="text-slate-500">Receipt Type</p>
+                        <p className="text-slate-400">Receipt Type</p>
                         <p>{item.receipt.type}</p>
                       </div>
 
                       {item.receipt.card ? (
                         <div>
-                          <p className="text-slate-500">Card used</p>
+                          <p className="text-slate-400">Card used</p>
                           <p>{item.receipt.card}</p>
                         </div>
                       ) : (
                         <div>
-                          <p className="text-slate-500">Card used</p>
+                          <p className="text-slate-400">Card used</p>
                           <p>None</p>
                         </div>
                       )}
                       {item.receipt.tracking_number ? (
                         <div>
-                          <p className="text-slate-500">Tracking Link</p>
+                          <p className="text-slate-400">Tracking Link</p>
                           <p>{item.receipt.tracking_number}</p>
                         </div>
                       ) : (
                         <div>
-                          <p className="text-slate-500">Tracking Link</p>
+                          <p className="text-slate-400">Tracking Link</p>
                           <p>None</p>
                         </div>
                       )}

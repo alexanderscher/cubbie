@@ -44,21 +44,36 @@ export const ReceiptItems = ({ item, asset_amount }: ReceiptItemsProps) => {
       <div className="p-4 flex flex-col gap-2 justify-between">
         <div>
           {!item.photo_url && <Shirt />}
-          <Link href={`/item/${item.id}`}>
-            <TruncateText
-              text={item.description}
-              maxLength={30}
-              styles={"text-orange-600"}
-            />
-          </Link>
-
-          <div className="text-sm">
+          <div className="border-b-[1px] border-slate-400">
+            <Link href={`/item/${item.id}`}>
+              <TruncateText
+                text={item.description}
+                maxLength={30}
+                styles={"text-orange-600"}
+              />
+            </Link>
             {asset_amount > item.price && (
               <p className="text-emerald-900">Asset</p>
             )}
-            <p className="">{formatCurrency(item.price)}</p>
-            {item.barcode && <p className="">{item.barcode}</p>}
-            {item.product_id && <p className="">{item.product_id}</p>}
+          </div>
+
+          <div className="text-xs mt-2 flex flex-col gap-1">
+            <div className="">
+              <p className="text-slate-400">Price</p>
+              <p className="">{formatCurrency(item.price)}</p>
+            </div>
+            {item.barcode && (
+              <div className="">
+                <p className="text-slate-400">Barcode</p>
+                <p className="">{item.barcode}</p>
+              </div>
+            )}
+            {item.product_id && (
+              <div className="">
+                <p className="text-slate-400">Product ID</p>
+                <p className="">{item.product_id}</p>
+              </div>
+            )}
           </div>
         </div>
         {pathname.endsWith("edit") && (

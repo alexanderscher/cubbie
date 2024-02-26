@@ -13,7 +13,7 @@ const Receipt = ({ receipt }: ReceiptProps) => {
   return (
     <div className="box sm:pb-6 pb-4 p-1">
       <div className="sm:p-4 p-2 flex flex-col gap-2">
-        <p className="text-slate-500 text-xs text-end">
+        <p className="text-slate-400 text-xs text-end">
           {formatDateToMMDDYY(receipt.created_at)}
         </p>
         <div className="w-full  overflow-hidden relative flex justify-center items-center">
@@ -51,12 +51,12 @@ const Receipt = ({ receipt }: ReceiptProps) => {
 
         <div className="border-t-[1px] border-slate-300  flex flex-col text-xs sm:text-sm gap-1">
           <div className="text-xs mt-2">
-            <p className="text-slate-500  ">Purchased date</p>
+            <p className="text-slate-400  ">Purchased date</p>
             <p> {formatDateToMMDDYY(receipt.purchase_date)}</p>
           </div>
 
           <div className="text-xs">
-            <p className="text-slate-500  ">Return date</p>
+            <p className="text-slate-400  ">Return date</p>
             <p> {formatDateToMMDDYY(receipt.purchase_date)}</p>
           </div>
         </div>

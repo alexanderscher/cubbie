@@ -5,7 +5,6 @@ import { Formik } from "formik";
 import React, { useState } from "react";
 import ImageGpt from "@/app/components/chatgpt/ImageGpt";
 import ReceiptManual from "@/app/components/createForm/ReceiptManual";
-
 import { useRouter } from "next/navigation";
 import { DEFAULT_INPUT_VALUES, ReceiptStoreStage } from "@/constants/form";
 import FinalStage from "@/app/components/createForm/FinalStage";
@@ -16,7 +15,7 @@ import {
 } from "@/utils/receiptValidation";
 import Loading from "@/app/components/Loading";
 import BottomBar from "@/app/components/createForm/BottomBar";
-import SearchAllItems from "@/app/components/search/AllItems";
+import ErrorModal from "@/app/components/error/Modal";
 
 const getValidationSchema = (stage: ReceiptStoreStage) => {
   switch (stage) {
@@ -62,11 +61,15 @@ const Store = () => {
 
   const [errors, setErrors] = useState({
     store: "",
-    items: "",
     amount: "",
-    gptError: "",
-    itemFileError: "",
+    itemError: "",
+    tracking_number: "",
     itemField: "",
+    days_until_return: "",
+    purchase_date: "",
+    gptError: "",
+    items: "",
+    itemFileError: "",
   });
 
   const router = useRouter();
@@ -80,9 +83,18 @@ const Store = () => {
             type: "Store",
           }}
           validationSchema={getValidationSchema(stage)}
-          onSubmit={(values) => {
-            console.log(values);
-            submitDB(values);
+          onSubmit={async (values) => {
+            try {
+              await ITEMS_SCHEMA.validate(values, { abortEarly: false });
+
+              submitDB(values);
+            } catch (error) {
+              console.log(error);
+              setErrors((prevErrors) => ({
+                ...prevErrors,
+                itemError: "At least one item is required",
+              }));
+            }
           }}
         >
           {({
@@ -100,162 +112,80 @@ const Store = () => {
                 switch (stage) {
                   case ReceiptStoreStage.IN_STORE_RECEIPT:
                     return (
-                      <div className={`${styles.twoTab}`}>
-                        <div className={`${styles.leftTab}`}>
-                          <div className="w-full flex justify-start mb-8 gap-2">
-                            <RegularButton
-                              styles={"bg-black text-white border-black"}
-                            >
-                              <p className=" text-xs">Add Receipt Manually</p>
-                            </RegularButton>
-
-                            <RegularButton
-                              styles={"border-black"}
-                              handleClick={() => {
-                                setFieldValue("storeType", "gpt");
-                                setStage(ReceiptStoreStage.IN_STORE_GPT);
-                                setErrors({
-                                  ...errors,
-                                  gptError: "",
-                                  items: "",
-                                  itemField: "",
-                                  itemFileError: "",
-                                });
-                              }}
-                            >
-                              <p className=" text-xs">Analyze receipt image</p>
-                            </RegularButton>
-                          </div>
-                          {errors.itemFileError && (
-                            <p className=" text-orange-800 text-sm">
-                              {errors.itemFileError}
-                            </p>
-                          )}
+                      <div>
+                        <div className="">
                           <ReceiptManual
                             setFieldValue={setFieldValue}
                             values={values}
                             handleChange={handleChange}
                             errors={errors}
+                            setStage={setStage}
                           />
                         </div>
                         <BottomBar>
-                          <div className="flex gap-2 ">
+                          <div className="flex justify-between w-full">
                             <RegularButton
-                              styles={
-                                "bg-emerald-900 border-emerald-900 w-full"
-                              }
-                              handleClick={() => {
+                              styles="bg-white border-emerald-900"
+                              handleClick={async () => {
                                 router.push("/receipt-type");
                               }}
                             >
-                              <p className="text-white text-xs">Back</p>
+                              <p className="text-emerald-900  text-xs">
+                                Discard
+                              </p>
                             </RegularButton>
-                            <RegularButton
-                              styles={
-                                "bg-emerald-900 border-emerald-900 w-full"
-                              }
-                              handleClick={async () => {
-                                setStage(ReceiptStoreStage.PREVIEW);
-                              }}
-                            >
-                              <p className="text-white text-xs">Items</p>
-                            </RegularButton>
+                            <div className="flex gap-3 ">
+                              <RegularButton
+                                styles={"bg-emerald-900 border-emerald-900 "}
+                                handleClick={() => {
+                                  router.push("/receipt-type");
+                                }}
+                              >
+                                <p className="text-white text-xs">Back</p>
+                              </RegularButton>
+                              <RegularButton
+                                styles={"bg-emerald-900 border-emerald-900 "}
+                                handleClick={async () => {
+                                  const error = await validateForm();
+                                  if (error) {
+                                    setErrors((prevErrors) => ({
+                                      ...prevErrors,
+                                      store:
+                                        error.store || prevErrors.store || "",
+
+                                      tracking_number:
+                                        error.tracking_number ||
+                                        prevErrors.tracking_number ||
+                                        "",
+                                      days_until_return:
+                                        error.days_until_return ||
+                                        prevErrors.days_until_return ||
+                                        "",
+                                      purchase_date:
+                                        error.purchase_date ||
+                                        prevErrors.purchase_date ||
+                                        "",
+                                    }));
+                                  }
+
+                                  if (Object.keys(error).length === 0) {
+                                    setStage(ReceiptStoreStage.PREVIEW);
+                                    setErrors((prevErrors) => ({
+                                      ...prevErrors,
+                                      store: "",
+                                      amount: "",
+                                      tracking_number: "",
+                                    }));
+                                  }
+                                }}
+                              >
+                                <p className="text-white text-xs">Items</p>
+                              </RegularButton>
+                            </div>
                           </div>
                         </BottomBar>
                       </div>
                     );
-
-                  // case ReceiptStoreStage.IN_STORE_ITEMS_MANUAL:
-                  //   return (
-                  //     <div className={`${styles.twoTab}`}>
-                  //       <div className={`${styles.leftTab}`}>
-                  //         <div className="flex justify-between">
-                  //           <h1 className="text-orange-600 text-lg">
-                  //             In Store Items
-                  //           </h1>
-                  //           {/* <RegularButton
-                  //             styles={
-                  //               "border-orange-600 text-orange-600 text-sm"
-                  //             }
-                  //           >
-                  //             <p> {values.type}</p>
-                  //           </RegularButton> */}
-                  //         </div>
-                  //         {errors.items && (
-                  //           <p className=" text-orange-800 text-sm">
-                  //             {errors.items}
-                  //           </p>
-                  //         )}
-                  //         {errors.itemField && (
-                  //           <p className=" text-orange-800 text-sm">
-                  //             {errors.itemField}
-                  //           </p>
-                  //         )}
-
-                  //         {errors.itemFileError && (
-                  //           <p className=" text-orange-800 text-sm">
-                  //             {errors.itemFileError}
-                  //           </p>
-                  //         )}
-                  //         <OnlineReceiptManual
-                  //           setFieldValue={setFieldValue}
-                  //           values={values}
-                  //         />
-
-                  //         <div className="flex gap-2 ">
-                  //           <RegularButton
-                  //             styles={
-                  //               "bg-emerald-900 border-emerald-900 w-full"
-                  //             }
-                  //             handleClick={() => {
-                  //               setStage(ReceiptStoreStage.IN_STORE_RECEIPT);
-                  //             }}
-                  //           >
-                  //             <p className="text-white text-xs">Back</p>
-                  //           </RegularButton>
-
-                  //           <RegularButton
-                  //             styles={
-                  //               "bg-emerald-900 border-emerald-900 w-full"
-                  //             }
-                  //             handleClick={async () => {
-                  //               const error = await validateForm();
-
-                  //               setErrors((prevErrors) => ({
-                  //                 ...prevErrors,
-                  //                 items:
-                  //                   typeof error.items === "string"
-                  //                     ? error.items
-                  //                     : prevErrors.items || "",
-                  //               }));
-
-                  //               for (const item of values.items) {
-                  //                 if (
-                  //                   item.description === "" ||
-                  //                   item.price === ""
-                  //                 ) {
-                  //                   setErrors((prevErrors) => ({
-                  //                     ...prevErrors,
-                  //                     itemField:
-                  //                       "Decsription and price are required for each item.",
-                  //                   }));
-                  //                   return;
-                  //                 }
-                  //               }
-                  //               if (
-                  //                 Object.keys(error).length === 0 &&
-                  //                 !errors.itemField
-                  //               ) {
-                  //                 setStage(ReceiptStoreStage.PREVIEW);
-                  //               }
-                  //             }}
-                  //           >
-                  //             <p className="text-white text-xs">Preview</p>
-                  //           </RegularButton>
-                  //         </div>
-                  //       </div>
-                  //     </div>
-                  //   );
 
                   case ReceiptStoreStage.IN_STORE_GPT:
                     return (
@@ -287,12 +217,12 @@ const Store = () => {
                           </div>
 
                           {errors.gptError && (
-                            <p className=" text-orange-800 text-sm text-center">
+                            <p className=" text-orange-800 text-xs text-center">
                               {errors.gptError}
                             </p>
                           )}
                           {errors.itemField && (
-                            <p className=" text-orange-800 text-sm text-center">
+                            <p className=" text-orange-800 text-xs text-center">
                               {errors.itemField}
                             </p>
                           )}
@@ -300,61 +230,74 @@ const Store = () => {
                           <ImageGpt
                             setFieldValue={setFieldValue}
                             values={values}
+                            setStage={setStage}
                           />
                           {errors.items && (
-                            <p className=" text-orange-800 text-sm text-center">
+                            <p className=" text-orange-800 text-xs text-center">
                               {errors.items}
                             </p>
                           )}
 
                           <BottomBar>
-                            <div className="flex gap-2 ">
+                            <div className="flex justify-between w-full">
                               <RegularButton
-                                styles={
-                                  "bg-emerald-900 border-emerald-900 w-full"
-                                }
-                                handleClick={() => {
+                                styles="bg-white border-emerald-900"
+                                handleClick={async () => {
                                   router.push("/receipt-type");
                                 }}
                               >
-                                <p className="text-white text-xs">Back</p>
+                                <p className="text-emerald-900  text-xs">
+                                  Discard
+                                </p>
                               </RegularButton>
-                              <RegularButton
-                                styles={
-                                  "bg-emerald-900 border-emerald-900 w-full"
-                                }
-                                handleClick={async () => {
-                                  const error = await validateForm();
-                                  setErrors((prevErrors) => ({
-                                    ...prevErrors,
-                                    gptError:
-                                      typeof error.items === "string"
-                                        ? error.items
-                                        : prevErrors.items || "",
-                                  }));
-                                  for (const item of values.items) {
-                                    if (
-                                      item.description === "" ||
-                                      item.price === ""
-                                    ) {
-                                      setErrors((prevErrors) => ({
-                                        ...prevErrors,
-                                        itemField:
-                                          "Decsription and price are required for each item.",
-                                      }));
-                                      return;
+                              <div className="flex gap-2 ">
+                                <RegularButton
+                                  styles={
+                                    "bg-emerald-900 border-emerald-900 w-full"
+                                  }
+                                  handleClick={() => {
+                                    router.push("/receipt-type");
+                                  }}
+                                >
+                                  <p className="text-white text-xs">Back</p>
+                                </RegularButton>
+                                <RegularButton
+                                  styles={
+                                    "bg-emerald-900 border-emerald-900 w-full"
+                                  }
+                                  handleClick={async () => {
+                                    const error = await validateForm();
+                                    setErrors((prevErrors) => ({
+                                      ...prevErrors,
+                                      gptError:
+                                        typeof error.items === "string"
+                                          ? error.items
+                                          : prevErrors.items || "",
+                                    }));
+                                    for (const item of values.items) {
+                                      if (
+                                        item.description === "" ||
+                                        item.price === ""
+                                      ) {
+                                        setErrors((prevErrors) => ({
+                                          ...prevErrors,
+                                          itemField:
+                                            "Decsription and price are required for each item.",
+                                        }));
+                                        return;
+                                      }
                                     }
-                                  }
-                                  if (
-                                    Object.keys(error).length === 0 &&
-                                    !errors.itemField
-                                  ) {
-                                    setStage(ReceiptStoreStage.PREVIEW);
-                                  }
-                                }}
-                              >
-                                <p className="text-white text-xs">Items</p>
-                              </RegularButton>
+                                    if (
+                                      Object.keys(error).length === 0 &&
+                                      !errors.itemField
+                                    ) {
+                                      setStage(ReceiptStoreStage.PREVIEW);
+                                    }
+                                  }}
+                                >
+                                  <p className="text-white text-xs">Items</p>
+                                </RegularButton>
+                              </div>
                             </div>
                           </BottomBar>
                         </div>
@@ -362,14 +305,16 @@ const Store = () => {
                     );
                   case ReceiptStoreStage.PREVIEW:
                     return (
-                      <FinalStage
-                        values={values}
-                        setStage={setStage}
-                        setFieldValue={setFieldValue}
-                        loading={loading}
-                        uploadError={uploadError}
-                        setUploadError={setUploadError}
-                      />
+                      <div className="flex justify-center items-center ">
+                        <FinalStage
+                          values={values}
+                          setStage={setStage}
+                          setFieldValue={setFieldValue}
+                          loading={loading}
+                          uploadError={uploadError}
+                          setUploadError={setUploadError}
+                        />
+                      </div>
                     );
                 }
               })()}
@@ -377,6 +322,15 @@ const Store = () => {
           )}
         </Formik>
       </div>
+      {errors.itemError && (
+        <ErrorModal
+          errorMessage={errors.itemError}
+          onClose={() =>
+            setErrors((prevErrors) => ({ ...prevErrors, itemError: "" }))
+          }
+        />
+      )}
+
       {loading && <Loading loading={loading} />}
     </div>
   );

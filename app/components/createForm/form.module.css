@@ -11,6 +11,9 @@
   display: flex;
   gap: 40px;
 }
+.bottombar {
+  padding-left: 120px;
+}
 
 .receiptLeft {
   width: 50%;
@@ -36,6 +39,21 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  position: relative;
+}
+
+.placeholder {
+  width: 100%;
+  max-width: 250px;
+  height: 200px;
+  border: 1px solid #064e3b;
+
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
   position: relative;
 }
 
@@ -70,5 +88,14 @@
     max-width: 100%;
     min-width: 100%;
     width: 100%;
+  }
+  .placeholder {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 550px) {
+  .bottombar {
+    padding-left: 16px;
   }
 }

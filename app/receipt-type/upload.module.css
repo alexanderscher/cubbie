@@ -1,7 +1,8 @@
 .receiptContainer {
   display: flex;
+  width: 100%;
   gap: 30px;
-  justify-content: space-between;
+  flex-direction: column;
 }
 
 .receiptTypes {
@@ -19,18 +20,6 @@
 
 .boxes {
   height: 130px;
-}
-
-.imageInput {
-  min-width: 300px;
-  width: 100%;
-  max-width: 450px;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-.imageSize {
-  height: 400px;
 }
 
 @media (max-width: 800px) {

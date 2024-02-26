@@ -15,7 +15,8 @@ import ImageModal from "@/app/components/images/ImageModal";
 import CurrencyInput from "react-currency-input-field";
 import LargeButton from "@/app/components/buttons/LargeButton";
 import { BarcodeScanner } from "@/app/components/createForm/barcode/BarcodeScanner";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import Shirt from "@/app/components/placeholderImages/Shirt";
 
 interface FinalStageProps {
   values: any;
@@ -37,7 +38,7 @@ const FinalStage = ({
   const router = useRouter();
 
   return (
-    <div className="flex flex-col gap-6 max-w-[1000px]">
+    <div className="flex flex-col gap-6 max-w-[1000px] w-full">
       <ReceiptPageForm values={values} setFieldValue={setFieldValue} />
       <BottomBar>
         <div className="flex justify-between w-full">
@@ -98,22 +99,38 @@ interface ReceiptPageProps {
 
 const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isAddOpen, setIsAddOpen] = React.useState(false);
+  const handleCurrencyChangeAsset = (value: string | undefined) => {
+    setFieldValue("assetAmount", value || "");
+  };
+  const pathname = usePathname();
+
   return (
     <div className="flex flex-col gap-8  w-full h-full ">
       <div className="flex justify-between items-center gap-4">
-        <h1 className="text-2xl text-orange-600 ">{values.store}</h1>
-        <RegularButton
-          styles={"bg-emerald-900 text-white text-xs"}
-          handleClick={() => {
-            setIsOpen(true);
+        {/* <h1 className="text-2xl text-orange-600 w-3/4 ">{values.store}</h1> */}
+        <input
+          className="w-full  bg border-slate-400 p-2  focus:outline-none focus:border-slate-400 focus:border-b-[1px] text-xl text-orange-600"
+          name="days_until_return"
+          value={values.store}
+          onChange={(e) => {
+            setFieldValue("store", e.target.value);
           }}
-        >
-          Add Item
-        </RegularButton>
+        />
+        <div className="w-[200px] flex justify-end">
+          <RegularButton
+            styles={"bg-emerald-900 text-white text-xs  border-emerald-900"}
+            handleClick={() => {
+              setIsAddOpen(true);
+            }}
+          >
+            Add Item
+          </RegularButton>
+        </div>
       </div>
       <div className="flex border-[1px] border-emerald-900 rounded-lg text-sm  p-4">
         <div className="w-1/3 border-r-[1px] border-slate-300 ">
-          <p className="text-slate-500 text-xs">Total amount</p>
+          <p className="text-slate-400 text-xs">Total amount</p>
           <p>
             {formatCurrency(
               values.items.reduce((acc: number, curr: ItemInput) => {
@@ -123,12 +140,12 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
           </p>
         </div>
         <div className="w-1/3 border-r-[1px] border-slate-300 pl-2 pr-2">
-          <p className="text-slate-500 text-xs">Purchase Date</p>
+          <p className="text-slate-400 text-xs">Purchase Date</p>
           <p>{formatDateToMMDDYY(values.purchase_date)}</p>
         </div>
 
         <div className="pl-2 pr-2">
-          <p className="text-slate-500 text-xs">Return Date</p>
+          <p className="text-slate-400 text-xs">Return Date</p>
           <p>
             {formatDateToMMDDYY(
               calculateReturnDate(
@@ -144,15 +161,19 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
           <div
             className={`border-[1px] border-emerald-900 rounded-lg  flex flex-col gap-4 p-6`}
           >
-            <p className="text-xl text-emerald-900">Receipt Information</p>
+            <p className="text-xl text-emerald-900">
+              {pathname !== "/receipt-type/memo"
+                ? "Receipt Information"
+                : "Memo Information"}
+            </p>
             {!values.receiptImage && (
               <div className="w-full  overflow-hidden relative flex justify-center items-center ">
                 <div className="w-full h-full flex justify-center items-start ">
                   <Image
                     src="/receipt_b.png"
                     alt=""
-                    width={60}
-                    height={60}
+                    width={40}
+                    height={40}
                     className="object-cover pt-4"
                     style={{ objectFit: "cover", objectPosition: "center" }}
                   />
@@ -184,42 +205,74 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
 
             <div className="flex flex-col gap-4 text-sm ">
               <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
-                <p className="text-slate-500 text-xs">Quantity</p>
+                <p className="text-slate-400 text-xs">Quantity</p>
                 <p className="">{values.items.length}</p>
               </div>
 
               <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
-                <p className="text-slate-500 text-xs">Receipt Type</p>
+                <p className="text-slate-400 text-xs">Receipt Type</p>
                 <p className="">{values.type}</p>
               </div>
 
-              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
-                <p className="text-slate-500 text-xs">Card</p>
-                <p className="">{values.card ? values.card : "None"}</p>
+              <div className="w-full">
+                <p className="text-xs text-slate-400 ">Days until return</p>
+                <input
+                  className="w-full border-[1px] bg border-slate-400 p-2 rounded-md focus:outline-none focus:border-slate-400"
+                  name="days_until_return"
+                  value={values.days_until_return}
+                  onChange={(e) => {
+                    setFieldValue("days_until_return", e.target.value);
+                  }}
+                />
               </div>
 
-              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
-                <p className="text-slate-500 text-xs">Tracking Link</p>
-                <p className="">
-                  {values.tracking_number ? values.tracking_number : "None"}
-                </p>
+              <div className="w-full">
+                <p className="text-xs text-slate-400 ">Card</p>
+                <input
+                  className="w-full border-[1px] bg border-slate-400 p-2 rounded-md focus:outline-none focus:border-slate-400"
+                  name="card"
+                  value={values.card}
+                  onChange={(e) => {
+                    setFieldValue("card", e.target.value);
+                  }}
+                />
               </div>
-              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
-                <p className="text-slate-500 text-xs">Asset Amount</p>
-                <p className="">
-                  {values.assetAmount
-                    ? formatCurrency(values.assetAmount)
-                    : "None"}
-                </p>
+
+              {pathname === "/receipt-type/online" && (
+                <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
+                  <p className="text-slate-400 text-xs">Tracking Link</p>
+                  <p className="">
+                    {values.tracking_number ? values.tracking_number : "None"}
+                  </p>
+                </div>
+              )}
+
+              <div className="w-full pb-2 ">
+                <p className="text-slate-400 text-xs">Asset Amount</p>
+
+                <CurrencyInput
+                  id="price"
+                  name="price"
+                  className="text-sm bg-white border-[1px] rounded-md p-2 bg border-slate-400 focus:outline-none w-full"
+                  placeholder=""
+                  value={values.assetAmount}
+                  defaultValue={values.assetAmount || ""}
+                  decimalsLimit={2}
+                  onValueChange={handleCurrencyChangeAsset}
+                />
               </div>
             </div>
           </div>
         </div>
-
-        <div className={`flex flex-col gap-2 pb-[200px] w-full`}>
-          <div className={`${styles.boxes} `}>
-            {values.items.length > 0 &&
-              values.items.map((item: any, index: number) => (
+        {values.items.length === 0 && (
+          <div className="pb-[200px] w-full">
+            <PlaceHolder setIsAddOpen={setIsAddOpen} />
+          </div>
+        )}
+        {values.items.length > 0 && (
+          <div className={`flex flex-col gap-2 pb-[200px] w-full`}>
+            <div className={`${styles.boxes} `}>
+              {values.items.map((item: any, index: number) => (
                 <ReceiptItems
                   key={item.id}
                   item={item}
@@ -229,17 +282,47 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
                   asset_amount={parseInt(values.assetAmount)}
                 />
               ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
-      {isOpen && (
+      {isAddOpen && (
         <AddItemModal
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
+          isAddOpen={isAddOpen}
+          setIsAddOpen={setIsAddOpen}
           items={values.items}
           setFieldValue={setFieldValue}
         />
       )}
+    </div>
+  );
+};
+
+interface PlaceHolderProps {
+  setIsAddOpen: (value: boolean) => void;
+}
+const PlaceHolder = ({ setIsAddOpen }: PlaceHolderProps) => {
+  return (
+    <div className={styles.placeholder}>
+      <div className="w-full  flex justify-center items-center">
+        <Image
+          src="/item_b.png"
+          alt=""
+          width={60}
+          height={60}
+          className="object-cover "
+          style={{ objectFit: "cover", objectPosition: "center" }}
+        />
+      </div>
+
+      <RegularButton
+        styles={"bg-emerald-900 text-white text-xs w-1/2  border-emerald-900"}
+        handleClick={() => {
+          setIsAddOpen(true);
+        }}
+      >
+        Add Item
+      </RegularButton>
     </div>
   );
 };
@@ -255,10 +338,10 @@ type ItemInputKey = keyof ItemInput;
 
 const ReceiptItems = ({
   item,
-  asset_amount,
   index,
   items,
   setFieldValue,
+  asset_amount,
 }: ReceiptItemsProps) => {
   const [showScanner, setShowScanner] = useState(false);
 
@@ -370,23 +453,26 @@ const ReceiptItems = ({
         </div>
 
         <div className="text-sm flex flex-col gap-3 items-start w-full ">
+          {parseInt(item.price) > asset_amount && (
+            <p className="text-orange-600">Asset</p>
+          )}
           <div className="w-full">
-            <h1 className="text-slate-500 text-xs">Description</h1>
+            <h1 className="text-slate-400 text-xs">Description</h1>
 
             <input
-              className="  text-sm bg-white border-[1px] rounded p-2 bg border-emerald-900 focus:outline-none w-full"
+              className="  text-sm bg-white border-[1px] rounded-md p-2 bg border-emerald-900 focus:outline-none w-full"
               name="character"
               value={item.description || ""}
               onChange={handleItemChange}
             />
           </div>
           <div className="w-full">
-            <h1 className="text-slate-500 text-xs">Amount</h1>
+            <h1 className="text-slate-400 text-xs">Amount</h1>
 
             <CurrencyInput
               id="price"
               name="price"
-              className="text-sm bg-white border-[1px] rounded p-2 bg border-emerald-900 focus:outline-none w-full"
+              className="text-sm bg-white border-[1px] rounded-md p-2 bg border-emerald-900 focus:outline-none w-full"
               placeholder=""
               value={item.price}
               defaultValue={item.price || ""}
@@ -396,10 +482,10 @@ const ReceiptItems = ({
           </div>
 
           <div className="w-full">
-            <h1 className="text-slate-500 text-xs">Character</h1>
+            <h1 className="text-slate-400 text-xs">Character</h1>
 
             <input
-              className="  text-sm bg-white border-[1px] rounded p-2 bg border-emerald-900 focus:outline-none w-full"
+              className="  text-sm bg-white border-[1px] rounded-md p-2 bg border-emerald-900 focus:outline-none w-full"
               name="character"
               value={item.character || ""}
               onChange={handleItemChange}
@@ -407,28 +493,28 @@ const ReceiptItems = ({
           </div>
 
           <div className="w-full">
-            <h1 className="text-slate-500 text-xs">Product ID</h1>
+            <h1 className="text-slate-400 text-xs">Product ID</h1>
 
             <input
-              className="  text-sm bg-white border-[1px] rounded p-2 bg border-emerald-900 focus:outline-none w-full"
+              className="  text-sm bg-white border-[1px] rounded-md p-2 bg border-emerald-900 focus:outline-none w-full"
               name="product_id"
               value={item.product_id}
               onChange={handleItemChange}
             />
           </div>
           <div className="w-full">
-            <h1 className="text-slate-500 text-xs">Barcode</h1>
+            <h1 className="text-slate-400 text-xs">Barcode</h1>
 
             <div className="flex  w-full gap-2">
               <input
-                className="w-full  text-sm bg-white border-[1px] rounded p-2 bg border-emerald-900 focus:outline-none "
+                className="w-full  text-sm bg-white border-[1px] rounded-md p-2 bg border-emerald-900 focus:outline-none "
                 name="barcode"
                 value={item.barcode}
                 onChange={handleItemChange}
               />
               <button
                 type="button"
-                className="w-[40px] border-[1px] border-emerald-900 p-3 rounded flex justify-center items-center  "
+                className="w-[40px] border-[1px] border-emerald-900 p-3 rounded-md flex justify-center items-center  "
                 onClick={() => {
                   setShowScanner(true);
                 }}
@@ -486,15 +572,15 @@ const ReceiptItems = ({
 };
 
 interface AddItemModalProps {
-  isOpen: boolean;
-  setIsOpen: (value: boolean) => void;
+  isAddOpen: boolean;
+  setIsAddOpen: (value: boolean) => void;
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
   items: ItemInput[];
 }
 
 const AddItemModal = ({
-  isOpen,
-  setIsOpen,
+  isAddOpen,
+  setIsAddOpen,
   setFieldValue,
   items,
 }: AddItemModalProps) => {
@@ -532,7 +618,7 @@ const AddItemModal = ({
     try {
       await itemSchema.validate(newItem, { abortEarly: false });
       setFieldValue("items", [...items, newItem]);
-      setIsOpen(false);
+      setIsAddOpen(false);
       setNewItem({
         description: "",
         price: "",
@@ -577,7 +663,7 @@ const AddItemModal = ({
           <button
             type="button"
             className="text-gray-400 hover:text-gray-500"
-            onClick={() => setIsOpen(false)}
+            onClick={() => setIsAddOpen(false)}
           >
             <span className="text-2xl">&times;</span>
           </button>
@@ -585,7 +671,7 @@ const AddItemModal = ({
         <div className="p-6">
           <div className="space-y-4">
             <div>
-              <p className="text-xs text-emerald-900">Description</p>
+              <p className="text-xs text-emerald-900">Description*</p>
               <input
                 type="text"
                 name="description"
@@ -598,11 +684,11 @@ const AddItemModal = ({
               )}
             </div>
             <div>
-              <p className="text-xs text-emerald-900">Price</p>
+              <p className="text-xs text-emerald-900">Price*</p>
               <CurrencyInput
                 id="price"
                 name="price"
-                className="text-sm bg-white border-[1px] rounded p-2  border-emerald-900 focus:outline-none w-full"
+                className="text-sm bg-white border-[1px] rounded-md p-2  border-emerald-900 focus:outline-none w-full"
                 placeholder=""
                 value={newItem.price}
                 defaultValue={newItem.price || ""}
@@ -625,7 +711,7 @@ const AddItemModal = ({
                 />
                 <button
                   type="button"
-                  className="w-[40px] border-[1px] border-emerald-900 p-3 rounded flex justify-center items-center  "
+                  className="w-[40px] border-[1px] border-emerald-900 p-3 rounded-md flex justify-center items-center  "
                   onClick={() => {
                     setShowScanner(true);
                   }}
@@ -777,7 +863,7 @@ const AddItemModal = ({
           <div className="flex justify-end mt-6">
             <RegularButton
               type="button"
-              styles="bg-emerald-900 text-white"
+              styles="bg-emerald-900 text-white border-emerald-900"
               handleClick={handleSubmit}
             >
               <p className="text-xs">Add Item</p>

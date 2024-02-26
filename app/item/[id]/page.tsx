@@ -91,8 +91,8 @@ const ItemID = () => {
               className={` rounded-lg p-8 bg-white flex flex-col gap-4  border-[1px] border-emerald-900 `}
             >
               <p className="text-xl text-emerald-900">Receipt Information</p>
-              <div className="flex flex-col gap-3 text-sm">
-                <div className="flex flex-col gap-3 text-sm">
+              <div className="flex flex-col gap-4 text-sm">
+                <div className="flex flex-col gap-4 text-sm">
                   <div className="border-slate-400 border-b-[1px] ">
                     <p className="text-slate-400">Store</p>
                     <p>{item.receipt.store}</p>

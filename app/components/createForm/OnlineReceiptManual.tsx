@@ -179,7 +179,7 @@ const OnlineReceiptManual = ({
       <div className="flex gap-4">
         <button
           type="button"
-          className="border-[1px] border-emerald-900 w-full p-3 rounded-lg text-emerald-900 "
+          className="border-[1px] border-emerald-900 w-full p-4 rounded-lg text-emerald-900 "
           onClick={() => {
             setShowScanner(true);
             setIsBarcode(false);
@@ -190,7 +190,7 @@ const OnlineReceiptManual = ({
         </button>
         <button
           type="button"
-          className="border-[1px] border-emerald-900 w-full p-3 rounded-lg text-emerald-900 "
+          className="border-[1px] border-emerald-900 w-full p-4 rounded-lg text-emerald-900 "
           onClick={() => {
             setShowScanner(false);
             setIsBarcode(!isBarcode);

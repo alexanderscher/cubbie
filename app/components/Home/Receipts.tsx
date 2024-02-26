@@ -9,24 +9,11 @@ const Receipts = () => {
 
   const pathname = usePathname();
 
-  if (pathname !== "/") {
-    return (
-      <div className="boxes">
-        {filteredData
-          .filter((receipt: ReceiptType) => receipt.memo === true)
-          .map((receipt: ReceiptType) => (
-            <Receipt key={receipt.id} receipt={receipt} />
-          ))}
-      </div>
-    );
-  }
   return (
     <div className="boxes">
-      {filteredData
-        .filter((receipt: ReceiptType) => receipt.memo === false)
-        .map((receipt: ReceiptType) => (
-          <Receipt key={receipt.id} receipt={receipt} />
-        ))}
+      {filteredData.map((receipt: ReceiptType) => (
+        <Receipt key={receipt.id} receipt={receipt} />
+      ))}
     </div>
   );
 };

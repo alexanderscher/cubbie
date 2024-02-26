@@ -5,12 +5,9 @@ import { Item as ItemType } from "@/types/receipt";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { formatDateToMMDDYY } from "@/utils/Date";
-import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
-import Shirt from "@/app/components/placeholderImages/Shirt";
 import { Formik } from "formik";
 import { EDIT_ITEM_SCHEMA } from "@/utils/editValidation";
-import Link from "next/link";
 import CurrencyInput from "react-currency-input-field";
 import ErrorModal from "@/app/components/error/Modal";
 import Loading from "@/app/components/Loading";
@@ -112,7 +109,7 @@ const ItemID = () => {
           <div className="flex justify-between w-full ">
             <h1 className="text-2xl text-orange-600">{item.description}</h1>
             {dirty ? (
-              <div className="flex gap-3">
+              <div className="flex gap-4">
                 <RegularButton
                   styles="bg  border-emerald-900"
                   href={`/item/${id}`}
@@ -157,7 +154,7 @@ const ItemID = () => {
                     id="edit"
                     style={{ opacity: 0, position: "absolute", zIndex: -1 }}
                   />
-                  <div className="w-full h-full flex flex-col gap-3 justify-center items-center ">
+                  <div className="w-full h-full flex flex-col gap-4 justify-center items-center ">
                     <Image
                       src="/image_b.png"
                       alt=""
@@ -317,8 +314,8 @@ const ItemID = () => {
                     Receipt Information
                   </p>
 
-                  <div className="flex flex-col gap-3 text-sm">
-                    <div className="flex flex-col gap-3 text-sm">
+                  <div className="flex flex-col gap-4 text-sm">
+                    <div className="flex flex-col gap-4 text-sm">
                       <div>
                         <p className="text-slate-400">Store</p>
                         <p>{item.receipt.store}</p>

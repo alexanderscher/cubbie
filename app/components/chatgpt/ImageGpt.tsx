@@ -225,7 +225,7 @@ export default function ImageGpt({ setFieldValue, values, setStage }: Props) {
         <div>
           <div className="flex flex-col gap-5">
             <div
-              className={` border-[1px] border-emerald-900 w-full flex flex-col gap-3 justify-center items-center rounded-md relative h-[200px] `}
+              className={` border-[1px] border-emerald-900 w-full flex flex-col gap-4 justify-center items-center rounded-md relative h-[200px] `}
               onClick={handleContainerClick}
               style={{ cursor: "pointer" }}
             >

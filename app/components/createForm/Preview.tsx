@@ -111,7 +111,7 @@ const Preview = ({ values, setFieldValue, stage }: PreviewProps) => {
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-6">
           <div className="flex gap-[100px]">
-            <div className="flex flex-col gap-3 w-full">
+            <div className="flex flex-col gap-4 w-full">
               {edit ? (
                 <div className="flex justify-between">
                   <input

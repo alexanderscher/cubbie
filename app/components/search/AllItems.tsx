@@ -60,7 +60,7 @@ function SearchAllItems() {
 
   return (
     <div className="pb-[30px]">
-      <div className="w-full flex gap-3 items-center justify-center">
+      <div className="w-full flex gap-4 items-center justify-center">
         <input
           className="searchBar  placeholder:text-sm placeholder:text-black "
           placeholder={`Search all items`}
@@ -69,7 +69,7 @@ function SearchAllItems() {
         <div>
           <button
             type="button"
-            className="w-[40px] border-[1px] border-black p-3 rounded-md flex justify-center items-center  "
+            className="w-[40px] border-[1px] border-black p-4 rounded-md flex justify-center items-center  "
             onClick={() => {
               setShowScanner(true);
             }}

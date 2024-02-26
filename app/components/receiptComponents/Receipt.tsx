@@ -11,53 +11,55 @@ interface ReceiptProps {
 
 const Receipt = ({ receipt }: ReceiptProps) => {
   return (
-    <div className="box sm:pb-6 pb-4 p-1">
-      <div className="sm:p-4 p-2 flex flex-col gap-2">
-        <p className="text-slate-400 text-xs text-end">
-          {formatDateToMMDDYY(receipt.created_at)}
-        </p>
-        <div className="w-full  overflow-hidden relative flex justify-center items-center">
-          <div className="w-full h-full flex justify-center items-center">
-            <Image
-              src="/receipt_b.png"
-              alt=""
-              width={30}
-              height={30}
-              className="object-cover "
-              style={{ objectFit: "cover", objectPosition: "center" }}
-            />
-          </div>
-        </div>
-        <Link href={`/receipt/${receipt.id}`}>
-          <TruncateText
-            text={receipt.store}
-            maxLength={15}
-            styles={"text-orange-600 text-xs sm:text-lg"}
+    <div className="box xs:pb-6 pb-4 ">
+      <div className="w-full  overflow-hidden relative flex justify-center items-center bg-slate-100 rounded-t-lg h-[90px]">
+        <div className="w-full h-full flex justify-center items-center ">
+          <Image
+            src="/receipt_b.png"
+            alt=""
+            width={30}
+            height={30}
+            className="object-cover "
+            style={{ objectFit: "cover", objectPosition: "center" }}
           />
-        </Link>
-        <div className="flex gap-1 text-xs">
-          <p className=" ">
-            {receipt.items.length}{" "}
-            {receipt.items.length === 1 ? "item" : "items"} |
-          </p>
-          <p className=" ">
-            {formatCurrency(
-              receipt.items.reduce((acc: number, curr: Item) => {
-                return acc + curr.price;
-              }, 0)
-            )}
+        </div>
+      </div>
+
+      <div className="p-3 flex flex-col justify-between">
+        <div className="border-b-[1px] border-slate-400">
+          <Link href={`/receipt/${receipt.id}`} className="">
+            <TruncateText
+              text={receipt.store}
+              maxLength={18}
+              styles={"text-orange-600"}
+            />
+          </Link>
+          <p className="text-xs text-slate-400">
+            Return by {formatDateToMMDDYY(receipt.return_date)}
           </p>
         </div>
 
-        <div className="border-t-[1px] border-slate-300  flex flex-col text-xs sm:text-sm gap-1">
-          <div className="text-xs mt-2">
-            <p className="text-slate-400  ">Purchased date</p>
-            <p> {formatDateToMMDDYY(receipt.purchase_date)}</p>
+        <div className="flex flex-col  gap-1 text-xs">
+          <div className=" flex flex-col  gap-1 text-xs">
+            <div className="flex gap-1 text-xs mt-2 ">
+              <p className="">
+                {receipt.type === "Store" ? "In Store" : "Online"}{" "}
+                {receipt.memo ? "Memo" : "Receipt"}
+              </p>
+            </div>
           </div>
-
-          <div className="text-xs">
-            <p className="text-slate-400  ">Return date</p>
-            <p> {formatDateToMMDDYY(receipt.purchase_date)}</p>
+          <div className="flex gap-1  ">
+            <p className=" ">
+              {receipt.items.length}{" "}
+              {receipt.items.length === 1 ? "item" : "items"} |
+            </p>
+            <p className=" ">
+              {formatCurrency(
+                receipt.items.reduce((acc: number, curr: Item) => {
+                  return acc + curr.price;
+                }, 0)
+              )}
+            </p>
           </div>
         </div>
       </div>

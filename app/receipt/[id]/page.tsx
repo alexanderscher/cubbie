@@ -38,7 +38,7 @@ const ReceiptPage = () => {
           <p className="text-white text-xs">Edit</p>
         </RegularButton>
       </div>
-      <div className="flex bg-white border-[1px] border-emerald-900 rounded-lg text-sm shadow p-4">
+      <div className="flex bg-white shadow rounded-lg text-sm shadow p-4">
         <div className="w-1/3 border-r-[1px] border-slate-300 ">
           <p className="text-slate-400 text-xs">Total amount</p>
           <p>
@@ -60,7 +60,7 @@ const ReceiptPage = () => {
         </div>
       </div>
       <div className={`${styles.receipt} `}>
-        <div className={`${styles.receiptLeft}  flex flex-col gap-2`}>
+        <div className={`${styles.receiptLeft} shadow  flex flex-col gap-2`}>
           <div
             className={`shadow rounded-lg  bg-white flex flex-col gap-4 p-6   `}
           >
@@ -71,8 +71,8 @@ const ReceiptPage = () => {
                   <Image
                     src="/receipt_b.png"
                     alt=""
-                    width={60}
-                    height={60}
+                    width={40}
+                    height={40}
                     className="object-cover bg-white pt-4"
                     style={{ objectFit: "cover", objectPosition: "center" }}
                   />

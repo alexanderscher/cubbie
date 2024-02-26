@@ -10,10 +10,10 @@ interface HeaderNavProps {
 const HeaderNav = ({ receipt }: HeaderNavProps) => {
   return (
     <div className="flex justify-between items-center gap-4 border-b-[1px] border-emerald-900 pb-4">
-      <div className="flex gap-3">
-        <Link href={receipt.memo ? "/memo" : "/"}>
+      <div className="flex gap-4">
+        <Link href="/">
           <p className="text-emerald-900 hover:text-orange-600 text-sm">
-            {receipt.memo ? "Memos" : "Receipts"}
+            Receipts
           </p>
         </Link>
         <p className="text-emerald-900 text-sm">/</p>

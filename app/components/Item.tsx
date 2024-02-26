@@ -27,24 +27,20 @@ const Item = ({ item }: Props) => {
           />
         </div>
       )}
-      <div className="p-4 flex flex-col gap-2 justify-between">
+      {!item.photo_url && <Shirt />}
+      <div className="p-3 flex flex-col gap-2 justify-between">
+        <Link href={`/item/${item.id}`} className="">
+          <TruncateText
+            text={item.description}
+            maxLength={18}
+            styles={"text-orange-600 text-sm"}
+          />
+        </Link>
+
         <div>
-          <Link href={`/item/${item.id}`} className="sm:text-lg text-xs">
-            {!item.photo_url && <Shirt />}
-            <TruncateText
-              text={item.description}
-              maxLength={18}
-              styles={"text-orange-600"}
-            />
-          </Link>
-
-          <p className="text-slate-400 text-xs ">
-            Return by {formatDateToMMDDYY(item.receipt.return_date)}
-          </p>
-
-          <div className="border-t-[1px] border-slate-300 flex flex-col  gap-1 text-xs">
+          <div className="border-t-[1px] border-slate-300 flex flex-col  gap-1 text-sm">
             <div className="mt-2">
-              <p className="text-slate-400">Store</p>
+              <p className="text-slate-400  ">Store</p>
               <Link href={`/receipt/${item.receipt_id}`} className="">
                 <TruncateText
                   text={item.receipt.store}
@@ -53,21 +49,17 @@ const Item = ({ item }: Props) => {
                 />
               </Link>
             </div>
-            <div>
+            <div className="mb-2">
               <p className="text-slate-400  ">Price</p>
               <p className="">{formatCurrency(item.price)}</p>
             </div>
-            {item.barcode && (
-              <div className="">
-                <p className="text-slate-400  ">Barcode</p>
-                <p className="text-xs">{item.barcode}</p>
-              </div>
-            )}
           </div>
         </div>
       </div>
+      <div className="border-t-[1px] text-sm text-center  text-emerald-900 p-2">
+        <Link href={`/item/${item.id}/edit/`}>Edit</Link>
+      </div>
     </div>
-    // </div>
   );
 };
 

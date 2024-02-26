@@ -120,7 +120,7 @@ const Online = () => {
                                 Discard
                               </p>
                             </RegularButton>
-                            <div className="flex gap-3 ">
+                            <div className="flex gap-4 ">
                               <RegularButton
                                 styles={"bg-emerald-900 border-emerald-900 "}
                                 handleClick={() => {
@@ -266,7 +266,7 @@ const Online = () => {
                                   Discard
                                 </p>
                               </RegularButton>
-                              <div className="flex gap-3 ">
+                              <div className="flex gap-4 ">
                                 <RegularButton
                                   styles={
                                     "bg-emerald-900 border-emerald-900 w-full"

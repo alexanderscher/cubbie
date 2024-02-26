@@ -211,7 +211,7 @@ const ReceiptManual = ({
 
           <div className={`w-full relative`}>
             <div
-              className={` border-[1px] border-emerald-900 w-full h-full flex flex-col gap-3 justify-center items-center rounded-md relative`}
+              className={` border-[1px] border-emerald-900 w-full h-full flex flex-col gap-4 justify-center items-center rounded-md relative`}
               onClick={handleContainerClick}
               style={{ cursor: "pointer" }}
             >

@@ -452,7 +452,7 @@ const ReceiptItems = ({
           )}
         </div>
 
-        <div className="text-sm flex flex-col gap-3 items-start w-full ">
+        <div className="text-sm flex flex-col gap-4 items-start w-full ">
           {parseInt(item.price) > asset_amount && (
             <p className="text-orange-600">Asset</p>
           )}
@@ -514,7 +514,7 @@ const ReceiptItems = ({
               />
               <button
                 type="button"
-                className="w-[40px] border-[1px] border-emerald-900 p-3 rounded-md flex justify-center items-center  "
+                className="w-[40px] border-[1px] border-emerald-900 p-4 rounded-md flex justify-center items-center  "
                 onClick={() => {
                   setShowScanner(true);
                 }}
@@ -711,7 +711,7 @@ const AddItemModal = ({
                 />
                 <button
                   type="button"
-                  className="w-[40px] border-[1px] border-emerald-900 p-3 rounded-md flex justify-center items-center  "
+                  className="w-[40px] border-[1px] border-emerald-900 p-4 rounded-md flex justify-center items-center  "
                   onClick={() => {
                     setShowScanner(true);
                   }}

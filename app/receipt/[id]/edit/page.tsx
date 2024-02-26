@@ -130,7 +130,7 @@ const ReceiptPage = () => {
             <h1 className="text-2xl text-orange-600 w-3/4">{receipt.store}</h1>
             <div className="flex gap-2">
               {dirty ? (
-                <div className="flex gap-3">
+                <div className="flex gap-4">
                   <RegularButton
                     styles="bg  border-emerald-900"
                     href={`/receipt/${id}`}
@@ -164,7 +164,7 @@ const ReceiptPage = () => {
               )}
             </div>
           </div>
-          <div className="flex bg-white rounded-lg text-sm border-emerald-900 border-[1px] p-4">
+          <div className="flex bg-white rounded-lg text-sm shadow p-4">
             <div className="w-1/2 border-r-[1px] border-slate-300 ">
               <p className="text-slate-400 text-xs">Total amount</p>
               <p>
@@ -199,7 +199,7 @@ const ReceiptPage = () => {
                       id="edit"
                       style={{ opacity: 0, position: "absolute", zIndex: -1 }}
                     />
-                    <div className="w-full h-full flex flex-col gap-3 justify-center items-center ">
+                    <div className="w-full h-full flex flex-col gap-4 justify-center items-center ">
                       <Image
                         src="/image_b.png"
                         alt=""
@@ -317,7 +317,7 @@ const ReceiptPage = () => {
                   </div>
                 )}
 
-                <div className="flex flex-col gap-3 text-sm">
+                <div className="flex flex-col gap-4 text-sm">
                   <div className="w-full ">
                     <p className="text-slate-400 text-xs">Store Name</p>
                     <input

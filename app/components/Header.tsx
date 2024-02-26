@@ -71,9 +71,7 @@ const Header = ({ type }: HeaderProps) => {
         <RegularButton href="/" styles={receiptColor}>
           <p className="text-xs">Receipts</p>
         </RegularButton>
-        <RegularButton href="/memo" styles={memoColor}>
-          <p className="text-xs">Memos</p>
-        </RegularButton>
+
         <RegularButton styles={itemColor} href="/items">
           <p className="text-xs">Items</p>
         </RegularButton>

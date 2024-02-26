@@ -270,7 +270,7 @@ const ReceiptFormItems = ({
             </div>
           ))}
 
-        <div className="text-sm flex flex-col gap-3 items-start w-full ">
+        <div className="text-sm flex flex-col gap-4 items-start w-full ">
           <div className="w-full">
             {edit && stage !== "Final" ? (
               <input
@@ -359,7 +359,7 @@ const ReceiptFormItems = ({
                 />
                 <button
                   type="button"
-                  className="border-[1px] border-emerald-900 p-3 rounded-lg   w-[150px]"
+                  className="border-[1px] border-emerald-900 p-4 rounded-lg   w-[150px]"
                   onClick={() => {
                     setShowScanner(true);
                   }}

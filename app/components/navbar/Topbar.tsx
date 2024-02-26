@@ -16,16 +16,16 @@ const Topbar = () => {
       <button onClick={() => setMenu(!menu)}>Menu</button>
       {menu && (
         <div className={`${styles.menu} p-4 `}>
-          <div className="flex flex-col gap-3 p-2">
-            <Link href="/" className="flex ">
-              <p className="text-white text-4xl">Receipts</p>
-            </Link>
+          <div className="flex flex-col gap-4 p-2">
             <Link href="/search">
               <p className="text-white text-4xl">Search</p>
             </Link>
+            <Link href="/" className="flex ">
+              <p className="text-white text-4xl">Receipts</p>
+            </Link>
+            <p className="text-white text-4xl">Calender</p>
             <p className="text-white text-4xl">Account</p>
             <p className="text-white text-4xl">Notifications</p>
-            <p className="text-white text-4xl">Calender</p>
           </div>
           {/* <div className={`${styles.navbarItems}`}>
             <div

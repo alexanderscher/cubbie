@@ -22,7 +22,7 @@ const ReceiptType = () => {
           <LargeButton
             border={"none"}
             height={styles.boxes}
-            styles="bg-white border-[1px] border-emerald-900"
+            styles="bg-white shadow"
             handleClick={() => router.push("/receipt-type/online")}
           >
             <p>Online</p>
@@ -30,7 +30,7 @@ const ReceiptType = () => {
           <LargeButton
             border={"none"}
             height={styles.boxes}
-            styles="bg-white border-[1px] border-emerald-900"
+            styles="bg-white shadow"
             handleClick={() => router.push("/receipt-type/store")}
           >
             <p>In Store</p>
@@ -38,7 +38,7 @@ const ReceiptType = () => {
           <LargeButton
             border={"none"}
             height={styles.boxes}
-            styles="bg-white border-[1px] border-emerald-900"
+            styles="bg-white shadow"
             handleClick={() => router.push("/receipt-type/memo")}
           >
             <p>Memo</p>

@@ -107,3 +107,36 @@ export async function PUT(
     );
   }
 }
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const receipt = await prisma.receipt.findUnique({
+    where: {
+      id: parseInt(params.id),
+    },
+    include: {
+      items: true,
+    },
+  });
+
+  if (receipt && receipt.receipt_image_key) {
+    await deleteUploadThingImage(receipt.receipt_image_key);
+  }
+
+  await prisma.receipt.delete({
+    where: {
+      id: parseInt(params.id),
+    },
+  });
+
+  return new NextResponse(
+    JSON.stringify({
+      success: true,
+    }),
+    {
+      headers: { "Content-Type": "application/json" },
+    }
+  );
+}

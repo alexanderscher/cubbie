@@ -107,27 +107,15 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
 
   return (
     <div className="flex flex-col gap-8  w-full h-full ">
-      <div className="flex justify-between items-center gap-4">
-        {/* <h1 className="text-2xl text-orange-600 w-3/4 ">{values.store}</h1> */}
-        <input
-          className="w-full  bg border-slate-400 p-2  focus:outline-none focus:border-slate-400 focus:border-b-[1px] text-xl text-orange-600"
-          name="days_until_return"
-          value={values.store}
-          onChange={(e) => {
-            setFieldValue("store", e.target.value);
-          }}
-        />
-        <div className="w-[200px] flex justify-end">
-          <RegularButton
-            styles={"bg-emerald-900 text-white text-xs  border-emerald-900"}
-            handleClick={() => {
-              setIsAddOpen(true);
-            }}
-          >
-            Add Item
-          </RegularButton>
-        </div>
-      </div>
+      <input
+        className="w-full  bg border-slate-400  focus:outline-none focus:border-slate-400 border-b-[1px] text-xl text-orange-600"
+        name="days_until_return"
+        value={values.store}
+        onChange={(e) => {
+          setFieldValue("store", e.target.value);
+        }}
+      />
+
       <div className="flex border-[1px] border-emerald-900 rounded-lg text-sm  p-4">
         <div className="w-1/3 border-r-[1px] border-slate-300 ">
           <p className="text-slate-400 text-xs">Total amount</p>
@@ -156,6 +144,18 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
           </p>
         </div>
       </div>
+      {values.items.length > 0 && (
+        <div className="w-full flex justify-end">
+          <RegularButton
+            styles={"bg-emerald-900 text-white text-xs  border-emerald-900"}
+            handleClick={() => {
+              setIsAddOpen(true);
+            }}
+          >
+            Add Item
+          </RegularButton>
+        </div>
+      )}
       <div className={`${styles.receipt} `}>
         <div className={`${styles.receiptLeft}  flex flex-col gap-2`}>
           <div

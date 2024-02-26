@@ -189,8 +189,8 @@ const Store = () => {
 
                   case ReceiptStoreStage.IN_STORE_GPT:
                     return (
-                      <div className="flex justify-center items-center w-full">
-                        <div className="flex flex-col gap-6 max-w-[500px] w-full">
+                      <div className="flex justify-center items-center w-full h-screen">
+                        <div className="flex flex-col gap-6 max-w-[500px] w-full pb-[200px]">
                           <div className="flex justify-between">
                             <RegularButton
                               styles={"border-black"}

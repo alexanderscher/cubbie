@@ -7,7 +7,7 @@
   width: 50%;
   min-width: 400px;
   max-width: 450px;
-
+  border: 1px solid #064e3b;
   border-radius: 8px;
 }
 

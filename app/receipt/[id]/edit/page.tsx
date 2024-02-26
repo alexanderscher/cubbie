@@ -164,7 +164,7 @@ const ReceiptPage = () => {
               )}
             </div>
           </div>
-          <div className="flex bg-white rounded-lg text-sm shadow p-4">
+          <div className="flex bg-white rounded-lg text-sm border-emerald-900 border-[1px] p-4">
             <div className="w-1/2 border-r-[1px] border-slate-300 ">
               <p className="text-slate-400 text-xs">Total amount</p>
               <p>

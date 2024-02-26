@@ -1,18 +1,19 @@
 "use client";
 import LargeButton from "@/app/components/buttons/LargeButton";
 import RegularButton from "@/app/components/buttons/RegularButton";
+import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ChangeEvent, useState, useCallback } from "react";
-import CurrencyInput from "react-currency-input-field";
 
 interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
   values: ReceiptInput;
+  setStage: (stage: any) => void;
 }
 
-export default function ImageGpt({ setFieldValue, values }: Props) {
+export default function ImageGpt({ setFieldValue, values, setStage }: Props) {
   const pathname = usePathname();
   const [image, setImage] = useState<string>("");
   const [noImage, setNoImage] = useState(false);
@@ -75,6 +76,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
       })
     );
     setFieldValue("items", itemsWithAllProperties);
+    setStage(ReceiptStoreStage.PREVIEW);
     setNoImage(false);
     setPrompt(false);
     setLoading(false);
@@ -136,6 +138,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
       })
     );
     setFieldValue("items", itemsWithAllProperties);
+    setStage(ReceiptStoreStage.PREVIEW);
 
     setNoImage(false);
     setPrompt(false);
@@ -198,16 +201,17 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
       <div className="flex flex-col gap-4">
         <button
           type="button"
-          className="w-[20px] border-[1px] border-orange-600 text-orange-600 rounded-lg"
+          className="w-[20px] border-[1px] border-orange-600 text-orange-600 rounded-md text-sm"
           onClick={() => setHelp(!help)}
         >
           ?
         </button>
         {help && (
           <p className="text-sm text-center text-orange-600">
-            We use AI to analyze the image you upload. Take a picture of the
-            receipt and upload it. Then click the &quot;Analyze Image&quot;
-            button to get the receipt info and items.
+            We use AI to analyze the receipt image you upload. Take a picture of
+            the receipt and upload it. Then click the &quot;Analyze Image&quot;
+            button to get the receipt information and items. Please only upload
+            images of receipts.
           </p>
         )}
 
@@ -232,7 +236,7 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
                 </label>
               </LargeButton>
             </div>
-            {image !== "" && (
+            {/* {image !== "" && (
               <div className="w-[100px] h-[120px] overflow-hidden rounded-lg relative">
                 <button
                   onClick={() => setImage("")}
@@ -248,6 +252,20 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
                   alt="Uploaded Image"
                   className="w-full object-contain"
                 />
+              </div>
+            )} */}
+            {image !== "" && (
+              <div className="relative w-24 h-24 ">
+                <div className="w-24 h-24 overflow-hidden flex items-center justify-center rounded-md border-[1px] border-emerald-900">
+                  <button
+                    type="button"
+                    onClick={() => setImage("")}
+                    className="absolute -top-2  -right-2 m-1  bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
+                  >
+                    X
+                  </button>
+                  <Image width={150} height={150} src={image} alt="" />
+                </div>
               </div>
             )}
 
@@ -266,26 +284,30 @@ export default function ImageGpt({ setFieldValue, values }: Props) {
             </div>
           </div>
         </div>
+
         {prompt && (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 mt-10">
             <p className="text-sm text-center text-black">
               Are you sure you want to anaylze? This will overwrite your current
               items
             </p>
-            <div className="flex gap-2 justify-center items-center">
-              <button
-                type="button"
-                onClick={() => {
+            <div className="flex gap-2">
+              <RegularButton
+                styles={"bg border-black w-full"}
+                handleClick={() => {
                   pathname === "/receipt-type/memo"
                     ? MemoGptCall()
                     : OnlineGptCall();
                 }}
               >
-                <p className="text-sm text-orange-600">Confirm</p>
-              </button>
-              <button type="button" onClick={() => setPrompt(false)}>
-                <p className="text-sm text-orange-600">Cancel</p>
-              </button>
+                <p className="text-sm">Confirm</p>
+              </RegularButton>
+              <RegularButton
+                styles={"bg border-black w-full"}
+                handleClick={() => setPrompt(false)}
+              >
+                <p className="text-sm">Cancel</p>
+              </RegularButton>
             </div>
           </div>
         )}

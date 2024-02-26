@@ -78,11 +78,13 @@ const Header = ({ type }: HeaderProps) => {
           <p className="text-xs">Items</p>
         </RegularButton>
       </div>
-      <SearchBar
-        data={data}
-        searchType={type}
-        type={pathname === "/items" ? "item" : "receipt"}
-      />
+      <div className="pb-4">
+        <SearchBar
+          data={data}
+          searchType={type}
+          type={pathname === "/items" ? "item" : "receipt"}
+        />
+      </div>
     </div>
   );
 };

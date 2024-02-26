@@ -166,7 +166,7 @@ const ReceiptPage = () => {
           </div>
           <div className="flex bg-white rounded-lg text-sm shadow p-4">
             <div className="w-1/2 border-r-[1px] border-slate-300 ">
-              <p className="text-slate-500 text-xs">Total amount</p>
+              <p className="text-slate-400 text-xs">Total amount</p>
               <p>
                 {formatCurrency(
                   receipt.items.reduce((acc: number, curr: Item) => {
@@ -176,7 +176,7 @@ const ReceiptPage = () => {
               </p>
             </div>
             <div className="w-1/2 pl-4 ">
-              <p className="text-slate-500 text-xs">Quantity</p>
+              <p className="text-slate-400 text-xs">Quantity</p>
               <p>{receipt.items.length}</p>
             </div>
           </div>
@@ -319,7 +319,7 @@ const ReceiptPage = () => {
 
                 <div className="flex flex-col gap-3 text-sm">
                   <div className="w-full ">
-                    <p className="text-slate-500 text-xs">Store Name</p>
+                    <p className="text-slate-400 text-xs">Store Name</p>
                     <input
                       value={values.store}
                       onChange={handleChange("store")}
@@ -330,7 +330,7 @@ const ReceiptPage = () => {
                     )}
                   </div>
                   <div className="w-full ">
-                    <p className="text-slate-500 text-xs">Receipt Type</p>
+                    <p className="text-slate-400 text-xs">Receipt Type</p>
                     <select
                       name="type"
                       value={values.type}
@@ -354,7 +354,7 @@ const ReceiptPage = () => {
                   </div>
 
                   <div className="w-full ">
-                    <p className="text-slate-500 text-xs">Purcahse Date</p>
+                    <p className="text-slate-400 text-xs">Purcahse Date</p>
                     <input
                       type="date"
                       value={formatDateToYYYYMMDD(values.purchase_date)}
@@ -369,7 +369,7 @@ const ReceiptPage = () => {
                   </div>
 
                   <div className="w-full">
-                    <p className="text-slate-500 text-xs">Return Date</p>
+                    <p className="text-slate-400 text-xs">Return Date</p>
                     <input
                       type="date"
                       value={formatDateToYYYYMMDD(values.return_date)}
@@ -384,7 +384,7 @@ const ReceiptPage = () => {
                   </div>
 
                   <div className="w-full">
-                    <p className="text-slate-500 text-xs">Card Used</p>
+                    <p className="text-slate-400 text-xs">Card Used</p>
                     <input
                       value={values.card}
                       onChange={handleChange("card")}
@@ -392,7 +392,7 @@ const ReceiptPage = () => {
                     />
                   </div>
                   <div className="w-full">
-                    <p className="text-slate-500 text-xs">Asset Amount</p>
+                    <p className="text-slate-400 text-xs">Asset Amount</p>
                     <CurrencyInput
                       id="asset_amount"
                       name="asset_amount"
@@ -407,7 +407,7 @@ const ReceiptPage = () => {
                     />
                   </div>
                   <div className="w-full">
-                    <p className="text-slate-500 text-xs">Tracking Link</p>
+                    <p className="text-slate-400 text-xs">Tracking Link</p>
                     <input
                       value={values.tracking_number}
                       onChange={handleChange("tracking_number")}

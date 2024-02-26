@@ -38,13 +38,13 @@ const Item = ({ item }: Props) => {
             />
           </Link>
 
-          <p className="text-slate-500 text-xs ">
+          <p className="text-slate-400 text-xs ">
             Return by {formatDateToMMDDYY(item.receipt.return_date)}
           </p>
 
           <div className="border-t-[1px] border-slate-300 flex flex-col  gap-1 text-xs">
             <div className="mt-2">
-              <p className="text-slate-500">Store</p>
+              <p className="text-slate-400">Store</p>
               <Link href={`/receipt/${item.receipt_id}`} className="">
                 <TruncateText
                   text={item.receipt.store}
@@ -54,12 +54,12 @@ const Item = ({ item }: Props) => {
               </Link>
             </div>
             <div>
-              <p className="text-slate-500  ">Price</p>
+              <p className="text-slate-400  ">Price</p>
               <p className="">{formatCurrency(item.price)}</p>
             </div>
             {item.barcode && (
               <div className="">
-                <p className="text-slate-500  ">Barcode</p>
+                <p className="text-slate-400  ">Barcode</p>
                 <p className="text-xs">{item.barcode}</p>
               </div>
             )}

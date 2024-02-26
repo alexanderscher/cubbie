@@ -1,8 +1,11 @@
 "use client";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import styles from "@/app/receipt-type/upload.module.css";
+import { ReceiptStoreStage } from "@/constants/form";
+import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import Image from "next/image";
-import React, { ChangeEvent, useRef } from "react";
+import { usePathname } from "next/navigation";
+import React, { ChangeEvent, use, useRef } from "react";
 import CurrencyInput from "react-currency-input-field";
 
 interface ReceiptManualProps {
@@ -11,6 +14,7 @@ interface ReceiptManualProps {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
   errors: any;
   online?: boolean;
+  setStage?: (stage: ReceiptStoreStage) => void;
 }
 
 const ReceiptManual = ({
@@ -19,15 +23,16 @@ const ReceiptManual = ({
   setFieldValue,
   errors,
   online = false,
+  setStage,
 }: ReceiptManualProps) => {
+  const pathname = usePathname();
   const [help, setHelp] = React.useState(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleContainerClick = () => {
     if (fileInputRef.current !== null) {
-      // Check if fileInputRef.current is not null
-      fileInputRef.current.click(); // If not, it's safe to call click()
+      fileInputRef.current.click();
     }
   };
 
@@ -59,140 +64,169 @@ const ReceiptManual = ({
   };
 
   return (
-    <div className="flex flex-col gap-10 max-w-[1000px]  w-full">
-      <div className="flex flex-col gap-2">
-        <input
-          className="w-full bg border-b-[1px] border-emerald-900  focus:outline-none focus:border-emerald-900 placeholder:text-3xl placeholder:text-orange-600 h-[50px] text-3xl text-orange-600"
-          name="store"
-          placeholder="Store Name*"
-          value={values.store}
-          onChange={handleChange("store")}
-        />
+    <div className="flex flex-col gap-10  w-full justify-center items-center">
+      <div className=" max-w-[600px] w-full">
+        {pathname === "/receipt-type/store" && setStage && (
+          <div className="w-full flex justify-between mb-8 gap-2">
+            <RegularButton styles={"bg-black text-white border-black"}>
+              <p className=" text-xs">Add Receipt Manually</p>
+            </RegularButton>
 
-        {errors.store && (
-          <p className="text-orange-800 text-sm">{errors.store}</p>
+            <RegularButton
+              styles={"border-black"}
+              handleClick={() => {
+                setFieldValue("storeType", "gpt");
+                setStage(ReceiptStoreStage.IN_STORE_GPT);
+              }}
+            >
+              <p className=" text-xs">Analyze receipt image</p>
+            </RegularButton>
+          </div>
         )}
-      </div>
 
-      <div className={styles.receiptContainer}>
-        <div className={styles.receiptInputs}>
-          <h1 className="text-emerald-900 text-xl">Receipt Details</h1>
-          <div className="flex gap-2 w-full">
-            <div className="w-full">
-              <p className="text-sm text-slate-500 ">Asset Amount</p>
-              {/* <button
-                type="button"
-                className="w-[20px] border-[1px] border-orange-600 text-orange-600 rounded text-xs"
-                onClick={() => setHelp(!help)}
-              >
-                ?
-              </button> */}
+        <div className="flex flex-col gap-2">
+          <input
+            className="w-full bg border-b-[1px] border-emerald-900  focus:outline-none focus:border-emerald-900 placeholder:text-3xl placeholder:text-orange-600 h-[50px] text-2xl text-orange-600"
+            name="store"
+            placeholder="Store Name*"
+            value={values.store}
+            onChange={handleChange("store")}
+          />
 
-              <CurrencyInput
-                id="assetAmount"
-                name="assetAmount"
-                className="w-full border-[1px] bg border-emerald-900 p-2 rounded focus:outline-none focus:border-emerald-900"
-                placeholder=""
-                defaultValue={values.assetAmount || ""}
-                decimalsLimit={2}
-                onValueChange={handleCurrencyChangeAsset}
-              />
-              {help && (
-                <p className="text-xs text-center text-orange-600 mt-2">
-                  Asset amount determines which item is considered an asset. An
-                  asset is an item that is worth more than a certain amount.
-                </p>
-              )}
-            </div>
-          </div>
-
-          <div className="w-full">
-            <p className="text-sm text-slate-500 ">Card</p>
-            <input
-              className="w-full border-[1px] bg border-emerald-900 p-2 rounded focus:outline-none focus:border-emerald-900"
-              name="card"
-              value={values.card}
-              onChange={handleChange("card")}
-            />
-          </div>
-
-          {online && (
-            <div className="w-full">
-              <p className="text-sm text-slate-500 ">Tracking Number Link</p>
-              <div className="flex flex-col gap-2">
-                <input
-                  className="w-full border-[1px] bg border-emerald-900 p-2 rounded focus:outline-none focus:border-emerald-900"
-                  name="tracking_number"
-                  value={values.tracking_number}
-                  onChange={handleChange("tracking_number")}
-                />
-                {errors.tracking_number && (
-                  <p className="text-orange-800 text-sm">
-                    {errors.tracking_number}
-                  </p>
-                )}
-              </div>
-            </div>
+          {errors.store && (
+            <p className="text-orange-800 text-sm">{errors.store}</p>
           )}
-
-          <div className="flex gap-2 w-full">
-            <div className="w-1/2">
-              <p className="text-sm text-slate-500 ">Purchase Date</p>
-              <div className="flex flex-col gap-2">
-                <input
-                  className="w-full border-[1px] bg border-emerald-900 p-2 rounded focus:outline-none focus:border-emerald-900"
-                  name="purchase_date"
-                  value={values.purchase_date}
-                  onChange={handleChange("purchase_date")}
-                  type="date"
-                />
-                {errors.purchase_date && (
-                  <p className="text-orange-800 text-sm">
-                    {errors.purchase_date}
-                  </p>
-                )}
-              </div>
-            </div>
-            <div className="w-1/2">
-              <p className="text-sm text-slate-500 ">Days until return</p>
-
-              <input
-                className="w-full border-[1px] bg border-emerald-900 p-2 rounded focus:outline-none focus:border-emerald-900 "
-                value={values.days_until_return}
-                onChange={(event) => {
-                  const value = parseInt(event.target.value, 10);
-                  setFieldValue("days_until_return", isNaN(value) ? "" : value);
-                }}
-              />
-              {errors.days_until_return && (
-                <p className="text-orange-800 text-sm">
-                  {errors.days_until_return}
-                </p>
-              )}
-            </div>
-          </div>
         </div>
 
-        <div className={`${styles.imageInput} relative pb-[200px]`}>
-          <h1 className="text-emerald-900 text-xl">Receipt Image</h1>
-          {!values.receiptImage && (
+        <div className={styles.receiptContainer}>
+          <div className={styles.receiptInputs}>
+            <h1 className="text-emerald-900 text-xl mt-6">
+              {pathname !== "/receipt-type/memo"
+                ? "Receipt Details"
+                : "Memo Details"}
+            </h1>
+            <div className="flex gap-2 w-full">
+              <div className="w-full">
+                <p className="text-sm text-slate-400 ">Asset Amount</p>
+
+                <CurrencyInput
+                  id="assetAmount"
+                  name="assetAmount"
+                  className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900"
+                  placeholder=""
+                  defaultValue={values.assetAmount || ""}
+                  decimalsLimit={2}
+                  onValueChange={handleCurrencyChangeAsset}
+                />
+                {help && (
+                  <p className="text-xs text-center text-orange-600 mt-2">
+                    Asset amount determines which item is considered an asset.
+                    An asset is an item that is worth more than a certain
+                    amount.
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="w-full">
+              <p className="text-sm text-slate-400 ">Card</p>
+              <input
+                className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900"
+                name="card"
+                value={values.card}
+                onChange={handleChange("card")}
+              />
+            </div>
+
+            {online && (
+              <div className="w-full">
+                <p className="text-sm text-slate-400 ">Tracking Number Link</p>
+                <div className="flex flex-col gap-2">
+                  <input
+                    className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900"
+                    name="tracking_number"
+                    value={values.tracking_number}
+                    onChange={handleChange("tracking_number")}
+                  />
+                  {errors.tracking_number && (
+                    <p className="text-orange-800 text-sm">
+                      {errors.tracking_number}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
+
+            <div className="flex gap-2 w-full">
+              <div className="w-1/2">
+                <p className="text-sm text-slate-400 ">Purchase Date</p>
+                <div className="flex flex-col gap-2">
+                  <input
+                    className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900"
+                    name="purchase_date"
+                    value={values.purchase_date}
+                    onChange={handleChange("purchase_date")}
+                    type="date"
+                  />
+                  {errors.purchase_date && (
+                    <p className="text-orange-800 text-sm">
+                      {errors.purchase_date}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="w-1/2">
+                <p className="text-sm text-slate-400 ">Days until return</p>
+
+                <input
+                  className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900 "
+                  value={values.days_until_return}
+                  onChange={(event) => {
+                    const value = parseInt(event.target.value, 10);
+                    setFieldValue(
+                      "days_until_return",
+                      isNaN(value) ? "" : value
+                    );
+                  }}
+                />
+                {errors.days_until_return && (
+                  <p className="text-orange-800 text-sm">
+                    {errors.days_until_return}
+                  </p>
+                )}
+              </div>
+            </div>
+            <div>
+              <p className="text-slate-400 text-sm">Return Date</p>
+              <div className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900 ">
+                {formatDateToMMDDYY(
+                  calculateReturnDate(
+                    values.purchase_date,
+                    values.days_until_return
+                  )
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className={`w-full relative`}>
             <div
-              className={`${styles.imageSize} border-[1px] border-emerald-900 w-full h-full flex flex-col gap-3 justify-center items-center rounded relative`}
-              onClick={handleContainerClick} // Add click handler to the container
-              style={{ cursor: "pointer" }} // Make the cursor indicate a clickable area
+              className={` border-[1px] border-emerald-900 w-full h-full flex flex-col gap-3 justify-center items-center rounded-md relative`}
+              onClick={handleContainerClick}
+              style={{ cursor: "pointer" }}
             >
               <input
                 type="file"
                 onChange={handleFileChange}
                 id="file-upload"
                 style={{ opacity: 0, position: "absolute", zIndex: -1 }}
-                ref={fileInputRef} // Attach the ref to the file input
+                ref={fileInputRef}
               />
               <Image
                 src="/image_b.png"
                 alt=""
-                width={40}
-                height={40}
+                width={30}
+                height={30}
                 className="object-cover pt-4"
                 style={{
                   objectFit: "cover",
@@ -202,44 +236,12 @@ const ReceiptManual = ({
               <label
                 htmlFor="file-upload"
                 className="justify-center items-center"
-              >
-                Upload File
-              </label>
+              ></label>
             </div>
-          )}
-          {values.receiptImage && (
-            <div
-              className={`border-[1px] border-emerald-900 ${styles.imageSize} flex flex-col gap-3 justify-center items-center rounded relative `}
-              style={{ cursor: "pointer" }}
-              // Set explicit dimensions for the container (e.g., w-[300px] h-[300px]) to ensure it never changes size.
-            >
-              <Image
-                src={values.receiptImage}
-                alt=""
-                width={150} // Consider removing these width and height attributes
-                height={150} // since you're controlling the size via CSS.
-                className="object-contain max-w-full max-h-full" // Change to object-contain and add max-w-full max-h-full to ensure the image scales down/up to fit.
-                style={{
-                  objectFit: "contain", // Change to contain to ensure the image fits without stretching.
-                  objectPosition: "center", // Keeps the image centered.
-                  maxWidth: "100%", // Ensure the image does not exceed the container's width.
-                  maxHeight: "100%", // Ensure the image does not exceed the container's height.
-                }}
-              />
-              <div
-                className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 opacity-0 hover:opacity-100 rounded"
-                // Tailwind classes for styling the overlay
-                // absolute positioning, full width and height, centered content, semi-transparent background
-                // initially invisible (opacity-0), becomes visible on hover (hover:opacity-100)
-              >
-                <span className="text-white font-bold">Replace</span>
-              </div>
-            </div>
-          )}
-
-          {/* <div className="relative w-24 h-24">
+          </div>
+          <div className="relative w-24 h-24 ">
             {values.receiptImage && (
-              <div className="w-24 h-24 overflow-hidden flex items-center justify-center rounded">
+              <div className="w-24 h-24 overflow-hidden flex items-center justify-center rounded-md border-[1px] border-emerald-900">
                 <button
                   type="button"
                   onClick={() => {
@@ -257,7 +259,7 @@ const ReceiptManual = ({
                 />
               </div>
             )}
-          </div> */}
+          </div>
         </div>
       </div>
     </div>

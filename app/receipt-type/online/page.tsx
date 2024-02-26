@@ -10,7 +10,6 @@ import FinalStage from "@/app/components/createForm/FinalStage";
 import { ITEMS_SCHEMA, RECEIPT_SCHEMA } from "@/utils/receiptValidation";
 import Loading from "@/app/components/Loading";
 import BottomBar from "@/app/components/createForm/BottomBar";
-import { formatCurrency } from "@/utils/formatCurrency";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import ErrorModal from "@/app/components/error/Modal";
 
@@ -80,7 +79,6 @@ const Online = () => {
 
             submitDB(values);
           } catch (error) {
-            // console.log("error", error);
             setErrors((prevErrors) => ({
               ...prevErrors,
               itemError: "At least one item is required",
@@ -184,9 +182,12 @@ const Online = () => {
                             <h1 className="text-2xl text-orange-600">
                               {values.store}
                             </h1>
-                            <div className="flex  rounded-lg text-sm border-[1px] border-emerald-900 p-4">
+                            <h1 className="text-emerald-900 text-xl ">
+                              Receipt Items
+                            </h1>
+                            <div className="flex  rounded-lg text-xs border-[1px] border-emerald-900 p-4">
                               <div className="w-1/2 border-r-[1px] border-slate-300 pl-2 pr-2">
-                                <p className="text-slate-500 text-xs">
+                                <p className="text-slate-400 text-xs">
                                   Purchase Date
                                 </p>
                                 <p>
@@ -195,7 +196,7 @@ const Online = () => {
                               </div>
 
                               <div className="pl-2 pr-2">
-                                <p className="text-slate-500 text-xs">
+                                <p className="text-slate-400 text-xs">
                                   Return Date
                                 </p>
                                 <p>
@@ -237,12 +238,12 @@ const Online = () => {
                             </RegularButton>
                           </div>
                           {errors.itemError && values.items.length === 0 && (
-                            <p className=" text-orange-800 text-sm">
+                            <p className=" text-orange-800 text-xs">
                               {errors.itemError}
                             </p>
                           )}
                           {errors.itemField && (
-                            <p className=" text-orange-800 text-sm">
+                            <p className=" text-orange-800 text-xs">
                               {errors.itemField}
                             </p>
                           )}
@@ -254,28 +255,40 @@ const Online = () => {
                             />
                           )}
                           <BottomBar>
-                            <div className="flex gap-2 ">
+                            <div className="flex justify-between w-full">
                               <RegularButton
-                                styles={
-                                  "bg-emerald-900 border-emerald-900 w-full"
-                                }
-                                handleClick={() => {
-                                  setStage(ReceiptOnlineStage.ONLINE_RECEIPT);
-                                }}
-                              >
-                                <p className="text-white text-sm">Back</p>
-                              </RegularButton>
-
-                              <RegularButton
-                                styles={
-                                  "bg-emerald-900 border-emerald-900 w-full"
-                                }
+                                styles="bg-white border-emerald-900"
                                 handleClick={async () => {
-                                  setStage(ReceiptOnlineStage.PREVIEW);
+                                  router.push("/receipt-type");
                                 }}
                               >
-                                <p className="text-white text-sm">Items</p>
+                                <p className="text-emerald-900  text-xs">
+                                  Discard
+                                </p>
                               </RegularButton>
+                              <div className="flex gap-3 ">
+                                <RegularButton
+                                  styles={
+                                    "bg-emerald-900 border-emerald-900 w-full"
+                                  }
+                                  handleClick={() => {
+                                    setStage(ReceiptOnlineStage.ONLINE_RECEIPT);
+                                  }}
+                                >
+                                  <p className="text-white text-xs">Back</p>
+                                </RegularButton>
+
+                                <RegularButton
+                                  styles={
+                                    "bg-emerald-900 border-emerald-900 w-full"
+                                  }
+                                  handleClick={async () => {
+                                    setStage(ReceiptOnlineStage.PREVIEW);
+                                  }}
+                                >
+                                  <p className="text-white text-xs">Items</p>
+                                </RegularButton>
+                              </div>
                             </div>
                           </BottomBar>
                         </div>
@@ -285,14 +298,16 @@ const Online = () => {
 
                 case ReceiptOnlineStage.PREVIEW:
                   return (
-                    <FinalStage
-                      values={values}
-                      setStage={setStage}
-                      setFieldValue={setFieldValue}
-                      loading={loading}
-                      uploadError={uploadError}
-                      setUploadError={setUploadError}
-                    />
+                    <div className="flex justify-center items-center ">
+                      <FinalStage
+                        values={values}
+                        setStage={setStage}
+                        setFieldValue={setFieldValue}
+                        loading={loading}
+                        uploadError={uploadError}
+                        setUploadError={setUploadError}
+                      />
+                    </div>
                   );
               }
             })()}

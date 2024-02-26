@@ -69,7 +69,7 @@ function SearchAllItems() {
         <div>
           <button
             type="button"
-            className="w-[40px] border-[1px] border-black p-3 rounded flex justify-center items-center  "
+            className="w-[40px] border-[1px] border-black p-3 rounded-md flex justify-center items-center  "
             onClick={() => {
               setShowScanner(true);
             }}

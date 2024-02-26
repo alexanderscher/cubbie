@@ -273,7 +273,7 @@ const OnlineReceiptManual = ({
       </div>
 
       {item.photo && (
-        <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-sm">
+        <div className="w-24 h-24 overflow-hidden relative flex items-center justify-center rounded-md ">
           <button
             type="button"
             onClick={() => {

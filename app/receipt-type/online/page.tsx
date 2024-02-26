@@ -165,7 +165,7 @@ const Online = () => {
                                   }
                                 }}
                               >
-                                <p className="text-white text-xs">Next</p>
+                                <p className="text-white text-xs">Items</p>
                               </RegularButton>
                             </div>
                           </div>

@@ -5,7 +5,7 @@ import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ChangeEvent, useState, useCallback } from "react";
+import { ChangeEvent, useState, useCallback, useRef } from "react";
 
 interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
@@ -23,6 +23,13 @@ export default function ImageGpt({ setFieldValue, values, setStage }: Props) {
   const [noReceipt, setNoReceipt] = useState(false);
   const [invalidImage, setInvalidImage] = useState(false);
   const [apiError, setApiError] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleContainerClick = () => {
+    if (fileInputRef.current !== null) {
+      fileInputRef.current.click();
+    }
+  };
 
   const OnlineGptCall = async () => {
     const res = await fetch("/api/gpt/analyze-image", {
@@ -217,7 +224,37 @@ export default function ImageGpt({ setFieldValue, values, setStage }: Props) {
 
         <div>
           <div className="flex flex-col gap-5">
-            <div className="flex flex-col">
+            <div
+              className={` border-[1px] border-emerald-900 w-full flex flex-col gap-3 justify-center items-center rounded-md relative h-[200px] `}
+              onClick={handleContainerClick}
+              style={{ cursor: "pointer" }}
+            >
+              <input
+                type="file"
+                onChange={handleFileChange}
+                id="file-upload"
+                style={{ opacity: 0, position: "absolute", zIndex: -1 }}
+                ref={fileInputRef}
+              />
+              <Image
+                src="/image_b.png"
+                alt=""
+                width={30}
+                height={30}
+                className="object-cover pt-4"
+                style={{
+                  objectFit: "cover",
+                  objectPosition: "center",
+                }}
+              />
+              <label
+                htmlFor="file-upload"
+                className="justify-center items-center cursor-pointer text-sm"
+              >
+                Upload file
+              </label>
+            </div>
+            {/* <div className="flex flex-col">
               <input
                 type="file"
                 onChange={handleFileChange}
@@ -235,25 +272,8 @@ export default function ImageGpt({ setFieldValue, values, setStage }: Props) {
                   Upload File
                 </label>
               </LargeButton>
-            </div>
-            {/* {image !== "" && (
-              <div className="w-[100px] h-[120px] overflow-hidden rounded-lg relative">
-                <button
-                  onClick={() => setImage("")}
-                  type="button"
-                  className="absolute top-0 right-0 m-1  bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm mt-1"
-                >
-                  X
-                </button>
-                <Image
-                  src={image}
-                  height={200}
-                  width={200}
-                  alt="Uploaded Image"
-                  className="w-full object-contain"
-                />
-              </div>
-            )} */}
+            </div> */}
+
             {image !== "" && (
               <div className="relative w-24 h-24 ">
                 <div className="w-24 h-24 overflow-hidden flex items-center justify-center rounded-md border-[1px] border-emerald-900">

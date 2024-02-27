@@ -8,8 +8,9 @@ export default function Home() {
   return (
     <main className="flex flex-col pb-[400px]">
       <SearchProvider>
-        <Header type="Receipts" />
         <Suspense fallback={<div>Loading...</div>}>
+          <Header type="Receipts" />
+
           <Receipts />
         </Suspense>
       </SearchProvider>

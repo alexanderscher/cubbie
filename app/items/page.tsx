@@ -7,8 +7,9 @@ const HomeItems = () => {
   return (
     <div>
       <SearchItemProvider>
-        <Header type="Items" />
         <Suspense fallback={<div>Loading...</div>}>
+          <Header type="Items" />
+
           <Items />
         </Suspense>
       </SearchItemProvider>

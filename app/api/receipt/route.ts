@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
   const receipts = await prisma.receipt.findMany({
     orderBy: {
-      created_at: "desc",
+      return_date: "desc",
     },
     include: {
       items: true,

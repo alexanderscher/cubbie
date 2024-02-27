@@ -60,7 +60,9 @@ input:-webkit-autofill::first-line {
   background-color: #e2f1e2;
   border-radius: 4px;
   padding: 6px;
+  max-width: 300px;
   outline: none;
+
   /* margin-bottom: 40px; */
 }
 

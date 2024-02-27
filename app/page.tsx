@@ -6,7 +6,6 @@ import SearchAllItems from "@/app/components/search/AllItems";
 export default function Home() {
   return (
     <main className="flex flex-col pb-[400px]">
-      {/* <SearchAllItems /> */}
       <SearchProvider>
         <Header type="Receipts" />
         <Receipts />

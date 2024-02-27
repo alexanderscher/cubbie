@@ -1,6 +1,7 @@
 "use client";
 import { useSearchContext } from "@/app/components/context/SearchContext";
 import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
+import { useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 
 interface Props {
@@ -60,9 +61,9 @@ function SearchBar({ data, type, searchType }: Props) {
 
   return (
     <div className="relative">
-      <div className="w-[290px]">
+      <div className="w-full">
         <input
-          className="searchBar  placeholder:text-sm placeholder:text-black "
+          className="searchBar  placeholder:text-xs flex items-center placeholder:text-black "
           placeholder={`Search ${searchType}`}
           value={searchTerm}
           onChange={handleChange}

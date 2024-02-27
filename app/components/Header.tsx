@@ -3,8 +3,9 @@ import RegularButton from "@/app/components/buttons/RegularButton";
 import { useSearchContext } from "@/app/components/context/SearchContext";
 import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
 import SearchBar from "@/app/components/search/SearchBar";
-import { usePathname } from "next/navigation";
-import React, { use, useEffect } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import path from "path";
+import React, { use, useCallback, useEffect } from "react";
 
 interface HeaderProps {
   type: string;
@@ -14,8 +15,19 @@ const Header = ({ type }: HeaderProps) => {
   const [data, setData] = React.useState([]);
   const { setFilteredData } = useSearchContext();
   const { setFilteredItemData } = useSearchItemContext();
-
+  const [openModal, setOpenModal] = React.useState(false);
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams]
+  );
 
   useEffect(() => {
     if (pathname === "/items") {
@@ -46,11 +58,6 @@ const Header = ({ type }: HeaderProps) => {
       ? "bg-black border-black text-white"
       : "bg border-black text-black ";
 
-  const memoColor =
-    pathname === "/memo"
-      ? "bg-black border-black text-white"
-      : "bg border-black text-black ";
-
   const itemColor =
     pathname === "/items"
       ? "bg-black border-black text-white"
@@ -67,7 +74,7 @@ const Header = ({ type }: HeaderProps) => {
           <p className="text-xs">Create new</p>
         </RegularButton>
       </div>
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex gap-2 ">
         <RegularButton href="/" styles={receiptColor}>
           <p className="text-xs">Receipts</p>
         </RegularButton>
@@ -76,15 +83,170 @@ const Header = ({ type }: HeaderProps) => {
           <p className="text-xs">Items</p>
         </RegularButton>
       </div>
-      <div className="pb-4">
+      <div className="pb-4 flex justify-between items-center relative flex-wrap gap-4 mt-6">
         <SearchBar
           data={data}
           searchType={type}
           type={pathname === "/items" ? "item" : "receipt"}
         />
+
+        <div className="relative flex gap-2 items-center">
+          <div className="relative">
+            <RegularButton
+              styles={`border-[1px] border-emerald-900  ${
+                openModal ? "bg-emerald-900 text-white" : "bg text-emerald-900"
+              }`}
+              handleClick={() => {
+                setOpenModal(!openModal);
+
+                false;
+              }}
+            >
+              <p className="text-xs">Sort</p>
+            </RegularButton>
+            {openModal && (
+              <FilterOptions
+                pathname={pathname}
+                onClose={() => setOpenModal(false)}
+                createQueryString={createQueryString}
+                searchParams={searchParams}
+              />
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
 export default Header;
+
+interface FilterOptionsProps {
+  onClose: () => void;
+  createQueryString: (name: string, value: string) => string;
+  pathname: string;
+  searchParams: URLSearchParams;
+}
+
+const FilterOptions = ({
+  onClose,
+  createQueryString,
+  pathname,
+  searchParams,
+}: FilterOptionsProps) => {
+  // const handleClickInside = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+  //   e.stopPropagation();
+
+  const handleTypeClick = (name: string) => {
+    router.push(pathname + "?" + createQueryString("type", name));
+  };
+
+  const handleSortClick = (name: string) => {
+    router.push(pathname + "?" + createQueryString("sort", name));
+  };
+
+  const router = useRouter();
+
+  return (
+    <div className="absolute right-0 mt-2 w-[200px] bg-white border border-gray-200 rounded-md shadow-lg z-10">
+      <div className="flex flex-col gap-4 p-6 text-sm items-start">
+        <div className="flex flex-col items-start">
+          <p className="text-orange-600">Type</p>
+          <button
+            className={`${
+              searchParams.get("type") === "all"
+                ? "text-sm text-emerald-900"
+                : "text-sm text-slate-400"
+            }`}
+            onClick={() => {
+              handleTypeClick("all");
+            }}
+          >
+            All
+          </button>
+          <button
+            className={`${
+              searchParams.get("type") === "receipt"
+                ? "text-sm text-emerald-900"
+                : "text-sm text-slate-400"
+            }`}
+            onClick={() => {
+              handleTypeClick("receipt");
+            }}
+          >
+            Receipt
+          </button>
+          <button
+            className={`${
+              searchParams.get("type") === "memo"
+                ? "text-sm text-emerald-900"
+                : "text-sm text-slate-400"
+            }`}
+            onClick={() => {
+              handleTypeClick("memo");
+            }}
+          >
+            Memo
+          </button>
+        </div>
+        <div className="flex flex-col items-start">
+          <p className="text-sm text-orange-600">Sort</p>
+
+          <button
+            className={`${
+              searchParams.get("sort") === "return_date"
+                ? "text-sm text-emerald-900"
+                : "text-sm text-slate-400"
+            }`}
+            onClick={() => {
+              handleSortClick("return_date");
+            }}
+          >
+            Return Date
+          </button>
+          <button
+            className={`${
+              searchParams.get("sort") === "purchase_date"
+                ? "text-sm text-emerald-900"
+                : "text-sm text-slate-400"
+            }`}
+            onClick={() => {
+              handleSortClick("purchase_date");
+            }}
+          >
+            Purchase Date
+          </button>
+          <button
+            className={`${
+              searchParams.get("sort") === "created_at"
+                ? "text-sm text-emerald-900"
+                : "text-sm text-slate-400"
+            }`}
+            onClick={() => {
+              handleSortClick("created_at");
+            }}
+          >
+            Created At
+          </button>
+          <button
+            className={`${
+              searchParams.get("sort") === "price"
+                ? "text-sm text-emerald-900"
+                : "text-sm text-slate-400"
+            }`}
+            onClick={() => {
+              handleSortClick("price");
+            }}
+          >
+            Price
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface TypeOptionsProps {
+  onClose: () => void;
+  setTypeOptions: (name: string) => void;
+}

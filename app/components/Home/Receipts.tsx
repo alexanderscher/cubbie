@@ -5,15 +5,15 @@ import { Item, Receipt as ReceiptType } from "@/types/receipt";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 
-type SortField = "created_at" | "purchase_date" | "price";
-
 const Receipts = () => {
   const { filteredData, isLoading } = useSearchContext();
   const searchParams = useSearchParams();
 
-  const sortField: SortField =
-    (searchParams.get("sort") as SortField) || "return_date";
-
+  const sortFieldParam = searchParams.get("sort");
+  const sortField = sortFieldParam?.startsWith("-")
+    ? sortFieldParam.slice(1)
+    : sortFieldParam;
+  const sortOrder = sortFieldParam?.startsWith("-") ? "desc" : "asc";
   const getTotalPrice = (items: Item[]) =>
     items.reduce((acc, item) => acc + item.price, 0);
 
@@ -30,16 +30,27 @@ const Receipts = () => {
       if (sortField === "price") {
         const totalPriceA = getTotalPrice(a.items);
         const totalPriceB = getTotalPrice(b.items);
-        return totalPriceB - totalPriceA;
+        if (sortOrder === "asc") {
+          return totalPriceB - totalPriceA;
+        } else {
+          return totalPriceA - totalPriceB;
+        }
       } else {
-        const dateA = new Date(a[sortField]).getTime();
-        const dateB = new Date(b[sortField]).getTime();
-        return dateB - dateA;
+        const dateA = new Date(
+          a[sortField as keyof ReceiptType] as Date
+        ).getTime();
+        const dateB = new Date(
+          b[sortField as keyof ReceiptType] as Date
+        ).getTime();
+        if (sortOrder === "asc") {
+          return dateA - dateB;
+        } else {
+          return dateB - dateA;
+        }
       }
     };
-
     return filteredByStoreType.sort(compareReceipts);
-  }, [filteredData, storeType, sortField]);
+  }, [filteredData, storeType, sortField, sortOrder]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -72,7 +83,7 @@ const Receipts = () => {
 
   return (
     <div className="boxes">
-      {sortedAndFilteredData.map((receipt: ReceiptType) => (
+      {filteredData.map((receipt: ReceiptType) => (
         <Receipt key={receipt.id} receipt={receipt} />
       ))}
     </div>

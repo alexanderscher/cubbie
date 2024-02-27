@@ -15,7 +15,6 @@ export default function Home() {
         <Suspense fallback={<div>Loading</div>}>
           {searchBarOpen && <SearchAllItems />}
           <Header type="Receipts" />
-
           <Receipts />
         </Suspense>
       </SearchProvider>

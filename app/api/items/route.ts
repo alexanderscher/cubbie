@@ -5,6 +5,9 @@ export async function GET(request: Request) {
     include: {
       receipt: true,
     },
+    orderBy: {
+      created_at: "desc",
+    },
   });
 
   return new NextResponse(

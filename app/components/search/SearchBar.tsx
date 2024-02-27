@@ -63,7 +63,7 @@ function SearchBar({ data, type, searchType }: Props) {
     <div className="relative">
       <div className="w-full">
         <input
-          className="searchBar  placeholder:text-xs flex items-center placeholder:text-black "
+          className="searchBar border-[1px] border-emerald-900 placeholder:text-emerald-900  placeholder:text-xs flex items-center text-xs text-emerald-900 p-2"
           placeholder={`Search ${searchType}`}
           value={searchTerm}
           onChange={handleChange}

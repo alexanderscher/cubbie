@@ -8,11 +8,15 @@ import { Receipt } from "@/types/receipt";
 
 interface SearchContextType {
   filteredData: Receipt[];
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setFilteredData: React.Dispatch<React.SetStateAction<Receipt[]>>;
 }
 
 export const SearchContext = createContext<SearchContextType>({
   filteredData: [],
+  isLoading: true,
+  setIsLoading: () => {},
   setFilteredData: () => {},
 });
 
@@ -24,6 +28,7 @@ interface SearchProviderProps {
 
 export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
   const [filteredData, setFilteredData] = useState<Receipt[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -31,7 +36,9 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
   }, [pathname]);
 
   return (
-    <SearchContext.Provider value={{ filteredData, setFilteredData }}>
+    <SearchContext.Provider
+      value={{ filteredData, setFilteredData, isLoading, setIsLoading }}
+    >
       {children}
     </SearchContext.Provider>
   );

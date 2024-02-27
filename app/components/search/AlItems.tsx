@@ -55,34 +55,30 @@ function SearchAllItems() {
     setFilteredItems(matchingItems);
   };
 
-  console.log(filteredItems);
-  console.log(filteredReceipts);
-
   return (
-    <div className="pb-[30px]">
+    <div className="pb-[30px] w-full">
       <div className="w-full flex gap-4 items-center justify-center">
         <input
-          className="searchBar  placeholder:text-sm placeholder:text-black "
+          className="bg  placeholder:text-sm placeholder:text-black border-[1px] border-black p-2 rounded-md w-full"
           placeholder={`Search all items`}
           onChange={handleChange}
         ></input>
         <div>
           <button
             type="button"
-            className="w-[40px] border-[1px] border-black p-4 rounded-md flex justify-center items-center  "
+            className="w-[40px] h-[40px] border-[1px] border-black p-2 rounded-md flex justify-center items-center "
             onClick={() => {
               setShowScanner(true);
             }}
             disabled={showScanner}
           >
-            <div className="w-[40px]">
-              <Image
-                src="/barcode_b.png"
-                alt="barcode"
-                width={50}
-                height={50}
-              ></Image>
-            </div>
+            <Image
+              src="/barcode_b.png"
+              alt="barcode"
+              width={100}
+              height={100}
+              className=""
+            ></Image>
           </button>
         </div>
         {showScanner && (

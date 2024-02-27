@@ -4,9 +4,11 @@ import styles from "./navbar.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSearchBarContext } from "@/app/components/context/SearchBarContext";
 
 const Navbar = () => {
   const pathname = usePathname();
+  const { searchBarOpen, setSearchBarOpen } = useSearchBarContext();
   return (
     <div className={`${styles.navbarFixed} p-2`}>
       <div className={`${styles.navbarItems} text-sm`}>
@@ -32,8 +34,10 @@ const Navbar = () => {
             />
           </Link>
         </div>
-        <div className={styles.linkWrapper}>
-          <Link href="/search">
+        <div
+          className={`${styles.linkWrapper} ${searchBarOpen && styles.page}`}
+        >
+          <button onClick={() => setSearchBarOpen(!searchBarOpen)}>
             <Image
               src="/search_w.png"
               alt=""
@@ -42,7 +46,7 @@ const Navbar = () => {
               className="object-cover "
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
-          </Link>
+          </button>
         </div>
 
         <div className={styles.linkWrapper}>

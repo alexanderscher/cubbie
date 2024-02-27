@@ -4,93 +4,98 @@ import styles from "./navbar.module.css";
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSearchBarContext } from "@/app/components/context/SearchBarContext";
 
 const Topbar = () => {
-  const pathname = usePathname();
   const [menu, setMenu] = useState(false);
+  const { searchBarOpen, setSearchBarOpen } = useSearchBarContext();
+
   return (
     <div
       className={`${styles.topbar} p-4 justify-between  bg-emerald-900 text-white`}
     >
       <Link href="/">Sticky Notes</Link>
-      <button onClick={() => setMenu(!menu)}>Menu</button>
+      <div className="flex gap-4">
+        <div>
+          <button onClick={() => setSearchBarOpen(!searchBarOpen)}>
+            <Image
+              src="/search_w.png"
+              alt=""
+              width={15}
+              height={15}
+              className="object-cover "
+              style={{ objectFit: "cover", objectPosition: "center" }}
+            />
+          </button>
+        </div>
+        <button onClick={() => setMenu(!menu)}>Menu</button>
+      </div>
+
       {menu && (
         <div className={`${styles.menu} p-4 `}>
           <div className="flex flex-col gap-4 p-2">
-            <Link href="/search">
-              <p className="text-white text-4xl">Search</p>
-            </Link>
-            <Link href="/" className="flex ">
-              <p className="text-white text-4xl">Receipts</p>
-            </Link>
-            <p className="text-white text-4xl">Calender</p>
-            <p className="text-white text-4xl">Account</p>
-            <p className="text-white text-4xl">Notifications</p>
-          </div>
-          {/* <div className={`${styles.navbarItems}`}>
-            <div
-              className={`${styles.linkWrapper} ${
-                pathname === "/" ||
-                pathname.includes("receipt") ||
-                pathname.includes("memo") ||
-                pathname.includes("item")
-                  ? styles.page
-                  : ""
-              }`}
-            >
+            <div className="flex justify-between">
               <Link href="/">
+                <p className="text-white text-3xl">Receipts</p>
+              </Link>
+              <div>
                 <Image
                   src="/receipt_w.png"
                   alt=""
                   width={20}
                   height={20}
-                  className="object-cover"
+                  className="object-cover "
                   style={{ objectFit: "cover", objectPosition: "center" }}
                 />
-              </Link>
+              </div>
             </div>
-
-            <Link href="/">
-              <Image
-                src="/search_w.png"
-                alt=""
-                width={25}
-                height={25}
-                className="object-cover "
-                style={{ objectFit: "cover", objectPosition: "center" }}
-              />
-            </Link>
-            <Link href="/">
-              <Image
-                src="/account_w.png"
-                alt=""
-                width={25}
-                height={25}
-                className="object-cover "
-                style={{ objectFit: "cover", objectPosition: "center" }}
-              />
-            </Link>
-            <Link href="/">
-              <Image
-                src="/calendar_w.png"
-                alt=""
-                width={25}
-                height={25}
-                className="object-cover "
-                style={{ objectFit: "cover", objectPosition: "center" }}
-              />
-            </Link>
-            <Link href="/">
-              <Image
-                src="/notification_w.png"
-                alt=""
-                width={25}
-                height={25}
-                className="object-cover "
-                style={{ objectFit: "cover", objectPosition: "center" }}
-              />
-            </Link>
-          </div> */}
+            <div className="flex justify-between">
+              <Link href="/">
+                <p className="text-white text-3xl">Calender</p>
+              </Link>
+              <div>
+                <Image
+                  src="/calendar_w.png"
+                  alt=""
+                  width={25}
+                  height={25}
+                  className="object-cover "
+                  style={{ objectFit: "cover", objectPosition: "center" }}
+                />
+              </div>
+            </div>
+            <div className="flex justify-between">
+              <Link href="/">
+                <p className="text-white text-3xl">Account</p>
+              </Link>
+              <div>
+                {" "}
+                <Image
+                  src="/account_w.png"
+                  alt=""
+                  width={25}
+                  height={25}
+                  className="object-cover "
+                  style={{ objectFit: "cover", objectPosition: "center" }}
+                />
+              </div>
+            </div>
+            <div className="flex justify-between">
+              <Link href="/">
+                <p className="text-white text-3xl">Notifications</p>
+              </Link>
+              <div>
+                <Image
+                  src="/notification_w.png"
+                  alt=""
+                  width={25}
+                  height={25}
+                  className="object-cover "
+                  style={{ objectFit: "cover", objectPosition: "center" }}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

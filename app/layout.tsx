@@ -8,8 +8,7 @@ import localFont from "next/font/local";
 
 import Head from "next/head";
 import Topbar from "@/app/components/navbar/Topbar";
-import { SearchProvider } from "@/app/components/context/SearchContext";
-import { SearchItemProvider } from "@/app/components/context/SearchtemContext";
+import { SearchBarContextProvider } from "@/app/components/context/SearchBarContext";
 
 const myFont = localFont({
   src: "../font/SuisseIntl-Medium.woff",
@@ -32,14 +31,16 @@ export default function RootLayout({
       </Head>
       <body className={` ${myFont.className}`}>
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
-        <Topbar />
-        <div className="flex bg-[#e2f1e2]">
-          <Navbar />
+        <SearchBarContextProvider>
+          <Topbar />
+          <div className="flex bg-[#e2f1e2]">
+            <Navbar />
 
-          <div className="page main-content bg-[#e2f1e2] min-h-screen">
-            <main className="">{children}</main>
+            <div className="page main-content bg-[#e2f1e2] min-h-screen">
+              <main className="">{children}</main>
+            </div>
           </div>
-        </div>
+        </SearchBarContextProvider>
       </body>
     </html>
   );

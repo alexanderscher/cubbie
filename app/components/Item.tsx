@@ -38,7 +38,7 @@ const Item = ({ item }: Props) => {
         </Link>
 
         <div>
-          <div className="border-t-[1px] border-slate-300 flex flex-col  gap-1 text-sm">
+          <div className="border-t-[1px] border-slate-300 flex flex-col  gap-1 text-xs">
             <div className="mt-2">
               <p className="text-slate-400  ">Store</p>
               <Link href={`/receipt/${item.receipt_id}`} className="">
@@ -49,14 +49,18 @@ const Item = ({ item }: Props) => {
                 />
               </Link>
             </div>
-            <div className="mb-2">
+            <div className="">
               <p className="text-slate-400  ">Price</p>
               <p className="">{formatCurrency(item.price)}</p>
+            </div>
+            <div className="mb-2">
+              <p className="text-slate-400  ">Return Date</p>
+              <p className="">{formatDateToMMDDYY(item.receipt.return_date)}</p>
             </div>
           </div>
         </div>
       </div>
-      <div className="border-t-[1px] text-sm text-center  text-emerald-900 p-2">
+      <div className="border-t-[1px] text-xs text-center  text-emerald-900 p-2">
         <Link href={`/item/${item.id}/edit/`}>Edit</Link>
       </div>
     </div>

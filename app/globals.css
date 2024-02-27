@@ -57,7 +57,7 @@ input:-webkit-autofill::first-line {
 .searchBar {
   background-color: #e2f1e2;
   border-radius: 4px;
-  width: 190px;
+  width: 150px;
   outline: none;
 
   /* margin-bottom: 40px; */

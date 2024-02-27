@@ -100,3 +100,35 @@ export async function PUT(
     );
   }
 }
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const findItem = await prisma.items.findUnique({
+    where: {
+      id: parseInt(params.id),
+    },
+  });
+  if (findItem) {
+    const photo_key = findItem.photo_key;
+    if (photo_key) {
+      await deleteUploadThingImage(photo_key);
+    }
+  }
+
+  const item = await prisma.items.delete({
+    where: {
+      id: parseInt(params.id),
+    },
+  });
+
+  return new NextResponse(
+    JSON.stringify({
+      item,
+    }),
+    {
+      headers: { "Content-Type": "application/json" },
+    }
+  );
+}

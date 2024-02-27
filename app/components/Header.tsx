@@ -13,7 +13,7 @@ interface HeaderProps {
 
 const Header = ({ type }: HeaderProps) => {
   const [data, setData] = React.useState([]);
-  const { setFilteredData } = useSearchContext();
+  const { setFilteredData, setIsLoading } = useSearchContext();
   const { setFilteredItemData } = useSearchItemContext();
   const [openModal, setOpenModal] = React.useState(false);
   const pathname = usePathname();
@@ -39,19 +39,21 @@ const Header = ({ type }: HeaderProps) => {
       };
       fetchItems();
     }
-  }, [pathname, setFilteredItemData]);
+  }, [pathname, setFilteredItemData, setIsLoading]);
 
   useEffect(() => {
     if (pathname !== "/items") {
       const fetchReceipts = async () => {
+        setIsLoading(true);
         const res = await fetch("/api/receipt");
         const data = await res.json();
         setData(data.receipts);
         setFilteredData(data.receipts);
+        setIsLoading(false);
       };
       fetchReceipts();
     }
-  }, [pathname, setFilteredData]);
+  }, [pathname, setFilteredData, setIsLoading]);
 
   const receiptColor =
     pathname === "/"

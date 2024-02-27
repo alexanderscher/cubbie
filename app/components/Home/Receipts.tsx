@@ -8,7 +8,7 @@ import { useMemo } from "react";
 type SortField = "created_at" | "purchase_date" | "price";
 
 const Receipts = () => {
-  const { filteredData } = useSearchContext();
+  const { filteredData, isLoading } = useSearchContext();
   const searchParams = useSearchParams();
 
   const sortField: SortField =
@@ -40,6 +40,14 @@ const Receipts = () => {
 
     return filteredByStoreType.sort(compareReceipts);
   }, [filteredData, storeType, sortField]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (sortedAndFilteredData.length === 0 && !isLoading) {
+    return <NoData />;
+  }
+
   if (searchParams.get("receiptType") === "receipt")
     return (
       <div className="boxes">
@@ -72,3 +80,11 @@ const Receipts = () => {
 };
 
 export default Receipts;
+
+const NoData = () => {
+  return (
+    <div className="flex justify-center items-center h-96">
+      <h1 className="text-2xl">No Data</h1>
+    </div>
+  );
+};

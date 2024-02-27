@@ -2,7 +2,6 @@
 import Item from "@/app/components/Item";
 import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
 import { Item as ItemType } from "@/types/receipt";
-import React, { useEffect, useState } from "react";
 
 const Items = () => {
   const { filteredItemData, setFilteredItemData } = useSearchItemContext();

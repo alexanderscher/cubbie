@@ -3,6 +3,7 @@ import { useSearchContext } from "@/app/components/context/SearchContext";
 import Receipt from "@/app/components/receiptComponents/Receipt";
 import { Item, Receipt as ReceiptType } from "@/types/receipt";
 import { useSearchParams } from "next/navigation";
+import { useMemo } from "react";
 
 type SortField = "created_at" | "purchase_date" | "price";
 
@@ -16,43 +17,46 @@ const Receipts = () => {
   const getTotalPrice = (items: Item[]) =>
     items.reduce((acc, item) => acc + item.price, 0);
 
-  const compareReceipts = (a: ReceiptType, b: ReceiptType) => {
-    if (sortField === "price") {
-      const totalPriceA = getTotalPrice(a.items);
-      const totalPriceB = getTotalPrice(b.items);
-      return totalPriceB - totalPriceA;
-    } else {
-      const dateA = new Date(a[sortField]).getTime();
-      const dateB = new Date(b[sortField]).getTime();
-      return dateB - dateA;
-    }
-  };
+  const storeType = searchParams.get("storeType") || "all";
 
-  const sortedData = filteredData.sort(compareReceipts);
+  const sortedAndFilteredData = useMemo(() => {
+    // Step 1: Filter by storeType if not 'all'
+    const filteredByStoreType =
+      storeType === "all"
+        ? filteredData
+        : filteredData.filter(
+            (receipt) => receipt.type.toLocaleLowerCase() === storeType
+          );
 
-  if (searchParams.get("type") === "all")
+    // Step 2: Sort the data
+    const compareReceipts = (a, b) => {
+      if (sortField === "price") {
+        const totalPriceA = getTotalPrice(a.items);
+        const totalPriceB = getTotalPrice(b.items);
+        return totalPriceB - totalPriceA;
+      } else {
+        const dateA = new Date(a[sortField]).getTime();
+        const dateB = new Date(b[sortField]).getTime();
+        return dateB - dateA;
+      }
+    };
+
+    return filteredByStoreType.sort(compareReceipts);
+  }, [filteredData, storeType, sortField]);
+  if (searchParams.get("receiptType") === "receipt")
     return (
       <div className="boxes">
-        {sortedData.map((receipt: ReceiptType) => (
-          <Receipt key={receipt.id} receipt={receipt} />
-        ))}
-      </div>
-    );
-  if (searchParams.get("type") === "receipt")
-    return (
-      <div className="boxes">
-        {sortedData
+        {sortedAndFilteredData
           .filter((receipt: ReceiptType) => receipt.memo === false)
           .map((receipt: ReceiptType) => (
             <Receipt key={receipt.id} receipt={receipt} />
           ))}
       </div>
     );
-
-  if (searchParams.get("type") === "memo") {
+  else if (searchParams.get("receiptType") === "memo") {
     return (
       <div className="boxes">
-        {sortedData
+        {sortedAndFilteredData
           .filter((receipt: ReceiptType) => receipt.memo === true)
           .map((receipt: ReceiptType) => (
             <Receipt key={receipt.id} receipt={receipt} />
@@ -60,6 +64,14 @@ const Receipts = () => {
       </div>
     );
   }
+
+  return (
+    <div className="boxes">
+      {sortedAndFilteredData.map((receipt: ReceiptType) => (
+        <Receipt key={receipt.id} receipt={receipt} />
+      ))}
+    </div>
+  );
 };
 
 export default Receipts;

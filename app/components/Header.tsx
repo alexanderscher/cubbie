@@ -138,11 +138,15 @@ const FilterOptions = ({
   //   e.stopPropagation();
 
   const handleTypeClick = (name: string) => {
-    router.push(pathname + "?" + createQueryString("type", name));
+    router.push(pathname + "?" + createQueryString("receiptType", name));
   };
 
   const handleSortClick = (name: string) => {
     router.push(pathname + "?" + createQueryString("sort", name));
+  };
+
+  const handleStoreClick = (name: string) => {
+    router.push(pathname + "?" + createQueryString("storeType", name));
   };
 
   const router = useRouter();
@@ -151,10 +155,10 @@ const FilterOptions = ({
     <div className="absolute right-0 mt-2 w-[200px] bg-white border border-gray-200 rounded-md shadow-lg z-10">
       <div className="flex flex-col gap-4 p-6 text-sm items-start">
         <div className="flex flex-col items-start">
-          <p className="text-orange-600">Type</p>
+          <p className="text-orange-600">Receipt Type</p>
           <button
             className={`${
-              searchParams.get("type") === "all"
+              searchParams.get("receiptType") === "all"
                 ? "text-sm text-emerald-900"
                 : "text-sm text-slate-400"
             }`}
@@ -166,7 +170,7 @@ const FilterOptions = ({
           </button>
           <button
             className={`${
-              searchParams.get("type") === "receipt"
+              searchParams.get("receiptType") === "receipt"
                 ? "text-sm text-emerald-900"
                 : "text-sm text-slate-400"
             }`}
@@ -178,7 +182,7 @@ const FilterOptions = ({
           </button>
           <button
             className={`${
-              searchParams.get("type") === "memo"
+              searchParams.get("receiptType") === "memo"
                 ? "text-sm text-emerald-900"
                 : "text-sm text-slate-400"
             }`}
@@ -187,6 +191,45 @@ const FilterOptions = ({
             }}
           >
             Memo
+          </button>
+        </div>
+        <div className="flex flex-col items-start">
+          <p className="text-sm text-orange-600">Store Type</p>
+          <button
+            className={`${
+              searchParams.get("storeType") === "all"
+                ? "text-sm text-emerald-900"
+                : "text-sm text-slate-400"
+            }`}
+            onClick={() => {
+              handleStoreClick("all");
+            }}
+          >
+            All
+          </button>
+          <button
+            className={`${
+              searchParams.get("storeType") === "online"
+                ? "text-sm text-emerald-900"
+                : "text-sm text-slate-400"
+            }`}
+            onClick={() => {
+              handleStoreClick("online");
+            }}
+          >
+            Online
+          </button>
+          <button
+            className={`${
+              searchParams.get("storeType") === "store"
+                ? "text-sm text-emerald-900"
+                : "text-sm text-slate-400"
+            }`}
+            onClick={() => {
+              handleStoreClick("store");
+            }}
+          >
+            Store
           </button>
         </div>
         <div className="flex flex-col items-start">

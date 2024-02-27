@@ -15,6 +15,7 @@ const ReceiptPage = () => {
   const { id } = useParams();
   const [receipt, setReceipt] = useState({} as ReceiptType);
   const [isOpen, setIsOpen] = useState(false);
+
   useEffect(() => {
     const fetchReceipt = async () => {
       const res = await fetch(`/api/receipt/${id}`);

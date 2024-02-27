@@ -20,16 +20,13 @@ const Receipts = () => {
   const storeType = searchParams.get("storeType") || "all";
 
   const sortedAndFilteredData = useMemo(() => {
-    // Step 1: Filter by storeType if not 'all'
     const filteredByStoreType =
       storeType === "all"
         ? filteredData
         : filteredData.filter(
             (receipt) => receipt.type.toLocaleLowerCase() === storeType
           );
-
-    // Step 2: Sort the data
-    const compareReceipts = (a, b) => {
+    const compareReceipts = (a: ReceiptType, b: ReceiptType) => {
       if (sortField === "price") {
         const totalPriceA = getTotalPrice(a.items);
         const totalPriceB = getTotalPrice(b.items);

@@ -177,7 +177,7 @@ const FilterOptions = ({
 
   return (
     <div className="absolute right-0 mt-2 w-[250px] bg-white border border-gray-200 rounded-md shadow-lg z-10 pb-2">
-      <div className="flex flex-col gap-6  text-sm  ">
+      <div className="flex flex-col   text-sm  ">
         <div className="flex flex-col w-full  items-start">
           <p className="text-orange-600 p-2 border-b-[1px] w-full ">
             Receipt Type

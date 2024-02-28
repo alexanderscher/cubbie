@@ -23,6 +23,13 @@ input[type="checkbox"] {
   padding: 20px;
 }
 
+.layout {
+  display: flex;
+
+  height: 100%;
+  padding-bottom: 200px;
+}
+
 .main-content {
   padding-left: 126px;
   width: 100%;
@@ -110,6 +117,13 @@ input:-webkit-autofill::first-line {
   }
   .box {
     width: 100%;
+  }
+
+  .layout {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-bottom: 200px;
   }
 }
 

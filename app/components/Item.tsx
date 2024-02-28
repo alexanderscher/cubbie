@@ -25,9 +25,19 @@ const Item = ({ item }: Props) => {
             className="w-full h-full object-cover rounded-t-lg"
             style={{ objectPosition: "top" }}
           />
+          <button className="absolute top-0 right-0 m-2 text-[10px] border border-orange-600 py-1 px-3 rounded-full text-orange-600">
+            <Link href={`/item/${item.id}/edit/`}>Edit</Link>
+          </button>
         </div>
       )}
-      {!item.photo_url && <Shirt />}
+      {!item.photo_url && (
+        <div className="relative">
+          <Shirt />
+          <button className="absolute top-0 right-0 m-2 text-[10px] border border-orange-600 py-1 px-3 rounded-full text-orange-600">
+            <Link href={`/item/${item.id}/edit/`}>Edit</Link>
+          </button>
+        </div>
+      )}
       <div className="p-3 flex flex-col gap-2 justify-between">
         <Link href={`/item/${item.id}`} className="">
           <TruncateText
@@ -61,7 +71,7 @@ const Item = ({ item }: Props) => {
         </div>
       </div>
       <div className="border-t-[1px] text-xs text-center  text-emerald-900 p-2">
-        <Link href={`/item/${item.id}/edit/`}>Edit</Link>
+        <p>Mark as Returned</p>
       </div>
     </div>
   );

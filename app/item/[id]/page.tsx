@@ -31,7 +31,7 @@ const ItemID = () => {
 
   if (!item.receipt) return <div className="min-h-screen">Loading</div>;
   return (
-    <div className="flex flex-col gap-6  max-w-[1000px] pb-[50px]">
+    <div className="flex flex-col gap-6  max-w-[700px] pb-[50px]">
       <HeaderItemNav item={item} />
       <div className="flex justify-between w-full ">
         <h1 className="text-2xl text-orange-600">{item.description}</h1>
@@ -42,7 +42,7 @@ const ItemID = () => {
 
       <div className={`${styles.receipt}`}>
         <div
-          className={`w-full  rounded-lg p-8 bg-white flex flex-col gap-4  border-[1px] border-emerald-900 `}
+          className={`w-full  rounded-lg p-8 bg-white flex flex-col gap-4  shadow `}
         >
           <p className="text-xl text-emerald-900">Item Information</p>
           {!item.photo_url && <Shirt />}
@@ -85,7 +85,7 @@ const ItemID = () => {
             <p>{item.product_id ? item.product_id : "None"}</p>
           </div>
         </div>
-        <div className={`w-full`}>
+        {/* <div className={`w-full`}>
           <div className={`${styles.receiptLeft}  flex flex-col gap-2`}>
             <div
               className={` rounded-lg p-8 bg-white flex flex-col gap-4  border-[1px] border-emerald-900 `}
@@ -123,7 +123,7 @@ const ItemID = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

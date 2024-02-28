@@ -120,7 +120,7 @@ const ItemID = () => {
         dirty,
         setFieldValue,
       }) => (
-        <div className="flex flex-col gap-6  max-w-[1000px] pb-[50px]">
+        <div className="flex flex-col gap-6  max-w-[700px] pb-[50px]">
           <HeaderItemNav item={item} />
           <div className="flex justify-between w-full ">
             <h1 className="text-2xl text-orange-600">{item.description}</h1>
@@ -159,7 +159,7 @@ const ItemID = () => {
 
           <div className={`${styles.receipt}`}>
             <div
-              className={`w-full border-[1px] border-emerald-900 rounded-lg p-6 bg-white flex flex-col gap-4`}
+              className={`w-full shadow rounded-lg p-6 bg-white flex flex-col gap-4`}
             >
               <p className="text-xl text-emerald-900">Item Information</p>
               {!values.photo_url && !values.edit_image && (
@@ -327,10 +327,10 @@ const ItemID = () => {
                 <p className="text-white text-xs ">Delete Receipt</p>
               </RegularButton>
             </div>
-            <div className={`w-full`}>
+            {/* <div className={`w-full`}>
               <div className={`${styles.receiptLeft}   flex flex-col gap-2`}>
                 <div
-                  className={` border-[1px] border-emerald-900 rounded-lg p-6 bg-white flex flex-col gap-4`}
+                  className={` shadow rounded-lg p-6 bg-white flex flex-col gap-4`}
                 >
                   <p className="text-xl text-emerald-900">
                     Receipt Information
@@ -341,6 +341,10 @@ const ItemID = () => {
                       <div>
                         <p className="text-slate-400">Store</p>
                         <p>{item.receipt.store}</p>
+                      </div>
+                      <div>
+                        <p className="text-slate-400">Return Date</p>
+                        <p>{formatDateToMMDDYY(item.receipt.return_date)}</p>
                       </div>
                       <div>
                         <p className="text-slate-400">Created at</p>
@@ -377,7 +381,7 @@ const ItemID = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
           {uploadError && (
             <ErrorModal

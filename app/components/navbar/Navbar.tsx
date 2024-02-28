@@ -1,10 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import styles from "./navbar.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSearchBarContext } from "@/app/components/context/SearchBarContext";
+import SearchAllItems from "@/app/components/search/AlItems";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -37,7 +37,11 @@ const Navbar = () => {
         <div
           className={`${styles.linkWrapper} ${searchBarOpen && styles.page}`}
         >
-          <button onClick={() => setSearchBarOpen(!searchBarOpen)}>
+          <button
+            onClick={() => {
+              setSearchBarOpen(!searchBarOpen);
+            }}
+          >
             <Image
               src="/search_w.png"
               alt=""
@@ -63,7 +67,6 @@ const Navbar = () => {
         </div>
 
         <div className={styles.linkWrapper}>
-          {" "}
           <Link href="/">
             <Image
               src="/calendar_w.png"
@@ -95,6 +98,14 @@ const Navbar = () => {
           Sticky Notes
         </Link>
       </div>
+
+      {searchBarOpen && (
+        <div
+          className={`fixed top-0 w-[400px] left-[100px] h-screen bg-emerald-900 p-4 border-l-[1px] border-white`}
+        >
+          <SearchAllItems />
+        </div>
+      )}
     </div>
   );
 };

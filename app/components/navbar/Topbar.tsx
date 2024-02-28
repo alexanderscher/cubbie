@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSearchBarContext } from "@/app/components/context/SearchBarContext";
+import SearchAllItems from "@/app/components/search/AlItems";
 
 const Topbar = () => {
   const [menu, setMenu] = useState(false);
@@ -17,7 +18,13 @@ const Topbar = () => {
       <Link href="/">Sticky Notes</Link>
       <div className="flex gap-4">
         <div>
-          <button onClick={() => setSearchBarOpen(!searchBarOpen)}>
+          <button
+            onClick={() => {
+              setSearchBarOpen(!searchBarOpen);
+
+              setMenu(false);
+            }}
+          >
             <Image
               src="/search_w.png"
               alt=""
@@ -28,8 +35,21 @@ const Topbar = () => {
             />
           </button>
         </div>
-        <button onClick={() => setMenu(!menu)}>Menu</button>
+        <button
+          onClick={() => {
+            setMenu(!menu);
+            setSearchBarOpen(false);
+          }}
+        >
+          Menu
+        </button>
       </div>
+
+      {searchBarOpen && (
+        <div className={`${styles.menu} p-4 `}>
+          <SearchAllItems />
+        </div>
+      )}
 
       {menu && (
         <div className={`${styles.menu} p-4 `}>

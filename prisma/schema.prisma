@@ -26,6 +26,7 @@ model Receipt {
   archive           Boolean
   memo              Boolean
   created_at        DateTime
+  expired           Boolean  @default(false)
 }
 
 model Items {
@@ -40,4 +41,5 @@ model Items {
   receipt_id  Int
   receipt     Receipt  @relation(fields: [receipt_id], references: [id], onDelete: Cascade)
   created_at  DateTime
+  returned    Boolean  @default(false)
 }

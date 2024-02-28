@@ -6,6 +6,7 @@ import { Item } from "@/types/receipt";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
+import { parse } from "path";
 
 interface ReceiptItemsProps {
   item: Item;
@@ -43,6 +44,11 @@ export const ReceiptItems = ({ item, asset_amount }: ReceiptItemsProps) => {
 
         <div>
           <div className=" border-slate-300 flex flex-col  gap-2 text-xs">
+            {asset_amount < item.price && (
+              <div className="">
+                <p className="text-emerald-900">Asset</p>
+              </div>
+            )}
             <div className="">
               <p className="text-slate-400   ">Price</p>
               <p className="">{formatCurrency(item.price)}</p>

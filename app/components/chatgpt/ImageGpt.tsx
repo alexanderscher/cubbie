@@ -78,7 +78,6 @@ export default function ImageGpt({ setFieldValue, values, setStage }: Props) {
         photo: item.photo || "",
         price: item.price || 0,
         barcode: item.barcode || "",
-        asset: item.hasOwnProperty("asset") ? item.asset : false,
         character: "",
       })
     );
@@ -140,7 +139,6 @@ export default function ImageGpt({ setFieldValue, values, setStage }: Props) {
         price: item.price || 0,
         barcode: item.barcode || "",
         product_id: item.product_id || "",
-        asset: item.hasOwnProperty("asset") ? item.asset : false,
         character: "",
       })
     );

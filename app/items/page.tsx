@@ -1,4 +1,4 @@
-import Header from "@/app/components/Header";
+import Header from "@/app/components/headers/Header";
 import Items from "@/app/components/Home/Items";
 import { SearchItemProvider } from "@/app/components/context/SearchtemContext";
 import { Suspense } from "react";

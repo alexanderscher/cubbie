@@ -33,11 +33,11 @@ const ReceiptPage = () => {
 
   if (!receipt.items) return <div className="min-h-screen">Loading</div>;
   return (
-    <div className="flex flex-col gap-8  w-full h-fullå ">
+    <div className="flex flex-col gap-8  w-full h-full ">
       <HeaderNav receipt={receipt} />
       <div className="flex justify-between items-center w-full">
-        <h1 className="text-2xl text-orange-600 w-3/4">{receipt.store}</h1>
-        <div className="flex gap-2">
+        <h1 className="text-2xl text-orange-600 w-1/2">{receipt.store}</h1>
+        <div className="flex gap-2 w-1/2 justify-end">
           <RegularButton
             styles="bg-emerald-900"
             handleClick={() => setIsAddOpen(true)}

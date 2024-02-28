@@ -35,10 +35,9 @@ model Items {
   photo_key   String?
   price       Float
   barcode     String?
-  asset       Boolean
   character   String?
   product_id  String?
   receipt_id  Int
-  receipt     Receipt  @relation(fields: [receipt_id], references: [id])
+  receipt     Receipt  @relation(fields: [receipt_id], references: [id], onDelete: Cascade)
   created_at  DateTime
 }

@@ -49,7 +49,6 @@ const TextGpt = ({ setFieldValue, values, setStage }: Props) => {
       price: item.price || 0,
       product_id: item.product_id || "",
       barcode: "",
-      asset: item.hasOwnProperty("asset") ? item.asset : false,
       character: "",
     }));
 

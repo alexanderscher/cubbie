@@ -37,6 +37,22 @@ const ReceiptPage = () => {
     store: "",
   });
 
+  const deleteReceipt = async () => {
+    setLoading(true);
+    const res = await fetch(`/api/receipt/${id}`, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+    if (data.error) {
+      setUploadError(data.error);
+      setLoading(false);
+    } else {
+      setUploadError("");
+      setLoading(false);
+      router.push("/");
+    }
+  };
+
   useEffect(() => {
     const fetchReceipt = async () => {
       const res = await fetch(`/api/receipt/${id}`);
@@ -130,7 +146,7 @@ const ReceiptPage = () => {
             <h1 className="text-2xl text-orange-600 w-3/4">{receipt.store}</h1>
             <div className="flex gap-2">
               {dirty ? (
-                <div className="flex gap-4">
+                <div className="flex gap-2">
                   <RegularButton
                     styles="bg  border-emerald-900"
                     href={`/receipt/${id}`}
@@ -419,6 +435,12 @@ const ReceiptPage = () => {
                       </p>
                     )}
                   </div>
+                  <RegularButton
+                    styles="bg-orange-600 border-orange-600"
+                    handleClick={deleteReceipt}
+                  >
+                    <p className="text-white text-xs ">Delete Receipt</p>
+                  </RegularButton>
                 </div>
               </div>
             </div>
@@ -426,7 +448,6 @@ const ReceiptPage = () => {
             <div
               className={`flex flex-col gap-2 pb-[200px] ${styles.boxContainer}`}
             >
-              {/* <p className="text-lg text-emerald-900">Items</p> */}
               <div className={`${styles.boxes} `}>
                 {receipt.items.length > 0 &&
                   receipt.items.map((item: any, index: number) => (

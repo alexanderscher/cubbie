@@ -28,6 +28,22 @@ const ItemID = () => {
     description: "",
   });
 
+  const deleteItem = async () => {
+    setLoading(true);
+    const res = await fetch(`/api/items/${id}`, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+    if (data.error) {
+      setUploadError(data.error);
+      setLoading(false);
+    } else {
+      setUploadError("");
+      setLoading(false);
+      router.push(`/receipt/${item.receipt.id}`);
+    }
+  };
+
   useEffect(() => {
     const fetchItem = async () => {
       const res = await fetch(`/api/items/${id}`);
@@ -304,6 +320,12 @@ const ItemID = () => {
                   className="w-full border-[1px] border-slate-300 rounded-lg p-2"
                 />
               </div>
+              <RegularButton
+                styles="bg-orange-600 border-orange-600"
+                handleClick={deleteItem}
+              >
+                <p className="text-white text-xs ">Delete Receipt</p>
+              </RegularButton>
             </div>
             <div className={`w-full`}>
               <div className={`${styles.receiptLeft}   flex flex-col gap-2`}>

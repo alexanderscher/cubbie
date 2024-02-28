@@ -1,12 +1,10 @@
 "use client";
-import styles from "@/app/receipt/receiptID.module.css";
 import Shirt from "@/app/components/placeholderImages/Shirt";
 import { TruncateText } from "@/app/components/text/Truncate";
 import { Item } from "@/types/receipt";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
-import { parse } from "path";
 
 interface ReceiptItemsProps {
   item: Item;

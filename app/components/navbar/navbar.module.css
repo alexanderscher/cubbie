@@ -69,7 +69,7 @@
     align-items: center;
     padding-top: env(safe-area-inset-top);
     position: fixed;
-    z-index: 1001;
+    z-index: 800;
     width: 100%;
   }
 

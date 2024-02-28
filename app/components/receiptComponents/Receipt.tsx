@@ -26,7 +26,7 @@ const Receipt = ({ receipt }: ReceiptProps) => {
       </div>
 
       <div className="p-3 flex flex-col justify-between">
-        <div className="border-b-[1px] border-slate-400">
+        <div className="border-b-[1px] border-slate-400 ">
           <Link href={`/receipt/${receipt.id}`} className="">
             <TruncateText
               text={receipt.store}

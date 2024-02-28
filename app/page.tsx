@@ -13,7 +13,8 @@ export default function Home() {
     <main className="flex flex-col pb-[400px]">
       <SearchProvider>
         <Suspense fallback={<div>Loading</div>}>
-          {searchBarOpen && <SearchAllItems />}
+          {/* {searchBarOpen && <SearchAllItems />} */}
+
           <Header type="Receipts" />
           <Receipts />
         </Suspense>

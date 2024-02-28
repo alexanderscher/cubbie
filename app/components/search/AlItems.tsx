@@ -59,21 +59,21 @@ function SearchAllItems() {
     <div className="pb-[30px] w-full">
       <div className="w-full flex gap-4 items-center justify-center">
         <input
-          className="bg  placeholder:text-sm placeholder:text-black border-[1px] border-black p-2 rounded-md w-full"
+          className="bg-emerald-900  placeholder:text-sm placeholder:text-white border-[1px] border-white p-2 rounded-md w-full"
           placeholder={`Search all items`}
           onChange={handleChange}
         ></input>
         <div>
           <button
             type="button"
-            className="w-[40px] h-[40px] border-[1px] border-black p-2 rounded-md flex justify-center items-center "
+            className="w-[40px] h-[40px] border-[1px] border-white p-1 rounded-md flex justify-center items-center "
             onClick={() => {
               setShowScanner(true);
             }}
             disabled={showScanner}
           >
             <Image
-              src="/barcode_b.png"
+              src="/searchbar_w.png"
               alt="barcode"
               width={100}
               height={100}

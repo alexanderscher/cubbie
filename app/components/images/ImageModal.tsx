@@ -7,6 +7,9 @@ interface ImageModalProps {
   altText: string;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setFieldValue?: any;
+  handleFileChange?: any;
+  changeField?: any;
 }
 
 const ImageModal = ({
@@ -14,6 +17,9 @@ const ImageModal = ({
   altText,
   isOpen,
   setIsOpen,
+  setFieldValue,
+  handleFileChange,
+  changeField,
 }: ImageModalProps) => {
   const handleOverlayClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -41,6 +47,37 @@ const ImageModal = ({
               onClick={() => setIsOpen(false)}
               className={styles.closeButton}
             ></button>
+            {setFieldValue && handleFileChange && changeField && (
+              <div className="">
+                <button
+                  className="absolute text-white top-0 left-0 m-2"
+                  onClick={() => {
+                    setFieldValue(changeField, "");
+                  }}
+                >
+                  Remove
+                </button>
+                <input
+                  type="file"
+                  onChange={(e) => handleFileChange(e, setFieldValue)}
+                  id="replace"
+                  style={{
+                    opacity: 0,
+                    position: "absolute",
+                    zIndex: -1,
+                  }}
+                />
+                <label
+                  htmlFor="replace"
+                  className="absolute text-white top-0 right-0 m-2"
+                  style={{
+                    cursor: "pointer",
+                  }}
+                >
+                  Replace
+                </label>
+              </div>
+            )}
           </div>
         </div>
       )}

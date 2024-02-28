@@ -12,6 +12,8 @@ import CurrencyInput from "react-currency-input-field";
 import ErrorModal from "@/app/components/error/Modal";
 import Loading from "@/app/components/Loading";
 import HeaderItemNav from "@/app/components/navbar/HeaderItemNav";
+import { BarcodeScanner } from "@/app/components/createForm/barcode/BarcodeScanner";
+import ImageModal from "@/app/components/images/ImageModal";
 
 type ExtendedItemType = ItemType & {
   edit_image: string;
@@ -27,6 +29,8 @@ const ItemID = () => {
     price: "",
     description: "",
   });
+  const [isOpen, setIsOpen] = useState(false);
+  const [showScanner, setShowScanner] = useState(false);
 
   const deleteItem = async () => {
     setLoading(true);
@@ -120,50 +124,56 @@ const ItemID = () => {
         dirty,
         setFieldValue,
       }) => (
-        <div className="flex flex-col gap-6  max-w-[700px] pb-[50px]">
+        <div className="flex flex-col gap-6  max-w-[600px] ">
           <HeaderItemNav item={item} />
-          <div className="flex justify-between w-full ">
-            <h1 className="text-2xl text-orange-600">{item.description}</h1>
-            {dirty ? (
-              <div className="flex gap-4">
-                <RegularButton
-                  styles="bg  border-emerald-900"
-                  href={`/item/${id}`}
-                >
-                  <p className="text-emerald-900 text-xs">Discard</p>
+          <div className="flex justify-between items-center">
+            <div className="flex justify-between w-1/2">
+              {dirty ? (
+                <div className="flex gap-2">
+                  <RegularButton
+                    styles="bg  border-emerald-900"
+                    href={`/item/${id}`}
+                  >
+                    <p className="text-emerald-900 text-xs">Discard</p>
+                  </RegularButton>
+                  <RegularButton
+                    styles="bg-emerald-900  border-emerald-900"
+                    handleClick={async () => {
+                      const error = await validateForm();
+                      if (error) {
+                        setErrorM({
+                          price: error.price ? error.price : "",
+                          description: error.description
+                            ? error.description
+                            : "",
+                        });
+                      }
+                      if (Object.keys(error).length === 0) {
+                        handleSubmit();
+                      }
+                    }}
+                  >
+                    <p className="text-white text-xs">Save</p>
+                  </RegularButton>
+                </div>
+              ) : (
+                <RegularButton styles="bg-emerald-900" href={`/item/${id}`}>
+                  <p className="text-white text-xs">Cancel</p>
                 </RegularButton>
-                <RegularButton
-                  styles="bg-emerald-900  border-emerald-900"
-                  handleClick={async () => {
-                    const error = await validateForm();
-                    if (error) {
-                      setErrorM({
-                        price: error.price ? error.price : "",
-                        description: error.description ? error.description : "",
-                      });
-                    }
-                    if (Object.keys(error).length === 0) {
-                      handleSubmit();
-                    }
-                  }}
-                >
-                  <p className="text-white text-xs">Save</p>
-                </RegularButton>
-              </div>
-            ) : (
-              <RegularButton styles="bg-emerald-900" href={`/item/${id}`}>
-                <p className="text-white text-xs">Cancel</p>
-              </RegularButton>
-            )}
+              )}
+            </div>
+            <RegularButton
+              styles="bg-orange-600 border-orange-600"
+              handleClick={deleteItem}
+            >
+              <p className="text-white text-xs ">Delete Receipt</p>
+            </RegularButton>
           </div>
 
-          <div className={`${styles.receipt}`}>
-            <div
-              className={`w-full shadow rounded-lg p-6 bg-white flex flex-col gap-4`}
-            >
-              <p className="text-xl text-emerald-900">Item Information</p>
+          <div>
+            <div className="flex flex-col gap-4">
               {!values.photo_url && !values.edit_image && (
-                <div className="w-full h-[200px] overflow-hidden  border-[1px] border-dashed rounded-lg bg-slate-100">
+                <div className="w-full h-[200px] overflow-hidden  border-[1px] border-dashed border-emerald-900 rounded-md bg relative">
                   <input
                     type="file"
                     onChange={(e) => handleFileChange(e, setFieldValue)}
@@ -196,97 +206,66 @@ const ItemID = () => {
               )}
               {values.edit_image && (
                 <div className="w-full flex justify-center items-center relative group">
-                  <div className="relative  w-[200px] max-h-[400px] rounded-lg overflow-hidden">
+                  <div className="relative  w-[200px] max-h-[400px] rounded-md overflow-hidden">
                     <Image
                       src={values.edit_image}
                       width={300}
                       height={300}
                       alt="Receipt Image"
-                      className="object-contain rounded-lg w-full"
+                      className="object-contain rounded-md w-full"
                       layout="intrinsic"
                     />
-                    <div className="absolute inset-0 rounded-lg bg-slate-200 bg-opacity-0 group-hover:bg-opacity-50 flex justify-center items-center transition-opacity duration-300 opacity-0 group-hover:opacity-100 cursor-pointer">
-                      <button
-                        className="absolute text-black top-0 left-0 m-2"
-                        onClick={() => {
-                          setFieldValue("edit_image", "");
-                        }}
-                      >
-                        Remove
-                      </button>
-                      <input
-                        type="file"
-                        onChange={(e) => handleFileChange(e, setFieldValue)}
-                        id="replace"
-                        style={{
-                          opacity: 0,
-                          position: "absolute",
-                          zIndex: -1,
-                        }}
-                      />
-                      <label
-                        htmlFor="replace"
-                        className="absolute text-black top-0 right-0 m-2"
-                        style={{
-                          cursor: "pointer",
-                        }}
-                      >
-                        Replace
-                      </label>
-                    </div>
+                    <ImageModal
+                      isOpen={isOpen}
+                      setIsOpen={setIsOpen}
+                      imageUrl={values.edit_image}
+                      altText="Your Image Description"
+                      setFieldValue={setFieldValue}
+                      handleFileChange={handleFileChange}
+                      changeField="edit_image"
+                    />
                   </div>
                 </div>
               )}
 
               {values.photo_url && (
-                <div className="w-full flex justify-center items-center relative group">
-                  <div className="relative  w-[200px] max-h-[400px] rounded-lg overflow-hidden">
+                <div className="w-full flex justify-center items-center relative ">
+                  <div className="relative  w-full max-h-[300px] rounded-sm overflow-hidden">
                     <Image
                       src={values.photo_url}
                       width={300}
                       height={300}
                       alt="Receipt Image"
-                      className="object-contain rounded-lg w-full"
+                      className="object-contain rounded-sm w-full cursor-pointer"
                       layout="intrinsic"
+                      onClick={() => setIsOpen(true)}
                     />
-                    <div className="absolute inset-0 rounded-lg bg-slate-200 bg-opacity-0 group-hover:bg-opacity-50 flex justify-center items-center transition-opacity duration-300 opacity-0 group-hover:opacity-100 cursor-pointer">
-                      <button
-                        className="absolute text-black top-0 left-0 m-2"
-                        onClick={() => {
-                          setFieldValue("photo_url", "");
-                        }}
-                      >
-                        Remove
-                      </button>
-                      <input
-                        type="file"
-                        onChange={(e) => handleFileChange(e, setFieldValue)}
-                        id="replace"
-                        style={{
-                          opacity: 0,
-                          position: "absolute",
-                          zIndex: -1,
-                        }}
-                      />
-                      <label
-                        htmlFor="replace"
-                        className="absolute text-black top-0 right-0 m-2"
-                        style={{
-                          cursor: "pointer",
-                        }}
-                      >
-                        Replace
-                      </label>
-                    </div>
+                    <ImageModal
+                      isOpen={isOpen}
+                      setIsOpen={setIsOpen}
+                      imageUrl={values.photo_url}
+                      altText="Your Image Description"
+                      setFieldValue={setFieldValue}
+                      handleFileChange={handleFileChange}
+                      changeField="photo_url"
+                    />
                   </div>
                 </div>
               )}
+              <div className="w-full ">
+                <p className="text-slate-400 text-xs">Description</p>
+                <input
+                  value={values.description}
+                  onChange={handleChange("description")}
+                  className="w-full border-[1px] border-emerald-900 bg rounded-md p-2"
+                />
+              </div>
               <div className="w-full">
                 <p className="text-slate-400 text-xs">Price</p>
                 <CurrencyInput
                   id="price"
                   name="price"
-                  className="w-full border-[1px] border-slate-300 rounded-lg p-2"
+                  className="w-full border-[1px] border-emerald-900 bg rounded-md p-2"
                   placeholder=""
                   value={values.price}
                   defaultValue={values.price || ""}
@@ -298,18 +277,57 @@ const ItemID = () => {
               </div>
               <div className="w-full ">
                 <p className="text-slate-400 text-xs">Barcode</p>
-                <input
-                  value={values.barcode}
-                  onChange={handleChange("barcode")}
-                  className="w-full border-[1px] border-slate-300 rounded-lg p-2"
-                />
+                <div className="flex gap-2">
+                  <input
+                    value={values.barcode}
+                    onChange={handleChange("barcode")}
+                    className="w-full border-[1px] border-emerald-900 bg rounded-md p-2"
+                  />
+                  <button
+                    type="button"
+                    className="w-[40px] h-[40px] border-[1px] border-emerald-900 p-1 rounded-md flex justify-center items-center "
+                    onClick={() => {
+                      setShowScanner(true);
+                    }}
+                    disabled={showScanner}
+                  >
+                    <Image
+                      src="/barcode_b.png"
+                      alt="barcode"
+                      width={100}
+                      height={100}
+                      className=""
+                    ></Image>
+                  </button>
+                  {showScanner && (
+                    <div className="w-full">
+                      <h1>Scan a Barcode</h1>
+                      <BarcodeScanner
+                        setShowScanner={setShowScanner}
+                        onResult={(result) => {
+                          setFieldValue("barcode", result.text);
+                          setShowScanner(false);
+                        }}
+                        onError={(error) => {}}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setShowScanner(false);
+                        }}
+                      >
+                        Close Scanner
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="w-full ">
                 <p className="text-slate-400 text-xs">Character</p>
                 <input
                   value={values.character}
                   onChange={handleChange("character")}
-                  className="w-full border-[1px] border-slate-300 rounded-lg p-2"
+                  className="w-full border-[1px] border-emerald-900 bg rounded-md p-2"
                 />
               </div>
               <div className="w-full ">
@@ -317,72 +335,12 @@ const ItemID = () => {
                 <input
                   value={values.product_id}
                   onChange={handleChange("product_id")}
-                  className="w-full border-[1px] border-slate-300 rounded-lg p-2"
+                  className="w-full border-[1px] border-emerald-900 bg rounded-md p-2"
                 />
               </div>
-              <RegularButton
-                styles="bg-orange-600 border-orange-600"
-                handleClick={deleteItem}
-              >
-                <p className="text-white text-xs ">Delete Receipt</p>
-              </RegularButton>
             </div>
-            {/* <div className={`w-full`}>
-              <div className={`${styles.receiptLeft}   flex flex-col gap-2`}>
-                <div
-                  className={` shadow rounded-lg p-6 bg-white flex flex-col gap-4`}
-                >
-                  <p className="text-xl text-emerald-900">
-                    Receipt Information
-                  </p>
-
-                  <div className="flex flex-col gap-4 text-sm">
-                    <div className="flex flex-col gap-4 text-sm">
-                      <div>
-                        <p className="text-slate-400">Store</p>
-                        <p>{item.receipt.store}</p>
-                      </div>
-                      <div>
-                        <p className="text-slate-400">Return Date</p>
-                        <p>{formatDateToMMDDYY(item.receipt.return_date)}</p>
-                      </div>
-                      <div>
-                        <p className="text-slate-400">Created at</p>
-                        <p>{formatDateToMMDDYY(item.receipt.created_at)}</p>
-                      </div>
-                      <div>
-                        <p className="text-slate-400">Receipt Type</p>
-                        <p>{item.receipt.type}</p>
-                      </div>
-
-                      {item.receipt.card ? (
-                        <div>
-                          <p className="text-slate-400">Card used</p>
-                          <p>{item.receipt.card}</p>
-                        </div>
-                      ) : (
-                        <div>
-                          <p className="text-slate-400">Card used</p>
-                          <p>None</p>
-                        </div>
-                      )}
-                      {item.receipt.tracking_number ? (
-                        <div>
-                          <p className="text-slate-400">Tracking Link</p>
-                          <p>{item.receipt.tracking_number}</p>
-                        </div>
-                      ) : (
-                        <div>
-                          <p className="text-slate-400">Tracking Link</p>
-                          <p>None</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> */}
           </div>
+
           {uploadError && (
             <ErrorModal
               errorMessage={uploadError}
@@ -397,3 +355,75 @@ const ItemID = () => {
 };
 
 export default ItemID;
+
+// <div className="flex flex-col gap-6  max-w-[600px] ">
+//   <HeaderItemNav item={item} />
+
+//   <div className="w-full flex flex-col gap-4">
+//     <RegularButton styles="bg-emerald-900" href={`/item/${id}/edit`}>
+//       <p className="text-white text-xs">Edit</p>
+//     </RegularButton>
+//     {item.photo_url && (
+//       <div className="w-full   ">
+//         <div className="max-h-[300px] w-full overflow-hidden rounded-sm">
+//           <Image
+//             src={item.photo_url}
+//             width={600}
+//             height={300}
+//             alt="Receipt Image"
+//             className="w-full h-full object-cover cursor-pointer"
+//             onClick={() => setIsOpen(true)}
+//           />
+//         </div>
+//         <ImageModal
+//           isOpen={isOpen}
+//           setIsOpen={setIsOpen}
+//           imageUrl={item.photo_url}
+//           altText="Your Image Description"
+//         />
+//       </div>
+//     )}
+//     {!item.photo_url && (
+//       <div className="max-h-[300px] w-full overflow-hidden rounded-sm">
+//         <div className="w-full h-[110px] overflow-hidden relative flex justify-center items-center bg-slate-100 ">
+//           <div className="w-full h-full flex justify-center items-center">
+//             <Image
+//               src="/item_b.png"
+//               alt=""
+//               width={60}
+//               height={60}
+//               className="object-cover "
+//               style={{ objectFit: "cover", objectPosition: "center" }}
+//             />
+//           </div>
+//         </div>
+//       </div>
+//     )}
+//   </div>
+//   <div>
+//     <p className="text-xl text-orange-600">{item.description}</p>
+//   </div>
+
+//   {item.receipt.asset_amount && item.receipt.asset_amount < item.price && (
+//     <p className="text-md text-emerald-900">Asset</p>
+//   )}
+
+//   <div className="flex flex-col gap-4">
+//     <div className="w-full  border-slate-400 border-b-[1px]   pb-2">
+//       <p className="text-xs text-slate-400">Price</p>
+//       <p>{formatCurrency(item.price)}</p>
+//     </div>
+//     <div className="w-full  border-slate-400 border-b-[1px]   pb-2">
+//       <p className="text-xs text-slate-400">Barcode</p>
+//       <p>{item.barcode ? item.barcode : "None"}</p>
+//     </div>
+//     <div className="w-full  border-slate-400 border-b-[1px]   pb-2">
+//       <p className="text-xs text-slate-400">Character</p>
+//       <p>{item.character ? item.character : "None"}</p>
+//     </div>
+//     <div className="w-full  border-slate-400 border-b-[1px]   pb-2">
+//       <p className="text-xs text-slate-400">Product ID</p>
+//       <p>{item.product_id ? item.product_id : "None"}</p>
+//     </div>
+//   </div>
+// </div>;

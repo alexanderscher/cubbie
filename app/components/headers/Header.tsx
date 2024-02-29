@@ -4,7 +4,6 @@ import { useSearchContext } from "@/app/components/context/SearchContext";
 import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
 import SearchBar from "@/app/components/search/SearchBar";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import styles from "./header.module.css";
 import React, { useCallback, useEffect } from "react";
 
 interface HeaderProps {
@@ -182,28 +181,42 @@ const FilterOptions = ({
 
   const router = useRouter();
 
+  const handleOverlayClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (
+      event.target instanceof HTMLDivElement &&
+      event.target.id === "modal-overlay"
+    ) {
+      onClose();
+    }
+  };
+
+  const handleModalContentClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => e.stopPropagation();
   return (
-    <div className={`overlay`}>
-      <div className={`flex flex-col modal`}>
+    <div id="modal-overlay" className={`overlay`} onClick={handleOverlayClick}>
+      <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
         <div className="border-b-[1px] border-emerald-900 flex ">
-          <div className="p-4 flex w-full">
+          <div className="p-2 flex w-full">
             <p className="text-center w-full text-orange-600 text-lg">Filter</p>
             <button onClick={onClose}>&times;</button>
           </div>
         </div>
         <div className="border-b-[1px] border-emerald-900 flex flex-col">
-          <div className="p-4 ">
+          <div className="pt-2">
             <p className="text-sm w-full text-center text-emerald-900">
               Receipt Type
             </p>
           </div>
-          <div className="flex w-full p-4 gap-3">
+          <div className="flex flex-col w-full p-4 gap-3">
             <button
               className={`${
                 searchParams.get("receiptType") === "all" ||
                 !searchParams.get("receiptType")
-                  ? "w-1/2 border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-1/2 border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
+                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
               }`}
               onClick={() => {
                 handleTypeClick("all");
@@ -214,8 +227,8 @@ const FilterOptions = ({
             <button
               className={`${
                 searchParams.get("receiptType") === "receipt"
-                  ? "w-1/2 border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-1/2 border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
+                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
               }`}
               onClick={() => {
                 handleTypeClick("receipt");
@@ -226,8 +239,8 @@ const FilterOptions = ({
             <button
               className={`${
                 searchParams.get("receiptType") === "memo"
-                  ? "w-1/2 border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-1/2 border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
+                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
               }`}
               onClick={() => {
                 handleTypeClick("memo");
@@ -238,18 +251,18 @@ const FilterOptions = ({
           </div>
         </div>
         <div className="border-b-[1px] border-emerald-900 flex flex-col">
-          <div className="p-4 ">
+          <div className="pt-2">
             <p className="text-sm w-full text-center text-emerald-900">
               Purchase type
             </p>
           </div>
-          <div className="flex w-full p-4 gap-3">
+          <div className="flex flex-col w-full p-4 gap-3">
             <button
               className={`${
                 searchParams.get("storeType") === "all" ||
                 !searchParams.get("storeType")
-                  ? "w-1/2 border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-1/2 border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
+                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
               }`}
               onClick={() => {
                 handleStoreClick("all");
@@ -260,8 +273,8 @@ const FilterOptions = ({
             <button
               className={`${
                 searchParams.get("storeType") === "online"
-                  ? "w-1/2 border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-1/2 border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
+                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
               }`}
               onClick={() => {
                 handleStoreClick("online");
@@ -272,8 +285,8 @@ const FilterOptions = ({
             <button
               className={`${
                 searchParams.get("storeType") === "store"
-                  ? "w-1/2 border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-1/2 border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
+                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
               }`}
               onClick={() => {
                 handleStoreClick("store");
@@ -284,7 +297,7 @@ const FilterOptions = ({
           </div>
         </div>
         <div className="border-b-[1px] border-emerald-900 flex flex-col">
-          <div className="p-4 ">
+          <div className="pt-2">
             <p className="text-sm w-full text-center text-emerald-900">Sort</p>
           </div>
           <div className="flex flex-col w-full p-4 gap-3">
@@ -385,6 +398,7 @@ const FilterItemsOptions = ({
   pathname,
   searchParams,
   onClose,
+  createQueryString,
 }: FilterOptionsProps) => {
   const handleSortClick = (name: string) => {
     const queryParams = new URLSearchParams(window.location.search);
@@ -408,6 +422,10 @@ const FilterItemsOptions = ({
 
   const router = useRouter();
 
+  const handleTypeClick = (name: string) => {
+    router.push(pathname + "?" + createQueryString("type", name));
+  };
+
   return (
     <div className={`overlay`}>
       <div className={`flex flex-col modal`}>
@@ -419,7 +437,7 @@ const FilterItemsOptions = ({
         </div>
 
         <div className="border-b-[1px] border-emerald-900 flex flex-col">
-          <div className="p-4 ">
+          <div className="pt-2">
             <p className="text-sm w-full text-center text-emerald-900">Sort</p>
           </div>
           <div className="flex flex-col w-full p-4 gap-3">
@@ -508,6 +526,50 @@ const FilterItemsOptions = ({
               ) : (
                 <p className="text-xs">Price</p>
               )}
+            </button>
+          </div>
+        </div>
+        <div className="border-b-[1px] border-emerald-900 flex flex-col">
+          <div className="pt-2">
+            <p className="text-sm w-full text-center text-emerald-900">Sort</p>
+          </div>
+          <div className="flex flex-col w-full p-4 gap-3 text-xs">
+            <button
+              className={`${
+                searchParams.get("type")?.includes("all") ||
+                !searchParams.get("type")
+                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
+                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
+              }`}
+              onClick={() => {
+                handleTypeClick("all");
+              }}
+            >
+              <p>All</p>
+            </button>
+            <button
+              className={`${
+                searchParams.get("type")?.includes("current")
+                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
+                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
+              }`}
+              onClick={() => {
+                handleTypeClick("current");
+              }}
+            >
+              <p>Current</p>
+            </button>
+            <button
+              className={`${
+                searchParams.get("type")?.includes("returned")
+                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
+                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
+              }`}
+              onClick={() => {
+                handleTypeClick("returned");
+              }}
+            >
+              <p>Returned</p>
             </button>
           </div>
         </div>

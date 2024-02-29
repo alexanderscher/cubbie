@@ -54,6 +54,28 @@ const Items = () => {
     });
   }, [filteredItemData, sortField, sortOrder]);
 
+  if (searchParams.get("type") === "returned") {
+    return (
+      <div className="boxes pb-20">
+        {sortedAndFilteredData.length > 0 &&
+          sortedAndFilteredData.map(
+            (item: ItemType) =>
+              item.returned && <Item key={item.id} item={item} />
+          )}
+      </div>
+    );
+  } else if (searchParams.get("type") === "current") {
+    return (
+      <div className="boxes pb-20">
+        {sortedAndFilteredData.length > 0 &&
+          sortedAndFilteredData.map(
+            (item: ItemType) =>
+              !item.returned && <Item key={item.id} item={item} />
+          )}
+      </div>
+    );
+  }
+
   return (
     <div className="boxes pb-20">
       {sortedAndFilteredData.length > 0 &&

@@ -106,30 +106,43 @@ export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  const findItem = await prisma.items.findUnique({
-    where: {
-      id: parseInt(params.id),
-    },
-  });
-  if (findItem) {
-    const photo_key = findItem.photo_key;
-    if (photo_key) {
-      await deleteUploadThingImage(photo_key);
+  try {
+    const findItem = await prisma.items.findUnique({
+      where: {
+        id: parseInt(params.id),
+      },
+    });
+    if (findItem) {
+      const photo_key = findItem.photo_key;
+      if (photo_key) {
+        await deleteUploadThingImage(photo_key);
+      }
     }
+
+    const item = await prisma.items.delete({
+      where: {
+        id: parseInt(params.id),
+      },
+    });
+
+    return new NextResponse(
+      JSON.stringify({
+        item,
+      }),
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  } catch (error) {
+    return new NextResponse(
+      JSON.stringify({
+        error:
+          "We're having trouble processing your request right now. Please check your internet connection and try again. If the problem persists, our support team is here to help.",
+      }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   }
-
-  const item = await prisma.items.delete({
-    where: {
-      id: parseInt(params.id),
-    },
-  });
-
-  return new NextResponse(
-    JSON.stringify({
-      item,
-    }),
-    {
-      headers: { "Content-Type": "application/json" },
-    }
-  );
 }

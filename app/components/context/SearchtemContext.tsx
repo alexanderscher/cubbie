@@ -9,11 +9,15 @@ import { Item } from "@/types/receipt";
 interface SearchItemContextType {
   filteredItemData: Item[];
   setFilteredItemData: React.Dispatch<React.SetStateAction<Item[]>>;
+  refreshData: boolean;
+  setRefreshData: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const SearchItemContext = createContext<SearchItemContextType>({
   filteredItemData: [],
   setFilteredItemData: () => {},
+  refreshData: false,
+  setRefreshData: () => {},
 });
 
 export const useSearchItemContext = () => useContext(SearchItemContext);
@@ -26,6 +30,7 @@ export const SearchItemProvider: React.FC<SearchProviderProps> = ({
   children,
 }) => {
   const [filteredItemData, setFilteredItemData] = useState<Item[]>([]);
+  const [refreshData, setRefreshData] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -34,7 +39,12 @@ export const SearchItemProvider: React.FC<SearchProviderProps> = ({
 
   return (
     <SearchItemContext.Provider
-      value={{ filteredItemData, setFilteredItemData }}
+      value={{
+        filteredItemData,
+        setFilteredItemData,
+        refreshData,
+        setRefreshData,
+      }}
     >
       {children}
     </SearchItemContext.Provider>

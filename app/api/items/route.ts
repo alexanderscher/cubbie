@@ -2,6 +2,7 @@ import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
 import { handleUpload } from "@/app/actions/uploadPhoto";
 import prisma from "@/prisma/client";
 import { NextResponse } from "next/server";
+
 export async function GET(request: Request) {
   const items = await prisma.items.findMany({
     include: {

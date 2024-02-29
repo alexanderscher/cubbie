@@ -1,4 +1,6 @@
 "use client";
+import { markAsReturned, unreturn } from "@/app/actions/return";
+import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
 import Shirt from "@/app/components/placeholderImages/Shirt";
 import { TruncateText } from "@/app/components/text/Truncate";
 import { Item as ItemType } from "@/types/receipt";
@@ -6,6 +8,7 @@ import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 interface Props {
@@ -13,6 +16,8 @@ interface Props {
 }
 
 const Item = ({ item }: Props) => {
+  const { setRefreshData } = useSearchItemContext();
+
   return (
     <div className="box">
       {item.photo_url && (
@@ -78,8 +83,40 @@ const Item = ({ item }: Props) => {
           </div>
         </div>
       </div>
-      <div className="border-t-[1px] text-xs text-center  text-emerald-900 p-2">
-        <p>Mark as Returned</p>
+      <div
+        className={`${
+          item.returned
+            ? "border-t-orange-600 text-orange-600"
+            : "border-t-emerald-900"
+        } border-t-[1px] text-xs text-center  text-emerald-900 p-2`}
+      >
+        {item.returned ? (
+          <button
+            onClick={async () => {
+              const { ok, data } = await unreturn(item.id);
+              if (ok) {
+                setRefreshData(true);
+              } else {
+                console.error("Failed to unreturn", data);
+              }
+            }}
+          >
+            <p className="text-orange-600">Returned</p>
+          </button>
+        ) : (
+          <button
+            onClick={async () => {
+              const { ok, data } = await markAsReturned(item.id);
+              if (ok) {
+                setRefreshData(true);
+              } else {
+                console.error("Failed to mark as returned:", data);
+              }
+            }}
+          >
+            Mark as Returned
+          </button>
+        )}
       </div>
     </div>
   );

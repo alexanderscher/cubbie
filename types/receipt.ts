@@ -29,4 +29,5 @@ export interface Item {
   product_id?: string;
   receipt_id: number;
   receipt: Receipt;
+  returned: boolean;
 }

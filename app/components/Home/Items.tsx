@@ -38,15 +38,12 @@ const Items = () => {
         return 0;
       }
 
-      // Handle undefined values gracefully
       if (valueA === undefined || valueB === undefined) return 0;
 
-      // Numeric comparison (assuming price is a number)
       if (typeof valueA === "number" && typeof valueB === "number") {
         return sortOrder === "asc" ? valueA - valueB : valueB - valueA;
       }
 
-      // String comparison for dates
       if (typeof valueA === "string" && typeof valueB === "string") {
         return sortOrder === "asc"
           ? valueA.localeCompare(valueB)

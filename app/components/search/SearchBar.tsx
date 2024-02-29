@@ -63,7 +63,7 @@ function SearchBar({ data, type, searchType }: Props) {
     <div className="w-full ">
       <div className="w-full">
         <input
-          className="searchBar border-[1px] border-emerald-900 placeholder:text-emerald-900  placeholder:text-xs flex items-center text-xs text-emerald-900 p-3"
+          className="searchBar border-[1px] border-black placeholder:text-slate-400  placeholder:text-xs flex items-center text-sm text-black p-3"
           placeholder={`Search ${
             searchType === "Receipts"
               ? "receipt by store name"

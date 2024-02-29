@@ -14,7 +14,8 @@ interface HeaderProps {
 const Header = ({ type }: HeaderProps) => {
   const [data, setData] = React.useState([]);
   const { setFilteredData, setIsLoading } = useSearchContext();
-  const { setFilteredItemData } = useSearchItemContext();
+  const { setFilteredItemData, refreshData, setRefreshData } =
+    useSearchItemContext();
   const [openModal, setOpenModal] = React.useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -31,15 +32,23 @@ const Header = ({ type }: HeaderProps) => {
 
   useEffect(() => {
     if (pathname === "/items") {
+      console.log("fetching items");
       const fetchItems = async () => {
         const res = await fetch("/api/items");
         const data = await res.json();
         setData(data.items);
         setFilteredItemData(data.items);
+        setRefreshData(false);
       };
       fetchItems();
     }
-  }, [pathname, setFilteredItemData, setIsLoading]);
+  }, [
+    pathname,
+    setFilteredItemData,
+    setIsLoading,
+    refreshData,
+    setRefreshData,
+  ]);
 
   useEffect(() => {
     if (pathname !== "/items") {

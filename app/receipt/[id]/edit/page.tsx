@@ -143,7 +143,12 @@ const ReceiptPage = () => {
         <div className="flex flex-col gap-8  w-full h-full pb-[200px]">
           <HeaderNav receipt={receipt} />
           <div className="flex justify-between items-center w-full">
-            <h1 className="text-2xl text-orange-600 w-3/4">{receipt.store}</h1>
+            <RegularButton
+              styles="bg-orange-600 border-orange-600"
+              handleClick={deleteReceipt}
+            >
+              <p className="text-white text-xs ">Delete Receipt</p>
+            </RegularButton>
             <div className="flex gap-2">
               {dirty ? (
                 <div className="flex gap-2">
@@ -200,13 +205,6 @@ const ReceiptPage = () => {
           <div className={`${styles.receipt} `}>
             <div className={`${styles.receiptLeft}  flex flex-col gap-2 `}>
               <div className={` rounded-lg  bg-white flex flex-col gap-4 p-6`}>
-                <div>
-                  {" "}
-                  <p className="text-xl text-emerald-900">
-                    Receipt Information
-                  </p>
-                </div>
-
                 {!values.receipt_image_url && !values.edit_image && (
                   <div className="w-full h-[200px] overflow-hidden  border-[1px] border-dashed rounded-lg bg-slate-100">
                     <input
@@ -247,88 +245,44 @@ const ReceiptPage = () => {
                         width={300}
                         height={300}
                         alt="Receipt Image"
-                        className="object-contain rounded-lg w-full"
+                        className="object-contain rounded-sm w-full cursor-pointer"
                         layout="intrinsic"
+                        onClick={() => setIsOpen(true)}
                       />
-                      <div className="absolute inset-0 rounded-lg bg-slate-200 bg-opacity-0 group-hover:bg-opacity-50 flex justify-center items-center transition-opacity duration-300 opacity-0 group-hover:opacity-100 cursor-pointer">
-                        <button
-                          className="absolute text-black top-0 left-0 m-2"
-                          onClick={() => {
-                            setFieldValue("edit_image", "");
-                          }}
-                        >
-                          Remove
-                        </button>
-                        <input
-                          type="file"
-                          onChange={(e) => handleFileChange(e, setFieldValue)}
-                          id="replace"
-                          style={{
-                            opacity: 0,
-                            position: "absolute",
-                            zIndex: -1,
-                          }}
-                        />
-                        <label
-                          htmlFor="replace"
-                          className="absolute text-black top-0 right-0 m-2"
-                          style={{
-                            cursor: "pointer",
-                          }}
-                        >
-                          Replace
-                        </label>
-                      </div>
+                      <ImageModal
+                        isOpen={isOpen}
+                        setIsOpen={setIsOpen}
+                        imageUrl={values.edit_image}
+                        altText="Your Image Description"
+                        setFieldValue={setFieldValue}
+                        handleFileChange={handleFileChange}
+                        changeField="edit_image"
+                      />
                     </div>
                   </div>
                 )}
 
                 {values.receipt_image_url && (
-                  <div className="w-full flex justify-center items-center relative group">
+                  <div className="w-full flex justify-center items-center relative">
                     <div className="relative  w-[200px] max-h-[400px] rounded-lg overflow-hidden">
                       <Image
                         src={values.receipt_image_url}
                         width={300}
                         height={300}
                         alt="Receipt Image"
-                        className="object-contain rounded-lg w-full"
+                        className="object-contain rounded-sm w-full cursor-pointer"
                         layout="intrinsic"
+                        onClick={() => setIsOpen(true)}
                       />
-                      <div className="absolute inset-0 rounded-lg bg-slate-200 bg-opacity-0 group-hover:bg-opacity-50 flex justify-center items-center transition-opacity duration-300 opacity-0 group-hover:opacity-100 cursor-pointer">
-                        <button
-                          className="absolute text-black top-0 left-0 m-2"
-                          onClick={() => {
-                            setFieldValue("receipt_image_url", "");
-                          }}
-                        >
-                          Remove
-                        </button>
-                        <input
-                          type="file"
-                          onChange={(e) => handleFileChange(e, setFieldValue)}
-                          id="replace"
-                          style={{
-                            opacity: 0,
-                            position: "absolute",
-                            zIndex: -1,
-                          }}
-                        />
-                        <label
-                          htmlFor="replace"
-                          className="absolute text-black top-0 right-0 m-2"
-                          style={{
-                            cursor: "pointer",
-                          }}
-                        >
-                          Replace
-                        </label>
-                      </div>
                     </div>
                     <ImageModal
                       isOpen={isOpen}
                       setIsOpen={setIsOpen}
                       imageUrl={values.receipt_image_url}
                       altText="Your Image Description"
+                      setFieldValue={setFieldValue}
+                      handleFileChange={handleFileChange}
+                      changeField="receipt_image_url"
                     />
                   </div>
                 )}
@@ -346,12 +300,12 @@ const ReceiptPage = () => {
                     )}
                   </div>
                   <div className="w-full ">
-                    <p className="text-slate-400 text-xs">Receipt Type</p>
+                    <p className="text-slate-400 text-xs">Purchase Type</p>
                     <select
                       name="type"
                       value={values.type}
                       onChange={handleChange}
-                      className="w-full border-[1px] border-slate-300 rounded-lg p-2"
+                      className="w-full border-[1px] border-slate-300 rounded-lg p-[10px]"
                     >
                       <option value={values.type}>
                         {values.type
@@ -435,12 +389,6 @@ const ReceiptPage = () => {
                       </p>
                     )}
                   </div>
-                  <RegularButton
-                    styles="bg-orange-600 border-orange-600"
-                    handleClick={deleteReceipt}
-                  >
-                    <p className="text-white text-xs ">Delete Receipt</p>
-                  </RegularButton>
                 </div>
               </div>
             </div>

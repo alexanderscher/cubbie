@@ -16,7 +16,6 @@ const Header = ({ type }: HeaderProps) => {
   const { setFilteredData, setIsLoading } = useSearchContext();
   const { setFilteredItemData } = useSearchItemContext();
   const [openModal, setOpenModal] = React.useState(false);
-  const [itemsModal, setItemsModall] = React.useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -86,15 +85,15 @@ const Header = ({ type }: HeaderProps) => {
           <p className="text-xs">Items</p>
         </RegularButton>
       </div>
-      <div className="pb-4 flex justify-between items-center relative flex-wrap gap-4 mt-6">
+      <div className="pb-4 flex justify-between items-center relative flex-wrap gap-4 ">
         <SearchBar
           data={data}
           searchType={type}
           type={pathname === "/items" ? "item" : "receipt"}
         />
-        <div className="fixed z-10 bottom-10 left-1/2 transform -translate-x-1/2">
+        <div className="fixed z-10 bottom-8 left-1/2 transform -translate-x-1/2">
           <button
-            className="px-[40px] py-[8px] border-[1px] border-emerald-900 bg-emerald-900 text-white rounded-3xl"
+            className="px-[60px] py-[8px] border-[1px] border-emerald-900 bg-emerald-900 text-white rounded-3xl"
             onClick={() => {
               setOpenModal(!openModal);
             }}

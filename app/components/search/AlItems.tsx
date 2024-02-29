@@ -1,15 +1,25 @@
 "use client";
 
+import { useSearchBarContext } from "@/app/components/context/SearchBarContext";
 import { BarcodeScanner } from "@/app/components/createForm/barcode/BarcodeScanner";
 import { Item, Receipt } from "@/types/receipt";
 import Image from "next/image";
+import Link from "next/link";
 import React, { ChangeEvent, useEffect, useState } from "react";
 
 function SearchAllItems() {
+  const {
+    searchInput,
+    setSearchInput,
+    filteredItems,
+    setFilteredItems,
+    filteredReceipts,
+    setFilteredReceipts,
+  } = useSearchBarContext();
+
   const [data, setData] = useState<Receipt[]>([]);
   const [showScanner, setShowScanner] = useState(false);
-  const [filteredReceipts, setFilteredReceipts] = useState<Receipt[]>([]);
-  const [filteredItems, setFilteredItems] = useState<Item[]>([]);
+  const [barcodeValue, setBarcodeValue] = useState("");
 
   const handleBarcodeResult = (barcodeValue: string) => {
     const matchingItems = data
@@ -18,7 +28,8 @@ function SearchAllItems() {
         const barcodeMatch = item.barcode === barcodeValue;
         return barcodeMatch;
       });
-
+    setSearchInput(barcodeValue);
+    setBarcodeValue(barcodeValue);
     setFilteredItems(matchingItems);
   };
   useEffect(() => {
@@ -33,6 +44,7 @@ function SearchAllItems() {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value.toLowerCase();
+    setSearchInput(e.target.value);
 
     const filteredReceipts = data.filter(
       (receipt) => receipt.store && receipt.store.toLowerCase().includes(input)
@@ -56,13 +68,19 @@ function SearchAllItems() {
   };
 
   return (
-    <div className="pb-[30px] w-full">
-      <div className="w-full flex gap-4 items-center justify-center">
+    <div className="pb-[30px] w-full flex-col">
+      <p className="text-xs mb-4 text-white">
+        Search for all items and receipts by store, description, barcode or
+        product id
+      </p>
+      <div className="w-full flex gap-4 items-center justify-center pb-4">
         <input
-          className="bg-emerald-900  placeholder:text-sm placeholder:text-white border-[1px] border-white p-2 rounded-md w-full"
-          placeholder={`Search all items`}
+          className="bg-emerald-900  placeholder:text-sm placeholder:text-white border-[1px] border-white p-2 rounded-md w-full text-white"
+          placeholder={`Search `}
           onChange={handleChange}
+          value={searchInput}
         ></input>
+
         <div>
           <button
             type="button"
@@ -103,35 +121,71 @@ function SearchAllItems() {
           </div>
         )}
       </div>
+      {filteredItems.length > 0 && searchInput && (
+        <ItemResults filteredItems={filteredItems} />
+      )}
+      {searchInput && !barcodeValue && filteredReceipts.length > 0 && (
+        <ReceiptResults filteredReceipts={filteredReceipts} />
+      )}
     </div>
   );
 }
 
 export default SearchAllItems;
 
-// interface ResultsProps {
-//   filteredData: Receipt[] | Item[];
-// }
+interface ResultsProps {
+  filteredItems: Item[];
+}
 
-// const Results = ({ filteredData }: ResultsProps) => {
-//   return (
-//     <div>
-//       {filteredData.map((receipt, index) => {
-//         return (
-//           <div key={index}>
-//             <h1>{receipt.store}</h1>
-//             <ul>
-//               {receipt.items.map((item, index) => {
-//                 return (
-//                   <li key={index}>
-//                     <h2>{item.description}</h2>
-//                   </li>
-//                 );
-//               })}
-//             </ul>
-//           </div>
-//         );
-//       })}
-//     </div>
-//   );
-// };
+const ItemResults = ({ filteredItems }: ResultsProps) => {
+  const { setSearchBarOpen } = useSearchBarContext();
+
+  return (
+    <div className="pb-4">
+      <p className="text-orange-600 border-b-[1px]">Items</p>
+      {filteredItems.map((item, index) => {
+        return (
+          <div key={index} className="pb-2">
+            <Link href={`/item/${item.id}`}>
+              <h1
+                className="text-white"
+                onClick={() => {
+                  setSearchBarOpen(false);
+                }}
+              >
+                {item.description}
+              </h1>
+            </Link>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+interface ReceiptResultsProps {
+  filteredReceipts: Receipt[];
+}
+
+const ReceiptResults = ({ filteredReceipts }: ReceiptResultsProps) => {
+  const { setSearchBarOpen } = useSearchBarContext();
+  return (
+    <div>
+      <p className="text-orange-600 border-b-[1px]">Receipts</p>
+      {filteredReceipts.map((receipt, index) => {
+        return (
+          <div key={index} className="pb-2">
+            <Link href={`/receipt/${receipt.id}`}>
+              <h1
+                className="text-white"
+                onClick={() => setSearchBarOpen(false)}
+              >
+                {receipt.store}
+              </h1>
+            </Link>
+          </div>
+        );
+      })}
+    </div>
+  );
+};

@@ -35,9 +35,9 @@ const ReceiptPage = () => {
   return (
     <div className="flex flex-col gap-8  w-full h-full ">
       <HeaderNav receipt={receipt} />
-      <div className="flex justify-between items-center w-full">
-        <h1 className="text-2xl text-orange-600 w-1/2">{receipt.store}</h1>
-        <div className="flex gap-2 w-1/2 justify-end">
+      <div className="flex justify-between items-center w-full flex-wrap gap-4">
+        <h1 className="text-2xl text-orange-600 ">{receipt.store}</h1>
+        <div className="flex gap-2  justify-end">
           <RegularButton
             styles="bg-emerald-900"
             handleClick={() => setIsAddOpen(true)}
@@ -79,7 +79,9 @@ const ReceiptPage = () => {
           <div
             className={`shadow rounded-lg  bg-white flex flex-col gap-4 p-6   `}
           >
-            <p className="text-xl text-emerald-900">Receipt Information</p>
+            <p className="text-xl text-emerald-900">
+              {receipt.memo ? "Memo" : "Receipt"} Information
+            </p>
             {!receipt.receipt_image_url && (
               <div className="w-full  overflow-hidden relative flex justify-center items-center ">
                 <div className="w-full h-full flex justify-center items-start ">
@@ -127,7 +129,7 @@ const ReceiptPage = () => {
                 <p className="">{formatDateToMMDDYY(receipt.created_at)}</p>
               </div>
               <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
-                <p className="text-slate-400 text-xs">Receipt Type</p>
+                <p className="text-slate-400 text-xs">Purchase Type</p>
                 <p className="">{receipt.type}</p>
               </div>
 

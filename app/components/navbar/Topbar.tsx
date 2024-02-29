@@ -3,7 +3,6 @@ import Image from "next/image";
 import styles from "./navbar.module.css";
 import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useSearchBarContext } from "@/app/components/context/SearchBarContext";
 import SearchAllItems from "@/app/components/search/AlItems";
 

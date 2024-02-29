@@ -38,7 +38,7 @@ const Item = ({ item }: Props) => {
           </button>
         </div>
       )}
-      <div className="p-3 flex flex-col gap-2 justify-between">
+      <div className="p-3 flex flex-col  ">
         <Link href={`/item/${item.id}`} className="">
           <TruncateText
             text={item.description}
@@ -46,6 +46,11 @@ const Item = ({ item }: Props) => {
             styles={"text-orange-600 text-sm"}
           />
         </Link>
+        <div className="text-xs">
+          <p className="text-slate-400  ">
+            Return by {formatDateToMMDDYY(item.receipt.return_date)}
+          </p>
+        </div>
 
         <div>
           <div className="border-t-[1px] border-slate-300 flex flex-col  gap-1 text-xs">
@@ -59,14 +64,17 @@ const Item = ({ item }: Props) => {
                 />
               </Link>
             </div>
+
             <div className="">
               <p className="text-slate-400  ">Price</p>
               <p className="">{formatCurrency(item.price)}</p>
             </div>
-            <div className="mb-2">
-              <p className="text-slate-400  ">Return Date</p>
-              <p className="">{formatDateToMMDDYY(item.receipt.return_date)}</p>
-            </div>
+            {item.barcode && (
+              <div className="">
+                <p className="text-slate-400  ">Barcode</p>
+                <p className="">{item.barcode}</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -9,7 +9,6 @@ import localFont from "next/font/local";
 import Head from "next/head";
 import Topbar from "@/app/components/navbar/Topbar";
 import { SearchBarContextProvider } from "@/app/components/context/SearchBarContext";
-import SearchAllItems from "@/app/components/search/AlItems";
 
 const myFont = localFont({
   src: "../font/SuisseIntl-Medium.woff",

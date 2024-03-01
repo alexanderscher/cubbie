@@ -1,25 +1,41 @@
 "use client";
 import { useSearchContext } from "@/app/components/context/SearchContext";
+import { useSearchProjectContext } from "@/app/components/context/SearchProjectContext";
 import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
-import { useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 
 interface Props {
   data: any;
-  type: string;
   searchType: string;
 }
 
-function SearchBar({ data, type, searchType }: Props) {
+function SearchBar({ data, searchType }: Props) {
+  console.log(data);
   const [searchTerm, setSearchTerm] = useState("");
   const { setFilteredData } = useSearchContext();
   const { setFilteredItemData } = useSearchItemContext();
+  const { setFilteredProjectData } = useSearchProjectContext();
+  const pathname = usePathname();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = event.target.value;
     setSearchTerm(newSearchTerm);
 
-    if (type === "receipt") {
+    if (pathname === "/") {
+      if (newSearchTerm.trim() === "") {
+        setFilteredProjectData(data);
+      } else {
+        const newFilteredData = data.filter(
+          (item: any) =>
+            item.name &&
+            item.name.toLowerCase().includes(newSearchTerm.toLowerCase())
+        );
+        setFilteredProjectData(newFilteredData);
+      }
+    }
+
+    if (pathname === "/receipts") {
       if (newSearchTerm.trim() === "") {
         setFilteredData(data);
       } else {
@@ -31,7 +47,7 @@ function SearchBar({ data, type, searchType }: Props) {
         setFilteredData(newFilteredData);
       }
     }
-    if (type === "item") {
+    if (pathname === "/items") {
       if (newSearchTerm.trim() === "") {
         setFilteredItemData(data);
       } else {

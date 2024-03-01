@@ -3,19 +3,19 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   const projects = await prisma.project.findMany({
-    include: {
-      receipts: {
-        include: {
-          items: true, // Include the items for each receipt
-        },
-      },
-    },
     orderBy: {
       created_at: "desc",
     },
+    include: {
+      receipts: {
+        include: {
+          items: true,
+        },
+      },
+    },
   });
 
-  return new NextResponse(JSON.stringify(projects), {
+  return new NextResponse(JSON.stringify({ projects }), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   });

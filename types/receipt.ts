@@ -1,3 +1,10 @@
+export interface Project {
+  id: number;
+  name: string;
+  created_at: Date;
+  receipts: Receipt[];
+}
+
 export interface Receipt {
   id: number;
   type: string;
@@ -15,6 +22,7 @@ export interface Receipt {
   memo: boolean;
   created_at: Date;
   asset_amount: number;
+  expired: boolean;
 }
 
 export interface Item {

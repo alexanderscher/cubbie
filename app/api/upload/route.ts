@@ -24,8 +24,6 @@ export async function POST(request: Request) {
       assetAmount,
     } = json;
 
-    console.log(receiptImage);
-
     const requiredFields = ["type", "store", "items"];
 
     const missingFields: string[] = [];
@@ -81,11 +79,11 @@ export async function POST(request: Request) {
 
           return {
             description: item.description,
+
             photo_url: itemPhotoUrl,
             photo_key: itemPhotoKey,
             price: parseFloat(item.price),
             barcode: item.barcode,
-            asset: assetAmount >= parseFloat(item.price) ? true : false,
             character: item.character,
             product_id: item.product_id,
             created_at: new Date().toISOString(),
@@ -113,7 +111,7 @@ export async function POST(request: Request) {
         type,
         store,
         card,
-
+        asset_amount: parseInt(assetAmount),
         tracking_number: tracking_number,
         purchase_date: purchaseDate,
         days_until_return: days_until_return,

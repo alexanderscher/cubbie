@@ -10,6 +10,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Project {
+  id         Int       @id @default(autoincrement())
+  name       String
+  created_at DateTime
+  receipts   Receipt[]
+}
+
 model Receipt {
   id                Int      @id @default(autoincrement())
   type              String
@@ -27,6 +34,8 @@ model Receipt {
   memo              Boolean
   created_at        DateTime
   expired           Boolean  @default(false)
+  project_id        Int?
+  project           Project? @relation(fields: [project_id], references: [id])
 }
 
 model Items {

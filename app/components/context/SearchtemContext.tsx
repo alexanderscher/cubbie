@@ -11,6 +11,8 @@ interface SearchItemContextType {
   setFilteredItemData: React.Dispatch<React.SetStateAction<Item[]>>;
   refreshData: boolean;
   setRefreshData: React.Dispatch<React.SetStateAction<boolean>>;
+  isItemLoading: boolean;
+  setisItemLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const SearchItemContext = createContext<SearchItemContextType>({
@@ -18,6 +20,8 @@ export const SearchItemContext = createContext<SearchItemContextType>({
   setFilteredItemData: () => {},
   refreshData: false,
   setRefreshData: () => {},
+  isItemLoading: true,
+  setisItemLoading: () => {},
 });
 
 export const useSearchItemContext = () => useContext(SearchItemContext);
@@ -31,6 +35,7 @@ export const SearchItemProvider: React.FC<SearchProviderProps> = ({
 }) => {
   const [filteredItemData, setFilteredItemData] = useState<Item[]>([]);
   const [refreshData, setRefreshData] = useState(false);
+  const [isItemLoading, setisItemLoading] = useState(true);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -44,6 +49,8 @@ export const SearchItemProvider: React.FC<SearchProviderProps> = ({
         setFilteredItemData,
         refreshData,
         setRefreshData,
+        isItemLoading,
+        setisItemLoading,
       }}
     >
       {children}

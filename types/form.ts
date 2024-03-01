@@ -17,7 +17,6 @@ export interface ReceiptInput {
   type: string;
   store: string;
   card?: string;
-
   assetAmount: string;
   tracking_number?: string;
   purchase_date: string;
@@ -28,4 +27,5 @@ export interface ReceiptInput {
   onlineType: string;
   storeType: string;
   memo?: boolean;
+  folder?: number;
 }

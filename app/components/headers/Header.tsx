@@ -140,7 +140,7 @@ const Header = ({ type }: HeaderProps) => {
               : "projects"
           }
         />
-        {pathname === "/projects" && (
+        {pathname === "/receipts" && (
           <div className="flex w-full    ">
             <button
               className={`${
@@ -183,7 +183,7 @@ const Header = ({ type }: HeaderProps) => {
 
         <div className="flex gap-2 ">
           <div className="">
-            {openModal && pathname === "/" && (
+            {openModal && pathname === "/receipts" && (
               <FilterOptions
                 pathname={pathname}
                 onClose={() => setOpenModal(false)}
@@ -498,10 +498,23 @@ const FilterItemsOptions = ({
   const handleTypeClick = (name: string) => {
     router.push(pathname + "?" + createQueryString("type", name));
   };
+  const handleOverlayClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (
+      event.target instanceof HTMLDivElement &&
+      event.target.id === "modal-overlay"
+    ) {
+      onClose();
+    }
+  };
+  const handleModalContentClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => e.stopPropagation();
 
   return (
-    <div className={`overlay`}>
-      <div className={`flex flex-col modal`}>
+    <div id="modal-overlay" className={`overlay`} onClick={handleOverlayClick}>
+      <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
         <div className="border-b-[1px] border-emerald-900 flex ">
           <div className="p-4 flex w-full">
             <p className="text-center w-full text-orange-600 text-lg">Filter</p>
@@ -684,8 +697,23 @@ const CreateProject = ({ setAddProjectOpen }: AddItemModalProps) => {
     }
   };
 
+  const handleOverlayClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (
+      event.target instanceof HTMLDivElement &&
+      event.target.id === "modal-overlay"
+    ) {
+      setAddProjectOpen(false);
+    }
+  };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]">
+    <div
+      id="modal-overlay"
+      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]"
+      onClick={handleOverlayClick}
+    >
       <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full">
         <div className="flex justify-between items-center border-b border-gray-200 px-5 py-4 bg-slate-100 rounded-t-lg">
           <h3 className="text-lg text-emerald-900">Create Project</h3>

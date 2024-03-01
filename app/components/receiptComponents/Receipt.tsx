@@ -26,6 +26,12 @@ const Receipt = ({ receipt }: ReceiptProps) => {
       </div>
 
       <div className="p-3 flex flex-col justify-between">
+        {receipt.project && (
+          <p className="text-xs text-emerald-900 mb-1">
+            {receipt.project.name}
+          </p>
+        )}
+
         <div className="border-b-[1px] border-slate-400 ">
           <Link href={`/receipt/${receipt.id}`} className="">
             <TruncateText

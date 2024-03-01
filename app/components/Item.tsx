@@ -18,7 +18,7 @@ const Item = ({ item }: Props) => {
   const { setRefreshData } = useSearchItemContext();
 
   return (
-    <div className="box">
+    <div className="box justify-between">
       {item.photo_url && (
         <div className="w-full h-[110px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col">
           <Image

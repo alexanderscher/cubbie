@@ -18,6 +18,7 @@ export interface Receipt {
   receipt_image_url: string;
   receipt_image_key: string;
   items: Item[];
+  project: Project;
   archive: boolean;
   memo: boolean;
   created_at: Date;

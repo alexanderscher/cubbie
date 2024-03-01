@@ -5,7 +5,7 @@ import { ReceiptStoreStage } from "@/constants/form";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import React, { ChangeEvent, use, useRef } from "react";
+import React, { ChangeEvent, use, useEffect, useRef } from "react";
 import CurrencyInput from "react-currency-input-field";
 
 interface ReceiptManualProps {
@@ -27,6 +27,7 @@ const ReceiptManual = ({
 }: ReceiptManualProps) => {
   const pathname = usePathname();
   const [help, setHelp] = React.useState(false);
+  const [projects, setProjects] = React.useState([]);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -62,6 +63,17 @@ const ReceiptManual = ({
   const handleCurrencyChangeAsset = (value: string | undefined) => {
     setFieldValue("assetAmount", value || "");
   };
+
+  useEffect(() => {
+    const getProjects = async () => {
+      const response = await fetch("/api/project");
+      const data = await response.json();
+      console.log(data);
+      setProjects(data);
+    };
+    getProjects();
+  }, []);
+  console.log(values);
 
   return (
     <div className="flex flex-col gap-10  w-full justify-center items-center">
@@ -105,6 +117,20 @@ const ReceiptManual = ({
                 ? "Receipt Details"
                 : "Memo Details"}
             </h1>
+            <div className="w-full">
+              <p className="text-sm text-slate-400 ">Project folder</p>
+              <select
+                className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900"
+                onChange={handleChange("folder")}
+              >
+                <option value="">Miscellaneous</option>
+                {projects.map((project: any) => (
+                  <option key={project.id} value={project.id}>
+                    {project.name}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div className="flex gap-2 w-full">
               <div className="w-full">
                 <p className="text-sm text-slate-400 ">Asset Amount</p>

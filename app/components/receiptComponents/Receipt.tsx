@@ -61,6 +61,7 @@ const Receipt = ({ receipt }: ReceiptProps) => {
               )}
             </p>
           </div>
+          {receipt.expired && <p className="text-orange-600">Expired</p>}
         </div>
       </div>
     </div>

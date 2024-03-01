@@ -162,6 +162,7 @@ export default function ImageGpt({ setFieldValue, values, setStage }: Props) {
       const file = event.target.files[0];
 
       if (!file.type.match("image.*")) {
+        console.error("File is not an image");
         setInvalidImage(true);
         return;
       }
@@ -195,10 +196,6 @@ export default function ImageGpt({ setFieldValue, values, setStage }: Props) {
       setLoading(true);
       pathname === "/receipt-type/memo" ? MemoGptCall() : OnlineGptCall();
     }
-  };
-
-  const handleCurrencyChangeAsset = (value: string | undefined) => {
-    setFieldValue("assetAmount", value || "");
   };
 
   return (
@@ -252,25 +249,6 @@ export default function ImageGpt({ setFieldValue, values, setStage }: Props) {
                 Upload file
               </label>
             </div>
-            {/* <div className="flex flex-col">
-              <input
-                type="file"
-                onChange={handleFileChange}
-                id="file-upload-gpt"
-                style={{ opacity: 0, position: "absolute", zIndex: -1 }}
-              />
-              <LargeButton height="h-[80px]">
-                <label
-                  htmlFor="file-upload-gpt"
-                  className="w-full h-full flex justify-center items-center"
-                  style={{
-                    cursor: "pointer",
-                  }}
-                >
-                  Upload File
-                </label>
-              </LargeButton>
-            </div> */}
 
             {image !== "" && (
               <div className="relative w-24 h-24 ">

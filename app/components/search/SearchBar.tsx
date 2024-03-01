@@ -67,7 +67,9 @@ function SearchBar({ data, type, searchType }: Props) {
           placeholder={`Search ${
             searchType === "Receipts"
               ? "receipt by store name"
-              : "item by description, barcode, or product id"
+              : searchType === "Items"
+              ? "item by description, barcode, or product id"
+              : "projects"
           }`}
           value={searchTerm}
           onChange={handleChange}

@@ -6,7 +6,7 @@ import { Item as ItemType } from "@/types/receipt";
 import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
 
 const Items = () => {
-  const { filteredItemData } = useSearchItemContext();
+  const { filteredItemData, isItemLoading } = useSearchItemContext();
   const searchParams = useSearchParams();
 
   const sortFieldParam = searchParams.get("sort");
@@ -54,6 +54,13 @@ const Items = () => {
     });
   }, [filteredItemData, sortField, sortOrder]);
 
+  if (isItemLoading) {
+    return <div>Loading...</div>;
+  }
+  if (sortedAndFilteredData.length === 0 && !isItemLoading) {
+    return <NoData />;
+  }
+
   if (searchParams.get("type") === "returned") {
     return (
       <div className="boxes pb-20">
@@ -87,3 +94,11 @@ const Items = () => {
 };
 
 export default Items;
+
+const NoData = () => {
+  return (
+    <div className="flex justify-center items-center h-96">
+      <h1 className="text-2xl">No Data</h1>
+    </div>
+  );
+};

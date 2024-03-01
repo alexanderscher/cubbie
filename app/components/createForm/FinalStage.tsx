@@ -16,7 +16,6 @@ import CurrencyInput from "react-currency-input-field";
 import LargeButton from "@/app/components/buttons/LargeButton";
 import { BarcodeScanner } from "@/app/components/createForm/barcode/BarcodeScanner";
 import { usePathname, useRouter } from "next/navigation";
-import Shirt from "@/app/components/placeholderImages/Shirt";
 
 interface FinalStageProps {
   values: any;

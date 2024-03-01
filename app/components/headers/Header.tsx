@@ -8,6 +8,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import * as Yup from "yup";
 import path from "path";
+import { useSearchProjectContext } from "@/app/components/context/SearchProjectContext";
 
 interface HeaderProps {
   type: string;
@@ -15,6 +16,8 @@ interface HeaderProps {
 
 const Header = ({ type }: HeaderProps) => {
   const [data, setData] = React.useState([]);
+  const { setFilteredProjectData, setisProjectLoading } =
+    useSearchProjectContext();
   const { setFilteredData, setIsLoading } = useSearchContext();
   const {
     setFilteredItemData,
@@ -40,6 +43,35 @@ const Header = ({ type }: HeaderProps) => {
   );
 
   useEffect(() => {
+    if (pathname === "/") {
+      const fetchProjects = async () => {
+        setisProjectLoading(true);
+        const res = await fetch("/api/project");
+        const data = await res.json();
+        setData(data.projects);
+        setFilteredProjectData(data.projects);
+        setisProjectLoading(false);
+      };
+      fetchProjects();
+    }
+  }, [pathname, setFilteredProjectData, setisProjectLoading]);
+
+  useEffect(() => {
+    if (pathname === "/receipts") {
+      const fetchReceipts = async () => {
+        setIsLoading(true);
+        const res = await fetch("/api/receipt");
+        const data = await res.json();
+
+        setData(data.receipts);
+        setFilteredData(data.receipts);
+        setIsLoading(false);
+      };
+      fetchReceipts();
+    }
+  }, [pathname, setFilteredData, setIsLoading]);
+
+  useEffect(() => {
     if (pathname === "/items") {
       console.log("fetching items");
       const fetchItems = async () => {
@@ -60,20 +92,6 @@ const Header = ({ type }: HeaderProps) => {
     setRefreshData,
     setisItemLoading,
   ]);
-
-  useEffect(() => {
-    if (pathname !== "/items") {
-      const fetchReceipts = async () => {
-        setIsLoading(true);
-        const res = await fetch("/api/receipt");
-        const data = await res.json();
-        setData(data.receipts);
-        setFilteredData(data.receipts);
-        setIsLoading(false);
-      };
-      fetchReceipts();
-    }
-  }, [pathname, setFilteredData, setIsLoading]);
 
   const projectColor =
     pathname === "/"
@@ -129,17 +147,7 @@ const Header = ({ type }: HeaderProps) => {
         </RegularButton>
       </div>
       <div className=" flex justify-between items-center relative flex-wrap gap-4 ">
-        <SearchBar
-          data={data}
-          searchType={type}
-          type={
-            pathname === "/items"
-              ? "items"
-              : pathname === "/receipts"
-              ? "receipts"
-              : "projects"
-          }
-        />
+        <SearchBar data={data} searchType={type} />
         {pathname === "/receipts" && (
           <div className="flex w-full    ">
             <button

@@ -1,4 +1,5 @@
 "use client";
+import { useSearchProjectContext } from "@/app/components/context/SearchProjectContext";
 import { Project } from "@/types/receipt";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
@@ -8,26 +9,21 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 const Projects = () => {
-  const [projects, setProjects] = useState<Project[]>([]);
   const [receipts, setReceipts] = useState<Receipt[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const getProjects = async () => {
-      setLoading(true);
-      const response = await fetch("/api/project");
-      const data = await response.json();
-      setProjects(data);
-      const receiptsResponse = await fetch("/api/project/miscellaneous");
-      const receiptsData = await receiptsResponse.json();
-      setReceipts(receiptsData.receipts);
-      setLoading(false);
-    };
+  const { isProjectLoading, filteredProjectData } = useSearchProjectContext();
 
-    getProjects();
-  }, []);
+  // useEffect(() => {
+  //   const getProjects = async () => {
+  //     const receiptsResponse = await fetch("/api/project/miscellaneous");
+  //     const receiptsData = await receiptsResponse.json();
+  //     setReceipts(receiptsData.receipts);
+  //   };
 
-  if (loading) {
+  //   getProjects();
+  // }, []);
+
+  if (isProjectLoading) {
     return (
       <div className="">
         <p>Loading...</p>
@@ -35,7 +31,11 @@ const Projects = () => {
     );
   }
 
-  if (projects.length === 0 && receipts.length === 0 && !loading) {
+  if (
+    filteredProjectData.length === 0 &&
+    receipts.length === 0 &&
+    !isProjectLoading
+  ) {
     return (
       <div className="">
         <p>No projects found</p>
@@ -44,7 +44,7 @@ const Projects = () => {
   }
   return (
     <div className="boxes">
-      {projects.map((project) => (
+      {filteredProjectData.map((project) => (
         <div className="box xs:pb-6 pb-4" key={project.id}>
           <div className="w-full  overflow-hidden relative flex justify-center items-center bg-slate-100 rounded-t-lg h-[90px]">
             <div className="w-full h-full flex justify-center items-center ">
@@ -87,7 +87,7 @@ const Projects = () => {
           </div>
         </div>
       ))}
-      <div className="box xs:pb-6 pb-4">
+      {/* <div className="box xs:pb-6 pb-4">
         <div className="w-full  overflow-hidden relative flex justify-center items-center bg-slate-100 rounded-t-lg h-[90px]">
           <div className="w-full h-full flex justify-center items-center ">
             <Image
@@ -109,7 +109,7 @@ const Projects = () => {
             </p>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

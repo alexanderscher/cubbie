@@ -156,7 +156,9 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
         </div>
       )}
       <div className={`${styles.receipt} `}>
-        <div className={`${styles.receiptLeft}  flex flex-col gap-2`}>
+        <div
+          className={`${styles.receiptLeft}  flex flex-col gap-2 pb-[200px]`}
+        >
           <div
             className={`border-[1px] border-emerald-900 rounded-lg  flex flex-col gap-4 p-6`}
           >
@@ -204,13 +206,16 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
 
             <div className="flex flex-col gap-4 text-sm ">
               <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
-                <p className="text-slate-400 text-xs">Quantity</p>
-                <p className="">{values.items.length}</p>
+                <p className="text-slate-400 text-xs">Project</p>
+                <p className="">{values.folder}</p>
               </div>
-
               <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
                 <p className="text-slate-400 text-xs">Receipt Type</p>
                 <p className="">{values.type}</p>
+              </div>
+              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
+                <p className="text-slate-400 text-xs">Quantity</p>
+                <p className="">{values.items.length}</p>
               </div>
 
               <div className="w-full">
@@ -238,11 +243,19 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
               </div>
 
               {pathname === "/receipt-type/online" && (
-                <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
+                <div className="w-full ">
                   <p className="text-slate-400 text-xs">Tracking Link</p>
-                  <p className="">
+                  {/* <p className="">
                     {values.tracking_number ? values.tracking_number : "None"}
-                  </p>
+                  </p> */}
+                  <input
+                    className="w-full border-[1px] bg border-slate-400 p-2 rounded-md focus:outline-none focus:border-slate-400"
+                    name="tracking_number"
+                    value={values.tracking_number}
+                    onChange={(e) => {
+                      setFieldValue("tracking_number", e.target.value);
+                    }}
+                  />
                 </div>
               )}
 

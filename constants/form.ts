@@ -15,6 +15,7 @@ export const DEFAULT_INPUT_VALUES: ReceiptInput = {
   items: [],
   onlineType: "gpt",
   storeType: "gpt",
+  folder: 0,
 };
 
 export enum ReceiptStoreStage {

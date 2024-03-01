@@ -12,7 +12,11 @@ export async function GET(
       id: parseInt(params.id),
     },
     include: {
-      receipt: true,
+      receipt: {
+        include: {
+          project: true,
+        },
+      },
     },
   });
 

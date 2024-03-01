@@ -22,6 +22,7 @@ export async function POST(request: Request) {
       items,
       memo,
       assetAmount,
+      folder,
     } = json;
 
     const requiredFields = ["type", "store", "items"];
@@ -103,8 +104,7 @@ export async function POST(request: Request) {
     const dateObjectReturn = new Date(return_date);
     const returnDate = dateObjectReturn.toISOString();
 
-    console.log("purchase_date:", purchase_date);
-    console.log("return_date:", return_date);
+    const productID = folder === 0 ? null : parseInt(folder);
 
     const receipt = await prisma.receipt.create({
       data: {
@@ -120,6 +120,7 @@ export async function POST(request: Request) {
         receipt_image_key: receiptFileKey,
         archive: false,
         memo,
+        project_id: productID,
         created_at: new Date().toISOString(),
         items: {
           create: itemsArray,

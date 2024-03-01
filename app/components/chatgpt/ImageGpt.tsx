@@ -5,7 +5,7 @@ import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ChangeEvent, useState, useCallback, useRef } from "react";
+import { ChangeEvent, useState, useCallback, useRef, useEffect } from "react";
 
 interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
@@ -24,6 +24,18 @@ export default function ImageGpt({ setFieldValue, values, setStage }: Props) {
   const [invalidImage, setInvalidImage] = useState(false);
   const [apiError, setApiError] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    const getProjects = async () => {
+      const response = await fetch("/api/project");
+      const data = await response.json();
+      console.log(data);
+      setProjects(data);
+    };
+    getProjects();
+  }, []);
+  console.log(values);
 
   const handleContainerClick = () => {
     if (fileInputRef.current !== null) {
@@ -201,6 +213,20 @@ export default function ImageGpt({ setFieldValue, values, setStage }: Props) {
   return (
     <div>
       <div className="flex flex-col gap-4">
+        <div className="w-full">
+          <p className="text-sm text-slate-400 ">Project folder</p>
+          <select
+            className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900"
+            onChange={(e) => setFieldValue("folder", e.target.value)}
+          >
+            <option value="">Miscellaneous</option>
+            {projects.map((project: any) => (
+              <option key={project.id} value={project.id}>
+                {project.name}
+              </option>
+            ))}
+          </select>
+        </div>
         <button
           type="button"
           className="w-[20px] border-[1px] border-orange-600 text-orange-600 rounded-md text-sm"

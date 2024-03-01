@@ -12,6 +12,7 @@ export async function GET(
     },
     include: {
       items: true,
+      project: true,
     },
   });
 

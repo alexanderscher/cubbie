@@ -1,6 +1,6 @@
 "use client";
 import { useSearchProjectContext } from "@/app/components/context/SearchProjectContext";
-import { Project } from "@/types/receipt";
+import { Project as ProjectType } from "@/types/receipt";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { Receipt } from "@prisma/client";
@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 
 const Projects = () => {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   const { isProjectLoading, filteredProjectData } = useSearchProjectContext();
 
@@ -45,7 +46,7 @@ const Projects = () => {
   return (
     <div className="boxes">
       {filteredProjectData.map((project) => (
-        <div className="box xs:pb-6 pb-4" key={project.id}>
+        <div className="box xs:pb-6 pb-4 relative" key={project.id}>
           <div className="w-full  overflow-hidden relative flex justify-center items-center bg-slate-100 rounded-t-lg h-[90px]">
             <div className="w-full h-full flex justify-center items-center ">
               <Image
@@ -56,8 +57,17 @@ const Projects = () => {
                 className="object-cover "
                 style={{ objectFit: "cover", objectPosition: "center" }}
               />
+              <Image
+                src="/three-dots.png"
+                className="absolute top-0 right-2 cursor-pointer "
+                alt=""
+                width={20}
+                height={20}
+                onClick={() => setIsOpen(!isOpen)}
+              />
             </div>
           </div>
+          {isOpen && <OptionsModal isOpen={isOpen} project={project} />}
           <div className="p-3 flex flex-col gap-2">
             <Link href={`/project/${project.id}`}>
               <h2 className="text-sm text-orange-600">{project.name}</h2>
@@ -115,3 +125,24 @@ const Projects = () => {
 };
 
 export default Projects;
+
+interface OptionsModalProps {
+  isOpen: boolean;
+
+  project: ProjectType;
+}
+
+const OptionsModal = ({ isOpen, project }: OptionsModalProps) => {
+  return (
+    <div className="absolute bg-white right-0 top-6 rounded-md border-emerald-900 border-[1px]">
+      <div className="p-4 rounded-lg text-sm">
+        <Link href={`project/${project.id}/edit`}>
+          <p>Edit</p>
+        </Link>
+
+        <p>Delete</p>
+        <p>Add receipt</p>
+      </div>
+    </div>
+  );
+};

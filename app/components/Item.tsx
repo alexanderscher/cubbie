@@ -8,80 +8,102 @@ import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 interface Props {
   item: ItemType;
 }
 
 const Item = ({ item }: Props) => {
-  const { setRefreshData } = useSearchItemContext();
+  const [isOpen, setIsOpen] = useState(false);
+  console.log(isOpen);
 
   return (
-    <div className="box justify-between">
-      {item.photo_url && (
-        <div className="w-full h-[110px] overflow-hidden relative flex justify-center flex-shrink-0 flex-col">
-          <Image
-            src={item.photo_url}
-            alt=""
-            width={200}
-            height={200}
-            className="w-full h-full object-cover rounded-t-lg"
-            style={{ objectPosition: "top" }}
-          />
-          <button className="absolute top-0 right-0 m-2 text-[10px] border border-orange-600 py-1 px-3 rounded-full text-orange-600">
-            <Link href={`/item/${item.id}/edit/`}>Edit</Link>
-          </button>
-        </div>
-      )}
-      {!item.photo_url && (
-        <div className="relative">
-          <Shirt />
-          <button className="absolute top-0 right-0 m-2 text-[10px] border border-orange-600 py-1 px-3 rounded-full text-orange-600">
-            <Link href={`/item/${item.id}/edit/`}>Edit</Link>
-          </button>
-        </div>
-      )}
-      <div className="p-3 flex flex-col  ">
-        <Link href={`/item/${item.id}`} className="">
-          <TruncateText
-            text={item.description}
-            maxLength={18}
-            styles={"text-orange-600 text-sm"}
-          />
-        </Link>
-        <div className="text-xs">
-          <p className="text-slate-400  ">
-            Return by {formatDateToMMDDYY(item.receipt.return_date)}
-          </p>
-        </div>
+    <div className="box justify-between relative">
+      <div className="">
+        {item.photo_url && (
+          <div className="w-full h-[110px] overflow-hidden  flex justify-center flex-shrink-0 flex-col">
+            <Image
+              src={item.photo_url}
+              alt=""
+              width={200}
+              height={200}
+              className="w-full h-full object-cover rounded-t-lg"
+              style={{ objectPosition: "top" }}
+            />
+            <Image
+              src="/three-dots.png"
+              className="absolute top-0 right-2 cursor-pointer "
+              alt=""
+              width={20}
+              height={20}
+              onClick={() => setIsOpen(!isOpen)}
+            />
+          </div>
+        )}
+        {isOpen && <OptionsModal isOpen={isOpen} item={item} />}
+        {!item.photo_url && (
+          <div className="">
+            <Shirt />
+            <Image
+              src="/three-dots.png"
+              className="absolute top-0 right-2 cursor-pointer "
+              alt=""
+              width={20}
+              height={20}
+            />
+            <Image
+              src="/three-dots.png"
+              className="absolute top-0 right-2 cursor-pointer "
+              alt=""
+              width={20}
+              height={20}
+              onClick={() => setIsOpen(!isOpen)}
+            />
+          </div>
+        )}
+        <div className="p-3 flex flex-col  ">
+          <Link href={`/item/${item.id}`} className="">
+            <TruncateText
+              text={item.description}
+              maxLength={18}
+              styles={"text-orange-600 text-sm"}
+            />
+          </Link>
+          <div className="text-xs">
+            <p className="text-slate-400  ">
+              Return by {formatDateToMMDDYY(item.receipt.return_date)}
+            </p>
+          </div>
 
-        <div>
-          <div className="border-t-[1px] border-slate-300 flex flex-col  gap-1 text-xs">
-            <div className="mt-2">
-              <p className="text-slate-400  ">Store</p>
-              <Link href={`/receipt/${item.receipt_id}`} className="">
-                <TruncateText
-                  text={item.receipt.store}
-                  maxLength={15}
-                  styles={""}
-                />
-              </Link>
-            </div>
-
-            <div className="">
-              <p className="text-slate-400  ">Price</p>
-              <p className="">{formatCurrency(item.price)}</p>
-            </div>
-            {item.barcode && (
-              <div className="">
-                <p className="text-slate-400  ">Barcode</p>
-                <p className="">{item.barcode}</p>
+          <div>
+            <div className="border-t-[1px] border-slate-300 flex flex-col  gap-1 text-xs">
+              <div className="mt-2">
+                <p className="text-slate-400  ">Store</p>
+                <Link href={`/receipt/${item.receipt_id}`} className="">
+                  <TruncateText
+                    text={item.receipt.store}
+                    maxLength={15}
+                    styles={""}
+                  />
+                </Link>
               </div>
-            )}
+
+              <div className="">
+                <p className="text-slate-400  ">Price</p>
+                <p className="">{formatCurrency(item.price)}</p>
+              </div>
+              {item.barcode && (
+                <div className="">
+                  <p className="text-slate-400  ">Barcode</p>
+                  <p className="">{item.barcode}</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
+
       <div
         className={`${
           item.returned
@@ -89,6 +111,35 @@ const Item = ({ item }: Props) => {
             : "border-t-emerald-900"
         } border-t-[1px] text-xs text-center  text-emerald-900 p-2`}
       >
+        {item.returned ? (
+          <p>
+            <p className="text-orange-600">Returned</p>
+          </p>
+        ) : (
+          <p>Active</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Item;
+
+interface OptionsModalProps {
+  isOpen: boolean;
+  item: ItemType;
+}
+
+const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
+  const { setRefreshData } = useSearchItemContext();
+
+  return (
+    <div className="absolute bg-white right-0 top-6 rounded-md border-emerald-900 border-[1px]">
+      <div className="p-4 rounded-lg text-sm">
+        <Link href={`item/${item.id}/edit`}>
+          <p>Edit</p>
+        </Link>
+        <p>Delete</p>
         {item.returned ? (
           <button
             onClick={async () => {
@@ -100,7 +151,7 @@ const Item = ({ item }: Props) => {
               }
             }}
           >
-            <p className="text-orange-600">Returned</p>
+            <p className="text-orange-600">Undo Return</p>
           </button>
         ) : (
           <button
@@ -120,5 +171,3 @@ const Item = ({ item }: Props) => {
     </div>
   );
 };
-
-export default Item;

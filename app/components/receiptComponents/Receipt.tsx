@@ -1,17 +1,20 @@
+"use client";
 import { TruncateText } from "@/app/components/text/Truncate";
 import { Item, Receipt as ReceiptType } from "@/types/receipt";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 interface ReceiptProps {
   receipt: ReceiptType;
 }
 
 const Receipt = ({ receipt }: ReceiptProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="box xs:pb-6 pb-4 ">
+    <div className="box xs:pb-6 pb-4 relative">
       <div className="w-full  overflow-hidden relative flex justify-center items-center bg-slate-100 rounded-t-lg h-[90px]">
         <div className="w-full h-full flex justify-center items-center ">
           <Image
@@ -22,8 +25,17 @@ const Receipt = ({ receipt }: ReceiptProps) => {
             className="object-cover "
             style={{ objectFit: "cover", objectPosition: "center" }}
           />
+          <Image
+            src="/three-dots.png"
+            className="absolute top-0 right-2 cursor-pointer "
+            alt=""
+            width={20}
+            height={20}
+            onClick={() => setIsOpen(!isOpen)}
+          />
         </div>
       </div>
+      {isOpen && <OptionsModal isOpen={isOpen} receipt={receipt} />}
 
       <div className="p-3 flex flex-col justify-between">
         {receipt.project && (
@@ -75,3 +87,26 @@ const Receipt = ({ receipt }: ReceiptProps) => {
 };
 
 export default Receipt;
+
+interface OptionsModalProps {
+  isOpen: boolean;
+
+  receipt: ReceiptType;
+}
+
+const OptionsModal = ({ isOpen, receipt }: OptionsModalProps) => {
+  return (
+    <div className="absolute bg-white right-0 top-6 rounded-md border-emerald-900 border-[1px]">
+      <div className="p-4 rounded-lg text-sm">
+        <Link href={`receipt/${receipt.id}/edit`}>
+          <p>Edit</p>
+        </Link>
+
+        <p>Delete</p>
+        <select>
+          <option>Move to</option>
+        </select>
+      </div>
+    </div>
+  );
+};

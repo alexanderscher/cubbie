@@ -27,3 +27,26 @@ export async function GET(
     }
   );
 }
+
+export async function PUT(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const body = await request.json();
+  const project = await prisma.project.update({
+    where: {
+      id: parseInt(params.id),
+    },
+    data: {
+      name: body.name,
+    },
+  });
+  return new NextResponse(
+    JSON.stringify({
+      project,
+    }),
+    {
+      headers: { "Content-Type": "application/json" },
+    }
+  );
+}

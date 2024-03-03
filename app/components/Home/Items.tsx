@@ -58,7 +58,11 @@ const Items = () => {
     return <div>Loading...</div>;
   }
   if (sortedAndFilteredData.length === 0 && !isItemLoading) {
-    return <NoData />;
+    return (
+      <div className="">
+        <p>No data found</p>
+      </div>
+    );
   }
 
   if (searchParams.get("type") === "returned") {
@@ -94,11 +98,3 @@ const Items = () => {
 };
 
 export default Items;
-
-const NoData = () => {
-  return (
-    <div className="flex justify-center items-center h-96">
-      <h1 className="text-2xl">No Data</h1>
-    </div>
-  );
-};

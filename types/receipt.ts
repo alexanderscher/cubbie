@@ -1,5 +1,5 @@
 export interface Project {
-  id: number;
+  id?: number;
   name: string;
   created_at: Date;
   receipts: Receipt[];

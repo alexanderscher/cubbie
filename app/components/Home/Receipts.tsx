@@ -56,7 +56,11 @@ const Receipts = () => {
     return <div>Loading...</div>;
   }
   if (sortedAndFilteredData.length === 0 && !isLoading) {
-    return <NoData />;
+    return (
+      <div className="">
+        <p>No receipts found</p>
+      </div>
+    );
   }
 
   if (searchParams.get("receiptType") === "receipt")
@@ -123,11 +127,3 @@ const Receipts = () => {
 };
 
 export default Receipts;
-
-const NoData = () => {
-  return (
-    <div className="flex justify-center items-center h-96">
-      <h1 className="text-2xl">No Data</h1>
-    </div>
-  );
-};

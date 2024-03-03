@@ -136,10 +136,6 @@ const OptionsModal = ({ isOpen, project }: OptionsModalProps) => {
   return (
     <div className="absolute bg-white right-0 top-6 rounded-md border-emerald-900 border-[1px]">
       <div className="p-4 rounded-lg text-sm">
-        <Link href={`project/${project.id}/edit`}>
-          <p>Edit</p>
-        </Link>
-
         <p>Delete</p>
         <p>Add receipt</p>
       </div>

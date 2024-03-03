@@ -5,9 +5,6 @@ import { useSearchItemContext } from "@/app/components/context/SearchtemContext"
 import SearchBar from "@/app/components/search/SearchBar";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
-import * as Yup from "yup";
-import path from "path";
 import { useSearchProjectContext } from "@/app/components/context/SearchProjectContext";
 
 interface HeaderProps {
@@ -26,6 +23,7 @@ const Header = ({ type }: HeaderProps) => {
 
     setisItemLoading,
   } = useSearchItemContext();
+
   const [openModal, setOpenModal] = React.useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -177,17 +175,18 @@ const Header = ({ type }: HeaderProps) => {
             </button>
           </div>
         )}
-
-        <div className="fixed z-10 bottom-8 left-1/2 transform -translate-x-1/2">
-          <button
-            className="px-[60px] py-[8px] border-[1px] border-emerald-900 bg-emerald-900 text-white rounded-3xl"
-            onClick={() => {
-              setOpenModal(!openModal);
-            }}
-          >
-            <p className="text-sm">Filter</p>
-          </button>
-        </div>
+        {pathname !== "/" && (
+          <div className="fixed z-10 bottom-8 left-1/2 transform -translate-x-1/2">
+            <button
+              className="px-[60px] py-[8px] border-[1px] border-emerald-900 bg-emerald-900 text-white rounded-3xl"
+              onClick={() => {
+                setOpenModal(!openModal);
+              }}
+            >
+              <p className="text-sm">Filter</p>
+            </button>
+          </div>
+        )}
 
         <div className="flex gap-2 ">
           <div className="">

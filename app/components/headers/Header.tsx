@@ -15,7 +15,12 @@ const Header = ({ type }: HeaderProps) => {
   const [data, setData] = React.useState([]);
   const { setFilteredProjectData, setisProjectLoading } =
     useSearchProjectContext();
-  const { setFilteredData, setIsLoading } = useSearchContext();
+  const {
+    setFilteredData,
+    setIsLoading,
+    isReceiptRefreshed,
+    setIsReceiptRefreshed,
+  } = useSearchContext();
   const {
     setFilteredItemData,
     refreshData,
@@ -60,18 +65,23 @@ const Header = ({ type }: HeaderProps) => {
         setIsLoading(true);
         const res = await fetch("/api/receipt");
         const data = await res.json();
-
         setData(data.receipts);
         setFilteredData(data.receipts);
         setIsLoading(false);
+        setIsReceiptRefreshed(false);
       };
       fetchReceipts();
     }
-  }, [pathname, setFilteredData, setIsLoading]);
+  }, [
+    pathname,
+    setFilteredData,
+    setIsLoading,
+    setIsReceiptRefreshed,
+    isReceiptRefreshed,
+  ]);
 
   useEffect(() => {
     if (pathname === "/items") {
-      console.log("fetching items");
       const fetchItems = async () => {
         setisItemLoading(true);
         const res = await fetch("/api/items");
@@ -691,7 +701,6 @@ const CreateProject = ({ setAddProjectOpen }: AddItemModalProps) => {
     });
     const data = await res.json();
     setError(data);
-    console.log(data);
   };
 
   const handleSubmit = async () => {

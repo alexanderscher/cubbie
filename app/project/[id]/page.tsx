@@ -69,7 +69,7 @@ const ProjectID = () => {
             </RegularButton>
             <RegularButton
               href="/receipt-type"
-              styles="bg border-emerald-900 text-emerald-900"
+              styles="bg-emerald-900 border-emerald-900 text-white"
             >
               <p className="text-xs">Add receipt</p>
             </RegularButton>

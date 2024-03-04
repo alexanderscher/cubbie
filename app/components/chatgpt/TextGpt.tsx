@@ -99,7 +99,7 @@ const TextGpt = ({ setFieldValue, values, setStage }: Props) => {
       )}
       <textarea
         value={inputText}
-        className="w-full border-[1px] border-emerald-900 p-2 mb-2 rounded-lg focus:outline-none h-[300px] resize-none bg"
+        className="w-full border-[1px] p-2 mb-2 rounded-lg  h-[300px] resize-none bg border-slate-400 focus:border-emerald-900 focus:outline-none"
         onChange={(e) => setInputText(e.target.value)}
         placeholder="Copy and paste receipt items from email or website"
       />

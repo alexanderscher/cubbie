@@ -144,10 +144,10 @@ const ReceiptPage = () => {
           <HeaderNav receipt={receipt} />
           <div className="flex justify-between items-center w-full">
             <RegularButton
-              styles="bg-orange-600 border-orange-600"
+              styles="bg border-orange-600"
               handleClick={deleteReceipt}
             >
-              <p className="text-white text-xs ">Delete Receipt</p>
+              <p className="text-orange-600 text-xs ">Delete Receipt</p>
             </RegularButton>
             <div className="flex gap-2">
               {dirty ? (
@@ -293,7 +293,7 @@ const ReceiptPage = () => {
                     <input
                       value={values.store}
                       onChange={handleChange("store")}
-                      className="w-full border-[1px] border-slate-300 rounded-lg p-2"
+                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2"
                     />
                     {errorM.store && (
                       <p className="text-orange-900 text-xs">{errorM.store}</p>
@@ -305,7 +305,7 @@ const ReceiptPage = () => {
                       name="type"
                       value={values.type}
                       onChange={handleChange}
-                      className="w-full border-[1px] border-slate-300 rounded-lg p-[10px]"
+                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-[10px]"
                     >
                       <option value={values.type}>
                         {values.type
@@ -329,7 +329,7 @@ const ReceiptPage = () => {
                       type="date"
                       value={formatDateToYYYYMMDD(values.purchase_date)}
                       onChange={handleChange("purchase_date")}
-                      className="w-full border-[1px] border-slate-300 rounded-lg p-2"
+                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2"
                     />
                     {errorM.purchase_date && (
                       <p className="text-orange-900 text-xs">
@@ -344,7 +344,7 @@ const ReceiptPage = () => {
                       type="date"
                       value={formatDateToYYYYMMDD(values.return_date)}
                       onChange={handleChange("return_date")}
-                      className="w-full border-[1px] border-slate-300 rounded-lg p-2"
+                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2"
                     />
                     {errorM.return_date && (
                       <p className="text-orange-900 text-xs">
@@ -358,7 +358,7 @@ const ReceiptPage = () => {
                     <input
                       value={values.card}
                       onChange={handleChange("card")}
-                      className="w-full border-[1px] border-slate-300 rounded-lg p-2"
+                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2"
                     />
                   </div>
                   <div className="w-full">
@@ -366,7 +366,7 @@ const ReceiptPage = () => {
                     <CurrencyInput
                       id="asset_amount"
                       name="asset_amount"
-                      className="w-full border-[1px] border-slate-300 rounded-lg p-2"
+                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2"
                       placeholder=""
                       value={values.asset_amount}
                       defaultValue={values.asset_amount || ""}
@@ -381,7 +381,7 @@ const ReceiptPage = () => {
                     <input
                       value={values.tracking_number}
                       onChange={handleChange("tracking_number")}
-                      className="w-full border-[1px] border-slate-300 rounded-lg p-2"
+                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2"
                     />
                     {errorM.tracking_number && (
                       <p className="text-orange-900 text-xs">

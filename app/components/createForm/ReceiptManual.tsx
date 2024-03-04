@@ -64,16 +64,22 @@ const ReceiptManual = ({
     setFieldValue("assetAmount", value || "");
   };
 
+  const [loading, setLoading] = React.useState(true);
+
   useEffect(() => {
     const getProjects = async () => {
+      setLoading(true);
       const response = await fetch("/api/project");
       const data = await response.json();
-      console.log(data);
-      setProjects(data);
+      setProjects(data.projects);
+      setLoading(false);
     };
     getProjects();
   }, []);
-  console.log(values);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div className="flex flex-col gap-10  w-full justify-center items-center">
@@ -98,7 +104,7 @@ const ReceiptManual = ({
 
         <div className="flex flex-col gap-2">
           <input
-            className="w-full bg border-b-[1px] border-emerald-900  focus:outline-none focus:border-emerald-900 placeholder:text-3xl placeholder:text-orange-600 h-[50px] text-2xl text-orange-600"
+            className="w-full bg border-b-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none placeholder:text-3xl placeholder:text-orange-600 h-[50px] text-2xl text-orange-600"
             name="store"
             placeholder="Store Name*"
             value={values.store}
@@ -120,15 +126,16 @@ const ReceiptManual = ({
             <div className="w-full">
               <p className="text-sm text-slate-400 ">Project folder</p>
               <select
-                className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900"
+                className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none"
                 onChange={handleChange("folder")}
               >
                 <option value="">Miscellaneous</option>
-                {projects.map((project: any) => (
-                  <option key={project.id} value={project.id}>
-                    {project.name}
-                  </option>
-                ))}
+                {projects.length > 0 &&
+                  projects.map((project: any) => (
+                    <option key={project.id} value={project.id}>
+                      {project.name}
+                    </option>
+                  ))}
               </select>
             </div>
             <div className="flex gap-2 w-full">
@@ -138,7 +145,7 @@ const ReceiptManual = ({
                 <CurrencyInput
                   id="assetAmount"
                   name="assetAmount"
-                  className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900"
+                  className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none"
                   placeholder=""
                   defaultValue={values.assetAmount || ""}
                   decimalsLimit={2}
@@ -157,7 +164,7 @@ const ReceiptManual = ({
             <div className="w-full">
               <p className="text-sm text-slate-400 ">Card</p>
               <input
-                className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900"
+                className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none"
                 name="card"
                 value={values.card}
                 onChange={handleChange("card")}
@@ -169,7 +176,7 @@ const ReceiptManual = ({
                 <p className="text-sm text-slate-400 ">Tracking Number Link</p>
                 <div className="flex flex-col gap-2">
                   <input
-                    className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900"
+                    className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none"
                     name="tracking_number"
                     value={values.tracking_number}
                     onChange={handleChange("tracking_number")}
@@ -188,7 +195,7 @@ const ReceiptManual = ({
                 <p className="text-sm text-slate-400 ">Purchase Date</p>
                 <div className="flex flex-col gap-2">
                   <input
-                    className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900"
+                    className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none"
                     name="purchase_date"
                     value={values.purchase_date}
                     onChange={handleChange("purchase_date")}
@@ -205,7 +212,7 @@ const ReceiptManual = ({
                 <p className="text-sm text-slate-400 ">Days until return</p>
 
                 <input
-                  className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900 "
+                  className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none "
                   value={values.days_until_return}
                   onChange={(event) => {
                     const value = parseInt(event.target.value, 10);
@@ -224,7 +231,7 @@ const ReceiptManual = ({
             </div>
             <div>
               <p className="text-slate-400 text-sm">Return Date</p>
-              <div className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900 ">
+              <div className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none ">
                 {formatDateToMMDDYY(
                   calculateReturnDate(
                     values.purchase_date,
@@ -237,7 +244,7 @@ const ReceiptManual = ({
 
           <div className={`w-full relative`}>
             <div
-              className={` border-[1px] border-emerald-900 w-full h-full flex flex-col gap-4 justify-center items-center rounded-md relative`}
+              className={` border-[1px]  w-full h-full flex flex-col gap-4 justify-center items-center rounded-md relative  border-slate-400`}
               onClick={handleContainerClick}
               style={{ cursor: "pointer" }}
             >
@@ -267,7 +274,7 @@ const ReceiptManual = ({
           </div>
           <div className="relative w-24 h-24 ">
             {values.receiptImage && (
-              <div className="w-24 h-24 overflow-hidden flex items-center justify-center rounded-md border-[1px] border-emerald-900">
+              <div className="w-24 h-24 overflow-hidden flex items-center justify-center rounded-md border-[1px] ">
                 <button
                   type="button"
                   onClick={() => {

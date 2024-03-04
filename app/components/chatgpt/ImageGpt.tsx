@@ -30,8 +30,8 @@ export default function ImageGpt({ setFieldValue, values, setStage }: Props) {
     const getProjects = async () => {
       const response = await fetch("/api/project");
       const data = await response.json();
-      console.log(data);
-      setProjects(data);
+
+      setProjects(data.projects);
     };
     getProjects();
   }, []);

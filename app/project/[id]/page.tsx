@@ -165,7 +165,7 @@ const EditProject = ({ setEdit, project, setRefresh }: EditProjectProps) => {
                 name="description"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full p-2 border-[1px] border-emerald-900 rounded"
+                className="w-full p-2 border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none rounded"
               />
               {error && <p className="text-orange-900 text-xs">{error}</p>}
             </div>

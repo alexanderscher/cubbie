@@ -14,16 +14,6 @@ const Projects = () => {
 
   const { isProjectLoading, filteredProjectData } = useSearchProjectContext();
 
-  // useEffect(() => {
-  //   const getProjects = async () => {
-  //     const receiptsResponse = await fetch("/api/project/miscellaneous");
-  //     const receiptsData = await receiptsResponse.json();
-  //     setReceipts(receiptsData.receipts);
-  //   };
-
-  //   getProjects();
-  // }, []);
-
   if (isProjectLoading) {
     return (
       <div className="">
@@ -97,29 +87,6 @@ const Projects = () => {
           </div>
         </div>
       ))}
-      {/* <div className="box xs:pb-6 pb-4">
-        <div className="w-full  overflow-hidden relative flex justify-center items-center bg-slate-100 rounded-t-lg h-[90px]">
-          <div className="w-full h-full flex justify-center items-center ">
-            <Image
-              src="/folder.png"
-              alt=""
-              width={40}
-              height={40}
-              className="object-cover "
-              style={{ objectFit: "cover", objectPosition: "center" }}
-            />
-          </div>
-        </div>
-        <div className="p-3 flex flex-col justify-start gap-2">
-          <h2 className="text-sm text-orange-600">Miscellaneous</h2>
-
-          <div className="flex gap-1 text-sm">
-            <p className=" ">
-              {receipts.length} {receipts.length === 1 ? "receipt" : "receipts"}
-            </p>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 };
@@ -134,10 +101,20 @@ interface OptionsModalProps {
 
 const OptionsModal = ({ isOpen, project }: OptionsModalProps) => {
   return (
-    <div className="absolute bg-white right-0 top-6 rounded-md border-emerald-900 border-[1px]">
-      <div className="p-4 rounded-lg text-sm">
-        <p>Delete</p>
-        <p>Add receipt</p>
+    <div className="absolute bg-white shadow-1 -right-2 top-6 rounded-md  w-[200px]">
+      <div className="p-4 rounded-lg text-sm flex flex-col gap-2">
+        <div className="bg-slate-100 rounded-md w-full p-2">
+          <div className="flex gap-2">
+            <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
+            <p>Delete</p>
+          </div>
+        </div>
+        <div className="bg-slate-100 rounded-md w-full p-2">
+          <div className="flex gap-2">
+            <Image src={"/add.png"} width={20} height={20} alt=""></Image>
+            <p>Add receipt</p>
+          </div>
+        </div>
       </div>
     </div>
   );

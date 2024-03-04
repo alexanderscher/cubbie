@@ -699,7 +699,7 @@ const CreateProject = ({ setAddProjectOpen }: AddItemModalProps) => {
       setError("Please enter a project name");
     }
     if (project !== "") {
-      createProject();
+      await createProject();
       setAddProjectOpen(false);
     }
   };
@@ -741,7 +741,7 @@ const CreateProject = ({ setAddProjectOpen }: AddItemModalProps) => {
                 name="description"
                 value={project}
                 onChange={(e) => setProject(e.target.value)}
-                className="w-full p-2 border-[1px] border-emerald-900 rounded"
+                className="w-full p-2 border-[1px] border-emerald-900 rounded border-slate-300 focus:border-emerald-900 focus:outline-none"
               />
               {error && <p className="text-orange-900 text-xs">{error}</p>}
             </div>

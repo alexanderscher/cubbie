@@ -1,12 +1,12 @@
 "use client";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { TruncateText } from "@/app/components/text/Truncate";
-import { Item, Receipt as ReceiptType } from "@/types/receipt";
+import { Item, Project, Receipt as ReceiptType } from "@/types/receipt";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ReceiptProps {
   receipt: ReceiptType;
@@ -113,10 +113,11 @@ const OptionsModal = ({ receipt }: OptionsModalProps) => {
             <p>Delete</p>
           </div>
         </div>
+
         <div className="bg-slate-100 rounded-md w-full p-2 hover:cursor-pointer">
-          <div className="flex gap-2">
+          <div className="flex gap-2" onClick={() => setIsOpen(true)}>
             <Image src={"/move.png"} width={20} height={20} alt=""></Image>
-            <button onClick={() => setIsOpen(true)}>Move</button>
+            <p>Move</p>
           </div>
         </div>
       </div>
@@ -130,33 +131,46 @@ interface AddItemModalProps {
 }
 
 const MoveModal = ({ setIsOpen }: AddItemModalProps) => {
-  const [project, setProject] = useState("");
+  const [project, setProject] = useState<Project[]>([]);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [selectedProject, setSelectedProject] = useState("");
 
-  const createProject = async () => {
-    const res = await fetch("/api/project", {
-      method: "POST",
-      body: JSON.stringify({
-        name: project,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await res.json();
-    setError(data);
-    console.log(data);
-  };
+  useEffect(() => {
+    const getProjects = async () => {
+      setLoading(true);
+      const res = await fetch("/api/project");
+      const data = await res.json();
 
-  const handleSubmit = async () => {
-    if (project === "") {
-      setError("Please enter a project name");
-    }
-    if (project !== "") {
-      // createProject();
-      setIsOpen(false);
-    }
-  };
+      setProject(data.projects);
+      setLoading(false);
+    };
+    getProjects();
+  }, []);
+
+  // const moveReceipt = async () => {
+  //   const res = await fetch("/api/project", {
+  //     method: "POST",
+  //     body: JSON.stringify({
+  //       name: project,
+  //     }),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   });
+  //   const data = await res.json();
+  //   setError(data);
+  //   console.log(data);
+  // };
+
+  // const handleSubmit = async () => {
+  //   if (project === "") {
+  //     setError("Please enter a project name");
+  //   }
+  //   if (project !== "") {
+  //     setIsOpen(false);
+  //   }
+  // };
 
   const handleOverlayClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -190,10 +204,19 @@ const MoveModal = ({ setIsOpen }: AddItemModalProps) => {
           <div className="space-y-4">
             <div>
               <p className="text-xs text-emerald-900 ">Project Folder</p>
-              <select className="w-full border-[1px] p-2 rounded-md border-slate-300 focus:border-emerald-900 focus:outline-none">
-                <option>Project 1</option>
-                <option>Project 2</option>
-                <option>Project 3</option>
+              <select
+                className="w-full border-[1px] p-2 rounded-md border-slate-300 focus:border-emerald-900 focus:outline-none
+              
+              "
+                onChange={(e) => setSelectedProject(e.target.value)}
+              >
+                <option value="">Select a project</option>
+                {project &&
+                  project.map((project) => (
+                    <option key={project.id} value={project.id}>
+                      {project.name}
+                    </option>
+                  ))}
               </select>
               {error && <p className="text-orange-900 text-xs">{error}</p>}
             </div>
@@ -203,7 +226,7 @@ const MoveModal = ({ setIsOpen }: AddItemModalProps) => {
             <RegularButton
               type="button"
               styles="bg-emerald-900 text-white border-emerald-900"
-              handleClick={handleSubmit}
+              // handleClick={handleSubmit}
             >
               <p className="text-xs">Move</p>
             </RegularButton>

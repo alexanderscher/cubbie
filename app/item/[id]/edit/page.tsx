@@ -127,17 +127,23 @@ const ItemID = () => {
         <div className="flex flex-col gap-6  max-w-[600px] ">
           <HeaderItemNav item={item} />
           <div className="flex justify-between items-center">
-            <div className="flex justify-between w-1/2">
+            <RegularButton
+              styles="bg border-orange-600"
+              handleClick={deleteItem}
+            >
+              <p className="text-orange-600 text-xs ">Delete Receipt</p>
+            </RegularButton>
+            <div className="flex justify-between ">
               {dirty ? (
                 <div className="flex gap-2">
                   <RegularButton
-                    styles="bg  border-emerald-900"
+                    styles="bg  border-emerald-900 focus:border-emerald-900 focus:outline-none"
                     href={`/item/${id}`}
                   >
                     <p className="text-emerald-900 text-xs">Discard</p>
                   </RegularButton>
                   <RegularButton
-                    styles="bg-emerald-900  border-emerald-900"
+                    styles="bg-emerald-900  border-emerald-900 focus:border-emerald-900 focus:outline-none"
                     handleClick={async () => {
                       const error = await validateForm();
                       if (error) {
@@ -162,18 +168,12 @@ const ItemID = () => {
                 </RegularButton>
               )}
             </div>
-            <RegularButton
-              styles="bg-orange-600 border-orange-600"
-              handleClick={deleteItem}
-            >
-              <p className="text-white text-xs ">Delete Receipt</p>
-            </RegularButton>
           </div>
 
           <div>
             <div className="flex flex-col gap-4">
               {!values.photo_url && !values.edit_image && (
-                <div className="w-full h-[200px] overflow-hidden  border-[1px] border-dashed border-emerald-900 rounded-md bg relative">
+                <div className="w-full h-[200px] overflow-hidden  border-[1px] border-dashed border-slate-400  focus:border-emerald-900 focus:outline-none rounded-md bg relative">
                   <input
                     type="file"
                     onChange={(e) => handleFileChange(e, setFieldValue)}
@@ -257,7 +257,7 @@ const ItemID = () => {
                 <input
                   value={values.description}
                   onChange={handleChange("description")}
-                  className="w-full border-[1px] border-emerald-900 bg rounded-md p-2"
+                  className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
                 />
               </div>
               <div className="w-full">
@@ -265,7 +265,7 @@ const ItemID = () => {
                 <CurrencyInput
                   id="price"
                   name="price"
-                  className="w-full border-[1px] border-emerald-900 bg rounded-md p-2"
+                  className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
                   placeholder=""
                   value={values.price}
                   defaultValue={values.price || ""}
@@ -281,11 +281,11 @@ const ItemID = () => {
                   <input
                     value={values.barcode}
                     onChange={handleChange("barcode")}
-                    className="w-full border-[1px] border-emerald-900 bg rounded-md p-2"
+                    className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
                   />
                   <button
                     type="button"
-                    className="w-[40px] h-[40px] border-[1px] border-emerald-900 p-1 rounded-md flex justify-center items-center "
+                    className="w-[40px] h-[40px] border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none p-1 rounded-md flex justify-center items-center "
                     onClick={() => {
                       setShowScanner(true);
                     }}
@@ -327,7 +327,7 @@ const ItemID = () => {
                 <input
                   value={values.character}
                   onChange={handleChange("character")}
-                  className="w-full border-[1px] border-emerald-900 bg rounded-md p-2"
+                  className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
                 />
               </div>
               <div className="w-full ">
@@ -335,7 +335,7 @@ const ItemID = () => {
                 <input
                   value={values.product_id}
                   onChange={handleChange("product_id")}
-                  className="w-full border-[1px] border-emerald-900 bg rounded-md p-2"
+                  className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
                 />
               </div>
             </div>

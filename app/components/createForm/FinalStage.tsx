@@ -107,7 +107,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
   return (
     <div className="flex flex-col gap-8  w-full h-full ">
       <input
-        className="w-full  bg border-slate-400  focus:outline-none focus:border-slate-400 border-b-[1px] text-xl text-orange-600"
+        className="w-full  bg border-slate-400   focus:border-emerald-900 focus:outline-none border-b-[1px] text-xl text-orange-600"
         name="days_until_return"
         value={values.store}
         onChange={(e) => {
@@ -221,7 +221,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
               <div className="w-full">
                 <p className="text-xs text-slate-400 ">Days until return</p>
                 <input
-                  className="w-full border-[1px] bg border-slate-400 p-2 rounded-md focus:outline-none focus:border-slate-400"
+                  className="w-full border-[1px] bg border-slate-400 p-2 rounded-md  focus:border-emerald-900 focus:outline-none"
                   name="days_until_return"
                   value={values.days_until_return}
                   onChange={(e) => {
@@ -233,7 +233,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
               <div className="w-full">
                 <p className="text-xs text-slate-400 ">Card</p>
                 <input
-                  className="w-full border-[1px] bg border-slate-400 p-2 rounded-md focus:outline-none focus:border-slate-400"
+                  className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none"
                   name="card"
                   value={values.card}
                   onChange={(e) => {
@@ -249,7 +249,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
                     {values.tracking_number ? values.tracking_number : "None"}
                   </p> */}
                   <input
-                    className="w-full border-[1px] bg border-slate-400 p-2 rounded-md focus:outline-none focus:border-slate-400"
+                    className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none"
                     name="tracking_number"
                     value={values.tracking_number}
                     onChange={(e) => {
@@ -265,7 +265,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
                 <CurrencyInput
                   id="price"
                   name="price"
-                  className="text-sm bg-white border-[1px] rounded-md p-2 bg border-slate-400 focus:outline-none w-full"
+                  className="text-sm bg-white border-[1px] rounded-md p-2 bg border-slate-400 focus:border-emerald-900 focus:outline-none w-full"
                   placeholder=""
                   value={values.assetAmount}
                   defaultValue={values.assetAmount || ""}

@@ -134,39 +134,68 @@ const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
   const { setRefreshData } = useSearchItemContext();
 
   return (
-    <div className="absolute bg-white right-0 top-6 rounded-md border-emerald-900 border-[1px]">
-      <div className="p-4 rounded-lg text-sm">
-        <Link href={`item/${item.id}/edit`}>
-          <p>Edit</p>
-        </Link>
-        <p>Delete</p>
-        {item.returned ? (
-          <button
-            onClick={async () => {
-              const { ok, data } = await unreturn(item.id);
-              if (ok) {
-                setRefreshData(true);
-              } else {
-                console.error("Failed to unreturn", data);
-              }
-            }}
-          >
-            <p className="text-orange-600">Undo Return</p>
-          </button>
-        ) : (
-          <button
-            onClick={async () => {
-              const { ok, data } = await markAsReturned(item.id);
-              if (ok) {
-                setRefreshData(true);
-              } else {
-                console.error("Failed to mark as returned:", data);
-              }
-            }}
-          >
-            Mark as Returned
-          </button>
-        )}
+    <div className="absolute bg-white shadow-1 -right-2 top-6 rounded-md  w-[200px]">
+      <div className="p-4 rounded-lg text-sm flex flex-col gap-2">
+        <div className="bg-slate-100 rounded-md w-full p-2">
+          <Link href={`item/${item.id}/edit`}>
+            <div className="flex gap-2">
+              <Image src={"/edit.png"} width={20} height={20} alt=""></Image>
+              <p>Edit</p>
+            </div>
+          </Link>
+        </div>
+
+        <div className="bg-slate-100 rounded-md w-full p-2">
+          <div className="flex gap-2">
+            <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
+            <p>Delete</p>
+          </div>
+        </div>
+        <div className="bg-slate-100 rounded-md w-full p-2">
+          {item.returned ? (
+            <div className="flex gap-2">
+              <Image
+                src={"/undoReturn.png"}
+                width={20}
+                height={20}
+                alt=""
+              ></Image>
+              <button
+                onClick={async () => {
+                  const { ok, data } = await unreturn(item.id);
+                  if (ok) {
+                    setRefreshData(true);
+                  } else {
+                    console.error("Failed to unreturn", data);
+                  }
+                }}
+              >
+                <p className="">Undo Return</p>
+              </button>
+            </div>
+          ) : (
+            <div className="flex gap-2">
+              <Image
+                src={"/returned.png"}
+                width={20}
+                height={20}
+                alt=""
+              ></Image>
+              <button
+                onClick={async () => {
+                  const { ok, data } = await markAsReturned(item.id);
+                  if (ok) {
+                    setRefreshData(true);
+                  } else {
+                    console.error("Failed to mark as returned:", data);
+                  }
+                }}
+              >
+                Mark as Returned
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

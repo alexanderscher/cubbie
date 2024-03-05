@@ -66,6 +66,11 @@ const Item = ({ item }: Props) => {
           </div>
         )}
         <div className="p-3 flex flex-col  ">
+          {/* {item.receipt.project && (
+            <p className="text-xs text-emerald-900 mb-1">
+              {item.receipt.project.name}
+            </p>
+          )} */}
           <div className="border-b-[1px] border-slate-300">
             <Link href={`/item/${item.id}`} className="">
               <TruncateText
@@ -76,7 +81,7 @@ const Item = ({ item }: Props) => {
             </Link>
             {pathname === "/items" && (
               <div className="text-xs">
-                <p className="text-slate-400  ">
+                <p className=" ">
                   Return by {formatDateToMMDDYY(item.receipt.return_date)}
                 </p>
               </div>
@@ -87,7 +92,7 @@ const Item = ({ item }: Props) => {
             <div className=" flex flex-col  gap-1 text-xs ">
               {pathname === "/items" && (
                 <div className="">
-                  <p className="text-slate-400  ">Store</p>
+                  <p className="text-slate-400  ">Receipt Store</p>
                   <Link href={`/receipt/${item.receipt_id}`} className="">
                     <TruncateText
                       text={item.receipt.store}
@@ -102,7 +107,7 @@ const Item = ({ item }: Props) => {
                 <p className="text-slate-400  ">Price</p>
                 <p className="">{formatCurrency(item.price)}</p>
               </div>
-              {pathname === "/items" ? (
+              {/* {pathname === "/items" ? (
                 item.barcode && (
                   <div className="">
                     <p className="text-slate-400  ">Barcode</p>
@@ -114,6 +119,9 @@ const Item = ({ item }: Props) => {
                   <p className="text-slate-400  ">Barcode</p>
                   <p className="">{item.barcode ? item.barcode : "None"}</p>
                 </div>
+              )} */}
+              {item.receipt.expired && (
+                <p className="text-orange-600">Expired</p>
               )}
             </div>
           </div>

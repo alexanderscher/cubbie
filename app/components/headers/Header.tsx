@@ -180,7 +180,7 @@ const Header = ({ type }: HeaderProps) => {
                 handleExpiredlick("false");
               }}
             >
-              <p className="text-sm">Active</p>
+              <p className="text-sm">Active Receipts</p>
             </button>
             <button
               className={`${
@@ -192,7 +192,7 @@ const Header = ({ type }: HeaderProps) => {
                 handleExpiredlick("true");
               }}
             >
-              <p className="text-sm">Expired</p>
+              <p className="text-sm">Expired Receipts</p>
             </button>
           </div>
         )}

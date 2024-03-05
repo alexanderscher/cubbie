@@ -830,6 +830,8 @@ interface AddItemModalProps {
 }
 
 const CreateProject = ({ setAddProjectOpen }: AddItemModalProps) => {
+  const { setProjectRefresh } = useSearchProjectContext();
+
   const [project, setProject] = useState("");
   const [error, setError] = useState("");
 
@@ -853,6 +855,7 @@ const CreateProject = ({ setAddProjectOpen }: AddItemModalProps) => {
     }
     if (project !== "") {
       await createProject();
+      setProjectRefresh(true);
       setAddProjectOpen(false);
     }
   };

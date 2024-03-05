@@ -1,5 +1,6 @@
 "use client";
 import { markAsReturned, unreturn } from "@/app/actions/return";
+import RegularButton from "@/app/components/buttons/RegularButton";
 import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
 import Shirt from "@/app/components/placeholderImages/Shirt";
 import { TruncateText } from "@/app/components/text/Truncate";
@@ -8,6 +9,8 @@ import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import path from "path";
 import React, { useState } from "react";
 
 interface Props {
@@ -16,7 +19,7 @@ interface Props {
 
 const Item = ({ item }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  console.log(isOpen);
+  const pathname = usePathname();
 
   return (
     <div className="box justify-between relative">
@@ -63,40 +66,53 @@ const Item = ({ item }: Props) => {
           </div>
         )}
         <div className="p-3 flex flex-col  ">
-          <Link href={`/item/${item.id}`} className="">
-            <TruncateText
-              text={item.description}
-              maxLength={18}
-              styles={"text-orange-600 text-sm"}
-            />
-          </Link>
-          <div className="text-xs">
-            <p className="text-slate-400  ">
-              Return by {formatDateToMMDDYY(item.receipt.return_date)}
-            </p>
+          <div className="border-b-[1px] border-slate-300">
+            <Link href={`/item/${item.id}`} className="">
+              <TruncateText
+                text={item.description}
+                maxLength={18}
+                styles={"text-orange-600 text-sm"}
+              />
+            </Link>
+            {pathname === "/items" && (
+              <div className="text-xs">
+                <p className="text-slate-400  ">
+                  Return by {formatDateToMMDDYY(item.receipt.return_date)}
+                </p>
+              </div>
+            )}
           </div>
 
-          <div>
-            <div className="border-t-[1px] border-slate-300 flex flex-col  gap-1 text-xs">
-              <div className="mt-2">
-                <p className="text-slate-400  ">Store</p>
-                <Link href={`/receipt/${item.receipt_id}`} className="">
-                  <TruncateText
-                    text={item.receipt.store}
-                    maxLength={15}
-                    styles={""}
-                  />
-                </Link>
-              </div>
+          <div className="pt-2">
+            <div className=" flex flex-col  gap-1 text-xs ">
+              {pathname === "/items" && (
+                <div className="">
+                  <p className="text-slate-400  ">Store</p>
+                  <Link href={`/receipt/${item.receipt_id}`} className="">
+                    <TruncateText
+                      text={item.receipt.store}
+                      maxLength={15}
+                      styles={""}
+                    />
+                  </Link>
+                </div>
+              )}
 
               <div className="">
                 <p className="text-slate-400  ">Price</p>
                 <p className="">{formatCurrency(item.price)}</p>
               </div>
-              {item.barcode && (
+              {pathname === "/items" ? (
+                item.barcode && (
+                  <div className="">
+                    <p className="text-slate-400  ">Barcode</p>
+                    <p className="">{item.barcode}</p>
+                  </div>
+                )
+              ) : (
                 <div className="">
                   <p className="text-slate-400  ">Barcode</p>
-                  <p className="">{item.barcode}</p>
+                  <p className="">{item.barcode ? item.barcode : "None"}</p>
                 </div>
               )}
             </div>
@@ -116,7 +132,7 @@ const Item = ({ item }: Props) => {
             <p className="text-orange-600">Returned</p>
           </p>
         ) : (
-          <p>Active</p>
+          <p>In possesion</p>
         )}
       </div>
     </div>
@@ -131,13 +147,26 @@ interface OptionsModalProps {
 }
 
 const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const { setRefreshData } = useSearchItemContext();
+
+  const deleteItem = async () => {
+    const res = await fetch(`/api/items/${item.id}`, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+    if (res.ok) {
+      setRefreshData(true);
+    } else {
+      console.error("Failed to delete item:", data);
+    }
+  };
 
   return (
     <div className="absolute bg-white shadow-1 -right-2 top-6 rounded-md  w-[200px]">
       <div className="p-4 rounded-lg text-sm flex flex-col gap-2">
         <div className="bg-slate-100 rounded-md w-full p-2">
-          <Link href={`item/${item.id}/edit`}>
+          <Link href={`/item/${item.id}/edit`}>
             <div className="flex gap-2">
               <Image src={"/edit.png"} width={20} height={20} alt=""></Image>
               <p>Edit</p>
@@ -145,12 +174,6 @@ const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
           </Link>
         </div>
 
-        <div className="bg-slate-100 rounded-md w-full p-2">
-          <div className="flex gap-2">
-            <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
-            <p>Delete</p>
-          </div>
-        </div>
         <div className="bg-slate-100 rounded-md w-full p-2">
           {item.returned ? (
             <div className="flex gap-2">
@@ -195,6 +218,59 @@ const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
               </button>
             </div>
           )}
+        </div>
+        <div className="bg-slate-100 rounded-md w-full p-2 ">
+          <div
+            className="flex gap-2 cursor-pointer"
+            onClick={() => {
+              setDeleteOpen(true);
+            }}
+          >
+            <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
+            <p>Delete</p>
+          </div>
+          {deleteOpen && (
+            <DeleteModal
+              deleteOpen={deleteOpen}
+              setDeleteOpen={setDeleteOpen}
+              item={item}
+              deleteItem={deleteItem}
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface DeleteModalProps {
+  deleteOpen: boolean;
+  setDeleteOpen: (value: boolean) => void;
+  item: ItemType;
+  deleteItem: () => void;
+}
+
+const DeleteModal = ({ item, deleteItem, setDeleteOpen }: DeleteModalProps) => {
+  return (
+    <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
+      <div className="relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded-lg border-emerald-900 border-[1px]">
+        <h2 className="text-orange-600">
+          Are you sure you want to delete {item.description}?
+        </h2>
+
+        <div className="mt-4 flex justify-between">
+          <RegularButton
+            handleClick={() => setDeleteOpen(false)}
+            styles="bg-white text-emerald-900 text-base font-medium rounded-full w-auto border-[1px] border-emerald-900 text-xs"
+          >
+            Cancel
+          </RegularButton>
+          <RegularButton
+            handleClick={deleteItem}
+            styles="bg-emerald-900 text-white text-base font-medium rounded-full w-auto border-[1px] border-emerald-900 text-xs"
+          >
+            Confirm
+          </RegularButton>
         </div>
       </div>
     </div>

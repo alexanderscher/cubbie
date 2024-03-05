@@ -30,9 +30,13 @@ const ItemID = () => {
         <HeaderItemNav item={item} />
 
         <div className="w-full flex flex-col gap-4">
-          <RegularButton styles="bg-emerald-900" href={`/item/${id}/edit`}>
-            <p className="text-white text-xs">Edit</p>
-          </RegularButton>
+          <div className="flex justify-between">
+            <p className="text-xl text-orange-600">{item.description}</p>
+            <RegularButton styles="bg-emerald-900" href={`/item/${id}/edit`}>
+              <p className="text-white text-xs">Edit</p>
+            </RegularButton>
+          </div>
+
           {item.photo_url && (
             <div className="w-full   ">
               <div className="max-h-[300px] w-full overflow-hidden rpunded-md">
@@ -53,9 +57,7 @@ const ItemID = () => {
               />
             </div>
           )}
-          <div>
-            <p className="text-xl text-orange-600">{item.description}</p>
-          </div>
+
           {!item.photo_url && (
             <div className="max-h-[300px] w-full overflow-hidden rounded-md">
               <div className="w-full h-[110px] overflow-hidden relative flex justify-center items-center bg-slate-100 ">

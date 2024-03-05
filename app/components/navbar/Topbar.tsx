@@ -14,7 +14,9 @@ const Topbar = () => {
     <div
       className={`${styles.topbar} p-4 justify-between  bg-emerald-900 text-white`}
     >
-      <Link href="/">Sticky Notes</Link>
+      <Link onClick={() => setMenu(false)} href="/">
+        Sticky Notes
+      </Link>
       <div className="flex gap-4">
         <div>
           <button
@@ -54,10 +56,25 @@ const Topbar = () => {
         <div className={`${styles.menu} p-4 `}>
           <div className="flex flex-col gap-4 p-2">
             <div className="flex justify-between">
-              <Link href="/">
-                <p className="text-white text-3xl">Receipts</p>
+              <Link onClick={() => setMenu(false)} href="/">
+                <p className="text-white text-3xl">Projects</p>
               </Link>
               <div>
+                <Image
+                  src="/folder.png"
+                  alt=""
+                  width={30}
+                  height={30}
+                  className="object-cover "
+                  style={{ objectFit: "cover", objectPosition: "center" }}
+                />
+              </div>
+            </div>
+            <div className="flex justify-between">
+              <Link onClick={() => setMenu(false)} href="/receipts">
+                <p className="text-white text-3xl">Receipts</p>
+              </Link>
+              <div className="">
                 <Image
                   src="/receipt_w.png"
                   alt=""
@@ -69,7 +86,22 @@ const Topbar = () => {
               </div>
             </div>
             <div className="flex justify-between">
-              <Link href="/">
+              <Link onClick={() => setMenu(false)} href="/items">
+                <p className="text-white text-3xl">Items</p>
+              </Link>
+              <div>
+                <Image
+                  src="/item_w.png"
+                  alt=""
+                  width={35}
+                  height={35}
+                  className="object-cover "
+                  style={{ objectFit: "cover", objectPosition: "center" }}
+                />
+              </div>
+            </div>
+            <div className="flex justify-between">
+              <Link onClick={() => setMenu(false)} href="/">
                 <p className="text-white text-3xl">Calender</p>
               </Link>
               <div>
@@ -84,7 +116,7 @@ const Topbar = () => {
               </div>
             </div>
             <div className="flex justify-between">
-              <Link href="/">
+              <Link onClick={() => setMenu(false)} href="/">
                 <p className="text-white text-3xl">Account</p>
               </Link>
               <div>
@@ -100,7 +132,7 @@ const Topbar = () => {
               </div>
             </div>
             <div className="flex justify-between">
-              <Link href="/">
+              <Link onClick={() => setMenu(false)} href="/">
                 <p className="text-white text-3xl">Notifications</p>
               </Link>
               <div>

@@ -3,7 +3,7 @@
 import styles from "@/app/receipt/receiptID.module.css";
 import RegularButton from "@/app/components/buttons/RegularButton";
 
-import { Item, Receipt as ReceiptType } from "@/types/receipt";
+import { Item as ItemType, Receipt as ReceiptType } from "@/types/receipt";
 import { formatDateToYYYYMMDD } from "@/utils/Date";
 
 import { Formik } from "formik";
@@ -17,7 +17,7 @@ import Loading from "@/app/components/Loading";
 import ErrorModal from "@/app/components/error/Modal";
 import HeaderNav from "@/app/components/navbar/HeaderNav";
 import ImageModal from "@/app/components/images/ImageModal";
-import { ReceiptItems } from "@/app/components/ReceiptItems";
+import Item from "@/app/components/Item";
 
 type ExtendedReceiptType = ReceiptType & {
   edit_image: string;
@@ -36,22 +36,6 @@ const ReceiptPage = () => {
     tracking_number: "",
     store: "",
   });
-
-  const deleteReceipt = async () => {
-    setLoading(true);
-    const res = await fetch(`/api/receipt/${id}`, {
-      method: "DELETE",
-    });
-    const data = await res.json();
-    if (data.error) {
-      setUploadError(data.error);
-      setLoading(false);
-    } else {
-      setUploadError("");
-      setLoading(false);
-      router.push("/");
-    }
-  };
 
   useEffect(() => {
     const fetchReceipt = async () => {
@@ -143,12 +127,6 @@ const ReceiptPage = () => {
         <div className="flex flex-col gap-8  w-full h-full pb-[200px]">
           <HeaderNav receipt={receipt} />
           <div className="flex justify-between items-center w-full">
-            <RegularButton
-              styles="bg border-orange-600"
-              handleClick={deleteReceipt}
-            >
-              <p className="text-orange-600 text-xs ">Delete Receipt</p>
-            </RegularButton>
             <div className="flex gap-2">
               {dirty ? (
                 <div className="flex gap-2">
@@ -190,7 +168,7 @@ const ReceiptPage = () => {
               <p className="text-slate-400 text-xs">Total amount</p>
               <p>
                 {formatCurrency(
-                  receipt.items.reduce((acc: number, curr: Item) => {
+                  receipt.items.reduce((acc: number, curr: ItemType) => {
                     return acc + curr.price;
                   }, 0)
                 )}
@@ -399,13 +377,7 @@ const ReceiptPage = () => {
               <div className={`${styles.boxes} `}>
                 {receipt.items.length > 0 &&
                   receipt.items.map((item: any, index: number) => (
-                    <ReceiptItems
-                      index={index}
-                      length={receipt.items.length}
-                      key={item.id}
-                      item={item}
-                      asset_amount={receipt.asset_amount}
-                    />
+                    <Item key={item.id} item={item} />
                   ))}
               </div>
             </div>

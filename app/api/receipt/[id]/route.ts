@@ -114,16 +114,30 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   const receipt = await prisma.receipt.findUnique({
-    where: {
-      id: parseInt(params.id),
-    },
-    include: {
-      items: true,
+    where: { id: parseInt(params.id) },
+    select: {
+      id: true,
+      receipt_image_key: true,
+      items: { select: { id: true, photo_key: true } },
     },
   });
 
-  if (receipt && receipt.receipt_image_key) {
-    await deleteUploadThingImage(receipt.receipt_image_key);
+  if (receipt) {
+    if (receipt.receipt_image_key) {
+      await deleteUploadThingImage(receipt.receipt_image_key);
+    }
+
+    for (const item of receipt.items) {
+      if (item) {
+        if (item.photo_key) {
+          await deleteUploadThingImage(item.photo_key);
+        }
+      }
+
+      await prisma.items.delete({
+        where: { id: item.id },
+      });
+    }
   }
 
   await prisma.receipt.delete({

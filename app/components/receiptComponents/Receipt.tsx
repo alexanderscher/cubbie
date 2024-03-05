@@ -97,6 +97,7 @@ interface OptionsModalProps {
 }
 
 const OptionsModal = ({ receipt }: OptionsModalProps) => {
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const { setIsReceiptRefreshed } = useSearchContext();
@@ -121,7 +122,7 @@ const OptionsModal = ({ receipt }: OptionsModalProps) => {
           </div>
         </div>
         <div className="bg-slate-100 rounded-md w-full p-2">
-          <Link href={`receipt/${receipt.id}/edit`}>
+          <Link href={`/receipt/${receipt.id}/edit`}>
             <div className="flex gap-2">
               <Image src={"/edit.png"} width={20} height={20} alt=""></Image>
               <p>Edit</p>
@@ -130,7 +131,12 @@ const OptionsModal = ({ receipt }: OptionsModalProps) => {
         </div>
 
         <div className="bg-slate-100 rounded-md w-full p-2">
-          <div className="flex gap-2">
+          <div
+            className="flex gap-2 cursor-pointer"
+            onClick={() => {
+              setIsDeleteOpen(true);
+            }}
+          >
             <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
             <p>Delete</p>
           </div>
@@ -143,6 +149,9 @@ const OptionsModal = ({ receipt }: OptionsModalProps) => {
           id={receipt.id}
           setRefresh={setIsReceiptRefreshed}
         />
+      )}
+      {isDeleteOpen && (
+        <DeleteModal setDeleteOpen={setIsDeleteOpen} receipt={receipt} />
       )}
     </div>
   );
@@ -266,12 +275,63 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
             <RegularButton
               type="button"
               styles="bg-emerald-900 text-white border-emerald-900"
-              // handleClick={() => console.log(selectedProject)}
               handleClick={handleSubmit}
             >
               <p className="text-xs">Move</p>
             </RegularButton>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface DeleteModalProps {
+  setDeleteOpen: (value: boolean) => void;
+  receipt: ReceiptType;
+}
+
+const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
+  const [uploadError, setUploadError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { setIsReceiptRefreshed } = useSearchContext();
+
+  const deleteReceipt = async () => {
+    const res = await fetch(`/api/receipt/${receipt.id}`, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+    if (data.error) {
+      setUploadError(data.error);
+      setLoading(false);
+    } else {
+      setIsReceiptRefreshed(true);
+      setUploadError("");
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
+      <div className="relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded-lg border-emerald-900 border-[1px]">
+        <h2 className="text-orange-600">
+          Are you sure you want to delete receipt from {receipt.store}? This
+          will delete all items in the receipt.
+        </h2>
+
+        <div className="mt-4 flex justify-between">
+          <RegularButton
+            handleClick={() => setDeleteOpen(false)}
+            styles="bg-white text-emerald-900 text-base font-medium rounded-full w-auto border-[1px] border-emerald-900 text-xs"
+          >
+            Cancel
+          </RegularButton>
+          <RegularButton
+            handleClick={deleteReceipt}
+            styles="bg-emerald-900 text-white text-base font-medium rounded-full w-auto border-[1px] border-emerald-900 text-xs"
+          >
+            Confirm
+          </RegularButton>
         </div>
       </div>
     </div>

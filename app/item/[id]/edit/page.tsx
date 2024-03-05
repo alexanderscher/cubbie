@@ -32,22 +32,6 @@ const ItemID = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
 
-  const deleteItem = async () => {
-    setLoading(true);
-    const res = await fetch(`/api/items/${id}`, {
-      method: "DELETE",
-    });
-    const data = await res.json();
-    if (data.error) {
-      setUploadError(data.error);
-      setLoading(false);
-    } else {
-      setUploadError("");
-      setLoading(false);
-      router.push(`/receipt/${item.receipt.id}`);
-    }
-  };
-
   useEffect(() => {
     const fetchItem = async () => {
       const res = await fetch(`/api/items/${id}`);
@@ -128,12 +112,6 @@ const ItemID = () => {
           <div className="flex flex-col gap-6  max-w-[600px] w-full ">
             <HeaderItemNav item={item} />
             <div className="flex justify-between items-center">
-              <RegularButton
-                styles="bg border-orange-600"
-                handleClick={deleteItem}
-              >
-                <p className="text-orange-600 text-xs ">Delete Receipt</p>
-              </RegularButton>
               <div className="flex justify-between ">
                 {dirty ? (
                   <div className="flex gap-2">

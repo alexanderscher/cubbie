@@ -141,7 +141,6 @@ function SearchAllItems() {
           </div>
         )}
       </div>
-      <ItemResults filteredItems={filteredItems} />
 
       {filteredItems.length > 0 && searchInput && (
         <ItemResults filteredItems={filteredItems} />

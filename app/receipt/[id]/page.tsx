@@ -58,8 +58,8 @@ const ReceiptPage = () => {
           setRefresh={setRefresh}
         />
       )}
-      <div className="flex bg-white  rounded-lg text-sm shadow p-4">
-        <div className="w-1/3 border-r-[1px] border-slate-300 ">
+      <div className="flex bg-white  rounded-lg text-sm shadow p-4 h-[80px] items-center">
+        <div className="w-1/3 border-r-[1px] border-slate-300  ">
           <p className="text-slate-400 text-xs">Total amount</p>
           <p>
             {formatCurrency(
@@ -79,14 +79,14 @@ const ReceiptPage = () => {
           <p>{formatDateToMMDDYY(receipt.return_date)}</p>
         </div>
       </div>
-      <div className={`${styles.receipt} `}>
+      <div className={`${styles.receipt} pb-[200px]`}>
         <div className={`${styles.receiptLeft} shadow  flex flex-col gap-2`}>
           <div
             className={`shadow rounded-lg  bg-white flex flex-col gap-4 p-6   `}
           >
-            <p className="text-xl text-emerald-900">
+            {/* <p className="text-xl text-emerald-900">
               {receipt.memo ? "Memo" : "Receipt"} Information
-            </p>
+            </p> */}
             {!receipt.receipt_image_url && (
               <div className="w-full  overflow-hidden relative flex justify-center items-center ">
                 <div className="w-full h-full flex justify-center items-start ">
@@ -125,6 +125,10 @@ const ReceiptPage = () => {
             />
 
             <div className="flex flex-col gap-4 text-sm ">
+              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
+                <p className="text-slate-400 text-xs">Receipt Type</p>
+                <p className="">{receipt.memo ? "Memo" : "Receipt"}</p>
+              </div>
               <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
                 <p className="text-slate-400 text-xs">Quantity</p>
                 <p className="">{receipt.items.length}</p>

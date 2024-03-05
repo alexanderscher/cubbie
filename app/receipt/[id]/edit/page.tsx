@@ -245,7 +245,7 @@ const ReceiptPage = () => {
                         width={300}
                         height={300}
                         alt="Receipt Image"
-                        className="object-contain rounded-sm w-full cursor-pointer"
+                        className="object-contain rpunded-md w-full cursor-pointer"
                         layout="intrinsic"
                         onClick={() => setIsOpen(true)}
                       />
@@ -270,7 +270,7 @@ const ReceiptPage = () => {
                         width={300}
                         height={300}
                         alt="Receipt Image"
-                        className="object-contain rounded-sm w-full cursor-pointer"
+                        className="object-contain rpunded-md w-full cursor-pointer"
                         layout="intrinsic"
                         onClick={() => setIsOpen(true)}
                       />

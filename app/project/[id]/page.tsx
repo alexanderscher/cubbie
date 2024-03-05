@@ -47,7 +47,7 @@ const ProjectID = () => {
         <div className="flex gap-4">
           <Link href="/">
             <p className="text-emerald-900 hover:text-orange-600 text-sm">
-              Projects
+              All Projects
             </p>
           </Link>
           <p className="text-emerald-900 text-sm">/</p>

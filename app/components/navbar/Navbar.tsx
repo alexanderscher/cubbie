@@ -15,20 +15,51 @@ const Navbar = () => {
         <Link href="/">Sticky Notes</Link>
         <div
           className={`${styles.linkWrapper} ${
-            pathname === "/" ||
-            pathname.includes("receipt") ||
-            pathname.includes("memo") ||
-            pathname.includes("item")
+            pathname === "/" || pathname.includes("project") ? styles.page : ""
+          }`}
+        >
+          <Link href="/">
+            <Image
+              src="/folder.png"
+              alt=""
+              width={35}
+              height={35}
+              className="object-cover"
+              style={{ objectFit: "cover", objectPosition: "center" }}
+            />
+          </Link>
+        </div>
+        <div
+          className={`${styles.linkWrapper} ${
+            pathname === "/receipts" || pathname.includes("receipt")
               ? styles.page
               : ""
           }`}
         >
-          <Link href="/">
+          <Link href="/receipts">
             <Image
               src="/receipt_w.png"
               alt=""
               width={20}
               height={20}
+              className="object-cover"
+              style={{ objectFit: "cover", objectPosition: "center" }}
+            />
+          </Link>
+        </div>
+        <div
+          className={`${styles.linkWrapper} ${
+            pathname === "/items" || pathname.includes("item")
+              ? styles.page
+              : ""
+          }`}
+        >
+          <Link href="/items">
+            <Image
+              src="/item_w.png"
+              alt=""
+              width={35}
+              height={35}
               className="object-cover"
               style={{ objectFit: "cover", objectPosition: "center" }}
             />

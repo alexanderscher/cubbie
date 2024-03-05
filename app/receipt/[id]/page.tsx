@@ -1,7 +1,7 @@
 "use client";
 import styles from "@/app/receipt/receiptID.module.css";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { Item, Receipt as ReceiptType } from "@/types/receipt";
+import { Item as ItemType, Receipt as ReceiptType } from "@/types/receipt";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
@@ -9,9 +9,9 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import HeaderNav from "@/app/components/navbar/HeaderNav";
 import ImageModal from "@/app/components/images/ImageModal";
-import { ReceiptItems } from "@/app/components/ReceiptItems";
 import { AddItem } from "@/app/components/item/AddItem";
-import { parse } from "path";
+
+import Item from "@/app/components/Item";
 
 const ReceiptPage = () => {
   const { id } = useParams();
@@ -63,7 +63,7 @@ const ReceiptPage = () => {
           <p className="text-slate-400 text-xs">Total amount</p>
           <p>
             {formatCurrency(
-              receipt.items.reduce((acc: number, curr: Item) => {
+              receipt.items.reduce((acc: number, curr: ItemType) => {
                 return acc + curr.price;
               }, 0)
             )}
@@ -168,17 +168,10 @@ const ReceiptPage = () => {
         <div
           className={`flex flex-col gap-2 pb-[200px] ${styles.boxContainer}`}
         >
-          {/* <p className="text-lg text-emerald-900">Items</p> */}
           <div className={`${styles.boxes} `}>
             {receipt.items.length > 0 &&
-              receipt.items.map((item: any, index: number) => (
-                <ReceiptItems
-                  key={item.id}
-                  item={item}
-                  asset_amount={receipt.asset_amount}
-                  index={index}
-                  length={receipt.items.length}
-                />
+              receipt.items.map((item: ItemType, index: number) => (
+                <Item key={item.id} item={item} />
               ))}
           </div>
         </div>

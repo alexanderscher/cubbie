@@ -473,7 +473,7 @@ const ReceiptItems = ({
 
             <input
               className="  text-sm bg-white border-[1px] rounded-md p-2 bg border-emerald-900 focus:outline-none w-full"
-              name="character"
+              name="description"
               value={item.description || ""}
               onChange={handleItemChange}
             />

@@ -45,7 +45,7 @@ const Topbar = () => {
       </div>
 
       {searchBarOpen && (
-        <div className={`${styles.menu} p-4 `}>
+        <div className={`${styles.menu} p-4 overflow-y-scroll`}>
           <SearchAllItems />
         </div>
       )}

@@ -11,6 +11,8 @@ interface SearchProjectContextType {
   setFilteredProjectData: React.Dispatch<React.SetStateAction<Project[]>>;
   isProjectLoading: boolean;
   setisProjectLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setProjectRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  isProjectRefresh: boolean;
 }
 
 export const SearchProjectContext = createContext<SearchProjectContextType>({
@@ -18,6 +20,8 @@ export const SearchProjectContext = createContext<SearchProjectContextType>({
   setFilteredProjectData: () => {},
   isProjectLoading: true,
   setisProjectLoading: () => {},
+  setProjectRefresh: () => {},
+  isProjectRefresh: false,
 });
 
 export const useSearchProjectContext = () => useContext(SearchProjectContext);
@@ -31,6 +35,7 @@ export const SearchProjectProvider: React.FC<SearchProviderProps> = ({
 }) => {
   const [filteredProjectData, setFilteredProjectData] = useState<Project[]>([]);
   const [isProjectLoading, setisProjectLoading] = useState(true);
+  const [isProjectRefresh, setProjectRefresh] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -44,6 +49,8 @@ export const SearchProjectProvider: React.FC<SearchProviderProps> = ({
         setFilteredProjectData,
         isProjectLoading,
         setisProjectLoading,
+        setProjectRefresh,
+        isProjectRefresh,
       }}
     >
       {children}

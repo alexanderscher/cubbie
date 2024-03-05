@@ -1,17 +1,18 @@
-// Assuming "use client" is at the top of your file.
 "use client";
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { Item, Receipt } from "@/types/receipt"; // Ensure these types are correctly imported
+import { Item, Project, Receipt } from "@/types/receipt";
 
 interface SearchBarContextType {
   searchBarOpen: boolean;
   setSearchBarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   searchInput: string;
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
-  filteredItems: Item[]; // Assuming Item is the type you've defined
+  filteredItems: Item[];
   setFilteredItems: React.Dispatch<React.SetStateAction<Item[]>>;
-  filteredReceipts: Receipt[]; // Assuming Receipt is the type you've defined
+  filteredReceipts: Receipt[];
   setFilteredReceipts: React.Dispatch<React.SetStateAction<Receipt[]>>;
+  filteredProjects: Project[];
+  setFilteredProjects: React.Dispatch<React.SetStateAction<Project[]>>;
 }
 
 export const SearchBarContext = createContext<SearchBarContextType>({
@@ -23,6 +24,8 @@ export const SearchBarContext = createContext<SearchBarContextType>({
   setFilteredItems: () => {},
   filteredReceipts: [],
   setFilteredReceipts: () => {},
+  filteredProjects: [],
+  setFilteredProjects: () => {},
 });
 
 export const useSearchBarContext = () => useContext(SearchBarContext);
@@ -38,6 +41,7 @@ export const SearchBarContextProvider: React.FC<SearchBarProviderProps> = ({
   const [searchInput, setSearchInput] = useState("");
   const [filteredItems, setFilteredItems] = useState<Item[]>([]);
   const [filteredReceipts, setFilteredReceipts] = useState<Receipt[]>([]);
+  const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
 
   return (
     <SearchBarContext.Provider
@@ -50,6 +54,8 @@ export const SearchBarContextProvider: React.FC<SearchBarProviderProps> = ({
         setFilteredItems,
         filteredReceipts,
         setFilteredReceipts,
+        filteredProjects,
+        setFilteredProjects,
       }}
     >
       {children}

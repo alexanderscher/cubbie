@@ -101,7 +101,7 @@ const Topbar = () => {
               </div>
             </div>
             <div className="flex justify-between">
-              <Link onClick={() => setMenu(false)} href="/">
+              <Link onClick={() => setMenu(false)} href="/calender">
                 <p className="text-white text-3xl">Calender</p>
               </Link>
               <div>

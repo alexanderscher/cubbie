@@ -98,7 +98,7 @@ const Navbar = () => {
         </div>
 
         <div className={styles.linkWrapper}>
-          <Link href="/">
+          <Link href="/calender">
             <Image
               src="/calendar_w.png"
               alt=""

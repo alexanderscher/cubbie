@@ -165,3 +165,84 @@ input:-webkit-autofill::first-line {
     max-width: 100%;
   }
 }
+
+.fc-scrollgrid {
+  border: 1px solid rgb(20 83 45);
+  background-color: white;
+}
+.fc {
+  border: none;
+  font-size: 14px;
+}
+.fc .fc-daygrid-day {
+  border: 1px solid rgb(20 83 45);
+}
+
+.fc .fc-col-header-cell {
+  border-top: 1px solid rgb(20 83 45);
+  border-bottom: 1px solid rgb(20 83 45);
+  padding: 5px;
+}
+
+.fc .fc-scrollgrid {
+  border: 1px solid rgb(20 83 45);
+}
+
+.fc .fc-col-header-cell {
+  border-right: 1px solid rgb(20 83 45);
+}
+
+.fc .fc-col-header-cell:last-child {
+  border-right: none;
+}
+
+.fc .fc-col-header-cell {
+  color: rgb(20 83 45);
+}
+
+.fc {
+  color: rgb(20 83 45);
+}
+
+.fc-daygrid-dot-event {
+  display: flex;
+  align-items: center;
+  padding: 2px 0;
+}
+
+.fc-event-title {
+  flex-grow: 1;
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-weight: bold;
+}
+
+.fc-daygrid-event-dot {
+  margin: 0 4px;
+  box-sizing: content-box;
+  width: 0;
+  height: 0;
+  border: calc(var(--fc-daygrid-event-dot-width) / 2) solid rgb(234 88 12);
+  border-radius: calc(var(--fc-daygrid-event-dot-width) / 2);
+}
+
+.fc-header-toolbar .fc-button {
+  background-color: rgb(20 83 45); /* Blue background */
+  color: white;
+  border: none;
+}
+
+.fc-header-toolbar .fc-button:hover {
+  background-color: #365880; /* Darker blue on hover */
+}
+
+.fc .fc-header-toolbar .fc-today-button {
+  background-color: rgb(20 83 45);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.fc .fc-header-toolbar .fc-today-button:hover {
+  background-color: #365880; /* Darker blue on hover */
+}

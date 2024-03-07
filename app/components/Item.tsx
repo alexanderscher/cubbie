@@ -20,6 +20,7 @@ interface Props {
 const Item = ({ item }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  console.log(item);
 
   return (
     <div className="box justify-between relative">
@@ -107,20 +108,13 @@ const Item = ({ item }: Props) => {
                 <p className="text-slate-400  ">Price</p>
                 <p className="">{formatCurrency(item.price)}</p>
               </div>
-              {/* {pathname === "/items" ? (
-                item.barcode && (
-                  <div className="">
-                    <p className="text-slate-400  ">Barcode</p>
-                    <p className="">{item.barcode}</p>
-                  </div>
-                )
-              ) : (
+              {pathname.includes("receipt") && (
                 <div className="">
                   <p className="text-slate-400  ">Barcode</p>
                   <p className="">{item.barcode ? item.barcode : "None"}</p>
                 </div>
-              )} */}
-              {item.receipt.expired && (
+              )}
+              {pathname === "/items" && item.receipt.expired && (
                 <p className="text-orange-600">Expired</p>
               )}
             </div>

@@ -115,14 +115,14 @@ const Topbar = () => {
                 />
               </div>
             </div>
+
             <div className="flex justify-between">
               <Link onClick={() => setMenu(false)} href="/">
-                <p className="text-white text-3xl">Account</p>
+                <p className="text-white text-3xl">Notifications</p>
               </Link>
               <div>
-                {" "}
                 <Image
-                  src="/account_w.png"
+                  src="/notification_w.png"
                   alt=""
                   width={25}
                   height={25}
@@ -133,11 +133,12 @@ const Topbar = () => {
             </div>
             <div className="flex justify-between">
               <Link onClick={() => setMenu(false)} href="/">
-                <p className="text-white text-3xl">Notifications</p>
+                <p className="text-white text-3xl">Account</p>
               </Link>
               <div>
+                {" "}
                 <Image
-                  src="/notification_w.png"
+                  src="/account_w.png"
                   alt=""
                   width={25}
                   height={25}

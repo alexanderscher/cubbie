@@ -39,7 +39,7 @@ const ItemID = () => {
 
           {item.photo_url && (
             <div className="w-full   ">
-              <div className="max-h-[300px] w-full overflow-hidden rpunded-md">
+              <div className="max-h-[300px] w-full overflow-hidden rounded-md">
                 <Image
                   src={item.photo_url}
                   width={600}
@@ -60,7 +60,7 @@ const ItemID = () => {
 
           {!item.photo_url && (
             <div className="max-h-[300px] w-full overflow-hidden rounded-md">
-              <div className="w-full h-[110px] overflow-hidden relative flex justify-center items-center bg-slate-100 ">
+              <div className="w-full h-[110px] overflow-hidden relative flex justify-center items-center bg-white">
                 <div className="w-full h-full flex justify-center items-center">
                   <Image
                     src="/item_b.png"
@@ -82,23 +82,23 @@ const ItemID = () => {
           )}
 
         <div className="flex flex-col gap-4">
-          <div className="w-full   bg-white rounded-md shadow p-2   pb-2">
+          <div className="w-full  bg-white rounded-md shadow p-4 pb-2">
             <p className="text-xs text-slate-400">Store</p>
             <p>{item.receipt.store}</p>
           </div>
-          <div className="w-full   bg-white rounded-md shadow p-2   pb-2">
+          <div className="w-full  bg-white rounded-md shadow p-4 pb-2">
             <p className="text-xs text-slate-400">Price</p>
             <p>{formatCurrency(item.price)}</p>
           </div>
-          <div className="w-full   bg-white rounded-md shadow p-2   pb-2">
+          <div className="w-full  bg-white rounded-md shadow p-4 pb-2">
             <p className="text-xs text-slate-400">Barcode</p>
             <p>{item.barcode ? item.barcode : "None"}</p>
           </div>
-          <div className="w-full   bg-white rounded-md shadow p-2   pb-2">
+          <div className="w-full  bg-white rounded-md shadow p-4 pb-2">
             <p className="text-xs text-slate-400">Character</p>
             <p>{item.character ? item.character : "None"}</p>
           </div>
-          <div className="w-full   bg-white rounded-md shadow p-2   pb-2">
+          <div className="w-full  bg-white rounded-md shadow p-4 pb-2">
             <p className="text-xs text-slate-400">Product ID</p>
             <p>{item.product_id ? item.product_id : "None"}</p>
           </div>

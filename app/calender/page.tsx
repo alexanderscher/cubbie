@@ -91,13 +91,13 @@ const CalendarPage = () => {
       </select> */}
       <div className="-ml-4 -mr-4 relative ">
         <FullCalendar
-          height={"100%"}
-          contentHeight={"auto"}
+          height={"80vh"}
+          // contentHeight={"auto"}
           ref={calendarRef}
           plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
           headerToolbar={{
             left: "title",
-            right: "today prev,next dayGridMonth",
+            right: "today prev,next",
           }}
           events={allEvents as any}
           nowIndicator={true}

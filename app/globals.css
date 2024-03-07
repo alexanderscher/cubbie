@@ -42,7 +42,7 @@ input[type="checkbox"] {
   border-radius: 0;
   position: absolute;
   right: 0;
-  border-left: 1px solid rgb(20 83 45);
+  border-left: 1px solid rgb(6 78 59);
 }
 
 .page {
@@ -57,13 +57,13 @@ input[type="checkbox"] {
 }
 
 .main-content {
-  padding-left: 126px;
+  padding-left: 122px;
   width: 100%;
   height: 100%;
 }
 
 input::placeholder {
-  color: rgb(20 83 45);
+  color: rgb(6 78 59);
 }
 /* img {
   background-color: rgb(241, 241, 241);
@@ -166,84 +166,57 @@ input:-webkit-autofill::first-line {
   }
 }
 
-.fc-scrollgrid {
-  border: 1px solid rgb(20 83 45);
-  background-color: white;
+/* .fc .fc-event {
+  background-color: #007bff;
+  border: 1px solid #0056b3;
+  color: white;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  padding: 2px 4px;
+  cursor: pointer;
+} */
+
+.fc .fc-daygrid-event {
+  margin-top: 1px;
+  z-index: auto;
 }
+
+.fc .fc-toolbar.fc-header-toolbar {
+  margin-bottom: 1.5em;
+  flex-wrap: wrap;
+}
+
 .fc {
   border: none;
   font-size: 14px;
-  min-height: 600px;
 }
+
 .fc .fc-daygrid-day {
-  border: 1px solid rgb(20 83 45);
+  height: 100px; /* Adjust based on your design */
 }
 
-.fc .fc-col-header-cell {
-  border-top: 1px solid rgb(20 83 45);
-  border-bottom: 1px solid rgb(20 83 45);
-  padding: 5px;
+.fc .fc-popover {
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 6px;
+  position: absolute;
+  z-index: 10;
 }
 
-.fc .fc-scrollgrid {
-  border: 1px solid rgb(20 83 45);
-}
-
-.fc .fc-col-header-cell {
-  border-right: 1px solid rgb(20 83 45);
-}
-
-.fc .fc-col-header-cell:last-child {
-  border-right: none;
-}
-
-.fc .fc-col-header-cell {
-  color: rgb(20 83 45);
-}
-
-.fc {
-  color: rgb(20 83 45);
-}
-
-.fc-daygrid-dot-event {
-  display: flex;
-  align-items: center;
-  padding: 2px 0;
-}
-
-.fc-event-title {
-  flex-grow: 1;
-  flex-shrink: 1;
-  min-width: 0;
-  overflow: hidden;
-  font-weight: bold;
-}
-
-.fc-daygrid-event-dot {
-  margin: 0 4px;
-  box-sizing: content-box;
-  width: 0;
-  height: 0;
-  border: calc(var(--fc-daygrid-event-dot-width) / 2) solid rgb(234 88 12);
-  border-radius: calc(var(--fc-daygrid-event-dot-width) / 2);
-}
-
-.fc-header-toolbar .fc-button {
-  background-color: rgb(20 83 45); /* Blue background */
+.fc .fc-event-purchase {
+  background-color: rgb(6 78 59);
+  border: 1px solid rgb(6 78 59);
   color: white;
-  border: none;
-}
-
-.fc-header-toolbar .fc-button:hover {
-  background-color: #365880; /* Darker blue on hover */
-}
-
-.fc .fc-header-toolbar .fc-today-button {
-  background-color: rgb(20 83 45);
-  color: white;
-  border: none;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  padding: 2px 4px;
   cursor: pointer;
 }
-.fc .fc-header-toolbar .fc-today-button:hover {
-  background-color: #365880; /* Darker blue on hover */
+
+.fc .fc-event-return {
+  background-color: rgb(234 88 12);
+  border: 1px solid rgb(234 88 12);
+  color: white;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  padding: 2px 4px;
+  cursor: pointer;
 }

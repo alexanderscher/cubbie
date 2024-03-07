@@ -84,20 +84,11 @@ const Navbar = () => {
           </button>
         </div>
 
-        <div className={styles.linkWrapper}>
-          <Link href="/">
-            <Image
-              src="/account_w.png"
-              alt=""
-              width={25}
-              height={25}
-              className="object-cover "
-              style={{ objectFit: "cover", objectPosition: "center" }}
-            />
-          </Link>
-        </div>
-
-        <div className={styles.linkWrapper}>
+        <div
+          className={`${styles.linkWrapper} ${
+            pathname === "/calender" ? styles.page : ""
+          }`}
+        >
           <Link href="/calender">
             <Image
               src="/calendar_w.png"
@@ -114,6 +105,18 @@ const Navbar = () => {
           <Link href="/">
             <Image
               src="/notification_w.png"
+              alt=""
+              width={25}
+              height={25}
+              className="object-cover "
+              style={{ objectFit: "cover", objectPosition: "center" }}
+            />
+          </Link>
+        </div>
+        <div className={styles.linkWrapper}>
+          <Link href="/">
+            <Image
+              src="/account_w.png"
               alt=""
               width={25}
               height={25}

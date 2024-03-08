@@ -82,23 +82,23 @@ const ItemID = () => {
           )}
 
         <div className="flex flex-col gap-4">
-          <div className="w-full  bg-white rounded-md shadow p-4 pb-2">
+          <div className="w-full  bg-white rounded-md shadow p-4 ">
             <p className="text-xs text-slate-400">Store</p>
             <p>{item.receipt.store}</p>
           </div>
-          <div className="w-full  bg-white rounded-md shadow p-4 pb-2">
+          <div className="w-full  bg-white rounded-md shadow p-4 ">
             <p className="text-xs text-slate-400">Price</p>
             <p>{formatCurrency(item.price)}</p>
           </div>
-          <div className="w-full  bg-white rounded-md shadow p-4 pb-2">
+          <div className="w-full  bg-white rounded-md shadow p-4 ">
             <p className="text-xs text-slate-400">Barcode</p>
             <p>{item.barcode ? item.barcode : "None"}</p>
           </div>
-          <div className="w-full  bg-white rounded-md shadow p-4 pb-2">
+          <div className="w-full  bg-white rounded-md shadow p-4 ">
             <p className="text-xs text-slate-400">Character</p>
             <p>{item.character ? item.character : "None"}</p>
           </div>
-          <div className="w-full  bg-white rounded-md shadow p-4 pb-2">
+          <div className="w-full  bg-white rounded-md shadow p-4 ">
             <p className="text-xs text-slate-400">Product ID</p>
             <p>{item.product_id ? item.product_id : "None"}</p>
           </div>

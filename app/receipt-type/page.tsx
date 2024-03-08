@@ -1,6 +1,7 @@
 "use client";
 import styles from "./upload.module.css";
 import LargeButton from "@/app/components/buttons/LargeButton";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -22,25 +23,28 @@ const ReceiptType = () => {
           <LargeButton
             border={"none"}
             height={styles.boxes}
-            styles="bg-white shadow"
+            styles="bg-white shadow flex flex-col gap-3 justify-center items-center"
             handleClick={() => router.push("/receipt-type/online")}
           >
+            <Image src={"/online_b.png"} width={30} height={30} alt=""></Image>
             <p>Online</p>
           </LargeButton>
           <LargeButton
             border={"none"}
             height={styles.boxes}
-            styles="bg-white shadow"
+            styles="bg-white shadow flex flex-col gap-3 justify-center items-center"
             handleClick={() => router.push("/receipt-type/store")}
           >
+            <Image src={"/store_b.png"} width={30} height={30} alt=""></Image>
             <p>In Store</p>
           </LargeButton>
           <LargeButton
             border={"none"}
             height={styles.boxes}
-            styles="bg-white shadow"
+            styles="bg-white shadow flex flex-col gap-3 justify-center items-center"
             handleClick={() => router.push("/receipt-type/memo")}
           >
+            <Image src={"/receipt_b.png"} width={20} height={20} alt=""></Image>
             <p>Memo</p>
           </LargeButton>
         </div>

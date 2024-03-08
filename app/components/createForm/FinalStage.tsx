@@ -157,7 +157,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
       )}
       <div className={`${styles.receipt} `}>
         <div
-          className={`${styles.receiptLeft}  flex flex-col gap-2 pb-[200px]`}
+          className={`${styles.receiptLeft}  flex flex-col gap-2 pb-[10px] md:pb-[200px]`}
         >
           <div
             className={`border-[1px] border-emerald-900 rounded-lg  flex flex-col gap-4 p-6`}
@@ -207,7 +207,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
             <div className="flex flex-col gap-4 text-sm ">
               <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
                 <p className="text-slate-400 text-xs">Project</p>
-                <p className="">{values.folder}</p>
+                <p className="">{values.folderName}</p>
               </div>
               <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
                 <p className="text-slate-400 text-xs">Receipt Type</p>

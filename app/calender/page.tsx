@@ -91,7 +91,7 @@ const CalendarPage = () => {
       </select> */}
       <div className="-ml-4 -mr-4 relative ">
         <FullCalendar
-          height={"80vh"}
+          height={"100vh"}
           // contentHeight={"auto"}
           ref={calendarRef}
           plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}

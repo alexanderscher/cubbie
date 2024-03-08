@@ -72,7 +72,7 @@ const Item = ({ item }: Props) => {
               {item.receipt.project.name}
             </p>
           )} */}
-          <div className="border-b-[1px] border-slate-300">
+          <div className="">
             <Link href={`/item/${item.id}`} className="">
               <TruncateText
                 text={item.description}
@@ -80,13 +80,13 @@ const Item = ({ item }: Props) => {
                 styles={"text-orange-600 text-sm"}
               />
             </Link>
-            {pathname === "/items" && (
+            {/* {pathname === "/items" && (
               <div className="text-xs">
                 <p className=" ">
                   Return by {formatDateToMMDDYY(item.receipt.return_date)}
                 </p>
               </div>
-            )}
+            )} */}
           </div>
 
           <div className="pt-2">

@@ -95,7 +95,7 @@ function SearchAllItems() {
       </p>
       <div className="w-full flex gap-4 items-center justify-center pb-4">
         <input
-          className="bg-emerald-900  placeholder:text-sm placeholder:text-white border-[1px] border-white p-2 rounded-md w-full text-white"
+          className="bg-emerald-900  placeholder:text-sm placeholder:text-white border-[1px] border-white p-2 rounded-md w-full text-white focus:outline-none"
           placeholder={`Search `}
           onChange={handleChange}
           value={searchInput}

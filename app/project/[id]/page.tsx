@@ -41,6 +41,7 @@ const ProjectID = () => {
   if (!loading && project.name === "") {
     return <p>Project not found</p>;
   }
+
   return (
     <div>
       <div className="flex justify-between items-center gap-4 border-b-[1px] border-emerald-900 pb-4">
@@ -76,6 +77,9 @@ const ProjectID = () => {
             </RegularButton>
           </div>
         </div>
+        {project.receipts.length === 0 && (
+          <p className="">No receipts found for this project</p>
+        )}
         <div className="boxes">
           {project.receipts.map((receipt: ReceiptType) => (
             <Receipt key={receipt.id} receipt={receipt} />

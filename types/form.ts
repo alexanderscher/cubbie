@@ -28,4 +28,5 @@ export interface ReceiptInput {
   storeType: string;
   memo?: boolean;
   folder?: number;
+  folderName?: string;
 }

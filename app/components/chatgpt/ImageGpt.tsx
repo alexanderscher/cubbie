@@ -1,6 +1,6 @@
 "use client";
-import LargeButton from "@/app/components/buttons/LargeButton";
 import RegularButton from "@/app/components/buttons/RegularButton";
+import ProjectSelect from "@/app/components/createForm/ProjectSelect";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
 import Image from "next/image";
@@ -11,9 +11,15 @@ interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
   values: ReceiptInput;
   setStage: (stage: any) => void;
+  handleChange: any;
 }
 
-export default function ImageGpt({ setFieldValue, values, setStage }: Props) {
+export default function ImageGpt({
+  setFieldValue,
+  values,
+  setStage,
+  handleChange,
+}: Props) {
   const pathname = usePathname();
   const [image, setImage] = useState<string>("");
   const [noImage, setNoImage] = useState(false);
@@ -213,20 +219,13 @@ export default function ImageGpt({ setFieldValue, values, setStage }: Props) {
   return (
     <div>
       <div className="flex flex-col gap-4">
-        <div className="w-full">
-          <p className="text-sm text-slate-400 ">Project folder</p>
-          <select
-            className="w-full border-[1px] bg border-emerald-900 p-2 rounded-md focus:outline-none focus:border-emerald-900"
-            onChange={(e) => setFieldValue("folder", e.target.value)}
-          >
-            <option value="">Miscellaneous</option>
-            {projects.map((project: any) => (
-              <option key={project.id} value={project.id}>
-                {project.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        <ProjectSelect
+          handleChange={handleChange}
+          projects={projects}
+          setFieldValue={setFieldValue}
+          values={values}
+          errors
+        />
         <button
           type="button"
           className="w-[20px] border-[1px] border-orange-600 text-orange-600 rounded-md text-sm"

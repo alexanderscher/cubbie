@@ -1,11 +1,13 @@
 "use client";
 import RegularButton from "@/app/components/buttons/RegularButton";
+import ProjectSelect from "@/app/components/createForm/ProjectSelect";
 import styles from "@/app/receipt-type/upload.module.css";
 import { ReceiptStoreStage } from "@/constants/form";
+import { Project } from "@/types/receipt";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import React, { ChangeEvent, use, useEffect, useRef } from "react";
+import React, { ChangeEvent, use, useEffect, useRef, useState } from "react";
 import CurrencyInput from "react-currency-input-field";
 
 interface ReceiptManualProps {
@@ -27,7 +29,7 @@ const ReceiptManual = ({
 }: ReceiptManualProps) => {
   const pathname = usePathname();
   const [help, setHelp] = React.useState(false);
-  const [projects, setProjects] = React.useState([]);
+  const [projects, setProjects] = useState<Project[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -123,21 +125,13 @@ const ReceiptManual = ({
                 ? "Receipt Details"
                 : "Memo Details"}
             </h1>
-            <div className="w-full">
-              <p className="text-sm text-slate-400 ">Project folder</p>
-              <select
-                className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none"
-                onChange={handleChange("folder")}
-              >
-                <option value="">Miscellaneous</option>
-                {projects.length > 0 &&
-                  projects.map((project: any) => (
-                    <option key={project.id} value={project.id}>
-                      {project.name}
-                    </option>
-                  ))}
-              </select>
-            </div>
+            <ProjectSelect
+              handleChange={handleChange}
+              projects={projects}
+              setFieldValue={setFieldValue}
+              values={values}
+              errors={errors}
+            />
             <div className="flex gap-2 w-full">
               <div className="w-full">
                 <p className="text-sm text-slate-400 ">Asset Amount</p>

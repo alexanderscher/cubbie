@@ -32,6 +32,7 @@ const Online = () => {
   const [uploadError, setUploadError] = useState("");
   const [errors, setErrors] = useState({
     store: "",
+    folderName: "",
     amount: "",
     itemError: "",
     tracking_number: "",
@@ -132,12 +133,19 @@ const Online = () => {
                               <RegularButton
                                 styles={"bg-emerald-900 border-emerald-900 "}
                                 handleClick={async () => {
+                                  console.log("values", values);
                                   const error = await validateForm();
                                   if (error) {
+                                    console.log("error", error);
                                     setErrors((prevErrors) => ({
                                       ...prevErrors,
                                       store:
                                         error.store || prevErrors.store || "",
+
+                                      folderName:
+                                        error.folderName ||
+                                        prevErrors.folderName ||
+                                        "",
 
                                       tracking_number:
                                         error.tracking_number ||
@@ -158,6 +166,7 @@ const Online = () => {
                                     setStage(ReceiptOnlineStage.ONLINE_ITEMS);
                                     setErrors((prevErrors) => ({
                                       ...prevErrors,
+                                      folderName: "",
                                       store: "",
                                       amount: "",
                                       tracking_number: "",

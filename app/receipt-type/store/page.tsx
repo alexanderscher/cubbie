@@ -228,6 +228,7 @@ const Store = () => {
                           )}
 
                           <ImageGpt
+                            handleChange={handleChange}
                             setFieldValue={setFieldValue}
                             values={values}
                             setStage={setStage}

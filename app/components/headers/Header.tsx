@@ -804,7 +804,7 @@ const FilterItemsOptions = ({
                 handleTypeClick("current");
               }}
             >
-              <p>Current</p>
+              <p>In possesion</p>
             </button>
             <button
               className={`${

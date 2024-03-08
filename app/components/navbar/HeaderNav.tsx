@@ -27,12 +27,12 @@ const HeaderNav = ({ receipt }: HeaderNavProps) => {
         <p className="text-emerald-900 text-sm">{receipt.store}</p>
       </div>
 
-      <RegularButton
+      {/* <RegularButton
         href="/receipt-type"
         styles="bg border-emerald-900 text-emerald-900"
       >
         <p className="text-xs">Create new</p>
-      </RegularButton>
+      </RegularButton> */}
     </div>
   );
 };

@@ -17,6 +17,7 @@ export const DEFAULT_INPUT_VALUES: ReceiptInput = {
   storeType: "gpt",
   folder: 0,
   folderName: "",
+  memo: false,
 };
 
 export enum ReceiptStoreStage {

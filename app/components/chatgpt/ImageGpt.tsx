@@ -12,6 +12,8 @@ interface Props {
   values: ReceiptInput;
   setStage: (stage: any) => void;
   handleChange: any;
+  errors: any;
+  validateForm: any;
 }
 
 export default function ImageGpt({
@@ -19,11 +21,12 @@ export default function ImageGpt({
   values,
   setStage,
   handleChange,
+  errors,
+  validateForm,
 }: Props) {
   const pathname = usePathname();
   const [image, setImage] = useState<string>("");
   const [noImage, setNoImage] = useState(false);
-  const [help, setHelp] = useState(false);
   const [prompt, setPrompt] = useState(false);
   const [loading, setLoading] = useState(false);
   const [noReceipt, setNoReceipt] = useState(false);
@@ -31,6 +34,13 @@ export default function ImageGpt({
   const [apiError, setApiError] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [projects, setProjects] = useState([]);
+
+  const [validationErrors, setValidationErrors] = useState({
+    folderName: "",
+  });
+
+  const [help, setHelp] = useState(false);
+  const [memoHelp, setMemoHelp] = useState(false);
 
   useEffect(() => {
     const getProjects = async () => {
@@ -41,7 +51,6 @@ export default function ImageGpt({
     };
     getProjects();
   }, []);
-  console.log(values);
 
   const handleContainerClick = () => {
     if (fileInputRef.current !== null) {
@@ -204,31 +213,91 @@ export default function ImageGpt({
   );
 
   const handleSubmit = async () => {
-    if (image === "") {
+    const error = await validateForm();
+    console.log(error);
+
+    if (error) {
+      setValidationErrors(error);
+    }
+
+    if (!image) {
       setNoImage(true);
       return;
     }
-    if (values.items.length > 0) {
-      setPrompt(true);
-    } else {
+
+    if (values.items.length === 0) {
       setLoading(true);
-      pathname === "/receipt-type/memo" ? MemoGptCall() : OnlineGptCall();
+      if (values.memo) {
+        MemoGptCall();
+      } else {
+        OnlineGptCall();
+      }
+      return;
     }
+
+    setPrompt(true);
   };
 
   return (
     <div>
       <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
+          <div className=" flex gap-2 items-center">
+            <p className=" text-slate-400">Is this a memo?*</p>
+            <button
+              type="button"
+              className="w-[20px] h-[20px] border-[1px] border-orange-600 text-orange-600 rounded-md text-xs"
+              onClick={() => setMemoHelp(!memoHelp)}
+            >
+              ?
+            </button>
+          </div>
+
+          <div className="flex gap-4 items-center">
+            <div className="flex gap-2 justify-center items-center">
+              <span>Yes</span>
+              <input
+                name="memo"
+                type="radio"
+                value="true"
+                checked={values.memo === true}
+                onChange={() => setFieldValue("memo", true)}
+              />
+            </div>
+            <div className="flex gap-2 justify-center items-center">
+              <span>No</span>
+              <input
+                name="memo"
+                type="radio"
+                value="false"
+                checked={values.memo === false}
+                onChange={() => setFieldValue("memo", false)}
+              />
+            </div>
+          </div>
+        </div>
+
+        {memoHelp && (
+          <p className="text-sm text-center text-orange-600">
+            Selecting the type of receipt you upload enables us to accurately
+            analyze and process it.
+          </p>
+        )}
         <ProjectSelect
           handleChange={handleChange}
           projects={projects}
           setFieldValue={setFieldValue}
           values={values}
-          errors
+          errors={errors}
         />
+        {validationErrors.folderName && (
+          <p className="text-sm text-orange-900">
+            {validationErrors.folderName}
+          </p>
+        )}
         <button
           type="button"
-          className="w-[20px] border-[1px] border-orange-600 text-orange-600 rounded-md text-sm"
+          className="w-[20px] h-[20px] border-[1px] border-orange-600 text-orange-600 rounded-md text-xs"
           onClick={() => setHelp(!help)}
         >
           ?
@@ -275,17 +344,24 @@ export default function ImageGpt({
               </label>
             </div>
 
-            {image !== "" && (
+            {values.receiptImage && (
               <div className="relative w-24 h-24 ">
                 <div className="w-24 h-24 overflow-hidden flex items-center justify-center rounded-md border-[1px] border-emerald-900">
                   <button
                     type="button"
-                    onClick={() => setImage("")}
+                    onClick={() => {
+                      setFieldValue("receiptImage", ""), setImage("");
+                    }}
                     className="absolute -top-2  -right-2 m-1  bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
                   >
                     X
                   </button>
-                  <Image width={150} height={150} src={image} alt="" />
+                  <Image
+                    width={150}
+                    height={150}
+                    src={values.receiptImage}
+                    alt=""
+                  />
                 </div>
               </div>
             )}

@@ -163,7 +163,7 @@ const ReceiptPage = () => {
               )}
             </div>
           </div>
-          <div className="flex bg-white rounded-lg text-sm shadow p-4">
+          <div className="flex bg-white rounded text-sm shadow p-4">
             <div className="w-1/2 border-r-[1px] border-slate-300 ">
               <p className="text-slate-400 text-xs">Total amount</p>
               <p>
@@ -182,9 +182,9 @@ const ReceiptPage = () => {
 
           <div className={`${styles.receipt} `}>
             <div className={`${styles.receiptLeft}  flex flex-col gap-2 `}>
-              <div className={` rounded-lg  bg-white flex flex-col gap-4 p-6`}>
+              <div className={` rounded  bg-white flex flex-col gap-4 p-6`}>
                 {!values.receipt_image_url && !values.edit_image && (
-                  <div className="w-full h-[200px] overflow-hidden  border-[1px] border-dashed rounded-lg bg-slate-100">
+                  <div className="w-full h-[200px] overflow-hidden  border-[1px] border-dashed rounded bg-slate-100">
                     <input
                       type="file"
                       onChange={(e) => handleFileChange(e, setFieldValue)}
@@ -217,7 +217,7 @@ const ReceiptPage = () => {
                 )}
                 {values.edit_image && (
                   <div className="w-full flex justify-center items-center relative group">
-                    <div className="relative  w-[200px] max-h-[400px] rounded-lg overflow-hidden">
+                    <div className="relative  w-[200px] max-h-[400px] rounded overflow-hidden">
                       <Image
                         src={values.edit_image}
                         width={300}
@@ -242,7 +242,7 @@ const ReceiptPage = () => {
 
                 {values.receipt_image_url && (
                   <div className="w-full flex justify-center items-center relative">
-                    <div className="relative  w-[200px] max-h-[400px] rounded-lg overflow-hidden">
+                    <div className="relative  w-[200px] max-h-[400px] rounded overflow-hidden">
                       <Image
                         src={values.receipt_image_url}
                         width={300}

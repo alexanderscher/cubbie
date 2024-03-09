@@ -59,7 +59,7 @@ export const EditProject = ({
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]"
       onClick={handleOverlayClick}
     >
-      <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full">
+      <div className="bg-white rounded shadow-xl m-4 max-w-md w-full">
         <div className="flex justify-between items-center border-b border-gray-200 px-5 py-4 bg-slate-100 rounded-t-lg">
           <h3 className="text-lg text-emerald-900">Edit Project</h3>
           <button

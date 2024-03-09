@@ -18,7 +18,7 @@ const ProjectSelect = ({
 }: Props) => {
   return (
     <div className="w-full">
-      <p className="text-sm text-slate-400 ">Project folder*</p>
+      <p className="text-slate-400 ">Project folder*</p>
       <select
         className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none"
         onChange={(e) => {
@@ -39,7 +39,7 @@ const ProjectSelect = ({
         </option>
         {projects.length > 0 &&
           projects
-            .filter((project) => project.name !== values.folderName) // Exclude the project with name equal to values.folderName
+            .filter((project) => project.name !== values.folderName)
             .map((project: any) => (
               <option key={project.id} value={project.id}>
                 {project.name}

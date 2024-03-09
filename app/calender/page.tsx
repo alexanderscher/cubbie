@@ -162,7 +162,7 @@ interface ModalProps {
 function ModalComponent({ eventInfo, onClose }: ModalProps) {
   return (
     <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex shadow">
-      <div className="relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded-lg ">
+      <div className="relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded ">
         <h1 className="text-black">{eventInfo.event.title}</h1>
         <button className="text-black" onClick={onClose}>
           Close

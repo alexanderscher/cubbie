@@ -153,7 +153,7 @@ const ReceiptFormItems = ({
         )} */}
 
         {stage !== "Final" && editState.photo && (
-          <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 overflow-hidden rounded-lg ">
+          <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 overflow-hidden rounded ">
             {edit ? (
               <div className="text-sm">
                 {editState.photo && (
@@ -175,7 +175,7 @@ const ReceiptFormItems = ({
                       height={200}
                       src={editState.photo}
                       alt=""
-                      className="w-full h-full object-cover rounded-lg"
+                      className="w-full h-full object-cover rounded"
                     />
                   </div>
                 )}
@@ -187,7 +187,7 @@ const ReceiptFormItems = ({
                   height={200}
                   src={editState.photo}
                   alt=""
-                  className="w-full h-full object-cover rounded-lg"
+                  className="w-full h-full object-cover rounded"
                 />
               </div>
             )}
@@ -196,7 +196,7 @@ const ReceiptFormItems = ({
         {stage !== "Final" &&
           !editState.photo &&
           (edit ? (
-            <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 overflow-hidden rounded-lg ">
+            <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 overflow-hidden rounded ">
               <div className="flex flex-col h-full w-full">
                 <input
                   type="file"
@@ -250,7 +250,7 @@ const ReceiptFormItems = ({
               </div>
             </div>
           ) : (
-            <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 overflow-hidden rounded-lg ">
+            <div className="w-[120px] h-[150px] flex items-center  flex-shrink-0 overflow-hidden rounded ">
               <div className="flex flex-col h-full w-full">
                 <LargeButton height="h-full">
                   <label
@@ -359,7 +359,7 @@ const ReceiptFormItems = ({
                 />
                 <button
                   type="button"
-                  className="border-[1px] border-emerald-900 p-4 rounded-lg   w-[150px]"
+                  className="border-[1px] border-emerald-900 p-4 rounded   w-[150px]"
                   onClick={() => {
                     setShowScanner(true);
                   }}

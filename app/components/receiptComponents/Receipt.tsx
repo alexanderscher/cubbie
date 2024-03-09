@@ -103,7 +103,7 @@ const OptionsModal = ({ receipt }: OptionsModalProps) => {
   const { setIsReceiptRefreshed } = useSearchContext();
   return (
     <div className="absolute bg-white shadow-1 -right-2 top-6 rounded-md  w-[200px]">
-      <div className="p-4 rounded-lg text-sm flex flex-col gap-2">
+      <div className="p-4 rounded text-sm flex flex-col gap-2">
         <div
           className="bg-slate-100 rounded-md w-full p-2 cursor-pointer"
           onClick={() => {
@@ -222,7 +222,7 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]"
       onClick={handleOverlayClick}
     >
-      <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full">
+      <div className="bg-white rounded shadow-xl m-4 max-w-md w-full">
         <div className="flex justify-between items-center border-b border-gray-200 px-5 py-4 bg-slate-100 rounded-t-lg">
           <h3 className="text-lg text-emerald-900">Move project</h3>
           <button
@@ -313,7 +313,7 @@ const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
 
   return (
     <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
-      <div className="relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded-lg border-emerald-900 border-[1px]">
+      <div className="relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded border-emerald-900 border-[1px]">
         <h2 className="text-orange-600">
           Are you sure you want to delete receipt from {receipt.store}? This
           will delete all items in the receipt.

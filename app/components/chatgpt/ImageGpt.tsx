@@ -189,46 +189,45 @@ export default function ImageGpt({
     });
   };
 
-  const handleFileChange = useCallback(
-    async (event: ChangeEvent<HTMLInputElement>) => {
-      const files = event.target.files;
-      if (!files || files.length === 0) {
-        setNoImage(true);
-        return;
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) {
+      setNoImage(true);
+      return;
+    }
+
+    let file = files[0];
+
+    if (!file.type.match("image.*")) {
+      alert("File is not an image.");
+      setInvalidImage(true);
+      return;
+    }
+
+    try {
+      if (file.type === "image/heic" || file.type === "image/heif") {
+        const convertedBlob = (await heic2any({
+          blob: file,
+          toType: "image/jpeg",
+          quality: 0.8,
+        })) as Blob;
+        file = new File([convertedBlob], "converted-image.jpeg", {
+          type: "image/jpeg",
+        });
       }
 
-      let file = files[0];
+      const dataUrl = await readFileAsDataURL(file);
+      setImage(dataUrl);
+      setNoImage(false);
+      setInvalidImage(false);
+      setFieldValue("receiptImage", dataUrl);
+    } catch (error) {
+      console.error("Error handling file:", error);
+      alert("Error processing file.");
+    }
 
-      if (!file.type.match("image.*")) {
-        alert("File is not an image.");
-        setInvalidImage(true);
-        return;
-      }
-
-      try {
-        if (file.type === "image/heic" || file.type === "image/heif") {
-          const convertedBlob = (await heic2any({
-            blob: file,
-            toType: "image/jpeg",
-            quality: 0.8,
-          })) as Blob;
-          file = new File([convertedBlob], "converted-image.jpeg", {
-            type: "image/jpeg",
-          });
-        }
-
-        const dataUrl = await readFileAsDataURL(file);
-        setImage(dataUrl);
-        setNoImage(false);
-        setInvalidImage(false);
-        setFieldValue("receiptImage", dataUrl);
-      } catch (error) {
-        console.error("Error handling file:", error);
-        alert("Error processing file.");
-      }
-    },
-    [setFieldValue]
-  );
+    [setFieldValue];
+  };
   const handleSubmit = async () => {
     const error = await validateForm();
     console.log(error);

@@ -2,7 +2,6 @@
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { Formik } from "formik";
 import React, { useState } from "react";
-import TextGpt from "@/app/components/chatgpt/TextGpt";
 import ReceiptManual from "@/app/components/createForm/ReceiptManual";
 import { useRouter } from "next/navigation";
 import { DEFAULT_INPUT_VALUES, ReceiptOnlineStage } from "@/constants/form";
@@ -10,7 +9,6 @@ import FinalStage from "@/app/components/createForm/FinalStage";
 import { ITEMS_SCHEMA, RECEIPT_SCHEMA } from "@/utils/receiptValidation";
 import Loading from "@/app/components/Loading";
 import BottomBar from "@/app/components/createForm/BottomBar";
-import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import ErrorModal from "@/app/components/error/Modal";
 
 const getValidationSchema = (stage: ReceiptOnlineStage) => {

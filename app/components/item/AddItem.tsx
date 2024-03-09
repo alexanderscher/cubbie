@@ -100,7 +100,7 @@ export const AddItem = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]">
-      <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full">
+      <div className="bg-white rounded shadow-xl m-4 max-w-md w-full">
         <div className="flex justify-between items-center border-b border-gray-200 px-5 py-4 bg-slate-100 rounded-t-lg">
           <h3 className="text-lg text-emerald-900">Add Item</h3>
           <button
@@ -220,7 +220,7 @@ export const AddItem = ({
             <div>
               <p className="text-xs text-emerald-900">Image</p>
 
-              <div className="relative w-full h-[70px] overflow-hidden border-[1px] border-dashed rounded-lg bg-slate-100 flex flex-col border-emerald-900 justify-center items-center ">
+              <div className="relative w-full h-[70px] overflow-hidden border-[1px] border-dashed rounded bg-slate-100 flex flex-col border-emerald-900 justify-center items-center ">
                 <input
                   type="file"
                   onChange={(e) => {
@@ -274,7 +274,7 @@ export const AddItem = ({
               </div>
             </div>
             {newItem.photo && (
-              <div className="w-24 h-24 flex items-center flex-shrink-0 overflow-visible rounded-lg relative">
+              <div className="w-24 h-24 flex items-center flex-shrink-0 overflow-visible rounded relative">
                 {newItem.photo && (
                   <div className="relative flex items-center justify-center w-full h-full">
                     <button
@@ -295,7 +295,7 @@ export const AddItem = ({
                       height={200}
                       src={newItem.photo}
                       alt=""
-                      className="w-full h-full object-cover rounded-lg"
+                      className="w-full h-full object-cover rounded"
                     />
                   </div>
                 )}

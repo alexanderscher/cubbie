@@ -6,6 +6,7 @@ import SearchBar from "@/app/components/search/SearchBar";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSearchProjectContext } from "@/app/components/context/SearchProjectContext";
+import Link from "next/link";
 
 interface HeaderProps {
   type: string;
@@ -38,6 +39,7 @@ const Header = ({ type }: HeaderProps) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [addProjectOpen, setAddProjectOpen] = useState(false);
+  const [addReceiptOpen, setAddReceiptOpen] = useState(false);
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -140,8 +142,8 @@ const Header = ({ type }: HeaderProps) => {
           <p className="text-xs">Create Project</p>
         </RegularButton>
         <RegularButton
-          href="/receipt-type"
           styles="bg-emerald-900 border-emerald-900 text-white"
+          handleClick={() => setAddReceiptOpen(true)}
         >
           <p className="text-xs">Create Receipt</p>
         </RegularButton>
@@ -151,6 +153,10 @@ const Header = ({ type }: HeaderProps) => {
 
         {addProjectOpen && (
           <CreateProject setAddProjectOpen={setAddProjectOpen} />
+        )}
+
+        {addReceiptOpen && (
+          <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
         )}
       </div>
       <div className="flex gap-2 flex-end">
@@ -825,11 +831,11 @@ const FilterItemsOptions = ({
   );
 };
 
-interface AddItemModalProps {
+interface AddProjectModalProps {
   setAddProjectOpen: (value: boolean) => void;
 }
 
-const CreateProject = ({ setAddProjectOpen }: AddItemModalProps) => {
+const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
   const { setProjectRefresh } = useSearchProjectContext();
 
   const [project, setProject] = useState("");
@@ -877,7 +883,7 @@ const CreateProject = ({ setAddProjectOpen }: AddItemModalProps) => {
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]"
       onClick={handleOverlayClick}
     >
-      <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full">
+      <div className="bg-white rounded shadow-xl m-4 max-w-md w-full">
         <div className="flex justify-between items-center border-b border-gray-200 px-5 py-4 bg-slate-100 rounded-t-lg">
           <h3 className="text-lg text-emerald-900">Create Project</h3>
           <button
@@ -912,6 +918,94 @@ const CreateProject = ({ setAddProjectOpen }: AddItemModalProps) => {
               <p className="text-xs">Create Project</p>
             </RegularButton>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface AddReceiptModalProps {
+  setAddReceiptOpen: (value: boolean) => void;
+}
+
+const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
+  const handleOverlayClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (
+      event.target instanceof HTMLDivElement &&
+      event.target.id === "modal-overlay"
+    ) {
+      setAddReceiptOpen(false);
+    }
+  };
+
+  const [imageHelp, setImageHelp] = useState(false);
+  const [textHelp, setTextHelp] = useState(false);
+
+  return (
+    <div
+      id="modal-overlay"
+      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]"
+      onClick={handleOverlayClick}
+    >
+      <div className="bg-white rounded shadow-xl m-4 max-w-md w-full">
+        <div className="flex justify-between items-center border-b border-gray-200 px-5 py-4 bg-slate-100 rounded-t-lg">
+          <h3 className="text-lg text-emerald-900">Create Receipt</h3>
+          <button
+            type="button"
+            className="text-gray-400 hover:text-gray-500"
+            onClick={() => setAddReceiptOpen(false)}
+          >
+            <span className="text-2xl">&times;</span>
+          </button>
+        </div>
+        <div className="p-6 flex flex-col gap-3">
+          <div className="border-[1px] p-2 rounded border-slate-400 text-sm cursor-pointer hover:border-emerald-900 text-slate-400 hover:text-emerald-900">
+            <div className="flex gap-3 justify-center items-center">
+              <Link href="/receipt-type/store">
+                <p className="">Analyze Receipt Image</p>
+              </Link>
+              <button
+                className="w-[20px] border-[1px] border-slate-400  cursor-pointer rounded-md text-sm text-slate-400 hover:text-emerald-900 hover:border-emerald-900"
+                onClick={() => setImageHelp(!imageHelp)}
+              >
+                ?
+              </button>
+            </div>
+          </div>
+          {imageHelp && (
+            <p className="text-xs text-center text-orange-600">
+              Take a photo of your receipt and upload it. We use AI to extract
+              and fill in the details of your receipt and item information. This
+              process works best with physical receipts or memo receipts.
+            </p>
+          )}
+          <div className="border-[1px] p-2 rounded border-slate-400 text-sm  cursor-pointer hover:border-emerald-900 text-slate-400 hover:text-emerald-900">
+            <div className="flex gap-3 justify-center items-center">
+              <Link href="/receipt-type/online">
+                <p className="">Analyze Receipt Text</p>
+              </Link>
+              <button
+                className="w-[20px] border-[1px] border-slate-400  cursor-pointer rounded-md text-sm text-slate-400 hover:text-emerald-900 hover:border-emerald-900"
+                onClick={() => setTextHelp(!textHelp)}
+              >
+                ?
+              </button>
+            </div>
+          </div>
+          {textHelp && (
+            <p className="text-xs text-center text-orange-600">
+              Enter your receipt details first, then copy and paste the item
+              information from your online receipt email. We use AI to
+              accurately populate the item details.
+            </p>
+          )}
+          <button className="border-[1px] p-2 rounded border-slate-400 text-sm  cursor-pointer hover:border-emerald-900 text-slate-400 hover:text-emerald-900">
+            <Link href="/receipt-type/manual">
+              <p className="">Manually Enter Receipt</p>
+            </Link>
+          </button>
         </div>
       </div>
     </div>

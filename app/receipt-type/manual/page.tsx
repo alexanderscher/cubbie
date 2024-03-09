@@ -155,7 +155,7 @@ const Online = () => {
                                   }
 
                                   if (Object.keys(error).length === 0) {
-                                    setStage(ReceiptOnlineStage.ONLINE_ITEMS);
+                                    setStage(ReceiptOnlineStage.PREVIEW);
                                     setErrors((prevErrors) => ({
                                       ...prevErrors,
                                       folderName: "",
@@ -171,102 +171,6 @@ const Online = () => {
                             </div>
                           </div>
                         </BottomBar>
-                      </div>
-                    </div>
-                  );
-                case ReceiptOnlineStage.ONLINE_ITEMS:
-                  return (
-                    <div>
-                      <div className="flex justify-center items-center w-full">
-                        <div className="flex flex-col gap-6 max-w-[600px] w-full">
-                          <div className="flex flex-col gap-6">
-                            <h1 className="text-2xl text-orange-600">
-                              {values.store}
-                            </h1>
-                            <h1 className="text-emerald-900 text-xl ">
-                              Receipt Items
-                            </h1>
-                            <div className="flex  rounded text-xs border-[1px] border-emerald-900 p-4">
-                              <div className="w-1/2 border-r-[1px] border-slate-300 pl-2 pr-2">
-                                <p className="text-slate-400 text-xs">
-                                  Purchase Date
-                                </p>
-                                <p>
-                                  {formatDateToMMDDYY(values.purchase_date)}
-                                </p>
-                              </div>
-
-                              <div className="pl-2 pr-2">
-                                <p className="text-slate-400 text-xs">
-                                  Return Date
-                                </p>
-                                <p>
-                                  {formatDateToMMDDYY(
-                                    calculateReturnDate(
-                                      values.purchase_date,
-                                      values.days_until_return
-                                    )
-                                  )}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-
-                          {errors.itemError && values.items.length === 0 && (
-                            <p className=" text-orange-800 text-xs">
-                              {errors.itemError}
-                            </p>
-                          )}
-                          {errors.itemField && (
-                            <p className=" text-orange-800 text-xs">
-                              {errors.itemField}
-                            </p>
-                          )}
-                          {values.onlineType === "gpt" && (
-                            <TextGpt
-                              setFieldValue={setFieldValue}
-                              values={values}
-                              setStage={setStage}
-                            />
-                          )}
-                          <BottomBar>
-                            <div className="flex justify-between w-full">
-                              <RegularButton
-                                styles="bg-white border-emerald-900"
-                                handleClick={async () => {
-                                  router.push("/");
-                                }}
-                              >
-                                <p className="text-emerald-900  text-xs">
-                                  Discard
-                                </p>
-                              </RegularButton>
-                              <div className="flex gap-4 ">
-                                <RegularButton
-                                  styles={
-                                    "bg-emerald-900 border-emerald-900 w-full"
-                                  }
-                                  handleClick={() => {
-                                    setStage(ReceiptOnlineStage.ONLINE_RECEIPT);
-                                  }}
-                                >
-                                  <p className="text-white text-xs">Back</p>
-                                </RegularButton>
-
-                                <RegularButton
-                                  styles={
-                                    "bg-emerald-900 border-emerald-900 w-full"
-                                  }
-                                  handleClick={async () => {
-                                    setStage(ReceiptOnlineStage.PREVIEW);
-                                  }}
-                                >
-                                  <p className="text-white text-xs">Items</p>
-                                </RegularButton>
-                              </div>
-                            </div>
-                          </BottomBar>
-                        </div>
                       </div>
                     </div>
                   );

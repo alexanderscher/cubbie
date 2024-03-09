@@ -146,7 +146,7 @@ const OptionsModal = ({ project }: OptionsModalProps) => {
   const [edit, setEdit] = useState(false);
   return (
     <div className="absolute bg-white shadow-1 -right-2 top-6 rounded-md  w-[200px]">
-      <div className="p-4 rounded-lg text-sm flex flex-col gap-2">
+      <div className="p-4 rounded text-sm flex flex-col gap-2">
         <div className="bg-slate-100 rounded-md w-full p-2">
           <Link href={`/receipt-type`}>
             <div className="flex gap-2">
@@ -218,7 +218,7 @@ const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
 
   return (
     <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
-      <div className="relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded-lg border-emerald-900 border-[1px]">
+      <div className="relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded border-emerald-900 border-[1px]">
         <h2 className="text-orange-600">
           Are you sure you want to delete {project.name}? This will delete all
           receipts and items in the project.

@@ -58,7 +58,7 @@ const ReceiptPage = () => {
           setRefresh={setRefresh}
         />
       )}
-      <div className="flex bg-white  rounded-lg text-sm shadow p-4 h-[80px] items-center">
+      <div className="flex bg-white  rounded text-sm shadow p-4 h-[80px] items-center">
         <div className="w-1/3 border-r-[1px] border-slate-300  ">
           <p className="text-slate-400 text-xs">Total amount</p>
           <p>
@@ -82,7 +82,7 @@ const ReceiptPage = () => {
       <div className={`${styles.receipt} pb-[200px]`}>
         <div className={`${styles.receiptLeft} shadow  flex flex-col gap-2`}>
           <div
-            className={`shadow rounded-lg  bg-white flex flex-col gap-4 p-6   `}
+            className={`shadow rounded  bg-white flex flex-col gap-4 p-6   `}
           >
             {/* <p className="text-xl text-emerald-900">
               {receipt.memo ? "Memo" : "Receipt"} Information
@@ -104,13 +104,13 @@ const ReceiptPage = () => {
 
             {receipt.receipt_image_url && (
               <div className="w-full flex justify-center items-center  ">
-                <div className=" w-[200px] max-h-[200px]  rounded-lg overflow-hidden">
+                <div className=" w-[200px] max-h-[200px]  rounded overflow-hidden">
                   <Image
                     src={receipt.receipt_image_url}
                     width={280}
                     height={280}
                     alt="Receipt Image"
-                    className="object-contain rounded-lg cursor-pointer"
+                    className="object-contain rounded cursor-pointer"
                     layout="intrinsic"
                     onClick={() => setIsOpen(true)}
                   />

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import * as Yup from "yup";
 
 export const RECEIPT_SCHEMA = Yup.object({
@@ -21,8 +22,5 @@ export const ITEMS_CONTENT_SCHEMA = Yup.object({
 });
 
 export const GPT_IMAGE_SCHEMA = Yup.object().shape({
-  items: Yup.array()
-    .min(1, "At least one item is required")
-    .required("At least one item is required"),
-  store: Yup.string().required("Store is required"),
+  folderName: Yup.string().required("Folder is required"),
 });

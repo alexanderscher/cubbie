@@ -44,7 +44,7 @@ const FinalStage = ({
           <RegularButton
             styles="bg-white border-emerald-900"
             handleClick={async () => {
-              router.push("/receipt-type");
+              router.push("/");
             }}
           >
             <p className="text-emerald-900  text-xs">Discard</p>
@@ -115,7 +115,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
         }}
       />
 
-      <div className="flex border-[1px] border-emerald-900 rounded-lg text-sm  p-4">
+      <div className="flex border-[1px] border-emerald-900 rounded text-sm  p-4">
         <div className="w-1/3 border-r-[1px] border-slate-300 ">
           <p className="text-slate-400 text-xs">Total amount</p>
           <p>
@@ -160,7 +160,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
           className={`${styles.receiptLeft}  flex flex-col gap-2 pb-[10px] md:pb-[200px]`}
         >
           <div
-            className={`border-[1px] border-emerald-900 rounded-lg  flex flex-col gap-4 p-6`}
+            className={`border-[1px] border-emerald-900 rounded  flex flex-col gap-4 p-6`}
           >
             <p className="text-xl text-emerald-900">
               {pathname !== "/receipt-type/memo"
@@ -184,13 +184,13 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
 
             {values.receiptImage && (
               <div className="w-full flex justify-center items-center  ">
-                <div className=" w-[200px] max-h-[200px]  rounded-lg overflow-hidden">
+                <div className=" w-[200px] max-h-[200px]  rounded overflow-hidden">
                   <Image
                     src={values.receiptImage}
                     width={280}
                     height={280}
                     alt="Receipt Image"
-                    className="object-contain rounded-lg cursor-pointer"
+                    className="object-contain rounded cursor-pointer"
                     layout="intrinsic"
                     onClick={() => setIsOpen(true)}
                   />
@@ -389,7 +389,7 @@ const ReceiptItems = ({
   return (
     <div className="border-t-[1px] border-black flex flex-col gap-4 w-full pt-5 ">
       <div className="w-full h-full flex gap-6">
-        <div className="w-[120px] h-[150px] flex items-center flex-shrink-0 overflow-visible rounded-lg relative">
+        <div className="w-[120px] h-[150px] flex items-center flex-shrink-0 overflow-visible rounded relative">
           {item.photo && (
             <div className="relative flex items-center justify-center w-full h-full">
               <button
@@ -409,7 +409,7 @@ const ReceiptItems = ({
                 height={200}
                 src={item.photo}
                 alt=""
-                className="w-full h-full object-cover rounded-lg"
+                className="w-full h-full object-cover rounded"
               />
             </div>
           )}
@@ -669,7 +669,7 @@ const AddItemModal = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]">
-      <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full">
+      <div className="bg-white rounded shadow-xl m-4 max-w-md w-full">
         <div className="flex justify-between items-center border-b border-gray-200 px-5 py-4 bg-slate-100 rounded-t-lg">
           <h3 className="text-lg text-emerald-900">Add Item</h3>
           <button
@@ -789,7 +789,7 @@ const AddItemModal = ({
             <div>
               <p className="text-xs text-emerald-900">Image</p>
 
-              <div className="relative w-full h-[70px] overflow-hidden border-[1px] border-dashed rounded-lg bg-slate-100 flex flex-col border-emerald-900 justify-center items-center ">
+              <div className="relative w-full h-[70px] overflow-hidden border-[1px] border-dashed rounded bg-slate-100 flex flex-col border-emerald-900 justify-center items-center ">
                 <input
                   type="file"
                   onChange={(e) => {
@@ -843,7 +843,7 @@ const AddItemModal = ({
               </div>
             </div>
             {newItem.photo && (
-              <div className="w-24 h-24 flex items-center flex-shrink-0 overflow-visible rounded-lg relative">
+              <div className="w-24 h-24 flex items-center flex-shrink-0 overflow-visible rounded relative">
                 {newItem.photo && (
                   <div className="relative flex items-center justify-center w-full h-full">
                     <button
@@ -864,7 +864,7 @@ const AddItemModal = ({
                       height={200}
                       src={newItem.photo}
                       alt=""
-                      className="w-full h-full object-cover rounded-lg"
+                      className="w-full h-full object-cover rounded"
                     />
                   </div>
                 )}

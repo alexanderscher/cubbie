@@ -6,7 +6,7 @@ import { ReceiptInput } from "@/types/form";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ChangeEvent, useState, useCallback, useRef, useEffect } from "react";
-import heic2any from "heic2any";
+// import heic2any from "heic2any";
 
 interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
@@ -205,16 +205,16 @@ export default function ImageGpt({
     }
 
     try {
-      if (file.type === "image/heic" || file.type === "image/heif") {
-        const convertedBlob = (await heic2any({
-          blob: file,
-          toType: "image/jpeg",
-          quality: 0.8,
-        })) as Blob;
-        file = new File([convertedBlob], "converted-image.jpeg", {
-          type: "image/jpeg",
-        });
-      }
+      // if (file.type === "image/heic" || file.type === "image/heif") {
+      //   const convertedBlob = (await heic2any({
+      //     blob: file,
+      //     toType: "image/jpeg",
+      //     quality: 0.8,
+      //   })) as Blob;
+      //   file = new File([convertedBlob], "converted-image.jpeg", {
+      //     type: "image/jpeg",
+      //   });
+      // }
 
       const dataUrl = await readFileAsDataURL(file);
       setImage(dataUrl);

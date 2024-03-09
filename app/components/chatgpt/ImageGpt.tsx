@@ -6,6 +6,7 @@ import { ReceiptInput } from "@/types/form";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ChangeEvent, useState, useCallback, useRef, useEffect } from "react";
+import heic2any from "heic2any";
 
 interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
@@ -179,39 +180,55 @@ export default function ImageGpt({
     setApiError(false);
   };
 
+  const readFileAsDataURL = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = () => reject("Error reading file");
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleFileChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      if (event.target.files === null || event.target.files.length === 0) {
+    async (event: ChangeEvent<HTMLInputElement>) => {
+      const files = event.target.files;
+      if (!files || files.length === 0) {
         setNoImage(true);
         return;
       }
 
-      const file = event.target.files[0];
+      let file = files[0];
 
       if (!file.type.match("image.*")) {
-        console.error("File is not an image");
+        alert("File is not an image.");
         setInvalidImage(true);
         return;
       }
 
-      const reader = new FileReader();
-
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        if (typeof reader.result === "string") {
-          setImage(reader.result);
-          setNoImage(false);
-          setInvalidImage(false);
-          setFieldValue("receiptImage", reader.result);
+      try {
+        if (file.type === "image/heic" || file.type === "image/heif") {
+          const convertedBlob = (await heic2any({
+            blob: file,
+            toType: "image/jpeg",
+            quality: 0.8,
+          })) as Blob;
+          file = new File([convertedBlob], "converted-image.jpeg", {
+            type: "image/jpeg",
+          });
         }
-      };
-      reader.onerror = (error) => {
-        console.error("Error converting file to base64:", error);
-      };
+
+        const dataUrl = await readFileAsDataURL(file);
+        setImage(dataUrl);
+        setNoImage(false);
+        setInvalidImage(false);
+        setFieldValue("receiptImage", dataUrl);
+      } catch (error) {
+        console.error("Error handling file:", error);
+        alert("Error processing file.");
+      }
     },
     [setFieldValue]
   );
-
   const handleSubmit = async () => {
     const error = await validateForm();
     console.log(error);

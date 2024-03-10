@@ -15,10 +15,11 @@ import React, { useState } from "react";
 
 interface Props {
   item: ItemType;
+  isOpen: boolean;
+  onToggleOpen: () => void;
 }
 
-const Item = ({ item }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
+const Item = ({ item, isOpen, onToggleOpen }: Props) => {
   const pathname = usePathname();
   console.log(item);
 
@@ -41,7 +42,7 @@ const Item = ({ item }: Props) => {
               alt=""
               width={20}
               height={20}
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={onToggleOpen}
             />
           </div>
         )}
@@ -62,7 +63,7 @@ const Item = ({ item }: Props) => {
               alt=""
               width={20}
               height={20}
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={onToggleOpen}
             />
           </div>
         )}

@@ -18,8 +18,18 @@ const ReceiptPage = () => {
   const [receipt, setReceipt] = useState({} as ReceiptType);
   const [isOpen, setIsOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
-
   const [refresh, setRefresh] = useState(false);
+  const [openItemId, setOpenItemId] = useState(null as number | null);
+
+  const toggleOpenItem = (itemId: number | undefined) => {
+    if (itemId === undefined) return;
+
+    if (openItemId === itemId) {
+      setOpenItemId(null);
+    } else {
+      setOpenItemId(itemId);
+    }
+  };
 
   useEffect(() => {
     const fetchReceipt = async () => {
@@ -171,7 +181,12 @@ const ReceiptPage = () => {
           <div className={`${styles.boxes} `}>
             {receipt.items.length > 0 &&
               receipt.items.map((item: ItemType, index: number) => (
-                <Item key={item.id} item={item} />
+                <Item
+                  key={item.id}
+                  item={item}
+                  isOpen={openItemId === item.id}
+                  onToggleOpen={() => toggleOpenItem(item.id)}
+                />
               ))}
           </div>
         </div>

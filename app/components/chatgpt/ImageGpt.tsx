@@ -4,6 +4,7 @@ import ProjectSelect from "@/app/components/createForm/ProjectSelect";
 import { TooltipWithHelperIcon } from "@/app/components/tooltips/TooltipWithHelperIcon";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
+import { convertHeic } from "@/utils/media";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ChangeEvent, useState, useRef, useEffect } from "react";
@@ -195,12 +196,21 @@ export default function ImageGpt({
       return;
     }
 
-    const file = event.target.files[0];
+    let file = event.target.files[0];
 
     if (!file.type.match("image.*")) {
       alert("File is not an image.");
       setInvalidImage(true);
       return;
+    }
+    if (file.type === "image/heic" || file.name.endsWith(".heic")) {
+      try {
+        file = await convertHeic(file);
+      } catch (error) {
+        console.error("Error converting HEIC file:", error);
+        alert("Error converting HEIC file.");
+        return;
+      }
     }
 
     try {
@@ -315,7 +325,7 @@ export default function ImageGpt({
         <div>
           <div className="flex flex-col gap-5">
             <div
-              className={` border-[1px]  w-full flex flex-col gap-4 justify-center items-center rounded-md relative  border-emerald-900 h-[150px]`}
+              className={`border-[1px] w-full flex flex-col gap-4 justify-center items-center rounded-md relative  border-emerald-900 h-[150px]`}
               onClick={handleContainerClick}
               style={{ cursor: "pointer" }}
             >
@@ -323,7 +333,13 @@ export default function ImageGpt({
                 type="file"
                 onChange={handleFileChange}
                 id="file-upload"
-                style={{ opacity: 0, position: "absolute", zIndex: -1 }}
+                style={{
+                  opacity: 0,
+                  position: "absolute",
+                  zIndex: -1,
+                  width: "100%",
+                  height: "100%",
+                }}
                 ref={fileInputRef}
               />
               <Image

@@ -195,12 +195,18 @@ const ReceiptPage = () => {
             <div className={`${styles.receiptLeft}  flex flex-col gap-2 `}>
               <div className={` rounded  bg-white flex flex-col gap-4 p-6`}>
                 {!values.receipt_image_url && !values.edit_image && (
-                  <div className="w-full h-[200px] overflow-hidden  border-[1px] border-dashed rounded bg-slate-100">
+                  <div className="w-full h-[200px] overflow-hidden  border-[1px] border-dashed rounded bg-slate-100 relative">
                     <input
                       type="file"
                       onChange={(e) => handleFileChange(e, setFieldValue)}
                       id="edit"
-                      style={{ opacity: 0, position: "absolute", zIndex: -1 }}
+                      style={{
+                        opacity: 0,
+                        position: "absolute",
+                        zIndex: -1,
+                        width: "100%",
+                        height: "100%",
+                      }}
                     />
                     <div className="w-full h-full flex flex-col gap-4 justify-center items-center ">
                       <Image

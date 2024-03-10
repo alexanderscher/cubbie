@@ -93,7 +93,7 @@ const Item = ({ item }: Props) => {
             <div className=" flex flex-col  gap-1 text-xs ">
               {pathname === "/items" && (
                 <div className="">
-                  <p className="text-slate-400  ">Receipt Store</p>
+                  <p className="text-slate-400  ">Store</p>
                   <Link href={`/receipt/${item.receipt_id}`} className="">
                     <TruncateText
                       text={item.receipt.store}
@@ -167,7 +167,7 @@ const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
   return (
     <div className="absolute bg-white shadow-1 -right-2 top-6 rounded-md  w-[200px]">
       <div className="p-4 rounded text-sm flex flex-col gap-2">
-        <div className="bg-slate-100 rounded-md w-full p-2">
+        <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2">
           <Link href={`/item/${item.id}/edit`}>
             <div className="flex gap-2">
               <Image src={"/edit.png"} width={20} height={20} alt=""></Image>
@@ -176,7 +176,7 @@ const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
           </Link>
         </div>
 
-        <div className="bg-slate-100 rounded-md w-full p-2">
+        <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2">
           {item.returned ? (
             <div className="flex gap-2">
               <Image
@@ -221,7 +221,7 @@ const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
             </div>
           )}
         </div>
-        <div className="bg-slate-100 rounded-md w-full p-2 ">
+        <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 ">
           <div
             className="flex gap-2 cursor-pointer"
             onClick={() => {

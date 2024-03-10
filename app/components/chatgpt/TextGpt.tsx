@@ -1,4 +1,5 @@
 import RegularButton from "@/app/components/buttons/RegularButton";
+import { TooltipWithHelperIcon } from "@/app/components/tooltips/TooltipWithHelperIcon";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
 import React, { useState } from "react";
@@ -83,20 +84,12 @@ const TextGpt = ({ setFieldValue, values, setStage }: Props) => {
   };
   return (
     <div className="flex flex-col gap-4 ">
-      <button
-        type="button"
-        className="w-[20px] border-[1px] border-orange-600 text-orange-600 rounded"
-        onClick={() => setHelp(!help)}
-      >
-        ?
-      </button>
-      {help && (
-        <p className="text-sm text-center text-orange-600">
-          We use AI to analyze the text you enter. Go to your online receipt or
+      <TooltipWithHelperIcon
+        content='We use AI to analyze the text you enter. Go to your online receipt or
           email and copy and paste the items from the receipt. Then click the
-          &quot;Analyze&quot; button to get the items.
-        </p>
-      )}
+          "Analyze" button to get the items.'
+      />
+
       <textarea
         value={inputText}
         className="w-full border-[1px] p-2 mb-2 rounded  h-[300px] resize-none bg border-slate-400 focus:border-emerald-900 focus:outline-none"

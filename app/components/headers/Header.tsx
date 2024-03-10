@@ -7,6 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSearchProjectContext } from "@/app/components/context/SearchProjectContext";
 import Link from "next/link";
+import { TooltipWithHelperIcon } from "@/app/components/tooltips/TooltipWithHelperIcon";
 
 interface HeaderProps {
   type: string;
@@ -263,10 +264,6 @@ const FilterProjectOptions = ({
   searchParams,
   onClose,
 }: FilterOptionsProps) => {
-  const handleTypeClick = (name: string) => {
-    router.push(pathname + "?" + createQueryString("receiptType", name));
-  };
-
   const handleSortClick = (name: string) => {
     const queryParams = new URLSearchParams(window.location.search);
 
@@ -444,52 +441,7 @@ const FilterOptions = ({
             </button>
           </div>
         </div>
-        <div className="border-b-[1px] border-emerald-900 flex flex-col">
-          <div className="pt-2">
-            <p className="text-sm w-full text-center text-emerald-900">
-              Receipt Type
-            </p>
-          </div>
-          <div className="flex flex-col w-full p-4 gap-3">
-            <button
-              className={`${
-                searchParams.get("receiptType") === "all" ||
-                !searchParams.get("receiptType")
-                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
-              }`}
-              onClick={() => {
-                handleTypeClick("all");
-              }}
-            >
-              <p className="text-xs">Receipts & Memos</p>
-            </button>
-            <button
-              className={`${
-                searchParams.get("receiptType") === "receipt"
-                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
-              }`}
-              onClick={() => {
-                handleTypeClick("receipt");
-              }}
-            >
-              <p className="text-xs">Receipts</p>
-            </button>
-            <button
-              className={`${
-                searchParams.get("receiptType") === "memo"
-                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
-              }`}
-              onClick={() => {
-                handleTypeClick("memo");
-              }}
-            >
-              <p className="text-xs">Memos</p>
-            </button>
-          </div>
-        </div>
+
         <div className="border-b-[1px] border-emerald-900 flex flex-col">
           <div className="pt-2">
             <p className="text-sm w-full text-center text-emerald-900">Sort</p>
@@ -951,7 +903,7 @@ const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
     >
       <div className="bg-white rounded shadow-xl m-4 max-w-md w-full">
         <div className="flex justify-between items-center border-b border-gray-200 px-5 py-4 bg-slate-100 rounded-t-lg">
-          <h3 className="text-lg text-emerald-900">Create Receipt</h3>
+          <h3 className="text-lg text-emerald-900">Create Receipt Options</h3>
           <button
             type="button"
             className="text-gray-400 hover:text-gray-500"
@@ -961,48 +913,34 @@ const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
           </button>
         </div>
         <div className="p-6 flex flex-col gap-3">
-          <div className="border-[1px] p-2 rounded border-slate-400 text-sm cursor-pointer hover:border-emerald-900 text-slate-400 hover:text-emerald-900">
+          <div className="border-[1px] p-2 rounded text-sm cursor-pointer border-emerald-900 text-emerald-900">
             <div className="flex gap-3 justify-center items-center">
-              <Link href="/receipt-type/store">
+              <Link href="/create/image">
                 <p className="">Analyze Receipt Image</p>
               </Link>
-              <button
-                className="w-[20px] border-[1px] border-slate-400  cursor-pointer rounded-md text-sm text-slate-400 hover:text-emerald-900 hover:border-emerald-900"
-                onClick={() => setImageHelp(!imageHelp)}
-              >
-                ?
-              </button>
+              <TooltipWithHelperIcon
+                content="  Take a photo of your receipt and upload it. We use AI to extract
+              and fill in the details of your receipt and item information. This
+              process works best with physical receipts or memo receipts."
+              />
             </div>
           </div>
-          {imageHelp && (
-            <p className="text-xs text-center text-orange-600">
-              Take a photo of your receipt and upload it. We use AI to extract
-              and fill in the details of your receipt and item information. This
-              process works best with physical receipts or memo receipts.
-            </p>
-          )}
-          <div className="border-[1px] p-2 rounded border-slate-400 text-sm  cursor-pointer hover:border-emerald-900 text-slate-400 hover:text-emerald-900">
+
+          <div className="border-[1px] p-2 rounded text-sm  cursor-pointer border-emerald-900 text-emerald-900">
             <div className="flex gap-3 justify-center items-center">
-              <Link href="/receipt-type/online">
+              <Link href="/create/text">
                 <p className="">Analyze Receipt Text</p>
               </Link>
-              <button
-                className="w-[20px] border-[1px] border-slate-400  cursor-pointer rounded-md text-sm text-slate-400 hover:text-emerald-900 hover:border-emerald-900"
-                onClick={() => setTextHelp(!textHelp)}
-              >
-                ?
-              </button>
+              <TooltipWithHelperIcon
+                content="Enter your receipt details first, then copy and paste the item
+              information from your online receipt email. We use AI to
+              accurately populate the item details."
+              />
             </div>
           </div>
-          {textHelp && (
-            <p className="text-xs text-center text-orange-600">
-              Enter your receipt details first, then copy and paste the item
-              information from your online receipt email. We use AI to
-              accurately populate the item details.
-            </p>
-          )}
-          <button className="border-[1px] p-2 rounded border-slate-400 text-sm  cursor-pointer hover:border-emerald-900 text-slate-400 hover:text-emerald-900">
-            <Link href="/receipt-type/manual">
+
+          <button className="border-[1px] p-2 rounded text-sm  cursor-pointer border-emerald-900 text-emerald-900">
+            <Link href="/create/manual">
               <p className="">Manually Enter Receipt</p>
             </Link>
           </button>

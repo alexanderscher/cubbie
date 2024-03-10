@@ -5,17 +5,14 @@ import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 
+import { TooltipComponent } from "@/app/components/tooltips/ToolTip";
+
 interface Event {
   title: string;
   start: string | Date;
   end?: string | Date;
   id?: string | number;
 }
-
-// const allEvents = [
-//   { title: "Event 1", start: "2024-03-10T10:00:00", id: 1 },
-
-// ];
 
 const CalendarPage = () => {
   const [allEvents, setAllEvents] = useState<Event[]>([
@@ -28,12 +25,11 @@ const CalendarPage = () => {
       const data = await response.json();
       console.log(data);
 
-      // Initialize an empty array to hold all the events
       const events = [];
 
       for (const receipt of data.receipts) {
         const purchaseEvent = {
-          title: `Purchase at ${receipt.store}`,
+          title: `Purchased at ${receipt.store}`,
           start: receipt.purchase_date,
           id: `purchase-${receipt.id}`,
 
@@ -73,26 +69,14 @@ const CalendarPage = () => {
 
   const [activeEventId, setActiveEventId] = useState<string | null>(null);
 
-  // Adjust to handle string IDs
   const handleEventClick = (eventId: string) => {
     setActiveEventId(eventId);
   };
   return (
     <div className="">
-      {/* <select
-        onChange={handleMonthChange}
-        value={currentDate.getMonth().toString()}
-      >
-        {Array.from({ length: 12 }).map((_, index) => (
-          <option key={index} value={index}>
-            {new Date(0, index).toLocaleString("default", { month: "long" })}
-          </option>
-        ))}
-      </select> */}
       <div className="-ml-4 -mr-4 relative ">
         <FullCalendar
           height={"100vh"}
-          // contentHeight={"auto"}
           ref={calendarRef}
           plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
           headerToolbar={{
@@ -127,47 +111,49 @@ interface EventContentProps {
   setActiveEventId: (id: string | null) => void;
 }
 
-const EventContent = ({
-  eventInfo,
-  isActive,
-  onEventClick,
-  setActiveEventId,
-}: EventContentProps) => {
+const EventContent = ({ eventInfo, onEventClick }: EventContentProps) => {
   const handleClick = () => {
     onEventClick(eventInfo.event.id.toString());
   };
-  const handleCloseModal = (e: React.MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    setActiveEventId(null);
-  };
+  const [tooltipPlacement, setTooltipPlacement] = useState("top");
+  const eventRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const updateTooltipPlacement = () => {
+      if (eventRef.current) {
+        const { top, left, right } = eventRef.current.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+
+        let verticalPosition = "bottom";
+        let horizontalPosition = "start";
+
+        if (top < window.innerHeight / 2) {
+          verticalPosition = "bottom";
+        } else {
+          verticalPosition = "top";
+        }
+
+        if ((left + right) / 2 < viewportWidth / 2) {
+          horizontalPosition = "start";
+        } else {
+          horizontalPosition = "end";
+        }
+
+        setTooltipPlacement(`${verticalPosition}-${horizontalPosition}`);
+      }
+    };
+
+    updateTooltipPlacement();
+  }, []);
 
   return (
-    <div className=" overflow-hidden" onClick={handleClick}>
-      <div>
-        <span className="text-xs ">{eventInfo.event.title}</span>
-      </div>
-
-      {isActive && (
-        <ModalComponent eventInfo={eventInfo} onClose={handleCloseModal} />
-      )}
+    <div className=" overflow-hidden" onClick={handleClick} ref={eventRef}>
+      <TooltipComponent
+        placement={tooltipPlacement}
+        item={eventInfo.event.title}
+        content={eventInfo.event.title}
+        date={eventInfo.event.start.toDateString()}
+      />
     </div>
   );
 };
-
-interface ModalProps {
-  eventInfo: any;
-  onClose: (e: React.MouseEvent<HTMLButtonElement>) => void;
-}
-
-function ModalComponent({ eventInfo, onClose }: ModalProps) {
-  return (
-    <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex shadow">
-      <div className="relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded ">
-        <h1 className="text-black">{eventInfo.event.title}</h1>
-        <button className="text-black" onClick={onClose}>
-          Close
-        </button>
-      </div>
-    </div>
-  );
-}

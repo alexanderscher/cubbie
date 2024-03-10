@@ -63,61 +63,15 @@ const Receipts = () => {
     );
   }
 
-  if (searchParams.get("receiptType") === "receipt")
-    return (
-      <div className="boxes">
-        {searchParams.get("expired") === "false" || !searchParams.get("expired")
-          ? sortedAndFilteredData
-              .filter(
-                (receipt: ReceiptType) =>
-                  receipt.memo === false && receipt.expired === false
-              )
-              .map((receipt: ReceiptType) => (
-                <Receipt key={receipt.id} receipt={receipt} />
-              ))
-          : sortedAndFilteredData
-              .filter(
-                (receipt: ReceiptType) =>
-                  receipt.memo === false && receipt.expired === true
-              )
-              .map((receipt: ReceiptType) => (
-                <Receipt key={receipt.id} receipt={receipt} />
-              ))}
-      </div>
-    );
-  else if (searchParams.get("receiptType") === "memo") {
-    return (
-      <div className="boxes">
-        {searchParams.get("expired") === "false" || !searchParams.get("expired")
-          ? sortedAndFilteredData
-              .filter(
-                (receipt: ReceiptType) =>
-                  receipt.memo === true && receipt.expired === false
-              )
-              .map((receipt: ReceiptType) => (
-                <Receipt key={receipt.id} receipt={receipt} />
-              ))
-          : sortedAndFilteredData
-              .filter(
-                (receipt: ReceiptType) =>
-                  receipt.memo === true && receipt.expired === true
-              )
-              .map((receipt: ReceiptType) => (
-                <Receipt key={receipt.id} receipt={receipt} />
-              ))}
-      </div>
-    );
-  }
-
   return (
     <div className="boxes">
       {searchParams.get("expired") === "false" || !searchParams.get("expired")
-        ? filteredData
+        ? sortedAndFilteredData
             .filter((receipt: ReceiptType) => receipt.expired === false)
             .map((receipt: ReceiptType) => (
               <Receipt key={receipt.id} receipt={receipt} />
             ))
-        : filteredData
+        : sortedAndFilteredData
             .filter((receipt: ReceiptType) => receipt.expired === true)
             .map((receipt: ReceiptType) => (
               <Receipt key={receipt.id} receipt={receipt} />

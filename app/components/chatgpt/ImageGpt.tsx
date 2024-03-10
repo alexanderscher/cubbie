@@ -1,12 +1,12 @@
 "use client";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import ProjectSelect from "@/app/components/createForm/ProjectSelect";
+import { TooltipWithHelperIcon } from "@/app/components/tooltips/TooltipWithHelperIcon";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ChangeEvent, useState, useCallback, useRef, useEffect } from "react";
-// import heic2any from "heic2any";
+import { ChangeEvent, useState, useRef, useEffect } from "react";
 
 interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
@@ -190,13 +190,12 @@ export default function ImageGpt({
   };
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (!files || files.length === 0) {
-      setNoImage(true);
+    if (event.target.files === null) {
+      window.alert("No file selected. Choose a file.");
       return;
     }
 
-    let file = files[0];
+    const file = event.target.files[0];
 
     if (!file.type.match("image.*")) {
       alert("File is not an image.");
@@ -205,17 +204,6 @@ export default function ImageGpt({
     }
 
     try {
-      // if (file.type === "image/heic" || file.type === "image/heif") {
-      //   const convertedBlob = (await heic2any({
-      //     blob: file,
-      //     toType: "image/jpeg",
-      //     quality: 0.8,
-      //   })) as Blob;
-      //   file = new File([convertedBlob], "converted-image.jpeg", {
-      //     type: "image/jpeg",
-      //   });
-      // }
-
       const dataUrl = await readFileAsDataURL(file);
       setImage(dataUrl);
       setNoImage(false);
@@ -228,14 +216,14 @@ export default function ImageGpt({
 
     [setFieldValue];
   };
+
   const handleSubmit = async () => {
     const error = await validateForm();
-    console.log(error);
 
-    if (error) {
+    if (Object.keys(error).length > 0) {
       setValidationErrors(error);
+      return;
     }
-
     if (!image) {
       setNoImage(true);
       return;
@@ -257,48 +245,6 @@ export default function ImageGpt({
   return (
     <div>
       <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-3">
-          <div className=" flex gap-2 items-center">
-            <p className=" text-slate-400">Is this a memo?*</p>
-            <button
-              type="button"
-              className="w-[20px] h-[20px] border-[1px] border-orange-600 text-orange-600 rounded-md text-xs"
-              onClick={() => setMemoHelp(!memoHelp)}
-            >
-              ?
-            </button>
-          </div>
-
-          <div className="flex gap-4 items-center">
-            <div className="flex gap-2 justify-center items-center">
-              <span>Yes</span>
-              <input
-                name="memo"
-                type="radio"
-                value="true"
-                checked={values.memo === true}
-                onChange={() => setFieldValue("memo", true)}
-              />
-            </div>
-            <div className="flex gap-2 justify-center items-center">
-              <span>No</span>
-              <input
-                name="memo"
-                type="radio"
-                value="false"
-                checked={values.memo === false}
-                onChange={() => setFieldValue("memo", false)}
-              />
-            </div>
-          </div>
-        </div>
-
-        {memoHelp && (
-          <p className="text-sm text-center text-orange-600">
-            Selecting the type of receipt you upload enables us to accurately
-            analyze and process it.
-          </p>
-        )}
         <ProjectSelect
           handleChange={handleChange}
           projects={projects}
@@ -311,26 +257,65 @@ export default function ImageGpt({
             {validationErrors.folderName}
           </p>
         )}
-        <button
-          type="button"
-          className="w-[20px] h-[20px] border-[1px] border-orange-600 text-orange-600 rounded-md text-xs"
-          onClick={() => setHelp(!help)}
-        >
-          ?
-        </button>
-        {help && (
-          <p className="text-sm text-center text-orange-600">
-            We use AI to analyze the receipt image you upload. Take a picture of
-            the receipt and upload it. Then click the &quot;Analyze Image&quot;
-            button to get the receipt information and items. Please only upload
-            images of receipts.
-          </p>
-        )}
+
+        <div className="flex flex-col gap-3">
+          <div className=" flex items-center gap-2 relatice">
+            <p className="text-slate-400">Is this a memo?*</p>
+            <TooltipWithHelperIcon
+              content="Selecting the type of receipt you upload enables us to
+                  accurately analyze and process it."
+            />
+          </div>
+
+          <div className="flex gap-4 items-center">
+            <label
+              className={`flex gap-2 justify-center items-center px-4 py-2 rounded cursor-pointer ${
+                values.memo === true
+                  ? "bg text-emerald-900 border-[1px] border-emerald-900 text-sm w-1/2"
+                  : "bg text-slate-400 border-[1px] border-slate-400 text-sm w-1/2"
+              }`}
+            >
+              <span>Yes</span>
+              <input
+                className="opacity-0 absolute"
+                name="memo"
+                type="radio"
+                value="true"
+                checked={values.memo === true}
+                onChange={() => setFieldValue("memo", true)}
+              />
+            </label>
+            <label
+              className={`flex gap-2 justify-center items-center px-4 py-2 rounded cursor-pointer ${
+                values.memo === false
+                  ? "bg text-emerald-900 border-[1px] border-emerald-900 text-sm w-1/2"
+                  : "bg text-slate-400 border-[1px] border-slate-400 text-sm w-1/2"
+              }`}
+            >
+              <span>No</span>
+              <input
+                className="opacity-0 absolute"
+                name="memo"
+                type="radio"
+                value="false"
+                checked={values.memo === false}
+                onChange={() => setFieldValue("memo", false)}
+              />
+            </label>
+          </div>
+        </div>
+        <TooltipWithHelperIcon
+          placement="right-start"
+          content='We use AI to analyze the receipt image you upload. Take a
+                picture of the receipt and upload it. Then click the
+                "Analyze Image" button to get the receipt information
+                and items. Please only upload images of receipts.'
+        />
 
         <div>
           <div className="flex flex-col gap-5">
             <div
-              className={` border-[1px] border-emerald-900 w-full flex flex-col gap-4 justify-center items-center rounded-md relative h-[200px] `}
+              className={` border-[1px]  w-full flex flex-col gap-4 justify-center items-center rounded-md relative  border-emerald-900 h-[150px]`}
               onClick={handleContainerClick}
               style={{ cursor: "pointer" }}
             >
@@ -344,20 +329,16 @@ export default function ImageGpt({
               <Image
                 src="/image_b.png"
                 alt=""
-                width={30}
-                height={30}
+                width={40}
+                height={40}
                 className="object-cover pt-4"
                 style={{
                   objectFit: "cover",
                   objectPosition: "center",
                 }}
               />
-              <label
-                htmlFor="file-upload"
-                className="justify-center items-center cursor-pointer text-sm"
-              >
-                Upload file
-              </label>
+              <p className="text-sm text-emerald-900">Upload image</p>
+              <label htmlFor="file-upload" className=""></label>
             </div>
 
             {values.receiptImage && (
@@ -384,12 +365,12 @@ export default function ImageGpt({
 
             <div className="w-full">
               <RegularButton
-                styles="border-emerald-900 bg w-full "
+                styles="border-emerald-900 bg-emerald-900  w-full "
                 handleClick={() => {
                   !loading && handleSubmit();
                 }}
               >
-                <p className="text-emerald-900 ">
+                <p className="text-white text-sm">
                   {" "}
                   {loading ? "Analyzing..." : "Analyze Image"}
                 </p>
@@ -408,9 +389,7 @@ export default function ImageGpt({
               <RegularButton
                 styles={"bg border-black w-full"}
                 handleClick={() => {
-                  pathname === "/receipt-type/memo"
-                    ? MemoGptCall()
-                    : OnlineGptCall();
+                  pathname === "/create/memo" ? MemoGptCall() : OnlineGptCall();
                 }}
               >
                 <p className="text-sm">Confirm</p>

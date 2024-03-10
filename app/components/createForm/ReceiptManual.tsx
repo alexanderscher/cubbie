@@ -1,12 +1,11 @@
 "use client";
-import RegularButton from "@/app/components/buttons/RegularButton";
 import ProjectSelect from "@/app/components/createForm/ProjectSelect";
-import styles from "@/app/receipt-type/upload.module.css";
+import { TooltipWithHelperIcon } from "@/app/components/tooltips/TooltipWithHelperIcon";
+import styles from "@/app/create/upload.module.css";
 import { ReceiptStoreStage } from "@/constants/form";
 import { Project } from "@/types/receipt";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import React, { ChangeEvent, use, useEffect, useRef, useState } from "react";
 import CurrencyInput from "react-currency-input-field";
 
@@ -27,7 +26,6 @@ const ReceiptManual = ({
   online = false,
   setStage,
 }: ReceiptManualProps) => {
-  const pathname = usePathname();
   const [help, setHelp] = React.useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
 
@@ -86,24 +84,6 @@ const ReceiptManual = ({
   return (
     <div className="flex flex-col gap-10  w-full justify-center items-center">
       <div className=" max-w-[600px] w-full">
-        {pathname === "/receipt-type/store" && setStage && (
-          <div className="w-full flex justify-between mb-8 gap-2">
-            <RegularButton styles={"bg-black text-white border-black"}>
-              <p className=" text-xs">Add Receipt Manually</p>
-            </RegularButton>
-
-            <RegularButton
-              styles={"border-black"}
-              handleClick={() => {
-                setFieldValue("storeType", "gpt");
-                setStage(ReceiptStoreStage.IN_STORE_GPT);
-              }}
-            >
-              <p className=" text-xs">Analyze receipt image</p>
-            </RegularButton>
-          </div>
-        )}
-
         <div className="flex flex-col gap-2">
           <input
             className="w-full bg border-b-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none placeholder:text-3xl placeholder:text-orange-600 h-[50px] text-2xl text-orange-600"
@@ -120,11 +100,6 @@ const ReceiptManual = ({
 
         <div className={styles.receiptContainer}>
           <div className={styles.receiptInputs}>
-            <h1 className="text-emerald-900 text-xl mt-6">
-              {pathname !== "/receipt-type/memo"
-                ? "Receipt Details"
-                : "Memo Details"}
-            </h1>
             <ProjectSelect
               handleChange={handleChange}
               projects={projects}
@@ -134,7 +109,14 @@ const ReceiptManual = ({
             />
             <div className="flex gap-2 w-full">
               <div className="w-full">
-                <p className="text-sm text-slate-400 ">Asset Amount</p>
+                <div className="flex gap-2 mb-1">
+                  <p className="text-sm text-slate-400 ">Asset Amount</p>
+                  <TooltipWithHelperIcon
+                    content="Asset amount determines which item is considered an asset.
+                    An asset is an item that is worth more than a certain
+                    amount."
+                  />
+                </div>
 
                 <CurrencyInput
                   id="assetAmount"
@@ -145,13 +127,6 @@ const ReceiptManual = ({
                   decimalsLimit={2}
                   onValueChange={handleCurrencyChangeAsset}
                 />
-                {help && (
-                  <p className="text-xs text-center text-orange-600 mt-2">
-                    Asset amount determines which item is considered an asset.
-                    An asset is an item that is worth more than a certain
-                    amount.
-                  </p>
-                )}
               </div>
             </div>
 

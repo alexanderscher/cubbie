@@ -24,25 +24,25 @@ const ReceiptType = () => {
             border={"none"}
             height={styles.boxes}
             styles="bg-white shadow flex flex-col gap-3 justify-center items-center"
-            handleClick={() => router.push("/receipt-type/online")}
+            handleClick={() => router.push("/create/text")}
           >
-            <Image src={"/online_b.png"} width={30} height={30} alt=""></Image>
+            <Image src={"/text_b.png"} width={30} height={30} alt=""></Image>
             <p>Online</p>
           </LargeButton>
           <LargeButton
             border={"none"}
             height={styles.boxes}
             styles="bg-white shadow flex flex-col gap-3 justify-center items-center"
-            handleClick={() => router.push("/receipt-type/store")}
+            handleClick={() => router.push("/create/image")}
           >
-            <Image src={"/store_b.png"} width={30} height={30} alt=""></Image>
+            <Image src={"/image_b.png"} width={30} height={30} alt=""></Image>
             <p>In Store</p>
           </LargeButton>
           <LargeButton
             border={"none"}
             height={styles.boxes}
             styles="bg-white shadow flex flex-col gap-3 justify-center items-center"
-            handleClick={() => router.push("/receipt-type/memo")}
+            handleClick={() => router.push("/create/memo")}
           >
             <Image src={"/receipt_b.png"} width={20} height={20} alt=""></Image>
             <p>Memo</p>

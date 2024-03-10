@@ -70,7 +70,7 @@ const ProjectID = () => {
               <p className="text-xs">Edit</p>
             </RegularButton>
             <RegularButton
-              href="/receipt-type"
+              href="/create"
               styles="bg-emerald-900 border-emerald-900 text-white"
             >
               <p className="text-xs">Add receipt</p>

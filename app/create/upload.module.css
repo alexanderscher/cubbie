@@ -16,6 +16,7 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
+  margin-top: 20px;
 }
 
 .boxes {
@@ -26,7 +27,7 @@
   .receiptContainer {
     justify-content: center;
   }
-  .receipt-types {
+  .creates {
     display: flex;
     flex-direction: column;
     width: 100%;

@@ -251,3 +251,19 @@ input:-webkit-autofill::first-line {
   border-radius: 4px;
   cursor: pointer;
 }
+
+.ui_TooltipContainer {
+  visibility: hidden; /* Hide tooltip by default */
+  position: absolute;
+  transform: translate(
+    -50%,
+    -8px
+  ); /* Center above the element and adjust the Y position */
+  /* Add more styling as needed */
+}
+
+/* Show tooltip on hover */
+button:hover + .ui_TooltipContainer {
+  visibility: visible;
+  opacity: 1; /* Fade in */
+}

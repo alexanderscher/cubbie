@@ -13,8 +13,6 @@ export const DEFAULT_INPUT_VALUES: ReceiptInput = {
   return_date: "",
   receiptImage: "",
   items: [],
-  onlineType: "gpt",
-  storeType: "gpt",
   folder: 0,
   folderName: "",
   memo: false,

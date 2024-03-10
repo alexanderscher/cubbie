@@ -157,7 +157,13 @@ const ItemID = () => {
                       type="file"
                       onChange={(e) => handleFileChange(e, setFieldValue)}
                       id="edit"
-                      style={{ opacity: 0, position: "absolute", zIndex: -1 }}
+                      style={{
+                        opacity: 0,
+                        position: "absolute",
+                        zIndex: -1,
+                        width: "100%",
+                        height: "100%",
+                      }}
                     />
                     <div className="w-full h-full flex flex-col gap-4 justify-center items-center ">
                       <Image

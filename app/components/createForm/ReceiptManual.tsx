@@ -221,7 +221,13 @@ const ReceiptManual = ({
                 type="file"
                 onChange={handleFileChange}
                 id="file-upload"
-                style={{ opacity: 0, position: "absolute", zIndex: -1 }}
+                style={{
+                  opacity: 0,
+                  position: "absolute",
+                  zIndex: -1,
+                  width: "100%",
+                  height: "100%",
+                }}
                 ref={fileInputRef}
               />
               <Image

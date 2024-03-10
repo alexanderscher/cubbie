@@ -1,5 +1,5 @@
 "use client";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Item from "@/app/components/Item";
 import { Item as ItemType } from "@/types/receipt";
@@ -8,6 +8,18 @@ import { useSearchItemContext } from "@/app/components/context/SearchtemContext"
 const Items = () => {
   const { filteredItemData, isItemLoading } = useSearchItemContext();
   const searchParams = useSearchParams();
+
+  const [openItemId, setOpenItemId] = useState(null as number | null);
+
+  const toggleOpenItem = (itemId: number | undefined) => {
+    if (itemId === undefined) return;
+
+    if (openItemId === itemId) {
+      setOpenItemId(null);
+    } else {
+      setOpenItemId(itemId);
+    }
+  };
 
   const sortFieldParam = searchParams.get("sort");
   const sortField = sortFieldParam?.startsWith("-")
@@ -71,7 +83,14 @@ const Items = () => {
         {sortedAndFilteredData.length > 0 &&
           sortedAndFilteredData.map(
             (item: ItemType) =>
-              item.returned && <Item key={item.id} item={item} />
+              item.returned && (
+                <Item
+                  key={item.id}
+                  item={item}
+                  isOpen={openItemId === item.id}
+                  onToggleOpen={() => toggleOpenItem(item.id)}
+                />
+              )
           )}
       </div>
     );
@@ -81,7 +100,14 @@ const Items = () => {
         {sortedAndFilteredData.length > 0 &&
           sortedAndFilteredData.map(
             (item: ItemType) =>
-              !item.returned && <Item key={item.id} item={item} />
+              !item.returned && (
+                <Item
+                  key={item.id}
+                  item={item}
+                  onToggleOpen={() => toggleOpenItem(item.id)}
+                  isOpen={openItemId === item.id}
+                />
+              )
           )}
       </div>
     );
@@ -91,7 +117,12 @@ const Items = () => {
     <div className="boxes pb-20">
       {sortedAndFilteredData.length > 0 &&
         sortedAndFilteredData.map((item: ItemType) => (
-          <Item key={item.id} item={item} />
+          <Item
+            key={item.id}
+            item={item}
+            isOpen={openItemId === item.id}
+            onToggleOpen={() => toggleOpenItem(item.id)}
+          />
         ))}
     </div>
   );

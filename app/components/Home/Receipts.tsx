@@ -3,11 +3,23 @@ import { useSearchContext } from "@/app/components/context/SearchContext";
 import Receipt from "@/app/components/receiptComponents/Receipt";
 import { Item, Receipt as ReceiptType } from "@/types/receipt";
 import { useSearchParams } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 const Receipts = () => {
   const { filteredData, isLoading } = useSearchContext();
   const searchParams = useSearchParams();
+
+  const [openReceiptId, setOpenReceiptId] = useState(null as number | null);
+
+  const toggleOpenReceipt = (receiptId: number | undefined) => {
+    if (receiptId === undefined) return;
+
+    if (openReceiptId === receiptId) {
+      setOpenReceiptId(null);
+    } else {
+      setOpenReceiptId(receiptId);
+    }
+  };
 
   const sortFieldParam = searchParams.get("sort");
   const sortField = sortFieldParam?.startsWith("-")
@@ -69,12 +81,22 @@ const Receipts = () => {
         ? sortedAndFilteredData
             .filter((receipt: ReceiptType) => receipt.expired === false)
             .map((receipt: ReceiptType) => (
-              <Receipt key={receipt.id} receipt={receipt} />
+              <Receipt
+                key={receipt.id}
+                receipt={receipt}
+                onToggleOpen={() => toggleOpenReceipt(receipt.id)}
+                isOpen={openReceiptId === receipt.id}
+              />
             ))
         : sortedAndFilteredData
             .filter((receipt: ReceiptType) => receipt.expired === true)
             .map((receipt: ReceiptType) => (
-              <Receipt key={receipt.id} receipt={receipt} />
+              <Receipt
+                key={receipt.id}
+                receipt={receipt}
+                onToggleOpen={() => toggleOpenReceipt(receipt.id)}
+                isOpen={openReceiptId === receipt.id}
+              />
             ))}
     </div>
   );

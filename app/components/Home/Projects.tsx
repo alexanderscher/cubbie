@@ -2,6 +2,7 @@
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { useSearchProjectContext } from "@/app/components/context/SearchProjectContext";
 import { EditProject } from "@/app/components/project/EditProject";
+import { CreateReceipt } from "@/app/components/receiptComponents/CreateReceipt";
 import { Receipt, Project as ProjectType } from "@/types/receipt";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
@@ -12,9 +13,18 @@ import { useSearchParams } from "next/navigation";
 import React, { useMemo, useState } from "react";
 
 const Projects = () => {
-  const [receipts, setReceipts] = useState<Receipt[]>([]);
-
   const { isProjectLoading, filteredProjectData } = useSearchProjectContext();
+  const [openProjectId, setOpenProjectId] = useState(null as number | null);
+
+  const toggleOpenProject = (projectId: number | undefined) => {
+    if (projectId === undefined) return;
+
+    if (openProjectId === projectId) {
+      setOpenProjectId(null);
+    } else {
+      setOpenProjectId(projectId);
+    }
+  };
 
   const searchParams = useSearchParams();
 
@@ -60,7 +70,7 @@ const Projects = () => {
     );
   }
 
-  if (filteredData.length === 0 && receipts.length === 0 && !isProjectLoading) {
+  if (filteredData.length === 0 && !isProjectLoading) {
     return (
       <div className="">
         <p>No projects found</p>
@@ -70,7 +80,12 @@ const Projects = () => {
   return (
     <div className="boxes">
       {filteredData.map((project) => (
-        <Project project={project} key={project.id} />
+        <Project
+          project={project}
+          key={project.id}
+          isOpen={openProjectId === project.id}
+          onToggleOpen={() => toggleOpenProject(project.id)}
+        />
       ))}
     </div>
   );
@@ -78,8 +93,13 @@ const Projects = () => {
 
 export default Projects;
 
-const Project = ({ project }: { project: ProjectType }) => {
-  const [isOpen, setIsOpen] = useState(false);
+interface ProjectProps {
+  project: ProjectType;
+  isOpen: boolean;
+  onToggleOpen: () => void;
+}
+
+const Project = ({ project, isOpen, onToggleOpen }: ProjectProps) => {
   return (
     <div className="box xs:pb-6 pb-4 relative" key={project.id}>
       <div className="w-full  overflow-hidden relative flex justify-center items-center bg-slate-100 hover:bg-slate-200 rounded-t-lg h-[90px]">
@@ -98,7 +118,7 @@ const Project = ({ project }: { project: ProjectType }) => {
             alt=""
             width={20}
             height={20}
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={onToggleOpen}
           />
         </div>
       </div>
@@ -144,16 +164,20 @@ const OptionsModal = ({ project }: OptionsModalProps) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const { setProjectRefresh } = useSearchProjectContext();
   const [edit, setEdit] = useState(false);
+  const [isAddOpen, setAddReceiptOpen] = useState(false);
   return (
     <div className="absolute bg-white shadow-1 -right-2 top-6 rounded-md  w-[200px]">
       <div className="p-4 rounded text-sm flex flex-col gap-2">
         <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2">
-          <Link href={`/create`}>
-            <div className="flex gap-2">
-              <Image src={"/add.png"} width={20} height={20} alt=""></Image>
-              <p>Add receipt</p>
-            </div>
-          </Link>
+          <div
+            className="flex gap-2"
+            onClick={() => {
+              setAddReceiptOpen(true);
+            }}
+          >
+            <Image src={"/add.png"} width={20} height={20} alt=""></Image>
+            <p>Add receipt</p>
+          </div>
         </div>
         <div
           className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 cursor-pointer"
@@ -187,6 +211,7 @@ const OptionsModal = ({ project }: OptionsModalProps) => {
           project={project}
         ></DeleteModal>
       )}
+      {isAddOpen && <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />}
     </div>
   );
 };

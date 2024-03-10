@@ -36,6 +36,17 @@ const ReceiptPage = () => {
     tracking_number: "",
     store: "",
   });
+  const [openItemId, setOpenItemId] = useState(null as number | null);
+
+  const toggleOpenItem = (itemId: number | undefined) => {
+    if (itemId === undefined) return;
+
+    if (openItemId === itemId) {
+      setOpenItemId(null);
+    } else {
+      setOpenItemId(itemId);
+    }
+  };
 
   useEffect(() => {
     const fetchReceipt = async () => {
@@ -377,7 +388,12 @@ const ReceiptPage = () => {
               <div className={`${styles.boxes} `}>
                 {receipt.items.length > 0 &&
                   receipt.items.map((item: any, index: number) => (
-                    <Item key={item.id} item={item} />
+                    <Item
+                      key={item.id}
+                      item={item}
+                      isOpen={openItemId === item.id}
+                      onToggleOpen={() => toggleOpenItem(item.id)}
+                    />
                   ))}
               </div>
             </div>

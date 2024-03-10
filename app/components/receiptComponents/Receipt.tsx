@@ -12,11 +12,11 @@ import { useEffect, useState } from "react";
 
 interface ReceiptProps {
   receipt: ReceiptType;
+  isOpen: boolean;
+  onToggleOpen: () => void;
 }
 
-const Receipt = ({ receipt }: ReceiptProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-
+const Receipt = ({ receipt, onToggleOpen, isOpen }: ReceiptProps) => {
   return (
     <div className="box xs:pb-6 pb-4 relative">
       <div className="w-full  overflow-hidden relative flex justify-center items-center bg-slate-100 rounded-t-lg h-[90px]">
@@ -35,7 +35,7 @@ const Receipt = ({ receipt }: ReceiptProps) => {
             alt=""
             width={20}
             height={20}
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={onToggleOpen}
           />
         </div>
       </div>

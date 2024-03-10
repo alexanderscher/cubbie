@@ -1,6 +1,7 @@
 "use client";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { EditProject } from "@/app/components/project/EditProject";
+import { CreateReceipt } from "@/app/components/receiptComponents/CreateReceipt";
 import Receipt from "@/app/components/receiptComponents/Receipt";
 import {
   Project as ProjectType,
@@ -22,6 +23,19 @@ const ProjectID = () => {
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(false);
   const [edit, setEdit] = useState(false);
+  const [isAddOpen, setAddReceiptOpen] = useState(false);
+
+  const [openReceiptId, setOpenReceiptId] = useState(null as number | null);
+
+  const toggleOpenReceipt = (receiptId: number | undefined) => {
+    if (receiptId === undefined) return;
+
+    if (openReceiptId === receiptId) {
+      setOpenReceiptId(null);
+    } else {
+      setOpenReceiptId(receiptId);
+    }
+  };
 
   useEffect(() => {
     const getProject = async () => {
@@ -70,19 +84,25 @@ const ProjectID = () => {
               <p className="text-xs">Edit</p>
             </RegularButton>
             <RegularButton
-              href="/create"
+              handleClick={() => setAddReceiptOpen(true)}
               styles="bg-emerald-900 border-emerald-900 text-white"
             >
               <p className="text-xs">Add receipt</p>
             </RegularButton>
           </div>
+          {isAddOpen && <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />}
         </div>
         {project.receipts.length === 0 && (
           <p className="">No receipts found for this project</p>
         )}
         <div className="boxes">
           {project.receipts.map((receipt: ReceiptType) => (
-            <Receipt key={receipt.id} receipt={receipt} />
+            <Receipt
+              key={receipt.id}
+              receipt={receipt}
+              onToggleOpen={() => toggleOpenReceipt(receipt.id)}
+              isOpen={openReceiptId === receipt.id}
+            />
           ))}
         </div>
       </div>

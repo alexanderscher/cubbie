@@ -82,7 +82,7 @@ const Project = ({ project }: { project: ProjectType }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="box xs:pb-6 pb-4 relative" key={project.id}>
-      <div className="w-full  overflow-hidden relative flex justify-center items-center bg-slate-100 rounded-t-lg h-[90px]">
+      <div className="w-full  overflow-hidden relative flex justify-center items-center bg-slate-100 hover:bg-slate-200 rounded-t-lg h-[90px]">
         <div className="w-full h-full flex justify-center items-center ">
           <Image
             src="/folder.png"
@@ -147,8 +147,8 @@ const OptionsModal = ({ project }: OptionsModalProps) => {
   return (
     <div className="absolute bg-white shadow-1 -right-2 top-6 rounded-md  w-[200px]">
       <div className="p-4 rounded text-sm flex flex-col gap-2">
-        <div className="bg-slate-100 rounded-md w-full p-2">
-          <Link href={`/receipt-type`}>
+        <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2">
+          <Link href={`/create`}>
             <div className="flex gap-2">
               <Image src={"/add.png"} width={20} height={20} alt=""></Image>
               <p>Add receipt</p>
@@ -156,7 +156,7 @@ const OptionsModal = ({ project }: OptionsModalProps) => {
           </Link>
         </div>
         <div
-          className="bg-slate-100 rounded-md w-full p-2 cursor-pointer"
+          className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 cursor-pointer"
           onClick={() => setEdit(true)}
         >
           <div className="flex gap-2">
@@ -164,7 +164,7 @@ const OptionsModal = ({ project }: OptionsModalProps) => {
             <p>Edit</p>
           </div>
         </div>
-        <div className="bg-slate-100 rounded-md w-full p-2 ">
+        <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 ">
           <div
             className="flex gap-2 cursor-pointer"
             onClick={() => setIsDeleteOpen(true)}

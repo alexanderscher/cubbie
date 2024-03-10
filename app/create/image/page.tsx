@@ -86,7 +86,7 @@ const Store = () => {
                 switch (stage) {
                   case ReceiptStoreStage.IN_STORE_GPT:
                     return (
-                      <div className="flex justify-center items-center w-full h-screen">
+                      <div className="flex justify-center mt-8 w-full h-screen">
                         <div className="flex flex-col gap-6 max-w-[500px] w-full pb-[200px]">
                           <ImageGpt
                             handleChange={handleChange}
@@ -98,7 +98,7 @@ const Store = () => {
                           />
 
                           <BottomBar>
-                            <div className="flex justify-between w-full">
+                            <div className="flex justify-end w-full ">
                               <RegularButton
                                 styles="bg-white border-emerald-900"
                                 handleClick={async () => {

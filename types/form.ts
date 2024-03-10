@@ -24,8 +24,7 @@ export interface ReceiptInput {
   return_date: string;
   receiptImage?: string;
   items: ItemInput[];
-  onlineType: string;
-  storeType: string;
+
   memo?: boolean;
   folder?: number;
   folderName?: string;

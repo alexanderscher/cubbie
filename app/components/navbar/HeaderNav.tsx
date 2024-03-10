@@ -28,7 +28,7 @@ const HeaderNav = ({ receipt }: HeaderNavProps) => {
       </div>
 
       {/* <RegularButton
-        href="/receipt-type"
+        href="/create"
         styles="bg border-emerald-900 text-emerald-900"
       >
         <p className="text-xs">Create new</p>

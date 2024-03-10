@@ -222,13 +222,13 @@ const Online = () => {
                               {errors.itemField}
                             </p>
                           )}
-                          {values.onlineType === "gpt" && (
-                            <TextGpt
-                              setFieldValue={setFieldValue}
-                              values={values}
-                              setStage={setStage}
-                            />
-                          )}
+
+                          <TextGpt
+                            setFieldValue={setFieldValue}
+                            values={values}
+                            setStage={setStage}
+                          />
+
                           <BottomBar>
                             <div className="flex justify-between w-full">
                               <RegularButton

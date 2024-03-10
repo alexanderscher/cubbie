@@ -34,6 +34,7 @@ const FinalStage = ({
   uploadError,
   setUploadError,
 }: FinalStageProps) => {
+  const pathname = usePathname();
   const router = useRouter();
 
   return (
@@ -53,9 +54,11 @@ const FinalStage = ({
             <RegularButton
               styles={"border-emerald-900 "}
               handleClick={() => {
-                if (values.type === "Online") {
+                if (pathname === "/create/manual") {
+                  setStage(ReceiptOnlineStage.ONLINE_RECEIPT);
+                } else if (pathname === "/create/text") {
                   setStage(ReceiptOnlineStage.ONLINE_ITEMS);
-                } else {
+                } else if (pathname === "/create/image") {
                   setStage(ReceiptStoreStage.IN_STORE_GPT);
                 }
               }}
@@ -163,7 +166,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
             className={`border-[1px] border-emerald-900 rounded  flex flex-col gap-4 p-6`}
           >
             <p className="text-xl text-emerald-900">
-              {pathname !== "/receipt-type/memo"
+              {pathname !== "/create/memo"
                 ? "Receipt Information"
                 : "Memo Information"}
             </p>
@@ -242,7 +245,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
                 />
               </div>
 
-              {pathname === "/receipt-type/online" && (
+              {pathname === "/create/text" && (
                 <div className="w-full ">
                   <p className="text-slate-400 text-xs">Tracking Link</p>
                   {/* <p className="">
@@ -356,8 +359,6 @@ const ReceiptItems = ({
   asset_amount,
 }: ReceiptItemsProps) => {
   const [showScanner, setShowScanner] = useState(false);
-
-  console.log("Item", item);
 
   const handleItemChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const key = e.target.name as ItemInputKey;

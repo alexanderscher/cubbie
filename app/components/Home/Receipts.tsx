@@ -98,7 +98,7 @@ const Receipts = () => {
               <Receipt
                 key={receipt.id}
                 receipt={receipt}
-                onToggleOpen={() => toggleOpenReceipt(receipt.id, e)}
+                onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
                 isOpen={openReceiptId === receipt.id}
               />
             ))}

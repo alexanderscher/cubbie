@@ -27,7 +27,11 @@ const ProjectID = () => {
 
   const [openReceiptId, setOpenReceiptId] = useState(null as number | null);
 
-  const toggleOpenReceipt = (receiptId: number | undefined) => {
+  const toggleOpenReceipt = (
+    receiptId: number | undefined,
+    event: React.MouseEvent<HTMLDivElement>
+  ) => {
+    event.preventDefault();
     if (receiptId === undefined) return;
 
     if (openReceiptId === receiptId) {
@@ -36,7 +40,6 @@ const ProjectID = () => {
       setOpenReceiptId(receiptId);
     }
   };
-
   useEffect(() => {
     const getProject = async () => {
       setLoading(true);
@@ -100,7 +103,7 @@ const ProjectID = () => {
             <Receipt
               key={receipt.id}
               receipt={receipt}
-              onToggleOpen={() => toggleOpenReceipt(receipt.id)}
+              onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
               isOpen={openReceiptId === receipt.id}
             />
           ))}

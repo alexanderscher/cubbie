@@ -11,7 +11,11 @@ const Items = () => {
 
   const [openItemId, setOpenItemId] = useState(null as number | null);
 
-  const toggleOpenItem = (itemId: number | undefined) => {
+  const toggleOpenItem = (
+    itemId: number | undefined,
+    event: React.MouseEvent<HTMLDivElement>
+  ) => {
+    event.preventDefault();
     if (itemId === undefined) return;
 
     if (openItemId === itemId) {
@@ -88,7 +92,7 @@ const Items = () => {
                   key={item.id}
                   item={item}
                   isOpen={openItemId === item.id}
-                  onToggleOpen={() => toggleOpenItem(item.id)}
+                  onToggleOpen={(e) => toggleOpenItem(item.id, e)}
                 />
               )
           )}
@@ -104,7 +108,7 @@ const Items = () => {
                 <Item
                   key={item.id}
                   item={item}
-                  onToggleOpen={() => toggleOpenItem(item.id)}
+                  onToggleOpen={(e) => toggleOpenItem(item.id, e)}
                   isOpen={openItemId === item.id}
                 />
               )
@@ -121,7 +125,7 @@ const Items = () => {
             key={item.id}
             item={item}
             isOpen={openItemId === item.id}
-            onToggleOpen={() => toggleOpenItem(item.id)}
+            onToggleOpen={(e) => toggleOpenItem(item.id, e)}
           />
         ))}
     </div>

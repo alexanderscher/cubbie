@@ -13,56 +13,57 @@ import { useEffect, useState } from "react";
 interface ReceiptProps {
   receipt: ReceiptType;
   isOpen: boolean;
-  onToggleOpen: () => void;
+  onToggleOpen: (event: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const Receipt = ({ receipt, onToggleOpen, isOpen }: ReceiptProps) => {
   return (
-    <div className="box xs:pb-6 pb-4 relative">
-      <div className="w-full  overflow-hidden relative flex justify-center items-center bg-slate-100 rounded-t-lg h-[90px]">
-        <div className="w-full h-full flex justify-center items-center ">
-          <Image
-            src="/receipt_b.png"
-            alt=""
-            width={30}
-            height={30}
-            className="object-cover "
-            style={{ objectFit: "cover", objectPosition: "center" }}
-          />
-          <Image
-            src="/three-dots.png"
-            className="absolute top-0 right-2 cursor-pointer "
-            alt=""
-            width={20}
-            height={20}
-            onClick={onToggleOpen}
-          />
+    <div className="box xs:pb-6 pb-4 relative ">
+      <Link href={`/receipt/${receipt.id}`}>
+        <div className="w-full  overflow-hidden relative flex justify-center items-center bg-slate-100 rounded-t-lg h-[90px]">
+          <div className="w-full h-full flex justify-center items-center ">
+            <Image
+              src="/receipt_b.png"
+              alt=""
+              width={30}
+              height={30}
+              className="object-cover "
+              style={{ objectFit: "cover", objectPosition: "center" }}
+            />
+            <Image
+              src="/three-dots.png"
+              className="absolute top-0 right-2 cursor-pointer "
+              alt=""
+              width={20}
+              height={20}
+              onClick={onToggleOpen}
+            />
+          </div>
         </div>
-      </div>
-      {isOpen && <OptionsModal receipt={receipt} />}
+        {isOpen && <OptionsModal receipt={receipt} />}
 
-      <div className="p-3 flex flex-col justify-between">
-        {/* {receipt.project && (
+        <div className="p-3 flex flex-col justify-between">
+          {/* {receipt.project && (
           <p className="text-xs text-emerald-900 mb-1">
             {receipt.project.name}
           </p>
         )} */}
 
-        <div className=" ">
-          <Link href={`/receipt/${receipt.id}`} className="">
-            <TruncateText
-              text={receipt.store}
-              maxLength={18}
-              styles={"text-orange-600"}
-            />
-          </Link>
-          <p className="text-xs text-slate-400">
-            Return by {formatDateToMMDDYY(receipt.return_date)}
-          </p>
-        </div>
+          <div className="">
+            <Link href={`/receipt/${receipt.id}`} className="">
+              <TruncateText
+                text={receipt.store}
+                maxLength={18}
+                styles={"text-orange-600"}
+              />
+            </Link>
+            <p className="text-xs text-slate-400">
+              Return by {formatDateToMMDDYY(receipt.return_date)}
+            </p>
+          </div>
 
-        <div className="flex flex-col  gap-1 text-xs">
-          {/* <div className=" flex flex-col  gap-1 text-xs">
+          <div className="flex flex-col  gap-1 text-xs">
+            {/* <div className=" flex flex-col  gap-1 text-xs">
             <div className="flex gap-1 text-xs mt-2 ">
               <p className="">
                 {receipt.type === "Store" ? "In Store" : "Online"}{" "}
@@ -70,22 +71,23 @@ const Receipt = ({ receipt, onToggleOpen, isOpen }: ReceiptProps) => {
               </p>
             </div>
           </div> */}
-          <div className="flex gap-1  mt-2">
-            <p className=" ">
-              {receipt.items.length}{" "}
-              {receipt.items.length === 1 ? "item" : "items"} |
-            </p>
-            <p className=" ">
-              {formatCurrency(
-                receipt.items.reduce((acc: number, curr: Item) => {
-                  return acc + curr.price;
-                }, 0)
-              )}
-            </p>
+            <div className="flex gap-1  mt-2">
+              <p className=" ">
+                {receipt.items.length}{" "}
+                {receipt.items.length === 1 ? "item" : "items"} |
+              </p>
+              <p className=" ">
+                {formatCurrency(
+                  receipt.items.reduce((acc: number, curr: Item) => {
+                    return acc + curr.price;
+                  }, 0)
+                )}
+              </p>
+            </div>
+            {receipt.expired && <p className="text-orange-600">Expired</p>}
           </div>
-          {receipt.expired && <p className="text-orange-600">Expired</p>}
         </div>
-      </div>
+      </Link>
     </div>
   );
 };
@@ -102,7 +104,7 @@ const OptionsModal = ({ receipt }: OptionsModalProps) => {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const { setIsReceiptRefreshed } = useSearchContext();
   return (
-    <div className="absolute bg-white shadow-1 -right-2 top-6 rounded-md  w-[200px]">
+    <div className="absolute bg-white shadow-1 -right-4 top-6 rounded-md  w-[200px] z-[200]">
       <div className="p-4 rounded text-sm flex flex-col gap-2">
         <div
           className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 cursor-pointer"

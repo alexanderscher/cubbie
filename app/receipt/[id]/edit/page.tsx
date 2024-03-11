@@ -39,7 +39,11 @@ const ReceiptPage = () => {
   });
   const [openItemId, setOpenItemId] = useState(null as number | null);
 
-  const toggleOpenItem = (itemId: number | undefined) => {
+  const toggleOpenItem = (
+    itemId: number | undefined,
+    e: React.MouseEvent<HTMLDivElement>
+  ) => {
+    e.preventDefault();
     if (itemId === undefined) return;
 
     if (openItemId === itemId) {
@@ -409,7 +413,7 @@ const ReceiptPage = () => {
                       key={item.id}
                       item={item}
                       isOpen={openItemId === item.id}
-                      onToggleOpen={() => toggleOpenItem(item.id)}
+                      onToggleOpen={(e) => toggleOpenItem(item.id, e)}
                     />
                   ))}
               </div>

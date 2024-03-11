@@ -5,6 +5,7 @@ import styles from "@/app/create/upload.module.css";
 import { ReceiptStoreStage } from "@/constants/form";
 import { Project } from "@/types/receipt";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
+import { convertHeic } from "@/utils/media";
 import Image from "next/image";
 import React, { ChangeEvent, use, useEffect, useRef, useState } from "react";
 import CurrencyInput from "react-currency-input-field";
@@ -37,13 +38,23 @@ const ReceiptManual = ({
     }
   };
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
+      let file = e.target.files[0];
       if (!file.type.match("image.*")) {
         alert("Please upload an image file");
 
         return;
+      }
+
+      if (file.type === "image/heic" || file.name.endsWith(".heic")) {
+        try {
+          file = await convertHeic(file);
+        } catch (error) {
+          console.error("Error converting HEIC file:", error);
+          alert("Error converting HEIC file.");
+          return;
+        }
       }
 
       const reader = new FileReader();
@@ -247,9 +258,9 @@ const ReceiptManual = ({
               ></label>
             </div>
           </div>
-          <div className="relative w-24 h-24 ">
-            {values.receiptImage && (
-              <div className="w-24 h-24 overflow-hidden flex items-center justify-center rounded-md border-[1px] ">
+          {values.receiptImage && (
+            <div className="relative w-24 h-24 ">
+              <div className="w-24 h-24 overflow-hidden flex items-center justify-center rounded-md border-[1px] border-slate-400">
                 <button
                   type="button"
                   onClick={() => {
@@ -266,8 +277,8 @@ const ReceiptManual = ({
                   alt=""
                 />
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

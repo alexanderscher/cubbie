@@ -14,6 +14,7 @@ import Loading from "@/app/components/Loading";
 import HeaderItemNav from "@/app/components/navbar/HeaderItemNav";
 import { BarcodeScanner } from "@/app/components/createForm/barcode/BarcodeScanner";
 import ImageModal from "@/app/components/images/ImageModal";
+import { convertHeic } from "@/utils/media";
 
 type ExtendedItemType = ItemType & {
   edit_image: string;
@@ -41,17 +42,27 @@ const ItemID = () => {
     fetchItem();
   }, [id]);
 
-  const handleFileChange = (
+  const handleFileChange = async (
     e: ChangeEvent<HTMLInputElement>,
     setFieldValue: any
   ) => {
     if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
+      let file = e.target.files[0];
       if (!file.type.match("image.*")) {
         alert("Please upload an image file");
 
         return;
       }
+      if (file.type === "image/heic" || file.name.endsWith(".heic")) {
+        try {
+          file = await convertHeic(file);
+        } catch (error) {
+          console.error("Error converting HEIC file:", error);
+          alert("Error converting HEIC file.");
+          return;
+        }
+      }
+
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
@@ -197,8 +208,9 @@ const ItemID = () => {
                         width={300}
                         height={300}
                         alt="Receipt Image"
-                        className="object-contain rounded-md w-full"
+                        className="object-contain rounded-md w-full cursor-pointer hover:opacity-80 transition-all duration-300 ease-in-out"
                         layout="intrinsic"
+                        onClick={() => setIsOpen(true)}
                       />
                       <ImageModal
                         isOpen={isOpen}
@@ -215,7 +227,7 @@ const ItemID = () => {
 
                 {values.photo_url && (
                   <div className="w-full flex justify-center items-center relative ">
-                    <div className="relative  w-full max-h-[300px] rpunded-md overflow-hidden">
+                    <div className="relative  w-full max-h-[300px] rpunded-md overflow-hidden hover:opacity-80 transition-all duration-300 ease-in-out">
                       <Image
                         src={values.photo_url}
                         width={300}

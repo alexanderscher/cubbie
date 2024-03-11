@@ -18,6 +18,7 @@ import ErrorModal from "@/app/components/error/Modal";
 import HeaderNav from "@/app/components/navbar/HeaderNav";
 import ImageModal from "@/app/components/images/ImageModal";
 import Item from "@/app/components/Item";
+import { convertHeic } from "@/utils/media";
 
 type ExtendedReceiptType = ReceiptType & {
   edit_image: string;
@@ -68,17 +69,27 @@ const ReceiptPage = () => {
     fetchReceipt();
   }, [id]);
 
-  const handleFileChange = (
+  const handleFileChange = async (
     e: ChangeEvent<HTMLInputElement>,
     setFieldValue: any
   ) => {
     if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
+      let file = e.target.files[0];
       if (!file.type.match("image.*")) {
         alert("Please upload an image file");
 
         return;
       }
+      if (file.type === "image/heic" || file.name.endsWith(".heic")) {
+        try {
+          file = await convertHeic(file);
+        } catch (error) {
+          console.error("Error converting HEIC file:", error);
+          alert("Error converting HEIC file.");
+          return;
+        }
+      }
+
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
@@ -240,7 +251,7 @@ const ReceiptPage = () => {
                         width={300}
                         height={300}
                         alt="Receipt Image"
-                        className="object-contain rpunded-md w-full cursor-pointer"
+                        className="object-contain rounded-md w-full cursor-pointer hover:opacity-80 transition-all duration-300 ease-in-out"
                         layout="intrinsic"
                         onClick={() => setIsOpen(true)}
                       />
@@ -259,7 +270,7 @@ const ReceiptPage = () => {
 
                 {values.receipt_image_url && (
                   <div className="w-full flex justify-center items-center relative">
-                    <div className="relative  w-[200px] max-h-[400px] rounded overflow-hidden">
+                    <div className="relative  w-[200px] max-h-[400px] rounded overflow-hidden hover:opacity-80 transition-all duration-300 ease-in-out">
                       <Image
                         src={values.receipt_image_url}
                         width={300}

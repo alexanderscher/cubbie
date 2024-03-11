@@ -33,7 +33,6 @@ input:-webkit-autofill::first-line {
   top: 0;
   left: 0;
   width: 100%;
-
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1001;
@@ -55,7 +54,7 @@ input:-webkit-autofill::first-line {
 }
 
 .page {
-  padding: 20px;
+  padding: 16px;
 }
 
 .layout {
@@ -66,7 +65,7 @@ input:-webkit-autofill::first-line {
 }
 
 .main-content {
-  padding-left: 122px;
+  padding-left: 116px;
   width: 100%;
   height: 100%;
 }
@@ -80,8 +79,6 @@ input:-webkit-autofill::first-line {
   border-radius: 4px;
   width: 100%;
   outline: none;
-
-  /* margin-bottom: 40px; */
 }
 
 .overlay {
@@ -123,50 +120,6 @@ input:-webkit-autofill::first-line {
 .shadow-1 {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
-
-@media (max-width: 550px) {
-  .main-content {
-    padding: 20px;
-    width: 100%;
-    padding-top: 80px;
-  }
-
-  .boxes {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-  }
-  .box {
-    width: 100%;
-  }
-
-  .layout {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding-bottom: 200px;
-  }
-}
-
-@media (max-width: 375px) {
-  .boxes {
-    display: flex;
-  }
-  .box {
-    width: 100%;
-    max-width: 100%;
-  }
-}
-
-/* .fc .fc-event {
-  background-color: #007bff;
-  border: 1px solid #0056b3;
-  color: white;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  padding: 2px 4px;
-  cursor: pointer;
-} */
 
 .fc .fc-daygrid-event {
   margin-top: 1px;
@@ -255,19 +208,54 @@ input:-webkit-autofill::first-line {
   border-radius: 4px;
   cursor: pointer;
 }
-
-.ui_TooltipContainer {
-  visibility: hidden; /* Hide tooltip by default */
-  position: absolute;
-  transform: translate(
-    -50%,
-    -8px
-  ); /* Center above the element and adjust the Y position */
-  /* Add more styling as needed */
+.fc .fc-toolbar .fc-today-button:active,
+.fc .fc-toolbar .fc-prev-button:active,
+.fc .fc-toolbar .fc-next-button:active {
+  background-color: #e2f1e2;
+  color: rgb(6 78 59);
+  outline: none;
 }
 
-/* Show tooltip on hover */
+.ui_TooltipContainer {
+  visibility: hidden;
+  position: absolute;
+  transform: translate(-50%, -8px);
+}
+
 button:hover + .ui_TooltipContainer {
   visibility: visible;
-  opacity: 1; /* Fade in */
+  opacity: 1;
+}
+@media (max-width: 550px) {
+  .main-content {
+    padding: 20px;
+    width: 100%;
+    padding-top: 80px;
+  }
+
+  .boxes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  .box {
+    width: 100%;
+  }
+
+  .layout {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-bottom: 200px;
+  }
+}
+
+@media (max-width: 375px) {
+  .boxes {
+    display: flex;
+  }
+  .box {
+    width: 100%;
+    max-width: 100%;
+  }
 }

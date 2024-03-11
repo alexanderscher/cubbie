@@ -74,9 +74,9 @@ const CalendarPage = () => {
   };
   return (
     <div className="">
-      <div className="-ml-4 -mr-4 relative ">
+      <div className="sm:-ml-2 sm:-mr-2 -ml-3 -mr-3 relative ">
         <FullCalendar
-          height={"100vh"}
+          height={"98vh"}
           ref={calendarRef}
           plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
           headerToolbar={{
@@ -147,7 +147,11 @@ const EventContent = ({ eventInfo, onEventClick }: EventContentProps) => {
   }, []);
 
   return (
-    <div className=" overflow-hidden" onClick={handleClick} ref={eventRef}>
+    <div
+      className="overflow-hidden text-xs"
+      onClick={handleClick}
+      ref={eventRef}
+    >
       <TooltipComponent
         placement={tooltipPlacement}
         item={eventInfo.event.title}

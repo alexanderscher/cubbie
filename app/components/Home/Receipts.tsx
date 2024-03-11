@@ -11,7 +11,11 @@ const Receipts = () => {
 
   const [openReceiptId, setOpenReceiptId] = useState(null as number | null);
 
-  const toggleOpenReceipt = (receiptId: number | undefined) => {
+  const toggleOpenReceipt = (
+    receiptId: number | undefined,
+    event: React.MouseEvent<HTMLDivElement>
+  ) => {
+    event.preventDefault();
     if (receiptId === undefined) return;
 
     if (openReceiptId === receiptId) {
@@ -84,7 +88,7 @@ const Receipts = () => {
               <Receipt
                 key={receipt.id}
                 receipt={receipt}
-                onToggleOpen={() => toggleOpenReceipt(receipt.id)}
+                onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
                 isOpen={openReceiptId === receipt.id}
               />
             ))
@@ -94,7 +98,7 @@ const Receipts = () => {
               <Receipt
                 key={receipt.id}
                 receipt={receipt}
-                onToggleOpen={() => toggleOpenReceipt(receipt.id)}
+                onToggleOpen={() => toggleOpenReceipt(receipt.id, e)}
                 isOpen={openReceiptId === receipt.id}
               />
             ))}

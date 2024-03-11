@@ -16,7 +16,7 @@ import React, { useState } from "react";
 interface Props {
   item: ItemType;
   isOpen: boolean;
-  onToggleOpen: () => void;
+  onToggleOpen: (event: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const Item = ({ item, isOpen, onToggleOpen }: Props) => {
@@ -25,119 +25,121 @@ const Item = ({ item, isOpen, onToggleOpen }: Props) => {
 
   return (
     <div className="box justify-between relative">
-      <div className="">
-        {item.photo_url && (
-          <div className="w-full h-[110px] overflow-hidden  flex justify-center flex-shrink-0 flex-col">
-            <Image
-              src={item.photo_url}
-              alt=""
-              width={200}
-              height={200}
-              className="w-full h-full object-cover rounded-t-lg"
-              style={{ objectPosition: "top" }}
-            />
-            <Image
-              src="/three-dots.png"
-              className="absolute top-0 right-2 cursor-pointer "
-              alt=""
-              width={20}
-              height={20}
-              onClick={onToggleOpen}
-            />
-          </div>
-        )}
-        {isOpen && <OptionsModal isOpen={isOpen} item={item} />}
-        {!item.photo_url && (
-          <div className="">
-            <Shirt />
-            <Image
-              src="/three-dots.png"
-              className="absolute top-0 right-2 cursor-pointer "
-              alt=""
-              width={20}
-              height={20}
-            />
-            <Image
-              src="/three-dots.png"
-              className="absolute top-0 right-2 cursor-pointer "
-              alt=""
-              width={20}
-              height={20}
-              onClick={onToggleOpen}
-            />
-          </div>
-        )}
-        <div className="p-3 flex flex-col  ">
-          {/* {item.receipt.project && (
+      <Link href={`/item/${item.id}`} className="">
+        <div className="">
+          {item.photo_url && (
+            <div className="w-full h-[110px] overflow-hidden  flex justify-center flex-shrink-0 flex-col">
+              <Image
+                src={item.photo_url}
+                alt=""
+                width={200}
+                height={200}
+                className="w-full h-full object-cover rounded-t-lg"
+                style={{ objectPosition: "top" }}
+              />
+              <Image
+                src="/three-dots.png"
+                className="absolute top-0 right-2 cursor-pointer "
+                alt=""
+                width={20}
+                height={20}
+                onClick={onToggleOpen}
+              />
+            </div>
+          )}
+          {isOpen && <OptionsModal isOpen={isOpen} item={item} />}
+          {!item.photo_url && (
+            <div className="">
+              <Shirt />
+              <Image
+                src="/three-dots.png"
+                className="absolute top-0 right-2 cursor-pointer "
+                alt=""
+                width={20}
+                height={20}
+              />
+              <Image
+                src="/three-dots.png"
+                className="absolute top-0 right-2 cursor-pointer "
+                alt=""
+                width={20}
+                height={20}
+                onClick={onToggleOpen}
+              />
+            </div>
+          )}
+          <div className="p-3 flex flex-col  ">
+            {/* {item.receipt.project && (
             <p className="text-xs text-emerald-900 mb-1">
               {item.receipt.project.name}
             </p>
           )} */}
-          <div className="">
-            <Link href={`/item/${item.id}`} className="">
-              <TruncateText
-                text={item.description}
-                maxLength={18}
-                styles={"text-orange-600 text-sm"}
-              />
-            </Link>
-            {/* {pathname === "/items" && (
+            <div className="">
+              <Link href={`/item/${item.id}`} className="">
+                <TruncateText
+                  text={item.description}
+                  maxLength={18}
+                  styles={"text-orange-600 text-sm"}
+                />
+              </Link>
+              {/* {pathname === "/items" && (
               <div className="text-xs">
                 <p className=" ">
                   Return by {formatDateToMMDDYY(item.receipt.return_date)}
                 </p>
               </div>
             )} */}
-          </div>
+            </div>
 
-          <div className="pt-2">
-            <div className=" flex flex-col  gap-1 text-xs ">
-              {pathname === "/items" && (
+            <div className="pt-2">
+              <div className=" flex flex-col  gap-1 text-xs ">
+                {pathname === "/items" && (
+                  <div className="">
+                    <p className="text-slate-400  ">Store</p>
+                    <Link href={`/receipt/${item.receipt_id}`} className="">
+                      <TruncateText
+                        text={item.receipt.store}
+                        maxLength={15}
+                        styles={""}
+                      />
+                    </Link>
+                  </div>
+                )}
+
                 <div className="">
-                  <p className="text-slate-400  ">Store</p>
-                  <Link href={`/receipt/${item.receipt_id}`} className="">
-                    <TruncateText
-                      text={item.receipt.store}
-                      maxLength={15}
-                      styles={""}
-                    />
-                  </Link>
+                  <p className="text-slate-400  ">Price</p>
+                  <p className="">{formatCurrency(item.price)}</p>
                 </div>
-              )}
-
-              <div className="">
-                <p className="text-slate-400  ">Price</p>
-                <p className="">{formatCurrency(item.price)}</p>
+                {pathname.includes("receipt") && (
+                  <div className="">
+                    <p className="text-slate-400  ">Barcode</p>
+                    <p className="">{item.barcode ? item.barcode : "None"}</p>
+                  </div>
+                )}
+                {pathname === "/items" && item.receipt.expired && (
+                  <p className="text-orange-600">Expired</p>
+                )}
               </div>
-              {pathname.includes("receipt") && (
-                <div className="">
-                  <p className="text-slate-400  ">Barcode</p>
-                  <p className="">{item.barcode ? item.barcode : "None"}</p>
-                </div>
-              )}
-              {pathname === "/items" && item.receipt.expired && (
-                <p className="text-orange-600">Expired</p>
-              )}
             </div>
           </div>
         </div>
-      </div>
 
-      <div
-        className={`${
-          item.returned
-            ? "border-t-orange-600 text-orange-600"
-            : "border-t-emerald-900"
-        } border-t-[1px] text-xs text-center  text-emerald-900 p-2`}
-      >
-        {item.returned ? (
-          <p>
-            <p className="text-orange-600">Returned</p>
-          </p>
-        ) : (
-          <p>In possesion</p>
-        )}
-      </div>
+        <div
+          className={`${
+            item.returned
+              ? "border-t-orange-600 text-orange-600"
+              : "border-t-emerald-900"
+          } border-t-[1px] text-xs text-center  text-emerald-900 p-2`}
+        >
+          {item.returned ? (
+            <p>
+              <p className="text-orange-600">Returned</p>
+            </p>
+          ) : (
+            <p>In possesion</p>
+          )}
+        </div>
+      </Link>
     </div>
   );
 };
@@ -166,7 +168,7 @@ const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
   };
 
   return (
-    <div className="absolute bg-white shadow-1 -right-2 top-6 rounded-md  w-[200px]">
+    <div className="absolute bg-white shadow-1 -right-5 top-6 rounded-md w-[200px]  z-[100]">
       <div className="p-4 rounded text-sm flex flex-col gap-2">
         <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2">
           <Link href={`/item/${item.id}/edit`}>

@@ -21,7 +21,11 @@ const ReceiptPage = () => {
   const [refresh, setRefresh] = useState(false);
   const [openItemId, setOpenItemId] = useState(null as number | null);
 
-  const toggleOpenItem = (itemId: number | undefined) => {
+  const toggleOpenItem = (
+    itemId: number | undefined,
+    e: React.MouseEvent<HTMLDivElement>
+  ) => {
+    e.preventDefault();
     if (itemId === undefined) return;
 
     if (openItemId === itemId) {
@@ -94,9 +98,6 @@ const ReceiptPage = () => {
           <div
             className={`shadow rounded  bg-white flex flex-col gap-4 p-6   `}
           >
-            {/* <p className="text-xl text-emerald-900">
-              {receipt.memo ? "Memo" : "Receipt"} Information
-            </p> */}
             {!receipt.receipt_image_url && (
               <div className="w-full  overflow-hidden relative flex justify-center items-center ">
                 <div className="w-full h-full flex justify-center items-start ">
@@ -185,7 +186,7 @@ const ReceiptPage = () => {
                   key={item.id}
                   item={item}
                   isOpen={openItemId === item.id}
-                  onToggleOpen={() => toggleOpenItem(item.id)}
+                  onToggleOpen={(e) => toggleOpenItem(item.id, e)}
                 />
               ))}
           </div>

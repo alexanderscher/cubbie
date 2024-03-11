@@ -170,7 +170,7 @@ const OptionsModal = ({ project }: OptionsModalProps) => {
   const [edit, setEdit] = useState(false);
   const [isAddOpen, setAddReceiptOpen] = useState(false);
   return (
-    <div className="absolute bg-white shadow-1 -right-2 top-6 rounded-md  w-[200px]">
+    <div className="absolute bg-white shadow-1 -right-2 top-6 rounded-md w-[200px] z-[100]">
       <div className="p-4 rounded text-sm flex flex-col gap-2">
         <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2">
           <div

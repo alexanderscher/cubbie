@@ -4,6 +4,7 @@ import Topbar from "@/app/components/navbar/Topbar";
 import Navbar from "@/app/components/navbar/Navbar";
 import React from "react";
 import { usePathname } from "next/navigation";
+import { SessionProvider } from "@/app/components/context/SessionContext";
 
 interface BaseLayoutProps {
   children: React.ReactNode;
@@ -14,16 +15,18 @@ const BaseLayout = ({ children }: BaseLayoutProps) => {
 
   if (pathname !== "/signup" && pathname !== "/login") {
     return (
-      <SearchBarContextProvider>
-        <Topbar />
-        <div className="flex bg-[#e2f1e2]">
-          <Navbar />
+      <SessionProvider>
+        <SearchBarContextProvider>
+          <Topbar />
+          <div className="flex bg-[#e2f1e2]">
+            <Navbar />
 
-          <div className="page main-content bg-[#e2f1e2] min-h-screen">
-            <main className="">{children}</main>
+            <div className="page main-content bg-[#e2f1e2] min-h-screen">
+              <main className="">{children}</main>
+            </div>
           </div>
-        </div>
-      </SearchBarContextProvider>
+        </SearchBarContextProvider>
+      </SessionProvider>
     );
   } else {
     return (

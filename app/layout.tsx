@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "@/app/components/navbar/Navbar";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
@@ -8,6 +7,7 @@ import localFont from "next/font/local";
 
 import BaseLayout from "@/app/components/layouts/BaseLayout";
 import { Providers } from "@/app/components/providers/SessionProvider";
+import { SessionProvider } from "next-auth/react";
 
 const myFont = localFont({
   src: "../font/SuisseIntl-Medium.woff",

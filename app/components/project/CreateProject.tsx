@@ -1,6 +1,7 @@
 "use client";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { useSearchProjectContext } from "@/app/components/context/SearchProjectContext";
+import { useSessionContext } from "@/app/components/context/SessionContext";
 import { useState } from "react";
 
 interface AddProjectModalProps {
@@ -9,6 +10,7 @@ interface AddProjectModalProps {
 
 export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
   const { setProjectRefresh } = useSearchProjectContext();
+  const { userId } = useSessionContext();
 
   const [project, setProject] = useState("");
   const [error, setError] = useState("");
@@ -18,6 +20,7 @@ export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
       method: "POST",
       body: JSON.stringify({
         name: project,
+        userId,
       }),
       headers: {
         "Content-Type": "application/json",

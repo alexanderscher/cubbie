@@ -1,25 +1,40 @@
 import prisma from "@/prisma/client";
+import { getSession } from "next-auth/react";
 import { NextResponse } from "next/server";
 
 export async function GET() {
+  const session = await getSession();
+  console.log("session", session);
   try {
-    const projects = await prisma.project.findMany({
-      orderBy: {
-        created_at: "desc",
-      },
-      include: {
-        receipts: {
-          include: {
-            items: true,
+    if (session?.user?.id) {
+      const projects = await prisma.project.findMany({
+        where: { userId: parseInt(session.user.id) },
+
+        orderBy: {
+          created_at: "desc",
+        },
+        include: {
+          receipts: {
+            include: {
+              items: true,
+            },
           },
         },
-      },
-    });
-
-    return new NextResponse(JSON.stringify({ projects }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+      });
+      return new NextResponse(JSON.stringify({ projects }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    } else {
+      console.error("No session found");
+      // return (
+      //   new NextResponse(),
+      //   {
+      //     status: 401,
+      //     headers: { "Content-Type": "application/json" },
+      //   }
+      // );
+    }
   } catch (error) {
     console.error("Error fetching projects:", error);
 
@@ -37,9 +52,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const json = await request.json();
-
-  const { name } = json;
-  console.log(name);
+  const { name, userId } = json;
 
   if (!name) {
     return new NextResponse(
@@ -56,6 +69,7 @@ export async function POST(request: Request) {
   const project = await prisma.project.create({
     data: {
       name,
+      userId,
       created_at: new Date().toISOString(),
     },
   });

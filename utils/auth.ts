@@ -118,29 +118,15 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         const myUser: MyUser = user as MyUser;
 
-        return { ...token, id: user.id, admin: myUser.admin };
+        return { ...token, id: user.id };
       }
       return token;
     },
     session: async ({ session, token }) => {
-      //   const databaseId = await getDatabaseId(token);
+      if (session.user) {
+        session.user.id = token.id as string;
+      }
 
-      //   if (databaseId) {
-      //     const extendedSession: ExtendedSession = {
-      //       ...session,
-      //       user: {
-      //         ...session.user,
-      //         id: databaseId[0] as string,
-      //         admin: databaseId[1] as boolean,
-      //         stripeCustomerId: databaseId[2] as string,
-      //         subscriptionID: databaseId[3] as string,
-      //         isActive: databaseId[4] as boolean,
-      //       },
-      //     };
-      //     return extendedSession;
-      //   } else {
-      //     return session;
-      //   }
       return session;
     },
 

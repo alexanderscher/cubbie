@@ -1,6 +1,7 @@
 "use client";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { useSearchProjectContext } from "@/app/components/context/SearchProjectContext";
+import { useSessionContext } from "@/app/components/context/SessionContext";
 import { CreateProject } from "@/app/components/project/CreateProject";
 import { EditProject } from "@/app/components/project/EditProject";
 import { CreateReceipt } from "@/app/components/receiptComponents/CreateReceipt";

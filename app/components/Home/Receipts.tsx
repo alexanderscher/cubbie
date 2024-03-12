@@ -1,15 +1,17 @@
 "use client";
 import { useSearchContext } from "@/app/components/context/SearchContext";
+import { CreateReceipt } from "@/app/components/receiptComponents/CreateReceipt";
 import Receipt from "@/app/components/receiptComponents/Receipt";
 import { Item, Receipt as ReceiptType } from "@/types/receipt";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 
 const Receipts = () => {
   const { filteredData, isLoading } = useSearchContext();
   const searchParams = useSearchParams();
-
   const [openReceiptId, setOpenReceiptId] = useState(null as number | null);
+  const [addReceiptOpen, setAddReceiptOpen] = useState(false);
 
   const toggleOpenReceipt = (
     receiptId: number | undefined,
@@ -73,8 +75,25 @@ const Receipts = () => {
   }
   if (sortedAndFilteredData.length === 0 && !isLoading) {
     return (
-      <div className="">
-        <p>No receipts found</p>
+      <div className="flex flex-col gap-6 justify-center items-center mt-10">
+        <Image
+          src="/receipt_b.png"
+          alt=""
+          width={30}
+          height={30}
+          className="object-cover "
+          style={{ objectFit: "cover", objectPosition: "center" }}
+        />
+        <p className="text-xl">No receipts found</p>
+        <button
+          className="border-[1px] bg-emerald-900 text-white border-emerald-900 py-2 px-10 text-sm rounded-md w-50"
+          onClick={() => setAddReceiptOpen(true)}
+        >
+          <p className="">Create Receipt</p>
+        </button>
+        {addReceiptOpen && (
+          <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
+        )}
       </div>
     );
   }

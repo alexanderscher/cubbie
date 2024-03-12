@@ -4,10 +4,13 @@ import { useSearchParams } from "next/navigation";
 import Item from "@/app/components/Item";
 import { Item as ItemType } from "@/types/receipt";
 import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
+import Image from "next/image";
+import { CreateReceipt } from "@/app/components/receiptComponents/CreateReceipt";
 
 const Items = () => {
   const { filteredItemData, isItemLoading } = useSearchItemContext();
   const searchParams = useSearchParams();
+  const [addReceiptOpen, setAddReceiptOpen] = useState(false);
 
   const [openItemId, setOpenItemId] = useState(null as number | null);
 
@@ -75,8 +78,25 @@ const Items = () => {
   }
   if (sortedAndFilteredData.length === 0 && !isItemLoading) {
     return (
-      <div className="">
-        <p>No data found</p>
+      <div className="flex flex-col gap-6 justify-center items-center mt-10">
+        <Image
+          src="/item_b.png"
+          alt=""
+          width={60}
+          height={60}
+          className="object-cover "
+          style={{ objectFit: "cover", objectPosition: "center" }}
+        />
+        <p className="text-xl">No items found</p>
+        <button
+          className="border-[1px] bg-emerald-900 text-white border-emerald-900 py-2 px-10 text-sm rounded-md w-50"
+          onClick={() => setAddReceiptOpen(true)}
+        >
+          <p className="">Create Receipt</p>
+        </button>
+        {addReceiptOpen && (
+          <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
+        )}
       </div>
     );
   }

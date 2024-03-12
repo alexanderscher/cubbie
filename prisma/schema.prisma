@@ -10,11 +10,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  password String
+  projects Project[]
+}
+
 model Project {
   id         Int       @id @default(autoincrement())
   name       String
   created_at DateTime
-  archived   Boolean   @default(false)
+  userId     Int
+  user       User      @relation(fields: [userId], references: [id])
   receipts   Receipt[]
 }
 
@@ -31,7 +39,6 @@ model Receipt {
   receipt_image_url String?
   receipt_image_key String?
   items             Items[]
-  archive           Boolean
   memo              Boolean
   created_at        DateTime
   expired           Boolean  @default(false)

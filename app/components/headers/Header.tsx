@@ -6,9 +6,8 @@ import SearchBar from "@/app/components/search/SearchBar";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSearchProjectContext } from "@/app/components/context/SearchProjectContext";
-import Link from "next/link";
-import { TooltipWithHelperIcon } from "@/app/components/tooltips/TooltipWithHelperIcon";
 import { CreateReceipt } from "@/app/components/receiptComponents/CreateReceipt";
+import { CreateProject } from "@/app/components/project/CreateProject";
 
 interface HeaderProps {
   type: string;
@@ -16,20 +15,28 @@ interface HeaderProps {
 
 const Header = ({ type }: HeaderProps) => {
   const [data, setData] = React.useState([]);
+
   const {
     setFilteredProjectData,
+    filteredProjectData,
     setisProjectLoading,
+    isProjectLoading,
     setProjectRefresh,
     isProjectRefresh,
   } = useSearchProjectContext();
   const {
     setFilteredData,
+    filteredData,
+
     setIsLoading,
     isReceiptRefreshed,
+    isLoading,
     setIsReceiptRefreshed,
   } = useSearchContext();
   const {
     setFilteredItemData,
+    filteredItemData,
+    isItemLoading,
     refreshData,
     setRefreshData,
 
@@ -59,6 +66,8 @@ const Header = ({ type }: HeaderProps) => {
         setisProjectLoading(true);
         const res = await fetch("/api/project");
         const data = await res.json();
+        console.log(data);
+
         setData(data.projects);
         setFilteredProjectData(data.projects);
         setisProjectLoading(false);
@@ -175,7 +184,7 @@ const Header = ({ type }: HeaderProps) => {
       </div>
       <div className=" flex justify-between items-center relative flex-wrap gap-4 ">
         <SearchBar data={data} searchType={type} />
-        {pathname === "/receipts" && (
+        {pathname === "/receipts" && data.length !== 0 && (
           <div className="flex w-full    ">
             <button
               className={`${
@@ -204,17 +213,22 @@ const Header = ({ type }: HeaderProps) => {
             </button>
           </div>
         )}
-
-        <div className="fixed z-10 bottom-8 left-1/2 transform -translate-x-1/2">
-          <button
-            className="px-[60px] py-[8px] border-[1px] border-emerald-900 bg-emerald-900 text-white rounded-3xl"
-            onClick={() => {
-              setOpenModal(!openModal);
-            }}
+        {data.length !== 0 && (
+          <div
+            className="fixed z-10 bottom-8 left-1/2 transform -translate-x-1/2
+        
+        "
           >
-            <p className="text-sm">Filter</p>
-          </button>
-        </div>
+            <button
+              className="px-[60px] py-[8px] border-[1px] border-emerald-900 bg-emerald-900 text-white rounded-3xl"
+              onClick={() => {
+                setOpenModal(!openModal);
+              }}
+            >
+              <p className="text-sm">Filter</p>
+            </button>
+          </div>
+        )}
 
         <div className="flex gap-2 ">
           <div className="">
@@ -283,10 +297,6 @@ const FilterProjectOptions = ({
     queryParams.set("sort", newSortValue);
 
     router.push(`${pathname}?${queryParams.toString()}`);
-  };
-
-  const handleStoreClick = (name: string) => {
-    router.push(pathname + "?" + createQueryString("storeType", name));
   };
 
   const router = useRouter();
@@ -777,99 +787,6 @@ const FilterItemsOptions = ({
             >
               <p>Returned</p>
             </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-interface AddProjectModalProps {
-  setAddProjectOpen: (value: boolean) => void;
-}
-
-const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
-  const { setProjectRefresh } = useSearchProjectContext();
-
-  const [project, setProject] = useState("");
-  const [error, setError] = useState("");
-
-  const createProject = async () => {
-    const res = await fetch("/api/project", {
-      method: "POST",
-      body: JSON.stringify({
-        name: project,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await res.json();
-    setError(data);
-  };
-
-  const handleSubmit = async () => {
-    if (project === "") {
-      setError("Please enter a project name");
-    }
-    if (project !== "") {
-      await createProject();
-      setProjectRefresh(true);
-      setAddProjectOpen(false);
-    }
-  };
-
-  const handleOverlayClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (
-      event.target instanceof HTMLDivElement &&
-      event.target.id === "modal-overlay"
-    ) {
-      setAddProjectOpen(false);
-    }
-  };
-
-  return (
-    <div
-      id="modal-overlay"
-      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]"
-      onClick={handleOverlayClick}
-    >
-      <div className="bg-white rounded shadow-xl m-4 max-w-md w-full">
-        <div className="flex justify-between items-center border-b border-gray-200 px-5 py-4 bg-slate-100 rounded-t-lg">
-          <h3 className="text-lg text-emerald-900">Create Project</h3>
-          <button
-            type="button"
-            className="text-gray-400 hover:text-gray-500"
-            onClick={() => setAddProjectOpen(false)}
-          >
-            <span className="text-2xl">&times;</span>
-          </button>
-        </div>
-        <div className="p-6">
-          <div className="space-y-4">
-            <div>
-              <p className="text-xs text-emerald-900">Project name*</p>
-              <input
-                type="text"
-                name="description"
-                value={project}
-                onChange={(e) => setProject(e.target.value)}
-                className="w-full p-2 border-[1px]  rounded border-slate-300 focus:border-emerald-900 focus:outline-none"
-              />
-              {error && <p className="text-orange-900 text-xs">{error}</p>}
-            </div>
-          </div>
-
-          <div className="flex justify-end mt-6">
-            <RegularButton
-              type="button"
-              styles="bg-emerald-900 text-white border-emerald-900"
-              handleClick={handleSubmit}
-            >
-              <p className="text-xs">Create Project</p>
-            </RegularButton>
           </div>
         </div>
       </div>

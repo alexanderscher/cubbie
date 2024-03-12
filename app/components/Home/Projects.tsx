@@ -1,6 +1,7 @@
 "use client";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { useSearchProjectContext } from "@/app/components/context/SearchProjectContext";
+import { CreateProject } from "@/app/components/project/CreateProject";
 import { EditProject } from "@/app/components/project/EditProject";
 import { CreateReceipt } from "@/app/components/receiptComponents/CreateReceipt";
 import { Receipt, Project as ProjectType } from "@/types/receipt";
@@ -15,6 +16,7 @@ import React, { useMemo, useState } from "react";
 const Projects = () => {
   const { isProjectLoading, filteredProjectData } = useSearchProjectContext();
   const [openProjectId, setOpenProjectId] = useState(null as number | null);
+  const [addProjectOpen, setAddProjectOpen] = useState(false);
 
   const toggleOpenProject = (
     projectId: number | undefined,
@@ -76,11 +78,29 @@ const Projects = () => {
 
   if (filteredData.length === 0 && !isProjectLoading) {
     return (
-      <div className="">
-        <p>No projects found</p>
+      <div className="flex flex-col gap-6 justify-center items-center mt-10">
+        <Image
+          src="/folder.png"
+          alt=""
+          width={40}
+          height={40}
+          className="object-cover "
+          style={{ objectFit: "cover", objectPosition: "center" }}
+        />
+        <p className="text-xl">No projects found</p>
+        <button
+          className="border-[1px] bg-emerald-900 text-white border-emerald-900 py-2 px-10 text-sm rounded-md w-50"
+          onClick={() => setAddProjectOpen(true)}
+        >
+          <p className="">Create Project</p>
+        </button>
+        {addProjectOpen && (
+          <CreateProject setAddProjectOpen={setAddProjectOpen} />
+        )}
       </div>
     );
   }
+
   return (
     <div className="boxes">
       {filteredData.map((project) => (

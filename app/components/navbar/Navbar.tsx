@@ -5,8 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSearchBarContext } from "@/app/components/context/SearchBarContext";
 import SearchAllItems from "@/app/components/search/AlItems";
+import { useSession } from "next-auth/react";
+import { LogOutButton } from "@/app/components/LogOutButton";
 
 const Navbar = () => {
+  const { data: session } = useSession();
   const pathname = usePathname();
   const { searchBarOpen, setSearchBarOpen } = useSearchBarContext();
   return (
@@ -18,7 +21,10 @@ const Navbar = () => {
             pathname === "/" || pathname.includes("project") ? styles.page : ""
           }`}
         >
-          <Link href="/">
+          <Link
+            href="/"
+            className="flex flex-col justify-center items-center gap-2"
+          >
             <Image
               src="/folder.png"
               alt=""
@@ -27,6 +33,7 @@ const Navbar = () => {
               className="object-cover"
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
+            <p className="text-xs">Projects</p>
           </Link>
         </div>
         <div
@@ -36,7 +43,10 @@ const Navbar = () => {
               : ""
           }`}
         >
-          <Link href="/receipts">
+          <Link
+            href="/receipts"
+            className="flex flex-col justify-center items-center gap-2"
+          >
             <Image
               src="/receipt_w.png"
               alt=""
@@ -45,6 +55,7 @@ const Navbar = () => {
               className="object-cover"
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
+            <p className="text-xs">Receipts</p>
           </Link>
         </div>
         <div
@@ -54,7 +65,10 @@ const Navbar = () => {
               : ""
           }`}
         >
-          <Link href="/items">
+          <Link
+            href="/items"
+            className="flex flex-col justify-center items-center gap-2"
+          >
             <Image
               src="/item_w.png"
               alt=""
@@ -63,12 +77,14 @@ const Navbar = () => {
               className="object-cover"
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
+            <p className="text-xs">Items</p>
           </Link>
         </div>
         <div
           className={`${styles.linkWrapper} ${searchBarOpen && styles.page}`}
         >
           <button
+            className="flex flex-col justify-center items-center gap-2"
             onClick={() => {
               setSearchBarOpen(!searchBarOpen);
             }}
@@ -81,6 +97,7 @@ const Navbar = () => {
               className="object-cover "
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
+            <p className="text-xs">Search</p>
           </button>
         </div>
 
@@ -89,7 +106,10 @@ const Navbar = () => {
             pathname === "/calender" ? styles.page : ""
           }`}
         >
-          <Link href="/calender">
+          <Link
+            href="/calender"
+            className="flex flex-col justify-center items-center gap-2"
+          >
             <Image
               src="/calendar_w.png"
               alt=""
@@ -98,11 +118,15 @@ const Navbar = () => {
               className="object-cover "
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
+            <p className="text-xs">Calender</p>
           </Link>
         </div>
 
         <div className={styles.linkWrapper}>
-          <Link href="/">
+          <Link
+            href="/"
+            className="flex flex-col justify-center items-center gap-2"
+          >
             <Image
               src="/notification_w.png"
               alt=""
@@ -111,10 +135,14 @@ const Navbar = () => {
               className="object-cover "
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
+            <p className="text-xs">Alerts</p>
           </Link>
         </div>
         <div className={styles.linkWrapper}>
-          <Link href="/">
+          <Link
+            href="/"
+            className="flex flex-col justify-center items-center gap-2"
+          >
             <Image
               src="/account_w.png"
               alt=""
@@ -123,7 +151,19 @@ const Navbar = () => {
               className="object-cover "
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
+            <p className="text-xs">Account</p>
           </Link>
+        </div>
+
+        <div>
+          {session ? (
+            <LogOutButton />
+          ) : (
+            <div className="flex flex-col">
+              <Link href="/signup">Sign Up</Link>
+              <Link href="/login">Login</Link>
+            </div>
+          )}
         </div>
       </div>
 

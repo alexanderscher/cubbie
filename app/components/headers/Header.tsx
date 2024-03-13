@@ -5,21 +5,17 @@ import { useSearchItemContext } from "@/app/components/context/SearchtemContext"
 import SearchBar from "@/app/components/search/SearchBar";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
-import { useSearchProjectContext } from "@/app/components/context/SearchProjectContext";
+
 import { CreateReceipt } from "@/app/components/receiptComponents/CreateReceipt";
 import { CreateProject } from "@/app/components/project/CreateProject";
-import { getProjects } from "@/app/lib/db";
-import { Project } from "@/types/receipt";
 
 interface HeaderProps {
   type: string;
 }
 
 const Header = ({ type }: HeaderProps) => {
-  const [data, setData] = useState<any[]>([]);
+  // const [data, setData] = useState<any[]>([]);
 
-  const { setFilteredProjectData, setisProjectLoading } =
-    useSearchProjectContext();
   const {
     setFilteredData,
     filteredData,
@@ -57,23 +53,12 @@ const Header = ({ type }: HeaderProps) => {
   );
 
   useEffect(() => {
-    if (pathname === "/") {
-      const fetchProjects = async () => {
-        const data = await getProjects();
-        setFilteredProjectData(data as Project[]);
-        setisProjectLoading(false);
-      };
-      fetchProjects();
-    }
-  }, [pathname, setFilteredProjectData, setisProjectLoading]);
-
-  useEffect(() => {
     if (pathname === "/receipts") {
       const fetchReceipts = async () => {
         setIsLoading(true);
         const res = await fetch("/api/receipt");
         const data = await res.json();
-        setData(data.receipts);
+        // setData(data.receipts);
         setFilteredData(data.receipts);
         setIsLoading(false);
         setIsReceiptRefreshed(false);
@@ -94,7 +79,7 @@ const Header = ({ type }: HeaderProps) => {
         setisItemLoading(true);
         const res = await fetch("/api/items");
         const data = await res.json();
-        setData(data.items);
+        // setData(data.items);
         setFilteredItemData(data.items);
         setRefreshData(false);
         setisItemLoading(false);
@@ -167,8 +152,8 @@ const Header = ({ type }: HeaderProps) => {
         </RegularButton>
       </div>
       <div className=" flex justify-between items-center relative flex-wrap gap-4 ">
-        <SearchBar data={data} searchType={type} />
-        {pathname === "/receipts" && data.length !== 0 && (
+        <SearchBar searchType={type} />
+        {pathname === "/receipts" && (
           <div className="flex w-full    ">
             <button
               className={`${
@@ -197,22 +182,21 @@ const Header = ({ type }: HeaderProps) => {
             </button>
           </div>
         )}
-        {data.length !== 0 && (
-          <div
-            className="fixed z-10 bottom-8 left-1/2 transform -translate-x-1/2
+
+        <div
+          className="fixed z-10 bottom-8 left-1/2 transform -translate-x-1/2
         
         "
+        >
+          <button
+            className="px-[60px] py-[8px] border-[1px] border-emerald-900 bg-emerald-900 text-white rounded-3xl"
+            onClick={() => {
+              setOpenModal(!openModal);
+            }}
           >
-            <button
-              className="px-[60px] py-[8px] border-[1px] border-emerald-900 bg-emerald-900 text-white rounded-3xl"
-              onClick={() => {
-                setOpenModal(!openModal);
-              }}
-            >
-              <p className="text-sm">Filter</p>
-            </button>
-          </div>
-        )}
+            <p className="text-sm">Filter</p>
+          </button>
+        </div>
 
         <div className="flex gap-2 ">
           <div className="">
@@ -258,7 +242,6 @@ interface FilterOptionsProps {
 }
 
 const FilterProjectOptions = ({
-  createQueryString,
   pathname,
   searchParams,
   onClose,

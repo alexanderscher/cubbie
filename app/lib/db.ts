@@ -10,7 +10,6 @@ export const getProjects = unstable_cache(
     const userId = parseInt(session?.user?.id as string);
     const projects = await prisma.project.findMany({
       where: { userId },
-
       orderBy: {
         created_at: "desc",
       },
@@ -26,8 +25,33 @@ export const getProjects = unstable_cache(
     return projects;
   },
   ["projects"],
-  { tags: ["projects"] }
+  { tags: ["projects"], revalidate: 60 }
 );
+
+export const getProjectById = unstable_cache(
+  async (id: string) => {
+    const session = await getServerSession(authOptions);
+    const userId = parseInt(session?.user?.id as string);
+    const project = await prisma.project.findUnique({
+      where: {
+        userId,
+        id: parseInt(id),
+      },
+      include: {
+        receipts: {
+          include: {
+            items: true,
+          },
+        },
+      },
+    });
+
+    return project;
+  },
+  ["projects"],
+  { tags: ["projects"], revalidate: 60 }
+);
+
 export const getReceipts = unstable_cache(
   async () => {
     const session = await getServerSession(authOptions);
@@ -45,5 +69,5 @@ export const getReceipts = unstable_cache(
     return receipts;
   },
   ["receipts"],
-  { tags: ["receipts"] }
+  { tags: ["receipts"], revalidate: 60 }
 );

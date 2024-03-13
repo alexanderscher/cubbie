@@ -11,7 +11,6 @@ export interface Receipt {
   type: string;
   store: string;
   card: string;
-  amount: number;
   tracking_number: string;
   purchase_date: Date;
   days_until_return: number;

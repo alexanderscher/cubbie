@@ -43,34 +43,19 @@ const Receipt = ({ receipt, onToggleOpen, isOpen }: ReceiptProps) => {
         {isOpen && <OptionsModal receipt={receipt} />}
 
         <div className="p-3 flex flex-col justify-between">
-          {/* {receipt.project && (
-          <p className="text-xs text-emerald-900 mb-1">
-            {receipt.project.name}
-          </p>
-        )} */}
-
           <div className="">
-            <Link href={`/receipt/${receipt.id}`} className="">
-              <TruncateText
-                text={receipt.store}
-                maxLength={18}
-                styles={"text-orange-600"}
-              />
-            </Link>
+            <TruncateText
+              text={receipt.store}
+              maxLength={18}
+              styles={"text-orange-600"}
+            />
+
             <p className="text-xs text-slate-400">
               Return by {formatDateToMMDDYY(receipt.return_date)}
             </p>
           </div>
 
           <div className="flex flex-col  gap-1 text-xs">
-            {/* <div className=" flex flex-col  gap-1 text-xs">
-            <div className="flex gap-1 text-xs mt-2 ">
-              <p className="">
-                {receipt.type === "Store" ? "In Store" : "Online"}{" "}
-                {receipt.memo ? "Memo" : "Receipt"}
-              </p>
-            </div>
-          </div> */}
             <div className="flex gap-1  mt-2">
               <p className=" ">
                 {receipt.items.length}{" "}

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/prisma/client";
-import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
+import { deleteUploadThingImage } from "@/app/actions/uploadthing/deletePhoto";
 
 export async function POST(request: Request) {
   const items = await prisma.items.findMany({});

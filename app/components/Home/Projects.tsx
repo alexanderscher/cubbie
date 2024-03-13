@@ -1,7 +1,7 @@
 "use client";
+import { deleteProject } from "@/app/actions/projects/deleteProject";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { useSearchProjectContext } from "@/app/components/context/SearchProjectContext";
-import { useSessionContext } from "@/app/components/context/SessionContext";
 import { CreateProject } from "@/app/components/project/CreateProject";
 import { EditProject } from "@/app/components/project/EditProject";
 import { CreateReceipt } from "@/app/components/receiptComponents/CreateReceipt";
@@ -12,10 +12,11 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import React, { useMemo, useState } from "react";
+import React, { use, useEffect, useMemo, useState } from "react";
 
 const Projects = () => {
   const { isProjectLoading, filteredProjectData } = useSearchProjectContext();
+
   const [openProjectId, setOpenProjectId] = useState(null as number | null);
   const [addProjectOpen, setAddProjectOpen] = useState(false);
 
@@ -41,13 +42,16 @@ const Projects = () => {
     : sortFieldParam;
   const sortOrder = sortFieldParam?.startsWith("-") ? "desc" : "asc";
   const getTotalPrice = (receipts: Receipt[]) => {
-    return receipts.reduce((acc, receipt) => {
-      const receiptTotal = receipt.items.reduce(
-        (receiptAcc, item) => receiptAcc + item.price,
-        0
-      );
-      return acc + receiptTotal;
-    }, 0);
+    if (receipts.length === 0) return 0;
+    else {
+      return receipts.reduce((acc, receipt) => {
+        const receiptTotal = receipt.items.reduce(
+          (receiptAcc, item) => receiptAcc + item.price,
+          0
+        );
+        return acc + receiptTotal;
+      }, 0);
+    }
   };
 
   const filteredData = useMemo(() => {
@@ -148,9 +152,7 @@ const Project = ({ project, isOpen, onToggleOpen }: ProjectProps) => {
         </div>
         {isOpen && <OptionsModal isOpen={isOpen} project={project} />}
         <div className="p-3 flex flex-col gap-2">
-          <Link href={`/project/${project.id}`}>
-            <h2 className="text-sm text-orange-600">{project.name}</h2>
-          </Link>
+          <h2 className="text-sm text-orange-600">{project.name}</h2>
 
           <div className="flex gap-1 text-sm">
             <p className=" ">
@@ -181,7 +183,6 @@ const Project = ({ project, isOpen, onToggleOpen }: ProjectProps) => {
 
 interface OptionsModalProps {
   isOpen: boolean;
-
   project: ProjectType;
 }
 
@@ -190,13 +191,19 @@ const OptionsModal = ({ project }: OptionsModalProps) => {
   const { setProjectRefresh } = useSearchProjectContext();
   const [edit, setEdit] = useState(false);
   const [isAddOpen, setAddReceiptOpen] = useState(false);
+
+  const toggleDeleteModal = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDeleteOpen(!isDeleteOpen);
+  };
   return (
     <div className="absolute bg-white shadow-1 -right-2 top-6 rounded-md w-[200px] z-[100]">
       <div className="p-4 rounded text-sm flex flex-col gap-2">
         <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2">
           <div
             className="flex gap-2"
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               setAddReceiptOpen(true);
             }}
           >
@@ -206,7 +213,10 @@ const OptionsModal = ({ project }: OptionsModalProps) => {
         </div>
         <div
           className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 cursor-pointer"
-          onClick={() => setEdit(true)}
+          onClick={(e) => {
+            e.preventDefault();
+            setEdit(true);
+          }}
         >
           <div className="flex gap-2">
             <Image src={"/edit.png"} width={20} height={20} alt=""></Image>
@@ -216,7 +226,7 @@ const OptionsModal = ({ project }: OptionsModalProps) => {
         <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 ">
           <div
             className="flex gap-2 cursor-pointer"
-            onClick={() => setIsDeleteOpen(true)}
+            onClick={toggleDeleteModal}
           >
             <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
             <p>Delete</p>
@@ -251,18 +261,17 @@ const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
   const [loading, setLoading] = useState(false);
   const { setProjectRefresh } = useSearchProjectContext();
 
-  const deleteProject = async () => {
-    const res = await fetch(`/api/project/${project.id}`, {
-      method: "DELETE",
-    });
-    const data = await res.json();
-    if (data.error) {
-      setUploadError(data.error);
-      setLoading(false);
-    } else {
-      setUploadError("");
-      setLoading(false);
+  const handleSubmit = async () => {
+    try {
+      if (project.id) {
+        await deleteProject(project.id);
+      }
       setProjectRefresh(true);
+      setDeleteOpen(false);
+    } catch (error) {
+      setUploadError("Error deleting project");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -276,18 +285,25 @@ const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
 
         <div className="mt-4 flex justify-between">
           <RegularButton
-            handleClick={() => setDeleteOpen(false)}
+            handleClick={(e) => {
+              e?.preventDefault();
+              setDeleteOpen(false);
+            }}
             styles="bg-white text-emerald-900 text-base font-medium rounded-full w-auto border-[1px] border-emerald-900 text-xs"
           >
             Cancel
           </RegularButton>
           <RegularButton
-            handleClick={deleteProject}
+            handleClick={(e) => {
+              e?.preventDefault();
+              handleSubmit();
+            }}
             styles="bg-emerald-900 text-white text-base font-medium rounded-full w-auto border-[1px] border-emerald-900 text-xs"
           >
             Confirm
           </RegularButton>
         </div>
+        {uploadError && <p className="text-red-600 text-xs">{uploadError}</p>}
       </div>
     </div>
   );

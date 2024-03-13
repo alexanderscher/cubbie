@@ -1,4 +1,5 @@
 "use client";
+import { createProject } from "@/app/actions/projects/createProject";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { useSearchProjectContext } from "@/app/components/context/SearchProjectContext";
 import { useSessionContext } from "@/app/components/context/SessionContext";
@@ -10,32 +11,16 @@ interface AddProjectModalProps {
 
 export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
   const { setProjectRefresh } = useSearchProjectContext();
-  const { userId } = useSessionContext();
 
   const [project, setProject] = useState("");
   const [error, setError] = useState("");
-
-  const createProject = async () => {
-    const res = await fetch("/api/project", {
-      method: "POST",
-      body: JSON.stringify({
-        name: project,
-        userId,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await res.json();
-    setError(data);
-  };
 
   const handleSubmit = async () => {
     if (project === "") {
       setError("Please enter a project name");
     }
     if (project !== "") {
-      await createProject();
+      await createProject(project);
       setProjectRefresh(true);
       setAddProjectOpen(false);
     }

@@ -1,4 +1,4 @@
-import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
+import { deleteUploadThingImage } from "@/app/actions/uploadthing/deletePhoto";
 import prisma from "@/prisma/client";
 import { NextResponse } from "next/server";
 

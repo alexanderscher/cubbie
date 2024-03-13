@@ -3,7 +3,7 @@ import React from "react";
 
 interface Props {
   children: React.ReactNode;
-  handleClick?: () => void;
+  handleClick?: (e?: React.MouseEvent<HTMLButtonElement>) => void; // Make event parameter optional
   styles: string;
   submit?: boolean;
   restProps?: any;

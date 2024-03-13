@@ -1,5 +1,5 @@
-import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
-import { handleUpload } from "@/app/actions/uploadPhoto";
+import { deleteUploadThingImage } from "@/app/actions/uploadthing/deletePhoto";
+import { handleUpload } from "@/app/actions/uploadthing/uploadPhoto";
 import prisma from "@/prisma/client";
 import { ItemInput } from "@/types/form";
 import { calculateReturnDate } from "@/utils/Date";
@@ -118,7 +118,7 @@ export async function POST(request: Request) {
         return_date: returnDate,
         receipt_image_url: receiptFileUrl,
         receipt_image_key: receiptFileKey,
-        archive: false,
+
         memo,
         project_id: productID,
         created_at: new Date().toISOString(),

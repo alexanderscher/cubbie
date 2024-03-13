@@ -8,22 +8,18 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useSearchProjectContext } from "@/app/components/context/SearchProjectContext";
 import { CreateReceipt } from "@/app/components/receiptComponents/CreateReceipt";
 import { CreateProject } from "@/app/components/project/CreateProject";
+import { getProjects } from "@/app/lib/db";
+import { Project } from "@/types/receipt";
 
 interface HeaderProps {
   type: string;
 }
 
 const Header = ({ type }: HeaderProps) => {
-  const [data, setData] = React.useState([]);
+  const [data, setData] = useState<any[]>([]);
 
-  const {
-    setFilteredProjectData,
-    filteredProjectData,
-    setisProjectLoading,
-    isProjectLoading,
-    setProjectRefresh,
-    isProjectRefresh,
-  } = useSearchProjectContext();
+  const { setFilteredProjectData, setisProjectLoading } =
+    useSearchProjectContext();
   const {
     setFilteredData,
     filteredData,
@@ -63,25 +59,13 @@ const Header = ({ type }: HeaderProps) => {
   useEffect(() => {
     if (pathname === "/") {
       const fetchProjects = async () => {
-        setisProjectLoading(true);
-        const res = await fetch("/api/project");
-        const data = await res.json();
-        console.log(data);
-
-        setData(data.projects);
-        setFilteredProjectData(data.projects);
+        const data = await getProjects();
+        setFilteredProjectData(data as Project[]);
         setisProjectLoading(false);
-        setProjectRefresh(false);
       };
       fetchProjects();
     }
-  }, [
-    pathname,
-    setFilteredProjectData,
-    setisProjectLoading,
-    setProjectRefresh,
-    isProjectRefresh,
-  ]);
+  }, [pathname, setFilteredProjectData, setisProjectLoading]);
 
   useEffect(() => {
     if (pathname === "/receipts") {

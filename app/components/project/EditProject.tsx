@@ -45,6 +45,7 @@ export const EditProject = ({
   const handleOverlayClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
+    event.preventDefault();
     if (
       event.target instanceof HTMLDivElement &&
       event.target.id === "modal-overlay"
@@ -65,7 +66,10 @@ export const EditProject = ({
           <button
             type="button"
             className="text-gray-400 hover:text-gray-500"
-            onClick={() => setEdit(false)}
+            onClick={(e) => {
+              e.preventDefault();
+              setEdit(false);
+            }}
           >
             <span className="text-2xl">&times;</span>
           </button>

@@ -1,14 +1,13 @@
 import prisma from "@/prisma/client";
-import { getSession } from "next-auth/react";
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const session = await getSession();
-  console.log("session", session);
+  const session = 1;
   try {
-    if (session?.user?.id) {
+    if (session) {
       const projects = await prisma.project.findMany({
-        where: { userId: parseInt(session.user.id) },
+        where: { userId: session },
 
         orderBy: {
           created_at: "desc",
@@ -27,13 +26,6 @@ export async function GET() {
       });
     } else {
       console.error("No session found");
-      // return (
-      //   new NextResponse(),
-      //   {
-      //     status: 401,
-      //     headers: { "Content-Type": "application/json" },
-      //   }
-      // );
     }
   } catch (error) {
     console.error("Error fetching projects:", error);

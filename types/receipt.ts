@@ -2,7 +2,8 @@ export interface Project {
   id?: number;
   name: string;
   created_at: Date;
-  receipts: Receipt[];
+  receipts: Receipt[] | [];
+  userId: number;
 }
 
 export interface Receipt {
@@ -19,7 +20,6 @@ export interface Receipt {
   receipt_image_key: string;
   items: Item[];
   project: Project;
-  archive: boolean;
   memo: boolean;
   created_at: Date;
   asset_amount: number;

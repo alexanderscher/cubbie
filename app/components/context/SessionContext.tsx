@@ -28,7 +28,6 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({
 }) => {
   const { data: session, status } = useSession();
   const [userId, setUserId] = useState<number | null>(null);
-  console.log(session);
 
   useEffect(() => {
     if (session?.user?.id) {

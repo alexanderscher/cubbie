@@ -43,6 +43,7 @@ model Receipt {
   created_at        DateTime
   expired           Boolean  @default(false)
   project_id        Int?
+  
   project           Project? @relation(fields: [project_id], references: [id])
 }
 

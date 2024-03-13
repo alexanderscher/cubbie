@@ -1,5 +1,5 @@
-import { deleteUploadThingImage } from "@/app/actions/deletePhoto";
-import { handleUpload } from "@/app/actions/uploadPhoto";
+import { deleteUploadThingImage } from "@/app/actions/uploadthing/deletePhoto";
+import { handleUpload } from "@/app/actions/uploadthing/uploadPhoto";
 import prisma from "@/prisma/client";
 import { NextResponse } from "next/server";
 

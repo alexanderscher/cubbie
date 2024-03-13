@@ -8,14 +8,9 @@ import React, { useState } from "react";
 interface EditProjectProps {
   setEdit: (value: boolean) => void;
   project: ProjectType;
-  setRefresh: (value: boolean) => void;
 }
 
-export const EditProject = ({
-  setEdit,
-  project,
-  setRefresh,
-}: EditProjectProps) => {
+export const EditProject = ({ setEdit, project }: EditProjectProps) => {
   const [name, setName] = useState(project.name);
   const [error, setError] = useState("");
 
@@ -38,7 +33,6 @@ export const EditProject = ({
     if (name !== "" && name !== project.name) {
       await createProject();
       setEdit(false);
-      setRefresh(true);
     }
   };
 

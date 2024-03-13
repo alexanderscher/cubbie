@@ -12,10 +12,22 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import React, { use, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
-const Projects = () => {
-  const { isProjectLoading, filteredProjectData } = useSearchProjectContext();
+interface Props {
+  serverData: ProjectType[];
+}
+
+const Projects = ({ serverData }: Props) => {
+  const { isProjectLoading, filteredProjectData, initializeProjects } =
+    useSearchProjectContext();
+
+  useEffect(() => {
+    if (serverData) {
+      console.log("redo");
+      initializeProjects(serverData);
+    }
+  }, [serverData, initializeProjects]);
 
   const [openProjectId, setOpenProjectId] = useState(null as number | null);
   const [addProjectOpen, setAddProjectOpen] = useState(false);
@@ -70,16 +82,11 @@ const Projects = () => {
         return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
       }
     };
+
     return filteredProjectData.sort(compareProjects);
   }, [filteredProjectData, sortField, sortOrder]);
 
-  if (isProjectLoading) {
-    return (
-      <div className="">
-        <p>Loading...</p>
-      </div>
-    );
-  }
+  console.log("filteredProjectData", filteredProjectData);
 
   if (filteredData.length === 0 && !isProjectLoading) {
     return (
@@ -233,13 +240,7 @@ const OptionsModal = ({ project }: OptionsModalProps) => {
           </div>
         </div>
       </div>
-      {edit && (
-        <EditProject
-          setEdit={setEdit}
-          project={project}
-          setRefresh={setProjectRefresh}
-        />
-      )}
+      {edit && <EditProject setEdit={setEdit} project={project} />}
       {isDeleteOpen && (
         <DeleteModal
           setDeleteOpen={setIsDeleteOpen}

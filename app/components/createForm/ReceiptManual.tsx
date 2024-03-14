@@ -2,6 +2,7 @@
 import ProjectSelect from "@/app/components/createForm/ProjectSelect";
 import { TooltipWithHelperIcon } from "@/app/components/tooltips/TooltipWithHelperIcon";
 import styles from "@/app/create/upload.module.css";
+import { getProjects } from "@/app/lib/db";
 import { ReceiptStoreStage } from "@/constants/form";
 import { Project } from "@/types/receipt";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
@@ -78,14 +79,12 @@ const ReceiptManual = ({
   const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
-    const getProjects = async () => {
-      setLoading(true);
-      const response = await fetch("/api/project");
-      const data = await response.json();
-      setProjects(data.projects);
+    const fetchProjects = async () => {
+      const data = await getProjects();
+      setProjects(data as Project[]);
       setLoading(false);
     };
-    getProjects();
+    fetchProjects();
   }, []);
 
   if (loading) {

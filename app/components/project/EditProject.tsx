@@ -1,4 +1,5 @@
 "use client";
+import { editProject } from "@/app/actions/projects/editProject";
 import RegularButton from "@/app/components/buttons/RegularButton";
 
 import { Project as ProjectType } from "@/types/receipt";
@@ -14,24 +15,12 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
   const [name, setName] = useState(project.name);
   const [error, setError] = useState("");
 
-  const createProject = async () => {
-    const res = await fetch(`/api/project/${project.id}`, {
-      method: "PUT",
-      body: JSON.stringify({ name }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await res.json();
-    setError(data);
-  };
-
   const handleSubmit = async () => {
     if (name === project.name || name === "") {
       setEdit(false);
     }
-    if (name !== "" && name !== project.name) {
-      await createProject();
+    if (name !== "" && name !== project.name && project.id) {
+      await editProject(project.id, name);
       setEdit(false);
     }
   };

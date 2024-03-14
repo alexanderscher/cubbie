@@ -1,6 +1,7 @@
 "use client";
 import { useSearchBarContext } from "@/app/components/context/SearchBarContext";
 import { BarcodeScanner } from "@/app/components/createForm/barcode/BarcodeScanner";
+import { getProjects } from "@/app/lib/db";
 import { Item, Project, Receipt } from "@/types/receipt";
 import Image from "next/image";
 import Link from "next/link";
@@ -37,12 +38,9 @@ function SearchAllItems() {
 
   useEffect(() => {
     const fetchProjects = async () => {
-      const res = await fetch("/api/project");
-      const data = await res.json();
-
-      setProjectData(data.projects);
+      const data = await getProjects();
+      setProjectData(data as Project[]);
     };
-
     fetchProjects();
   }, []);
   useEffect(() => {

@@ -3,6 +3,7 @@ import RegularButton from "@/app/components/buttons/RegularButton";
 import { useSearchContext } from "@/app/components/context/SearchContext";
 import { AddItem } from "@/app/components/item/AddItem";
 import { TruncateText } from "@/app/components/text/Truncate";
+import { getProjects } from "@/app/lib/db";
 import { Item, Project, Receipt as ReceiptType } from "@/types/receipt";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
@@ -157,14 +158,12 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
   const { setIsReceiptRefreshed } = useSearchContext();
 
   useEffect(() => {
-    const getProjects = async () => {
-      setLoading(true);
-      const res = await fetch("/api/project");
-      const data = await res.json();
-      setProject(data.projects);
+    const fetchProjects = async () => {
+      const data = await getProjects();
+      setProject(data as Project[]);
       setLoading(false);
     };
-    getProjects();
+    fetchProjects();
   }, []);
 
   const moveReceipt = async () => {

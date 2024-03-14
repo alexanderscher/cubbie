@@ -2,8 +2,10 @@
 import RegularButton from "@/app/components/buttons/RegularButton";
 import ProjectSelect from "@/app/components/createForm/ProjectSelect";
 import { TooltipWithHelperIcon } from "@/app/components/tooltips/TooltipWithHelperIcon";
+import { getProjects } from "@/app/lib/db";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
+import { Project } from "@/types/receipt";
 import { convertHeic } from "@/utils/media";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -35,7 +37,7 @@ export default function ImageGpt({
   const [invalidImage, setInvalidImage] = useState(false);
   const [apiError, setApiError] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<Project[]>([]);
 
   const [validationErrors, setValidationErrors] = useState({
     folderName: "",
@@ -45,13 +47,12 @@ export default function ImageGpt({
   const [memoHelp, setMemoHelp] = useState(false);
 
   useEffect(() => {
-    const getProjects = async () => {
-      const response = await fetch("/api/project");
-      const data = await response.json();
-
-      setProjects(data.projects);
+    const fetchProjects = async () => {
+      const data = await getProjects();
+      setProjects(data as Project[]);
+      setLoading(false);
     };
-    getProjects();
+    fetchProjects();
   }, []);
 
   const handleContainerClick = () => {

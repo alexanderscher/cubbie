@@ -4,8 +4,7 @@ import RegularButton from "@/app/components/buttons/RegularButton";
 import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
 import Shirt from "@/app/components/placeholderImages/Shirt";
 import { TruncateText } from "@/app/components/text/Truncate";
-import { Item as ItemType } from "@/types/receipt";
-import { formatDateToMMDDYY } from "@/utils/Date";
+import { Receipt } from "@/types/receipt";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,8 +12,22 @@ import { usePathname } from "next/navigation";
 import path from "path";
 import React, { useState } from "react";
 
+export interface Item {
+  id: number;
+  description: string;
+  photo_url?: string;
+  photo_key?: string;
+  price: number;
+  barcode?: string;
+  character?: string;
+  product_id?: string;
+  receipt_id: number;
+  receipt: Receipt;
+  returned: boolean;
+}
+
 interface Props {
-  item: ItemType;
+  item: Item;
   isOpen: boolean;
   onToggleOpen: (event: React.MouseEvent<HTMLDivElement>) => void;
 }
@@ -97,7 +110,7 @@ const Item = ({ item, isOpen, onToggleOpen }: Props) => {
                     <p className="text-slate-400  ">Store</p>
                     <Link href={`/receipt/${item.receipt_id}`} className="">
                       <TruncateText
-                        text={item.receipt.store}
+                        text={item?.receipt?.store}
                         maxLength={15}
                         styles={""}
                       />
@@ -115,7 +128,7 @@ const Item = ({ item, isOpen, onToggleOpen }: Props) => {
                     <p className="">{item.barcode ? item.barcode : "None"}</p>
                   </div>
                 )}
-                {pathname === "/items" && item.receipt.expired && (
+                {pathname === "/items" && item?.receipt?.expired && (
                   <p className="text-orange-600">Expired</p>
                 )}
               </div>
@@ -147,7 +160,7 @@ export default Item;
 
 interface OptionsModalProps {
   isOpen: boolean;
-  item: ItemType;
+  item: Item;
 }
 
 const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
@@ -250,7 +263,7 @@ const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
 interface DeleteModalProps {
   deleteOpen: boolean;
   setDeleteOpen: (value: boolean) => void;
-  item: ItemType;
+  item: Item;
   deleteItem: () => void;
 }
 

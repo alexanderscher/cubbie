@@ -1,7 +1,6 @@
 "use client";
 import styles from "@/app/receipt/receiptID.module.css";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { Item as ItemType, Receipt as ReceiptType } from "@/types/receipt";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
@@ -11,9 +10,10 @@ import ImageModal from "@/app/components/images/ImageModal";
 import { AddItem } from "@/app/components/item/AddItem";
 
 import Item from "@/app/components/Item";
+import { Item as ItemType, Receipt } from "@/types/fetchReceipts";
 
 interface ReceiptIdProps {
-  receipt: ReceiptType;
+  receipt: Receipt;
 }
 
 const ReceiptId = ({ receipt }: ReceiptIdProps) => {
@@ -34,6 +34,9 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
       setOpenItemId(itemId);
     }
   };
+  const total_amount = receipt.items.reduce((acc: number, curr: ItemType) => {
+    return acc + curr.price;
+  }, 0);
 
   if (!receipt.items) return <div className="min-h-screen">Loading</div>;
   return (
@@ -60,13 +63,7 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
       <div className="flex bg-white  rounded text-sm shadow p-4 h-[80px] items-center">
         <div className="w-1/3 border-r-[1px] border-slate-300  ">
           <p className="text-slate-400 text-xs">Total amount</p>
-          <p>
-            {formatCurrency(
-              receipt.items.reduce((acc: number, curr: ItemType) => {
-                return acc + curr.price;
-              }, 0)
-            )}
-          </p>
+          <p>{formatCurrency(total_amount)}</p>
         </div>
         <div className="w-1/3 border-r-[1px] border-slate-300 pl-2 pr-2">
           <p className="text-slate-400 text-xs">Purchase Date</p>

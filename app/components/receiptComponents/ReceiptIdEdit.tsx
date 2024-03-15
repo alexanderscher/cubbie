@@ -3,7 +3,6 @@
 import styles from "@/app/receipt/receiptID.module.css";
 import RegularButton from "@/app/components/buttons/RegularButton";
 
-import { Item as ItemType, Receipt } from "@/types/receipt";
 import { formatDateToYYYYMMDD } from "@/utils/Date";
 
 import { Formik } from "formik";
@@ -20,6 +19,7 @@ import ImageModal from "@/app/components/images/ImageModal";
 import Item from "@/app/components/Item";
 import { convertHeic } from "@/utils/media";
 import { editReceipt } from "@/app/actions/receipts/editReceipt";
+import { Item as ItemType, Receipt } from "@/types/fetchReceipts";
 type ExtendedReceiptType = Receipt & {
   edit_image: string;
 };
@@ -42,6 +42,10 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
     store: "",
   });
   const [openItemId, setOpenItemId] = useState(null as number | null);
+
+  const total_amount = receipt.items.reduce((acc: number, curr: ItemType) => {
+    return acc + curr.price;
+  }, 0);
 
   const toggleOpenItem = (
     itemId: number | undefined,
@@ -178,13 +182,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
           <div className="flex bg-white rounded text-sm shadow p-4">
             <div className="w-1/2 border-r-[1px] border-slate-300 ">
               <p className="text-slate-400 text-xs">Total amount</p>
-              <p>
-                {formatCurrency(
-                  receipt.items.reduce((acc: number, curr: ItemType) => {
-                    return acc + curr.price;
-                  }, 0)
-                )}
-              </p>
+              <p>{formatCurrency(total_amount)}</p>
             </div>
             <div className="w-1/2 pl-4 ">
               <p className="text-slate-400 text-xs">Quantity</p>

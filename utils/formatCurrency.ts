@@ -1,5 +1,5 @@
 export const formatCurrency = (
-  amount: number,
+  amount: number | string,
   locale = "en-US",
   currency = "USD"
 ): string => {

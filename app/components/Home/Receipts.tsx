@@ -2,7 +2,7 @@
 import { useSearchReceiptContext } from "@/app/components/context/SearchReceiptContext";
 import { CreateReceipt } from "@/app/components/receiptComponents/CreateReceipt";
 import Receipt from "@/app/components/receiptComponents/Receipt";
-import { Item, Receipt as ReceiptType } from "@/types/receipt";
+import { Item, Receipt as ReceiptType } from "@/types/fetchReceipts";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -22,7 +22,7 @@ const Receipts = ({ serverData }: ReceiptsProps) => {
   useEffect(() => {
     if (serverData) {
       console.log("redo");
-      initializeReceipts(serverData);
+      initializeReceipts(serverData as ReceiptType[]);
     }
   }, [serverData, initializeReceipts]);
 

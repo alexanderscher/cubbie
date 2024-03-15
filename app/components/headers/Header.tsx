@@ -1,6 +1,5 @@
 "use client";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { useSearchContext } from "@/app/components/context/SearchContext";
 import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
 import SearchBar from "@/app/components/search/SearchBar";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -16,15 +15,6 @@ interface HeaderProps {
 const Header = ({ type }: HeaderProps) => {
   // const [data, setData] = useState<any[]>([]);
 
-  const {
-    setFilteredData,
-    filteredData,
-
-    setIsLoading,
-    isReceiptRefreshed,
-    isLoading,
-    setIsReceiptRefreshed,
-  } = useSearchContext();
   const {
     setFilteredItemData,
     filteredItemData,
@@ -51,27 +41,6 @@ const Header = ({ type }: HeaderProps) => {
     },
     [searchParams]
   );
-
-  useEffect(() => {
-    if (pathname === "/receipts") {
-      const fetchReceipts = async () => {
-        setIsLoading(true);
-        const res = await fetch("/api/receipt");
-        const data = await res.json();
-        // setData(data.receipts);
-        setFilteredData(data.receipts);
-        setIsLoading(false);
-        setIsReceiptRefreshed(false);
-      };
-      fetchReceipts();
-    }
-  }, [
-    pathname,
-    setFilteredData,
-    setIsLoading,
-    setIsReceiptRefreshed,
-    isReceiptRefreshed,
-  ]);
 
   useEffect(() => {
     if (pathname === "/items") {

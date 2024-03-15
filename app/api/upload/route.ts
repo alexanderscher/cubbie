@@ -63,7 +63,6 @@ export async function POST(request: Request) {
       const itemsArray = await Promise.all(
         items.map(async (item) => {
           const price = parseFloat(item.price);
-          console.log(item.price, price);
 
           let itemPhotoUrl = "";
           let itemPhotoKey = "";

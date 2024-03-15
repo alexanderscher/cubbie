@@ -35,7 +35,6 @@ export async function POST(request: Request): Promise<NextResponse> {
   try {
     const body = await request.json();
     const { provider, email, password } = body.data;
-    console.log(provider);
 
     if (provider && provider === "Google") {
       const existingUser = await prisma.user.findUnique({

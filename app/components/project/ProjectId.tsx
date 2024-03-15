@@ -73,7 +73,7 @@ export const ProjectId = ({ project }: ProjectIdProps) => {
           </div>
           {isAddOpen && <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />}
         </div>
-        {project.receipts.length === 0 && (
+        {project?.receipts?.length === 0 && (
           <div className="flex flex-col gap-6 justify-center items-center mt-10">
             <Image
               src="/receipt_b.png"
@@ -96,7 +96,7 @@ export const ProjectId = ({ project }: ProjectIdProps) => {
           </div>
         )}
         <div className="boxes">
-          {project.receipts.map((receipt: ReceiptType) => (
+          {project?.receipts?.map((receipt: ReceiptType) => (
             <Receipt
               key={receipt.id}
               receipt={receipt}

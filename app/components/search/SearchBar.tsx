@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchProjectContext } from "@/app/components/context/SearchProjectContext";
-import { useSearchContext } from "@/app/components/context/SearchContext";
+import { useSearchReceiptContext } from "@/app/components/context/SearchReceiptContext";
 import { usePathname } from "next/navigation";
 import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
 
@@ -13,7 +13,7 @@ function SearchBar({ searchType }: Props) {
   const pathname = usePathname();
 
   const { filterProjects } = useSearchProjectContext();
-  // const { setFilteredData } = useSearchContext();
+  const { filterReceipts } = useSearchReceiptContext();
   // const { setFilteredItemData } = useSearchItemContext();
 
   useEffect(() => {
@@ -26,12 +26,11 @@ function SearchBar({ searchType }: Props) {
 
     if (pathname === "/") {
       filterProjects(newSearchTerm);
+    } else if (pathname.includes("receipts")) {
+      filterReceipts(newSearchTerm);
+      // } else if (pathname.includes("items")) {
+      //   setFilteredItemData(newSearchTerm);
     }
-    // } else if (pathname.includes("receipts")) {
-    //   setFilteredData(newSearchTerm);
-    // } else if (pathname.includes("items")) {
-    //   setFilteredItemData(newSearchTerm);
-    // }
   };
 
   return (

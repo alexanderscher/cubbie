@@ -21,15 +21,12 @@ interface SearchProjectContextType {
   setProjectRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// Create the context with default values
 export const SearchProjectContext = createContext<SearchProjectContextType>(
   {} as SearchProjectContextType
 );
 
-// Custom hook to use the context
 export const useSearchProjectContext = () => useContext(SearchProjectContext);
 
-// Context provider component
 export const SearchProjectProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {

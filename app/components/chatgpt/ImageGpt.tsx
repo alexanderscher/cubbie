@@ -121,7 +121,6 @@ export default function ImageGpt({
   };
 
   const MemoGptCall = async () => {
-    console.log("MemoGptCall");
     const res = await fetch("/api/gpt/analyze-memo", {
       method: "POST",
       headers: {

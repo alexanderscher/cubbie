@@ -1,17 +1,30 @@
 "use client";
-import { useSearchContext } from "@/app/components/context/SearchContext";
+import { useSearchReceiptContext } from "@/app/components/context/SearchReceiptContext";
 import { CreateReceipt } from "@/app/components/receiptComponents/CreateReceipt";
 import Receipt from "@/app/components/receiptComponents/Receipt";
 import { Item, Receipt as ReceiptType } from "@/types/receipt";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-const Receipts = () => {
-  const { filteredData, isLoading } = useSearchContext();
+interface ReceiptsProps {
+  serverData: ReceiptType[];
+}
+
+const Receipts = ({ serverData }: ReceiptsProps) => {
+  console.log(serverData);
+  const { filteredReceiptData, isReceiptLoading, initializeReceipts } =
+    useSearchReceiptContext();
   const searchParams = useSearchParams();
   const [openReceiptId, setOpenReceiptId] = useState(null as number | null);
   const [addReceiptOpen, setAddReceiptOpen] = useState(false);
+
+  useEffect(() => {
+    if (serverData) {
+      console.log("redo");
+      initializeReceipts(serverData);
+    }
+  }, [serverData, initializeReceipts]);
 
   const toggleOpenReceipt = (
     receiptId: number | undefined,
@@ -40,8 +53,8 @@ const Receipts = () => {
   const sortedAndFilteredData = useMemo(() => {
     const filteredByStoreType =
       storeType === "all"
-        ? filteredData
-        : filteredData.filter(
+        ? filteredReceiptData
+        : filteredReceiptData.filter(
             (receipt) => receipt.type.toLocaleLowerCase() === storeType
           );
     const compareReceipts = (a: ReceiptType, b: ReceiptType) => {
@@ -68,61 +81,94 @@ const Receipts = () => {
       }
     };
     return filteredByStoreType.sort(compareReceipts);
-  }, [filteredData, storeType, sortField, sortOrder]);
+  }, [filteredReceiptData, storeType, sortField, sortOrder]);
 
-  if (isLoading) {
+  if (isReceiptLoading) {
     return <div>Loading...</div>;
   }
-  if (sortedAndFilteredData.length === 0 && !isLoading) {
+  if (sortedAndFilteredData.length === 0 && !isReceiptLoading) {
     return (
-      <div className="flex flex-col gap-6 justify-center items-center mt-10">
-        <Image
-          src="/receipt_b.png"
-          alt=""
-          width={30}
-          height={30}
-          className="object-cover "
-          style={{ objectFit: "cover", objectPosition: "center" }}
-        />
-        <p className="text-xl">No receipts found</p>
-        <button
-          className="border-[1px] bg-emerald-900 text-white border-emerald-900 py-2 px-10 text-sm rounded-md w-50"
-          onClick={() => setAddReceiptOpen(true)}
-        >
-          <p className="">Create Receipt</p>
-        </button>
-        {addReceiptOpen && (
-          <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
-        )}
-      </div>
+      <NoReceipts
+        setAddReceiptOpen={setAddReceiptOpen}
+        addReceiptOpen={addReceiptOpen}
+      />
     );
   }
 
-  return (
-    <div className="boxes">
-      {searchParams.get("expired") === "false" || !searchParams.get("expired")
-        ? sortedAndFilteredData
-            .filter((receipt: ReceiptType) => receipt.expired === false)
-            .map((receipt: ReceiptType) => (
-              <Receipt
-                key={receipt.id}
-                receipt={receipt}
-                onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
-                isOpen={openReceiptId === receipt.id}
-              />
-            ))
-        : sortedAndFilteredData
-            .filter((receipt: ReceiptType) => receipt.expired === true)
-            .map((receipt: ReceiptType) => (
-              <Receipt
-                key={receipt.id}
-                receipt={receipt}
-                onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
-                isOpen={openReceiptId === receipt.id}
-              />
-            ))}
-    </div>
-  );
+  if (searchParams.get("expired") === "false" || !searchParams.get("expired")) {
+    return sortedAndFilteredData.filter(
+      (receipt: ReceiptType) => receipt.expired === false
+    ).length === 0 ? (
+      <NoReceipts
+        setAddReceiptOpen={setAddReceiptOpen}
+        addReceiptOpen={addReceiptOpen}
+      />
+    ) : (
+      <div className="boxes">
+        {sortedAndFilteredData
+          .filter((receipt: ReceiptType) => receipt.expired === false)
+          .map((receipt: ReceiptType) => (
+            <Receipt
+              key={receipt.id}
+              receipt={receipt}
+              onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
+              isOpen={openReceiptId === receipt.id}
+            />
+          ))}
+      </div>
+    );
+  } else
+    return sortedAndFilteredData.filter(
+      (receipt: ReceiptType) => receipt.expired === true
+    ).length === 0 ? (
+      <NoReceipts
+        setAddReceiptOpen={setAddReceiptOpen}
+        addReceiptOpen={addReceiptOpen}
+      />
+    ) : (
+      <div className="boxes">
+        {sortedAndFilteredData
+          .filter((receipt: ReceiptType) => receipt.expired === true)
+          .map((receipt: ReceiptType) => (
+            <Receipt
+              key={receipt.id}
+              receipt={receipt}
+              onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
+              isOpen={openReceiptId === receipt.id}
+            />
+          ))}
+      </div>
+    );
 };
 
 export default Receipts;
+
+interface NoReceiptsProps {
+  setAddReceiptOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  addReceiptOpen: boolean;
+}
+
+const NoReceipts = ({ setAddReceiptOpen, addReceiptOpen }: NoReceiptsProps) => {
+  return (
+    <div className="flex flex-col gap-6 justify-center items-center mt-10">
+      <Image
+        src="/receipt_b.png"
+        alt=""
+        width={30}
+        height={30}
+        className="object-cover "
+        style={{ objectFit: "cover", objectPosition: "center" }}
+      />
+      <p className="text-xl">No receipts found</p>
+      <button
+        className="border-[1px] bg-emerald-900 text-white border-emerald-900 py-2 px-10 text-sm rounded-md w-50"
+        onClick={() => setAddReceiptOpen(true)}
+      >
+        <p className="">Create Receipt</p>
+      </button>
+      {addReceiptOpen && (
+        <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
+      )}
+    </div>
+  );
+};

@@ -35,6 +35,6 @@ export interface Item {
   character?: string;
   product_id?: string;
   receipt_id: number;
-  receipt?: Receipt;
+  receipt: Receipt;
   returned: boolean;
 }

@@ -57,16 +57,3 @@ export const getProjectById = unstable_cache(
   ["projects"],
   { tags: ["projects"], revalidate: 60 }
 );
-
-export const getUserByEmail = async (email: string) => {
-  if (!email) {
-    return null;
-  }
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  });
-
-  return user;
-};

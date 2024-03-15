@@ -14,5 +14,5 @@ export const createProject = async (name: string) => {
       created_at: new Date().toISOString(),
     },
   });
-  revalidateTag("projects");
+  revalidateTag(`projects_user_${userId}`);
 };

@@ -1,9 +1,13 @@
 "use server";
 import { deleteUploadThingImage } from "@/app/actions/uploadthing/deletePhoto";
 import prisma from "@/prisma/client";
+import { authOptions } from "@/utils/auth";
+import { getServerSession } from "next-auth";
 import { revalidateTag } from "next/cache";
 
 export const deleteReceipt = async (receiptId: number) => {
+  const session = await getServerSession(authOptions);
+  const userId = parseInt(session?.user?.id as string);
   const receipt = await prisma.receipt.findUnique({
     where: { id: receiptId },
     select: {
@@ -36,6 +40,5 @@ export const deleteReceipt = async (receiptId: number) => {
       id: receiptId,
     },
   });
-  revalidateTag("projects");
-  revalidateTag("receipts");
+  revalidateTag(`projects_user_${userId}`);
 };

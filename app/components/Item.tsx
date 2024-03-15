@@ -4,7 +4,7 @@ import RegularButton from "@/app/components/buttons/RegularButton";
 import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
 import Shirt from "@/app/components/placeholderImages/Shirt";
 import { TruncateText } from "@/app/components/text/Truncate";
-import { Item as ItemType, Receipt } from "@/types/receipt";
+import { Item as ItemType } from "@/types/fetchReceipts";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,7 +13,7 @@ import path from "path";
 import React, { useState } from "react";
 
 interface Props {
-  item: ItemType;
+  item: any;
   isOpen: boolean;
   onToggleOpen: (event: React.MouseEvent<HTMLDivElement>) => void;
 }

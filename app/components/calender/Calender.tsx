@@ -6,7 +6,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 import { TooltipComponent } from "@/app/components/tooltips/ToolTip";
-import { Receipt } from "@/types/receipt";
+import { Receipt } from "@/types/fetchReceipts";
 
 interface Event {
   title: string;

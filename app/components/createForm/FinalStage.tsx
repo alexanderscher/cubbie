@@ -419,7 +419,6 @@ const ReceiptItems = ({
               <input
                 type="file"
                 onChange={(e) => {
-                  console.log("File input changed");
                   if (e.target.files && e.target.files[0]) {
                     const file = e.target.files[0];
                     if (!file.type.match("image.*")) {
@@ -800,7 +799,6 @@ const AddItemModal = ({
                 <input
                   type="file"
                   onChange={(e) => {
-                    console.log("File input changed");
                     if (e.target.files && e.target.files[0]) {
                       const file = e.target.files[0];
                       if (!file.type.match("image.*")) {

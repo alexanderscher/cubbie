@@ -1,8 +1,7 @@
 "use client";
 import { createProject } from "@/app/actions/projects/createProject";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { useSearchProjectContext } from "@/app/components/context/SearchProjectContext";
-import { useSessionContext } from "@/app/components/context/SessionContext";
+
 import { useState } from "react";
 
 interface AddProjectModalProps {
@@ -10,8 +9,6 @@ interface AddProjectModalProps {
 }
 
 export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
-  const { setProjectRefresh } = useSearchProjectContext();
-
   const [project, setProject] = useState("");
   const [error, setError] = useState("");
 
@@ -21,7 +18,7 @@ export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
     }
     if (project !== "") {
       await createProject(project);
-      setProjectRefresh(true);
+
       setAddProjectOpen(false);
     }
   };

@@ -1,6 +1,7 @@
 "use client";
+import { deleteReceipt } from "@/app/actions/receipts/deleteReceipt";
+import { moveReceipt } from "@/app/actions/receipts/moveReceipt";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { useSearchContext } from "@/app/components/context/SearchContext";
 import { AddItem } from "@/app/components/item/AddItem";
 import { TruncateText } from "@/app/components/text/Truncate";
 import { getProjects } from "@/app/lib/db";
@@ -88,13 +89,18 @@ const OptionsModal = ({ receipt }: OptionsModalProps) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
-  const { setIsReceiptRefreshed } = useSearchContext();
   return (
-    <div className="absolute bg-white shadow-1 -right-4 top-6 rounded-md  w-[200px] z-[200]">
+    <div
+      className="absolute bg-white shadow-1 -right-4 top-6 rounded-md  w-[200px] z-[200]"
+      onClick={(e) => {
+        e.preventDefault();
+      }}
+    >
       <div className="p-4 rounded text-sm flex flex-col gap-2">
         <div
           className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 cursor-pointer"
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault();
             setIsAddOpen(true);
           }}
         >
@@ -104,7 +110,13 @@ const OptionsModal = ({ receipt }: OptionsModalProps) => {
           </div>
         </div>
         <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 hover:cursor-pointer">
-          <div className="flex gap-2" onClick={() => setIsOpen(true)}>
+          <div
+            className="flex gap-2"
+            onClick={(e) => {
+              e.preventDefault();
+              setIsOpen(true);
+            }}
+          >
             <Image src={"/move.png"} width={20} height={20} alt=""></Image>
             <p>Move</p>
           </div>
@@ -121,7 +133,8 @@ const OptionsModal = ({ receipt }: OptionsModalProps) => {
         <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2">
           <div
             className="flex gap-2 cursor-pointer"
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               setIsDeleteOpen(true);
             }}
           >
@@ -131,13 +144,7 @@ const OptionsModal = ({ receipt }: OptionsModalProps) => {
         </div>
       </div>
       {isOpen && <MoveModal setIsOpen={setIsOpen} receipt={receipt} />}
-      {isAddOpen && (
-        <AddItem
-          setIsAddOpen={setIsAddOpen}
-          id={receipt.id}
-          setRefresh={setIsReceiptRefreshed}
-        />
-      )}
+      {isAddOpen && <AddItem setIsAddOpen={setIsAddOpen} id={receipt.id} />}
       {isDeleteOpen && (
         <DeleteModal setDeleteOpen={setIsDeleteOpen} receipt={receipt} />
       )}
@@ -155,7 +162,6 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState("");
-  const { setIsReceiptRefreshed } = useSearchContext();
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -166,27 +172,15 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
     fetchProjects();
   }, []);
 
-  const moveReceipt = async () => {
-    const res = await fetch(`/api/receipt/${receipt.id}/move`, {
-      method: "PUT",
-      body: JSON.stringify({
-        projectId: parseInt(selectedProject),
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await res.json();
-    setError(data);
-  };
-
   const handleSubmit = async () => {
     if (selectedProject === "") {
       setError("Please select a project");
     }
     if (selectedProject !== "") {
-      await moveReceipt();
-      setIsReceiptRefreshed(true);
+      await moveReceipt({
+        id: receipt.id,
+        projectId: parseInt(selectedProject),
+      });
       setIsOpen(false);
     }
   };
@@ -206,7 +200,10 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
     <div
       id="modal-overlay"
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]"
-      onClick={handleOverlayClick}
+      onClick={(e) => {
+        e.preventDefault();
+        handleOverlayClick(e);
+      }}
     >
       <div className="bg-white rounded shadow-xl m-4 max-w-md w-full">
         <div className="flex justify-between items-center border-b border-gray-200 px-5 py-4 bg-slate-100 rounded-t-lg">
@@ -278,23 +275,8 @@ interface DeleteModalProps {
 }
 
 const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
-  const [uploadError, setUploadError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const { setIsReceiptRefreshed } = useSearchContext();
-
-  const deleteReceipt = async () => {
-    const res = await fetch(`/api/receipt/${receipt.id}`, {
-      method: "DELETE",
-    });
-    const data = await res.json();
-    if (data.error) {
-      setUploadError(data.error);
-      setLoading(false);
-    } else {
-      setIsReceiptRefreshed(true);
-      setUploadError("");
-      setLoading(false);
-    }
+  const deleteMethod = async () => {
+    await deleteReceipt(receipt.id);
   };
 
   return (
@@ -313,7 +295,7 @@ const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
             Cancel
           </RegularButton>
           <RegularButton
-            handleClick={deleteReceipt}
+            handleClick={deleteMethod}
             styles="bg-emerald-900 text-white text-base font-medium rounded-full w-auto border-[1px] border-emerald-900 text-xs"
           >
             Confirm

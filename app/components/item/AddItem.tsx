@@ -8,14 +8,9 @@ import * as Yup from "yup";
 interface AddItemModalProps {
   setIsAddOpen: (value: boolean) => void;
   id: number;
-  setRefresh: (value: boolean) => void;
 }
 
-export const AddItem = ({
-  setIsAddOpen,
-  id,
-  setRefresh,
-}: AddItemModalProps) => {
+export const AddItem = ({ setIsAddOpen, id }: AddItemModalProps) => {
   const [newItem, setNewItem] = useState({
     description: "",
     price: "",
@@ -60,7 +55,7 @@ export const AddItem = ({
       await itemSchema.validate(newItem, { abortEarly: false });
       await addItemToReceipt();
       setIsAddOpen(false);
-      setRefresh(true);
+
       setNewItem({
         description: "",
         price: "",
@@ -99,7 +94,10 @@ export const AddItem = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]">
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]"
+      onClick={(e) => e.preventDefault()}
+    >
       <div className="bg-white rounded shadow-xl m-4 max-w-md w-full">
         <div className="flex justify-between items-center border-b border-gray-200 px-5 py-4 bg-slate-100 rounded-t-lg">
           <h3 className="text-lg text-emerald-900">Add Item</h3>

@@ -1,18 +1,27 @@
 import Receipts from "@/app/components/Home/Receipts";
-
-import { SearchProvider } from "@/app/components/context/SearchContext";
+import { SearchReceiptProvider } from "@/app/components/context/SearchReceiptContext";
 import Header from "@/app/components/headers/Header";
+import { getReceipts } from "@/app/lib/db";
+import { Receipt } from "@/types/receipt";
 import { Suspense } from "react";
 
-export default function ReceiptPage() {
+const fetchReceipts = async () => {
+  const receipts = await getReceipts();
+
+  return receipts as Receipt[];
+};
+
+export default async function ReceiptPage() {
+  const receipts = await fetchReceipts();
+
   return (
     <main className="flex flex-col pb-[400px]">
-      <SearchProvider>
+      <SearchReceiptProvider>
         <Suspense fallback={<div>Loading</div>}>
           <Header type="Receipts" />
-          <Receipts />
+          <Receipts serverData={receipts} />
         </Suspense>
-      </SearchProvider>
+      </SearchReceiptProvider>
     </main>
   );
 }

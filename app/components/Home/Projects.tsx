@@ -24,7 +24,6 @@ const Projects = ({ serverData }: Props) => {
 
   useEffect(() => {
     if (serverData) {
-      console.log("redo");
       initializeProjects(serverData);
     }
   }, [serverData, initializeProjects]);
@@ -68,7 +67,7 @@ const Projects = ({ serverData }: Props) => {
 
   const filteredData = useMemo(() => {
     const compareProjects = (a: ProjectType, b: ProjectType) => {
-      if (sortField === "price") {
+      if (sortField === "price" && a.receipts && b.receipts) {
         const totalPriceA = getTotalPrice(a.receipts);
         const totalPriceB = getTotalPrice(b.receipts);
         return sortOrder === "asc"
@@ -163,19 +162,20 @@ const Project = ({ project, isOpen, onToggleOpen }: ProjectProps) => {
 
           <div className="flex gap-1 text-sm">
             <p className=" ">
-              {project.receipts.length}{" "}
-              {project.receipts.length === 1 ? "receipt" : "receipts"} |
+              {project.receipts?.length}{" "}
+              {project.receipts?.length === 1 ? "receipt" : "receipts"} |
             </p>
             <p className=" ">
-              {formatCurrency(
-                project.receipts.reduce((acc, receipt) => {
-                  const receiptTotal = receipt.items.reduce(
-                    (receiptAcc, item) => receiptAcc + item.price,
-                    0
-                  );
-                  return acc + receiptTotal;
-                }, 0)
-              )}
+              {project.receipts?.length &&
+                formatCurrency(
+                  project.receipts.reduce((acc, receipt) => {
+                    const receiptTotal = receipt.items.reduce(
+                      (receiptAcc, item) => receiptAcc + item.price,
+                      0
+                    );
+                    return acc + receiptTotal;
+                  }, 0)
+                )}
             </p>
           </div>
 
@@ -195,7 +195,6 @@ interface OptionsModalProps {
 
 const OptionsModal = ({ project }: OptionsModalProps) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const { setProjectRefresh } = useSearchProjectContext();
   const [edit, setEdit] = useState(false);
   const [isAddOpen, setAddReceiptOpen] = useState(false);
 

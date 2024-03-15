@@ -8,6 +8,8 @@ export const getProjects = unstable_cache(
   async () => {
     const session = await getServerSession(authOptions);
     const userId = parseInt(session?.user?.id as string);
+    console.log(session);
+
     const projects = await prisma.project.findMany({
       where: { userId },
       orderBy: {
@@ -97,3 +99,16 @@ export const getReceiptById = unstable_cache(
   ["receipts"],
   { tags: ["receipts"], revalidate: 60 }
 );
+
+export const getUserByEmail = async (email: string) => {
+  if (!email) {
+    return null;
+  }
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  return user;
+};

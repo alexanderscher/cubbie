@@ -1,5 +1,5 @@
 import { ProjectId } from "@/app/components/project/ProjectId";
-import { getProjectById } from "@/app/lib/db";
+import { getProjectById } from "@/app/lib/projectsDB";
 import { Project } from "@/types/receipt";
 
 const fetchProject = async (id: string) => {

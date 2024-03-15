@@ -4,47 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { compare } from "bcryptjs";
 
 import prisma from "@/prisma/client";
-import { JWT } from "next-auth/jwt";
-import { get } from "http";
-import { getUserByEmail } from "@/app/lib/db";
-
-interface MyUser extends User {
-  admin: boolean;
-}
-
-async function getDatabaseId(user: JWT) {
-  try {
-    if (user.email) {
-      const queryResult = await prisma.user.findUnique({
-        where: {
-          email: user.email.toLowerCase(),
-        },
-        select: {
-          id: true,
-
-          // stripeCustomerId: true,
-          // subscriptionID: true,
-          // isActive: true,
-        },
-      });
-
-      if (queryResult) {
-        return [
-          queryResult.id.toString(),
-          // queryResult.admin,
-          // queryResult.stripeCustomerId,
-          // queryResult.subscriptionID,
-          // queryResult.isActive,
-        ];
-      }
-    } else {
-      return null;
-    }
-  } catch (error) {
-    console.error("Error fetching user ID from the database:", error);
-    return null;
-  }
-}
+import { getUserByEmail } from "@/app/lib/userDb";
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -117,8 +77,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     jwt: async ({ token, user }) => {
       if (user) {
-        const myUser: MyUser = user as MyUser;
-        const newUser = await getUserByEmail(myUser.email as string);
+        const newUser = await getUserByEmail(user.email as string);
 
         return { ...token, id: newUser?.id };
       }

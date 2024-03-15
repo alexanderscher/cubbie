@@ -1,5 +1,5 @@
 import Calender from "@/app/components/calender/Calender";
-import { getReceipts } from "@/app/lib/db";
+import { getReceipts } from "@/app/lib/receiptsDB";
 import { Receipt } from "@/types/fetchReceipts";
 import React from "react";
 

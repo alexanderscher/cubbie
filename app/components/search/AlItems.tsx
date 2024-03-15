@@ -1,7 +1,9 @@
 "use client";
 import { useSearchBarContext } from "@/app/components/context/SearchBarContext";
 import { BarcodeScanner } from "@/app/components/createForm/barcode/BarcodeScanner";
-import { getProjects, getReceipts } from "@/app/lib/db";
+import { getProjects } from "@/app/lib/projectsDB";
+import { getReceipts } from "@/app/lib/receiptsDB";
+
 import { Receipt } from "@/types/fetchReceipts";
 import { Project } from "@/types/receipt";
 import Image from "next/image";

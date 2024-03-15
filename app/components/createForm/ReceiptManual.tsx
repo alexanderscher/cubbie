@@ -2,7 +2,7 @@
 import ProjectSelect from "@/app/components/createForm/ProjectSelect";
 import { TooltipWithHelperIcon } from "@/app/components/tooltips/TooltipWithHelperIcon";
 import styles from "@/app/create/upload.module.css";
-import { getProjects } from "@/app/lib/db";
+import { getProjects } from "@/app/lib/projectsDB";
 import { ReceiptStoreStage } from "@/constants/form";
 import { Project } from "@/types/receipt";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";

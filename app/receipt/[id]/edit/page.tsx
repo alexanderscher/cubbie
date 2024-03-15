@@ -1,5 +1,5 @@
 import ReceiptIdEdit from "@/app/components/receiptComponents/ReceiptIdEdit";
-import { getReceiptById } from "@/app/lib/db";
+import { getReceiptById } from "@/app/lib/projectsDB";
 import { Receipt } from "@/types/fetchReceipts";
 import { unstable_noStore } from "next/cache";
 import React from "react";

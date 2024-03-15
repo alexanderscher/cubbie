@@ -4,7 +4,7 @@ import { moveReceipt } from "@/app/actions/receipts/moveReceipt";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { AddItem } from "@/app/components/item/AddItem";
 import { TruncateText } from "@/app/components/text/Truncate";
-import { getProjects } from "@/app/lib/db";
+import { getProjects } from "@/app/lib/projectsDB";
 import { Item, Receipt as ReceiptType } from "@/types/fetchReceipts";
 import { Project } from "@/types/receipt";
 import { formatDateToMMDDYY } from "@/utils/Date";

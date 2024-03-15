@@ -5,6 +5,8 @@ import { compare } from "bcryptjs";
 
 import prisma from "@/prisma/client";
 import { JWT } from "next-auth/jwt";
+import { get } from "http";
+import { getUserByEmail } from "@/app/lib/db";
 
 interface MyUser extends User {
   admin: boolean;
@@ -82,7 +84,6 @@ export const authOptions: NextAuthOptions = {
           select: {
             id: true,
             email: true,
-
             password: true,
           },
         });
@@ -114,18 +115,21 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    jwt: ({ token, user }) => {
+    jwt: async ({ token, user }) => {
       if (user) {
         const myUser: MyUser = user as MyUser;
+        const newUser = await getUserByEmail(myUser.email as string);
 
-        return { ...token, id: user.id };
+        return { ...token, id: newUser?.id };
       }
+
       return token;
     },
     session: async ({ session, token }) => {
       if (session.user) {
         session.user.id = token.id as string;
       }
+      console.log("session", session);
 
       return session;
     },

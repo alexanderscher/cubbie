@@ -2,24 +2,10 @@
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Item from "@/app/components/Item";
-import { Receipt } from "@/types/receipt";
+import { Item as ItemType } from "@/types/receipt";
 import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
 import Image from "next/image";
 import { CreateReceipt } from "@/app/components/receiptComponents/CreateReceipt";
-
-export interface ItemType {
-  id: number;
-  description: string;
-  photo_url?: string;
-  photo_key?: string;
-  price: number;
-  barcode?: string;
-  character?: string;
-  product_id?: string;
-  receipt_id: number;
-  receipt?: Receipt;
-  returned: boolean;
-}
 
 const Items = () => {
   const { filteredItemData, isItemLoading } = useSearchItemContext();

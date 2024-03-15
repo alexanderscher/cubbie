@@ -3,8 +3,6 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   try {
-    const currentDate = new Date();
-
     const receipts = await prisma.receipt.findMany({
       orderBy: {
         created_at: "desc",
@@ -14,6 +12,8 @@ export async function GET(request: Request) {
         project: true,
       },
     });
+
+    const currentDate = new Date();
 
     const updatePromises = receipts.map((receipt) => {
       const isExpired = new Date(receipt.return_date) < currentDate;

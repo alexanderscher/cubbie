@@ -29,6 +29,20 @@ export const getReceipts = async () => {
         },
       });
 
+      // const currentDate = new Date();
+
+      // const updatePromises = receipts.map((receipt) => {
+      //   const isExpired = new Date(receipt.return_date) < currentDate;
+      //   if (receipt.expired !== isExpired) {
+      //     return prisma.receipt.update({
+      //       where: { id: receipt.id },
+      //       data: { expired: isExpired },
+      //     });
+      //   }
+      // });
+
+      // const updated = await Promise.all(updatePromises);
+
       return receipts;
     },
     dynamicKey,

@@ -3,21 +3,18 @@ import RegularButton from "@/app/components/buttons/RegularButton";
 import { EditProject } from "@/app/components/project/EditProject";
 import { CreateReceipt } from "@/app/components/receiptComponents/CreateReceipt";
 import Receipt from "@/app/components/receiptComponents/Receipt";
-import {
-  Project as ProjectType,
-  Receipt as ReceiptType,
-} from "@/types/receipt";
+import { Project as ProjectType } from "@/types/receipt";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 interface ProjectIdProps {
   project: ProjectType;
 }
 
 export const ProjectId = ({ project }: ProjectIdProps) => {
+  console.log(project);
   const [edit, setEdit] = useState(false);
   const [isAddOpen, setAddReceiptOpen] = useState(false);
 
@@ -96,7 +93,7 @@ export const ProjectId = ({ project }: ProjectIdProps) => {
           </div>
         )}
         <div className="boxes">
-          {project?.receipts?.map((receipt: ReceiptType) => (
+          {project.receipts.map((receipt) => (
             <Receipt
               key={receipt.id}
               receipt={receipt}

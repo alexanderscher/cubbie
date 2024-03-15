@@ -1,6 +1,7 @@
 import ReceiptId from "@/app/components/receiptComponents/ReceiptId";
 import { getReceiptById } from "@/app/lib/db";
-import { Receipt } from "@/types/receipt";
+import { Receipt } from "@/types/fetchReceipts";
+
 import React from "react";
 
 const fetchReceipt = async (id: string) => {

@@ -1,14 +1,15 @@
 "use client";
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { Item, Project, Receipt } from "@/types/receipt";
+import { Item, Project } from "@/types/receipt";
+import { Receipt } from "@/types/fetchReceipts";
 
 interface SearchBarContextType {
   searchBarOpen: boolean;
   setSearchBarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   searchInput: string;
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
-  filteredItems: Item[];
-  setFilteredItems: React.Dispatch<React.SetStateAction<Item[]>>;
+  filteredItems: any[];
+  setFilteredItems: React.Dispatch<React.SetStateAction<any[]>>;
   filteredReceipts: Receipt[];
   setFilteredReceipts: React.Dispatch<React.SetStateAction<Receipt[]>>;
   filteredProjects: Project[];
@@ -39,7 +40,7 @@ export const SearchBarContextProvider: React.FC<SearchBarProviderProps> = ({
 }) => {
   const [searchBarOpen, setSearchBarOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-  const [filteredItems, setFilteredItems] = useState<Item[]>([]);
+  const [filteredItems, setFilteredItems] = useState<any[]>([]);
   const [filteredReceipts, setFilteredReceipts] = useState<Receipt[]>([]);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
 

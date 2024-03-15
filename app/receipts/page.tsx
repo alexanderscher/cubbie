@@ -1,7 +1,7 @@
 import Receipts from "@/app/components/Home/Receipts";
 import { SearchReceiptProvider } from "@/app/components/context/SearchReceiptContext";
 import Header from "@/app/components/headers/Header";
-import { getReceipts } from "@/app/lib/db";
+import { getReceipts } from "@/app/lib/receiptsDB";
 import { Receipt } from "@/types/fetchReceipts";
 
 import { Suspense } from "react";

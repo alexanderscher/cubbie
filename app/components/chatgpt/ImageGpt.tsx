@@ -2,7 +2,7 @@
 import RegularButton from "@/app/components/buttons/RegularButton";
 import ProjectSelect from "@/app/components/createForm/ProjectSelect";
 import { TooltipWithHelperIcon } from "@/app/components/tooltips/TooltipWithHelperIcon";
-import { getProjects } from "@/app/lib/db";
+import { getProjects } from "@/app/lib/projectsDB";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
 import { Project } from "@/types/receipt";

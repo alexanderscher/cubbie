@@ -2,7 +2,7 @@
 import { useSearchBarContext } from "@/app/components/context/SearchBarContext";
 import { BarcodeScanner } from "@/app/components/createForm/barcode/BarcodeScanner";
 import { getProjects, getReceipts } from "@/app/lib/db";
-import { Item, Project, Receipt } from "@/types/receipt";
+import { GetReceipt, Item, Project, Receipt } from "@/types/receipt";
 import Image from "next/image";
 import Link from "next/link";
 import React, { ChangeEvent, useEffect, useState } from "react";
@@ -19,7 +19,7 @@ function SearchAllItems() {
     setFilteredProjects,
   } = useSearchBarContext();
 
-  const [data, setData] = useState<Receipt[]>([]);
+  const [data, setData] = useState<GetReceipt[]>([]);
   const [projectData, setProjectData] = useState<Project[]>([]);
   const [showScanner, setShowScanner] = useState(false);
   const [barcodeValue, setBarcodeValue] = useState("");
@@ -46,9 +46,8 @@ function SearchAllItems() {
   useEffect(() => {
     const fetchReceipts = async () => {
       const data = await getReceipts();
-      console.log(data);
 
-      setData(data as Receipt[]);
+      setData(data as GetReceipt[]);
     };
 
     fetchReceipts();

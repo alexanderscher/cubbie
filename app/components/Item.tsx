@@ -4,7 +4,7 @@ import RegularButton from "@/app/components/buttons/RegularButton";
 import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
 import Shirt from "@/app/components/placeholderImages/Shirt";
 import { TruncateText } from "@/app/components/text/Truncate";
-import { Receipt } from "@/types/receipt";
+import { Item as ItemType, Receipt } from "@/types/receipt";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,22 +12,8 @@ import { usePathname } from "next/navigation";
 import path from "path";
 import React, { useState } from "react";
 
-export interface Item {
-  id: number;
-  description: string;
-  photo_url?: string;
-  photo_key?: string;
-  price: number;
-  barcode?: string;
-  character?: string;
-  product_id?: string;
-  receipt_id: number;
-  receipt: Receipt;
-  returned: boolean;
-}
-
 interface Props {
-  item: Item;
+  item: ItemType;
   isOpen: boolean;
   onToggleOpen: (event: React.MouseEvent<HTMLDivElement>) => void;
 }
@@ -160,7 +146,7 @@ export default Item;
 
 interface OptionsModalProps {
   isOpen: boolean;
-  item: Item;
+  item: ItemType;
 }
 
 const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
@@ -263,7 +249,7 @@ const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
 interface DeleteModalProps {
   deleteOpen: boolean;
   setDeleteOpen: (value: boolean) => void;
-  item: Item;
+  item: ItemType;
   deleteItem: () => void;
 }
 

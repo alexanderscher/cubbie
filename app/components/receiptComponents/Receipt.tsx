@@ -5,7 +5,8 @@ import RegularButton from "@/app/components/buttons/RegularButton";
 import { AddItem } from "@/app/components/item/AddItem";
 import { TruncateText } from "@/app/components/text/Truncate";
 import { getProjects } from "@/app/lib/db";
-import { Item, Project, Receipt as ReceiptType } from "@/types/receipt";
+import { Item, Receipt as ReceiptType } from "@/types/fetchReceipts";
+import { Project } from "@/types/receipt";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
@@ -19,6 +20,9 @@ interface ReceiptProps {
 }
 
 const Receipt = ({ receipt, onToggleOpen, isOpen }: ReceiptProps) => {
+  const total_amount = receipt.items.reduce((acc: number, curr: Item) => {
+    return acc + curr.price;
+  }, 0);
   return (
     <div className="box xs:pb-6 pb-4 relative ">
       <Link href={`/receipt/${receipt.id}`}>
@@ -63,13 +67,7 @@ const Receipt = ({ receipt, onToggleOpen, isOpen }: ReceiptProps) => {
                 {receipt.items.length}{" "}
                 {receipt.items.length === 1 ? "item" : "items"} |
               </p>
-              <p className=" ">
-                {formatCurrency(
-                  receipt.items.reduce((acc: number, curr: Item) => {
-                    return acc + curr.price;
-                  }, 0)
-                )}
-              </p>
+              <p className=" ">{formatCurrency(total_amount)}</p>
             </div>
             {receipt.expired && <p className="text-orange-600">Expired</p>}
           </div>

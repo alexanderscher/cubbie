@@ -25,6 +25,25 @@ export interface Receipt {
   expired: boolean;
 }
 
+export interface GetReceipt {
+  id: number;
+  type: string;
+  store: string;
+  card: string;
+  tracking_number: string;
+  purchase_date: Date;
+  days_until_return: number;
+  return_date: Date;
+  receipt_image_url: string;
+  receipt_image_key: string;
+  items: Item[];
+  project: Project;
+  memo: boolean;
+  created_at: Date;
+  asset_amount: number;
+  expired: boolean;
+}
+
 export interface Item {
   id: number;
   description: string;
@@ -37,4 +56,5 @@ export interface Item {
   receipt_id: number;
   receipt: Receipt;
   returned: boolean;
+  created_at: Date;
 }

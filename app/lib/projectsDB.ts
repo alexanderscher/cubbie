@@ -34,26 +34,30 @@ export const getProjects = async () => {
   )(userId);
 };
 
-export const getProjectById = unstable_cache(
-  async (id: string) => {
-    const session = await getServerSession(authOptions);
-    const userId = parseInt(session?.user?.id as string);
-    const project = await prisma.project.findUnique({
-      where: {
-        userId,
-        id: parseInt(id),
-      },
-      include: {
-        receipts: {
-          include: {
-            items: true,
+export const getProjectById = async (id: string) => {
+  const session = await getServerSession(authOptions);
+  const userId = parseInt(session?.user?.id as string);
+  const dynamicKey = getDynamicCacheKey(userId);
+
+  return unstable_cache(
+    async (userId) => {
+      const project = await prisma.project.findUnique({
+        where: {
+          userId,
+          id: parseInt(id),
+        },
+        include: {
+          receipts: {
+            include: {
+              items: true,
+            },
           },
         },
-      },
-    });
+      });
 
-    return project;
-  },
-  ["projects"],
-  { tags: ["projects"], revalidate: 60 }
-);
+      return project;
+    },
+    dynamicKey,
+    { tags: dynamicKey, revalidate: 60 }
+  )(userId);
+};

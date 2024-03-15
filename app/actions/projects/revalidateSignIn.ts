@@ -8,5 +8,5 @@ export const revalidate = async (name: string) => {
   const session = await getServerSession(authOptions);
   const userId = parseInt(session?.user?.id as string);
 
-  revalidateTag("projects");
+  revalidateTag(`projects_user_${userId}`);
 };

@@ -2,6 +2,8 @@
 import { deleteUploadThingImage } from "@/app/actions/uploadthing/deletePhoto";
 import { handleUpload } from "@/app/actions/uploadthing/uploadPhoto";
 import prisma from "@/prisma/client";
+import { authOptions } from "@/utils/auth";
+import { getServerSession } from "next-auth";
 import { revalidateTag } from "next/cache";
 
 interface ExtendedReceipt {
@@ -22,6 +24,8 @@ export const editReceipt = async (params: {
   id: string;
   values: ExtendedReceipt;
 }) => {
+  const session = await getServerSession(authOptions);
+  const userId = parseInt(session?.user?.id as string);
   const {
     type,
     store,
@@ -75,6 +79,5 @@ export const editReceipt = async (params: {
     },
   });
 
-  revalidateTag("receipts");
-  revalidateTag("projects");
+  revalidateTag(`projects_user_${userId}`);
 };

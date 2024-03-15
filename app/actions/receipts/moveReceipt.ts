@@ -3,7 +3,7 @@
 import prisma from "@/prisma/client";
 import { authOptions } from "@/utils/auth";
 import { getServerSession } from "next-auth/next";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export const moveReceipt = async (params: {
   id: number;
@@ -30,6 +30,5 @@ export const moveReceipt = async (params: {
       project_id: params.projectId,
     },
   });
-  revalidateTag("projects");
-  revalidateTag("receipts");
+  revalidateTag(`projects_user_${userId}`);
 };

@@ -59,7 +59,7 @@ export const editReceipt = async (params: {
     await deleteUploadThingImage(receipt_image_key);
   }
 
-  const updatedReceipt = await prisma.receipt.update({
+  await prisma.receipt.update({
     where: {
       id: parseInt(params.id),
     },
@@ -76,6 +76,7 @@ export const editReceipt = async (params: {
       purchase_date: new Date(purchase_date).toISOString(),
       return_date: new Date(return_date).toISOString(),
       asset_amount: asset_amount,
+      expired: new Date(return_date) < new Date(),
     },
   });
 

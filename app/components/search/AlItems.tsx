@@ -4,8 +4,8 @@ import { BarcodeScanner } from "@/app/components/createForm/barcode/BarcodeScann
 import { getProjects } from "@/app/lib/projectsDB";
 import { getReceipts } from "@/app/lib/receiptsDB";
 
-import { Receipt } from "@/types/fetchReceipts";
-import { Project } from "@/types/receipt";
+import { Receipt } from "@/types/receiptTypes";
+import { Project } from "@/types/receiptTypes";
 import Image from "next/image";
 import Link from "next/link";
 import React, { ChangeEvent, useEffect, useState } from "react";
@@ -47,13 +47,13 @@ function SearchAllItems() {
     fetchProjects();
   }, []);
   useEffect(() => {
-    const fetchReceipts = async () => {
+    const receipt = async () => {
       const data = await getReceipts();
 
       setData(data as Receipt[]);
     };
 
-    fetchReceipts();
+    receipt();
   }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

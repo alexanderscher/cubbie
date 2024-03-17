@@ -4,7 +4,7 @@ import RegularButton from "@/app/components/buttons/RegularButton";
 import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
 import Shirt from "@/app/components/placeholderImages/Shirt";
 import { TruncateText } from "@/app/components/text/Truncate";
-import { Item as ItemType } from "@/types/fetchReceipts";
+import { Item as ItemType } from "@/types/receiptTypes";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";

@@ -1,4 +1,4 @@
-import { Project } from "@/types/receipt";
+import { Project } from "@/types/receiptTypes";
 import React from "react";
 
 interface Props {

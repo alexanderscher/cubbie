@@ -3,7 +3,7 @@ import RegularButton from "@/app/components/buttons/RegularButton";
 import { EditProject } from "@/app/components/project/EditProject";
 import { CreateReceipt } from "@/app/components/receiptComponents/CreateReceipt";
 import Receipt from "@/app/components/receiptComponents/Receipt";
-import { Project as ProjectType } from "@/types/receipt";
+import { Project as ProjectType } from "@/types/receiptTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import Image from "next/image";
 import Link from "next/link";

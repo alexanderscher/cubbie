@@ -1,6 +1,6 @@
 import ReceiptId from "@/app/components/receiptComponents/ReceiptId";
 import { getReceiptById } from "@/app/lib/receiptsDB";
-import { Receipt } from "@/types/fetchReceipts";
+import { Receipt } from "@/types/receiptTypes";
 
 import React from "react";
 

@@ -2,7 +2,7 @@ import Projects from "@/app/components/Home/Projects";
 import { SearchProjectProvider } from "@/app/components/context/SearchProjectContext";
 import Header from "@/app/components/headers/Header";
 import { getProjects } from "@/app/lib/projectsDB";
-import { Project } from "@/types/receipt";
+import { Project } from "@/types/receiptTypes";
 
 import { Suspense } from "react";
 

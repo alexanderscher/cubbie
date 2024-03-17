@@ -2,7 +2,7 @@
 import { editProject } from "@/app/actions/projects/editProject";
 import RegularButton from "@/app/components/buttons/RegularButton";
 
-import { Project as ProjectType } from "@/types/receipt";
+import { Project as ProjectType } from "@/types/receiptTypes";
 
 import React, { useState } from "react";
 

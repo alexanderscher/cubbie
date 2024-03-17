@@ -8,7 +8,7 @@ import React, {
   useCallback,
 } from "react";
 import { usePathname } from "next/navigation";
-import { Project } from "@/types/receipt";
+import { Project } from "@/types/receiptTypes";
 
 interface SearchProjectContextType {
   projects: Project[];

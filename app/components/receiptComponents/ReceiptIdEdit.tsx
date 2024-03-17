@@ -19,7 +19,7 @@ import ImageModal from "@/app/components/images/ImageModal";
 import Item from "@/app/components/Item";
 import { convertHeic } from "@/utils/media";
 import { editReceipt } from "@/app/actions/receipts/editReceipt";
-import { Item as ItemType, Receipt } from "@/types/fetchReceipts";
+import { Item as ItemType, Receipt } from "@/types/receiptTypes";
 type ExtendedReceiptType = Receipt & {
   edit_image: string;
 };
@@ -109,23 +109,6 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
           await editReceipt({ id: id[0], values });
           setLoading(false);
           router.push(`/receipt/${id}`);
-          // const res = await fetch(`/api/receipt/${id}`, {
-          //   method: "PUT",
-          //   body: JSON.stringify(values),
-          //   headers: {
-          //     "Content-Type": "application/json",
-          //   },
-          // });
-
-          // const data = await res.json();
-          // if (data.error) {
-          //   setUploadError(data.error);
-          //   setLoading(false);
-          // } else {
-          //   setUploadError("");
-          //   setLoading(false);
-          //   router.push(`/receipt/${id}`);
-          // }
         };
 
         update();

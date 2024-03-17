@@ -5,8 +5,8 @@ import { useSearchProjectContext } from "@/app/components/context/SearchProjectC
 import { CreateProject } from "@/app/components/project/CreateProject";
 import { EditProject } from "@/app/components/project/EditProject";
 import { CreateReceipt } from "@/app/components/receiptComponents/CreateReceipt";
-import { Receipt } from "@/types/fetchReceipts";
-import { Project as ProjectType } from "@/types/receipt";
+import { Receipt } from "@/types/receiptTypes";
+import { Project as ProjectType } from "@/types/receiptTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 

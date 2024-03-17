@@ -1,10 +1,9 @@
 "use client";
 import styles from "../itemID.module.css";
 import { useParams, useRouter } from "next/navigation";
-import { Item as ItemType } from "@/types/receipt";
+import { Item as ItemType } from "@/types/receiptTypes";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { formatDateToMMDDYY } from "@/utils/Date";
 import Image from "next/image";
 import { Formik } from "formik";
 import { EDIT_ITEM_SCHEMA } from "@/utils/editValidation";
@@ -18,6 +17,7 @@ import { convertHeic } from "@/utils/media";
 
 type ExtendedItemType = ItemType & {
   edit_image: string;
+  receipt: string;
 };
 
 const ItemID = () => {

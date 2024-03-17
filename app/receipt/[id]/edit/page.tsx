@@ -1,7 +1,6 @@
 import ReceiptIdEdit from "@/app/components/receiptComponents/ReceiptIdEdit";
 import { getReceiptById } from "@/app/lib/receiptsDB";
-import { Receipt } from "@/types/fetchReceipts";
-import { unstable_noStore } from "next/cache";
+import { Receipt } from "@/types/receiptTypes";
 import React from "react";
 
 type ExtendedReceiptType = Receipt & {
@@ -30,9 +29,7 @@ export default async function ReceiptIdPage({
 }: {
   params: { id: string };
 }) {
-  unstable_noStore();
   const receipt = await fetchReceipt(params.id);
-  console.log(receipt);
   return (
     <div>
       <ReceiptIdEdit receipt={receipt} />

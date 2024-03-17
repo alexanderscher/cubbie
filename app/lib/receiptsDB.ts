@@ -31,14 +31,17 @@ export const getReceipts = async () => {
         },
       });
 
-      // Current date to compare with return_date
+      // Adjust current date to start of the day for comparison
       const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0); // Sets the current date to midnight, ignoring the time part
 
-      // Check each receipt to see if its return_date is in the past
+      // Check each receipt to see if its return_date is in the past (before today)
       // and update expired to true if needed
       const updatePromises = receipts.map((receipt) => {
-        const isExpired = new Date(receipt.return_date) < currentDate;
-        // If it's already expired, no need to update
+        const receiptReturnDate = new Date(receipt.return_date);
+        receiptReturnDate.setHours(0, 0, 0, 0); // Optional: Adjust if you also want to ignore time part of return_date
+        const isExpired = receiptReturnDate < currentDate;
+        // Update only if it's not already marked as expired and the return date is before today
         if (!receipt.expired && isExpired) {
           return prisma.receipt.update({
             where: { id: receipt.id },

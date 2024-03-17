@@ -5,7 +5,7 @@ import { TooltipWithHelperIcon } from "@/app/components/tooltips/TooltipWithHelp
 import { getProjects } from "@/app/lib/projectsDB";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
-import { Project } from "@/types/receipt";
+import { Project } from "@/types/receiptTypes";
 import { convertHeic } from "@/utils/media";
 import Image from "next/image";
 import { usePathname } from "next/navigation";

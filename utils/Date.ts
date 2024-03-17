@@ -21,15 +21,24 @@ export function formatDateToMMDDYY(dateString: any): string {
 
   return mm + "/" + dd + "/" + yy;
 }
-
-export const formatDateToYYYYMMDD = (date: any) => {
+export const formatDateToYYYYMMDD = (date: string | Date): string => {
   if (!date) return "";
 
-  // If date is already a string, assuming it's in ISO format
-  const dateObj = typeof date === "string" ? new Date(date) : date;
+  let dateObj: Date;
+
+  if (typeof date === "string") {
+    // Directly create a Date object from the string without converting to UTC
+    // This assumes the date string is in the format YYYY-MM-DD
+    dateObj = new Date(date);
+    // Adjust for timezone offset to ensure the date is not shifted
+    dateObj = new Date(dateObj.getTime() + dateObj.getTimezoneOffset() * 60000);
+  } else {
+    // If the input is already a Date object, we use it directly
+    dateObj = date;
+  }
 
   const year = dateObj.getFullYear();
-  const month = `0${dateObj.getMonth() + 1}`.slice(-2); // getMonth() is zero-based
+  const month = `0${dateObj.getMonth() + 1}`.slice(-2);
   const day = `0${dateObj.getDate()}`.slice(-2);
 
   return `${year}-${month}-${day}`;

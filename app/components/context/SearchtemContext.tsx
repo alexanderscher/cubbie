@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 import { usePathname } from "next/navigation";
 
 import { useEffect } from "react";
-import { Item } from "@/types/receipt";
+import { Item } from "@/types/receiptTypes";
 
 interface SearchItemContextType {
   filteredItemData: Item[];

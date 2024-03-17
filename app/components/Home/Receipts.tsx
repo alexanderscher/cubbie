@@ -2,7 +2,7 @@
 import { useSearchReceiptContext } from "@/app/components/context/SearchReceiptContext";
 import { CreateReceipt } from "@/app/components/receiptComponents/CreateReceipt";
 import Receipt from "@/app/components/receiptComponents/Receipt";
-import { Item, Receipt as ReceiptType } from "@/types/fetchReceipts";
+import { Item, Receipt as ReceiptType } from "@/types/receiptTypes";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";

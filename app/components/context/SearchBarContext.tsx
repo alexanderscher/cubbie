@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { Item, Project } from "@/types/receipt";
-import { Receipt } from "@/types/fetchReceipts";
+import { Item, Project } from "@/types/receiptTypes";
+import { Receipt } from "@/types/receiptTypes";
 
 interface SearchBarContextType {
   searchBarOpen: boolean;

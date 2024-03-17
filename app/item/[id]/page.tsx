@@ -1,6 +1,6 @@
 "use client";
 import { useParams } from "next/navigation";
-import { Item as ItemType } from "@/types/receipt";
+import { Item as ItemType } from "@/types/receiptTypes";
 import React, { useEffect, useState } from "react";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { formatCurrency } from "@/utils/formatCurrency";

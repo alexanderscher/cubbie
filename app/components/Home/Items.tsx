@@ -1,14 +1,28 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Item from "@/app/components/Item";
 import { Item as ItemType } from "@/types/receiptTypes";
-import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
+import { useSearchItemContext } from "@/app/components/context/SearchItemContext";
 import Image from "next/image";
 import { CreateReceipt } from "@/app/components/receiptComponents/CreateReceipt";
 
-const Items = () => {
-  const { filteredItemData, isItemLoading } = useSearchItemContext();
+interface ItemsProps {
+  items: ItemType[];
+}
+
+const Items = ({ items }: ItemsProps) => {
+  const { filteredItemData, isItemLoading, initializeItems } =
+    useSearchItemContext();
+
+  useEffect(() => {
+    if (items) {
+      initializeItems(items as ItemType[]);
+    }
+  }, [items, initializeItems]);
+
+  console.log(items);
+
   const searchParams = useSearchParams();
   const [addReceiptOpen, setAddReceiptOpen] = useState(false);
 

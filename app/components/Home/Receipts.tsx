@@ -12,7 +12,6 @@ interface ReceiptsProps {
 }
 
 const Receipts = ({ serverData }: ReceiptsProps) => {
-  console.log(serverData);
   const { filteredReceiptData, isReceiptLoading, initializeReceipts } =
     useSearchReceiptContext();
   const searchParams = useSearchParams();
@@ -21,7 +20,6 @@ const Receipts = ({ serverData }: ReceiptsProps) => {
 
   useEffect(() => {
     if (serverData) {
-      console.log("redo");
       initializeReceipts(serverData as ReceiptType[]);
     }
   }, [serverData, initializeReceipts]);

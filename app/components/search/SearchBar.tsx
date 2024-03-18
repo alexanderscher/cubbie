@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSearchProjectContext } from "@/app/components/context/SearchProjectContext";
 import { useSearchReceiptContext } from "@/app/components/context/SearchReceiptContext";
 import { usePathname } from "next/navigation";
-import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
+import { useSearchItemContext } from "@/app/components/context/SearchItemContext";
 
 interface Props {
   searchType: string;
@@ -14,7 +14,7 @@ function SearchBar({ searchType }: Props) {
 
   const { filterProjects } = useSearchProjectContext();
   const { filterReceipts } = useSearchReceiptContext();
-  // const { setFilteredItemData } = useSearchItemContext();
+  const { filterItems } = useSearchItemContext();
 
   useEffect(() => {
     setSearchTerm("");
@@ -28,8 +28,8 @@ function SearchBar({ searchType }: Props) {
       filterProjects(newSearchTerm);
     } else if (pathname.includes("receipts")) {
       filterReceipts(newSearchTerm);
-      // } else if (pathname.includes("items")) {
-      //   setFilteredItemData(newSearchTerm);
+    } else if (pathname.includes("items")) {
+      filterItems(newSearchTerm);
     }
   };
 

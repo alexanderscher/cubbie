@@ -1,7 +1,7 @@
 "use client";
 import { markAsReturned, unreturn } from "@/app/actions/return";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
+import { useSearchItemContext } from "@/app/components/context/SearchItemContext";
 import Shirt from "@/app/components/placeholderImages/Shirt";
 import { TruncateText } from "@/app/components/text/Truncate";
 import { Item as ItemType } from "@/types/receiptTypes";

@@ -1,5 +1,5 @@
 "use client";
-import { markAsReturned, unreturn } from "@/app/actions/return";
+import { markAsReturned, unreturn } from "@/app/actions/items/return";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { useSearchItemContext } from "@/app/components/context/SearchItemContext";
 import Shirt from "@/app/components/placeholderImages/Shirt";

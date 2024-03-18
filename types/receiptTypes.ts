@@ -40,4 +40,5 @@ export interface Project {
   created_at: Date;
   userId: number;
   receipts: Receipt[];
+  items: Item[];
 }

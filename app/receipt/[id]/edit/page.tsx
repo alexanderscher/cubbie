@@ -17,7 +17,6 @@ const fetchReceipt = async (id: string) => {
     return_date: receipt?.return_date ? receipt.return_date : "",
     project: {
       ...receipt?.project,
-      receipts: [],
     },
   };
 

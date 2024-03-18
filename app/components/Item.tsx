@@ -151,7 +151,6 @@ interface OptionsModalProps {
 
 const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const { setRefreshData } = useSearchItemContext();
 
   const deleteItem = async () => {
     const res = await fetch(`/api/items/${item.id}`, {
@@ -159,7 +158,6 @@ const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
     });
     const data = await res.json();
     if (res.ok) {
-      setRefreshData(true);
     } else {
       console.error("Failed to delete item:", data);
     }
@@ -190,7 +188,6 @@ const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
                 onClick={async () => {
                   const { ok, data } = await unreturn(item.id);
                   if (ok) {
-                    setRefreshData(true);
                   } else {
                     console.error("Failed to unreturn", data);
                   }
@@ -211,7 +208,6 @@ const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
                 onClick={async () => {
                   const { ok, data } = await markAsReturned(item.id);
                   if (ok) {
-                    setRefreshData(true);
                   } else {
                     console.error("Failed to mark as returned:", data);
                   }

@@ -1,6 +1,6 @@
 "use client";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { useSearchItemContext } from "@/app/components/context/SearchtemContext";
+import { useSearchItemContext } from "@/app/components/context/SearchItemContext";
 import SearchBar from "@/app/components/search/SearchBar";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
@@ -13,18 +13,6 @@ interface HeaderProps {
 }
 
 const Header = ({ type }: HeaderProps) => {
-  // const [data, setData] = useState<any[]>([]);
-
-  const {
-    setFilteredItemData,
-    filteredItemData,
-    isItemLoading,
-    refreshData,
-    setRefreshData,
-
-    setisItemLoading,
-  } = useSearchItemContext();
-
   const [openModal, setOpenModal] = React.useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -41,27 +29,6 @@ const Header = ({ type }: HeaderProps) => {
     },
     [searchParams]
   );
-
-  useEffect(() => {
-    if (pathname === "/items") {
-      const fetchItems = async () => {
-        setisItemLoading(true);
-        const res = await fetch("/api/items");
-        const data = await res.json();
-        // setData(data.items);
-        setFilteredItemData(data.items);
-        setRefreshData(false);
-        setisItemLoading(false);
-      };
-      fetchItems();
-    }
-  }, [
-    pathname,
-    setFilteredItemData,
-    refreshData,
-    setRefreshData,
-    setisItemLoading,
-  ]);
 
   const projectColor =
     pathname === "/"

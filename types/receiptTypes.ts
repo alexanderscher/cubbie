@@ -28,8 +28,10 @@ export interface Item {
   character: string;
   product_id: string;
   receipt_id: number;
-  returned: boolean;
   created_at: Date;
+  returned: boolean;
+  project_id: number;
+  receipt: Receipt;
 }
 
 export interface Project {

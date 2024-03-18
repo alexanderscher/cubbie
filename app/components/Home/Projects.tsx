@@ -86,8 +86,6 @@ const Projects = ({ serverData }: Props) => {
     return filteredProjectData.sort(compareProjects);
   }, [filteredProjectData, sortField, sortOrder]);
 
-  console.log("filteredProjectData", filteredProjectData);
-
   if (filteredData.length === 0 && !isProjectLoading) {
     return (
       <div className="flex flex-col gap-6 justify-center items-center mt-10">

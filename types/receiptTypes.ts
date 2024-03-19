@@ -30,8 +30,11 @@ export interface Item {
   receipt_id: number;
   created_at: Date;
   returned: boolean;
-  project_id: number;
   receipt: Receipt;
+}
+
+export interface ExtendedItemType extends Item {
+  edit_image: string;
 }
 
 export interface Project {
@@ -40,5 +43,4 @@ export interface Project {
   created_at: Date;
   userId: number;
   receipts: Receipt[];
-  items: Item[];
 }

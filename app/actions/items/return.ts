@@ -1,33 +1,37 @@
-export const markAsReturned = async (
-  id: number
-): Promise<{ ok: boolean; data: any }> => {
-  const response = await fetch(`/api/items/${id}/return`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
+"use server";
+import prisma from "@/prisma/client";
+import { authOptions } from "@/utils/auth";
+import { getServerSession } from "next-auth";
+import { revalidateTag } from "next/cache";
+
+export const markAsReturned = async (id: number) => {
+  const session = await getServerSession(authOptions);
+  const userId = parseInt(session?.user?.id as string);
+
+  await prisma.items.update({
+    where: {
+      id: id,
     },
-    body: JSON.stringify({
+    data: {
       returned: true,
-    }),
+    },
   });
-  const data = await response.json();
-  return { ok: response.ok, data };
+
+  revalidateTag(`projects_user_${userId}`);
 };
 
-export const unreturn = async (
-  id: number
-): Promise<{ ok: boolean; data: any }> => {
-  const response = await fetch(`/api/items/${id}/return`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
+export const unreturn = async (id: number) => {
+  const session = await getServerSession(authOptions);
+  const userId = parseInt(session?.user?.id as string);
+
+  await prisma.items.update({
+    where: {
+      id: id,
     },
-    body: JSON.stringify({
+    data: {
       returned: false,
-    }),
+    },
   });
 
-  const data = await response.json();
-
-  return { ok: response.ok, data: data };
+  revalidateTag(`projects_user_${userId}`);
 };

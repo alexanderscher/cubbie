@@ -24,7 +24,6 @@ model Project {
   userId     Int
   user       User      @relation(fields: [userId], references: [id])
   receipts   Receipt[]
-  Items      Items[]
 }
 
 model Receipt {
@@ -60,6 +59,4 @@ model Items {
   receipt     Receipt  @relation(fields: [receipt_id], references: [id], onDelete: Cascade)
   created_at  DateTime
   returned    Boolean  @default(false)
-  Project     Project  @relation(fields: [projectId], references: [id])
-  projectId   Int
 }

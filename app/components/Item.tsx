@@ -1,7 +1,7 @@
 "use client";
+import { deleteItem } from "@/app/actions/items/deleteItem";
 import { markAsReturned, unreturn } from "@/app/actions/items/return";
 import RegularButton from "@/app/components/buttons/RegularButton";
-import { useSearchItemContext } from "@/app/components/context/SearchItemContext";
 import Shirt from "@/app/components/placeholderImages/Shirt";
 import { TruncateText } from "@/app/components/text/Truncate";
 import { Item as ItemType } from "@/types/receiptTypes";
@@ -9,7 +9,6 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import path from "path";
 import React, { useState } from "react";
 
 interface Props {
@@ -45,7 +44,7 @@ const Item = ({ item, isOpen, onToggleOpen }: Props) => {
               />
             </div>
           )}
-          {isOpen && <OptionsModal isOpen={isOpen} item={item} />}
+          {isOpen && <OptionsModal item={item} />}
           {!item.photo_url && (
             <div className="">
               <Shirt />
@@ -145,26 +144,19 @@ const Item = ({ item, isOpen, onToggleOpen }: Props) => {
 export default Item;
 
 interface OptionsModalProps {
-  isOpen: boolean;
   item: ItemType;
 }
 
-const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
+const OptionsModal = ({ item }: OptionsModalProps) => {
   const [deleteOpen, setDeleteOpen] = useState(false);
 
-  const deleteItem = async () => {
-    const res = await fetch(`/api/items/${item.id}`, {
-      method: "DELETE",
-    });
-    const data = await res.json();
-    if (res.ok) {
-    } else {
-      console.error("Failed to delete item:", data);
-    }
-  };
-
   return (
-    <div className="absolute bg-white shadow-1 -right-5 top-6 rounded-md w-[200px]  z-[100]">
+    <div
+      className="absolute bg-white shadow-1 -right-5 top-6 rounded-md w-[200px]  z-[100]"
+      onClick={(e) => {
+        e.preventDefault();
+      }}
+    >
       <div className="p-4 rounded text-sm flex flex-col gap-2">
         <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2">
           <Link href={`/item/${item.id}/edit`}>
@@ -185,12 +177,8 @@ const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
                 alt=""
               ></Image>
               <button
-                onClick={async () => {
-                  const { ok, data } = await unreturn(item.id);
-                  if (ok) {
-                  } else {
-                    console.error("Failed to unreturn", data);
-                  }
+                onClick={async (e) => {
+                  await unreturn(item.id);
                 }}
               >
                 <p className="">Undo Return</p>
@@ -206,11 +194,7 @@ const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
               ></Image>
               <button
                 onClick={async () => {
-                  const { ok, data } = await markAsReturned(item.id);
-                  if (ok) {
-                  } else {
-                    console.error("Failed to mark as returned:", data);
-                  }
+                  await markAsReturned(item.id);
                 }}
               >
                 Mark as Returned
@@ -233,7 +217,10 @@ const OptionsModal = ({ isOpen, item }: OptionsModalProps) => {
               deleteOpen={deleteOpen}
               setDeleteOpen={setDeleteOpen}
               item={item}
-              deleteItem={deleteItem}
+              deleteItem={async () => {
+                await deleteItem(item.id);
+                setDeleteOpen(false);
+              }}
             />
           )}
         </div>
@@ -252,7 +239,12 @@ interface DeleteModalProps {
 const DeleteModal = ({ item, deleteItem, setDeleteOpen }: DeleteModalProps) => {
   return (
     <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
-      <div className="relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded border-emerald-900 border-[1px]">
+      <div
+        className="relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded border-emerald-900 border-[1px]"
+        onClick={(e) => {
+          e.preventDefault();
+        }}
+      >
         <h2 className="text-orange-600">
           Are you sure you want to delete {item.description}?
         </h2>

@@ -4,7 +4,6 @@ import { ReceiptOnlineStage, ReceiptStoreStage } from "@/constants/form";
 import { ItemInput, ReceiptInput } from "@/types/form";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import styles from "./form.module.css";
-import stylesReceipt from "@/app/receipt/receiptID.module.css";
 import * as Yup from "yup";
 import Image from "next/image";
 import React, { useState } from "react";

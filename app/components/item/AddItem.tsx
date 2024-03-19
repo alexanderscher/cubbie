@@ -1,3 +1,4 @@
+import { addItem } from "@/app/actions/items/addItem";
 import RegularButton from "@/app/components/buttons/RegularButton";
 import { BarcodeScanner } from "@/app/components/createForm/barcode/BarcodeScanner";
 import Image from "next/image";
@@ -20,14 +21,6 @@ export const AddItem = ({ setIsAddOpen, id }: AddItemModalProps) => {
     photo: "",
     receipt_id: id,
   });
-
-  const addItemToReceipt = async () => {
-    const res = await fetch("/api/items", {
-      method: "POST",
-      body: JSON.stringify(newItem),
-    });
-    const data = await res.json();
-  };
 
   const [showScanner, setShowScanner] = useState(false);
 
@@ -53,7 +46,7 @@ export const AddItem = ({ setIsAddOpen, id }: AddItemModalProps) => {
   const handleSubmit = async () => {
     try {
       await itemSchema.validate(newItem, { abortEarly: false });
-      await addItemToReceipt();
+      await addItem(newItem);
       setIsAddOpen(false);
 
       setNewItem({

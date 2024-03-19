@@ -2,7 +2,10 @@ import { deleteUploadThingImage } from "@/app/actions/uploadthing/deletePhoto";
 import { handleUpload } from "@/app/actions/uploadthing/uploadPhoto";
 import prisma from "@/prisma/client";
 import { ItemInput } from "@/types/form";
+import { authOptions } from "@/utils/auth";
 import { calculateReturnDate } from "@/utils/Date";
+import { getServerSession } from "next-auth";
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -84,7 +87,6 @@ export async function POST(request: Request) {
             character: item.character,
             product_id: item.product_id,
             created_at: new Date().toISOString(),
-            projectId: parseInt(folder),
           };
         })
       );
@@ -121,6 +123,10 @@ export async function POST(request: Request) {
         },
       },
     });
+    const session = await getServerSession(authOptions);
+    const userId = parseInt(session?.user?.id as string);
+    revalidateTag(`projects_user_${userId}`);
+
     return new NextResponse(JSON.stringify(receipt), {
       status: 201,
       headers: { "Content-Type": "application/json" },

@@ -8,8 +8,11 @@ import SearchAllItems from "@/app/components/search/AlItems";
 import { useSession } from "next-auth/react";
 import { LogOutButton } from "@/app/components/LogOutButton";
 
-const Navbar = () => {
-  const { data: session } = useSession();
+interface NavbarProps {
+  session: any;
+}
+
+const Navbar = ({ session }: NavbarProps) => {
   const pathname = usePathname();
   const { searchBarOpen, setSearchBarOpen } = useSearchBarContext();
   return (

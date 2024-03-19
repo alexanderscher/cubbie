@@ -11,7 +11,6 @@ import { LogOutButton } from "@/app/components/LogOutButton";
 interface NavbarProps {
   session: any;
 }
-
 const Navbar = ({ session }: NavbarProps) => {
   const pathname = usePathname();
   const { searchBarOpen, setSearchBarOpen } = useSearchBarContext();

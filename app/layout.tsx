@@ -19,20 +19,17 @@ export const metadata: Metadata = {
   themeColor: "#ecd96f",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession(authOptions);
-  console.log("RootLayout session", session);
-
   return (
     <html lang="en">
       <body className={` ${myFont.className}`}>
         <Providers>
           <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
-          <BaseLayout session={session}>{children}</BaseLayout>
+          <main className="bg-[#e2f1e2]">{children}</main>
         </Providers>
       </body>
     </html>

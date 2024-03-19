@@ -44,3 +44,7 @@ export interface Project {
   userId: number;
   receipts: Receipt[];
 }
+
+export interface LayoutProps {
+  children?: React.ReactNode;
+}

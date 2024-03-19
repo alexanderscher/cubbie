@@ -1,4 +1,5 @@
 import ItemID from "@/app/components/item/ItemId";
+import PageWrapper from "@/app/components/wrapper/PageWrapper";
 import { getItemsById } from "@/app/lib/itemsDB";
 import { Item } from "@/types/receiptTypes";
 
@@ -14,9 +15,5 @@ export default async function ItemIdPage({
   params: { id: string };
 }) {
   const item = await fetchItem(params.id);
-  return (
-    <div>
-      <ItemID item={item} />
-    </div>
-  );
+  return <ItemID item={item} />;
 }

@@ -1,4 +1,5 @@
 import ReceiptIdEdit from "@/app/components/receiptComponents/ReceiptIdEdit";
+import PageWrapper from "@/app/components/wrapper/PageWrapper";
 import { getReceiptById } from "@/app/lib/receiptsDB";
 import { Receipt } from "@/types/receiptTypes";
 import React from "react";
@@ -29,9 +30,5 @@ export default async function ReceiptIdPage({
   params: { id: string };
 }) {
   const receipt = await fetchReceipt(params.id);
-  return (
-    <div>
-      <ReceiptIdEdit receipt={receipt} />
-    </div>
-  );
+  return <ReceiptIdEdit receipt={receipt} />;
 }

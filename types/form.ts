@@ -1,3 +1,5 @@
+import { Project } from "@/types/receiptTypes";
+
 export interface Photo {
   key: string;
   url: string;
@@ -27,4 +29,8 @@ export interface ReceiptInput {
   memo?: boolean;
   folder?: number;
   folderName?: string;
+}
+
+export interface Pages {
+  projects: Project[];
 }

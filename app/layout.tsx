@@ -6,6 +6,8 @@ import { ourFileRouter } from "@/app/api/uploadthing/core";
 import localFont from "next/font/local";
 import BaseLayout from "@/app/components/layouts/BaseLayout";
 import { Providers } from "@/app/components/providers/SessionProvider";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/utils/auth";
 
 const myFont = localFont({
   src: "../font/SuisseIntl-Medium.woff",
@@ -17,17 +19,20 @@ export const metadata: Metadata = {
   themeColor: "#ecd96f",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(authOptions);
+  console.log("RootLayout session", session);
+
   return (
     <html lang="en">
       <body className={` ${myFont.className}`}>
         <Providers>
           <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
-          <BaseLayout>{children}</BaseLayout>
+          <BaseLayout session={session}>{children}</BaseLayout>
         </Providers>
       </body>
     </html>

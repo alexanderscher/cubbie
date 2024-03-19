@@ -8,9 +8,10 @@ import { SessionProvider } from "@/app/components/context/SessionContext";
 
 interface BaseLayoutProps {
   children: React.ReactNode;
+  session?: any;
 }
 
-const BaseLayout = ({ children }: BaseLayoutProps) => {
+const BaseLayout = ({ children, session }: BaseLayoutProps) => {
   const pathname = usePathname();
 
   if (pathname !== "/signup" && pathname !== "/login") {
@@ -19,7 +20,7 @@ const BaseLayout = ({ children }: BaseLayoutProps) => {
         <SearchBarContextProvider>
           <Topbar />
           <div className="flex bg-[#e2f1e2]">
-            <Navbar />
+            <Navbar session={session} />
 
             <div className="page main-content bg-[#e2f1e2] min-h-screen">
               <main className="">{children}</main>

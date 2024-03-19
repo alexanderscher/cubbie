@@ -18,6 +18,7 @@ interface ReceiptManualProps {
   errors: any;
   online?: boolean;
   setStage?: (stage: ReceiptStoreStage) => void;
+  projects: Project[];
 }
 
 const ReceiptManual = ({
@@ -27,9 +28,9 @@ const ReceiptManual = ({
   errors,
   online = false,
   setStage,
+  projects,
 }: ReceiptManualProps) => {
   const [help, setHelp] = React.useState(false);
-  const [projects, setProjects] = useState<Project[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -76,20 +77,14 @@ const ReceiptManual = ({
     setFieldValue("assetAmount", value || "");
   };
 
-  const [loading, setLoading] = React.useState(true);
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      const data = await getProjects();
-      setProjects(data as Project[]);
-      setLoading(false);
-    };
-    fetchProjects();
-  }, []);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  // useEffect(() => {
+  //   const fetchProjects = async () => {
+  //     const data = await getProjects();
+  //     setProjects(data as Project[]);
+  //     setLoading(false);
+  //   };
+  //   fetchProjects();
+  // }, []);
 
   return (
     <div className="flex flex-col gap-10  w-full justify-center items-center">

@@ -19,9 +19,5 @@ export default async function ItemIdEditPage({
 }) {
   const item = await fetchItem(params.id);
 
-  return (
-    <div>
-      <ItemIdEdit item={item} id={params.id} />
-    </div>
-  );
+  return <ItemIdEdit item={item} id={params.id} />;
 }

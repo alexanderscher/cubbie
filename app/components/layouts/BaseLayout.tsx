@@ -16,18 +16,16 @@ const BaseLayout = ({ children, session }: BaseLayoutProps) => {
 
   if (pathname !== "/signup" && pathname !== "/login") {
     return (
-      <SessionProvider>
-        <SearchBarContextProvider>
-          <Topbar />
-          <div className="flex bg-[#e2f1e2]">
-            <Navbar session={session} />
+      <SearchBarContextProvider>
+        <Topbar />
+        <div className="flex bg-[#e2f1e2]">
+          <Navbar />
 
-            <div className="page main-content bg-[#e2f1e2] min-h-screen">
-              <main className="">{children}</main>
-            </div>
+          <div className="page main-content bg-[#e2f1e2] min-h-screen">
+            <main className="">{children}</main>
           </div>
-        </SearchBarContextProvider>
-      </SessionProvider>
+        </div>
+      </SearchBarContextProvider>
     );
   } else {
     return (

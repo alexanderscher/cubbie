@@ -1,6 +1,7 @@
 import Receipts from "@/app/components/Home/Receipts";
 import { SearchReceiptProvider } from "@/app/components/context/SearchReceiptContext";
 import Header from "@/app/components/headers/Header";
+import PageWrapper from "@/app/components/wrapper/PageWrapper";
 import { getReceipts } from "@/app/lib/receiptsDB";
 import { Receipt } from "@/types/receiptTypes";
 
@@ -16,13 +17,15 @@ export default async function ReceiptPage() {
   const receipts = await receipt();
 
   return (
-    <main className="flex flex-col pb-[400px]">
-      <SearchReceiptProvider>
-        <Suspense fallback={<div>Loading</div>}>
-          <Header type="Receipts" />
-          <Receipts serverData={receipts} />
-        </Suspense>
-      </SearchReceiptProvider>
-    </main>
+    <PageWrapper>
+      <div className="flex flex-col pb-[400px]">
+        <SearchReceiptProvider>
+          <Suspense fallback={<div>Loading</div>}>
+            <Header type="Receipts" />
+            <Receipts serverData={receipts} />
+          </Suspense>
+        </SearchReceiptProvider>
+      </div>
+    </PageWrapper>
   );
 }

@@ -1,6 +1,7 @@
 import Projects from "@/app/components/Home/Projects";
 import { SearchProjectProvider } from "@/app/components/context/SearchProjectContext";
 import Header from "@/app/components/headers/Header";
+import PageWrapper from "@/app/components/wrapper/PageWrapper";
 import { getProjects } from "@/app/lib/projectsDB";
 import { Project } from "@/types/receiptTypes";
 import { Suspense } from "react";
@@ -14,13 +15,15 @@ export default async function Home() {
   const projects = await fetchProject();
 
   return (
-    <SearchProjectProvider>
-      <main className="flex flex-col pb-[400px]">
-        <Suspense fallback={<div>Loading</div>}>
-          <Header type="Projects" />
-          <Projects serverData={projects} />
-        </Suspense>
-      </main>
-    </SearchProjectProvider>
+    <PageWrapper>
+      <SearchProjectProvider>
+        <div className="flex flex-col pb-[400px]">
+          <Suspense fallback={<div>Loading</div>}>
+            <Header type="Projects" />
+            <Projects serverData={projects} />
+          </Suspense>
+        </div>
+      </SearchProjectProvider>
+    </PageWrapper>
   );
 }

@@ -18,6 +18,7 @@ interface Props {
   handleChange: any;
   errors: any;
   validateForm: any;
+  projects: Project[];
 }
 
 export default function ImageGpt({
@@ -27,6 +28,7 @@ export default function ImageGpt({
   handleChange,
   errors,
   validateForm,
+  projects,
 }: Props) {
   const pathname = usePathname();
   const [image, setImage] = useState<string>("");
@@ -37,7 +39,6 @@ export default function ImageGpt({
   const [invalidImage, setInvalidImage] = useState(false);
   const [apiError, setApiError] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [projects, setProjects] = useState<Project[]>([]);
 
   const [validationErrors, setValidationErrors] = useState({
     folderName: "",
@@ -45,15 +46,6 @@ export default function ImageGpt({
 
   const [help, setHelp] = useState(false);
   const [memoHelp, setMemoHelp] = useState(false);
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      const data = await getProjects();
-      setProjects(data as Project[]);
-      setLoading(false);
-    };
-    fetchProjects();
-  }, []);
 
   const handleContainerClick = () => {
     if (fileInputRef.current !== null) {

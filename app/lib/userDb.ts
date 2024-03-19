@@ -10,7 +10,6 @@ export const getUserByEmail = async (email: string) => {
       email,
     },
   });
-  console.log("USER!!!!!!!", user);
 
   return user;
 };

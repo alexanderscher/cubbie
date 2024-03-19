@@ -11,6 +11,7 @@ function getDynamicCacheKey(userId: number) {
 export const getProjects = async () => {
   const session = await getServerSession(authOptions);
   const userId = parseInt(session?.user?.id as string);
+  console.log("USER ID", userId);
   const dynamicKey = getDynamicCacheKey(userId);
   return unstable_cache(
     async (userId) => {

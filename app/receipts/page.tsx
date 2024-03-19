@@ -8,6 +8,7 @@ import { Suspense } from "react";
 
 const receipt = async () => {
   const receipts = await getReceipts();
+  console.log(receipts);
 
   return receipts as Receipt[];
 };

@@ -15,7 +15,7 @@ const PageWrapper = async ({ children }: PageWrapperProps) => {
 
   return (
     <SearchBarContextProvider>
-      <Topbar />
+      <Topbar session={session} />
       <div className="flex bg-[#e2f1e2]">
         <Navbar session={session} />
         <div className="page main-content bg-[#e2f1e2] min-h-screen">

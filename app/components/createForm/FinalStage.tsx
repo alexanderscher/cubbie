@@ -107,44 +107,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
   const pathname = usePathname();
 
   return (
-    <div className="flex flex-col gap-8  w-full h-full ">
-      <input
-        className="w-full  bg border-slate-400   focus:border-emerald-900 focus:outline-none border-b-[1px] text-xl text-orange-600"
-        name="days_until_return"
-        value={values.store}
-        onChange={(e) => {
-          setFieldValue("store", e.target.value);
-        }}
-      />
-
-      <div className="flex border-[1px] border-emerald-900 rounded text-sm  p-4">
-        <div className="w-1/3 border-r-[1px] border-slate-300 ">
-          <p className="text-slate-400 text-xs">Total amount</p>
-          <p>
-            {formatCurrency(
-              values.items.reduce((acc: number, curr: ItemInput) => {
-                return acc + parseFloat(curr.price);
-              }, 0)
-            )}
-          </p>
-        </div>
-        <div className="w-1/3 border-r-[1px] border-slate-300 pl-2 pr-2">
-          <p className="text-slate-400 text-xs">Purchase Date</p>
-          <p>{formatDateToMMDDYY(values.purchase_date)}</p>
-        </div>
-
-        <div className="pl-2 pr-2">
-          <p className="text-slate-400 text-xs">Return Date</p>
-          <p>
-            {formatDateToMMDDYY(
-              calculateReturnDate(
-                values.purchase_date,
-                values.days_until_return
-              )
-            )}
-          </p>
-        </div>
-      </div>
+    <div className="flex flex-col gap-8  w-full h-full mt-8">
       {values.items.length > 0 && (
         <div className="w-full flex justify-end">
           <RegularButton
@@ -207,6 +170,43 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
             )}
 
             <div className="flex flex-col gap-4 text-sm ">
+              <div className="w-full">
+                <p className="text-xs text-slate-400 ">Store</p>
+
+                <input
+                  className="w-full border-[1px] bg border-slate-400 p-2 rounded-md  focus:border-emerald-900 focus:outline-none"
+                  value={values.store}
+                  onChange={(e) => {
+                    setFieldValue("store", e.target.value);
+                  }}
+                />
+              </div>
+              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
+                <p className="text-slate-400 text-xs">Total amount</p>
+                <p>
+                  {formatCurrency(
+                    values.items.reduce((acc: number, curr: ItemInput) => {
+                      return acc + parseFloat(curr.price);
+                    }, 0)
+                  )}
+                </p>
+              </div>
+              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
+                <p className="text-slate-400 text-xs">Purchase Date</p>
+                <p>{formatDateToMMDDYY(values.purchase_date)}</p>
+              </div>
+              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
+                <p className="text-slate-400 text-xs">Return Date</p>
+                <p>
+                  {formatDateToMMDDYY(
+                    calculateReturnDate(
+                      values.purchase_date,
+                      values.days_until_return
+                    )
+                  )}
+                </p>
+              </div>
+
               <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
                 <p className="text-slate-400 text-xs">Project</p>
                 <p className="">{values.folderName}</p>

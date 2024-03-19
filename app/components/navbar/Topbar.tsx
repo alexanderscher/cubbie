@@ -5,8 +5,13 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useSearchBarContext } from "@/app/components/context/SearchBarContext";
 import SearchAllItems from "@/app/components/search/AlItems";
+import { LogOutButton } from "@/app/components/LogOutButton";
 
-const Topbar = () => {
+interface TopbarProps {
+  session: any;
+}
+
+const Topbar = ({ session }: TopbarProps) => {
   const [menu, setMenu] = useState(false);
   const { searchBarOpen, setSearchBarOpen } = useSearchBarContext();
 
@@ -146,6 +151,16 @@ const Topbar = () => {
                   style={{ objectFit: "cover", objectPosition: "center" }}
                 />
               </div>
+            </div>
+            <div>
+              {session ? (
+                <LogOutButton />
+              ) : (
+                <div className="flex flex-col">
+                  <Link href="/signup">Sign Up</Link>
+                  <Link href="/login">Login</Link>
+                </div>
+              )}
             </div>
           </div>
         </div>

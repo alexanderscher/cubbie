@@ -78,6 +78,7 @@ export const authOptions: NextAuthOptions = {
     jwt: async ({ token, user }) => {
       if (user) {
         const newUser = await getUserByEmail(user.email as string);
+        console.log(newUser);
 
         return { ...token, id: newUser?.id };
       }

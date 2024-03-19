@@ -62,8 +62,6 @@ export async function POST(request: Request) {
     const processItems = async (items: ItemInput[]) => {
       const itemsArray = await Promise.all(
         items.map(async (item) => {
-          const price = parseFloat(item.price);
-
           let itemPhotoUrl = "";
           let itemPhotoKey = "";
 
@@ -79,7 +77,6 @@ export async function POST(request: Request) {
 
           return {
             description: item.description,
-
             photo_url: itemPhotoUrl,
             photo_key: itemPhotoKey,
             price: parseFloat(item.price),
@@ -87,6 +84,7 @@ export async function POST(request: Request) {
             character: item.character,
             product_id: item.product_id,
             created_at: new Date().toISOString(),
+            projectId: parseInt(folder),
           };
         })
       );
@@ -103,8 +101,6 @@ export async function POST(request: Request) {
     const dateObjectReturn = new Date(return_date);
     const returnDate = dateObjectReturn.toISOString();
 
-    const productID = folder === 0 ? null : parseInt(folder);
-
     const receipt = await prisma.receipt.create({
       data: {
         type,
@@ -117,16 +113,14 @@ export async function POST(request: Request) {
         return_date: returnDate,
         receipt_image_url: receiptFileUrl,
         receipt_image_key: receiptFileKey,
-
         memo,
-        project_id: productID,
+        project_id: parseInt(folder),
         created_at: new Date().toISOString(),
         items: {
           create: itemsArray,
         },
       },
     });
-
     return new NextResponse(JSON.stringify(receipt), {
       status: 201,
       headers: { "Content-Type": "application/json" },

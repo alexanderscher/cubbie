@@ -3,12 +3,10 @@ import { SearchProjectProvider } from "@/app/components/context/SearchProjectCon
 import Header from "@/app/components/headers/Header";
 import { getProjects } from "@/app/lib/projectsDB";
 import { Project } from "@/types/receiptTypes";
-
 import { Suspense } from "react";
 
 const fetchProject = async () => {
   const projects = await getProjects();
-  console.log(projects);
   return projects as Project[];
 };
 

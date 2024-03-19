@@ -3,7 +3,7 @@ import RegularButton from "@/app/components/buttons/RegularButton";
 import { useSearchItemContext } from "@/app/components/context/SearchItemContext";
 import SearchBar from "@/app/components/search/SearchBar";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import { CreateReceipt } from "@/app/components/receiptComponents/CreateReceipt";
 import { CreateProject } from "@/app/components/project/CreateProject";

@@ -9,7 +9,7 @@ export const LogOutButton = () => {
   //     : "http://localhost:3000/home";
 
   const signout = async () => {
-    await signOut({ callbackUrl: "http://localhost:3000/" });
+    await signOut({ callbackUrl: "http://localhost:3000/login" });
   };
 
   return (

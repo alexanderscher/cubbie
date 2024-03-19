@@ -25,7 +25,7 @@ export default function Signup() {
   const loginUser = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await signIn("credentials", { ...data, redirect: false });
-    router.push("/home");
+    router.push("/");
   };
 
   const [emailError, setEmailError] = useState(false);

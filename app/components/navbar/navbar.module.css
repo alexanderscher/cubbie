@@ -66,7 +66,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: env(safe-area-inset-top);
     position: fixed;
     z-index: 800;
     width: 100%;

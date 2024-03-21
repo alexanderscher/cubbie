@@ -157,8 +157,8 @@ const Topbar = ({ session }: TopbarProps) => {
                 <LogOutButton />
               ) : (
                 <div className="flex flex-col">
-                  <Link href="/signup">Sign Up</Link>
-                  <Link href="/login">Login</Link>
+                  <Link href="/auth/register">Sign Up</Link>
+                  <Link href="/auth/login">Login</Link>
                 </div>
               )}
             </div>

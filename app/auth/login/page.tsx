@@ -1,10 +1,13 @@
 import { LoginForm } from "@/components/auth/login-form";
+import { Suspense } from "react";
 
 const LoginPage = () => {
   return (
-    <div className="flex justify-center items-center w-full h-screen">
-      <LoginForm />
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="flex justify-center items-center w-full h-screen">
+        <LoginForm />
+      </div>
+    </Suspense>
   );
 };
 

@@ -1,5 +1,5 @@
-import ItemIdEdit from "@/app/components/item/ItemIdEdit";
-import { getItemsById } from "@/app/lib/itemsDB";
+import ItemIdEdit from "@/components/item/ItemIdEdit";
+import { getItemsById } from "@/lib/itemsDB";
 import { ExtendedItemType, Item } from "@/types/receiptTypes";
 
 const fetchItem = async (id: string) => {

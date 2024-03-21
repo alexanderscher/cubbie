@@ -1,8 +1,8 @@
-import Receipts from "@/app/components/Home/Receipts";
-import { SearchReceiptProvider } from "@/app/components/context/SearchReceiptContext";
-import Header from "@/app/components/headers/Header";
-import PageWrapper from "@/app/components/wrapper/PageWrapper";
-import { getReceipts } from "@/app/lib/receiptsDB";
+import Receipts from "@/components/Home/Receipts";
+import { SearchReceiptProvider } from "@/components/context/SearchReceiptContext";
+import Header from "@/components/headers/Header";
+import PageWrapper from "@/components/wrapper/PageWrapper";
+import { getReceipts } from "@/lib/receiptsDB";
 import { Receipt } from "@/types/receiptTypes";
 
 import { Suspense } from "react";

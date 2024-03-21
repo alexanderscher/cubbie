@@ -1,6 +1,6 @@
 "use client";
 import { deleteItem } from "@/actions/items/deleteItem";
-import { markAsReturned, unreturn } from "@/actions/items/return";
+import { markAsReturned, unreturn } from "@/actions/return";
 import RegularButton from "@/components/buttons/RegularButton";
 import Shirt from "@/components/placeholderImages/Shirt";
 import { TruncateText } from "@/components/text/Truncate";

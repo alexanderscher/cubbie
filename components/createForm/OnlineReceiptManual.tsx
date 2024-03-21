@@ -1,12 +1,12 @@
-import { BarcodeScanner } from "@/app/components/createForm/barcode/BarcodeScanner";
-import LargeButton from "@/app/components/buttons/LargeButton";
-import RegularButton from "@/app/components/buttons/RegularButton";
 import { ItemInput, ReceiptInput } from "@/types/form";
 import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
 import * as Yup from "yup";
 
 import CurrencyInput from "react-currency-input-field";
+import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
+import LargeButton from "@/components/buttons/LargeButton";
+import RegularButton from "@/components/buttons/RegularButton";
 const itemSchema = Yup.object({
   description: Yup.string().required("Description is required"),
   price: Yup.string().required("Price is required"),

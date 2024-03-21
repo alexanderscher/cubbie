@@ -1,6 +1,6 @@
-import { BarcodeScanner } from "@/app/components/createForm/barcode/BarcodeScanner";
-import LargeButton from "@/app/components/buttons/LargeButton";
-import RegularButton from "@/app/components/buttons/RegularButton";
+import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
+import LargeButton from "@/components/buttons/LargeButton";
+import RegularButton from "@/components/buttons/RegularButton";
 import { ItemInput, ReceiptInput } from "@/types/form";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { ITEMS_CONTENT_SCHEMA } from "@/utils/receiptValidation";

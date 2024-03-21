@@ -1,5 +1,5 @@
-import ImagePage from "@/app/components/createForm/FormPages/ImagePage";
-import { getProjects } from "@/app/lib/projectsDB";
+import ImagePage from "@/components/createForm/FormPages/ImagePage";
+import { getProjects } from "@/lib/projectsDB";
 import { Project } from "@/types/receiptTypes";
 import React from "react";
 

@@ -1,4 +1,4 @@
-import PageWrapper from "@/app/components/wrapper/PageWrapper";
+import PageWrapper from "@/components/wrapper/PageWrapper";
 import { LayoutProps } from "@/types/receiptTypes";
 
 import React from "react";

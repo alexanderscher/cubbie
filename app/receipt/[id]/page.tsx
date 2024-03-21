@@ -1,6 +1,6 @@
-import ReceiptId from "@/app/components/receiptComponents/ReceiptId";
-import PageWrapper from "@/app/components/wrapper/PageWrapper";
-import { getReceiptById } from "@/app/lib/receiptsDB";
+import ReceiptId from "@/components/receiptComponents/ReceiptId";
+import PageWrapper from "@/components/wrapper/PageWrapper";
+import { getReceiptById } from "@/lib/receiptsDB";
 import { Receipt } from "@/types/receiptTypes";
 
 import React from "react";

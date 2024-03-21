@@ -1,6 +1,6 @@
-import ItemID from "@/app/components/item/ItemId";
-import PageWrapper from "@/app/components/wrapper/PageWrapper";
-import { getItemsById } from "@/app/lib/itemsDB";
+import ItemID from "@/components/item/ItemId";
+import PageWrapper from "@/components/wrapper/PageWrapper";
+import { getItemsById } from "@/lib/itemsDB";
 import { Item } from "@/types/receiptTypes";
 
 const fetchItem = async (id: string) => {

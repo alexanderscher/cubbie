@@ -1,6 +1,6 @@
-import { ProjectId } from "@/app/components/project/ProjectId";
-import PageWrapper from "@/app/components/wrapper/PageWrapper";
-import { getProjectById } from "@/app/lib/projectsDB";
+import { ProjectId } from "@/components/project/ProjectId";
+import PageWrapper from "@/components/wrapper/PageWrapper";
+import { getProjectById } from "@/lib/projectsDB";
 import { Project } from "@/types/receiptTypes";
 
 const fetchProject = async (id: string) => {

@@ -1,8 +1,8 @@
-import Projects from "@/app/components/Home/Projects";
-import { SearchProjectProvider } from "@/app/components/context/SearchProjectContext";
-import Header from "@/app/components/headers/Header";
-import PageWrapper from "@/app/components/wrapper/PageWrapper";
-import { getProjects } from "@/app/lib/projectsDB";
+import Projects from "@/components/Home/Projects";
+import { SearchProjectProvider } from "@/components/context/SearchProjectContext";
+import Header from "@/components/headers/Header";
+import PageWrapper from "@/components/wrapper/PageWrapper";
+import { getProjects } from "@/lib/projectsDB";
 import { Project } from "@/types/receiptTypes";
 import { Suspense } from "react";
 

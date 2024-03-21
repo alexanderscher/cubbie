@@ -4,7 +4,7 @@ import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
 import localFont from "next/font/local";
-import { Providers } from "@/app/components/providers/SessionProvider";
+import { Providers } from "@/components/providers/SessionProvider";
 
 const myFont = localFont({
   src: "../font/SuisseIntl-Medium.woff",

@@ -1,6 +1,6 @@
-import Calender from "@/app/components/calender/Calender";
-import PageWrapper from "@/app/components/wrapper/PageWrapper";
-import { getReceipts } from "@/app/lib/receiptsDB";
+import Calender from "@/components/calender/Calender";
+import PageWrapper from "@/components/wrapper/PageWrapper";
+import { getReceipts } from "@/lib/receiptsDB";
 import { Receipt } from "@/types/receiptTypes";
 import React from "react";
 

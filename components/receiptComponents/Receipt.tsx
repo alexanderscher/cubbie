@@ -3,6 +3,7 @@ import { deleteReceipt } from "@/actions/receipts/deleteReceipt";
 import { moveReceipt } from "@/actions/receipts/moveReceipt";
 import RegularButton from "@/components/buttons/RegularButton";
 import { AddItem } from "@/components/item/AddItem";
+import Loading from "@/components/Loading";
 import { TruncateText } from "@/components/text/Truncate";
 import { getProjects } from "@/lib/projectsDB";
 import { Item, Receipt as ReceiptType } from "@/types/receiptTypes";
@@ -11,7 +12,7 @@ import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 interface ReceiptProps {
   receipt: ReceiptType;
@@ -160,6 +161,7 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState("");
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -171,14 +173,21 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
   }, []);
 
   const handleSubmit = async () => {
+    if (selectedProject === receipt.project.id.toString()) {
+      setError("Receipt is already in this project");
+    }
     if (selectedProject === "") {
       setError("Please select a project");
     }
+
     if (selectedProject !== "") {
-      await moveReceipt({
-        id: receipt.id,
-        projectId: parseInt(selectedProject),
+      startTransition(async () => {
+        await moveReceipt({
+          id: receipt.id,
+          projectId: parseInt(selectedProject),
+        });
       });
+
       setIsOpen(false);
     }
   };
@@ -218,36 +227,39 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
           <div className="space-y-4">
             <div>
               <p className="text-xs text-emerald-900 ">Project Folder</p>
-              <select
-                className="w-full border-[1px] p-2 rounded-md border-slate-300 focus:border-emerald-900 focus:outline-none
+              {!loading && (
+                <select
+                  className="w-full border-[1px] p-2 rounded-md border-slate-300 focus:border-emerald-900 focus:outline-none
               
               "
-                onChange={(e) => setSelectedProject(e.target.value)}
-              >
-                {receipt.project ? (
-                  <option value={receipt.project.id}>
-                    {receipt.project.name}
-                  </option>
-                ) : (
-                  <option value="">Select a project</option>
-                )}
-                {receipt.project &&
-                  project &&
-                  project
-                    .filter((p) => p.id !== receipt.project.id)
-                    .map((project) => (
+                  onChange={(e) => setSelectedProject(e.target.value)}
+                >
+                  {receipt.project ? (
+                    <option value={receipt.project.id}>
+                      {receipt.project.name}
+                    </option>
+                  ) : (
+                    <option value="">Select a project</option>
+                  )}
+                  {receipt.project &&
+                    project &&
+                    project
+                      .filter((p) => p.id !== receipt.project.id)
+                      .map((project) => (
+                        <option key={project.id} value={project.id}>
+                          {project.name}
+                        </option>
+                      ))}
+                  {!receipt.project &&
+                    project &&
+                    project.map((project) => (
                       <option key={project.id} value={project.id}>
                         {project.name}
                       </option>
                     ))}
-                {!receipt.project &&
-                  project &&
-                  project.map((project) => (
-                    <option key={project.id} value={project.id}>
-                      {project.name}
-                    </option>
-                  ))}
-              </select>
+                </select>
+              )}
+
               {error && <p className="text-orange-900 text-xs">{error}</p>}
             </div>
           </div>
@@ -263,6 +275,7 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
           </div>
         </div>
       </div>
+      {isPending && <Loading loading={isPending} />}
     </div>
   );
 };
@@ -273,14 +286,18 @@ interface DeleteModalProps {
 }
 
 const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
+  const [isPending, startTransition] = useTransition();
+
   const deleteMethod = async () => {
-    await deleteReceipt(receipt.id);
+    startTransition(async () => {
+      await deleteReceipt(receipt.id);
+    });
   };
 
   return (
     <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
       <div className="relative p-8 bg-orange-100  w-full max-w-md m-auto flex-col flex rounded shadow-md">
-        <h2 className="text-emerald-900">
+        <h2 className="text-emerald-900 text-sm">
           Are you sure you want to delete receipt from {receipt.store}? This
           will delete all items in the receipt.
         </h2>
@@ -300,6 +317,7 @@ const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
           </RegularButton>
         </div>
       </div>
+      {isPending && <Loading loading={isPending} />}
     </div>
   );
 };

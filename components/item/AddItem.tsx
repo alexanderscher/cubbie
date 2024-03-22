@@ -1,8 +1,9 @@
 import { addItem } from "@/actions/items/addItem";
 import RegularButton from "@/components/buttons/RegularButton";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
+import Loading from "@/components/Loading";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import CurrencyInput from "react-currency-input-field";
 import * as Yup from "yup";
 
@@ -43,24 +44,29 @@ export const AddItem = ({ setIsAddOpen, id }: AddItemModalProps) => {
     price: Yup.string().required("Price is required"),
   });
 
+  const [isPending, startTransition] = useTransition();
+
   const handleSubmit = async () => {
     try {
       await itemSchema.validate(newItem, { abortEarly: false });
-      await addItem(newItem);
-      setIsAddOpen(false);
 
-      setNewItem({
-        description: "",
-        price: "",
-        barcode: "",
-        product_id: "",
-        character: "",
-        photo: "",
-        receipt_id: id,
-      });
-      setError({
-        description: "",
-        price: "",
+      startTransition(async () => {
+        await addItem(newItem);
+        setIsAddOpen(false);
+
+        setNewItem({
+          description: "",
+          price: "",
+          barcode: "",
+          product_id: "",
+          character: "",
+          photo: "",
+          receipt_id: id,
+        });
+        setError({
+          description: "",
+          price: "",
+        });
       });
     } catch (error) {
       let errorsObject = {};
@@ -305,6 +311,7 @@ export const AddItem = ({ setIsAddOpen, id }: AddItemModalProps) => {
           </div>
         </div>
       </div>
+      {isPending && <Loading loading={isPending} />}
     </div>
   );
 };

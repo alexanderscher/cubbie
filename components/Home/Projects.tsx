@@ -2,6 +2,7 @@
 import { deleteProject } from "@/actions/projects/deleteProject";
 import RegularButton from "@/components/buttons/RegularButton";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
+import Loading from "@/components/Loading";
 import { CreateProject } from "@/components/project/CreateProject";
 import { EditProject } from "@/components/project/EditProject";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
@@ -13,7 +14,7 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useTransition } from "react";
 
 interface Props {
   serverData: ProjectType[];
@@ -258,27 +259,25 @@ interface DeleteModalProps {
 
 const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
   const [uploadError, setUploadError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const { setProjectRefresh } = useSearchProjectContext();
+  const [isPending, startTransition] = useTransition();
 
   const handleSubmit = async () => {
     try {
-      if (project.id) {
-        await deleteProject(project.id);
-      }
-      setProjectRefresh(true);
-      setDeleteOpen(false);
+      startTransition(async () => {
+        if (project.id) {
+          await deleteProject(project.id);
+        }
+        setDeleteOpen(false); // Assuming you want to close a modal or similar
+      });
     } catch (error) {
-      setUploadError("Error deleting project");
-    } finally {
-      setLoading(false);
+      setUploadError("Error deleting project"); // Display any errors from the operation
     }
   };
 
   return (
     <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
       <div className="relative p-8 bg-orange-100 w-full max-w-md m-auto flex-col flex rounded shadow-md ">
-        <h2 className="text-emerald-900">
+        <h2 className="text-emerald-900 text-sm">
           Are you sure you want to delete {project.name}? This will delete all
           receipts and items in the project.
         </h2>
@@ -305,6 +304,7 @@ const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
         </div>
         {uploadError && <p className="text-red-600 text-xs">{uploadError}</p>}
       </div>
+      {isPending && <Loading loading={isPending} />}
     </div>
   );
 };

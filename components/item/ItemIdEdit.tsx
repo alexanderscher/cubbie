@@ -1,7 +1,7 @@
 "use client";
 import { useParams, useRouter } from "next/navigation";
 import { ExtendedItemType } from "@/types/receiptTypes";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState, useTransition } from "react";
 import RegularButton from "@/components/buttons/RegularButton";
 import Image from "next/image";
 import { Formik } from "formik";
@@ -23,7 +23,6 @@ interface ItemIdEditProps {
 const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
   console.log(item);
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [errorM, setErrorM] = useState({
     price: "",
@@ -31,6 +30,7 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
   });
   const [isOpen, setIsOpen] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const handleFileChange = async (
     e: ChangeEvent<HTMLInputElement>,
@@ -74,16 +74,11 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
         ...item,
       }}
       onSubmit={(values) => {
-        setLoading(true);
-
-        const update = async () => {
-          setLoading(true);
+        startTransition(async () => {
           await editItem(id, values);
-          setLoading(false);
-          router.push(`/item/${id}`);
-        };
 
-        update();
+          router.push(`/item/${id}`);
+        });
       }}
       validationSchema={EDIT_ITEM_SCHEMA}
     >
@@ -320,7 +315,7 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
               onClose={() => setUploadError("")}
             />
           )}
-          {loading && <Loading loading={loading} />}
+          {isPending && <Loading loading={isPending} />}
         </div>
       )}
     </Formik>

@@ -5,7 +5,7 @@ import RegularButton from "@/components/buttons/RegularButton";
 import { Formik } from "formik";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState, useTransition } from "react";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { EDIT_RECEIPT_SCHEMA } from "@/utils/editValidation";
 import CurrencyInput from "react-currency-input-field";
@@ -27,12 +27,10 @@ interface Props {
 }
 
 const ReceiptIdEdit = ({ receipt }: Props) => {
-  console.log(receipt);
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const { id } = useParams();
   const stringId = Array.isArray(id) ? id[0] : id;
-  const [loading, setLoading] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [errorM, setErrorM] = useState({
     purchase_date: "",
@@ -40,6 +38,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
     tracking_number: "",
     store: "",
   });
+  const [isPending, startTransition] = useTransition();
   const [openItemId, setOpenItemId] = useState(null as number | null);
 
   const total_amount = receipt.items.reduce((acc: number, curr: ItemType) => {
@@ -102,15 +101,10 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
         ...receipt,
       }}
       onSubmit={(values) => {
-        setLoading(true);
-        const update = async () => {
-          setLoading(true);
+        startTransition(async () => {
           await editReceipt({ id: stringId, values });
-          setLoading(false);
           router.push(`/receipt/${id}`);
-        };
-
-        update();
+        });
       }}
       validationSchema={EDIT_RECEIPT_SCHEMA}
     >
@@ -391,7 +385,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
               onClose={() => setUploadError("")}
             />
           )}
-          {loading && <Loading loading={loading} />}
+          {isPending && <Loading loading={isPending} />}
         </div>
       )}
     </Formik>

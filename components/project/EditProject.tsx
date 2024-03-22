@@ -1,10 +1,11 @@
 "use client";
 import { editProject } from "@/actions/projects/editProject";
 import RegularButton from "@/components/buttons/RegularButton";
+import Loading from "@/components/Loading";
 
 import { Project as ProjectType } from "@/types/receiptTypes";
 
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 
 interface EditProjectProps {
   setEdit: (value: boolean) => void;
@@ -14,17 +15,19 @@ interface EditProjectProps {
 export const EditProject = ({ setEdit, project }: EditProjectProps) => {
   const [name, setName] = useState(project.name);
   const [error, setError] = useState("");
+  const [isPending, startTransition] = useTransition();
 
   const handleSubmit = async () => {
     if (name === project.name || name === "") {
       setEdit(false);
-    }
-    if (name !== "" && name !== project.name && project.id) {
-      await editProject(project.id, name);
-      setEdit(false);
+    } else if (name !== "" && project.id) {
+      startTransition(async () => {
+        await editProject(project.id, name);
+
+        setEdit(false);
+      });
     }
   };
-
   const handleOverlayClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
@@ -83,6 +86,7 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
           </div>
         </div>
       </div>
+      {isPending && <Loading loading={isPending} />}
     </div>
   );
 };

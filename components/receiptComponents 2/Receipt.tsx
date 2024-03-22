@@ -1,5 +1,5 @@
-import { TruncateText } from "@/app/components/text/Truncate";
-import { Item, Receipt as ReceiptType } from "@/types/receipt";
+import { TruncateText } from "@/components/text/Truncate";
+import { Item, Receipt as ReceiptType } from "@/types/receiptTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";

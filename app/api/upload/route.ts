@@ -41,7 +41,18 @@ export async function POST(request: Request) {
     if (missingFields.length > 0) {
       return new NextResponse(
         JSON.stringify({
-          error: `Missing or invalid fields: ${missingFields.join(", ")}`,
+          error: `Missing the following fields: ${missingFields.join(", ")}`,
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+    if (items.length === 0) {
+      return new NextResponse(
+        JSON.stringify({
+          error: "At least one item is required",
         }),
         {
           status: 400,

@@ -1,4 +1,5 @@
 import RegularButton from "@/components/buttons/RegularButton";
+import { FormError } from "@/components/form-error";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
@@ -125,22 +126,24 @@ const TextGpt = ({ setFieldValue, values, setStage }: Props) => {
         </div>
       )}
       {promptError && (
-        <p className="text-sm text-center text-orange-800">
-          The text you&apos;ve submitted doesn&apos;t seem to be from a receipt.
-          Please ensure you submit text from a valid receipt, or try providing a
-          more specific part of the receipt for better recognition.
-        </p>
+        <FormError
+          message={
+            "The text you&apos;ve submitted doesn&apos;t seem to be from a receipt. Please ensure you submit text from a valid receipt, or try providing a more specific part of the receipt for better recognition."
+          }
+        ></FormError>
       )}
       {noText && (
-        <p className="text-sm text-center text-orange-800">
-          Please enter some text to analyze. If you have a receipt, copy and
-          paste the items from the receipt.
-        </p>
+        <FormError
+          message={
+            "Please enter some text to analyze. If you have a receipt, copy and paste the items from the receipt."
+          }
+        ></FormError>
       )}
+
       {apiError && (
-        <p className="text-sm text-center text-orange-800">
-          There was an error analyzing the text. Please try again.
-        </p>
+        <FormError
+          message={"There was an error analyzing the text. Please try again."}
+        ></FormError>
       )}
     </div>
   );

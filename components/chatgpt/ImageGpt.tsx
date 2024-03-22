@@ -10,6 +10,8 @@ import { convertHeic } from "@/utils/media";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ChangeEvent, useState, useRef, useEffect } from "react";
+import { Form } from "react-hook-form";
+import { FormError } from "@/components/form-error";
 
 interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
@@ -375,17 +377,12 @@ export default function ImageGpt({
               <RegularButton
                 styles="border-emerald-900 bg-emerald-900  w-full "
                 handleClick={() => {
+                  console.log("clicked");
                   !loading && handleSubmit();
                 }}
               >
                 <p className="text-white text-sm">
-                  {values.receiptImage
-                    ? loading
-                      ? "Analyzing..."
-                      : "Re-analyze Image"
-                    : loading
-                    ? "Analyzing..."
-                    : "Analyze Image"}
+                  {loading ? "Analyzing..." : "Analyze Image"}
                 </p>
               </RegularButton>
             </div>
@@ -423,16 +420,15 @@ export default function ImageGpt({
             higher-quality image for better recognition.
           </p>
         )}
-        {noImage && !values.receiptImage && (
-          <p className="text-sm text-center text-orange-800">
-            Please upload an image to analyze. If you have a receipt, take a
-            picture of the receipt and upload it.
-          </p>
+        {noImage && (
+          <FormError
+            message={
+              "Please upload an image to analyze. If you have a receipt, take a picture of the receipt and upload it."
+            }
+          ></FormError>
         )}
         {invalidImage && (
-          <p className="text-sm text-center text-orange-800">
-            Please upload a valid image file.
-          </p>
+          <FormError message={" Please upload a valid image file."}></FormError>
         )}
         {apiError && (
           <p className="text-sm text-center text-orange-800">

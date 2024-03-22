@@ -99,7 +99,7 @@ const Projects = ({ serverData }: Props) => {
         />
         <p className="text-xl">No projects found</p>
         <button
-          className="border-[1px] bg-emerald-900 text-white border-emerald-900 py-2 px-10 text-sm rounded-md w-50"
+          className="border-[1px] bg-emerald-900 text-white border-emerald-900 py-2 px-10 text-xs rounded-full w-50"
           onClick={() => setAddProjectOpen(true)}
         >
           <p className="">Create Project</p>
@@ -165,7 +165,8 @@ const Project = ({ project, isOpen, onToggleOpen }: ProjectProps) => {
               {project.receipts?.length === 1 ? "receipt" : "receipts"} |
             </p>
             <p className=" ">
-              {project.receipts?.length &&
+              {project.receipts?.length === 0 && "$0.00"}
+              {project.receipts?.length > 0 &&
                 formatCurrency(
                   project.receipts.reduce((acc, receipt) => {
                     const receiptTotal = receipt.items.reduce(
@@ -276,8 +277,8 @@ const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
 
   return (
     <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
-      <div className="relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded border-emerald-900 border-[1px]">
-        <h2 className="text-orange-600">
+      <div className="relative p-8 bg-orange-100 w-full max-w-md m-auto flex-col flex rounded shadow-md ">
+        <h2 className="text-emerald-900">
           Are you sure you want to delete {project.name}? This will delete all
           receipts and items in the project.
         </h2>
@@ -288,7 +289,7 @@ const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
               e?.preventDefault();
               setDeleteOpen(false);
             }}
-            styles="bg-white text-emerald-900 text-base font-medium rounded-full w-auto border-[1px] border-emerald-900 text-xs"
+            styles="bg-orange-100 text-emerald-900 text-base font-medium rounded-full w-auto border-[1px] border-emerald-900 text-xs"
           >
             Cancel
           </RegularButton>

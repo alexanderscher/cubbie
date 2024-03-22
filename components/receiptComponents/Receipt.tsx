@@ -279,8 +279,8 @@ const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
 
   return (
     <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
-      <div className="relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded border-emerald-900 border-[1px]">
-        <h2 className="text-orange-600">
+      <div className="relative p-8 bg-orange-100  w-full max-w-md m-auto flex-col flex rounded shadow-md">
+        <h2 className="text-emerald-900">
           Are you sure you want to delete receipt from {receipt.store}? This
           will delete all items in the receipt.
         </h2>
@@ -288,7 +288,7 @@ const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
         <div className="mt-4 flex justify-between">
           <RegularButton
             handleClick={() => setDeleteOpen(false)}
-            styles="bg-white text-emerald-900 text-base font-medium rounded-full w-auto border-[1px] border-emerald-900 text-xs"
+            styles="bg-orange-100 text-emerald-900 text-base font-medium rounded-full w-auto border-[1px] border-emerald-900 text-xs"
           >
             Cancel
           </RegularButton>

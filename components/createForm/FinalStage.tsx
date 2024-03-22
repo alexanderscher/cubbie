@@ -15,6 +15,7 @@ import CurrencyInput from "react-currency-input-field";
 import LargeButton from "@/components/buttons/LargeButton";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
 import { usePathname, useRouter } from "next/navigation";
+import { Toaster } from "sonner";
 
 interface FinalStageProps {
   values: any;

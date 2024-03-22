@@ -13,9 +13,6 @@ import { Pages } from "@/types/form";
 
 const getValidationSchema = (stage: ReceiptStoreStage) => {
   switch (stage) {
-    case ReceiptStoreStage.IN_STORE_RECEIPT:
-      return RECEIPT_SCHEMA;
-
     case ReceiptStoreStage.IN_STORE_GPT:
       return GPT_IMAGE_SCHEMA;
     default:
@@ -40,6 +37,7 @@ const ImagePage = ({ projects }: Pages) => {
       body: JSON.stringify({ ...values, memo: false }),
     });
     const data = await response.json();
+    console.log(data.error);
 
     if (data.error) {
       setUploadError(data.error);
@@ -111,16 +109,18 @@ const ImagePage = ({ projects }: Pages) => {
                                   Discard
                                 </p>
                               </RegularButton>
-                              <RegularButton
-                                styles="bg-white border-emerald-900"
-                                handleClick={async () => {
-                                  setStage(ReceiptStoreStage.PREVIEW);
-                                }}
-                              >
-                                <p className="text-emerald-900  text-xs">
-                                  Items
-                                </p>
-                              </RegularButton>
+                              {values.folderName && (
+                                <RegularButton
+                                  styles="bg-white border-emerald-900"
+                                  handleClick={async () => {
+                                    setStage(ReceiptStoreStage.PREVIEW);
+                                  }}
+                                >
+                                  <p className="text-emerald-900  text-xs">
+                                    Items
+                                  </p>
+                                </RegularButton>
+                              )}
                             </div>
                           </BottomBar>
                         </div>

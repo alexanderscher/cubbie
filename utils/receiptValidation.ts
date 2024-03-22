@@ -23,4 +23,5 @@ export const ITEMS_CONTENT_SCHEMA = Yup.object({
 
 export const GPT_IMAGE_SCHEMA = Yup.object().shape({
   folderName: Yup.string().required("Folder is required"),
+  items: Yup.array().min(1, "At least one item is required"),
 });

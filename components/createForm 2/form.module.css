@@ -1,0 +1,101 @@
+.receipts {
+  display: flex;
+  gap: 50px;
+}
+
+.receiptBar {
+  width: 100%;
+}
+
+.receipt {
+  display: flex;
+  gap: 40px;
+}
+.bottombar {
+  padding-left: 120px;
+}
+
+.receiptLeft {
+  width: 50%;
+  min-width: 320px;
+  max-width: 450px;
+
+  border-radius: 8px;
+}
+
+.boxes {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  padding-bottom: 40px;
+}
+
+.box {
+  width: 100%;
+  max-width: 300px;
+  min-width: 300px;
+  background-color: white;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+}
+
+.placeholder {
+  width: 100%;
+  max-width: 250px;
+  height: 200px;
+  border: 1px solid #064e3b;
+
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  position: relative;
+}
+
+.preview {
+  background-color: white;
+  width: 100%;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+  max-width: 500px;
+  width: 100%;
+}
+@media (max-width: 800px) {
+  .receipts {
+    flex-direction: column;
+  }
+  .receiptBar {
+    width: 100%;
+  }
+  .box {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 800px) {
+  .receipt {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .receiptLeft {
+    max-width: 100%;
+    min-width: 100%;
+    width: 100%;
+  }
+  .placeholder {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 550px) {
+  .bottombar {
+    padding-left: 16px;
+  }
+}

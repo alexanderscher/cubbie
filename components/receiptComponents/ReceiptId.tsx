@@ -4,7 +4,7 @@ import RegularButton from "@/components/buttons/RegularButton";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import HeaderNav from "@/components/navbar/HeaderNav";
 import ImageModal from "@/components/images/ImageModal";
 import { AddItem } from "@/components/item/AddItem";
@@ -20,6 +20,11 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [openItemId, setOpenItemId] = useState(null as number | null);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const toggleOpenItem = (
     itemId: number | undefined,
@@ -162,7 +167,8 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
           className={`flex flex-col gap-2 pb-[200px] ${styles.boxContainer}`}
         >
           <div className={`${styles.boxes} `}>
-            {receipt.items.length > 0 &&
+            {isClient &&
+              receipt.items.length > 0 &&
               receipt.items.map((item: ItemType, index: number) => (
                 <Item
                   key={item.id}

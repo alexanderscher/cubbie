@@ -8,9 +8,10 @@ import { Project } from "@/types/receiptTypes";
 import { convertHeic } from "@/utils/media";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ChangeEvent, useState, useRef } from "react";
+import { ChangeEvent, useState, useRef, useEffect } from "react";
 import { Form } from "react-hook-form";
 import { FormError } from "@/components/form-error";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
 interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
@@ -223,9 +224,14 @@ export default function ImageGpt({
       setValidationErrors(error);
       return;
     }
-    if (!image) {
+    if (!image && values.items.length === 0 && !values.receiptImage) {
       console.log("no image");
       setNoImage(true);
+      return;
+    }
+
+    if (values.receiptImage && values.items.length > 0) {
+      setPrompt(true);
       return;
     }
 
@@ -386,25 +392,30 @@ export default function ImageGpt({
         </div>
 
         {prompt && (
-          <div className="flex flex-col gap-4 mt-10">
-            <p className="text-sm text-center text-black">
-              Are you sure you want to anaylze? This will overwrite your current
-              items
+          <div className="flex flex-col gap-4 mt-10 bg-orange-200 p-6 rounded-md shadow items-center justify-center w-full text-emerlad-900">
+            <ExclamationTriangleIcon className="h-6 w-1/6 " />
+            <p className="text-sm text-center text-emerald-900">
+              Are you sure you want to anaylze the image? This will overwrite
+              your current data.
             </p>
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2 w-full">
               <RegularButton
-                styles={"bg border-black w-full"}
+                styles={
+                  "bg-orange-20 border-emerald-900 text-emerald-900 w-full"
+                }
                 handleClick={() => {
                   pathname === "/create/memo" ? MemoGptCall() : OnlineGptCall();
                 }}
               >
-                <p className="text-sm">Confirm</p>
+                <p className="text-xs">Confirm</p>
               </RegularButton>
               <RegularButton
-                styles={"bg border-black w-full"}
+                styles={
+                  "bg-orange-20 border-emerald-900 text-emerald-900 w-full"
+                }
                 handleClick={() => setPrompt(false)}
               >
-                <p className="text-sm">Cancel</p>
+                <p className="text-xs">Cancel</p>
               </RegularButton>
             </div>
           </div>
@@ -416,7 +427,7 @@ export default function ImageGpt({
             higher-quality image for better recognition.
           </p>
         )}
-        {noImage && (
+        {noImage && values.items.length === 0 && !values.receiptImage && (
           <FormError
             message={
               "Please upload an image to analyze. If you have a receipt, take a picture of the receipt and upload it."

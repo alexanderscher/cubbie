@@ -3,6 +3,8 @@ import { FormError } from "@/components/form-error";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { set } from "date-fns";
 import React, { useState } from "react";
 
 interface Props {
@@ -74,17 +76,19 @@ const TextGpt = ({ setFieldValue, values, setStage }: Props) => {
   const handleSubmit = async () => {
     if (inputText === "") {
       setNoText(true);
+      setPrompt(false);
+      return;
+    }
+    if (values.items.length > 0) {
+      setPrompt(true);
+      setNoText(false);
       return;
     }
 
-    if (values.items.length > 0) {
-      setPrompt(true);
-    } else {
-      run();
-    }
+    run();
   };
   return (
-    <div className="flex flex-col gap-4 ">
+    <div className="flex flex-col gap-4 mb-[200px]">
       <TooltipWithHelperIcon
         content='We use AI to analyze the text you enter. Go to your online receipt or
           email and copy and paste the items from the receipt. Then click the
@@ -107,20 +111,26 @@ const TextGpt = ({ setFieldValue, values, setStage }: Props) => {
         </p>
       </RegularButton>
       {prompt && (
-        <div className="flex flex-col gap-4">
-          <p className="text-sm text-center text-black">
-            Are you sure you want to anaylze? This will overwrite your current
-            items
+        <div className="flex flex-col gap-4  bg-orange-200 p-6 rounded-md shadow items-center justify-center w-full text-emerlad-900">
+          <ExclamationTriangleIcon className="h-6 w-1/6 " />
+          <p className="text-sm text-center text-emerald-900">
+            Are you sure you want to anaylze the image? This will overwrite your
+            current data.
           </p>
-          <div className="flex gap-2">
-            <RegularButton styles={"bg border-black w-full"} handleClick={run}>
-              <p className="text-sm">Confirm</p>
+          <div className="flex flex-col gap-2 w-full">
+            <RegularButton
+              styles={"bg-orange-20 border-emerald-900 text-emerald-900 w-full"}
+              handleClick={() => {
+                run();
+              }}
+            >
+              <p className="text-xs">Confirm</p>
             </RegularButton>
             <RegularButton
-              styles={"bg border-black w-full"}
+              styles={"bg-orange-20 border-emerald-900 text-emerald-900 w-full"}
               handleClick={() => setPrompt(false)}
             >
-              <p className="text-sm">Cancel</p>
+              <p className="text-xs">Cancel</p>
             </RegularButton>
           </div>
         </div>

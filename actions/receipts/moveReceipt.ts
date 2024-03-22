@@ -11,6 +11,9 @@ export const moveReceipt = async (params: {
 }) => {
   const session = await auth();
   const userId = session?.user?.id as string;
+  if (!userId) {
+    return { error: "Unauthorized" };
+  }
 
   const project = await prisma.project.findFirst({
     where: {

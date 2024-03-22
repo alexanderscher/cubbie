@@ -2,14 +2,13 @@
 import RegularButton from "@/components/buttons/RegularButton";
 import ProjectSelect from "@/components/createForm/ProjectSelect";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
-import { getProjects } from "@/lib/projectsDB";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
 import { Project } from "@/types/receiptTypes";
 import { convertHeic } from "@/utils/media";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ChangeEvent, useState, useRef, useEffect } from "react";
+import { ChangeEvent, useState, useRef } from "react";
 import { Form } from "react-hook-form";
 import { FormError } from "@/components/form-error";
 

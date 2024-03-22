@@ -6,7 +6,7 @@ import ImageGpt from "@/components/chatgpt/ImageGpt";
 import { useRouter } from "next/navigation";
 import { DEFAULT_INPUT_VALUES, ReceiptStoreStage } from "@/constants/form";
 import FinalStage from "@/components/createForm/FinalStage";
-import { GPT_IMAGE_SCHEMA, RECEIPT_SCHEMA } from "@/utils/receiptValidation";
+import { GPT_IMAGE_SCHEMA } from "@/utils/receiptValidation";
 import Loading from "@/components/Loading";
 import BottomBar from "@/components/createForm/BottomBar";
 import { Pages } from "@/types/form";

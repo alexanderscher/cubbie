@@ -45,9 +45,6 @@ export default function ImageGpt({
     folderName: "",
   });
 
-  const [help, setHelp] = useState(false);
-  const [memoHelp, setMemoHelp] = useState(false);
-
   const handleContainerClick = () => {
     if (fileInputRef.current !== null) {
       fileInputRef.current.click();
@@ -185,7 +182,6 @@ export default function ImageGpt({
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files === null) {
-      window.alert("No file selected. Choose a file.");
       return;
     }
 
@@ -228,6 +224,7 @@ export default function ImageGpt({
       return;
     }
     if (!image) {
+      console.log("no image");
       setNoImage(true);
       return;
     }
@@ -376,8 +373,8 @@ export default function ImageGpt({
               <RegularButton
                 styles="border-emerald-900 bg-emerald-900  w-full "
                 handleClick={() => {
-                  console.log("clicked");
-                  !loading && handleSubmit();
+                  console.log(loading);
+                  handleSubmit();
                 }}
               >
                 <p className="text-white text-sm">

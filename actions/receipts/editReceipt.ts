@@ -3,6 +3,7 @@ import { deleteUploadThingImage } from "@/actions/uploadthing/deletePhoto";
 import { handleUpload } from "@/actions/uploadthing/uploadPhoto";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
+import moment from "moment";
 
 import { revalidateTag } from "next/cache";
 
@@ -29,6 +30,7 @@ export const editReceipt = async (params: {
   if (!userId) {
     return { error: "Unauthorized" };
   }
+
   const {
     type,
     store,
@@ -62,6 +64,11 @@ export const editReceipt = async (params: {
     await deleteUploadThingImage(receipt_image_key);
   }
 
+  // Use moment to compare dates for the expired field
+  const expired = moment(return_date)
+    .startOf("day")
+    .isBefore(moment().startOf("day"));
+
   await prisma.receipt.update({
     where: {
       id: parseInt(params.id),
@@ -70,16 +77,15 @@ export const editReceipt = async (params: {
       type,
       store,
       card,
-
       receipt_image_url:
         receiptFileUrl === "" ? receipt_image_url : receiptFileUrl,
       receipt_image_key:
         receiptFileUrl === "" ? receipt_image_key : receiptFileKey,
       tracking_number,
-      purchase_date: new Date(purchase_date).toISOString(),
-      return_date: new Date(return_date).toISOString(),
+      purchase_date: moment(purchase_date).toISOString(),
+      return_date: moment(return_date).toISOString(),
       asset_amount: asset_amount,
-      expired: new Date(return_date) < new Date(),
+      expired: expired,
     },
   });
 

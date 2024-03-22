@@ -2,9 +2,6 @@
 
 import styles from "@/app/receipt/receiptID.module.css";
 import RegularButton from "@/components/buttons/RegularButton";
-
-import { formatDateToYYYYMMDD } from "@/utils/Date";
-
 import { Formik } from "formik";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
@@ -20,6 +17,7 @@ import Item from "@/components/Item";
 import { convertHeic } from "@/utils/media";
 import { editReceipt } from "@/actions/receipts/editReceipt";
 import { Item as ItemType, Receipt } from "@/types/receiptTypes";
+import { formatDateToYYYYMMDD } from "@/utils/Date";
 type ExtendedReceiptType = Receipt & {
   edit_image: string;
 };
@@ -33,6 +31,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const { id } = useParams();
+  const stringId = Array.isArray(id) ? id[0] : id;
   const [loading, setLoading] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [errorM, setErrorM] = useState({
@@ -106,7 +105,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
         setLoading(true);
         const update = async () => {
           setLoading(true);
-          await editReceipt({ id: id[0], values });
+          await editReceipt({ id: stringId, values });
           setLoading(false);
           router.push(`/receipt/${id}`);
         };

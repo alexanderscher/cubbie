@@ -1,7 +1,7 @@
 "use server";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
-
+import moment from "moment";
 import { unstable_cache } from "next/cache";
 
 function getDynamicCacheKey(userId: string) {
@@ -15,7 +15,6 @@ export const getReceipts = async () => {
 
   return unstable_cache(
     async (userId) => {
-      // Retrieve all receipts for the user
       const receipts = await prisma.receipt.findMany({
         where: {
           project: {
@@ -31,17 +30,21 @@ export const getReceipts = async () => {
         },
       });
 
-      // Adjust current date to start of the day for comparison
-      const currentDate = new Date();
-      currentDate.setHours(0, 0, 0, 0); // Sets the current date to midnight, ignoring the time part
+      const currentDate = moment.utc().startOf("day");
 
-      // Check each receipt to see if its return_date is in the past (before today)
+      // Check each receipt to see if its return_date is strictly before the current day (in UTC)
       // and update expired to true if needed
       const updatePromises = receipts.map((receipt) => {
-        const receiptReturnDate = new Date(receipt.return_date);
-        receiptReturnDate.setHours(0, 0, 0, 0); // Optional: Adjust if you also want to ignore time part of return_date
-        const isExpired = receiptReturnDate < currentDate;
-        // Update only if it's not already marked as expired and the return date is before today
+        // Convert return_date to UTC and set it to the start of that day, ensuring we compare full days
+        const receiptReturnDate = moment
+          .utc(receipt.return_date)
+          .startOf("day");
+
+        // Check if the return date is strictly before the current day
+        // This comparison now ensures that as long as we're on 3/21 (or the return date), it's not expired, regardless of the current time of day
+        const isExpired = receiptReturnDate.isBefore(currentDate);
+
+        // Update only if it's not already marked as expired and the return date is strictly before today
         if (!receipt.expired && isExpired) {
           return prisma.receipt.update({
             where: { id: receipt.id },
@@ -49,7 +52,6 @@ export const getReceipts = async () => {
           });
         }
       });
-
       // Wait for all update operations to complete
       await Promise.all(
         updatePromises.filter((promise) => promise !== undefined)

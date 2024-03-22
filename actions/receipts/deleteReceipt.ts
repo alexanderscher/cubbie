@@ -8,6 +8,9 @@ import { revalidateTag } from "next/cache";
 export const deleteReceipt = async (receiptId: number) => {
   const session = await auth();
   const userId = session?.user?.id as string;
+  if (!userId) {
+    return { error: "Unauthorized" };
+  }
   const receipt = await prisma.receipt.findUnique({
     where: { id: receiptId },
     select: {

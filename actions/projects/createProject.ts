@@ -6,7 +6,11 @@ import { revalidateTag } from "next/cache";
 
 export const createProject = async (name: string) => {
   const session = await auth();
+
   const userId = session?.user?.id as string;
+  if (!userId) {
+    return { error: "Unauthorized" };
+  }
   await prisma.project.create({
     data: {
       name,

@@ -17,7 +17,11 @@ interface Item {
 
 export const addItem = async (values: Item) => {
   const session = await auth();
+
   const userId = session?.user?.id as string;
+  if (!userId) {
+    return { error: "Unauthorized" };
+  }
   const keyList = [];
   const {
     description,

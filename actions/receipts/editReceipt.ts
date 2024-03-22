@@ -26,6 +26,9 @@ export const editReceipt = async (params: {
 }) => {
   const session = await auth();
   const userId = session?.user?.id as string;
+  if (!userId) {
+    return { error: "Unauthorized" };
+  }
   const {
     type,
     store,

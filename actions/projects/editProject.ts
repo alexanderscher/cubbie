@@ -8,6 +8,9 @@ import { revalidateTag } from "next/cache";
 export const editProject = async (projectId: number, name: string) => {
   const session = await auth();
   const userId = session?.user?.id as string;
+  if (!userId) {
+    return { error: "Unauthorized" };
+  }
   await prisma.project.update({
     where: {
       userId,

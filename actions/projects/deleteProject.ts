@@ -8,6 +8,9 @@ import { revalidateTag } from "next/cache";
 export const deleteProject = async (projectId: number) => {
   const session = await auth();
   const userId = session?.user?.id as string;
+  if (!userId) {
+    return { error: "Unauthorized" };
+  }
   const project = await prisma.project.findFirst({
     where: { id: projectId, userId },
   });

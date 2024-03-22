@@ -82,7 +82,7 @@ export const ProjectId = ({ project }: ProjectIdProps) => {
             />
             <p className="text-xl">No receipts found</p>
             <button
-              className="border-[1px] bg-emerald-900 text-white border-emerald-900 py-2 px-10 text-xs rounded-full w-50"
+              className="border-[1px] bg text-orange-600 border-orange-600 py-2 px-10 text-xs rounded-full w-50"
               onClick={() => setAddReceiptOpen(true)}
             >
               <p className="">Create Receipt</p>

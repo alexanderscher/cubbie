@@ -10,6 +10,7 @@ interface Props {
   type?: "button" | "submit" | "reset" | undefined;
   href?: string;
   small?: boolean;
+  disabled?: boolean;
 }
 
 const RegularButton = ({

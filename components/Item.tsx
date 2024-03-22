@@ -2,6 +2,7 @@
 import { deleteItem } from "@/actions/items/deleteItem";
 import { markAsReturned, unreturn } from "@/actions/return";
 import RegularButton from "@/components/buttons/RegularButton";
+import Loading from "@/components/Loading";
 import Shirt from "@/components/placeholderImages/Shirt";
 import { TruncateText } from "@/components/text/Truncate";
 import { Item as ItemType } from "@/types/receiptTypes";
@@ -9,7 +10,7 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 
 interface Props {
   item: any;
@@ -149,6 +150,7 @@ interface OptionsModalProps {
 
 const OptionsModal = ({ item }: OptionsModalProps) => {
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   return (
     <div
@@ -178,7 +180,9 @@ const OptionsModal = ({ item }: OptionsModalProps) => {
               ></Image>
               <button
                 onClick={async (e) => {
-                  await unreturn(item.id);
+                  startTransition(async () => {
+                    await unreturn(item.id);
+                  });
                 }}
               >
                 <p className="">Undo Return</p>
@@ -194,7 +198,9 @@ const OptionsModal = ({ item }: OptionsModalProps) => {
               ></Image>
               <button
                 onClick={async () => {
-                  await markAsReturned(item.id);
+                  startTransition(async () => {
+                    await markAsReturned(item.id);
+                  });
                 }}
               >
                 Mark as Returned
@@ -217,14 +223,18 @@ const OptionsModal = ({ item }: OptionsModalProps) => {
               deleteOpen={deleteOpen}
               setDeleteOpen={setDeleteOpen}
               item={item}
+              isPending={isPending}
               deleteItem={async () => {
-                await deleteItem(item.id);
-                setDeleteOpen(false);
+                startTransition(async () => {
+                  await deleteItem(item.id);
+                  setDeleteOpen(false);
+                });
               }}
             />
           )}
         </div>
       </div>
+      {isPending && <Loading loading={isPending} />}
     </div>
   );
 };
@@ -234,9 +244,15 @@ interface DeleteModalProps {
   setDeleteOpen: (value: boolean) => void;
   item: ItemType;
   deleteItem: () => void;
+  isPending: boolean;
 }
 
-const DeleteModal = ({ item, deleteItem, setDeleteOpen }: DeleteModalProps) => {
+const DeleteModal = ({
+  item,
+  deleteItem,
+  setDeleteOpen,
+  isPending,
+}: DeleteModalProps) => {
   return (
     <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
       <div
@@ -245,7 +261,7 @@ const DeleteModal = ({ item, deleteItem, setDeleteOpen }: DeleteModalProps) => {
           e.preventDefault();
         }}
       >
-        <h2 className="text-emerald-900">
+        <h2 className="text-emerald-900 text-sm ">
           Are you sure you want to delete {item.description}?
         </h2>
 
@@ -264,6 +280,7 @@ const DeleteModal = ({ item, deleteItem, setDeleteOpen }: DeleteModalProps) => {
           </RegularButton>
         </div>
       </div>
+      {isPending && <Loading loading={isPending} />}
     </div>
   );
 };

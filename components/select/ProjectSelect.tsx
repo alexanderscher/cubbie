@@ -19,7 +19,7 @@ const ProjectSelect = ({ handleChange, projects, values, errors }: Props) => {
   const customStyles: StylesConfig<Option, false> = {
     control: (provided, state) => ({
       ...provided,
-      backgroundColor: "#e2f1e2",
+      backgroundColor: "#FFFFFF",
       borderColor: "rgb(148 163 184)",
       borderWidth: "1px",
       boxShadow: state.isFocused ? "0 0 0px .08px rgb(6 78 59)" : "none",
@@ -30,7 +30,7 @@ const ProjectSelect = ({ handleChange, projects, values, errors }: Props) => {
     }),
     menu: (provided) => ({
       ...provided,
-      backgroundColor: "#e2f1e2",
+      backgroundColor: "#FFFFFF",
     }),
     option: (provided, state) => ({
       ...provided,

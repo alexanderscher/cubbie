@@ -1,6 +1,6 @@
 "use client";
 import RegularButton from "@/components/buttons/RegularButton";
-import ProjectSelect from "@/components/createForm/ProjectSelect";
+import ProjectSelect from "@/components/createForm/ProjectSelectForm";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";

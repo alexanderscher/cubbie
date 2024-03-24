@@ -2,7 +2,11 @@
 import RegularButton from "@/components/buttons/RegularButton";
 import { ReceiptOnlineStage, ReceiptStoreStage } from "@/constants/form";
 import { ItemInput, ReceiptInput } from "@/types/form";
-import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
+import {
+  calculateReturnDate,
+  formatDateToMMDDYY,
+  formatDateToYYYYMMDD,
+} from "@/utils/Date";
 import styles from "./form.module.css";
 import * as Yup from "yup";
 import Image from "next/image";
@@ -15,7 +19,7 @@ import CurrencyInput from "react-currency-input-field";
 import LargeButton from "@/components/buttons/LargeButton";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
 import { usePathname, useRouter } from "next/navigation";
-import { Toaster } from "sonner";
+import PurchaseTypeSelect from "@/components/select/PurchaseTypeSelect";
 
 interface FinalStageProps {
   values: any;
@@ -192,9 +196,35 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
                   )}
                 </p>
               </div>
-              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
+
+              <div className="w-full pb-2 ">
                 <p className="text-slate-400 text-xs">Purchase Date</p>
-                <p>{formatDateToMMDDYY(values.purchase_date)}</p>
+                <input
+                  className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none cursor-pointer"
+                  name="purchase_date"
+                  value={formatDateToYYYYMMDD(values.purchase_date)}
+                  onChange={(e) => {
+                    setFieldValue("purchase_date", e.target.value);
+                  }}
+                  type="date"
+                  style={{ WebkitAppearance: "none" }}
+                />
+              </div>
+
+              <div className="w-full">
+                <p className="text-xs text-slate-400 ">Days until return</p>
+                <input
+                  className="w-full border-[1px] bg border-slate-400 p-2 rounded-md  focus:border-emerald-900 focus:outline-none"
+                  name="days_until_return"
+                  value={values.days_until_return}
+                  onChange={(event) => {
+                    const value = parseInt(event.target.value, 10);
+                    setFieldValue(
+                      "days_until_return",
+                      isNaN(value) ? "" : value
+                    );
+                  }}
+                />
               </div>
               <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
                 <p className="text-slate-400 text-xs">Return Date</p>
@@ -220,18 +250,10 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
                 <p className="text-slate-400 text-xs">Quantity</p>
                 <p className="">{values.items.length}</p>
               </div>
-
-              <div className="w-full">
-                <p className="text-xs text-slate-400 ">Days until return</p>
-                <input
-                  className="w-full border-[1px] bg border-slate-400 p-2 rounded-md  focus:border-emerald-900 focus:outline-none"
-                  name="days_until_return"
-                  value={values.days_until_return}
-                  onChange={(e) => {
-                    setFieldValue("days_until_return", e.target.value);
-                  }}
-                />
-              </div>
+              <PurchaseTypeSelect
+                type={values.type}
+                setFieldValue={setFieldValue}
+              />
 
               <div className="w-full">
                 <p className="text-xs text-slate-400 ">Card</p>

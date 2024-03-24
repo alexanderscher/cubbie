@@ -18,6 +18,7 @@ import { convertHeic } from "@/utils/media";
 import { editReceipt } from "@/actions/receipts/editReceipt";
 import { Item as ItemType, Receipt } from "@/types/receiptTypes";
 import { formatDateToYYYYMMDD } from "@/utils/Date";
+import PurchaseTypeSelect from "@/components/select/PurchaseTypeSelect";
 type ExtendedReceiptType = Receipt & {
   edit_image: string;
 };
@@ -269,6 +270,12 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                       <p className="text-orange-900 text-xs">{errorM.store}</p>
                     )}
                   </div>
+                  <PurchaseTypeSelect
+                    type={values.type}
+                    setFieldValue={setFieldValue}
+                    color="white"
+                  />
+
                   {/* <div className="w-full ">
                     <p className="text-slate-400 text-xs">Purchase Type</p>
                     <select

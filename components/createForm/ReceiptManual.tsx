@@ -1,5 +1,5 @@
 "use client";
-import ProjectSelect from "@/components/createForm/ProjectSelect";
+import ProjectSelect from "@/components/createForm/ProjectSelectForm";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import styles from "@/app/create/upload.module.css";
 import { getProjects } from "@/lib/projectsDB";
@@ -27,11 +27,8 @@ const ReceiptManual = ({
   setFieldValue,
   errors,
   online = false,
-  setStage,
   projects,
 }: ReceiptManualProps) => {
-  const [help, setHelp] = React.useState(false);
-
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleContainerClick = () => {

@@ -219,12 +219,13 @@ export default function ImageGpt({
 
   const handleSubmit = async () => {
     const error = await validateForm();
+    console.log(image);
 
     if (Object.keys(error).length > 0) {
       setValidationErrors(error);
       return;
     }
-    if (!image && values.items.length === 0 && !values.receiptImage) {
+    if (!image) {
       console.log("no image");
       setNoImage(true);
       return;
@@ -235,7 +236,7 @@ export default function ImageGpt({
       return;
     }
 
-    if (values.items.length === 0) {
+    if (values.items.length === 0 && image) {
       setLoading(true);
       if (values.memo) {
         MemoGptCall();
@@ -353,7 +354,7 @@ export default function ImageGpt({
               <label htmlFor="file-upload" className=""></label>
             </div>
 
-            {values.receiptImage && (
+            {image && (
               <div className="relative w-24 h-24 ">
                 <div className="w-24 h-24 overflow-hidden flex items-center justify-center rounded-md border-[1px] border-emerald-900">
                   <button
@@ -365,12 +366,7 @@ export default function ImageGpt({
                   >
                     X
                   </button>
-                  <Image
-                    width={150}
-                    height={150}
-                    src={values.receiptImage}
-                    alt=""
-                  />
+                  <Image width={150} height={150} src={image} alt="" />
                 </div>
               </div>
             )}
@@ -427,7 +423,7 @@ export default function ImageGpt({
             higher-quality image for better recognition.
           </p>
         )}
-        {noImage && values.items.length === 0 && !values.receiptImage && (
+        {noImage && (
           <FormError
             message={
               "Please upload an image to analyze. If you have a receipt, take a picture of the receipt and upload it."

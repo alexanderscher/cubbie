@@ -1,3 +1,4 @@
+import FormHeader from "@/components/createForm/FormPages/FormHeader";
 import ImagePage from "@/components/createForm/FormPages/ImagePage";
 import TextPage from "@/components/createForm/FormPages/TextPage";
 import { getProjects } from "@/lib/projectsDB";
@@ -12,12 +13,9 @@ const fetchProject = async () => {
 const UploadText = async () => {
   const projects = await fetchProject();
   return (
-    <div>
-      <div className="border-b-[1px] border-emerald-900">
-        <h1 className="text-emerald-900 text-2xl">Create Receipt</h1>
-      </div>
+    <FormHeader>
       <TextPage projects={projects} />
-    </div>
+    </FormHeader>
   );
 };
 

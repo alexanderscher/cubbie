@@ -275,7 +275,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                       name="type"
                       value={values.type}
                       onChange={handleChange}
-                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-[10px]"
+                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-[10px] bg-white"
                     >
                       <option value={values.type}>
                         {values.type
@@ -297,9 +297,10 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                     <p className="text-slate-400 text-xs">Purcahse Date</p>
                     <input
                       type="date"
+                      style={{ WebkitAppearance: "none" }}
                       value={formatDateToYYYYMMDD(values.purchase_date)}
                       onChange={handleChange("purchase_date")}
-                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2"
+                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2 bg-white"
                     />
                     {errorM.purchase_date && (
                       <p className="text-orange-900 text-xs">
@@ -312,9 +313,10 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                     <p className="text-slate-400 text-xs">Return Date</p>
                     <input
                       type="date"
+                      style={{ WebkitAppearance: "none" }}
                       value={formatDateToYYYYMMDD(values.return_date)}
                       onChange={handleChange("return_date")}
-                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2"
+                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2 bg-white"
                     />
                     {errorM.return_date && (
                       <p className="text-orange-900 text-xs">

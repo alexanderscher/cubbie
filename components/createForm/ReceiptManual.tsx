@@ -169,11 +169,12 @@ const ReceiptManual = ({
                 <p className="text-sm text-slate-400 ">Purchase Date</p>
                 <div className="flex flex-col gap-2">
                   <input
-                    className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none"
+                    className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none cursor-pointer"
                     name="purchase_date"
                     value={values.purchase_date}
                     onChange={handleChange("purchase_date")}
                     type="date"
+                    style={{ WebkitAppearance: "none" }}
                   />
                   {errors.purchase_date && (
                     <p className="text-orange-800 text-sm">

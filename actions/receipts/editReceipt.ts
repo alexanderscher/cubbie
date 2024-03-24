@@ -9,7 +9,7 @@ import { revalidateTag } from "next/cache";
 
 interface ExtendedReceipt {
   id: number;
-  type: string;
+  // type: string;
   store: string;
   card: string;
   receipt_image_url: string;
@@ -32,7 +32,7 @@ export const editReceipt = async (params: {
   }
 
   const {
-    type,
+    // type,
     store,
     card,
     receipt_image_url,
@@ -74,7 +74,7 @@ export const editReceipt = async (params: {
       id: parseInt(params.id),
     },
     data: {
-      type,
+      // type,
       store,
       card,
       receipt_image_url:

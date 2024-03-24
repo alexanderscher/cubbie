@@ -269,7 +269,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                       <p className="text-orange-900 text-xs">{errorM.store}</p>
                     )}
                   </div>
-                  <div className="w-full ">
+                  {/* <div className="w-full ">
                     <p className="text-slate-400 text-xs">Purchase Type</p>
                     <select
                       name="type"
@@ -291,7 +291,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                         <option value="Online">Online</option>
                       )}
                     </select>
-                  </div>
+                  </div> */}
 
                   <div className="w-full ">
                     <p className="text-slate-400 text-xs">Purcahse Date</p>

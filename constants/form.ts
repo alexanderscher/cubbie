@@ -3,7 +3,7 @@ import { ReceiptInput } from "@/types/form";
 const TODAY = new Date().toISOString().split("T")[0];
 
 export const DEFAULT_INPUT_VALUES: ReceiptInput = {
-  type: "",
+  // type: "",
   store: "",
   card: "",
   tracking_number: "",

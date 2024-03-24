@@ -63,7 +63,7 @@ const ImagePage = ({ projects }: Pages) => {
         <Formik
           initialValues={{
             ...DEFAULT_INPUT_VALUES,
-            type: "Store",
+            // type: "Store",
           }}
           validationSchema={getValidationSchema(stage)}
           onSubmit={async (values) => {

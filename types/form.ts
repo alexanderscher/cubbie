@@ -16,7 +16,7 @@ export interface ItemInput {
 }
 
 export interface ReceiptInput {
-  // type: string;
+  type: string;
   store: string;
   card?: string;
   assetAmount: string;

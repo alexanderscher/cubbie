@@ -1,6 +1,6 @@
 export interface Receipt {
   id: number;
-  // type: string;
+  type: string;
   store: string;
   card: string;
   tracking_number: string;

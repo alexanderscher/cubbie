@@ -116,6 +116,7 @@ export async function POST(request: Request) {
 
     const receipt = await prisma.receipt.create({
       data: {
+        type,
         store,
         card,
         asset_amount: parseInt(assetAmount),

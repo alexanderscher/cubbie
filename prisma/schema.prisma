@@ -95,6 +95,7 @@ model Project {
 
 model Receipt {
   id                Int      @id @default(autoincrement())
+  type              String
   store             String
   card              String?
   tracking_number   String?

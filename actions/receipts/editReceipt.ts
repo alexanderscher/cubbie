@@ -9,7 +9,7 @@ import { revalidateTag } from "next/cache";
 
 interface ExtendedReceipt {
   id: number;
-  // type: string;
+  type: string;
   store: string;
   card: string;
   receipt_image_url: string;

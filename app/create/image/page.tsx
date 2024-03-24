@@ -1,3 +1,4 @@
+import FormHeader from "@/components/createForm/FormPages/FormHeader";
 import ImagePage from "@/components/createForm/FormPages/ImagePage";
 import { getProjects } from "@/lib/projectsDB";
 import { Project } from "@/types/receiptTypes";
@@ -11,12 +12,9 @@ const fetchProject = async () => {
 const UploadImage = async () => {
   const projects = await fetchProject();
   return (
-    <div>
-      <div className="border-b-[1px] border-emerald-900">
-        <h1 className="text-emerald-900 text-2xl">Create Receipt</h1>
-      </div>
+    <FormHeader>
       <ImagePage projects={projects} />
-    </div>
+    </FormHeader>
   );
 };
 

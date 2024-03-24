@@ -243,16 +243,16 @@ const TextPage = ({ projects }: Pages) => {
                                   Discard
                                 </p>
                               </RegularButton>
-                              <div className="flex gap-4 ">
+                              <div className="flex gap-2 ">
                                 <RegularButton
-                                  styles={
-                                    "bg-emerald-900 border-emerald-900 w-full"
-                                  }
+                                  styles={"border-emerald-900 w-full"}
                                   handleClick={() => {
                                     setStage(ReceiptOnlineStage.ONLINE_RECEIPT);
                                   }}
                                 >
-                                  <p className="text-white text-xs">Back</p>
+                                  <p className="text-emerald-900 text-xs">
+                                    Back
+                                  </p>
                                 </RegularButton>
 
                                 <RegularButton
@@ -263,7 +263,7 @@ const TextPage = ({ projects }: Pages) => {
                                     setStage(ReceiptOnlineStage.PREVIEW);
                                   }}
                                 >
-                                  <p className="text-white text-xs">Items</p>
+                                  <p className="text-white text-xs">Finish</p>
                                 </RegularButton>
                               </div>
                             </div>

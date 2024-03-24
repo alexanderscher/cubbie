@@ -72,7 +72,7 @@ const TextPage = ({ projects }: Pages) => {
       <Formik
         initialValues={{
           ...DEFAULT_INPUT_VALUES,
-          type: "Online",
+          // type: "Online",
         }}
         onSubmit={async (values) => {
           console.log("values", values);

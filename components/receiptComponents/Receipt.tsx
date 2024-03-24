@@ -4,6 +4,7 @@ import { moveReceipt } from "@/actions/receipts/moveReceipt";
 import RegularButton from "@/components/buttons/RegularButton";
 import { AddItem } from "@/components/item/AddItem";
 import Loading from "@/components/Loading";
+import ProjectSelect from "@/components/select/ProjectSelect";
 import { TruncateText } from "@/components/text/Truncate";
 import { getProjects } from "@/lib/projectsDB";
 import { Item, Receipt as ReceiptType } from "@/types/receiptTypes";
@@ -159,7 +160,6 @@ interface AddItemModalProps {
 const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
   const [project, setProject] = useState<Project[]>([]);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState("");
   const [isPending, startTransition] = useTransition();
 
@@ -167,7 +167,6 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
     const fetchProjects = async () => {
       const data = await getProjects();
       setProject(data as Project[]);
-      setLoading(false);
     };
     fetchProjects();
   }, []);
@@ -182,6 +181,7 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
 
     if (selectedProject !== "") {
       startTransition(async () => {
+        console.log(isPending);
         await moveReceipt({
           id: receipt.id,
           projectId: parseInt(selectedProject),
@@ -226,7 +226,13 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
         <div className="p-6">
           <div className="space-y-4">
             <div>
-              <p className="text-xs text-emerald-900 ">Project Folder</p>
+              <ProjectSelect
+                projects={project}
+                handleChange={setSelectedProject}
+                values={selectedProject}
+                errors={error}
+              ></ProjectSelect>
+              {/* <p className="text-xs text-emerald-900 ">Project Folder</p>
               {!loading && (
                 <select
                   className="w-full border-[1px] p-2 rounded-md border-slate-300 focus:border-emerald-900 focus:outline-none
@@ -258,7 +264,7 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
                       </option>
                     ))}
                 </select>
-              )}
+              )} */}
 
               {error && <p className="text-orange-900 text-xs">{error}</p>}
             </div>

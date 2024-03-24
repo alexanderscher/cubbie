@@ -212,10 +212,10 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
                 <p className="text-slate-400 text-xs">Project</p>
                 <p className="">{values.folderName}</p>
               </div>
-              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
+              {/* <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
                 <p className="text-slate-400 text-xs">Receipt Type</p>
                 <p className="">{values.type}</p>
-              </div>
+              </div> */}
               <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
                 <p className="text-slate-400 text-xs">Quantity</p>
                 <p className="">{values.items.length}</p>

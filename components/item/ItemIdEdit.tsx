@@ -14,6 +14,7 @@ import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
 import ImageModal from "@/components/images/ImageModal";
 import { convertHeic } from "@/utils/media";
 import { editItem } from "@/actions/items/editItem";
+import { FormError } from "@/components/form-error";
 
 interface ItemIdEditProps {
   item: ExtendedItemType;
@@ -75,9 +76,13 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
       }}
       onSubmit={(values) => {
         startTransition(async () => {
-          await editItem(id, values);
+          const result = await editItem(id, values);
 
-          router.push(`/item/${id}`);
+          if (result?.error) {
+            setUploadError(result.error);
+          } else {
+            router.push(`/item/${id}`);
+          }
         });
       }}
       validationSchema={EDIT_ITEM_SCHEMA}
@@ -228,6 +233,11 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                     className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
                   />
                 </div>
+                {errorM.description && (
+                  <p className="text-orange-900 text-xs">
+                    {errorM.description}
+                  </p>
+                )}
                 <div className="w-full">
                   <p className="text-slate-400 text-xs">Price</p>
                   <CurrencyInput
@@ -243,6 +253,9 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                     }}
                   />
                 </div>
+                {errorM.price && (
+                  <p className="text-orange-900 text-xs">{errorM.price}</p>
+                )}
                 <div className="w-full ">
                   <p className="text-slate-400 text-xs">Barcode</p>
                   <div className="flex gap-2">
@@ -306,15 +319,24 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                     className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
                   />
                 </div>
+                {uploadError && (
+                  <FormError
+                    message={
+                      uploadError === "Unauthorized"
+                        ? "You are not authorized to edit this item"
+                        : "Error editing item"
+                    }
+                  ></FormError>
+                )}
               </div>
             </div>
           </div>
-          {uploadError && (
+          {/* {uploadError && (
             <ErrorModal
               errorMessage={uploadError}
               onClose={() => setUploadError("")}
             />
-          )}
+          )} */}
           {isPending && <Loading loading={isPending} />}
         </div>
       )}

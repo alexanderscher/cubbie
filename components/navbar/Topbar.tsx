@@ -152,16 +152,7 @@ const Topbar = ({ session }: TopbarProps) => {
                 />
               </div>
             </div>
-            <div>
-              {session ? (
-                <LogOutButton />
-              ) : (
-                <div className="flex flex-col">
-                  <Link href="/auth/register">Sign Up</Link>
-                  <Link href="/auth/login">Login</Link>
-                </div>
-              )}
-            </div>
+            <div className="mt-3">{session && <LogOutButton />}</div>
           </div>
         </div>
       )}

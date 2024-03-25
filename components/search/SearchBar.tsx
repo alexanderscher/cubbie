@@ -36,7 +36,7 @@ function SearchBar({ searchType }: Props) {
   return (
     <div className="w-full">
       <input
-        className="searchBar border-[1px] border-black placeholder:text-slate-400 placeholder:text-xs flex items-center text-sm text-black p-3"
+        className="searchBar  border-[1px] border-black placeholder:text-slate-400 placeholder:text-xs flex items-center text-sm text-black p-3"
         placeholder={`Search ${
           searchType === "Receipts"
             ? "receipt by store name"

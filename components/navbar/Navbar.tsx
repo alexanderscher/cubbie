@@ -7,6 +7,7 @@ import { useSearchBarContext } from "@/components/context/SearchBarContext";
 import SearchAllItems from "@/components/search/AlItems";
 import { useSession } from "next-auth/react";
 import { LogOutButton } from "@/components/LogOutButton";
+import { useState } from "react";
 
 interface NavbarProps {
   session: any;
@@ -14,6 +15,11 @@ interface NavbarProps {
 const Navbar = ({ session }: NavbarProps) => {
   const pathname = usePathname();
   const { searchBarOpen, setSearchBarOpen } = useSearchBarContext();
+  const [isModalVisible, setModalVisible] = useState(false);
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   return (
     <div className={`${styles.navbarFixed} p-2`}>
       <div className={`${styles.navbarItems} text-sm`}>
@@ -140,32 +146,24 @@ const Navbar = ({ session }: NavbarProps) => {
             <p className="text-xs">Alerts</p>
           </Link>
         </div>
-        <div className={styles.linkWrapper}>
-          <Link
-            href="/"
-            className="flex flex-col justify-center items-center gap-2"
-          >
-            <Image
-              src="/account_w.png"
-              alt=""
-              width={25}
-              height={25}
-              className="object-cover "
-              style={{ objectFit: "cover", objectPosition: "center" }}
-            />
-            <p className="text-xs">Account</p>
-          </Link>
-        </div>
-
-        <div>
-          {session ? (
-            <LogOutButton />
-          ) : (
-            <div className="flex flex-col">
-              <Link href="/auth/register">Sign Up</Link>
-              <Link href="/auth/login">Login</Link>
+        <div className="relative">
+          <div className={styles.linkWrapper}>
+            <div
+              className="flex flex-col justify-center items-center gap-2 cursor-pointer"
+              onClick={toggleModal}
+            >
+              <Image
+                src="/account_w.png"
+                alt=""
+                width={25}
+                height={25}
+                className="object-cover"
+                style={{ objectFit: "cover", objectPosition: "center" }}
+              />
+              <p className="text-xs">Account</p>
             </div>
-          )}
+          </div>
+          {isModalVisible && <Modal session={session} />}
         </div>
       </div>
 
@@ -187,3 +185,24 @@ const Navbar = ({ session }: NavbarProps) => {
 };
 
 export default Navbar;
+
+interface ModalProps {
+  session: any;
+}
+
+const Modal = ({ session }: ModalProps) => {
+  console.log(session);
+  return (
+    <div className="absolute left-full top-0 mt-[-1rem] ml-2 w-48  bg-white shadow-lg rounded-md border border-gray-200 flex flex-col  text-black">
+      <div className="text-black border-b-[1px]">
+        <p className="p-3">{session && session.user.name}</p>
+      </div>
+
+      <div className="p-3">
+        <Link href="/profile">Profile</Link>
+
+        <p className="text-black">{session && <LogOutButton type="not" />}</p>
+      </div>
+    </div>
+  );
+};

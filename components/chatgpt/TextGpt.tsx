@@ -111,27 +111,31 @@ const TextGpt = ({ setFieldValue, values, setStage }: Props) => {
         </p>
       </RegularButton>
       {prompt && (
-        <div className="flex flex-col gap-4  bg-orange-200 p-6 rounded-md shadow items-center justify-center w-full text-emerlad-900">
-          <ExclamationTriangleIcon className="h-6 w-1/6 " />
-          <p className="text-sm text-center text-emerald-900">
-            Are you sure you want to anaylze the image? This will overwrite your
-            current data.
-          </p>
-          <div className="flex flex-col gap-2 w-full">
-            <RegularButton
-              styles={"bg-orange-20 border-emerald-900 text-emerald-900 w-full"}
-              handleClick={() => {
-                run();
-              }}
-            >
-              <p className="text-xs">Confirm</p>
-            </RegularButton>
-            <RegularButton
-              styles={"bg-orange-20 border-emerald-900 text-emerald-900 w-full"}
-              handleClick={() => setPrompt(false)}
-            >
-              <p className="text-xs">Cancel</p>
-            </RegularButton>
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex justify-center items-center">
+          {/* Modal Content */}
+          <div className="flex flex-col gap-4 mt-10 bg-orange-200 p-6 rounded-md shadow items-center justify-center w-full text-emerald-900 max-w-lg">
+            <ExclamationTriangleIcon className="h-6 w-1/6" />
+            <p className="text-sm text-center text-emerald-900">
+              Are you sure you want to analyze the image? This will overwrite
+              your current data.
+            </p>
+            <div className="flex flex-col gap-2 w-full">
+              <RegularButton
+                styles="bg-orange-200 border-emerald-900 text-emerald-900 w-full"
+                handleClick={() => {
+                  run();
+                  setPrompt(false);
+                }}
+              >
+                <p className="text-xs">Confirm</p>
+              </RegularButton>
+              <RegularButton
+                styles="bg-orange-200 border-emerald-900 text-emerald-900 w-full"
+                handleClick={() => setPrompt(false)}
+              >
+                <p className="text-xs">Cancel</p>
+              </RegularButton>
+            </div>
           </div>
         </div>
       )}

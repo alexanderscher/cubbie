@@ -68,7 +68,7 @@ export const NewPasswordForm = () => {
                     <Input
                       {...field}
                       disabled={isPending}
-                      placeholder="******"
+                      // placeholder="******"
                       type="password"
                     />
                   </FormControl>
@@ -79,7 +79,11 @@ export const NewPasswordForm = () => {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button disabled={isPending} type="submit" className="w-full">
+          <Button
+            disabled={isPending}
+            type="submit"
+            className="w-full bg-black text-white rounded-full text-xs"
+          >
             Reset password
           </Button>
         </form>

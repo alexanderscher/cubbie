@@ -15,7 +15,6 @@ interface Props {
 }
 
 const ProjectSelect = ({ handleChange, projects, values, errors }: Props) => {
-  console.log("values", projects);
   const customStyles: StylesConfig<Option, false> = {
     control: (provided, state) => ({
       ...provided,

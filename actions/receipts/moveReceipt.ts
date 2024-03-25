@@ -22,16 +22,19 @@ export const moveReceipt = async (params: {
   });
 
   if (!project) {
-    throw new Error("Project not found or doesn't belong to the user");
+    return { error: "Project not found or doesn't belong to the user" };
   }
-
-  await prisma.receipt.update({
-    where: {
-      id: params.id,
-    },
-    data: {
-      project_id: params.projectId,
-    },
-  });
-  revalidateTag(`projects_user_${userId}`);
+  try {
+    await prisma.receipt.update({
+      where: {
+        id: params.id,
+      },
+      data: {
+        project_id: params.projectId,
+      },
+    });
+    revalidateTag(`projects_user_${userId}`);
+  } catch (e) {
+    return { error: "An error occured" };
+  }
 };

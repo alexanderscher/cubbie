@@ -2,6 +2,7 @@
 import { deleteReceipt } from "@/actions/receipts/deleteReceipt";
 import { moveReceipt } from "@/actions/receipts/moveReceipt";
 import RegularButton from "@/components/buttons/RegularButton";
+import { FormError } from "@/components/form-error";
 import { AddItem } from "@/components/item/AddItem";
 import Loading from "@/components/Loading";
 import ProjectSelect from "@/components/select/ProjectSelect";
@@ -160,6 +161,7 @@ interface AddItemModalProps {
 const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
   const [project, setProject] = useState<Project[]>([]);
   const [error, setError] = useState("");
+  const [uploadError, setUploadError] = useState("");
   const [selectedProject, setSelectedProject] = useState("");
   const [isPending, startTransition] = useTransition();
 
@@ -174,21 +176,25 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
   const handleSubmit = async () => {
     if (selectedProject === receipt.project.id.toString()) {
       setError("Receipt is already in this project");
+      return;
     }
     if (selectedProject === "") {
       setError("Please select a project");
+      return;
     }
 
     if (selectedProject !== "") {
       startTransition(async () => {
-        console.log(isPending);
-        await moveReceipt({
+        const result = await moveReceipt({
           id: receipt.id,
           projectId: parseInt(selectedProject),
         });
+        if (result?.error) {
+          setUploadError(result.error);
+        } else {
+          setIsOpen(false);
+        }
       });
-
-      setIsOpen(false);
     }
   };
 
@@ -223,62 +229,35 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
             <span className="text-2xl">&times;</span>
           </button>
         </div>
-        <div className="p-6">
-          <div className="space-y-4">
-            <div>
-              <ProjectSelect
-                projects={project}
-                handleChange={setSelectedProject}
-                values={selectedProject}
-                errors={error}
-              ></ProjectSelect>
-              {/* <p className="text-xs text-emerald-900 ">Project Folder</p>
-              {!loading && (
-                <select
-                  className="w-full border-[1px] p-2 rounded-md border-slate-300 focus:border-emerald-900 focus:outline-none
-              
-              "
-                  onChange={(e) => setSelectedProject(e.target.value)}
-                >
-                  {receipt.project ? (
-                    <option value={receipt.project.id}>
-                      {receipt.project.name}
-                    </option>
-                  ) : (
-                    <option value="">Select a project</option>
-                  )}
-                  {receipt.project &&
-                    project &&
-                    project
-                      .filter((p) => p.id !== receipt.project.id)
-                      .map((project) => (
-                        <option key={project.id} value={project.id}>
-                          {project.name}
-                        </option>
-                      ))}
-                  {!receipt.project &&
-                    project &&
-                    project.map((project) => (
-                      <option key={project.id} value={project.id}>
-                        {project.name}
-                      </option>
-                    ))}
-                </select>
-              )} */}
+        <div className="p-6 flex flex-col gap-4">
+          <div className="flex flex-col gap-4">
+            <div className="space-y-4">
+              <div className="flex flex-col gap-2">
+                {project && (
+                  <ProjectSelect
+                    projects={project}
+                    handleChange={setSelectedProject}
+                    values={selectedProject}
+                    errors={error}
+                  ></ProjectSelect>
+                )}
 
-              {error && <p className="text-orange-900 text-xs">{error}</p>}
+                {error && <p className="text-orange-900 text-xs">{error}</p>}
+              </div>
+            </div>
+
+            <div className="flex justify-end mt-6">
+              <RegularButton
+                type="button"
+                styles="bg-emerald-900 text-white border-emerald-900"
+                handleClick={handleSubmit}
+              >
+                <p className="text-xs">Move</p>
+              </RegularButton>
             </div>
           </div>
 
-          <div className="flex justify-end mt-6">
-            <RegularButton
-              type="button"
-              styles="bg-emerald-900 text-white border-emerald-900"
-              handleClick={handleSubmit}
-            >
-              <p className="text-xs">Move</p>
-            </RegularButton>
-          </div>
+          {uploadError && <FormError message={uploadError}></FormError>}
         </div>
       </div>
       {isPending && <Loading loading={isPending} />}
@@ -293,35 +272,46 @@ interface DeleteModalProps {
 
 const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
   const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState("");
 
   const deleteMethod = async () => {
     startTransition(async () => {
-      await deleteReceipt(receipt.id);
+      const result = await deleteReceipt(receipt.id);
+      if (result?.error) {
+        console.log(result.error);
+        setError("Error deleting receipt");
+      } else {
+        setDeleteOpen(false);
+      }
     });
   };
 
   return (
     <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
-      <div className="relative p-8 bg-orange-100  w-full max-w-md m-auto flex-col flex rounded shadow-md">
-        <h2 className="text-emerald-900 text-sm">
-          Are you sure you want to delete receipt from {receipt.store}? This
-          will delete all items in the receipt.
-        </h2>
+      <div className="relative p-8 bg-orange-100  w-full max-w-md m-auto flex-col flex  rounded shadow-md gap-4">
+        <div>
+          <h2 className="text-emerald-900 text-sm">
+            Are you sure you want to delete receipt from {receipt.store}? This
+            will delete all items in the receipt.
+          </h2>
 
-        <div className="mt-4 flex justify-between">
-          <RegularButton
-            handleClick={() => setDeleteOpen(false)}
-            styles="bg-orange-100 text-emerald-900 text-base font-medium rounded-full w-auto border-[1px] border-emerald-900 text-xs"
-          >
-            Cancel
-          </RegularButton>
-          <RegularButton
-            handleClick={deleteMethod}
-            styles="bg-emerald-900 text-white text-base font-medium rounded-full w-auto border-[1px] border-emerald-900 text-xs"
-          >
-            Confirm
-          </RegularButton>
+          <div className="mt-4 flex justify-between">
+            <RegularButton
+              handleClick={() => setDeleteOpen(false)}
+              styles="bg-orange-100 text-emerald-900 text-base font-medium rounded-full w-auto border-[1px] border-emerald-900 text-xs"
+            >
+              Cancel
+            </RegularButton>
+            <RegularButton
+              handleClick={deleteMethod}
+              styles="bg-emerald-900 text-white text-base font-medium rounded-full w-auto border-[1px] border-emerald-900 text-xs"
+            >
+              Confirm
+            </RegularButton>
+          </div>
         </div>
+
+        {error && <FormError message={error}></FormError>}
       </div>
       {isPending && <Loading loading={isPending} />}
     </div>

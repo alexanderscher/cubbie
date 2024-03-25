@@ -103,8 +103,12 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
       }}
       onSubmit={(values) => {
         startTransition(async () => {
-          await editReceipt({ id: stringId, values });
-          router.push(`/receipt/${id}`);
+          const result = await editReceipt({ id: stringId, values });
+          if (result?.error) {
+            setUploadError(result.error);
+          } else {
+            router.push(`/receipt/${id}`);
+          }
         });
       }}
       validationSchema={EDIT_RECEIPT_SCHEMA}
@@ -259,7 +263,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                 )}
 
                 <div className="flex flex-col gap-4 text-sm">
-                  <div className="w-full ">
+                  <div className="w-full">
                     <p className="text-slate-400 text-xs">Store Name</p>
                     <input
                       value={values.store}
@@ -267,7 +271,9 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                       className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2"
                     />
                     {errorM.store && (
-                      <p className="text-orange-900 text-xs">{errorM.store}</p>
+                      <p className="text-orange-900 text-xs mt-2">
+                        {errorM.store}
+                      </p>
                     )}
                   </div>
                   <PurchaseTypeSelect
@@ -275,30 +281,6 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                     setFieldValue={setFieldValue}
                     color="white"
                   />
-
-                  {/* <div className="w-full ">
-                    <p className="text-slate-400 text-xs">Purchase Type</p>
-                    <select
-                      name="type"
-                      value={values.type}
-                      onChange={handleChange}
-                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-[10px] bg-white"
-                    >
-                      <option value={values.type}>
-                        {values.type
-                          ? values.type.charAt(0).toUpperCase() +
-                            values.type.slice(1)
-                          : "Select type"}
-                      </option>
-
-                      {values.type !== "Store" && (
-                        <option value="Store">Store</option>
-                      )}
-                      {values.type !== "Online" && (
-                        <option value="Online">Online</option>
-                      )}
-                    </select>
-                  </div> */}
 
                   <div className="w-full ">
                     <p className="text-slate-400 text-xs">Purcahse Date</p>
@@ -310,7 +292,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                       className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2 bg-white"
                     />
                     {errorM.purchase_date && (
-                      <p className="text-orange-900 text-xs">
+                      <p className="text-orange-900 text-xs mt-2">
                         {errorM.purchase_date}
                       </p>
                     )}
@@ -326,7 +308,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                       className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2 bg-white"
                     />
                     {errorM.return_date && (
-                      <p className="text-orange-900 text-xs">
+                      <p className="text-orange-900 text-xs mt-2">
                         {errorM.return_date}
                       </p>
                     )}
@@ -363,7 +345,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                       className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2"
                     />
                     {errorM.tracking_number && (
-                      <p className="text-orange-900 text-xs">
+                      <p className="text-orange-900 text-xs mt-2">
                         {errorM.tracking_number}
                       </p>
                     )}

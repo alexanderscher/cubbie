@@ -262,16 +262,19 @@ const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
   const [isPending, startTransition] = useTransition();
 
   const handleSubmit = async () => {
-    try {
-      startTransition(async () => {
-        if (project.id) {
-          await deleteProject(project.id);
-        }
-        setDeleteOpen(false); // Assuming you want to close a modal or similar
-      });
-    } catch (error) {
-      setUploadError("Error deleting project"); // Display any errors from the operation
+    if (!project.id) {
+      setUploadError("No project selected for deletion");
+      return;
     }
+
+    startTransition(async () => {
+      const result = await deleteProject(project.id);
+      if (result?.error) {
+        setUploadError(result.error);
+      } else {
+        setDeleteOpen(false);
+      }
+    });
   };
 
   return (

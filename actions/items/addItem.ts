@@ -16,46 +16,51 @@ interface Item {
 }
 
 export const addItem = async (values: Item) => {
-  const session = await auth();
+  try {
+    const session = await auth();
 
-  const userId = session?.user?.id as string;
-  if (!userId) {
-    return { error: "Unauthorized" };
-  }
-  const keyList = [];
-  const {
-    description,
-    price,
-    barcode,
-    character,
-    product_id,
-    photo,
-    receipt_id,
-  } = values;
-
-  let receiptFileUrl = "";
-  let receiptFileKey = "";
-  if (photo) {
-    const uploadResults = await handleUpload(photo);
-    if (uploadResults.length > 0) {
-      receiptFileUrl = uploadResults[0].url;
-      receiptFileKey = uploadResults[0].key;
-      keyList.push(receiptFileKey);
+    const userId = session?.user?.id as string;
+    if (!userId) {
+      return { error: "Unauthorized" };
     }
-  }
-
-  const newItem = await prisma.items.create({
-    data: {
-      receipt_id: receipt_id,
+    const keyList = [];
+    const {
       description,
-      price: parseFloat(price),
+      price,
       barcode,
       character,
       product_id,
-      photo_url: receiptFileUrl,
-      photo_key: receiptFileKey,
-      created_at: new Date(),
-    },
-  });
-  revalidateTag(`projects_user_${userId}`);
+      photo,
+      receipt_id,
+    } = values;
+
+    let receiptFileUrl = "";
+    let receiptFileKey = "";
+    if (photo) {
+      const uploadResults = await handleUpload(photo);
+      if (uploadResults.length > 0) {
+        receiptFileUrl = uploadResults[0].url;
+        receiptFileKey = uploadResults[0].key;
+        keyList.push(receiptFileKey);
+      }
+    }
+
+    const newItem = await prisma.items.create({
+      data: {
+        receipt_id: receipt_id,
+        description,
+        price: parseFloat(price),
+        barcode,
+        character,
+        product_id,
+        photo_url: receiptFileUrl,
+        photo_key: receiptFileKey,
+        created_at: new Date(),
+      },
+    });
+    revalidateTag(`projects_user_${userId}`);
+  } catch (error) {
+    console.error(error);
+    return { error: "Failed to add item" };
+  }
 };

@@ -1,8 +1,9 @@
 "use client";
 import { createProject } from "@/actions/projects/createProject";
 import RegularButton from "@/components/buttons/RegularButton";
+import Loading from "@/components/Loading";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 
 interface AddProjectModalProps {
   setAddProjectOpen: (value: boolean) => void;
@@ -11,15 +12,21 @@ interface AddProjectModalProps {
 export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
   const [project, setProject] = useState("");
   const [error, setError] = useState("");
+  const [isPending, startTransition] = useTransition();
 
   const handleSubmit = async () => {
     if (project === "") {
       setError("Please enter a project name");
-    }
-    if (project !== "") {
-      await createProject(project);
-
-      setAddProjectOpen(false);
+    } else {
+      startTransition(async () => {
+        const result = await createProject(project);
+        if (result.error) {
+          setError(result.error);
+        } else {
+          setProject("");
+          setAddProjectOpen(false);
+        }
+      });
     }
   };
 
@@ -77,6 +84,7 @@ export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
           </div>
         </div>
       </div>
+      {isPending && <Loading loading={isPending} />}
     </div>
   );
 };

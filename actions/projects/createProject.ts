@@ -5,18 +5,27 @@ import prisma from "@/prisma/client";
 import { revalidateTag } from "next/cache";
 
 export const createProject = async (name: string) => {
-  const session = await auth();
+  try {
+    const session = await auth();
+    const userId = session?.user?.id as string;
 
-  const userId = session?.user?.id as string;
-  if (!userId) {
-    return { error: "Unauthorized" };
+    if (!userId) {
+      return { error: "Unauthorized" };
+    }
+
+    await prisma.project.create({
+      data: {
+        name,
+        userId,
+        created_at: new Date().toISOString(),
+      },
+    });
+
+    revalidateTag(`projects_user_${userId}`);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to create project:", error);
+    return { error: "Failed to create project" };
   }
-  await prisma.project.create({
-    data: {
-      name,
-      userId,
-      created_at: new Date().toISOString(),
-    },
-  });
-  revalidateTag(`projects_user_${userId}`);
 };

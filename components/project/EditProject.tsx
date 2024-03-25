@@ -22,9 +22,13 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
       setEdit(false);
     } else if (name !== "" && project.id) {
       startTransition(async () => {
-        await editProject(project.id, name);
+        const result = await editProject(project.id, name);
 
-        setEdit(false);
+        if (result.error) {
+          console.error(result.error);
+        } else {
+          setEdit(false);
+        }
       });
     }
   };

@@ -151,6 +151,7 @@ interface OptionsModalProps {
 const OptionsModal = ({ item }: OptionsModalProps) => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [error, setDeleteError] = useState<string | null>(null);
 
   return (
     <div
@@ -223,11 +224,24 @@ const OptionsModal = ({ item }: OptionsModalProps) => {
               deleteOpen={deleteOpen}
               setDeleteOpen={setDeleteOpen}
               item={item}
+              error={error}
               isPending={isPending}
               deleteItem={async () => {
                 startTransition(async () => {
-                  await deleteItem(item.id);
-                  setDeleteOpen(false);
+                  try {
+                    const result = await deleteItem(item.id);
+                    if (result?.error) {
+                      // Handle error based on your application's structure
+                      setDeleteError(result.error);
+                    } else {
+                      // Reset error state on successful deletion
+                      setDeleteError("");
+                      setDeleteOpen(false);
+                    }
+                  } catch (error) {
+                    // Catch and handle exceptions thrown by deleteItem
+                    setDeleteError("Failed to delete item.");
+                  }
                 });
               }}
             />
@@ -245,6 +259,7 @@ interface DeleteModalProps {
   item: ItemType;
   deleteItem: () => void;
   isPending: boolean;
+  error: string | null;
 }
 
 const DeleteModal = ({
@@ -252,6 +267,7 @@ const DeleteModal = ({
   deleteItem,
   setDeleteOpen,
   isPending,
+  error,
 }: DeleteModalProps) => {
   return (
     <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
@@ -279,6 +295,7 @@ const DeleteModal = ({
             Confirm
           </RegularButton>
         </div>
+        {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
       </div>
       {isPending && <Loading loading={isPending} />}
     </div>

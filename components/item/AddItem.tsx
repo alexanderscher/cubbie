@@ -37,6 +37,7 @@ export const AddItem = ({ setIsAddOpen, id }: AddItemModalProps) => {
   const [error, setError] = useState({
     description: "",
     price: "",
+    result: "",
   });
 
   const itemSchema = Yup.object({
@@ -51,22 +52,28 @@ export const AddItem = ({ setIsAddOpen, id }: AddItemModalProps) => {
       await itemSchema.validate(newItem, { abortEarly: false });
 
       startTransition(async () => {
-        await addItem(newItem);
-        setIsAddOpen(false);
+        const result = await addItem(newItem);
 
-        setNewItem({
-          description: "",
-          price: "",
-          barcode: "",
-          product_id: "",
-          character: "",
-          photo: "",
-          receipt_id: id,
-        });
-        setError({
-          description: "",
-          price: "",
-        });
+        if (result?.error) {
+          setError({ ...error, result: result.error });
+        } else {
+          setIsAddOpen(false);
+
+          setNewItem({
+            description: "",
+            price: "",
+            barcode: "",
+            product_id: "",
+            character: "",
+            photo: "",
+            receipt_id: id,
+          });
+          setError({
+            description: "",
+            price: "",
+            result: "",
+          });
+        }
       });
     } catch (error) {
       let errorsObject = {};
@@ -83,6 +90,7 @@ export const AddItem = ({ setIsAddOpen, id }: AddItemModalProps) => {
         errorsObject as {
           description: string;
           price: string;
+          result: string;
         }
       );
     }

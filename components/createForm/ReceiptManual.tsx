@@ -4,7 +4,7 @@ import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIc
 import styles from "@/app/create/upload.module.css";
 import { getProjects } from "@/lib/projectsDB";
 import { ReceiptStoreStage } from "@/constants/form";
-import { Project } from "@/types/receiptTypes";
+import { Project } from "@/types/AppTypes";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import { convertHeic } from "@/utils/media";
 import Image from "next/image";

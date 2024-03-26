@@ -8,9 +8,10 @@ import SearchAllItems from "@/components/search/AlItems";
 import { useSession } from "next-auth/react";
 import { LogOutButton } from "@/components/LogOutButton";
 import { useState } from "react";
+import { Session } from "@/types/AppTypes";
 
 interface NavbarProps {
-  session: any;
+  session: Session;
 }
 const Navbar = ({ session }: NavbarProps) => {
   const pathname = usePathname();
@@ -187,7 +188,7 @@ const Navbar = ({ session }: NavbarProps) => {
 export default Navbar;
 
 interface ModalProps {
-  session: any;
+  session: Session;
 }
 
 const Modal = ({ session }: ModalProps) => {

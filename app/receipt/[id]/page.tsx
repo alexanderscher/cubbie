@@ -1,7 +1,7 @@
 import ReceiptId from "@/components/receiptComponents/ReceiptId";
 import PageWrapper from "@/components/wrapper/PageWrapper";
 import { getReceiptById } from "@/lib/receiptsDB";
-import { Receipt } from "@/types/receiptTypes";
+import { Receipt } from "@/types/AppTypes";
 
 import React from "react";
 

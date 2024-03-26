@@ -6,8 +6,8 @@ import Loading from "@/components/Loading";
 import { CreateProject } from "@/components/project/CreateProject";
 import { EditProject } from "@/components/project/EditProject";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
-import { Receipt } from "@/types/receiptTypes";
-import { Project as ProjectType } from "@/types/receiptTypes";
+import { Receipt } from "@/types/AppTypes";
+import { Project as ProjectType } from "@/types/AppTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 
@@ -100,12 +100,12 @@ const Projects = ({ serverData }: Props) => {
               className="object-cover "
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
-            <p className="text-lg text-emerald-900">No projects found</p>
+            <p className="text-lg text-emerald-900">No projects</p>
             <button
-              className="border-[1px]  text-emerald-900 border-emerald-900 py-2 px-10 text-xs rounded-full w-50"
+              className="border-[1px] bg-emerald-900 border-emerald-900 py-2 px-10 text-xs text-white rounded-full w-full"
               onClick={() => setAddProjectOpen(true)}
             >
-              <p className="">Create Project</p>
+              <p className="">Create</p>
             </button>
             {addProjectOpen && (
               <CreateProject setAddProjectOpen={setAddProjectOpen} />
@@ -283,7 +283,7 @@ const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
 
   return (
     <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
-      <div className="relative p-8 bg-orange-100 w-full max-w-md m-auto flex-col flex rounded shadow-md ">
+      <div className="relative p-8 bg-orange-100  max-w-md m-auto flex-col flex  rounded shadow-md gap-4 w-3/4 ">
         <h2 className="text-emerald-900 text-sm">
           Are you sure you want to delete {project.name}? This will delete all
           receipts and items in the project.

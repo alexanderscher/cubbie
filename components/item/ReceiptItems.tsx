@@ -1,7 +1,7 @@
 "use client";
 import Shirt from "@/components/placeholderImages/Shirt";
 import { TruncateText } from "@/components/text/Truncate";
-import { Item } from "@/types/receiptTypes";
+import { Item } from "@/types/AppTypes";
 
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";

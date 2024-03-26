@@ -4,7 +4,7 @@ import ProjectSelect from "@/components/createForm/ProjectSelectForm";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
-import { Project } from "@/types/receiptTypes";
+import { Project } from "@/types/AppTypes";
 import { convertHeic } from "@/utils/media";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -12,6 +12,7 @@ import { ChangeEvent, useState, useRef, useEffect } from "react";
 import { Form } from "react-hook-form";
 import { FormError } from "@/components/form-error";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import Loading from "@/components/Loading";
 
 interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
@@ -389,8 +390,7 @@ export default function ImageGpt({
 
         {prompt && (
           <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex justify-center items-center">
-            {/* Modal Content */}
-            <div className="flex flex-col gap-4 mt-10 bg-orange-200 p-6 rounded-md shadow items-center justify-center w-full text-emerald-900 max-w-lg">
+            <div className="flex flex-col gap-4 mt-10 bg-orange-200 p-6 rounded-md shadow items-center justify-center text-emerald-900 max-w-lg w-3/4">
               <ExclamationTriangleIcon className="h-6 w-1/6" />
               <p className="text-sm text-center text-emerald-900">
                 Are you sure you want to analyze the image? This will overwrite
@@ -441,6 +441,7 @@ export default function ImageGpt({
             There was an error analyzing the image. Please try again.
           </p>
         )}
+        {loading && <Loading loading={loading} />}
       </div>
     </div>
   );

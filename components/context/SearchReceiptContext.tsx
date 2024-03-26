@@ -8,7 +8,7 @@ import React, {
   useCallback,
 } from "react";
 import { usePathname } from "next/navigation";
-import { Receipt } from "@/types/receiptTypes";
+import { Receipt } from "@/types/AppTypes";
 
 interface SearchReceiptContextType {
   receipts: Receipt[];

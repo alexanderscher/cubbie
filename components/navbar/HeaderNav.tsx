@@ -1,5 +1,5 @@
 import RegularButton from "@/components/buttons/RegularButton";
-import { Receipt } from "@/types/receiptTypes";
+import { Receipt } from "@/types/AppTypes";
 
 import Link from "next/link";
 import React from "react";

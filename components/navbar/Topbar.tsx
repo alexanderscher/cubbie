@@ -6,9 +6,10 @@ import Link from "next/link";
 import { useSearchBarContext } from "@/components/context/SearchBarContext";
 import SearchAllItems from "@/components/search/AlItems";
 import { LogOutButton } from "@/components/LogOutButton";
+import { Session } from "@/types/AppTypes";
 
 interface TopbarProps {
-  session: any;
+  session: Session;
 }
 
 const Topbar = ({ session }: TopbarProps) => {

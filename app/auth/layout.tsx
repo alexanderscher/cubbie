@@ -1,4 +1,4 @@
-import { LayoutProps } from "@/types/receiptTypes";
+import { LayoutProps } from "@/types/AppTypes";
 
 import React from "react";
 

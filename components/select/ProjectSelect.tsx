@@ -1,6 +1,6 @@
 import React from "react";
 import ReactSelect, { StylesConfig } from "react-select";
-import { Project } from "@/types/receiptTypes";
+import { Project } from "@/types/AppTypes";
 
 interface Option {
   value: string;

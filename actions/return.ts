@@ -7,6 +7,7 @@ import { revalidateTag } from "next/cache";
 
 export const markAsReturned = async (id: number) => {
   const session = (await auth()) as Session;
+
   const userId = session?.user?.id as string;
 
   await prisma.items.update({

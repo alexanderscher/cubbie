@@ -49,7 +49,7 @@ export const ProjectId = ({ project }: ProjectIdProps) => {
         <div></div>
       </div>
       <div className="flex flex-col gap-8 mt-10">
-        <div className="flex justify-between">
+        <div className="flex justify-between bg-white p-4 rounded-md shadow">
           <div>
             <h1 className="text-2xl text-orange-600">{project.name}</h1>
             <p>Created on {formatDateToMMDDYY(project.created_at)}</p>{" "}
@@ -57,7 +57,7 @@ export const ProjectId = ({ project }: ProjectIdProps) => {
           <div className="flex items-center gap-3">
             <RegularButton
               handleClick={() => setEdit(!edit)}
-              styles="bg border-emerald-900 text-emerald-900"
+              styles="bg-white border-emerald-900 text-emerald-900"
             >
               <p className="text-xs">Edit</p>
             </RegularButton>

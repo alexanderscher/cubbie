@@ -19,6 +19,7 @@ import { editReceipt } from "@/actions/receipts/editReceipt";
 import { Item as ItemType, Receipt } from "@/types/receiptTypes";
 import { formatDateToYYYYMMDD } from "@/utils/Date";
 import PurchaseTypeSelect from "@/components/select/PurchaseTypeSelect";
+import { AddItem } from "@/components/item/AddItem";
 type ExtendedReceiptType = Receipt & {
   edit_image: string;
 };
@@ -31,6 +32,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const { id } = useParams();
+  const [isAddOpen, setIsAddOpen] = useState(false);
   const stringId = Array.isArray(id) ? id[0] : id;
   const [uploadError, setUploadError] = useState("");
   const [errorM, setErrorM] = useState({
@@ -354,21 +356,48 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
               </div>
             </div>
 
-            <div
-              className={`flex flex-col gap-2 pb-[200px] ${styles.boxContainer}`}
-            >
-              <div className={`${styles.boxes} `}>
-                {receipt.items.length > 0 &&
-                  receipt.items.map((item: any, index: number) => (
-                    <Item
-                      key={item.id}
-                      item={item}
-                      isOpen={openItemId === item.id}
-                      onToggleOpen={(e) => toggleOpenItem(item.id, e)}
-                    />
-                  ))}
+            {receipt.items.length > 0 && (
+              <div
+                className={`flex flex-col gap-2 pb-[200px] ${styles.boxContainer}`}
+              >
+                <div className={`${styles.boxes} `}>
+                  {receipt.items.length > 0 &&
+                    receipt.items.map((item: ItemType, index: number) => (
+                      <Item
+                        key={item.id}
+                        item={item}
+                        isOpen={openItemId === item.id}
+                        onToggleOpen={(e) => toggleOpenItem(item.id, e)}
+                      />
+                    ))}
+                </div>
               </div>
-            </div>
+            )}
+            {receipt.items.length === 0 && (
+              <div className={`${styles.placeholder} shadow`}>
+                <div className="w-full  flex justify-center items-center">
+                  <Image
+                    src="/item_b.png"
+                    alt=""
+                    width={60}
+                    height={60}
+                    className="object-cover "
+                    style={{ objectFit: "cover", objectPosition: "center" }}
+                  />
+                </div>
+
+                <RegularButton
+                  styles={
+                    "bg-emerald-900 text-white text-xs w-1/2  border-emerald-900"
+                  }
+                  handleClick={() => {
+                    setIsAddOpen(true);
+                  }}
+                >
+                  Add Item
+                </RegularButton>
+              </div>
+            )}
           </div>
           {uploadError && (
             <ErrorModal
@@ -376,6 +405,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
               onClose={() => setUploadError("")}
             />
           )}
+          {isAddOpen && <AddItem setIsAddOpen={setIsAddOpen} id={receipt.id} />}
           {isPending && <Loading loading={isPending} />}
         </div>
       )}

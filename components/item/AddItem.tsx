@@ -165,14 +165,12 @@ export const AddItem = ({ setIsAddOpen, id }: AddItemModalProps) => {
                   }}
                   disabled={showScanner}
                 >
-                  <div className="w-[40px]">
-                    <Image
-                      src="/barcode_b.png"
-                      alt="barcode"
-                      width={50}
-                      height={50}
-                    ></Image>
-                  </div>
+                  <Image
+                    src="/barcode_b.png"
+                    alt="barcode"
+                    width={400}
+                    height={400}
+                  ></Image>
                 </button>
 
                 {showScanner && (

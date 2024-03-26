@@ -162,23 +162,49 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
             </div>
           </div>
         </div>
-
-        <div
-          className={`flex flex-col gap-2 pb-[200px] ${styles.boxContainer}`}
-        >
-          <div className={`${styles.boxes} `}>
-            {isClient &&
-              receipt.items.length > 0 &&
-              receipt.items.map((item: ItemType, index: number) => (
-                <Item
-                  key={item.id}
-                  item={item}
-                  isOpen={openItemId === item.id}
-                  onToggleOpen={(e) => toggleOpenItem(item.id, e)}
-                />
-              ))}
+        {receipt.items.length > 0 && (
+          <div
+            className={`flex flex-col gap-2 pb-[200px] ${styles.boxContainer}`}
+          >
+            <div className={`${styles.boxes} `}>
+              {isClient &&
+                receipt.items.length > 0 &&
+                receipt.items.map((item: ItemType, index: number) => (
+                  <Item
+                    key={item.id}
+                    item={item}
+                    isOpen={openItemId === item.id}
+                    onToggleOpen={(e) => toggleOpenItem(item.id, e)}
+                  />
+                ))}
+            </div>
           </div>
-        </div>
+        )}
+        {receipt.items.length === 0 && (
+          <div className={`${styles.placeholder} shadow`}>
+            <div className="w-full  flex justify-center items-center">
+              <Image
+                src="/item_b.png"
+                alt=""
+                width={60}
+                height={60}
+                className="object-cover "
+                style={{ objectFit: "cover", objectPosition: "center" }}
+              />
+            </div>
+
+            <RegularButton
+              styles={
+                "bg-emerald-900 text-white text-xs w-1/2  border-emerald-900"
+              }
+              handleClick={() => {
+                setIsAddOpen(true);
+              }}
+            >
+              Add Item
+            </RegularButton>
+          </div>
+        )}
       </div>
     </div>
   );

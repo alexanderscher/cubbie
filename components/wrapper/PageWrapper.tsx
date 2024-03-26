@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { SearchBarContextProvider } from "@/components/context/SearchBarContext";
 import Navbar from "@/components/navbar/Navbar";
 import Topbar from "@/components/navbar/Topbar";
+import { Session } from "@/types/AppTypes";
 
 import React from "react";
 
@@ -10,7 +11,7 @@ interface PageWrapperProps {
 }
 
 const PageWrapper = async ({ children }: PageWrapperProps) => {
-  const session = await auth();
+  const session = (await auth()) as Session;
 
   return (
     <SearchBarContextProvider>

@@ -1,6 +1,7 @@
 "use server";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
+import { Session } from "@/types/AppTypes";
 import moment from "moment";
 import { unstable_cache } from "next/cache";
 
@@ -9,7 +10,7 @@ function getDynamicCacheKey(userId: string) {
 }
 
 export const getReceipts = async () => {
-  const session = await auth();
+  const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
   const dynamicKey = getDynamicCacheKey(userId);
 
@@ -73,7 +74,7 @@ export const getReceipts = async () => {
 };
 
 export const getReceiptById = async (id: string) => {
-  const session = await auth();
+  const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
   const dynamicKey = getDynamicCacheKey(userId);
 

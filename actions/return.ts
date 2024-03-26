@@ -1,11 +1,12 @@
 "use server";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
+import { Session } from "@/types/AppTypes";
 
 import { revalidateTag } from "next/cache";
 
 export const markAsReturned = async (id: number) => {
-  const session = await auth();
+  const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
 
   await prisma.items.update({
@@ -21,7 +22,7 @@ export const markAsReturned = async (id: number) => {
 };
 
 export const unreturn = async (id: number) => {
-  const session = await auth();
+  const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
 
   await prisma.items.update({

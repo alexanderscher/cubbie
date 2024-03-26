@@ -1,7 +1,13 @@
+import { getUserInfo } from "@/lib/userDb";
 import React from "react";
 
-const page = () => {
-  return <div>page</div>;
+const getUser = async () => {
+  const user = await getUserInfo();
+  return user;
 };
 
-export default page;
+export default async function Profile() {
+  const user = getUser();
+  console.log(user);
+  return <div>page</div>;
+}

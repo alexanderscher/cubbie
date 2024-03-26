@@ -44,7 +44,21 @@ export interface Project {
   userId: string;
   receipts: Receipt[];
 }
-
 export interface LayoutProps {
   children?: React.ReactNode;
+}
+
+export interface User {
+  email: string;
+  id: string;
+  image: string | null;
+  isOAuth: boolean;
+  isTwoFactorEnabled: boolean;
+  name: string;
+  role: string;
+}
+
+export interface Session {
+  expires: string;
+  user: User;
 }

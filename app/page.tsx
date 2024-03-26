@@ -3,7 +3,7 @@ import { SearchProjectProvider } from "@/components/context/SearchProjectContext
 import Header from "@/components/headers/Header";
 import PageWrapper from "@/components/wrapper/PageWrapper";
 import { getProjects } from "@/lib/projectsDB";
-import { Project } from "@/types/receiptTypes";
+import { Project } from "@/types/AppTypes";
 import { Suspense } from "react";
 
 const fetchProject = async () => {

@@ -1,6 +1,6 @@
 import ItemIdEdit from "@/components/item/ItemIdEdit";
 import { getItemsById } from "@/lib/itemsDB";
-import { ExtendedItemType, Item } from "@/types/receiptTypes";
+import { ExtendedItemType, Item } from "@/types/AppTypes";
 
 const fetchItem = async (id: string) => {
   const item = await getItemsById(id);

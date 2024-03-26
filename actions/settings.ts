@@ -2,15 +2,16 @@
 
 import * as z from "zod";
 import bcrypt from "bcryptjs";
-import { SettingsSchema } from "@/schemas";
+import { EmailSchema, PasswordSchema } from "@/schemas";
 import { getUserByEmail, getUserById } from "@/data/user";
 import { currentUser } from "@/lib/auth";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
 import prisma from "@/prisma/client";
 
-export const settings = async (values: z.infer<typeof SettingsSchema>) => {
+export const changeEmail = async (values: z.infer<typeof EmailSchema>) => {
   const user = await currentUser();
+  console.log(values);
 
   if (!user) {
     return { error: "Unauthorized" };
@@ -21,11 +22,23 @@ export const settings = async (values: z.infer<typeof SettingsSchema>) => {
       return { error: "Unauthorized" };
     }
 
-    if (user.isOAuth) {
-      values.email = undefined;
-      values.password = undefined;
-      values.newPassword = undefined;
-      values.isTwoFactorEnabled = undefined;
+    // if (user.isOAuth) {
+    //   values.email = undefined;
+    //   values.password = undefined;
+    //   values.newPassword = undefined;
+    //   values.isTwoFactorEnabled = undefined;
+    // }
+
+    if (values.name && values.name !== user.name) {
+      await prisma.user.update({
+        where: { id: dbUser.id },
+        data: {
+          name: values.name,
+        },
+      });
+      if (!values.email) {
+        return { success: "Settings Updated!" };
+      }
     }
 
     if (values.email && values.email !== user.email) {
@@ -42,6 +55,31 @@ export const settings = async (values: z.infer<typeof SettingsSchema>) => {
       );
 
       return { success: "Verification email sent!" };
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: dbUser.id },
+      data: {
+        ...values,
+      },
+    });
+
+    return { success: "Settings Updated!" };
+  }
+};
+
+export const changePassword = async (
+  values: z.infer<typeof PasswordSchema>
+) => {
+  const user = await currentUser();
+
+  if (!user) {
+    return { error: "Unauthorized" };
+  }
+  if (user.id) {
+    const dbUser = await getUserById(user.id);
+    if (!dbUser) {
+      return { error: "Unauthorized" };
     }
 
     if (values.password && values.newPassword && dbUser.password) {

@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Item from "@/components/Item";
-import { Item as ItemType } from "@/types/receiptTypes";
+import { Item as ItemType } from "@/types/AppTypes";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
 import Image from "next/image";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
@@ -94,7 +94,7 @@ const Items = ({ items }: ItemsProps) => {
     return (
       <div className="boxes">
         <div className="box relative">
-          <div className="flex flex-col gap-4 justify-center items-center  p-6">
+          <div className="flex flex-col gap-4 justify-center items-center p-6">
             <Image
               src="/item_b.png"
               alt=""
@@ -103,12 +103,12 @@ const Items = ({ items }: ItemsProps) => {
               className="object-cover "
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
-            <p className="text-md text-emerald-900">No items found</p>
+            <p className="text-md text-emerald-900">No items</p>
             <button
-              className="border-[1px] text-emerald-900 border-emerald-900 py-2 px-10 text-xs rounded-full w-50"
+              className="border-[1px] bg-emerald-900 border-emerald-900 py-2 px-10 text-xs text-white rounded-full w-full"
               onClick={() => setAddReceiptOpen(true)}
             >
-              <p className="">Create Receipt</p>
+              <p className="">Create</p>
             </button>
             {addReceiptOpen && (
               <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />

@@ -1,6 +1,6 @@
 import ReceiptIdEdit from "@/components/receiptComponents/ReceiptIdEdit";
 import { getReceiptById } from "@/lib/receiptsDB";
-import { Receipt } from "@/types/receiptTypes";
+import { Receipt } from "@/types/AppTypes";
 import React from "react";
 
 type ExtendedReceiptType = Receipt & {

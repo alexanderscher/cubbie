@@ -1,7 +1,7 @@
 import ItemID from "@/components/item/ItemId";
 import PageWrapper from "@/components/wrapper/PageWrapper";
 import { getItemsById } from "@/lib/itemsDB";
-import { Item } from "@/types/receiptTypes";
+import { Item } from "@/types/AppTypes";
 
 const fetchItem = async (id: string) => {
   const item = await getItemsById(id);

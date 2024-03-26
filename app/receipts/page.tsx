@@ -3,7 +3,7 @@ import { SearchReceiptProvider } from "@/components/context/SearchReceiptContext
 import Header from "@/components/headers/Header";
 import PageWrapper from "@/components/wrapper/PageWrapper";
 import { getReceipts } from "@/lib/receiptsDB";
-import { Receipt } from "@/types/receiptTypes";
+import { Receipt } from "@/types/AppTypes";
 
 import { Suspense } from "react";
 

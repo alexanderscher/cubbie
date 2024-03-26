@@ -221,26 +221,26 @@ const FilterProjectOptions = ({
   return (
     <div id="modal-overlay" className={`overlay`} onClick={handleOverlayClick}>
       <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
-        <div className="border-b-[1px] border-emerald-900 flex ">
+        <div className="border-b-[1px] border-black flex ">
           <div className="p-2 flex w-full">
-            <p className="text-center w-full text-orange-600 text-lg">Filter</p>
-            <button className="text-orange-600" onClick={onClose}>
+            <p className="text-center w-full text-black text-lg">Filter</p>
+            <button className="text-black" onClick={onClose}>
               &times;
             </button>
           </div>
         </div>
 
-        <div className=" border-emerald-900 flex flex-col">
+        <div className=" border-black flex flex-col">
           <div className="pt-2">
-            <p className="text-sm w-full text-center text-emerald-900">Sort</p>
+            <p className="text-sm w-full text-center text-black">Sort</p>
           </div>
           <div className="flex flex-col w-full p-4 gap-3">
             <button
               className={`${
                 searchParams.get("sort")?.includes("created_at") ||
                 !searchParams.get("sort")
-                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
               }`}
               onClick={() => {
                 handleSortClick("created_at");
@@ -262,8 +262,8 @@ const FilterProjectOptions = ({
             <button
               className={`${
                 searchParams.get("sort")?.includes("price")
-                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
               }`}
               onClick={() => {
                 handleSortClick("price");
@@ -347,26 +347,26 @@ const FilterOptions = ({
   return (
     <div id="modal-overlay" className={`overlay`} onClick={handleOverlayClick}>
       <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
-        <div className="border-b-[1px] border-emerald-900 flex ">
+        <div className="border-b-[1px] border-black flex ">
           <div className="p-2 flex w-full">
-            <p className="text-center w-full text-orange-600 text-lg">Filter</p>
-            <button className="text-orange-600" onClick={onClose}>
+            <p className="text-center w-full text-black text-lg">Filter</p>
+            <button className="text-black" onClick={onClose}>
               &times;
             </button>
           </div>
         </div>
 
-        <div className="border-b-[1px] border-emerald-900 flex flex-col">
+        <div className="border-b-[1px] border-black flex flex-col">
           <div className="pt-2">
-            <p className="text-sm w-full text-center text-emerald-900">Sort</p>
+            <p className="text-sm w-full text-center text-black">Sort</p>
           </div>
           <div className="flex flex-col w-full p-4 gap-3">
             <button
               className={`${
                 searchParams.get("sort")?.includes("created_at") ||
                 !searchParams.get("sort")
-                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
               }`}
               onClick={() => {
                 handleSortClick("created_at");
@@ -387,8 +387,8 @@ const FilterOptions = ({
             <button
               className={`${
                 searchParams.get("sort")?.includes("return_date")
-                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
               }`}
               onClick={() => {
                 handleSortClick("return_date");
@@ -408,8 +408,8 @@ const FilterOptions = ({
             <button
               className={`${
                 searchParams.get("sort")?.includes("purchase_date")
-                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
               }`}
               onClick={() => {
                 handleSortClick("purchase_date");
@@ -429,8 +429,8 @@ const FilterOptions = ({
             <button
               className={`${
                 searchParams.get("sort")?.includes("price")
-                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
               }`}
               onClick={() => {
                 handleSortClick("price");
@@ -449,9 +449,9 @@ const FilterOptions = ({
             </button>
           </div>
         </div>
-        <div className="border-b-[1px] border-emerald-900 flex flex-col">
+        <div className="border-b-[1px] border-black flex flex-col">
           <div className="pt-2">
-            <p className="text-sm w-full text-center text-emerald-900">
+            <p className="text-sm w-full text-center text-black">
               Purchase type
             </p>
           </div>
@@ -460,8 +460,8 @@ const FilterOptions = ({
               className={`${
                 searchParams.get("storeType") === "all" ||
                 !searchParams.get("storeType")
-                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
               }`}
               onClick={() => {
                 handleStoreClick("all");
@@ -472,8 +472,8 @@ const FilterOptions = ({
             <button
               className={`${
                 searchParams.get("storeType") === "online"
-                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
               }`}
               onClick={() => {
                 handleStoreClick("online");
@@ -484,8 +484,8 @@ const FilterOptions = ({
             <button
               className={`${
                 searchParams.get("storeType") === "store"
-                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
               }`}
               onClick={() => {
                 handleStoreClick("store");
@@ -548,24 +548,24 @@ const FilterItemsOptions = ({
   return (
     <div id="modal-overlay" className={`overlay`} onClick={handleOverlayClick}>
       <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
-        <div className="border-b-[1px] border-emerald-900 flex ">
+        <div className="border-b-[1px] border-black flex ">
           <div className="p-4 flex w-full">
-            <p className="text-center w-full text-orange-600 text-lg">Filter</p>
+            <p className="text-center w-full text-black text-lg">Filter</p>
             <button onClick={onClose}>&times;</button>
           </div>
         </div>
 
-        <div className="border-b-[1px] border-emerald-900 flex flex-col">
+        <div className="border-b-[1px] border-black flex flex-col">
           <div className="pt-2">
-            <p className="text-sm w-full text-center text-emerald-900">Sort</p>
+            <p className="text-sm w-full text-center text-black">Sort</p>
           </div>
           <div className="flex flex-col w-full p-4 gap-3">
             <button
               className={`${
                 searchParams.get("sort")?.includes("created_at") ||
                 !searchParams.get("sort")
-                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
               }`}
               onClick={() => {
                 handleSortClick("created_at");
@@ -586,8 +586,8 @@ const FilterItemsOptions = ({
             <button
               className={`${
                 searchParams.get("sort")?.includes("return_date")
-                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
               }`}
               onClick={() => {
                 handleSortClick("return_date");
@@ -607,8 +607,8 @@ const FilterItemsOptions = ({
             <button
               className={`${
                 searchParams.get("sort")?.includes("purchase_date")
-                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
               }`}
               onClick={() => {
                 handleSortClick("purchase_date");
@@ -628,8 +628,8 @@ const FilterItemsOptions = ({
             <button
               className={`${
                 searchParams.get("sort")?.includes("price")
-                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
               }`}
               onClick={() => {
                 handleSortClick("price");
@@ -648,17 +648,17 @@ const FilterItemsOptions = ({
             </button>
           </div>
         </div>
-        <div className="border-b-[1px] border-emerald-900 flex flex-col">
+        <div className="border-b-[1px] border-black flex flex-col">
           <div className="pt-2">
-            <p className="text-sm w-full text-center text-emerald-900">Sort</p>
+            <p className="text-sm w-full text-center text-black">Sort</p>
           </div>
           <div className="flex flex-col w-full p-4 gap-3 text-xs">
             <button
               className={`${
                 searchParams.get("type")?.includes("all") ||
                 !searchParams.get("type")
-                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
               }`}
               onClick={() => {
                 handleTypeClick("all");
@@ -669,8 +669,8 @@ const FilterItemsOptions = ({
             <button
               className={`${
                 searchParams.get("type")?.includes("current")
-                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
               }`}
               onClick={() => {
                 handleTypeClick("current");
@@ -681,8 +681,8 @@ const FilterItemsOptions = ({
             <button
               className={`${
                 searchParams.get("type")?.includes("returned")
-                  ? "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900"
-                  : "w-full border-[1px] p-2 border-emerald-900 rounded-md"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
               }`}
               onClick={() => {
                 handleTypeClick("returned");

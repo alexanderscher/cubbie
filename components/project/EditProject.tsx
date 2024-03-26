@@ -4,7 +4,7 @@ import RegularButton from "@/components/buttons/RegularButton";
 import { FormError } from "@/components/form-error";
 import Loading from "@/components/Loading";
 
-import { Project as ProjectType } from "@/types/receiptTypes";
+import { Project as ProjectType } from "@/types/AppTypes";
 
 import React, { useState, useTransition } from "react";
 

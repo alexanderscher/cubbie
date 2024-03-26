@@ -10,7 +10,7 @@ import ImageModal from "@/components/images/ImageModal";
 import { AddItem } from "@/components/item/AddItem";
 
 import Item from "@/components/Item";
-import { Item as ItemType, Receipt } from "@/types/receiptTypes";
+import { Item as ItemType, Receipt } from "@/types/AppTypes";
 
 interface ReceiptIdProps {
   receipt: Receipt;

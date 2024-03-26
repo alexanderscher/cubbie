@@ -5,7 +5,7 @@ import RegularButton from "@/components/buttons/RegularButton";
 import Loading from "@/components/Loading";
 import Shirt from "@/components/placeholderImages/Shirt";
 import { TruncateText } from "@/components/text/Truncate";
-import { Item as ItemType } from "@/types/receiptTypes";
+import { Item as ItemType } from "@/types/AppTypes";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
@@ -272,7 +272,7 @@ const DeleteModal = ({
   return (
     <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
       <div
-        className="relative p-8 bg-orange-100  w-full max-w-md m-auto flex-col flex rounded shadow-md"
+        className="relative p-8 bg-orange-100  max-w-md m-auto flex-col flex  rounded shadow-md gap-4 w-3/4"
         onClick={(e) => {
           e.preventDefault();
         }}

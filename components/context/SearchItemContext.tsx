@@ -8,7 +8,7 @@ import React, {
   useCallback,
 } from "react";
 import { usePathname } from "next/navigation";
-import { Item } from "@/types/receiptTypes";
+import { Item } from "@/types/AppTypes";
 
 interface SearchItemContextType {
   items: Item[];

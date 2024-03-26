@@ -1,6 +1,6 @@
 "use client";
 import { useParams, useRouter } from "next/navigation";
-import { ExtendedItemType } from "@/types/receiptTypes";
+import { ExtendedItemType } from "@/types/AppTypes";
 import React, { ChangeEvent, useState, useTransition } from "react";
 import RegularButton from "@/components/buttons/RegularButton";
 import Image from "next/image";

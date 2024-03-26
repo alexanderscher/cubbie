@@ -16,7 +16,7 @@ import ImageModal from "@/components/images/ImageModal";
 import Item from "@/components/Item";
 import { convertHeic } from "@/utils/media";
 import { editReceipt } from "@/actions/receipts/editReceipt";
-import { Item as ItemType, Receipt } from "@/types/receiptTypes";
+import { Item as ItemType, Receipt } from "@/types/AppTypes";
 import { formatDateToYYYYMMDD } from "@/utils/Date";
 import PurchaseTypeSelect from "@/components/select/PurchaseTypeSelect";
 import { AddItem } from "@/components/item/AddItem";

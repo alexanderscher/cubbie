@@ -1,19 +1,14 @@
+import { auth } from "@/auth";
 import Account from "@/components/profile/Account";
-import { getUserInfo } from "@/lib/userDb";
-import { User } from "@prisma/client";
+import { Session } from "@/types/AppTypes";
 import React from "react";
 
-const getUser = async () => {
-  const user = await getUserInfo();
-  return user as User;
-};
-
 export default async function Profile() {
-  const user = await getUser();
+  const session = (await auth()) as Session;
 
   return (
     <div>
-      <Account user={user} />
+      <Account session={session} />
     </div>
   );
 }

@@ -4,8 +4,8 @@ import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
 import { getProjects } from "@/lib/projectsDB";
 import { getReceipts } from "@/lib/receiptsDB";
 
-import { Receipt } from "@/types/receiptTypes";
-import { Project } from "@/types/receiptTypes";
+import { Receipt } from "@/types/AppTypes";
+import { Project } from "@/types/AppTypes";
 import Image from "next/image";
 import Link from "next/link";
 import React, { ChangeEvent, useEffect, useState } from "react";

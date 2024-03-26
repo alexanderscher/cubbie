@@ -1,5 +1,6 @@
 import RegularButton from "@/components/buttons/RegularButton";
 import { FormError } from "@/components/form-error";
+import Loading from "@/components/Loading";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
@@ -113,7 +114,7 @@ const TextGpt = ({ setFieldValue, values, setStage }: Props) => {
       {prompt && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex justify-center items-center">
           {/* Modal Content */}
-          <div className="flex flex-col gap-4 mt-10 bg-orange-200 p-6 rounded-md shadow items-center justify-center w-full text-emerald-900 max-w-lg">
+          <div className="flex flex-col gap-4 mt-10 bg-orange-200 p-6 rounded-md shadow items-center justify-center w-3/4 text-emerald-900 max-w-lg">
             <ExclamationTriangleIcon className="h-6 w-1/6" />
             <p className="text-sm text-center text-emerald-900">
               Are you sure you want to analyze the image? This will overwrite
@@ -159,6 +160,7 @@ const TextGpt = ({ setFieldValue, values, setStage }: Props) => {
           message={"There was an error analyzing the text. Please try again."}
         ></FormError>
       )}
+      {loading && <Loading loading={loading} />}
     </div>
   );
 };

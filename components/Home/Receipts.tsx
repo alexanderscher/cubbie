@@ -2,7 +2,7 @@
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import Receipt from "@/components/receiptComponents/Receipt";
-import { Item, Receipt as ReceiptType } from "@/types/receiptTypes";
+import { Item, Receipt as ReceiptType } from "@/types/AppTypes";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -159,12 +159,12 @@ const NoReceipts = ({ setAddReceiptOpen, addReceiptOpen }: NoReceiptsProps) => {
             className="object-cover "
             style={{ objectFit: "cover", objectPosition: "center" }}
           />
-          <p className="text-lg text-emerald-900">No receipts found</p>
+          <p className=" text-emerald-900">No receipts </p>
           <button
-            className="border-[1px]  text-emerald-900 border-emerald-900 py-2 px-10 text-xs rounded-full w-50"
+            className="border-[1px] bg-emerald-900 border-emerald-900 py-2 px-10 text-xs text-white rounded-full w-full"
             onClick={() => setAddReceiptOpen(true)}
           >
-            <p className="">Create Project</p>
+            <p className="">Create</p>
           </button>
           {addReceiptOpen && (
             <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />

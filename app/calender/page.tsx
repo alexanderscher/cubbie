@@ -1,7 +1,7 @@
 import Calender from "@/components/calender/Calender";
 import PageWrapper from "@/components/wrapper/PageWrapper";
 import { getReceipts } from "@/lib/receiptsDB";
-import { Receipt } from "@/types/receiptTypes";
+import { Receipt } from "@/types/AppTypes";
 import React from "react";
 
 const receipt = async () => {

@@ -8,8 +8,8 @@ import Loading from "@/components/Loading";
 import ProjectSelect from "@/components/select/ProjectSelect";
 import { TruncateText } from "@/components/text/Truncate";
 import { getProjects } from "@/lib/projectsDB";
-import { Item, Receipt as ReceiptType } from "@/types/receiptTypes";
-import { Project } from "@/types/receiptTypes";
+import { Item, Receipt as ReceiptType } from "@/types/AppTypes";
+import { Project } from "@/types/AppTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
@@ -287,8 +287,8 @@ const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
-      <div className="relative p-8 bg-orange-100  w-full max-w-md m-auto flex-col flex  rounded shadow-md gap-4">
+    <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex ">
+      <div className="relative p-8 bg-orange-100  max-w-md m-auto flex-col flex  rounded shadow-md gap-4 w-3/4">
         <div>
           <h2 className="text-emerald-900 text-sm">
             Are you sure you want to delete receipt from {receipt.store}? This

@@ -1,4 +1,4 @@
-import { Project } from "@/types/receiptTypes";
+import { Project } from "@/types/AppTypes";
 
 export interface Photo {
   key: string;

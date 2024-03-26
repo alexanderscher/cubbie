@@ -148,26 +148,29 @@ interface NoReceiptsProps {
 
 const NoReceipts = ({ setAddReceiptOpen, addReceiptOpen }: NoReceiptsProps) => {
   return (
-    <div className="flex flex-col gap-6 justify-center items-center mt-10">
-      <Image
-        src="/receipt_b.png"
-        alt=""
-        width={30}
-        height={30}
-        className="object-cover "
-        style={{ objectFit: "cover", objectPosition: "center" }}
-      />
-      <p className="text-xl text-orange-600">No receipts found</p>
-
-      <button
-        className="border-[1px] bg text-orange-600 border-orange-600 py-2 px-10 text-xs rounded-full w-50"
-        onClick={() => setAddReceiptOpen(true)}
-      >
-        <p className="">Create Receipt</p>
-      </button>
-      {addReceiptOpen && (
-        <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
-      )}
+    <div className="boxes">
+      <div className="box relative">
+        <div className="flex flex-col gap-4 justify-center items-center  p-6">
+          <Image
+            src="/receipt_b.png"
+            alt=""
+            width={25}
+            height={25}
+            className="object-cover "
+            style={{ objectFit: "cover", objectPosition: "center" }}
+          />
+          <p className="text-lg text-emerald-900">No receipts found</p>
+          <button
+            className="border-[1px]  text-emerald-900 border-emerald-900 py-2 px-10 text-xs rounded-full w-50"
+            onClick={() => setAddReceiptOpen(true)}
+          >
+            <p className="">Create Project</p>
+          </button>
+          {addReceiptOpen && (
+            <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
+          )}
+        </div>
+      </div>
     </div>
   );
 };

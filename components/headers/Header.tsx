@@ -1,12 +1,14 @@
 "use client";
 import RegularButton from "@/components/buttons/RegularButton";
-import { useSearchItemContext } from "@/components/context/SearchItemContext";
 import SearchBar from "@/components/search/SearchBar";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useState } from "react";
 
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import { CreateProject } from "@/components/project/CreateProject";
+import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
+import { useSearchItemContext } from "@/components/context/SearchItemContext";
+import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 
 interface HeaderProps {
   type: string;
@@ -19,6 +21,10 @@ const Header = ({ type }: HeaderProps) => {
   const router = useRouter();
   const [addProjectOpen, setAddProjectOpen] = useState(false);
   const [addReceiptOpen, setAddReceiptOpen] = useState(false);
+  const { filteredReceiptData } = useSearchReceiptContext();
+  const { filteredItemData } = useSearchItemContext();
+
+  const { filteredProjectData } = useSearchProjectContext();
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -89,7 +95,7 @@ const Header = ({ type }: HeaderProps) => {
       </div>
       <div className=" flex justify-between items-center relative flex-wrap gap-4 ">
         <SearchBar searchType={type} />
-        {pathname === "/receipts" && (
+        {pathname === "/receipts" && filteredReceiptData.length > 0 && (
           <div className="flex w-full    ">
             <button
               className={`${
@@ -118,21 +124,15 @@ const Header = ({ type }: HeaderProps) => {
             </button>
           </div>
         )}
-
-        <div
-          className="fixed z-10 bottom-8 left-1/2 transform -translate-x-1/2
-        
-        "
-        >
-          <button
-            className="px-[60px] py-[8px] border-[1px] border-emerald-900 bg-emerald-900 text-white rounded-3xl"
-            onClick={() => {
-              setOpenModal(!openModal);
-            }}
-          >
-            <p className="text-sm">Filter</p>
-          </button>
-        </div>
+        {pathname === "/receipts" && filteredReceiptData.length > 0 && (
+          <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
+        )}
+        {pathname === "/items" && filteredItemData.length > 0 && (
+          <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
+        )}
+        {pathname === "/" && filteredProjectData.length > 0 && (
+          <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
+        )}
 
         <div className="flex gap-2 ">
           <div className="">
@@ -693,6 +693,26 @@ const FilterItemsOptions = ({
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+interface FilterButtonProps {
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  openModal: boolean;
+}
+
+const FilterButton = ({ setOpenModal, openModal }: FilterButtonProps) => {
+  return (
+    <div className="fixed z-10 bottom-8 left-1/2 transform -translate-x-1/2">
+      <button
+        className="px-[60px] py-[8px] border-[1px] border-emerald-900 bg-emerald-900 text-white rounded-3xl"
+        onClick={() => {
+          setOpenModal(!openModal);
+        }}
+      >
+        <p className="text-sm">Filter</p>
+      </button>
     </div>
   );
 };

@@ -11,6 +11,21 @@
   border-radius: 8px;
 }
 
+.placeholder {
+  width: 100%;
+  max-width: 250px;
+  height: 200px;
+  background-color: white;
+
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  position: relative;
+}
+
 .boxes {
   display: flex;
   gap: 30px;

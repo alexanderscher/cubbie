@@ -8,7 +8,7 @@ import prisma from "@/prisma/client";
 import { revalidateTag } from "next/cache";
 
 export const editItem = async (id: string, values: any) => {
-  const session = await auth();
+  const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
   if (!userId) {
     return { error: "Unauthorized" };

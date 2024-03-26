@@ -6,7 +6,7 @@ import { revalidateTag } from "next/cache";
 
 export const createProject = async (name: string) => {
   try {
-    const session = await auth();
+    const session = (await auth()) as Session;
     const userId = session?.user?.id as string;
 
     if (!userId) {

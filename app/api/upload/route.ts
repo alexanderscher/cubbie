@@ -2,6 +2,7 @@ import { deleteUploadThingImage } from "@/actions/uploadthing/deletePhoto";
 import { handleUpload } from "@/actions/uploadthing/uploadPhoto";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
+import { Session } from "@/types/AppTypes";
 import { ItemInput } from "@/types/form";
 
 import { calculateReturnDate } from "@/utils/Date";
@@ -134,7 +135,7 @@ export async function POST(request: Request) {
         },
       },
     });
-    const session = await auth();
+    const session = (await auth()) as Session;
     const userId = session?.user?.id as string;
     revalidateTag(`projects_user_${userId}`);
 

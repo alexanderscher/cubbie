@@ -3,6 +3,7 @@ import { deleteUploadThingImage } from "@/actions/uploadthing/deletePhoto";
 import { handleUpload } from "@/actions/uploadthing/uploadPhoto";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
+import { Session } from "@/types/AppTypes";
 import moment from "moment";
 import { revalidateTag } from "next/cache";
 
@@ -24,7 +25,7 @@ export const editReceipt = async (params: {
   id: string;
   values: ExtendedReceipt;
 }) => {
-  const session = await auth();
+  const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
   if (!userId) {
     return { error: "Unauthorized" };

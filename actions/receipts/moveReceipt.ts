@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
+import { Session } from "@/types/AppTypes";
 
 import { revalidateTag } from "next/cache";
 
@@ -9,7 +10,7 @@ export const moveReceipt = async (params: {
   id: number;
   projectId: number;
 }) => {
-  const session = await auth();
+  const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
   if (!userId) {
     return { error: "Unauthorized" };

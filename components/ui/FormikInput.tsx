@@ -32,7 +32,7 @@ const FormikInput = ({
         onChange={onChange}
         onFocus={() => setIsFocused(true)} // Set isFocused to true when the input is focused
         onBlur={() => setIsFocused(false)} // Set isFocused to false when the input loses focus
-        className={`focus:outline-none focus:border-emerald-900 text-xs w-full border-[1px] border-slate-400  p-2 cursor-pointer ${styles}`}
+        className={`focus:outline-none focus:border-emerald-900 text-xs w-full border-[1px] border-slate-400 rounded p-2  ${styles}`}
         type={type}
       />
     </div>

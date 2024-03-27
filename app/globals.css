@@ -227,6 +227,16 @@ button:hover + .ui_TooltipContainer {
   opacity: 1;
 }
 
+.extra-div {
+  width: 300px;
+}
+
+@media (max-width: 900px) {
+  .extra-div {
+    display: none;
+  }
+}
+
 @media (max-width: 550px) {
   .main-content {
     padding: 20px;

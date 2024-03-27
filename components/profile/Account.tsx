@@ -6,7 +6,6 @@ import { FormSuccess } from "@/components/form-success";
 import { EmailSchema, PasswordSchema } from "@/schemas";
 import { Session } from "@/types/AppTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "@prisma/client";
 import { Formik } from "formik";
 import React, { startTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -20,7 +19,9 @@ interface Props {
 
 const Account = ({ session }: Props) => {
   return (
-    <div className={`${styles.layout} gap-6 `}>
+    <div
+      className={`${styles.layout} gap-6 w-full justify-center items center`}
+    >
       <div
         className={`${styles.header}  bg-white min-w-[200px] rounded shadow p-6 flex flex-col gap-6 text-sm`}
       >
@@ -109,15 +110,11 @@ const PersonalInformation = ({ session }: Props) => {
               onChange={handleChange("email")}
             />
 
-            <div className="w-full">
-              {/* <p className="text-sm text-slate-300">Phone</p> */}
-              {/* <FormikInput
-              vales={values.phone}
-              /> */}
-            </div>
+            {/* <FormikInput name="Phone" values={values.phone} /> */}
+
             <RegularButton
               type="submit"
-              styles="  border-emerald-900 text-emerald-900 h-[40px]
+              styles="mt-2  border-emerald-900 text-emerald-900 h-[40px]
             
             "
             >
@@ -195,7 +192,7 @@ const Password = () => {
               />
               <RegularButton
                 type="submit"
-                styles="  border-emerald-900 text-emerald-900 h-[40px]
+                styles="mt-2  border-emerald-900 text-emerald-900 h-[40px]
             
             "
               >

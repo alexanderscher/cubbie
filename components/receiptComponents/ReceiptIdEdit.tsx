@@ -162,8 +162,8 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
               )}
             </div>
           </div>
-          <div className="flex bg-white rounded text-sm shadow p-4">
-            <div className="w-1/2 border-r-[1px] border-slate-300 ">
+          <div className="flex bg-white rounded-md text-sm shadow p-6">
+            <div className="w-1/2 border-r-[1px] border-slate-400 ">
               <p className="text-slate-400 text-xs">Total amount</p>
               <p>{formatCurrency(total_amount)}</p>
             </div>
@@ -175,9 +175,9 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
 
           <div className={`${styles.receipt} `}>
             <div className={`${styles.receiptLeft}  flex flex-col gap-2 `}>
-              <div className={` rounded  bg-white flex flex-col gap-4 p-6`}>
+              <div className={` rounded-md  bg-white flex flex-col gap-4 p-8`}>
                 {!values.receipt_image_url && !values.edit_image && (
-                  <div className="w-full h-[200px] overflow-hidden  border-[1px] border-dashed rounded bg-slate-100 relative">
+                  <div className="w-full h-[200px] overflow-hidden  border-[1px] border-dashed rounded-md bg-slate-100 relative">
                     <input
                       type="file"
                       onChange={(e) => handleFileChange(e, setFieldValue)}
@@ -216,13 +216,13 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                 )}
                 {values.edit_image && (
                   <div className="w-full flex justify-center items-center relative group">
-                    <div className="relative  w-[200px] max-h-[400px] rounded overflow-hidden">
+                    <div className="relative  w-[200px] max-h-[400px] rounded-md overflow-hidden">
                       <Image
                         src={values.edit_image}
                         width={300}
                         height={300}
                         alt="Receipt Image"
-                        className="object-contain rounded-md w-full cursor-pointer hover:opacity-80 transition-all duration-300 ease-in-out"
+                        className="object-contain  w-full cursor-pointer hover:opacity-80 transition-all duration-300 ease-in-out"
                         layout="intrinsic"
                         onClick={() => setIsOpen(true)}
                       />
@@ -241,7 +241,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
 
                 {values.receipt_image_url && (
                   <div className="w-full flex justify-center items-center relative">
-                    <div className="relative  w-[200px] max-h-[400px] rounded overflow-hidden hover:opacity-80 transition-all duration-300 ease-in-out">
+                    <div className="relative  w-[200px] max-h-[400px] rounded-md overflow-hidden hover:opacity-80 transition-all duration-300 ease-in-out">
                       <Image
                         src={values.receipt_image_url}
                         width={300}
@@ -270,7 +270,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                     <input
                       value={values.store}
                       onChange={handleChange("store")}
-                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2"
+                      className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none rounded-md p-2"
                     />
                     {errorM.store && (
                       <p className="text-orange-900 text-xs mt-2">
@@ -291,7 +291,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                       style={{ WebkitAppearance: "none" }}
                       value={formatDateToYYYYMMDD(values.purchase_date)}
                       onChange={handleChange("purchase_date")}
-                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2 bg-white"
+                      className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none rounded-md p-2 bg-white"
                     />
                     {errorM.purchase_date && (
                       <p className="text-orange-900 text-xs mt-2">
@@ -307,7 +307,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                       style={{ WebkitAppearance: "none" }}
                       value={formatDateToYYYYMMDD(values.return_date)}
                       onChange={handleChange("return_date")}
-                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2 bg-white"
+                      className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none rounded-md p-2 bg-white"
                     />
                     {errorM.return_date && (
                       <p className="text-orange-900 text-xs mt-2">
@@ -321,7 +321,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                     <input
                       value={values.card}
                       onChange={handleChange("card")}
-                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2"
+                      className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none rounded-md p-2"
                     />
                   </div>
                   <div className="w-full">
@@ -329,7 +329,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                     <CurrencyInput
                       id="asset_amount"
                       name="asset_amount"
-                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2"
+                      className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none rounded-md p-2"
                       placeholder=""
                       value={values.asset_amount}
                       defaultValue={values.asset_amount || ""}
@@ -344,7 +344,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                     <input
                       value={values.tracking_number}
                       onChange={handleChange("tracking_number")}
-                      className="w-full border-[1px] border-slate-300 focus:border-emerald-900 focus:outline-none rounded p-2"
+                      className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none rounded-md p-2"
                     />
                     {errorM.tracking_number && (
                       <p className="text-orange-900 text-xs mt-2">

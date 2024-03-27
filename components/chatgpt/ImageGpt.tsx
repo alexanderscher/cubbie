@@ -268,7 +268,7 @@ export default function ImageGpt({
 
         <div className="flex flex-col gap-3">
           <div className=" flex items-center gap-2 relatice">
-            <p className="text-slate-400">Is this a memo?*</p>
+            <p className="text-emerald-900">Is this a memo?*</p>
             <TooltipWithHelperIcon
               content="Selecting the type of receipt you upload enables us to
                   accurately analyze and process it."
@@ -280,7 +280,7 @@ export default function ImageGpt({
               className={`flex gap-2 justify-center items-center px-4 py-2 rounded cursor-pointer ${
                 values.memo === true
                   ? "bg text-emerald-900 border-[1px] border-emerald-900 text-sm w-1/2"
-                  : "bg text-slate-400 border-[1px] border-slate-400 text-sm w-1/2"
+                  : "bg text-emerald-900 border-[1px] border-emerald-900 text-sm w-1/2"
               }`}
             >
               <span>Yes</span>
@@ -297,7 +297,7 @@ export default function ImageGpt({
               className={`flex gap-2 justify-center items-center px-4 py-2 rounded cursor-pointer ${
                 values.memo === false
                   ? "bg text-emerald-900 border-[1px] border-emerald-900 text-sm w-1/2"
-                  : "bg text-slate-400 border-[1px] border-slate-400 text-sm w-1/2"
+                  : "bg text-emerald-900 border-[1px] border-emerald-900 text-sm w-1/2"
               }`}
             >
               <span>No</span>

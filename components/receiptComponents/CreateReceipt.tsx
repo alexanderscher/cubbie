@@ -23,7 +23,7 @@ export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]"
       onClick={handleOverlayClick}
     >
-      <div className="bg-white rounded shadow-xl m-4 max-w-md w-full">
+      <div className="bg-white rounded-md shadow-xl m-4 max-w-md w-full">
         <div className="flex justify-between items-center border-b border-gray-200 px-5 py-4 bg-slate-100 rounded-t-lg">
           <h3 className="text-lg text-emerald-900">Create Receipt Options</h3>
           <button
@@ -35,7 +35,7 @@ export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
           </button>
         </div>
         <div className="p-6 flex flex-col gap-3">
-          <div className="border-[1px] p-2 rounded text-sm cursor-pointer border-emerald-900 text-emerald-900">
+          <div className="border-[1px] p-2 rounded-md text-sm cursor-pointer border-emerald-900 text-emerald-900">
             <div className="flex gap-3 justify-center items-center">
               <Link href="/create/image">
                 <p className="">Analyze Receipt Image</p>
@@ -48,7 +48,7 @@ export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
             </div>
           </div>
 
-          <div className="border-[1px] p-2 rounded text-sm  cursor-pointer border-emerald-900 text-emerald-900">
+          <div className="border-[1px] p-2 rounded-md text-sm  cursor-pointer border-emerald-900 text-emerald-900">
             <div className="flex gap-3 justify-center items-center">
               <Link href="/create/text">
                 <p className="">Analyze Receipt Text</p>
@@ -61,7 +61,7 @@ export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
             </div>
           </div>
 
-          <button className="border-[1px] p-2 rounded text-sm  cursor-pointer border-emerald-900 text-emerald-900">
+          <button className="border-[1px] p-2 rounded-md text-sm  cursor-pointer border-emerald-900 text-emerald-900">
             <Link href="/create/manual">
               <p className="">Manually Enter Receipt</p>
             </Link>

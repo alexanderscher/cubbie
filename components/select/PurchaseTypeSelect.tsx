@@ -51,7 +51,7 @@ const PurchaseTypeSelect: React.FC<Props> = ({
     control: (provided, state) => ({
       ...provided,
       backgroundColor: "#e2f1e2",
-      borderColor: "rgb(148 163 184)",
+      borderColor: "rgb(6 78 59)",
       borderWidth: "1px",
       boxShadow: state.isFocused ? "0 0 0px .08px rgb(6 78 59)" : "none",
       "&:hover": {
@@ -91,7 +91,13 @@ const PurchaseTypeSelect: React.FC<Props> = ({
 
   return (
     <div className="w-full ">
-      <p className="text-slate-400 text-xs">Purchase Type</p>
+      <p
+        className={`${
+          color === "green" ? "text-emerald-900" : "text-slate-400"
+        } text-xs`}
+      >
+        Purchase Type
+      </p>
       <ReactSelect
         options={options}
         onChange={handleSelectChange}

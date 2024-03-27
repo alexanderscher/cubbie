@@ -12,6 +12,7 @@ import React, { startTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import styles from "./profile.module.css";
+import FormikInput from "@/components/ui/FormikInput";
 
 interface Props {
   session: Session;
@@ -21,7 +22,7 @@ const Account = ({ session }: Props) => {
   return (
     <div className={`${styles.layout} gap-6 `}>
       <div
-        className={`${styles.header}  bg-white min-w-[200px] rounded shadow p-6 flex flex-col gap-6`}
+        className={`${styles.header}  bg-white min-w-[200px] rounded shadow p-6 flex flex-col gap-6 text-sm`}
       >
         <h1>User Profile</h1>
         <h1>Prefrences</h1>
@@ -92,43 +93,31 @@ const PersonalInformation = ({ session }: Props) => {
           onSubmit(values);
         }}
       >
-        {({
-          handleSubmit,
-          setFieldValue,
-          values,
-          handleChange,
-          validateForm,
-        }) => (
+        {({ handleSubmit, values, handleChange }) => (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
-            <h1>Personal Information</h1>
+            <h1 className="text-emerald-900">Personal Information</h1>
+
+            <FormikInput
+              name={"Name"}
+              value={values.name}
+              onChange={handleChange("name")}
+            />
+
+            <FormikInput
+              name={"Email"}
+              value={values.email}
+              onChange={handleChange("email")}
+            />
+
             <div className="w-full">
-              <p className="text-sm text-slate-300">Name</p>
-              <input
-                value={values.name}
-                onChange={handleChange("name")}
-                className="w-full border-[1px] border-slate-300 rounded-md  p-2"
-                type="text"
-              />
-            </div>
-            <div className="w-full">
-              <p className="text-sm text-slate-300">Email</p>
-              <input
-                value={values.email}
-                onChange={handleChange("email")}
-                className="w-full border-[1px] border-slate-300 rounded-md  p-2"
-                type="text"
-              />
-            </div>
-            <div className="w-full">
-              <p className="text-sm text-slate-300">Phone</p>
-              <input
-                className="w-full border-[1px] border-slate-300 rounded-md  p-2"
-                type="text"
-              />
+              {/* <p className="text-sm text-slate-300">Phone</p> */}
+              {/* <FormikInput
+              vales={values.phone}
+              /> */}
             </div>
             <RegularButton
               type="submit"
-              styles=" bg-black border-black text-white h-[40px]
+              styles="  border-emerald-900 text-emerald-900 h-[40px]
             
             "
             >
@@ -191,28 +180,22 @@ const Password = () => {
         }) => (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
             <div className="bg-white rounded-md shadow  w-full flex flex-col p-6 gap-4">
-              <h1>Change Password</h1>
-              <div className="w-full">
-                <p className="text-sm text-slate-300">Current Password</p>
-                <input
-                  value={values.password}
-                  onChange={handleChange("password")}
-                  className="w-full border-[1px] border-slate-300 rounded-md h-[40px] p-2"
-                  type="text"
-                />
-              </div>
-              <div className="w-full">
-                <p className="text-sm text-slate-300">New Password</p>
-                <input
-                  value={values.newPassword}
-                  onChange={handleChange("newPassword")}
-                  className="w-full border-[1px] border-slate-300 rounded-md h-[40px] p-2"
-                  type="text"
-                />
-              </div>
+              <h1 className="text-emerald-900">Change Password</h1>
+
+              <FormikInput
+                name={"Current Password"}
+                value={values.password}
+                onChange={handleChange("password")}
+              />
+
+              <FormikInput
+                name={"New Password"}
+                value={values.newPassword}
+                onChange={handleChange("newPassword")}
+              />
               <RegularButton
                 type="submit"
-                styles=" bg-black border-black text-white h-[40px]
+                styles="  border-emerald-900 text-emerald-900 h-[40px]
             
             "
               >

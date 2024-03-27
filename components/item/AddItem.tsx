@@ -136,7 +136,7 @@ export const AddItem = ({ setIsAddOpen, id }: AddItemModalProps) => {
               <CurrencyInput
                 id="price"
                 name="price"
-                className="text-sm bg-white border-[1px] rounded-md p-2  border-emerald-900 focus:outline-none w-full"
+                className="text-sm bg-white border-[1px] rounded p-2  border-emerald-900 focus:outline-none w-full"
                 placeholder=""
                 value={newItem.price}
                 defaultValue={newItem.price || ""}

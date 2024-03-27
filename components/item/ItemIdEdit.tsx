@@ -139,7 +139,7 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
             <div>
               <div className="flex flex-col gap-4">
                 {!values.photo_url && !values.edit_image && (
-                  <div className="w-full h-[200px] overflow-hidden  border-[1px] border-dashed border-slate-400  focus:border-emerald-900 focus:outline-none rounded-md bg relative">
+                  <div className="w-full h-[200px] overflow-hidden  border-[1px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-md bg relative">
                     <input
                       type="file"
                       onChange={(e) => handleFileChange(e, setFieldValue)}
@@ -226,11 +226,11 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                   </div>
                 )}
                 <div className="w-full ">
-                  <p className="text-slate-400 text-xs">Description</p>
+                  <p className="text-emerald-900 text-xs">Description</p>
                   <input
                     value={values.description}
                     onChange={handleChange("description")}
-                    className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
+                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
                   />
                 </div>
                 {errorM.description && (
@@ -239,11 +239,11 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                   </p>
                 )}
                 <div className="w-full">
-                  <p className="text-slate-400 text-xs">Price</p>
+                  <p className="text-emerald-900 text-xs">Price</p>
                   <CurrencyInput
                     id="price"
                     name="price"
-                    className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
+                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
                     placeholder=""
                     value={values.price}
                     defaultValue={values.price || ""}
@@ -257,28 +257,30 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                   <p className="text-orange-900 text-xs">{errorM.price}</p>
                 )}
                 <div className="w-full ">
-                  <p className="text-slate-400 text-xs">Barcode</p>
+                  <p className="text-emerald-900 text-xs">Barcode</p>
                   <div className="flex gap-2">
                     <input
                       value={values.barcode}
                       onChange={handleChange("barcode")}
-                      className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
+                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
                     />
                     <button
                       type="button"
-                      className="w-[40px] h-[40px] border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none p-1 rounded-md flex justify-center items-center "
+                      className="w-[40px] h-[40px] border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none p-1 rounded-md flex justify-center items-center "
                       onClick={() => {
                         setShowScanner(true);
                       }}
                       disabled={showScanner}
                     >
-                      <Image
-                        src="/barcode_b.png"
-                        alt="barcode"
-                        width={100}
-                        height={100}
-                        className=""
-                      ></Image>
+                      <div>
+                        <Image
+                          src="/barcode_b.png"
+                          alt="barcode"
+                          width={60}
+                          height={60}
+                          className=""
+                        ></Image>
+                      </div>
                     </button>
                     {showScanner && (
                       <div className="w-full">
@@ -304,19 +306,19 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                   </div>
                 </div>
                 <div className="w-full ">
-                  <p className="text-slate-400 text-xs">Character</p>
+                  <p className="text-emerald-900 text-xs">Character</p>
                   <input
                     value={values.character}
                     onChange={handleChange("character")}
-                    className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
+                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
                   />
                 </div>
                 <div className="w-full ">
-                  <p className="text-slate-400 text-xs">Product ID</p>
+                  <p className="text-emerald-900 text-xs">Product ID</p>
                   <input
                     value={values.product_id}
                     onChange={handleChange("product_id")}
-                    className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
+                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
                   />
                 </div>
                 {uploadError && (

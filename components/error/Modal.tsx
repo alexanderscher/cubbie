@@ -11,7 +11,7 @@ const ErrorModal = ({ errorMessage, onClose }: ErrorModalProps) => {
 
   return (
     <div className="fixed inset-0 z-100 overflow-auto bg-smoke-light flex">
-      <div className="relative p-6 bg-red-200 w-full max-w-md m-auto flex-col flex rounded  shadow-md">
+      <div className="relative p-6 bg-red-200 w-full max-w-md m-auto flex-col flex rounded-md  shadow-md">
         <h2 className="text-xl font-semibold text-red-500">Error</h2>
         <div className="mt-3 text-sm text-emerald-900">
           <p>{errorMessage}</p>

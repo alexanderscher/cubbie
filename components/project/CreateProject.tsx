@@ -49,7 +49,7 @@ export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]"
       onClick={handleOverlayClick}
     >
-      <div className="bg-white rounded shadow-xl m-4 max-w-md w-full">
+      <div className="bg-white rounded-md shadow-xl m-4 max-w-md w-full">
         <div className="flex justify-between items-center border-b border-gray-200 px-5 py-4 bg-slate-100 rounded-t-lg">
           <h3 className="text-lg text-emerald-900">Create Project</h3>
           <button
@@ -70,7 +70,7 @@ export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
                   name="description"
                   value={project}
                   onChange={(e) => setProject(e.target.value)}
-                  className="w-full p-2 border-[1px]  rounded border-slate-300 focus:border-emerald-900 focus:outline-none"
+                  className="w-full p-2 border-[1px]  rounded-md border-slate-300 focus:border-emerald-900 focus:outline-none"
                 />
                 {error && <p className="text-orange-900 text-xs">{error}</p>}
               </div>

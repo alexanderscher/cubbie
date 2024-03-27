@@ -27,7 +27,7 @@ const ProjectSelect = ({
     control: (provided, state) => ({
       ...provided,
       backgroundColor: "#e2f1e2",
-      borderColor: "rgb(148 163 184)",
+      borderColor: "rgb(6 78 59)",
       borderWidth: "1px",
       boxShadow: state.isFocused ? "0 0 0px .08px rgb(6 78 59)" : "none",
       "&:hover": {
@@ -71,7 +71,7 @@ const ProjectSelect = ({
 
   return (
     <div className="w-full ">
-      <p className="text-slate-400">Project folder*</p>
+      <p className="text-emerald-900">Project folder*</p>
       <ReactSelect
         options={options}
         onChange={handleSelectChange}

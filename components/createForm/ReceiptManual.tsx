@@ -88,7 +88,7 @@ const ReceiptManual = ({
       <div className=" max-w-[600px] w-full">
         <div className="flex flex-col gap-2">
           <input
-            className="w-full bg border-b-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none placeholder:text-3xl placeholder:text-orange-600 h-[50px] text-2xl text-orange-600"
+            className="w-full bg border-b-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none placeholder:text-3xl placeholder:text-orange-600 h-[50px] text-2xl text-orange-600"
             name="store"
             placeholder="Store Name*"
             value={values.store}
@@ -112,7 +112,7 @@ const ReceiptManual = ({
             <div className="flex gap-2 w-full">
               <div className="w-full">
                 <div className="flex gap-2 mb-1">
-                  <p className="text-sm text-slate-400 ">Asset Amount</p>
+                  <p className="text-sm text-emerald-900 ">Asset Amount</p>
                   <TooltipWithHelperIcon
                     content="Asset amount determines which item is considered an asset.
                     An asset is an item that is worth more than a certain
@@ -123,7 +123,7 @@ const ReceiptManual = ({
                 <CurrencyInput
                   id="assetAmount"
                   name="assetAmount"
-                  className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none"
+                  className="w-full border-[1px] bg  p-2  border-emerald-900 focus:border-emerald-900 focus:outline-none"
                   placeholder=""
                   defaultValue={values.assetAmount || ""}
                   decimalsLimit={2}
@@ -133,9 +133,9 @@ const ReceiptManual = ({
             </div>
 
             <div className="w-full">
-              <p className="text-sm text-slate-400 ">Card</p>
+              <p className="text-sm text-emerald-900 ">Card</p>
               <input
-                className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none"
+                className="w-full border-[1px] bg  p-2  border-emerald-900 focus:border-emerald-900 focus:outline-none"
                 name="card"
                 value={values.card}
                 onChange={handleChange("card")}
@@ -144,10 +144,12 @@ const ReceiptManual = ({
 
             {online && (
               <div className="w-full">
-                <p className="text-sm text-slate-400 ">Tracking Number Link</p>
+                <p className="text-sm text-emerald-900 ">
+                  Tracking Number Link
+                </p>
                 <div className="flex flex-col gap-2">
                   <input
-                    className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none"
+                    className="w-full border-[1px] bg  p-2  border-emerald-900 focus:border-emerald-900 focus:outline-none"
                     name="tracking_number"
                     value={values.tracking_number}
                     onChange={handleChange("tracking_number")}
@@ -163,10 +165,10 @@ const ReceiptManual = ({
 
             <div className="flex gap-2 w-full">
               <div className="w-1/2">
-                <p className="text-sm text-slate-400 ">Purchase Date</p>
+                <p className="text-sm text-emerald-900 ">Purchase Date</p>
                 <div className="flex flex-col gap-2">
                   <input
-                    className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none cursor-pointer"
+                    className="w-full border-[1px] bg  p-2  border-emerald-900 focus:border-emerald-900 focus:outline-none cursor-pointer"
                     name="purchase_date"
                     value={values.purchase_date}
                     onChange={handleChange("purchase_date")}
@@ -181,10 +183,10 @@ const ReceiptManual = ({
                 </div>
               </div>
               <div className="w-1/2">
-                <p className="text-sm text-slate-400 ">Days until return</p>
+                <p className="text-sm text-emerald-900 ">Days until return</p>
 
                 <input
-                  className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none "
+                  className="w-full border-[1px] bg  p-2  border-emerald-900 focus:border-emerald-900 focus:outline-none "
                   value={values.days_until_return}
                   onChange={(event) => {
                     const value = parseInt(event.target.value, 10);
@@ -202,8 +204,8 @@ const ReceiptManual = ({
               </div>
             </div>
             <div>
-              <p className="text-slate-400 text-sm">Return Date</p>
-              <div className="w-full border-[1px] bg  p-2 rounded-md border-slate-400 focus:border-emerald-900 focus:outline-none ">
+              <p className="text-emerald-900 text-sm">Return Date</p>
+              <div className="w-full border-[1px] bg  p-2  border-emerald-900 focus:border-emerald-900 focus:outline-none ">
                 {formatDateToMMDDYY(
                   calculateReturnDate(
                     values.purchase_date,
@@ -216,7 +218,7 @@ const ReceiptManual = ({
 
           <div className={`w-full relative`}>
             <div
-              className={` border-[1px]  w-full h-full flex flex-col gap-4 justify-center items-center rounded-md relative  border-slate-400`}
+              className={` border-[1px]  w-full h-full flex flex-col gap-4 justify-center items-center  relative  border-emerald-900`}
               onClick={handleContainerClick}
               style={{ cursor: "pointer" }}
             >
@@ -252,7 +254,7 @@ const ReceiptManual = ({
           </div>
           {values.receiptImage && (
             <div className="relative w-24 h-24 ">
-              <div className="w-24 h-24 overflow-hidden flex items-center justify-center rounded-md border-[1px] border-slate-400">
+              <div className="w-24 h-24 overflow-hidden flex items-center justify-center  border-[1px] border-emerald-900">
                 <button
                   type="button"
                   onClick={() => {

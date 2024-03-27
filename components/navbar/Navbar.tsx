@@ -199,10 +199,15 @@ const Modal = ({ session }: ModalProps) => {
         <p className="p-3">{session && session.user.name}</p>
       </div>
 
-      <div className="p-3">
-        <Link href="/profile">Profile</Link>
-
-        <p className="text-black">{session && <LogOutButton type="not" />}</p>
+      <div className="flex flex-col ">
+        <Link href="/profile" className="hover:bg-slate-100">
+          <p className="p-3">Profile</p>
+        </Link>
+        <div className="hover:bg-slate-100">
+          <p className="text-black p-3">
+            {session && <LogOutButton type="not" />}
+          </p>
+        </div>
       </div>
     </div>
   );

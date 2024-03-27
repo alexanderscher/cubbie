@@ -11,6 +11,7 @@ import { Formik } from "formik";
 import React, { startTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import styles from "./profile.module.css";
 
 interface Props {
   session: Session;
@@ -18,16 +19,18 @@ interface Props {
 
 const Account = ({ session }: Props) => {
   return (
-    <div className="flex gap-6 ">
-      <div className="bg-white min-w-[200px] rounded shadow p-8 flex flex-col gap-6">
+    <div className={`${styles.layout} gap-6 `}>
+      <div
+        className={`${styles.header}  bg-white min-w-[200px] rounded shadow p-6 flex flex-col gap-6`}
+      >
         <h1>User Profile</h1>
         <h1>Prefrences</h1>
         <h1>Alerts</h1>
         <h1>Plan & Billing</h1>
       </div>
       <div className="flex flex-col gap-4 w-full max-w-[600px]">
-        <div className="bg-white rounded p-8  flex flex-col gap-4">
-          <div className="text-xl">
+        <div className="bg-white rounded p-6  flex flex-col gap-4">
+          <div className="text-lg">
             <p>Account</p>
           </div>
         </div>
@@ -79,7 +82,7 @@ const PersonalInformation = ({ session }: Props) => {
     });
   };
   return (
-    <div className="bg-white rounded-md shadow  w-full  p-8  justify-center">
+    <div className="bg-white rounded-md shadow  w-full  p-6  justify-center">
       <Formik
         initialValues={{
           name: session?.user.name || undefined,
@@ -187,7 +190,7 @@ const Password = () => {
           handleChange,
         }) => (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
-            <div className="bg-white rounded-md shadow  w-full flex flex-col p-8 gap-4">
+            <div className="bg-white rounded-md shadow  w-full flex flex-col p-6 gap-4">
               <h1>Change Password</h1>
               <div className="w-full">
                 <p className="text-sm text-slate-300">Current Password</p>

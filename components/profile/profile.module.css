@@ -11,6 +11,10 @@
   display: none;
 }
 
+.button {
+  display: none;
+}
+
 .smallheader {
   display: none;
 }
@@ -28,5 +32,8 @@
   }
   .smallheader {
     display: flex;
+  }
+  .button {
+    display: block;
   }
 }

@@ -130,7 +130,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
           className={`${styles.receiptLeft}  flex flex-col gap-2 pb-[10px] md:pb-[200px]`}
         >
           <div
-            className={`border-[1px] border-emerald-900 rounded-md  flex flex-col gap-4 p-6`}
+            className={`border-[1px] border-emerald-900 rounded  flex flex-col gap-4 p-6`}
           >
             {/* <p className="text-xl text-emerald-900">
               {pathname !== "/create/memo"
@@ -154,13 +154,13 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
 
             {values.receiptImage && (
               <div className="w-full flex justify-center items-center  ">
-                <div className=" w-[200px] max-h-[200px]  rounded-md overflow-hidden">
+                <div className=" w-[200px] max-h-[200px]  rounded overflow-hidden">
                   <Image
                     src={values.receiptImage}
                     width={280}
                     height={280}
                     alt="Receipt Image"
-                    className="object-contain rounded-md cursor-pointer"
+                    className="object-contain rounded cursor-pointer"
                     layout="intrinsic"
                     onClick={() => setIsOpen(true)}
                   />
@@ -179,7 +179,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
                 <p className="text-xs text-emerald-900 ">Store</p>
 
                 <input
-                  className="w-full border-[1px] bg border-emerald-900 p-2   focus:border-emerald-900 focus:outline-none"
+                  className="w-full border-[1px] bg border-emerald-900 p-2 rounded  focus:border-emerald-900 focus:outline-none"
                   value={values.store}
                   onChange={(e) => {
                     setFieldValue("store", e.target.value);
@@ -200,7 +200,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
               <div className="w-full pb-2 ">
                 <p className="text-emerald-900 text-xs">Purchase Date</p>
                 <input
-                  className="w-full border-[1px] bg  p-2  border-emerald-900 focus:border-emerald-900 focus:outline-none cursor-pointer"
+                  className="w-full border-[1px] bg  p-2 rounded border-emerald-900 focus:border-emerald-900 focus:outline-none cursor-pointer"
                   name="purchase_date"
                   value={formatDateToYYYYMMDD(values.purchase_date)}
                   onChange={(e) => {
@@ -214,7 +214,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
               <div className="w-full">
                 <p className="text-xs text-emerald-900 ">Days until return</p>
                 <input
-                  className="w-full border-[1px] bg border-emerald-900 p-2   focus:border-emerald-900 focus:outline-none"
+                  className="w-full border-[1px] bg border-emerald-900 p-2 rounded  focus:border-emerald-900 focus:outline-none"
                   name="days_until_return"
                   value={values.days_until_return}
                   onChange={(event) => {
@@ -258,7 +258,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
               <div className="w-full">
                 <p className="text-xs text-emerald-900 ">Card</p>
                 <input
-                  className="w-full border-[1px] bg  p-2  border-emerald-900 focus:border-emerald-900 focus:outline-none"
+                  className="w-full border-[1px] bg  p-2 rounded border-emerald-900 focus:border-emerald-900 focus:outline-none"
                   name="card"
                   value={values.card}
                   onChange={(e) => {
@@ -274,7 +274,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
                     {values.tracking_number ? values.tracking_number : "None"}
                   </p> */}
                   <input
-                    className="w-full border-[1px] bg  p-2  border-emerald-900 focus:border-emerald-900 focus:outline-none"
+                    className="w-full border-[1px] bg  p-2 rounded border-emerald-900 focus:border-emerald-900 focus:outline-none"
                     name="tracking_number"
                     value={values.tracking_number}
                     onChange={(e) => {
@@ -290,7 +290,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
                 <CurrencyInput
                   id="price"
                   name="price"
-                  className="text-sm bg-white border-[1px]  p-2 bg border-emerald-900 focus:border-emerald-900 focus:outline-none w-full"
+                  className="text-sm bg-white border-[1px] rounded p-2 bg border-emerald-900 focus:border-emerald-900 focus:outline-none w-full"
                   placeholder=""
                   value={values.assetAmount}
                   defaultValue={values.assetAmount || ""}
@@ -412,7 +412,7 @@ const ReceiptItems = ({
   return (
     <div className="border-t-[1px] border-black flex flex-col gap-4 w-full pt-5 ">
       <div className="w-full h-full flex gap-6">
-        <div className="w-[120px] h-[150px] flex items-center flex-shrink-0 overflow-visible rounded-md relative">
+        <div className="w-[120px] h-[150px] flex items-center flex-shrink-0 overflow-visible rounded relative">
           {item.photo && (
             <div className="relative flex items-center justify-center w-full h-full">
               <button
@@ -500,7 +500,7 @@ const ReceiptItems = ({
             <h1 className="text-emerald-900 text-xs">Description</h1>
 
             <input
-              className="  text-sm bg-white border-[1px]  p-2 bg border-emerald-900 focus:outline-none w-full"
+              className="  text-sm bg-white border-[1px] rounded p-2 bg border-emerald-900 focus:outline-none w-full"
               name="description"
               value={item.description || ""}
               onChange={handleItemChange}
@@ -512,7 +512,7 @@ const ReceiptItems = ({
             <CurrencyInput
               id="price"
               name="price"
-              className="text-sm bg-white border-[1px]  p-2 bg border-emerald-900 focus:outline-none w-full"
+              className="text-sm bg-white border-[1px] rounded p-2 bg border-emerald-900 focus:outline-none w-full"
               placeholder=""
               value={item.price}
               defaultValue={item.price || ""}
@@ -525,7 +525,7 @@ const ReceiptItems = ({
             <h1 className="text-emerald-900 text-xs">Character</h1>
 
             <input
-              className="  text-sm bg-white border-[1px]  p-2 bg border-emerald-900 focus:outline-none w-full"
+              className="  text-sm bg-white border-[1px] rounded p-2 bg border-emerald-900 focus:outline-none w-full"
               name="character"
               value={item.character || ""}
               onChange={handleItemChange}
@@ -536,7 +536,7 @@ const ReceiptItems = ({
             <h1 className="text-emerald-900 text-xs">Product ID</h1>
 
             <input
-              className="  text-sm bg-white border-[1px]  p-2 bg border-emerald-900 focus:outline-none w-full"
+              className="  text-sm bg-white border-[1px] rounded p-2 bg border-emerald-900 focus:outline-none w-full"
               name="product_id"
               value={item.product_id}
               onChange={handleItemChange}
@@ -547,14 +547,14 @@ const ReceiptItems = ({
 
             <div className="flex  w-full gap-2">
               <input
-                className="w-full  text-sm bg-white border-[1px]  p-2 bg border-emerald-900 focus:outline-none "
+                className="w-full  text-sm bg-white border-[1px] rounded p-2 bg border-emerald-900 focus:outline-none "
                 name="barcode"
                 value={item.barcode}
                 onChange={handleItemChange}
               />
               <button
                 type="button"
-                className="w-[40px] border-[1px] border-emerald-900 p-4  flex justify-center items-center  "
+                className="w-[40px] border-[1px] border-emerald-900 p-4 rounded flex justify-center items-center  "
                 onClick={() => {
                   setShowScanner(true);
                 }}
@@ -697,7 +697,7 @@ const AddItemModal = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]">
-      <div className="bg-white rounded-md shadow-xl m-4 max-w-md w-full">
+      <div className="bg-white rounded shadow-xl m-4 max-w-md w-full">
         <div className="flex justify-between items-center border-b border-gray-200 px-5 py-4 bg-slate-100 rounded-t-lg">
           <h3 className="text-lg text-emerald-900">Add Item</h3>
           <button
@@ -728,7 +728,7 @@ const AddItemModal = ({
               <CurrencyInput
                 id="price"
                 name="price"
-                className="text-sm bg-white border-[1px]  p-2  border-emerald-900 focus:outline-none w-full"
+                className="text-sm bg-white border-[1px] rounded p-2  border-emerald-900 focus:outline-none w-full"
                 placeholder=""
                 value={newItem.price}
                 defaultValue={newItem.price || ""}
@@ -751,7 +751,7 @@ const AddItemModal = ({
                 />
                 <button
                   type="button"
-                  className="w-[40px] border-[1px] border-emerald-900 p-4  flex justify-center items-center  "
+                  className="w-[40px] border-[1px] border-emerald-900 p-4 rounded flex justify-center items-center  "
                   onClick={() => {
                     setShowScanner(true);
                   }}
@@ -817,7 +817,7 @@ const AddItemModal = ({
             <div>
               <p className="text-xs text-emerald-900">Image</p>
 
-              <div className="relative w-full h-[70px] overflow-hidden border-[1px] border-dashed rounded-md bg-slate-100 flex flex-col border-emerald-900 justify-center items-center ">
+              <div className="relative w-full h-[70px] overflow-hidden border-[1px] border-dashed rounded bg-slate-100 flex flex-col border-emerald-900 justify-center items-center ">
                 <input
                   type="file"
                   onChange={(e) => {
@@ -870,7 +870,7 @@ const AddItemModal = ({
               </div>
             </div>
             {newItem.photo && (
-              <div className="w-24 h-24 flex items-center flex-shrink-0 overflow-visible rounded-md relative">
+              <div className="w-24 h-24 flex items-center flex-shrink-0 overflow-visible rounded relative">
                 {newItem.photo && (
                   <div className="relative flex items-center justify-center w-full h-full">
                     <button

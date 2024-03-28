@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import styles from "./profile.module.css";
 import FormikInput from "@/components/ui/FormikInput";
+import Image from "next/image";
 
 interface Props {
   session: Session;
@@ -23,23 +24,35 @@ const Account = ({ session }: Props) => {
       className={`${styles.layout} gap-6 w-full justify-center items center`}
     >
       <div
-        className={`${styles.header}  bg-white min-w-[200px] rounded shadow p-6 flex flex-col gap-6 text-sm`}
+        className={`${styles.header}  bg-white min-w-[200px] rounded shadow p-6 flex flex-col gap-4 `}
       >
-        <h1>User Profile</h1>
-        <h1>Prefrences</h1>
-        <h1>Alerts</h1>
-        <h1>Plan & Billing</h1>
+        <h1 className="text-lg">Account</h1>
+        <div className="flex flex-col gap-4 text-sm ">
+          <h1>User Profile</h1>
+          <h1>Prefrences</h1>
+          <h1>Alerts</h1>
+          <h1>Plan & Billing</h1>
+        </div>
       </div>
       <div className="flex flex-col gap-4 w-full max-w-[600px]">
         <div className="bg-white rounded p-6  flex flex-col gap-4">
-          <div className="text-lg">
-            <p>Account</p>
+          <div className="flex justify-between">
+            <p>User Profile</p>
+            <div className={styles.button}>
+              <Image
+                src={"/dashboard_b.png"}
+                alt="user image"
+                width={20}
+                height={20}
+                className="cursor-pointer"
+              />
+            </div>
           </div>
         </div>
 
         <div className="flex flex-col gap-4 ">
           <PersonalInformation session={session} />
-          <Password />
+          {!session.user.isOAuth && <Password />}
         </div>
       </div>
     </div>
@@ -207,3 +220,25 @@ const Password = () => {
     </div>
   );
 };
+
+// const Menu = () => {
+//   return (
+//     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+//       <div className="bg-white p-5 rounded-lg shadow-lg">
+//         <h2 className="text-2xl font-bold mb-4">Menu</h2>
+//         <ul>
+//           <li className="mb-2">Item 1</li>
+//           <li className="mb-2">Item 2</li>
+//           <li className="mb-2">Item 3</li>
+//           <li className="mb-2">Item 4</li>
+//         </ul>
+//         <button
+//           onClick={() => setIsOpen(false)}
+//           className="mt-4 px-4 py-2 text-white bg-red-500 rounded hover:bg-red-700 transition duration-200"
+//         >
+//           Close Menu
+//         </button>
+//       </div>
+//     </div>
+//   );
+// }

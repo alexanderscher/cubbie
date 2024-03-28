@@ -45,22 +45,22 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
 
   if (!receipt.items) return <div className="min-h-screen">Loading</div>;
   return (
-    <div className="flex flex-col gap-8  w-full h-full ">
+    <div className="flex flex-col gap-8 w-full h-full max-w-[1260px] ">
       <HeaderNav receipt={receipt} />
       <div className="flex justify-between items-center w-full flex-wrap gap-4">
         <h1 className="text-2xl text-orange-600 ">{receipt.store}</h1>
         <div className="flex gap-2  justify-end">
           <RegularButton
-            styles="bg-emerald-900"
+            styles="bg  border-emerald-900"
             handleClick={() => setIsAddOpen(true)}
           >
-            <p className="text-white text-xs">Add item</p>
+            <p className="text-emerald-900 text-xs">Add item</p>
           </RegularButton>
           <RegularButton
-            styles="bg-emerald-900"
+            styles="bg  border-emerald-900"
             href={`/receipt/${receipt.id}/edit`}
           >
-            <p className="text-white text-xs">Edit</p>
+            <p className="text-emerald-900 text-xs">Edit</p>
           </RegularButton>
         </div>
       </div>

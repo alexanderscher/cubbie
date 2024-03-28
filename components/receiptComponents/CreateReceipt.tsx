@@ -20,12 +20,12 @@ export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
   return (
     <div
       id="modal-overlay"
-      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]"
+      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000] "
       onClick={handleOverlayClick}
     >
-      <div className="bg-white rounded-md shadow-xl m-4 max-w-md w-full">
-        <div className="flex justify-between items-center border-b border-gray-200 px-5 py-4 bg-slate-100 rounded-t-lg">
-          <h3 className="text-lg text-emerald-900">Create Receipt Options</h3>
+      <div className="bg-white rounded-md shadow-xl m-4 max-w-md w-full rounded-t-lg">
+        <div className="flex justify-between items-center border-b border-gray-200 px-5 py-2 bg-emerald-900 rounded-t-lg">
+          <h3 className=" text-white">Create Receipt Options</h3>
           <button
             type="button"
             className="text-gray-400 hover:text-gray-500"
@@ -34,8 +34,8 @@ export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
             <span className="text-2xl">&times;</span>
           </button>
         </div>
-        <div className="p-6 flex flex-col gap-3">
-          <div className="border-[1px] p-2 rounded-md text-sm cursor-pointer border-emerald-900 text-emerald-900">
+        <div className="flex flex-col ">
+          <div className="border-b-[1px] p-4 rounded-md text-sm cursor-pointer hover:bg-slate-100 ">
             <div className="flex gap-3 justify-center items-center">
               <Link href="/create/image">
                 <p className="">Analyze Receipt Image</p>
@@ -48,7 +48,7 @@ export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
             </div>
           </div>
 
-          <div className="border-[1px] p-2 rounded-md text-sm  cursor-pointer border-emerald-900 text-emerald-900">
+          <div className="border-b-[1px] p-4 rounded-md text-sm  cursor-pointer hover:bg-slate-100 ">
             <div className="flex gap-3 justify-center items-center">
               <Link href="/create/text">
                 <p className="">Analyze Receipt Text</p>
@@ -61,7 +61,7 @@ export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
             </div>
           </div>
 
-          <button className="border-[1px] p-2 rounded-md text-sm  cursor-pointer border-emerald-900 text-emerald-900">
+          <button className="border-b-[1px] p-4 rounded-md text-sm  cursor-pointer hover:bg-slate-100 ">
             <Link href="/create/manual">
               <p className="">Manually Enter Receipt</p>
             </Link>

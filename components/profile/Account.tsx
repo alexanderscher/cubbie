@@ -19,6 +19,7 @@ interface Props {
 }
 
 const Account = ({ session }: Props) => {
+  const [isOpen, setIsOpen] = React.useState(false);
   return (
     <div
       className={`${styles.layout} gap-6 w-full justify-center items center`}
@@ -45,6 +46,7 @@ const Account = ({ session }: Props) => {
                 width={20}
                 height={20}
                 className="cursor-pointer"
+                onClick={() => setIsOpen(!isOpen)}
               />
             </div>
           </div>
@@ -55,6 +57,7 @@ const Account = ({ session }: Props) => {
           {!session.user.isOAuth && <Password />}
         </div>
       </div>
+      {isOpen && <Menu setIsOpen={setIsOpen} />}
     </div>
   );
 };
@@ -221,24 +224,38 @@ const Password = () => {
   );
 };
 
-// const Menu = () => {
-//   return (
-//     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-//       <div className="bg-white p-5 rounded-lg shadow-lg">
-//         <h2 className="text-2xl font-bold mb-4">Menu</h2>
-//         <ul>
-//           <li className="mb-2">Item 1</li>
-//           <li className="mb-2">Item 2</li>
-//           <li className="mb-2">Item 3</li>
-//           <li className="mb-2">Item 4</li>
-//         </ul>
-//         <button
-//           onClick={() => setIsOpen(false)}
-//           className="mt-4 px-4 py-2 text-white bg-red-500 rounded hover:bg-red-700 transition duration-200"
-//         >
-//           Close Menu
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
+interface MenuProps {
+  setIsOpen: (value: boolean) => void;
+}
+
+const Menu = ({ setIsOpen }: MenuProps) => {
+  return (
+    <div
+      className={`${styles.modal} fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center`}
+    >
+      <div className="bg-white  rounded-lg shadow-lg w-[300px] text-sm">
+        {/* <h2 className="text-2xl font-bold mb-4">Menu</h2> */}
+        <ul>
+          <div className="border-b-[1px] border-slate-300 hover:bg-slate-100 rounded-t-lg">
+            <li className="p-6">User Profile</li>
+          </div>
+          <div className="border-b-[1px] border-slate-300 hover:bg-slate-100 ">
+            <li className="p-6">Preferences</li>
+          </div>
+          <div className="border-b-[1px] border-slate-300 hover:bg-slate-100 ">
+            <li className="p-6">Alerts</li>
+          </div>
+          <div className="border-b-[1px] border-slate-300 hover:bg-slate-100 ">
+            <li className="p-6">Plans & Billing</li>
+          </div>
+          <div
+            onClick={() => setIsOpen(false)}
+            className="p-6 hover:bg-slate-100 rounded-b-lg"
+          >
+            Close
+          </div>
+        </ul>
+      </div>
+    </div>
+  );
+};

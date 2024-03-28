@@ -26,8 +26,11 @@ const ItemID = ({ item }: ItemIDProps) => {
         <div className="w-full flex flex-col gap-4">
           <div className="flex justify-between">
             <p className="text-xl text-orange-600">{item.description}</p>
-            <RegularButton styles="bg-emerald-900" href={`/item/${id}/edit`}>
-              <p className="text-white text-xs">Edit</p>
+            <RegularButton
+              styles="bg border-emerald-900"
+              href={`/item/${id}/edit`}
+            >
+              <p className="text-emerald-900 text-xs">Edit</p>
             </RegularButton>
           </div>
 

@@ -16,5 +16,9 @@ export default async function ReceiptIdPage({
   params: { id: string };
 }) {
   const receipt = await fetchReceipt(params.id);
-  return <ReceiptId receipt={receipt} />;
+  return (
+    <div className="w-full flex justify-center ">
+      <ReceiptId receipt={receipt} />
+    </div>
+  );
 }

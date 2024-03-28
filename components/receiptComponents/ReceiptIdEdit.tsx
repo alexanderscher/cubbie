@@ -35,6 +35,8 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const stringId = Array.isArray(id) ? id[0] : id;
   const [uploadError, setUploadError] = useState("");
+  const [isClient, setIsClient] = useState(false);
+
   const [errorM, setErrorM] = useState({
     purchase_date: "",
     return_date: "",
@@ -47,6 +49,10 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
   const total_amount = receipt.items.reduce((acc: number, curr: ItemType) => {
     return acc + curr.price;
   }, 0);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const toggleOpenItem = (
     itemId: number | undefined,
@@ -123,7 +129,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
         dirty,
         setFieldValue,
       }) => (
-        <div className="flex flex-col gap-8  w-full h-full pb-[200px]">
+        <div className="flex flex-col gap-8  w-full h-full pb-[200px] max-w-[1260px]">
           <HeaderNav receipt={receipt} />
           <div className="flex justify-between items-center w-full">
             <div className="flex gap-2">
@@ -156,8 +162,11 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                   </RegularButton>
                 </div>
               ) : (
-                <RegularButton styles="bg-emerald-900" href={`/receipt/${id}`}>
-                  <p className="text-white text-xs">Cancel</p>
+                <RegularButton
+                  styles="bg border-emerald-900"
+                  href={`/receipt/${id}`}
+                >
+                  <p className="text-emerald-900 text-xs">Cancel</p>
                 </RegularButton>
               )}
             </div>
@@ -361,7 +370,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                 className={`flex flex-col gap-2 pb-[200px] ${styles.boxContainer}`}
               >
                 <div className={`${styles.boxes} `}>
-                  {receipt.items.length > 0 &&
+                  {isClient &&
                     receipt.items.map((item: ItemType, index: number) => (
                       <Item
                         key={item.id}

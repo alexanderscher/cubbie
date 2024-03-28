@@ -129,8 +129,11 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                     </RegularButton>
                   </div>
                 ) : (
-                  <RegularButton styles="bg-emerald-900" href={`/item/${id}`}>
-                    <p className="text-white text-xs">Cancel</p>
+                  <RegularButton
+                    styles="bg border-emerald-900"
+                    href={`/item/${id}`}
+                  >
+                    <p className="text-emerald-900 text-xs">Cancel</p>
                   </RegularButton>
                 )}
               </div>

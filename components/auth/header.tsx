@@ -7,7 +7,7 @@ interface HeaderProps {
 export const Header = ({ label }: HeaderProps) => {
   return (
     <div className="w-full flex flex-col gap-y-4 items-center justify-center">
-      <h1 className={cn("text-xl ")}>Sticky Notes</h1>
+      <h1 className={cn("text-xl ")}>Cubbie</h1>
       <p className="text-muted-foreground text-sm">{label}</p>
     </div>
   );

@@ -24,7 +24,7 @@ const Navbar = ({ session }: NavbarProps) => {
   return (
     <div className={`${styles.navbarFixed} p-2`}>
       <div className={`${styles.navbarItems} text-sm`}>
-        <Link href="/">Sticky Notes</Link>
+        <Link href="/">Cubbie</Link>
         <div
           className={`${styles.linkWrapper} ${
             pathname === "/" || pathname.includes("project") ? styles.page : ""
@@ -170,7 +170,7 @@ const Navbar = ({ session }: NavbarProps) => {
 
       <div className={`${styles.title} p-4`}>
         <Link href="/" className="text-black">
-          Sticky Notes
+          Cubbie
         </Link>
       </div>
 

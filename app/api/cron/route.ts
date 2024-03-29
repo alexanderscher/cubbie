@@ -1,10 +1,11 @@
 import { resend } from "@/lib/mail";
 import prisma from "@/prisma/client";
+import { getBaseUrl } from "@/utils/baseUrl";
 import moment from "moment";
 import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
-const domain = "http://localhost:3000";
+const domain = getBaseUrl();
 
 const sendReminder = async (daysUntilDue: number, reminderType: string) => {
   try {

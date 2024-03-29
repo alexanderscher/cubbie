@@ -21,7 +21,7 @@ const Topbar = ({ session }: TopbarProps) => {
       className={`${styles.topbar} p-4 justify-between  bg-emerald-900 text-white`}
     >
       <Link onClick={() => setMenu(false)} href="/">
-        Sticky Notes
+        Cubbie
       </Link>
       <div className="flex gap-4">
         <div>

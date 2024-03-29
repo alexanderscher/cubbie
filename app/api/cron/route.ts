@@ -55,7 +55,7 @@ const sendReminder = async (daysUntilDue: number, reminderType: string) => {
           }
 
           await resend.emails.send({
-            from: "onboarding@resend.dev",
+            from: "noreply@cubbie.io",
             to: user.email,
             subject: emailSubject,
             html: `<p>Your receipt from <a href="${link}">${receipt.store}</a> is due.</p>`,

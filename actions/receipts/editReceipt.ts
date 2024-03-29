@@ -84,6 +84,10 @@ export const editReceipt = async (params: {
         purchase_date: moment(purchase_date).toISOString(),
         return_date: moment(return_date).toISOString(),
         asset_amount: asset_amount,
+        days_until_return: moment(return_date).diff(
+          moment(purchase_date),
+          "days"
+        ),
         expired: expired,
       },
     });

@@ -133,7 +133,7 @@ const Navbar = ({ session }: NavbarProps) => {
 
         <div className={styles.linkWrapper}>
           <Link
-            href="/"
+            href="/alerts"
             className="flex flex-col justify-center items-center gap-2"
           >
             <Image

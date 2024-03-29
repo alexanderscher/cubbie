@@ -62,3 +62,12 @@ export interface Session {
   expires: string;
   user: User;
 }
+
+export interface Alert {
+  id: string;
+  type: string;
+  receipt_id: number;
+  date: Date;
+  userId: string;
+  read: boolean;
+}

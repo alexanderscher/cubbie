@@ -1,9 +1,9 @@
+import { resend } from "@/lib/mail";
 import prisma from "@/prisma/client";
 import moment from "moment";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const domain = "http://localhost:3000";
 
 export async function GET() {

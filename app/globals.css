@@ -237,7 +237,7 @@ button:hover + .ui_TooltipContainer {
   }
 }
 
-@media (max-width: 550px) {
+@media (max-width: 650px) {
   .main-content {
     padding: 20px;
     width: 100%;

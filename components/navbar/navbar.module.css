@@ -53,7 +53,7 @@
   background-color: rgba(85, 162, 116, 0.5);
 }
 
-@media (max-width: 550px) {
+@media (max-width: 650px) {
   .navbarFixed {
     display: none;
   }

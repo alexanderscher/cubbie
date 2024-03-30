@@ -23,7 +23,6 @@ const Header = ({ type }: HeaderProps) => {
   const [addReceiptOpen, setAddReceiptOpen] = useState(false);
   const { filteredReceiptData } = useSearchReceiptContext();
   const { filteredItemData } = useSearchItemContext();
-
   const { filteredProjectData } = useSearchProjectContext();
 
   const createQueryString = useCallback(
@@ -56,7 +55,7 @@ const Header = ({ type }: HeaderProps) => {
   };
   return (
     <div className="flex flex-col gap-6 pb-4 ">
-      <div className="flex gap-2 ">
+      {/* <div className="flex gap-2 ">
         <RegularButton
           styles="bg border-emerald-900 text-emerald-900"
           handleClick={() => setAddProjectOpen(true)}
@@ -70,18 +69,20 @@ const Header = ({ type }: HeaderProps) => {
           <p className="text-xs">Create Receipt</p>
         </RegularButton>
       </div>
+      {addProjectOpen && (
+        <CreateProject setAddProjectOpen={setAddProjectOpen} />
+      )}
+
+      {addReceiptOpen && (
+        <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
+      )} */}
       <div className="flex justify-between pb-2">
-        <h1 className="text-3xl text-emerald-900  ">{type}</h1>
-
-        {addProjectOpen && (
-          <CreateProject setAddProjectOpen={setAddProjectOpen} />
-        )}
-
-        {addReceiptOpen && (
-          <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
-        )}
+        <h1 className="text-2xl text-emerald-900  ">{type}</h1>
+        <RegularButton styles="bg text-emerald-900 border-emerald-900">
+          <p className="text-xs">Create</p>
+        </RegularButton>
       </div>
-      <div className="flex gap-2 flex-end">
+      {/* <div className="flex gap-2 flex-end">
         <RegularButton href="/" styles={projectColor}>
           <p className="text-xs">Projects</p>
         </RegularButton>
@@ -92,7 +93,7 @@ const Header = ({ type }: HeaderProps) => {
         <RegularButton styles={itemColor} href="/items">
           <p className="text-xs">Items</p>
         </RegularButton>
-      </div>
+      </div> */}
       <div className=" flex justify-between items-center relative flex-wrap gap-4 ">
         <SearchBar searchType={type} />
         {pathname === "/receipts" && filteredReceiptData.length > 0 && (

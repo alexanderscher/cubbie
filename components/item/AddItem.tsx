@@ -4,7 +4,7 @@ import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
 import FileUploadDropzone from "@/components/dropzone/FileUPloadDropzone";
 import Loading from "@/components/Loading";
 import Image from "next/image";
-import { ChangeEvent, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import CurrencyInput from "react-currency-input-field";
 import * as Yup from "yup";
 

@@ -40,7 +40,9 @@ export default async function ProjectID({
 
   return (
     <PageWrapper>
-      <ProjectId project={project} />
+      <div className="w-full flex justify-center ">
+        <ProjectId project={project} />
+      </div>
     </PageWrapper>
   );
 }

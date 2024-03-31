@@ -84,26 +84,26 @@ const Header = ({ type }: HeaderProps) => {
               className={`${
                 searchParams.get("expired") === "false" ||
                 !searchParams.get("expired")
-                  ? "p-2  underline"
+                  ? "p-2  underline text-emerald-900"
                   : "p-2  rounded-full"
               }`}
               onClick={() => {
                 handleExpiredlick("false");
               }}
             >
-              <p className="text-sm">Active Receipts</p>
+              <p className="text-sm text-emerald-900">Active Receipts</p>
             </button>
             <button
               className={`${
                 searchParams.get("expired") === "true"
-                  ? "p-2 underline"
+                  ? "p-2 underline text-emerald-900"
                   : "p-2  rounded-full"
               }`}
               onClick={() => {
                 handleExpiredlick("true");
               }}
             >
-              <p className="text-sm">Expired Receipts</p>
+              <p className="text-sm text-emerald-900">Expired Receipts</p>
             </button>
           </div>
         )}

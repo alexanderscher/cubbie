@@ -8,6 +8,8 @@ import { formatDateToMMDDYY } from "@/utils/Date";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
+import styles from "./project.module.css";
+import { NoReceipts } from "@/components/receiptComponents/NoReceipts";
 
 interface ProjectIdProps {
   project: ProjectType;
@@ -35,7 +37,7 @@ export const ProjectId = ({ project }: ProjectIdProps) => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col  w-full h-full max-w-[1090px]">
       <div className="flex justify-between items-center gap-4 border-b-[1px] border-emerald-900 pb-4">
         <div className="flex gap-4">
           <Link href="/">
@@ -49,23 +51,23 @@ export const ProjectId = ({ project }: ProjectIdProps) => {
         <div></div>
       </div>
       <div className="flex flex-col gap-8 mt-10">
-        <div className="flex justify-between bg-white p-4 rounded-md shadow">
+        <div className={styles.header}>
           <div>
             <h1 className="text-xl text-orange-600">{project.name}</h1>
             <p className="text-sm">
               Created on {formatDateToMMDDYY(project.created_at)}
             </p>{" "}
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <RegularButton
               handleClick={() => setEdit(!edit)}
-              styles="bg-white border-emerald-900 text-emerald-900"
+              styles=" border-emerald-900 text-emerald-900"
             >
               <p className="text-xs">Edit</p>
             </RegularButton>
             <RegularButton
               handleClick={() => setAddReceiptOpen(true)}
-              styles="bg-emerald-900 border-emerald-900 text-white"
+              styles=" border-emerald-900 text-emerald-900"
             >
               <p className="text-xs">Add receipt</p>
             </RegularButton>
@@ -73,26 +75,10 @@ export const ProjectId = ({ project }: ProjectIdProps) => {
           {isAddOpen && <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />}
         </div>
         {project?.receipts?.length === 0 && (
-          <div className="flex flex-col gap-6 justify-center items-center mt-10">
-            <Image
-              src="/receipt_b.png"
-              alt=""
-              width={30}
-              height={30}
-              className="object-cover "
-              style={{ objectFit: "cover", objectPosition: "center" }}
-            />
-            <p className="text-xl">No receipts found</p>
-            <button
-              className="border-[1px] bg text-orange-600 border-orange-600 py-2 px-10 text-xs rounded-full w-50"
-              onClick={() => setAddReceiptOpen(true)}
-            >
-              <p className="">Create Receipt</p>
-            </button>
-            {isAddOpen && (
-              <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
-            )}
-          </div>
+          <NoReceipts
+            setAddReceiptOpen={setAddReceiptOpen}
+            addReceiptOpen={isAddOpen}
+          />
         )}
         <div className="boxes">
           {project.receipts.map((receipt) => (

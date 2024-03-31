@@ -6,17 +6,11 @@ interface FileUploadDropzoneProps {
 }
 
 const FileUploadDropzone = ({ onFileUpload }: FileUploadDropzoneProps) => {
-  const [previewSrc, setPreviewSrc] = useState("");
-
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
       const reader = new FileReader();
-      reader.onload = () => {
-        if (typeof reader.result === "string") {
-          setPreviewSrc(reader.result);
-        }
-      };
+
       reader.readAsDataURL(file);
 
       onFileUpload(file);

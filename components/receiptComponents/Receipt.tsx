@@ -92,7 +92,7 @@ const OptionsModal = ({ receipt }: OptionsModalProps) => {
   const [isAddOpen, setIsAddOpen] = useState(false);
   return (
     <div
-      className="absolute bg-white shadow-1 -right-4 top-6 rounded-md  w-[200px] z-[200]"
+      className="absolute bg-white shadow-1 -right-4 top-6 rounded-md  w-[200px] z-100"
       onClick={(e) => {
         e.preventDefault();
       }}

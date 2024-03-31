@@ -57,11 +57,11 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
       onClick={handleOverlayClick}
     >
       <div className="bg-white rounded-md shadow-xl m-4 max-w-md w-full">
-        <div className="flex justify-between items-center border-b border-gray-200 px-5 py-4 bg-slate-100 rounded-t-lg">
-          <h3 className="text-lg text-emerald-900">Edit Project</h3>
+        <div className="flex justify-between items-center border-b  px-5 py-3 rounded-t-lg border-emerald-900">
+          <h3 className="text-md text-emerald-900">Edit Project</h3>
           <button
             type="button"
-            className="text-gray-400 hover:text-gray-500"
+            className="text-emerald-900"
             onClick={(e) => {
               e.preventDefault();
               setEdit(false);
@@ -80,7 +80,7 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
                   name="description"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full p-2 border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none rounded"
+                  className="w-full p-2 border-[1px] border-emerald-900 focus:outline-none rounded"
                 />
                 {error && <p className="text-orange-900 text-xs">{error}</p>}
               </div>
@@ -89,10 +89,10 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
             <div className="flex justify-end ">
               <RegularButton
                 type="button"
-                styles="bg-emerald-900 text-white border-emerald-900"
+                styles=" text-white border-emerald-900"
                 handleClick={handleSubmit}
               >
-                <p className="text-xs">Edit Project</p>
+                <p className="text-xs text-emerald-900">Edit Project</p>
               </RegularButton>
             </div>
           </div>

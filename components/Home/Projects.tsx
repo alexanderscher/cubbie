@@ -208,13 +208,14 @@ const OptionsModal = ({ project }: OptionsModalProps) => {
     setIsDeleteOpen(!isDeleteOpen);
   };
   return (
-    <div className="absolute bg-white shadow-1 -right-2 top-6 rounded-md w-[200px] z-[100]">
+    <div className="absolute bg-white shadow-1 -right-2 top-6 rounded-md w-[200px] z-100">
       <div className="p-4 rounded text-sm flex flex-col gap-2">
         <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2">
           <div
             className="flex gap-2"
             onClick={(e) => {
               e.preventDefault();
+              // e.stopPropagation();
               setAddReceiptOpen(true);
             }}
           >

@@ -704,7 +704,7 @@ const AddButton = ({
 }: AddButtonProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   return (
-    <div className="fixed z-10 bottom-8 right-8 shadow-xl w-12 h-12 flex items-center justify-center border-2 border-emerald-900 bg-emerald-900 text-white rounded-full ">
+    <div className="fixed z-10 bottom-8 right-8 shadow-xl w-12 h-12 flex items-center justify-center border-2 border-orange-600 bg-orange-600 text-white rounded-full ">
       <div className="relative">
         <button onClick={() => setIsModalVisible(!isModalVisible)} className="">
           <p className="text-xl">+</p>
@@ -729,22 +729,22 @@ const OptionsModal = ({
   setIsModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   return (
-    <div className="absolute -right-1 -bottom-1 w-48 bg-emerald-900 shadow-lg rounded-md flex flex-col text-black ">
+    <div className="absolute -right-1 -bottom-1 w-48 bg-orange-300 shadow-lg rounded-md flex flex-col text-black z-200">
       <div className="flex flex-col text-start gap-3 relative p-4">
         <div
-          className="bg-slate-100 hover:bg-slate-200 rounded-md p-3 cursor-pointer"
+          className="bg-orange-100 hover:bg-orange-200 rounded-md p-3 cursor-pointer"
           onClick={() => setAddProjectOpen(true)}
         >
-          <button className="text-sm">Create Project</button>
+          <button className="text-sm text-orange-600">Create Project</button>
         </div>
         <div
-          className="bg-slate-100 hover:bg-slate-200 rounded-md p-3 cursor-pointer"
+          className="bg-orange-100 hover:bg-orange-200 rounded-md p-3 cursor-pointer"
           onClick={() => setAddReceiptOpen(true)}
         >
-          <button className="text-sm">Create Receipt</button>
+          <button className="text-sm text-orange-600">Create Receipt</button>
         </div>
         <div
-          className="absolute -right-3 -top-3 shadow-xl w-12 h-12 flex items-center justify-center  bg-white text-emerald-900 rounded-full cursor-pointer"
+          className="absolute -right-3 -top-3 shadow-xl w-12 h-12 flex items-center justify-center  bg-white text-orange-600 rounded-full cursor-pointer"
           onClick={() => setIsModalVisible(false)}
         >
           X

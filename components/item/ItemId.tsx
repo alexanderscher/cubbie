@@ -7,6 +7,7 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import HeaderItemNav from "@/components/navbar/HeaderItemNav";
 import ImageModal from "@/components/images/ImageModal";
+import { formatDateToMMDDYY } from "@/utils/Date";
 
 interface ItemIDProps {
   item: ItemType;
@@ -83,6 +84,10 @@ const ItemID = ({ item }: ItemIDProps) => {
           <div className="w-full  bg-white rounded-md shadow p-4 ">
             <p className="text-xs text-slate-400">Store</p>
             <p>{item.receipt.store}</p>
+          </div>
+          <div className="w-full  bg-white rounded-md shadow p-4 ">
+            <p className="text-xs text-slate-400">Return Date</p>
+            <p>{formatDateToMMDDYY(item.receipt.return_date)}</p>
           </div>
           <div className="w-full  bg-white rounded-md shadow p-4 ">
             <p className="text-xs text-slate-400">Price</p>

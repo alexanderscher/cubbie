@@ -3,9 +3,9 @@ import { deleteItem } from "@/actions/items/deleteItem";
 import { markAsReturned, unreturn } from "@/actions/return";
 import RegularButton from "@/components/buttons/RegularButton";
 import Loading from "@/components/Loading";
-import Shirt from "@/components/placeholderImages/Shirt";
 import { TruncateText } from "@/components/text/Truncate";
 import { Item as ItemType } from "@/types/AppTypes";
+import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
@@ -26,7 +26,8 @@ const Item = ({ item, isOpen, onToggleOpen }: Props) => {
       <Link href={`/item/${item.id}`} className="">
         <div className="">
           {item.photo_url && (
-            <div className="w-full h-[110px] overflow-hidden  flex justify-center flex-shrink-0 flex-col">
+            <div className="w-full h-[110px] overflow-hidden flex justify-center flex-shrink-0 flex-col relative">
+              {/* Image Container */}
               <Image
                 src={item.photo_url}
                 alt=""
@@ -35,9 +36,19 @@ const Item = ({ item, isOpen, onToggleOpen }: Props) => {
                 className="w-full h-full object-cover rounded-t-lg"
                 style={{ objectPosition: "top" }}
               />
+
+              {pathname === "/items" && item?.receipt?.expired && (
+                <div className="absolute top-0 left-0 w-full h-full bg-orange-400 opacity-30  rounded-t-lg"></div>
+              )}
+              {pathname === "/items" && item?.receipt?.expired && (
+                <p className="absolute top-2 left-2 flex  text-orange-600 text-xs border-[1px] border-orange-600 rounded-full px-3 py-1">
+                  Expired
+                </p>
+              )}
+
               <Image
                 src="/three-dots.png"
-                className="absolute top-0 right-2 cursor-pointer "
+                className="absolute top-0 right-2 cursor-pointer z-10"
                 alt=""
                 width={20}
                 height={20}
@@ -48,7 +59,24 @@ const Item = ({ item, isOpen, onToggleOpen }: Props) => {
           {isOpen && <OptionsModal item={item} />}
           {!item.photo_url && (
             <div className="">
-              <Shirt />
+              <div
+                className={`w-full h-[110px] overflow-hidden  flex justify-center items-center  rounded-t-lg ${
+                  pathname === "/items" && item?.receipt?.expired
+                    ? "bg-orange-100"
+                    : "bg-slate-100"
+                }`}
+              >
+                <div className="w-full h-full flex justify-center items-center">
+                  <Image
+                    src="/item_b.png"
+                    alt=""
+                    width={50}
+                    height={50}
+                    className="object-cover "
+                    style={{ objectFit: "cover", objectPosition: "center" }}
+                  />
+                </div>
+              </div>
               <Image
                 src="/three-dots.png"
                 className="absolute top-0 right-2 cursor-pointer "
@@ -73,13 +101,12 @@ const Item = ({ item, isOpen, onToggleOpen }: Props) => {
             </p>
           )} */}
             <div className="">
-              <Link href={`/item/${item.id}`} className="">
-                <TruncateText
-                  text={item.description}
-                  maxLength={18}
-                  styles={"text-orange-600 text-sm"}
-                />
-              </Link>
+              <TruncateText
+                text={item.description}
+                maxLength={18}
+                styles={"text-orange-600 text-sm"}
+              />
+
               {/* {pathname === "/items" && (
               <div className="text-xs">
                 <p className=" ">
@@ -91,31 +118,35 @@ const Item = ({ item, isOpen, onToggleOpen }: Props) => {
 
             <div className="pt-2">
               <div className=" flex flex-col  gap-1 text-xs ">
-                {pathname === "/items" && (
+                {/* {pathname === "/items" && (
                   <div className="">
                     <p className="text-slate-400  ">Store</p>
-                    <Link href={`/receipt/${item.receipt_id}`} className="">
-                      <TruncateText
-                        text={item?.receipt?.store}
-                        maxLength={15}
-                        styles={""}
-                      />
-                    </Link>
+
+                    <TruncateText
+                      text={item?.receipt?.store}
+                      maxLength={15}
+                      styles={""}
+                    />
+                  </div>
+                )} */}
+                {pathname === "/items" && (
+                  <div className="">
+                    <p className="text-slate-400  ">Return Date</p>
+                    <p className="">
+                      {formatDateToMMDDYY(item.receipt.return_date)}
+                    </p>
                   </div>
                 )}
-
                 <div className="">
                   <p className="text-slate-400  ">Price</p>
                   <p className="">{formatCurrency(item.price)}</p>
                 </div>
+
                 {pathname.includes("receipt") && (
                   <div className="">
                     <p className="text-slate-400  ">Barcode</p>
                     <p className="">{item.barcode ? item.barcode : "None"}</p>
                   </div>
-                )}
-                {pathname === "/items" && item?.receipt?.expired && (
-                  <p className="text-orange-600">Expired</p>
                 )}
               </div>
             </div>
@@ -130,9 +161,7 @@ const Item = ({ item, isOpen, onToggleOpen }: Props) => {
           } border-t-[1px] text-xs text-center  text-emerald-900 p-2`}
         >
           {item.returned ? (
-            <p>
-              <p className="text-orange-600">Returned</p>
-            </p>
+            <p className="text-orange-600">Returned</p>
           ) : (
             <p>In possesion</p>
           )}
@@ -152,6 +181,7 @@ const OptionsModal = ({ item }: OptionsModalProps) => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [error, setDeleteError] = useState<string | null>(null);
+  const pathname = usePathname();
 
   return (
     <div
@@ -161,6 +191,25 @@ const OptionsModal = ({ item }: OptionsModalProps) => {
       }}
     >
       <div className="p-4 rounded text-sm flex flex-col gap-2">
+        {pathname === "/items" && (
+          <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2">
+            <Link href={`/receipt/${item.receipt_id}`}>
+              <div className="flex gap-4">
+                <Image
+                  src={"/receipt_b.png"}
+                  width={12}
+                  height={12}
+                  alt=""
+                ></Image>
+                <TruncateText
+                  text={item.receipt?.store}
+                  maxLength={15}
+                  styles={"text-md"}
+                />
+              </div>
+            </Link>
+          </div>
+        )}
         <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2">
           <Link href={`/item/${item.id}/edit`}>
             <div className="flex gap-2">

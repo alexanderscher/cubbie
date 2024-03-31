@@ -23,6 +23,7 @@ interface ReceiptProps {
 }
 
 const Receipt = ({ receipt, onToggleOpen, isOpen }: ReceiptProps) => {
+  console.log(receipt);
   const total_amount = receipt.items.reduce((acc: number, curr: Item) => {
     return acc + curr.price;
   }, 0);
@@ -34,11 +35,19 @@ const Receipt = ({ receipt, onToggleOpen, isOpen }: ReceiptProps) => {
             <Image
               src="/receipt_b.png"
               alt=""
-              width={30}
-              height={30}
+              width={24}
+              height={24}
               className="object-cover "
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
+            {receipt?.expired && (
+              <div className="absolute top-0 left-0 w-full h-full bg-orange-400 opacity-30 rounded-t-lg"></div>
+            )}
+            {receipt?.expired && (
+              <p className="absolute top-2 left-2 flex  text-orange-600 text-xs border-[1px] border-orange-600 rounded-full px-3 py-1">
+                Expired
+              </p>
+            )}
             <Image
               src="/three-dots.png"
               className="absolute top-0 right-2 cursor-pointer "
@@ -72,7 +81,6 @@ const Receipt = ({ receipt, onToggleOpen, isOpen }: ReceiptProps) => {
               </p>
               <p className=" ">{formatCurrency(total_amount)}</p>
             </div>
-            {receipt.expired && <p className="text-orange-600">Expired</p>}
           </div>
         </div>
       </Link>
@@ -174,7 +182,8 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
   }, []);
 
   const handleSubmit = async () => {
-    if (selectedProject === receipt.project.id.toString()) {
+    console.log(selectedProject, receipt.project_id);
+    if (selectedProject === receipt.project_id.toString()) {
       setError("Receipt is already in this project");
       return;
     }

@@ -102,7 +102,7 @@ const Projects = ({ serverData }: Props) => {
             />
             <p className="text-lg text-emerald-900">No projects</p>
             <button
-              className="border-[1px] bg-emerald-900 border-emerald-900 py-2 px-10 text-xs text-white rounded-full w-full"
+              className="border-[1px]  border-emerald-900 py-2 px-10 text-xs text-emerald-900 rounded-full w-full"
               onClick={() => setAddProjectOpen(true)}
             >
               <p className="">Create</p>
@@ -233,6 +233,15 @@ const OptionsModal = ({ project }: OptionsModalProps) => {
           <div className="flex gap-2">
             <Image src={"/edit.png"} width={20} height={20} alt=""></Image>
             <p>Edit</p>
+          </div>
+        </div>
+        <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 ">
+          <div
+            className="flex gap-2 cursor-pointer"
+            // onClick={toggleDeleteModal}
+          >
+            <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
+            <p>Archive</p>
           </div>
         </div>
         <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 ">

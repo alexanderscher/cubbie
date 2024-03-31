@@ -8,12 +8,15 @@ const Shirt = () => {
         <Image
           src="/item_b.png"
           alt=""
-          width={60}
-          height={60}
+          width={50}
+          height={50}
           className="object-cover "
           style={{ objectFit: "cover", objectPosition: "center" }}
         />
       </div>
+      {/* {pathname === "/items" && item?.receipt?.expired && (
+                  <p className="text-orange-600">Expired</p>
+                )} */}
     </div>
   );
 };

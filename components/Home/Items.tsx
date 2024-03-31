@@ -105,7 +105,7 @@ const Items = ({ items }: ItemsProps) => {
             />
             <p className="text-md text-emerald-900">No items</p>
             <button
-              className="border-[1px] bg-emerald-900 border-emerald-900 py-2 px-10 text-xs text-white rounded-full w-full"
+              className="border-[1px]  border-emerald-900 py-2 px-10 text-xs text-emerald-900 rounded-full w-full"
               onClick={() => setAddReceiptOpen(true)}
             >
               <p className="">Create</p>

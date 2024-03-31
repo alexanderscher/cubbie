@@ -64,9 +64,10 @@ export const editReceipt = async (params: {
       await deleteUploadThingImage(receipt_image_key);
     }
 
-    const expired = moment(return_date)
+    const expired = moment
+      .utc(return_date)
       .startOf("day")
-      .isBefore(moment().startOf("day"));
+      .isBefore(moment.utc().startOf("day"));
 
     await prisma.receipt.update({
       where: {

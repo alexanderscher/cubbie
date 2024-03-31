@@ -4,7 +4,7 @@ import prisma from "@/prisma/client";
 import { Item } from "@/types/AppTypes";
 import { Session } from "next-auth";
 
-export const getItemsById = async (id: string) => {
+const getItemsById = async (id: string) => {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
 

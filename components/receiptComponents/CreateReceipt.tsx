@@ -21,7 +21,10 @@ export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
     <div
       id="modal-overlay"
       className="fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center z-[2000] "
-      onClick={handleOverlayClick}
+      onClick={(e) => {
+        handleOverlayClick;
+        e.preventDefault();
+      }}
     >
       <div className="bg-white rounded-md shadow-xl m-4 max-w-md w-full rounded-t-lg">
         <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3  rounded-t-lg">

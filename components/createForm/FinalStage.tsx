@@ -619,7 +619,6 @@ interface AddItemModalProps {
 }
 
 const AddItemModal = ({
-  isAddOpen,
   setIsAddOpen,
   setFieldValue,
   items,

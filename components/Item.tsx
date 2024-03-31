@@ -155,7 +155,7 @@ const OptionsModal = ({ item }: OptionsModalProps) => {
 
   return (
     <div
-      className="absolute bg-white shadow-1 -right-5 top-6 rounded-md w-[200px]  z-[100]"
+      className="absolute bg-white shadow-1 -right-5 top-6 rounded-md w-[200px]  z-100"
       onClick={(e) => {
         e.preventDefault();
       }}

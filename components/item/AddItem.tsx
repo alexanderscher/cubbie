@@ -239,7 +239,24 @@ export const AddItem = ({ setIsAddOpen, id }: AddItemModalProps) => {
               <div>
                 <p className="text-xs text-emerald-900">Image</p>
 
-                <FileUploadDropzone onFileUpload={onFileUpload} />
+                <FileUploadDropzone
+                  onFileUpload={onFileUpload}
+                  button={
+                    <div className="w-full h-[100px] overflow-hidden  border-[1px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-md  relative flex items-center justify-center">
+                      <Image
+                        src="/image_b.png"
+                        alt=""
+                        width={40}
+                        height={40}
+                        className="object-cover "
+                        style={{
+                          objectFit: "cover",
+                          objectPosition: "center",
+                        }}
+                      />
+                    </div>
+                  }
+                />
               </div>
             </div>
             <div>

@@ -82,6 +82,9 @@ export const getReceiptById = async (id: string) => {
     async () => {
       const receipt = await prisma.receipt.findUnique({
         where: {
+          project: {
+            userId: userId,
+          },
           id: parseInt(id),
         },
         include: {

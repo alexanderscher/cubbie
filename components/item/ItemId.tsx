@@ -13,6 +13,7 @@ interface ItemIDProps {
 }
 
 const ItemID = ({ item }: ItemIDProps) => {
+  console.log(item);
   const { id } = useParams();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +36,7 @@ const ItemID = ({ item }: ItemIDProps) => {
           </div>
 
           {item.photo_url && (
-            <div className="w-full   ">
+            <div className="w-full  bg-white p-6 rounded-md shadow ">
               <div className="max-h-[300px] w-full overflow-hidden rounded-md">
                 <Image
                   src={item.photo_url}

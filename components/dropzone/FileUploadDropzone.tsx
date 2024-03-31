@@ -1,11 +1,16 @@
+import Image from "next/image";
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
 interface FileUploadDropzoneProps {
   onFileUpload: (file: File) => void;
+  button: any;
 }
 
-const FileUploadDropzone = ({ onFileUpload }: FileUploadDropzoneProps) => {
+const FileUploadDropzone = ({
+  onFileUpload,
+  button,
+}: FileUploadDropzoneProps) => {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
@@ -23,7 +28,7 @@ const FileUploadDropzone = ({ onFileUpload }: FileUploadDropzoneProps) => {
   return (
     <div {...getRootProps()} className="dropzone">
       <input {...getInputProps()} />
-      <p>Drag drop an image here, or click to select an image</p>
+      {button}
     </div>
   );
 };

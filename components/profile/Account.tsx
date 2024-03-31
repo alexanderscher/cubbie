@@ -30,7 +30,6 @@ const Account = ({ session }: Props) => {
         <h1 className="text-lg">Account</h1>
         <div className="flex flex-col gap-4 text-sm ">
           <h1>User Profile</h1>
-          <h1>Prefrences</h1>
           <h1>Alerts</h1>
           <h1>Plan & Billing</h1>
         </div>
@@ -239,9 +238,7 @@ const Menu = ({ setIsOpen }: MenuProps) => {
           <div className="border-b-[1px] border-slate-300 hover:bg-slate-100 rounded-t-lg">
             <li className="p-6">User Profile</li>
           </div>
-          <div className="border-b-[1px] border-slate-300 hover:bg-slate-100 ">
-            <li className="p-6">Preferences</li>
-          </div>
+
           <div className="border-b-[1px] border-slate-300 hover:bg-slate-100 ">
             <li className="p-6">Alerts</li>
           </div>

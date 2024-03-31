@@ -3,9 +3,11 @@ import { Tooltip } from "@material-tailwind/react";
 interface TooltipWithHelperIconProps {
   content: string;
   placement?: string;
+  iconColor?: string;
 }
 
 export function TooltipWithHelperIcon({
+  iconColor = "text-orange-600",
   content,
   placement = "top",
 }: TooltipWithHelperIconProps) {
@@ -29,7 +31,7 @@ export function TooltipWithHelperIcon({
         viewBox="0 0 24 24"
         stroke="currentColor"
         strokeWidth={2}
-        className="h-5 w-5 cursor-pointer text-orange-600"
+        className={`h-5 w-5 cursor-pointer ${iconColor}`}
       >
         <path
           strokeLinecap="round"

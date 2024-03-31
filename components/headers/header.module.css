@@ -11,6 +11,10 @@
   position: relative;
 }
 
+.top {
+  display: flex;
+}
+
 .modal {
   width: 50%; /* Half of the viewport width */
   height: 100vh; /* Full viewport height */
@@ -19,4 +23,11 @@
   border-radius: 0; /* Adjust if needed */
   position: absolute;
   right: 0;
+}
+
+@media (max-width: 650px) {
+  .top {
+    flex-direction: column;
+    gap: 10px;
+  }
 }

@@ -50,11 +50,11 @@ export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
       onClick={handleOverlayClick}
     >
       <div className="bg-white rounded-md shadow-xl m-4 max-w-md w-full">
-        <div className="flex justify-between items-center border-b border-gray-200 px-5 py-4 bg-slate-100 rounded-t-lg">
-          <h3 className="text-lg text-emerald-900">Create Project</h3>
+        <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3  rounded-t-lg">
+          <h3 className="text-md text-emerald-900">Create Project</h3>
           <button
             type="button"
-            className="text-gray-400 hover:text-gray-500"
+            className="text-emerald-900"
             onClick={() => setAddProjectOpen(false)}
           >
             <span className="text-2xl">&times;</span>
@@ -70,7 +70,7 @@ export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
                   name="description"
                   value={project}
                   onChange={(e) => setProject(e.target.value)}
-                  className="w-full p-2 border-[1px]  rounded-md border-slate-300 focus:border-emerald-900 focus:outline-none"
+                  className="w-full p-2 border-[1px]  rounded-md border-emerald-900"
                 />
                 {error && <p className="text-orange-900 text-xs">{error}</p>}
               </div>
@@ -79,7 +79,7 @@ export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
             <div className="flex justify-end mt-6">
               <RegularButton
                 type="button"
-                styles="bg-emerald-900 text-white border-emerald-900"
+                styles="text-emerald-900 border-emerald-900"
                 handleClick={handleSubmit}
               >
                 <p className="text-xs">Create Project</p>

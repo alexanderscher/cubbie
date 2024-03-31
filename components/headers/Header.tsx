@@ -3,7 +3,7 @@ import RegularButton from "@/components/buttons/RegularButton";
 import SearchBar from "@/components/search/SearchBar";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useState } from "react";
-
+import styles from "./Header.module.css";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import { CreateProject } from "@/components/project/CreateProject";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
@@ -55,45 +55,27 @@ const Header = ({ type }: HeaderProps) => {
   };
   return (
     <div className="flex flex-col gap-6 pb-4 ">
-      {/* <div className="flex gap-2 ">
-        <RegularButton
-          styles="bg border-emerald-900 text-emerald-900"
-          handleClick={() => setAddProjectOpen(true)}
-        >
-          <p className="text-xs">Create Project</p>
-        </RegularButton>
-        <RegularButton
-          styles="bg-emerald-900 border-emerald-900 text-white"
-          handleClick={() => setAddReceiptOpen(true)}
-        >
-          <p className="text-xs">Create Receipt</p>
-        </RegularButton>
-      </div>
-      {addProjectOpen && (
-        <CreateProject setAddProjectOpen={setAddProjectOpen} />
-      )}
-
-      {addReceiptOpen && (
-        <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
-      )} */}
-      <div className="flex justify-between pb-2">
+      <div className={` flex justify-between pb-2`}>
         <h1 className="text-2xl text-emerald-900  ">{type}</h1>
-        <RegularButton styles="bg text-emerald-900 border-emerald-900">
-          <p className="text-xs">Create</p>
-        </RegularButton>
-      </div>
-      {/* <div className="flex gap-2 flex-end">
-        <RegularButton href="/" styles={projectColor}>
-          <p className="text-xs">Projects</p>
-        </RegularButton>
-        <RegularButton href="/receipts" styles={receiptColor}>
-          <p className="text-xs">Receipts</p>
-        </RegularButton>
 
-        <RegularButton styles={itemColor} href="/items">
-          <p className="text-xs">Items</p>
-        </RegularButton>
-      </div> */}
+        {pathname === "/receipts" && filteredReceiptData.length > 0 && (
+          <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
+        )}
+        {pathname === "/items" && filteredItemData.length > 0 && (
+          <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
+        )}
+        {pathname === "/" && filteredProjectData.length > 0 && (
+          <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
+        )}
+        {addProjectOpen && (
+          <CreateProject setAddProjectOpen={setAddProjectOpen} />
+        )}
+
+        {addReceiptOpen && (
+          <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
+        )}
+      </div>
+
       <div className=" flex justify-between items-center relative flex-wrap gap-4 ">
         <SearchBar searchType={type} />
         {pathname === "/receipts" && filteredReceiptData.length > 0 && (
@@ -124,15 +106,6 @@ const Header = ({ type }: HeaderProps) => {
               <p className="text-sm">Expired Receipts</p>
             </button>
           </div>
-        )}
-        {pathname === "/receipts" && filteredReceiptData.length > 0 && (
-          <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
-        )}
-        {pathname === "/items" && filteredItemData.length > 0 && (
-          <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
-        )}
-        {pathname === "/" && filteredProjectData.length > 0 && (
-          <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
         )}
 
         <div className="flex gap-2 ">
@@ -165,6 +138,10 @@ const Header = ({ type }: HeaderProps) => {
           </div>
         </div>
       </div>
+      <AddButton
+        setAddReceiptOpen={setAddReceiptOpen}
+        setAddProjectOpen={setAddProjectOpen}
+      />
     </div>
   );
 };
@@ -705,15 +682,74 @@ interface FilterButtonProps {
 
 const FilterButton = ({ setOpenModal, openModal }: FilterButtonProps) => {
   return (
-    <div className="fixed z-10 bottom-8 left-1/2 transform -translate-x-1/2">
-      <button
-        className="px-[60px] py-[8px] border-[1px] border-emerald-900 bg-emerald-900 text-white rounded-3xl"
-        onClick={() => {
-          setOpenModal(!openModal);
-        }}
-      >
-        <p className="text-sm">Filter</p>
-      </button>
+    <RegularButton
+      styles="border-emerald-900 text-emerald-900 "
+      handleClick={() => {
+        setOpenModal(!openModal);
+      }}
+    >
+      <p className="text-xs">Filter</p>
+    </RegularButton>
+  );
+};
+
+interface AddButtonProps {
+  setAddReceiptOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setAddProjectOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const AddButton = ({
+  setAddReceiptOpen,
+  setAddProjectOpen,
+}: AddButtonProps) => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  return (
+    <div className="fixed z-10 bottom-8 right-8 shadow-xl w-12 h-12 flex items-center justify-center border-2 border-emerald-900 bg-emerald-900 text-white rounded-full ">
+      <div className="relative">
+        <button onClick={() => setIsModalVisible(!isModalVisible)} className="">
+          <p className="text-xl">+</p>
+        </button>
+      </div>
+      {isModalVisible && (
+        <OptionsModal
+          setAddProjectOpen={setAddProjectOpen}
+          setAddReceiptOpen={setAddReceiptOpen}
+          setIsModalVisible={setIsModalVisible}
+        />
+      )}
+    </div>
+  );
+};
+
+const OptionsModal = ({
+  setAddReceiptOpen,
+  setAddProjectOpen,
+  setIsModalVisible,
+}: AddButtonProps & {
+  setIsModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  return (
+    <div className="absolute -right-1 -bottom-1 w-48 bg-emerald-900 shadow-lg rounded-md flex flex-col text-black ">
+      <div className="flex flex-col text-start gap-3 relative p-4">
+        <div
+          className="bg-slate-100 hover:bg-slate-200 rounded-md p-3 cursor-pointer"
+          onClick={() => setAddProjectOpen(true)}
+        >
+          <button className="text-sm">Create Project</button>
+        </div>
+        <div
+          className="bg-slate-100 hover:bg-slate-200 rounded-md p-3 cursor-pointer"
+          onClick={() => setAddReceiptOpen(true)}
+        >
+          <button className="text-sm">Create Receipt</button>
+        </div>
+        <div
+          className="absolute -right-3 -top-3 shadow-xl w-12 h-12 flex items-center justify-center  bg-white text-emerald-900 rounded-full cursor-pointer"
+          onClick={() => setIsModalVisible(false)}
+        >
+          X
+        </div>
+      </div>
     </div>
   );
 };

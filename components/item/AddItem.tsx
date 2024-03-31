@@ -1,7 +1,7 @@
 import { addItem } from "@/actions/items/addItem";
 import RegularButton from "@/components/buttons/RegularButton";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
-import FileUploadDropzone from "@/components/dropzone/FileUPloadDropzone";
+import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import Loading from "@/components/Loading";
 import Image from "next/image";
 import { useState, useTransition } from "react";

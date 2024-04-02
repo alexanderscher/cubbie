@@ -9,6 +9,8 @@ import { CreateProject } from "@/components/project/CreateProject";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
+import Image from "next/image";
+import Link from "next/link";
 
 interface HeaderProps {
   type: string;
@@ -35,28 +37,81 @@ const Header = ({ type }: HeaderProps) => {
     [searchParams]
   );
 
-  const projectColor =
-    pathname === "/"
-      ? "bg-black border-black text-white"
-      : "bg border-black text-black ";
-
-  const receiptColor =
-    pathname === "/receipts"
-      ? "bg-black border-black text-white"
-      : "bg border-black text-black ";
-
-  const itemColor =
-    pathname === "/items"
-      ? "bg-black border-black text-white"
-      : "bg border-black text-black ";
-
   const handleExpiredlick = (name: string) => {
     router.push(pathname + "?" + createQueryString("expired", name));
   };
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
   return (
     <div className="flex flex-col gap-6 pb-4 ">
       <div className={` flex justify-between pb-2`}>
-        <h1 className="text-2xl text-emerald-900  ">{type}</h1>
+        <div className="cursor-pointer relative">
+          <div onClick={() => setIsModalVisible(!isModalVisible)}>
+            <div className="flex gap-2 items-center ">
+              <h1 className="text-2xl text-emerald-900">{type}</h1>
+              <Image
+                src="/arrow_grey.png"
+                width={8}
+                height={8}
+                alt="arrow"
+                className="rotate-90"
+              />
+            </div>
+          </div>
+
+          {isModalVisible && (
+            <div className="absolute bg-[#b8dab8] rounded shadow p-3 -bottom-[120px] z-[200] w-[160px]">
+              {type === "Projects" && (
+                <div className="flex flex-col gap-2 text-sm">
+                  <Link
+                    className="bg hover:bg-[#d2edd2] text-emerald-900 rounded p-2"
+                    href="/receipts"
+                  >
+                    Receipts
+                  </Link>
+                  <Link
+                    className="bg hover:bg-[#d2edd2] text-emerald-900 rounded p-2"
+                    href="/items"
+                  >
+                    Items
+                  </Link>
+                </div>
+              )}
+              {type === "Receipts" && (
+                <div className="flex flex-col gap-2 text-sm">
+                  <Link
+                    className="bg-orange-100 hover:bg-orange-200 text-orange-600 rounded p-2"
+                    href="/"
+                  >
+                    Projects
+                  </Link>
+                  <Link
+                    className="bg-orange-100 hover:bg-orange-200 text-orange-600 rounded p-2"
+                    href="/items"
+                  >
+                    Items
+                  </Link>
+                </div>
+              )}
+              {type === "Items" && (
+                <div className="flex flex-col gap-2 text-sm">
+                  <Link
+                    className="bg-slate-100 hover:bg-slate-200 rounded p-2"
+                    href="/"
+                  >
+                    Projects
+                  </Link>
+                  <Link
+                    className="bg-slate-100 hover:bg-slate-200 rounded p-2"
+                    href="/receipts"
+                  >
+                    Receipts
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
         {pathname === "/receipts" && filteredReceiptData.length > 0 && (
           <FilterButton openModal={openModal} setOpenModal={setOpenModal} />

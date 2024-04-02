@@ -62,7 +62,7 @@ const Item = ({ item, isOpen, onToggleOpen }: Props) => {
               <div
                 className={`w-full h-[110px] overflow-hidden  flex justify-center items-center  rounded-t-lg ${
                   pathname === "/items" && item?.receipt?.expired
-                    ? "bg-orange-100"
+                    ? "bg-orange-400 opacity-30"
                     : "bg-slate-100"
                 }`}
               >
@@ -77,6 +77,11 @@ const Item = ({ item, isOpen, onToggleOpen }: Props) => {
                   />
                 </div>
               </div>
+              {pathname === "/items" && item?.receipt?.expired && (
+                <p className="absolute top-2 left-2 flex  text-orange-600 text-xs border-[1px] border-orange-600 rounded-full px-3 py-1">
+                  Expired
+                </p>
+              )}
               <Image
                 src="/three-dots.png"
                 className="absolute top-0 right-2 cursor-pointer "

@@ -11,6 +11,8 @@ import { AddItem } from "@/components/item/AddItem";
 
 import Item from "@/components/Item";
 import { Item as ItemType, Receipt } from "@/types/AppTypes";
+import { ErrorMessage } from "formik";
+import { FormError } from "@/components/form-error";
 
 interface ReceiptIdProps {
   receipt: Receipt;
@@ -47,8 +49,14 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
   return (
     <div className="flex flex-col gap-8 w-full h-full max-w-[1260px] ">
       <HeaderNav receipt={receipt} />
+      {receipt.expired && (
+        <div className="bg-destructive/15 p-3 rounded-md flex items-center gap-x-2 text-sm text-destructive bg-red-100 text-red-500 shadow">
+          <p>This receipt has expired</p>
+        </div>
+      )}
       <div className="flex justify-between items-center w-full flex-wrap gap-4">
         <h1 className="text-2xl text-orange-600 ">{receipt.store}</h1>
+
         <div className="flex gap-2  justify-end">
           <RegularButton
             styles="bg  border-emerald-900"

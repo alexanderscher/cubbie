@@ -8,7 +8,6 @@ import PageWrapper from "@/components/wrapper/PageWrapper";
 
 const fetchItems = async () => {
   const items = await getItems();
-  console.log(items);
 
   return items as Item[];
 };

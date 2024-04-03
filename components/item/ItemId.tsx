@@ -14,7 +14,6 @@ interface ItemIDProps {
 }
 
 const ItemID = ({ item }: ItemIDProps) => {
-  console.log(item);
   const { id } = useParams();
 
   const [isOpen, setIsOpen] = useState(false);

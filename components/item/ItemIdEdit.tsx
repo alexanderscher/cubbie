@@ -23,7 +23,6 @@ interface ItemIdEditProps {
 }
 
 const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
-  console.log(item);
   const router = useRouter();
   const [uploadError, setUploadError] = useState("");
   const [errorM, setErrorM] = useState({

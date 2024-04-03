@@ -24,8 +24,6 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     return { error: "Email already in use!" };
   }
 
-  console.log("Creating user with email", email);
-
   await prisma.user.create({
     data: {
       name,

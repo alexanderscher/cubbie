@@ -9,7 +9,6 @@ const fetchAlert = async () => {
 
 export default async function Alerts() {
   const alerts = await fetchAlert();
-  console.log(alerts);
 
   return (
     <PageWrapper>

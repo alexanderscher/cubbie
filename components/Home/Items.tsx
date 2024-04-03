@@ -21,8 +21,6 @@ const Items = ({ items }: ItemsProps) => {
     }
   }, [items, initializeItems]);
 
-  console.log(items);
-
   const searchParams = useSearchParams();
   const [addReceiptOpen, setAddReceiptOpen] = useState(false);
 

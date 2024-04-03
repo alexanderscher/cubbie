@@ -10,6 +10,7 @@ import { convertHeic } from "@/utils/media";
 import Image from "next/image";
 import React, { ChangeEvent, use, useEffect, useRef, useState } from "react";
 import CurrencyInput from "react-currency-input-field";
+import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 
 interface ReceiptManualProps {
   values: any;
@@ -37,51 +38,44 @@ const ReceiptManual = ({
     }
   };
 
-  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      let file = e.target.files[0];
-      if (!file.type.match("image.*")) {
-        alert("Please upload an image file");
-
+  const onFileUpload = async (file: File) => {
+    if (file === null) {
+      return;
+    }
+    if (!file.type.match("image.*")) {
+      alert("Please upload an image file");
+      return;
+    }
+    if (file.type === "image/heic" || file.name.endsWith(".heic")) {
+      try {
+        file = await convertHeic(file);
+      } catch (error) {
+        console.error("Error converting HEIC file:", error);
+        alert("Error converting HEIC file.");
         return;
       }
+    }
 
-      if (file.type === "image/heic" || file.name.endsWith(".heic")) {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
         try {
-          file = await convertHeic(file);
+          setFieldValue("receiptImage", reader.result);
         } catch (error) {
-          console.error("Error converting HEIC file:", error);
-          alert("Error converting HEIC file.");
-          return;
+          console.error("Error handling file:", error);
+          alert("Error processing file.");
         }
       }
-
-      const reader = new FileReader();
-
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        if (typeof reader.result === "string") {
-          setFieldValue("receiptImage", reader.result);
-        }
-      };
-      reader.onerror = (error) => {
-        console.error("Error converting file to base64:", error);
-      };
-    }
+    };
+    reader.onerror = (error) => {
+      console.error("Error converting file to base64:", error);
+    };
   };
 
   const handleCurrencyChangeAsset = (value: string | undefined) => {
     setFieldValue("assetAmount", value || "");
   };
-
-  // useEffect(() => {
-  //   const fetchProjects = async () => {
-  //     const data = await getProjects();
-  //     setProjects(data as Project[]);
-  //     setLoading(false);
-  //   };
-  //   fetchProjects();
-  // }, []);
 
   return (
     <div className="flex flex-col gap-10  w-full justify-center items-center mt-10">
@@ -217,40 +211,27 @@ const ReceiptManual = ({
           </div>
 
           <div className={`w-full relative`}>
-            <div
-              className={` border-[1px]  w-full h-full flex flex-col gap-4 justify-center items-center  relative  border-emerald-900 rounded`}
-              onClick={handleContainerClick}
-              style={{ cursor: "pointer" }}
-            >
-              <input
-                type="file"
-                onChange={handleFileChange}
-                id="file-upload"
-                style={{
-                  opacity: 0,
-                  position: "absolute",
-                  zIndex: -1,
-                  width: "100%",
-                  height: "100%",
-                }}
-                ref={fileInputRef}
-              />
-              <Image
-                src="/image_b.png"
-                alt=""
-                width={30}
-                height={30}
-                className="object-cover pt-4"
-                style={{
-                  objectFit: "cover",
-                  objectPosition: "center",
-                }}
-              />
-              <label
-                htmlFor="file-upload"
-                className="justify-center items-center"
-              ></label>
-            </div>
+            <FileUploadDropzone
+              onFileUpload={onFileUpload}
+              button={
+                <div className="w-full h-[100px] soverflow-hidden  border-[1.5px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-md  relative flex flex-col items-center justify-center cursor-pointer gap-5">
+                  <Image
+                    src="/image_b.png"
+                    alt=""
+                    width={30}
+                    height={30}
+                    className="object-cover "
+                    style={{
+                      objectFit: "cover",
+                      objectPosition: "center",
+                    }}
+                  />
+                  <p className="text-xs text-emerald-900">
+                    Upload photo or drag and drop
+                  </p>
+                </div>
+              }
+            />
           </div>
           {values.receiptImage && (
             <div className="relative w-24 h-24 ">

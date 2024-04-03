@@ -21,7 +21,7 @@ const PurchaseTypeSelect: React.FC<Props> = ({
     control: (provided, state) => ({
       ...provided,
       backgroundColor: "#FFFFFF",
-      borderColor: "rgb(148 163 184)",
+      borderColor: "rgb(6 78 59)",
       borderWidth: "1px",
       boxShadow: state.isFocused ? "0 0 0px .08px rgb(6 78 59)" : "none",
       "&:hover": {

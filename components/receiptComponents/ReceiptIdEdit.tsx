@@ -20,6 +20,7 @@ import { Item as ItemType, Receipt } from "@/types/AppTypes";
 import { formatDateToYYYYMMDD } from "@/utils/Date";
 import PurchaseTypeSelect from "@/components/select/PurchaseTypeSelect";
 import { AddItem } from "@/components/item/AddItem";
+import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 type ExtendedReceiptType = Receipt & {
   edit_image: string;
 };
@@ -66,6 +67,34 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
     } else {
       setOpenItemId(itemId);
     }
+  };
+
+  const onFileUpload = async (file: File, setFieldValue: any) => {
+    if (!file.type.match("image.*")) {
+      alert("Please upload an image file");
+      return;
+    }
+    if (file.type === "image/heic" || file.name.endsWith(".heic")) {
+      try {
+        file = await convertHeic(file);
+      } catch (error) {
+        console.error("Error converting HEIC file:", error);
+        alert("Error converting HEIC file.");
+        return;
+      }
+    }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        setFieldValue("receipt_image_url", "");
+        setFieldValue("edit_image", reader.result);
+      }
+    };
+    reader.onerror = (error) => {
+      console.error("Error converting file to base64:", error);
+    };
   };
 
   const handleFileChange = async (
@@ -172,7 +201,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
             </div>
           </div>
           <div className="flex bg-white rounded-md text-sm shadow p-6">
-            <div className="w-1/2 border-r-[1px] border-slate-400 ">
+            <div className="w-1/2 border-r-[1px] border-emerald-900 ">
               <p className="text-slate-400 text-xs">Total amount</p>
               <p>{formatCurrency(total_amount)}</p>
             </div>
@@ -186,41 +215,28 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
             <div className={`${styles.receiptLeft}  flex flex-col gap-2 `}>
               <div className={` rounded-md  bg-white flex flex-col gap-4 p-8`}>
                 {!values.receipt_image_url && !values.edit_image && (
-                  <div className="w-full h-[200px] overflow-hidden  border-[1px] border-dashed rounded-md bg-slate-100 relative">
-                    <input
-                      type="file"
-                      onChange={(e) => handleFileChange(e, setFieldValue)}
-                      id="edit"
-                      style={{
-                        opacity: 0,
-                        position: "absolute",
-                        zIndex: -1,
-                        width: "100%",
-                        height: "100%",
-                      }}
+                  <div className="w-full  overflow-hidden  relative">
+                    <FileUploadDropzone
+                      onFileUpload={(e) => onFileUpload(e, setFieldValue)}
+                      button={
+                        <div className="w-full h-[150px] soverflow-hidden  border-[1px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-md  relative flex flex-col items-center justify-center cursor-pointer gap-5">
+                          <Image
+                            src="/image_b.png"
+                            alt=""
+                            width={40}
+                            height={40}
+                            className="object-cover "
+                            style={{
+                              objectFit: "cover",
+                              objectPosition: "center",
+                            }}
+                          />
+                          <p className="text-xs text-emerald-900">
+                            Upload photo or drag and drop
+                          </p>
+                        </div>
+                      }
                     />
-                    <div className="w-full h-full flex flex-col gap-4 justify-center items-center ">
-                      <Image
-                        src="/image_b.png"
-                        alt=""
-                        width={60}
-                        height={60}
-                        className="object-cover  pt-4"
-                        style={{
-                          objectFit: "cover",
-                          objectPosition: "center",
-                        }}
-                      />
-                      <label
-                        htmlFor="edit"
-                        className=""
-                        style={{
-                          cursor: "pointer",
-                        }}
-                      >
-                        Upload an image
-                      </label>
-                    </div>
                   </div>
                 )}
                 {values.edit_image && (
@@ -241,7 +257,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                         imageUrl={values.edit_image}
                         altText="Your Image Description"
                         setFieldValue={setFieldValue}
-                        handleFileChange={handleFileChange}
+                        handleFileChange={onFileUpload}
                         changeField="edit_image"
                       />
                     </div>
@@ -275,11 +291,11 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
 
                 <div className="flex flex-col gap-4 text-sm">
                   <div className="w-full">
-                    <p className="text-slate-400 text-xs">Store Name</p>
+                    <p className="text-emerald-900 text-xs">Store Name</p>
                     <input
                       value={values.store}
                       onChange={handleChange("store")}
-                      className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none rounded-md p-2"
+                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded-md p-2"
                     />
                     {errorM.store && (
                       <p className="text-orange-900 text-xs mt-2">
@@ -294,13 +310,13 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                   />
 
                   <div className="w-full ">
-                    <p className="text-slate-400 text-xs">Purcahse Date</p>
+                    <p className="text-emerald-900 text-xs">Purcahse Date</p>
                     <input
                       type="date"
                       style={{ WebkitAppearance: "none" }}
                       value={formatDateToYYYYMMDD(values.purchase_date)}
                       onChange={handleChange("purchase_date")}
-                      className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none rounded-md p-2 bg-white"
+                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded-md p-2 bg-white"
                     />
                     {errorM.purchase_date && (
                       <p className="text-orange-900 text-xs mt-2">
@@ -310,13 +326,13 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                   </div>
 
                   <div className="w-full">
-                    <p className="text-slate-400 text-xs">Return Date</p>
+                    <p className="text-emerald-900 text-xs">Return Date</p>
                     <input
                       type="date"
                       style={{ WebkitAppearance: "none" }}
                       value={formatDateToYYYYMMDD(values.return_date)}
                       onChange={handleChange("return_date")}
-                      className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none rounded-md p-2 bg-white"
+                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded-md p-2 bg-white"
                     />
                     {errorM.return_date && (
                       <p className="text-orange-900 text-xs mt-2">
@@ -326,19 +342,19 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                   </div>
 
                   <div className="w-full">
-                    <p className="text-slate-400 text-xs">Card Used</p>
+                    <p className="text-emerald-900 text-xs">Card Used</p>
                     <input
                       value={values.card}
                       onChange={handleChange("card")}
-                      className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none rounded-md p-2"
+                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded-md p-2"
                     />
                   </div>
                   <div className="w-full">
-                    <p className="text-slate-400 text-xs">Asset Amount</p>
+                    <p className="text-emerald-900 text-xs">Asset Amount</p>
                     <CurrencyInput
                       id="asset_amount"
                       name="asset_amount"
-                      className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none rounded-md p-2"
+                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded-md p-2"
                       placeholder=""
                       value={values.asset_amount}
                       defaultValue={values.asset_amount || ""}
@@ -349,11 +365,11 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                     />
                   </div>
                   <div className="w-full">
-                    <p className="text-slate-400 text-xs">Tracking Link</p>
+                    <p className="text-emerald-900 text-xs">Tracking Link</p>
                     <input
                       value={values.tracking_number}
                       onChange={handleChange("tracking_number")}
-                      className="w-full border-[1px] border-slate-400 focus:border-emerald-900 focus:outline-none rounded-md p-2"
+                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded-md p-2"
                     />
                     {errorM.tracking_number && (
                       <p className="text-orange-900 text-xs mt-2">

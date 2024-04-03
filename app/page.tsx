@@ -17,10 +17,12 @@ export default async function Home() {
   return (
     <PageWrapper>
       <SearchProjectProvider>
-        <div className="flex flex-col pb-[400px]">
+        <div className="flex flex-col items-center pb-[400px]">
           <Suspense fallback={<div>Loading</div>}>
-            <Header type="Projects" />
-            <Projects serverData={projects} />
+            <div className="w-full max-w-[1090px]">
+              <Header type="Projects" />
+              <Projects serverData={projects} />
+            </div>
           </Suspense>
         </div>
       </SearchProjectProvider>

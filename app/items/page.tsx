@@ -19,11 +19,15 @@ export default async function HomeItems() {
   return (
     <PageWrapper>
       <SearchItemProvider>
-        <Suspense fallback={<div>Loading...</div>}>
-          <Header type="Items" />
+        <div className="flex flex-col items-center">
+          <Suspense fallback={<div>Loading...</div>}>
+            <div className="w-full max-w-[1090px]">
+              <Header type="Items" />
 
-          <Items items={items} />
-        </Suspense>
+              <Items items={items} />
+            </div>
+          </Suspense>
+        </div>
       </SearchItemProvider>
     </PageWrapper>
   );

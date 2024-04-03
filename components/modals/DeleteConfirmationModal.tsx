@@ -20,19 +20,22 @@ const DeleteConfirmationModal = ({
   type,
 }: DeleteModalProps) => {
   return (
-    <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
-      <div className="relative p-10 bg-white  max-w-md m-auto flex-col flex  rounded-lg shadow-md gap-4 w-[400px] items-center">
+    <div
+      className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex"
+      onClick={(e) => e.preventDefault()}
+    >
+      <div className="relative p-10 bg-red-50  max-w-md m-auto flex-col flex  rounded-lg shadow-md gap-4 w-[340px] items-center">
         <div className="bg-red-100 rounded-full flex items-center justify-center h-[50px] w-[50px]">
-          <ExclamationTriangleIcon className=" text-red-500 " />
+          <ExclamationTriangleIcon className=" text-red-500 w-3/4 h-1/2" />
         </div>
 
         <h1 className="text-xl">Delete {type} </h1>
-        <p>{message}</p>
+        <p className="text-sm text-center">{message}</p>
 
         <div className="mt-4 flex justify-between w-full">
           <RegularButton
             handleClick={() => cancelClick(false)}
-            styles="bg-white text-red-500 text-base font-medium rounded-full w-auto border-[1px] border-red-500 text-xs"
+            styles="bg-white text-red-500 text-base font-medium rounded-full w-auto border-[1px] border-red-500 text-xs bg-red-50"
           >
             No, Keep it.
           </RegularButton>

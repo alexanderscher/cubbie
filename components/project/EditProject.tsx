@@ -1,0 +1,106 @@
+"use client";
+import { editProject } from "@/actions/projects/editProject";
+import RegularButton from "@/components/buttons/RegularButton";
+import { FormError } from "@/components/form-error";
+import Loading from "@/components/Loading";
+
+import { Project as ProjectType } from "@/types/AppTypes";
+
+import React, { useState, useTransition } from "react";
+
+interface EditProjectProps {
+  setEdit: (value: boolean) => void;
+  project: ProjectType;
+}
+
+export const EditProject = ({ setEdit, project }: EditProjectProps) => {
+  const [name, setName] = useState(project.name);
+  const [error, setError] = useState("");
+  const [uploadError, setUploadError] = useState("");
+  const [isPending, startTransition] = useTransition();
+
+  const handleSubmit = async () => {
+    if (name === "") {
+      setError("Project name is required");
+      return;
+    }
+    if (name === project.name || name === "") {
+      setEdit(false);
+    } else if (name !== "" && project.id) {
+      startTransition(async () => {
+        const result = await editProject(project.id, name);
+
+        if (result.error) {
+          setUploadError(result.error);
+        } else {
+          setEdit(false);
+        }
+      });
+    }
+  };
+  const handleOverlayClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    if (
+      event.target instanceof HTMLDivElement &&
+      event.target.id === "modal-overlay"
+    ) {
+      setEdit(false);
+    }
+  };
+
+  return (
+    <div
+      id="modal-overlay"
+      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]"
+      onClick={handleOverlayClick}
+    >
+      <div className="bg-white rounded-md shadow-xl m-4 max-w-md w-full">
+        <div className="flex justify-between items-center border-b  px-5 py-3 rounded-t-lg border-emerald-900">
+          <h3 className="text-md text-emerald-900">Edit Project</h3>
+          <button
+            type="button"
+            className="text-emerald-900"
+            onClick={(e) => {
+              e.preventDefault();
+              setEdit(false);
+            }}
+          >
+            <span className="text-2xl">&times;</span>
+          </button>
+        </div>
+        <div className="p-6 flex flex-col gap-4">
+          <div className="flex flex-col gap-4">
+            <div className="space-y-4">
+              <div>
+                <p className="text-xs text-emerald-900">Project name*</p>
+                <input
+                  type="text"
+                  name="description"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full p-2 border-[1px] border-emerald-900 focus:outline-none rounded"
+                />
+                {error && <p className="text-orange-900 text-xs">{error}</p>}
+              </div>
+            </div>
+
+            <div className="flex justify-end ">
+              <RegularButton
+                type="button"
+                styles=" text-white border-emerald-900"
+                handleClick={handleSubmit}
+              >
+                <p className="text-xs text-emerald-900">Edit Project</p>
+              </RegularButton>
+            </div>
+          </div>
+
+          {uploadError && <FormError message={uploadError} />}
+        </div>
+      </div>
+      {isPending && <Loading loading={isPending} />}
+    </div>
+  );
+};

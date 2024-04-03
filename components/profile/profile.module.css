@@ -1,0 +1,46 @@
+.layout {
+  display: flex;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+}
+
+.icon {
+  display: none;
+}
+
+.button {
+  display: none;
+}
+
+.smallheader {
+  display: none;
+}
+
+.modal {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+  .header {
+    display: none;
+  }
+  .icon {
+    cursor: pointer;
+    display: block;
+  }
+  .smallheader {
+    display: flex;
+  }
+  .button {
+    display: block;
+  }
+  .modal {
+    display: flex;
+  }
+}

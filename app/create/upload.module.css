@@ -1,0 +1,57 @@
+.receiptContainer {
+  display: flex;
+  width: 100%;
+  gap: 30px;
+  flex-direction: column;
+}
+
+.receiptTypes {
+  display: flex;
+  width: 100%;
+  gap: 15px;
+}
+
+.receiptInputs {
+  min-width: 450px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.boxes {
+  height: 130px;
+}
+
+@media (max-width: 800px) {
+  .receiptContainer {
+    justify-content: center;
+  }
+  .creates {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 30px;
+  }
+
+  .receiptContainer {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 600px) {
+  .receiptInputs {
+    min-width: 100%;
+  }
+  .receiptTypes {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+  }
+  .imageInput {
+    min-width: 100%;
+    width: 100%;
+    max-width: 100%;
+  }
+}

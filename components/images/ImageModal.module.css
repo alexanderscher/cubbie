@@ -1,0 +1,42 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(73, 75, 79, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  max-width: 600px;
+  width: 80%;
+  height: 600px;
+  position: relative;
+  background-color: rgba(73, 75, 79, 0.8);
+  border-radius: 8px;
+}
+
+.fullImage {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+}
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+}

@@ -1,0 +1,16 @@
+.receipt {
+  display: flex;
+  gap: 20px;
+}
+
+.container {
+  width: 100%;
+}
+
+@media (max-width: 700px) {
+  .receipt {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}

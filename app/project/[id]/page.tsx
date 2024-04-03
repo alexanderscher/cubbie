@@ -18,6 +18,7 @@ const getProjectById = async (id: string) => {
       receipts: {
         include: {
           items: true,
+          project: true,
         },
       },
     },

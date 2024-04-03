@@ -28,7 +28,7 @@ input:-webkit-autofill::first-line {
   color: black !important;
 }
 
-.overlay {
+/* .overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -39,7 +39,7 @@ input:-webkit-autofill::first-line {
   display: flex;
   justify-content: flex-end;
   position: relative;
-}
+} */
 
 .modal {
   width: 100%;

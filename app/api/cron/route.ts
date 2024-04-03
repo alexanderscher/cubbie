@@ -77,6 +77,7 @@ const sendReminder = async (daysUntilDue: number, reminderType: string) => {
     console.error("Failed to send reminders:", error);
   }
 };
+export const revalidate = 0;
 
 export async function GET() {
   await sendReminder(0, "TODAY_REMINDER");

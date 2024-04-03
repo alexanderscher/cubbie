@@ -10,9 +10,10 @@ import { Session } from "@/types/AppTypes";
 
 interface TopbarProps {
   session: Session;
+  children: React.ReactNode;
 }
 
-const Topbar = ({ session }: TopbarProps) => {
+const Topbar = ({ session, children }: TopbarProps) => {
   const [menu, setMenu] = useState(false);
   const { searchBarOpen, setSearchBarOpen } = useSearchBarContext();
 
@@ -53,9 +54,7 @@ const Topbar = ({ session }: TopbarProps) => {
       </div>
 
       {searchBarOpen && (
-        <div className={`${styles.menu} p-4 overflow-y-scroll`}>
-          <SearchAllItems />
-        </div>
+        <div className={`${styles.menu} p-4 overflow-y-scroll`}>{children}</div>
       )}
 
       {menu && (

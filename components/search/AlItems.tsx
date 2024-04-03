@@ -1,8 +1,6 @@
 "use client";
 import { useSearchBarContext } from "@/components/context/SearchBarContext";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
-import { getProjects } from "@/lib/projectsDB";
-import { getReceipts } from "@/lib/receiptsDB";
 
 import { Receipt } from "@/types/AppTypes";
 import { Project } from "@/types/AppTypes";
@@ -10,7 +8,12 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { ChangeEvent, useEffect, useState } from "react";
 
-function SearchAllItems() {
+interface SearchAllItemsProps {
+  projectData: Project[];
+  receiptData: Receipt[];
+}
+
+function SearchAllItems({ projectData, receiptData }: SearchAllItemsProps) {
   const {
     searchInput,
     setSearchInput,
@@ -22,13 +25,15 @@ function SearchAllItems() {
     setFilteredProjects,
   } = useSearchBarContext();
 
-  const [data, setData] = useState<Receipt[]>([]);
-  const [projectData, setProjectData] = useState<Project[]>([]);
   const [showScanner, setShowScanner] = useState(false);
   const [barcodeValue, setBarcodeValue] = useState("");
 
+  useEffect(() => {
+    console.log("projectData", projectData);
+  }, [receiptData, projectData]);
+
   const handleBarcodeResult = (barcodeValue: string) => {
-    const matchingItems = data
+    const matchingItems = receiptData
       .flatMap((receipt) => receipt.items)
       .filter((item) => {
         const barcodeMatch = item.barcode === barcodeValue;
@@ -38,23 +43,6 @@ function SearchAllItems() {
     setBarcodeValue(barcodeValue);
     setFilteredItems(matchingItems);
   };
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      const data = await getProjects();
-      setProjectData(data as Project[]);
-    };
-    fetchProjects();
-  }, []);
-  useEffect(() => {
-    const receipt = async () => {
-      const data = await getReceipts();
-
-      setData(data as Receipt[]);
-    };
-
-    receipt();
-  }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value.toLowerCase().trim();
@@ -66,13 +54,13 @@ function SearchAllItems() {
 
     setFilteredProjects(filteredProjects);
 
-    const filteredReceipts = data.filter(
+    const filteredReceipts = receiptData.filter(
       (receipt) => receipt.store && receipt.store.toLowerCase().includes(input)
     );
 
     setFilteredReceipts(filteredReceipts);
 
-    const matchingItems = data
+    const matchingItems = receiptData
       .flatMap((receipt) => receipt.items)
       .filter((item) => {
         const descriptionMatch =
@@ -87,6 +75,14 @@ function SearchAllItems() {
 
     setFilteredItems(matchingItems);
   };
+
+  {
+    receiptData === undefined && projectData === undefined && (
+      <div>
+        <h1>Loading...</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="pb-[200px] w-full flex-col overflow-y-auto">

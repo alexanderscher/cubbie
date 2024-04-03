@@ -27,7 +27,6 @@ interface ReceiptProps {
 }
 
 const Receipt = ({ receipt, onToggleOpen, isOpen }: ReceiptProps) => {
-  console.log(receipt);
   const total_amount = receipt.items.reduce((acc: number, curr: Item) => {
     return acc + curr.price;
   }, 0);
@@ -280,7 +279,6 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
   }, []);
 
   const handleSubmit = async () => {
-    console.log(selectedProject, receipt.project_id);
     if (selectedProject === receipt.project_id.toString()) {
       setError("Receipt is already in this project");
       return;
@@ -386,7 +384,6 @@ const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
     startTransition(async () => {
       const result = await deleteReceipt(receipt.id);
       if (result?.error) {
-        console.log(result.error);
         setError("Error deleting receipt");
       } else {
         setDeleteOpen(false);

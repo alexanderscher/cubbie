@@ -75,7 +75,6 @@ const TextPage = ({ projects }: Pages) => {
           type: "Online",
         }}
         onSubmit={async (values) => {
-          console.log("values", values);
           try {
             await ITEMS_SCHEMA.validate(values, { abortEarly: false });
 
@@ -127,7 +126,6 @@ const TextPage = ({ projects }: Pages) => {
                               <RegularButton
                                 styles={"bg-emerald-900 border-emerald-900 "}
                                 handleClick={async () => {
-                                  console.log("values", values);
                                   const error = await validateForm();
                                   if (error) {
                                     console.log("error", error);

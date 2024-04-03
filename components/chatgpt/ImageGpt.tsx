@@ -260,7 +260,6 @@ export default function ImageGpt({
 
   const handleSubmit = async () => {
     const error = await validateForm();
-    console.log(image);
 
     if (Object.keys(error).length > 0) {
       setValidationErrors(error);
@@ -405,7 +404,6 @@ export default function ImageGpt({
               <RegularButton
                 styles="border-emerald-900 bg-emerald-900  w-full "
                 handleClick={() => {
-                  console.log(loading);
                   handleSubmit();
                 }}
               >

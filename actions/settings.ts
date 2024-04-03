@@ -11,7 +11,6 @@ import prisma from "@/prisma/client";
 
 export const changeEmail = async (values: z.infer<typeof EmailSchema>) => {
   const user = await currentUser();
-  console.log(values);
 
   if (!user) {
     return { error: "Unauthorized" };

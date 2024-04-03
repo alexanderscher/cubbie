@@ -37,7 +37,6 @@ const ImagePage = ({ projects }: Pages) => {
       body: JSON.stringify({ ...values, memo: false }),
     });
     const data = await response.json();
-    console.log(data.error);
 
     if (data.error) {
       setUploadError(data.error);

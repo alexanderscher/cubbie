@@ -1,7 +1,11 @@
 import { auth } from "@/auth";
-import { SearchBarContextProvider } from "@/components/context/SearchBarContext";
+import {
+  SearchBarContextProvider,
+  useSearchBarContext,
+} from "@/components/context/SearchBarContext";
 import Navbar from "@/components/navbar/Navbar";
 import Topbar from "@/components/navbar/Topbar";
+import SearchFetch from "@/components/search/SearchFetch";
 import { Session } from "@/types/AppTypes";
 
 import React from "react";
@@ -15,9 +19,13 @@ const PageWrapper = async ({ children }: PageWrapperProps) => {
 
   return (
     <SearchBarContextProvider>
-      <Topbar session={session} />
+      <Topbar session={session}>
+        <SearchFetch />
+      </Topbar>
       <div className="flex bg-[#e2f1e2]">
-        <Navbar session={session} />
+        <Navbar session={session}>
+          <SearchFetch />
+        </Navbar>
         <div className="page main-content bg-[#e2f1e2] min-h-screen">
           <div className="">{children}</div>
         </div>

@@ -5,15 +5,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSearchBarContext } from "@/components/context/SearchBarContext";
 import SearchAllItems from "@/components/search/AlItems";
-import { useSession } from "next-auth/react";
 import { LogOutButton } from "@/components/LogOutButton";
 import { useState } from "react";
 import { Session } from "@/types/AppTypes";
 
 interface NavbarProps {
   session: Session;
+  children: React.ReactNode;
 }
-const Navbar = ({ session }: NavbarProps) => {
+const Navbar = ({ session, children }: NavbarProps) => {
   const pathname = usePathname();
   const { searchBarOpen, setSearchBarOpen } = useSearchBarContext();
   const [isModalVisible, setModalVisible] = useState(false);
@@ -178,7 +178,7 @@ const Navbar = ({ session }: NavbarProps) => {
         <div
           className={`fixed top-0 w-[400px] left-[100px] h-screen bg-emerald-900 p-4 border-l-[1px] border-white overflow-y-scroll`}
         >
-          <SearchAllItems />
+          {children}
         </div>
       )}
     </div>
@@ -192,7 +192,6 @@ interface ModalProps {
 }
 
 const Modal = ({ session }: ModalProps) => {
-  console.log(session);
   return (
     <div className="absolute left-full top-0 mt-[-1rem] ml-2 w-48  bg-white shadow-lg rounded-md border border-gray-200 flex flex-col  text-black">
       <div className="text-black border-b-[1px]">

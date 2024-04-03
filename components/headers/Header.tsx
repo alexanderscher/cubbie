@@ -60,17 +60,17 @@ const Header = ({ type }: HeaderProps) => {
           </div>
 
           {isModalVisible && (
-            <div className="absolute bg-[#b8dab8] rounded shadow p-3 -bottom-[120px] z-[200] w-[160px]">
+            <div className="absolute bg-[#97cb97] rounded shadow p-3 -bottom-[120px] z-[200] w-[160px]">
               {type === "Projects" && (
                 <div className="flex flex-col gap-2 text-sm">
                   <Link
-                    className="bg hover:bg-[#d2edd2] text-emerald-900 rounded p-2"
+                    className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
                     href="/receipts"
                   >
                     Receipts
                   </Link>
                   <Link
-                    className="bg hover:bg-[#d2edd2] text-emerald-900 rounded p-2"
+                    className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
                     href="/items"
                   >
                     Items
@@ -80,13 +80,13 @@ const Header = ({ type }: HeaderProps) => {
               {type === "Receipts" && (
                 <div className="flex flex-col gap-2 text-sm">
                   <Link
-                    className="bg-orange-100 hover:bg-orange-200 text-orange-600 rounded p-2"
+                    className="bg-[#d2edd2] hover:bg-orange-200 text-orange-600 rounded p-2"
                     href="/"
                   >
                     Projects
                   </Link>
                   <Link
-                    className="bg-orange-100 hover:bg-orange-200 text-orange-600 rounded p-2"
+                    className="bg-[#d2edd2] hover:bg-orange-200 text-orange-600 rounded p-2"
                     href="/items"
                   >
                     Items

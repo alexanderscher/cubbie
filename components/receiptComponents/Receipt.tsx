@@ -5,6 +5,7 @@ import RegularButton from "@/components/buttons/RegularButton";
 import { FormError } from "@/components/form-error";
 import { AddItem } from "@/components/item/AddItem";
 import Loading from "@/components/Loading";
+import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import ProjectSelect from "@/components/select/ProjectSelect";
 import { TruncateText } from "@/components/text/Truncate";
 import { getProjects } from "@/lib/projectsDB";
@@ -100,7 +101,7 @@ const OptionsModal = ({ receipt }: OptionsModalProps) => {
   const [isAddOpen, setIsAddOpen] = useState(false);
   return (
     <div
-      className="absolute bg-white shadow-1 -right-4 top-6 rounded-md  w-[200px] z-100"
+      className="absolute bg-white shadow-1 -right-4 top-6 rounded-md  w-[200px] z-[200]"
       onClick={(e) => {
         e.preventDefault();
       }}
@@ -297,33 +298,13 @@ const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex ">
-      <div className="relative p-8 bg-orange-100  max-w-md m-auto flex-col flex  rounded shadow-md gap-4 w-3/4">
-        <div>
-          <h2 className="text-emerald-900 text-sm">
-            Are you sure you want to delete receipt from {receipt.store}? This
-            will delete all items in the receipt.
-          </h2>
-
-          <div className="mt-4 flex justify-between">
-            <RegularButton
-              handleClick={() => setDeleteOpen(false)}
-              styles="bg-orange-100 text-emerald-900 text-base font-medium rounded-full w-auto border-[1px] border-emerald-900 text-xs"
-            >
-              Cancel
-            </RegularButton>
-            <RegularButton
-              handleClick={deleteMethod}
-              styles="bg-emerald-900 text-white text-base font-medium rounded-full w-auto border-[1px] border-emerald-900 text-xs"
-            >
-              Confirm
-            </RegularButton>
-          </div>
-        </div>
-
-        {error && <FormError message={error}></FormError>}
-      </div>
-      {isPending && <Loading loading={isPending} />}
-    </div>
+    <DeleteConfirmationModal
+      cancelClick={setDeleteOpen}
+      deleteClick={deleteMethod}
+      error={error}
+      isPending={isPending}
+      type="Receipt"
+      message={`Are you sure you want to delete ${receipt.store}? This will delete all receipts and items in the project.`}
+    />
   );
 };

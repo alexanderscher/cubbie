@@ -3,6 +3,7 @@ import { deleteItem } from "@/actions/items/deleteItem";
 import { markAsReturned, unreturn } from "@/actions/return";
 import RegularButton from "@/components/buttons/RegularButton";
 import Loading from "@/components/Loading";
+import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import { TruncateText } from "@/components/text/Truncate";
 import { Item as ItemType } from "@/types/AppTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
@@ -100,40 +101,16 @@ const Item = ({ item, isOpen, onToggleOpen }: Props) => {
             </div>
           )}
           <div className="p-3 flex flex-col  ">
-            {/* {item.receipt.project && (
-            <p className="text-xs text-emerald-900 mb-1">
-              {item.receipt.project.name}
-            </p>
-          )} */}
             <div className="">
               <TruncateText
                 text={item.description}
                 maxLength={18}
                 styles={"text-orange-600 text-sm"}
               />
-
-              {/* {pathname === "/items" && (
-              <div className="text-xs">
-                <p className=" ">
-                  Return by {formatDateToMMDDYY(item.receipt.return_date)}
-                </p>
-              </div>
-            )} */}
             </div>
 
             <div className="pt-2">
               <div className=" flex flex-col  gap-1 text-xs ">
-                {/* {pathname === "/items" && (
-                  <div className="">
-                    <p className="text-slate-400  ">Store</p>
-
-                    <TruncateText
-                      text={item?.receipt?.store}
-                      maxLength={15}
-                      styles={""}
-                    />
-                  </div>
-                )} */}
                 {pathname === "/items" && (
                   <div className="">
                     <p className="text-slate-400  ">Return Date</p>
@@ -185,12 +162,29 @@ interface OptionsModalProps {
 const OptionsModal = ({ item }: OptionsModalProps) => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const [error, setDeleteError] = useState<string | null>(null);
+  const [error, setDeleteError] = useState("");
   const pathname = usePathname();
+
+  const deleteMethod = () => {
+    startTransition(async () => {
+      try {
+        const result = await deleteItem(item.id);
+        if (result?.error) {
+          // Handle error based on your application's structure
+          setDeleteError(result.error);
+        } else {
+          setDeleteError("");
+          setDeleteOpen(false);
+        }
+      } catch (error) {
+        setDeleteError("Failed to delete item.");
+      }
+    });
+  };
 
   return (
     <div
-      className="absolute bg-white shadow-1 -right-5 top-6 rounded-md w-[200px]  z-100"
+      className="absolute bg-white shadow-1 -right-5 top-6 rounded-md w-[200px]  z-[200]"
       onClick={(e) => {
         e.preventDefault();
       }}
@@ -274,82 +268,16 @@ const OptionsModal = ({ item }: OptionsModalProps) => {
             <p>Delete</p>
           </div>
           {deleteOpen && (
-            <DeleteModal
-              deleteOpen={deleteOpen}
-              setDeleteOpen={setDeleteOpen}
-              item={item}
+            <DeleteConfirmationModal
+              cancelClick={setDeleteOpen}
+              deleteClick={deleteMethod}
               error={error}
               isPending={isPending}
-              deleteItem={async () => {
-                startTransition(async () => {
-                  try {
-                    const result = await deleteItem(item.id);
-                    if (result?.error) {
-                      // Handle error based on your application's structure
-                      setDeleteError(result.error);
-                    } else {
-                      // Reset error state on successful deletion
-                      setDeleteError("");
-                      setDeleteOpen(false);
-                    }
-                  } catch (error) {
-                    // Catch and handle exceptions thrown by deleteItem
-                    setDeleteError("Failed to delete item.");
-                  }
-                });
-              }}
+              type="Item"
+              message={`Are you sure you want to delete ${item.description}? This will delete all receipts and items in the project.`}
             />
           )}
         </div>
-      </div>
-      {isPending && <Loading loading={isPending} />}
-    </div>
-  );
-};
-
-interface DeleteModalProps {
-  deleteOpen: boolean;
-  setDeleteOpen: (value: boolean) => void;
-  item: ItemType;
-  deleteItem: () => void;
-  isPending: boolean;
-  error: string | null;
-}
-
-const DeleteModal = ({
-  item,
-  deleteItem,
-  setDeleteOpen,
-  isPending,
-  error,
-}: DeleteModalProps) => {
-  return (
-    <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
-      <div
-        className="relative p-8 bg-orange-100  max-w-md m-auto flex-col flex  rounded shadow-md gap-4 w-3/4"
-        onClick={(e) => {
-          e.preventDefault();
-        }}
-      >
-        <h2 className="text-emerald-900 text-sm ">
-          Are you sure you want to delete {item.description}?
-        </h2>
-
-        <div className="mt-4 flex justify-between">
-          <RegularButton
-            handleClick={() => setDeleteOpen(false)}
-            styles="bg-orange-100  text-emerald-900 text-base font-medium rounded-full w-auto border-[1px] border-emerald-900 text-xs"
-          >
-            Cancel
-          </RegularButton>
-          <RegularButton
-            handleClick={deleteItem}
-            styles="bg-emerald-900 text-white text-base font-medium rounded-full w-auto border-[1px] border-emerald-900 text-xs"
-          >
-            Confirm
-          </RegularButton>
-        </div>
-        {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
       </div>
       {isPending && <Loading loading={isPending} />}
     </div>

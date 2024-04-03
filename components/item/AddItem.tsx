@@ -1,30 +1,30 @@
 "use client";
-import { addItem } from "@/actions/items/addItem";
 import RegularButton from "@/components/buttons/RegularButton";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import Loading from "@/components/Loading";
+import { convertHeic } from "@/utils/media";
 import Image from "next/image";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import CurrencyInput from "react-currency-input-field";
-import * as Yup from "yup";
 
 interface AddItemModalProps {
   setIsAddOpen: (value: boolean) => void;
-  id: number;
+  isPending?: boolean;
+  handleSubmit: () => void;
+  setNewItem: (value: any) => void;
+  newItem: any;
+  error: any;
 }
 
-export const AddItem = ({ setIsAddOpen, id }: AddItemModalProps) => {
-  const [newItem, setNewItem] = useState({
-    description: "",
-    price: "",
-    barcode: "",
-    product_id: "",
-    character: "",
-    photo: "",
-    receipt_id: id,
-  });
-
+export const AddItem = ({
+  setIsAddOpen,
+  handleSubmit,
+  setNewItem,
+  newItem,
+  error,
+  isPending,
+}: AddItemModalProps) => {
   const [showScanner, setShowScanner] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,73 +36,25 @@ export const AddItem = ({ setIsAddOpen, id }: AddItemModalProps) => {
     setNewItem({ ...newItem, price: value || "" });
   };
 
-  const [error, setError] = useState({
-    description: "",
-    price: "",
-    result: "",
-  });
-
-  const itemSchema = Yup.object({
-    description: Yup.string().required("Description is required"),
-    price: Yup.string().required("Price is required"),
-  });
-
-  const [isPending, startTransition] = useTransition();
-
-  const handleSubmit = async () => {
-    try {
-      await itemSchema.validate(newItem, { abortEarly: false });
-
-      startTransition(async () => {
-        const result = await addItem(newItem);
-
-        if (result?.error) {
-          setError({ ...error, result: result.error });
-        } else {
-          setIsAddOpen(false);
-
-          setNewItem({
-            description: "",
-            price: "",
-            barcode: "",
-            product_id: "",
-            character: "",
-            photo: "",
-            receipt_id: id,
-          });
-          setError({
-            description: "",
-            price: "",
-            result: "",
-          });
-        }
-      });
-    } catch (error) {
-      let errorsObject = {};
-
-      if (error instanceof Yup.ValidationError) {
-        errorsObject = error.inner.reduce((acc, curr) => {
-          const key = curr.path || "unknownField";
-          acc[key] = curr.message;
-          return acc;
-        }, {} as Record<string, string>);
-      }
-
-      setError(
-        errorsObject as {
-          description: string;
-          price: string;
-          result: string;
-        }
-      );
-    }
-  };
-
   const handleBarcodeResult = (barcodeValue: string) => {
     setNewItem({ ...newItem, barcode: barcodeValue });
   };
 
-  const onFileUpload = (file: any) => {
+  const onFileUpload = async (file: any) => {
+    if (!file.type.match("image.*")) {
+      alert("Please upload an image file");
+      return;
+    }
+    if (file.type === "image/heic" || file.name.endsWith(".heic")) {
+      try {
+        file = await convertHeic(file);
+      } catch (error) {
+        console.error("Error converting HEIC file:", error);
+        alert("Error converting HEIC file.");
+        return;
+      }
+    }
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
@@ -163,7 +115,7 @@ export const AddItem = ({ setIsAddOpen, id }: AddItemModalProps) => {
             </div>
             <div>
               <p className="text-xs text-emerald-900">Barcode</p>
-              <div className="flex gap-2">
+              <div className="flex gap-2 ">
                 <input
                   type="text"
                   name="barcode"
@@ -173,18 +125,20 @@ export const AddItem = ({ setIsAddOpen, id }: AddItemModalProps) => {
                 />
                 <button
                   type="button"
-                  className="w-[40px] border-[1px] border-emerald-900 p-4 rounded-md flex justify-center items-center  "
+                  className=" border-[1px] border-emerald-900 p-2 rounded flex justify-center items-center  "
                   onClick={() => {
                     setShowScanner(true);
                   }}
                   disabled={showScanner}
                 >
-                  <Image
-                    src="/barcode_b.png"
-                    alt="barcode"
-                    width={400}
-                    height={400}
-                  ></Image>
+                  <div className="w-full">
+                    <Image
+                      src="/barcode_b.png"
+                      alt="barcode"
+                      width={30}
+                      height={30}
+                    ></Image>
+                  </div>
                 </button>
 
                 {showScanner && (

@@ -80,13 +80,13 @@ const Header = ({ type }: HeaderProps) => {
               {type === "Receipts" && (
                 <div className="flex flex-col gap-2 text-sm">
                   <Link
-                    className="bg-[#d2edd2] hover:bg-orange-200 text-orange-600 rounded p-2"
+                    className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
                     href="/"
                   >
                     Projects
                   </Link>
                   <Link
-                    className="bg-[#d2edd2] hover:bg-orange-200 text-orange-600 rounded p-2"
+                    className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
                     href="/items"
                   >
                     Items
@@ -96,13 +96,13 @@ const Header = ({ type }: HeaderProps) => {
               {type === "Items" && (
                 <div className="flex flex-col gap-2 text-sm">
                   <Link
-                    className="bg-slate-100 hover:bg-slate-200 rounded p-2"
+                    className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
                     href="/"
                   >
                     Projects
                   </Link>
                   <Link
-                    className="bg-slate-100 hover:bg-slate-200 rounded p-2"
+                    className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
                     href="/receipts"
                   >
                     Receipts

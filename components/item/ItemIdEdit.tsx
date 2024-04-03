@@ -15,6 +15,7 @@ import ImageModal from "@/components/images/ImageModal";
 import { convertHeic } from "@/utils/media";
 import { editItem } from "@/actions/items/editItem";
 import { FormError } from "@/components/form-error";
+import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 
 interface ItemIdEditProps {
   item: ExtendedItemType;
@@ -33,40 +34,76 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
   const [showScanner, setShowScanner] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  const handleFileChange = async (
-    e: ChangeEvent<HTMLInputElement>,
-    setFieldValue: any
-  ) => {
-    if (e.target.files && e.target.files[0]) {
-      let file = e.target.files[0];
-      if (!file.type.match("image.*")) {
-        alert("Please upload an image file");
-
+  const onFileUpload = async (file: File, setFieldValue: any) => {
+    if (file === null) {
+      return;
+    }
+    if (!file.type.match("image.*")) {
+      alert("Please upload an image file");
+      return;
+    }
+    if (file.type === "image/heic" || file.name.endsWith(".heic")) {
+      try {
+        file = await convertHeic(file);
+      } catch (error) {
+        console.error("Error converting HEIC file:", error);
+        alert("Error converting HEIC file.");
         return;
       }
-      if (file.type === "image/heic" || file.name.endsWith(".heic")) {
-        try {
-          file = await convertHeic(file);
-        } catch (error) {
-          console.error("Error converting HEIC file:", error);
-          alert("Error converting HEIC file.");
-          return;
-        }
-      }
+    }
 
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        if (typeof reader.result === "string") {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        try {
           setFieldValue("photo_url", "");
           setFieldValue("edit_image", reader.result);
+        } catch (error) {
+          console.error("Error handling file:", error);
+          alert("Error processing file.");
         }
-      };
-      reader.onerror = (error) => {
-        console.error("Error converting file to base64:", error);
-      };
-    }
+      }
+    };
+    reader.onerror = (error) => {
+      console.error("Error converting file to base64:", error);
+    };
   };
+
+  // const handleFileChange = async (
+  //   e: ChangeEvent<HTMLInputElement>,
+  //   setFieldValue: any
+  // ) => {
+  //   if (e.target.files && e.target.files[0]) {
+  //     let file = e.target.files[0];
+  //     if (!file.type.match("image.*")) {
+  //       alert("Please upload an image file");
+
+  //       return;
+  //     }
+  //     if (file.type === "image/heic" || file.name.endsWith(".heic")) {
+  //       try {
+  //         file = await convertHeic(file);
+  //       } catch (error) {
+  //         console.error("Error converting HEIC file:", error);
+  //         alert("Error converting HEIC file.");
+  //         return;
+  //       }
+  //     }
+
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => {
+  //       if (typeof reader.result === "string") {
+  //         setFieldValue("photo_url", "");
+  //         setFieldValue("edit_image", reader.result);
+  //       }
+  //     };
+  //     reader.onerror = (error) => {
+  //       console.error("Error converting file to base64:", error);
+  //     };
+  //   }
+  // };
 
   if (!item.receipt) return <div className="min-h-screen">Loading</div>;
   return (
@@ -142,42 +179,29 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
             <div>
               <div className="flex flex-col gap-4">
                 {!values.photo_url && !values.edit_image && (
-                  <div className="w-full h-[200px] overflow-hidden  border-[1px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-md bg relative">
-                    <input
-                      type="file"
-                      onChange={(e) => handleFileChange(e, setFieldValue)}
-                      id="edit"
-                      style={{
-                        opacity: 0,
-                        position: "absolute",
-                        zIndex: -1,
-                        width: "100%",
-                        height: "100%",
-                      }}
-                    />
-                    <div className="w-full h-full flex flex-col gap-4 justify-center items-center ">
-                      <Image
-                        src="/image_b.png"
-                        alt=""
-                        width={60}
-                        height={60}
-                        className="object-cover  pt-4"
-                        style={{
-                          objectFit: "cover",
-                          objectPosition: "center",
-                        }}
-                      />
-                      <label
-                        htmlFor="edit"
-                        className=""
-                        style={{
-                          cursor: "pointer",
-                        }}
-                      >
-                        Upload an image
-                      </label>
-                    </div>
-                  </div>
+                  <FileUploadDropzone
+                    onFileUpload={(e) => {
+                      onFileUpload(e, setFieldValue);
+                    }}
+                    button={
+                      <div className="w-full h-[150px] soverflow-hidden  border-[1.5px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-md  relative flex flex-col items-center justify-center cursor-pointer gap-5">
+                        <Image
+                          src="/image_b.png"
+                          alt=""
+                          width={30}
+                          height={30}
+                          className="object-cover "
+                          style={{
+                            objectFit: "cover",
+                            objectPosition: "center",
+                          }}
+                        />
+                        <p className="text-xs text-emerald-900">
+                          Upload photo or drag and drop
+                        </p>
+                      </div>
+                    }
+                  />
                 )}
                 {values.edit_image && (
                   <div className="w-full flex justify-center items-center relative group">
@@ -197,7 +221,7 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                         imageUrl={values.edit_image}
                         altText="Your Image Description"
                         setFieldValue={setFieldValue}
-                        handleFileChange={handleFileChange}
+                        handleFileChange={onFileUpload}
                         changeField="edit_image"
                       />
                     </div>
@@ -222,7 +246,7 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                         imageUrl={values.photo_url}
                         altText="Your Image Description"
                         setFieldValue={setFieldValue}
-                        handleFileChange={handleFileChange}
+                        handleFileChange={onFileUpload}
                         changeField="photo_url"
                       />
                     </div>

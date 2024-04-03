@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./ImageModal.module.css"; // Make sure you have the corresponding CSS module
 import Image from "next/image";
+import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 
 interface ImageModalProps {
   imageUrl: string;
@@ -57,25 +58,16 @@ const ImageModal = ({
                 >
                   Remove
                 </button>
-                <input
-                  type="file"
-                  onChange={(e) => handleFileChange(e, setFieldValue)}
-                  id="replace"
-                  style={{
-                    opacity: 0,
-                    position: "absolute",
-                    zIndex: -1,
+                <FileUploadDropzone
+                  onFileUpload={(e) => {
+                    handleFileChange(e, setFieldValue);
                   }}
+                  button={
+                    <p className="absolute text-white top-0 right-0 m-2">
+                      Replace
+                    </p>
+                  }
                 />
-                <label
-                  htmlFor="replace"
-                  className="absolute text-white top-0 right-0 m-2"
-                  style={{
-                    cursor: "pointer",
-                  }}
-                >
-                  Replace
-                </label>
               </div>
             )}
           </div>

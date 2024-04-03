@@ -131,35 +131,35 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
             />
 
             <div className="flex flex-col gap-4 text-sm ">
-              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
+              <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
                 <p className="text-slate-400 text-xs">Receipt Type</p>
                 <p className="">{receipt.memo ? "Memo" : "Receipt"}</p>
               </div>
-              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
+              <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
                 <p className="text-slate-400 text-xs">Quantity</p>
                 <p className="">{receipt.items.length}</p>
               </div>
-              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
+              <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
                 <p className="text-slate-400 text-xs">Created at</p>
                 <p className="">{formatDateToMMDDYY(receipt.created_at)}</p>
               </div>
-              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
+              <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
                 <p className="text-slate-400 text-xs">Purchase Type</p>
                 <p className="">{receipt.type}</p>
               </div>
 
-              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
+              <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
                 <p className="text-slate-400 text-xs">Card</p>
                 <p className="">{receipt.card ? receipt.card : "None"}</p>
               </div>
 
-              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
+              <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
                 <p className="text-slate-400 text-xs">Tracking Link</p>
                 <p className="">
                   {receipt.tracking_number ? receipt.tracking_number : "None"}
                 </p>
               </div>
-              <div className="w-full  border-slate-400 border-b-[1px] pb-2 ">
+              <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
                 <p className="text-slate-400 text-xs">Asset Amount</p>
                 <p className="">
                   {receipt.asset_amount

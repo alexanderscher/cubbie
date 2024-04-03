@@ -1,4 +1,5 @@
 "use client";
+import { addItem } from "@/actions/items/addItem";
 import { deleteReceipt } from "@/actions/receipts/deleteReceipt";
 import { moveReceipt } from "@/actions/receipts/moveReceipt";
 import RegularButton from "@/components/buttons/RegularButton";
@@ -15,7 +16,9 @@ import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
+import * as Yup from "yup";
 
 interface ReceiptProps {
   receipt: ReceiptType;
@@ -99,6 +102,79 @@ const OptionsModal = ({ receipt }: OptionsModalProps) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const pathname = usePathname();
+
+  const [newItem, setNewItem] = useState({
+    description: "",
+    price: "",
+    barcode: "",
+    product_id: "",
+    character: "",
+    photo: "",
+    receipt_id: receipt.id,
+  });
+
+  const [error, setError] = useState({
+    description: "",
+    price: "",
+    result: "",
+  });
+
+  const [isPending, startTransition] = useTransition();
+
+  const itemSchema = Yup.object({
+    description: Yup.string().required("Description is required"),
+    price: Yup.string().required("Price is required"),
+  });
+  const handleSubmit = async () => {
+    try {
+      await itemSchema.validate(newItem, { abortEarly: false });
+
+      startTransition(async () => {
+        const result = await addItem(newItem);
+
+        if (result?.error) {
+          setError({ ...error, result: result.error });
+        } else {
+          setIsAddOpen(false);
+
+          setNewItem({
+            description: "",
+            price: "",
+            barcode: "",
+            product_id: "",
+            character: "",
+            photo: "",
+            receipt_id: receipt.id,
+          });
+          setError({
+            description: "",
+            price: "",
+            result: "",
+          });
+        }
+      });
+    } catch (error) {
+      let errorsObject = {};
+
+      if (error instanceof Yup.ValidationError) {
+        errorsObject = error.inner.reduce((acc, curr) => {
+          const key = curr.path || "unknownField";
+          acc[key] = curr.message;
+          return acc;
+        }, {} as Record<string, string>);
+      }
+
+      setError(
+        errorsObject as {
+          description: string;
+          price: string;
+          result: string;
+        }
+      );
+    }
+  };
+
   return (
     <div
       className="absolute bg-white shadow-1 -right-4 top-6 rounded-md  w-[200px] z-[200]"
@@ -107,15 +183,18 @@ const OptionsModal = ({ receipt }: OptionsModalProps) => {
       }}
     >
       <div className="p-4 rounded text-sm flex flex-col gap-2">
-        <Link
-          href={`project/${receipt.project.id}`}
-          className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 cursor-pointer"
-        >
-          <div className="flex gap-2">
-            <Image src={"/folder.png"} width={20} height={20} alt=""></Image>
-            <p>{receipt.project.name}</p>
-          </div>
-        </Link>
+        {pathname === "/receipts" && (
+          <Link
+            href={`/project/${receipt.project.id}`}
+            className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 cursor-pointer"
+          >
+            <div className="flex gap-2">
+              <Image src={"/folder.png"} width={20} height={20} alt=""></Image>
+              <p>{receipt.project.name}</p>
+            </div>
+          </Link>
+        )}
+
         <div
           className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 cursor-pointer"
           onClick={(e) => {
@@ -163,7 +242,16 @@ const OptionsModal = ({ receipt }: OptionsModalProps) => {
         </div>
       </div>
       {isOpen && <MoveModal setIsOpen={setIsOpen} receipt={receipt} />}
-      {isAddOpen && <AddItem setIsAddOpen={setIsAddOpen} id={receipt.id} />}
+      {isAddOpen && (
+        <AddItem
+          setIsAddOpen={setIsAddOpen}
+          handleSubmit={handleSubmit}
+          setNewItem={setNewItem}
+          newItem={newItem}
+          error={error}
+          isPending={isPending}
+        />
+      )}
       {isDeleteOpen && (
         <DeleteModal setDeleteOpen={setIsDeleteOpen} receipt={receipt} />
       )}

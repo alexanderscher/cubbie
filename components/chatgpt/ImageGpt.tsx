@@ -13,6 +13,7 @@ import { Form } from "react-hook-form";
 import { FormError } from "@/components/form-error";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import Loading from "@/components/Loading";
+import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 
 interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
@@ -182,16 +183,12 @@ export default function ImageGpt({
     });
   };
 
-  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files === null) {
+  const onFileUpload = async (file: File) => {
+    if (file === null) {
       return;
     }
-
-    let file = event.target.files[0];
-
     if (!file.type.match("image.*")) {
-      alert("File is not an image.");
-      setInvalidImage(true);
+      alert("Please upload an image file");
       return;
     }
     if (file.type === "image/heic" || file.name.endsWith(".heic")) {
@@ -204,19 +201,62 @@ export default function ImageGpt({
       }
     }
 
-    try {
-      const dataUrl = await readFileAsDataURL(file);
-      setImage(dataUrl);
-      setNoImage(false);
-      setInvalidImage(false);
-      setFieldValue("receiptImage", dataUrl);
-    } catch (error) {
-      console.error("Error handling file:", error);
-      alert("Error processing file.");
-    }
-
-    [setFieldValue];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+      if (typeof reader.result === "string") {
+        try {
+          const dataUrl = await readFileAsDataURL(file);
+          setImage(dataUrl);
+          setNoImage(false);
+          setInvalidImage(false);
+          setFieldValue("receiptImage", dataUrl);
+        } catch (error) {
+          console.error("Error handling file:", error);
+          alert("Error processing file.");
+        }
+      }
+    };
+    reader.onerror = (error) => {
+      console.error("Error converting file to base64:", error);
+    };
   };
+
+  // const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+  //   if (event.target.files === null) {
+  //     return;
+  //   }
+
+  //   let file = event.target.files[0];
+
+  //   if (!file.type.match("image.*")) {
+  //     alert("File is not an image.");
+  //     setInvalidImage(true);
+  //     return;
+  //   }
+  //   if (file.type === "image/heic" || file.name.endsWith(".heic")) {
+  //     try {
+  //       file = await convertHeic(file);
+  //     } catch (error) {
+  //       console.error("Error converting HEIC file:", error);
+  //       alert("Error converting HEIC file.");
+  //       return;
+  //     }
+  //   }
+
+  //   try {
+  //     const dataUrl = await readFileAsDataURL(file);
+  //     setImage(dataUrl);
+  //     setNoImage(false);
+  //     setInvalidImage(false);
+  //     setFieldValue("receiptImage", dataUrl);
+  //   } catch (error) {
+  //     console.error("Error handling file:", error);
+  //     alert("Error processing file.");
+  //   }
+
+  //   [setFieldValue];
+  // };
 
   const handleSubmit = async () => {
     const error = await validateForm();
@@ -322,38 +362,27 @@ export default function ImageGpt({
 
         <div>
           <div className="flex flex-col gap-5">
-            <div
-              className={`border-[1px] w-full flex flex-col gap-4 justify-center items-center rounded-md relative  border-emerald-900 h-[150px]`}
-              onClick={handleContainerClick}
-              style={{ cursor: "pointer" }}
-            >
-              <input
-                type="file"
-                onChange={handleFileChange}
-                id="file-upload"
-                style={{
-                  opacity: 0,
-                  position: "absolute",
-                  zIndex: -1,
-                  width: "100%",
-                  height: "100%",
-                }}
-                ref={fileInputRef}
-              />
-              <Image
-                src="/image_b.png"
-                alt=""
-                width={40}
-                height={40}
-                className="object-cover pt-4"
-                style={{
-                  objectFit: "cover",
-                  objectPosition: "center",
-                }}
-              />
-              <p className="text-sm text-emerald-900">Upload image</p>
-              <label htmlFor="file-upload" className=""></label>
-            </div>
+            <FileUploadDropzone
+              onFileUpload={onFileUpload}
+              button={
+                <div className="w-full h-[150px] soverflow-hidden  border-[1.5px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-md  relative flex flex-col items-center justify-center cursor-pointer gap-5">
+                  <Image
+                    src="/image_b.png"
+                    alt=""
+                    width={40}
+                    height={40}
+                    className="object-cover "
+                    style={{
+                      objectFit: "cover",
+                      objectPosition: "center",
+                    }}
+                  />
+                  <p className="text-xs text-emerald-900">
+                    Upload photo or drag and drop
+                  </p>
+                </div>
+              }
+            />
 
             {image && (
               <div className="relative w-24 h-24 ">

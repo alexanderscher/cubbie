@@ -18,11 +18,13 @@ export default async function ReceiptPage() {
 
   return (
     <PageWrapper>
-      <div className="flex flex-col pb-[400px]">
+      <div className="flex flex-col items-center pb-[400px]">
         <SearchReceiptProvider>
           <Suspense fallback={<div>Loading</div>}>
-            <Header type="Receipts" />
-            <Receipts serverData={receipts} />
+            <div className="w-full max-w-[1090px]">
+              <Header type="Receipts" />
+              <Receipts serverData={receipts} />
+            </div>
           </Suspense>
         </SearchReceiptProvider>
       </div>

@@ -21,7 +21,7 @@ const DeleteConfirmationModal = ({
 }: DeleteModalProps) => {
   return (
     <div
-      className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex"
+      className="fixed inset-0 z-[300] overflow-auto bg-smoke-light flex"
       onClick={(e) => e.preventDefault()}
     >
       <div className="relative p-10 bg-red-50  max-w-md m-auto flex-col flex  rounded-lg shadow-md gap-4 w-[340px] items-center">

@@ -78,7 +78,7 @@ const sendReminder = async (daysUntilDue: number, reminderType: string) => {
   }
 };
 
-export async function POST() {
+export async function GET() {
   await sendReminder(0, "TODAY_REMINDER");
   await sendReminder(1, "1_DAY_REMINDER");
   await sendReminder(7, "1_WEEK_REMINDER");

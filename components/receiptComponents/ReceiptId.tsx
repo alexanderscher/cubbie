@@ -4,15 +4,14 @@ import RegularButton from "@/components/buttons/RegularButton";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import HeaderNav from "@/components/navbar/HeaderNav";
 import ImageModal from "@/components/images/ImageModal";
 import { AddItem } from "@/components/item/AddItem";
-
 import Item from "@/components/Item";
 import { Item as ItemType, Receipt } from "@/types/AppTypes";
-import { ErrorMessage } from "formik";
-import { FormError } from "@/components/form-error";
+import * as Yup from "yup";
+import { addItem } from "@/actions/items/addItem";
 
 interface ReceiptIdProps {
   receipt: Receipt;
@@ -45,6 +44,77 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
     return acc + curr.price;
   }, 0);
 
+  const [newItem, setNewItem] = useState({
+    description: "",
+    price: "",
+    barcode: "",
+    product_id: "",
+    character: "",
+    photo: "",
+    receipt_id: receipt.id,
+  });
+
+  const [error, setError] = useState({
+    description: "",
+    price: "",
+    result: "",
+  });
+
+  const [isPending, startTransition] = useTransition();
+
+  const itemSchema = Yup.object({
+    description: Yup.string().required("Description is required"),
+    price: Yup.string().required("Price is required"),
+  });
+  const handleSubmit = async () => {
+    try {
+      await itemSchema.validate(newItem, { abortEarly: false });
+
+      startTransition(async () => {
+        const result = await addItem(newItem);
+
+        if (result?.error) {
+          setError({ ...error, result: result.error });
+        } else {
+          setIsAddOpen(false);
+
+          setNewItem({
+            description: "",
+            price: "",
+            barcode: "",
+            product_id: "",
+            character: "",
+            photo: "",
+            receipt_id: receipt.id,
+          });
+          setError({
+            description: "",
+            price: "",
+            result: "",
+          });
+        }
+      });
+    } catch (error) {
+      let errorsObject = {};
+
+      if (error instanceof Yup.ValidationError) {
+        errorsObject = error.inner.reduce((acc, curr) => {
+          const key = curr.path || "unknownField";
+          acc[key] = curr.message;
+          return acc;
+        }, {} as Record<string, string>);
+      }
+
+      setError(
+        errorsObject as {
+          description: string;
+          price: string;
+          result: string;
+        }
+      );
+    }
+  };
+
   if (!receipt.items) return <div className="min-h-screen">Loading</div>;
   return (
     <div className="flex flex-col gap-8 w-full h-full max-w-[1260px] ">
@@ -72,7 +142,16 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
           </RegularButton>
         </div>
       </div>
-      {isAddOpen && <AddItem setIsAddOpen={setIsAddOpen} id={receipt.id} />}
+      {isAddOpen && (
+        <AddItem
+          setIsAddOpen={setIsAddOpen}
+          handleSubmit={handleSubmit}
+          setNewItem={setNewItem}
+          newItem={newItem}
+          error={error}
+          isPending={isPending}
+        />
+      )}
       <div className="flex bg-white  rounded-md text-sm shadow p-6 h-[80px] items-center">
         <div className="w-1/3 border-r-[1px] border-slate-300  ">
           <p className="text-slate-400 text-xs">Total amount</p>

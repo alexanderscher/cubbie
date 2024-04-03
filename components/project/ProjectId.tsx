@@ -16,7 +16,6 @@ interface ProjectIdProps {
 }
 
 export const ProjectId = ({ project }: ProjectIdProps) => {
-  console.log(project);
   const [edit, setEdit] = useState(false);
   const [isAddOpen, setAddReceiptOpen] = useState(false);
 

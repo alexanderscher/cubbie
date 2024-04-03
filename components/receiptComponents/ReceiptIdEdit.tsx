@@ -21,6 +21,8 @@ import { formatDateToYYYYMMDD } from "@/utils/Date";
 import PurchaseTypeSelect from "@/components/select/PurchaseTypeSelect";
 import { AddItem } from "@/components/item/AddItem";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
+import * as Yup from "yup";
+import { addItem } from "@/actions/items/addItem";
 type ExtendedReceiptType = Receipt & {
   edit_image: string;
 };
@@ -44,8 +46,78 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
     tracking_number: "",
     store: "",
   });
-  const [isPending, startTransition] = useTransition();
   const [openItemId, setOpenItemId] = useState(null as number | null);
+
+  const [newItem, setNewItem] = useState({
+    description: "",
+    price: "",
+    barcode: "",
+    product_id: "",
+    character: "",
+    photo: "",
+    receipt_id: receipt.id,
+  });
+
+  const [error, setError] = useState({
+    description: "",
+    price: "",
+    result: "",
+  });
+
+  const [isPending, startTransition] = useTransition();
+
+  const itemSchema = Yup.object({
+    description: Yup.string().required("Description is required"),
+    price: Yup.string().required("Price is required"),
+  });
+  const handleSubmit = async () => {
+    try {
+      await itemSchema.validate(newItem, { abortEarly: false });
+
+      startTransition(async () => {
+        const result = await addItem(newItem);
+
+        if (result?.error) {
+          setError({ ...error, result: result.error });
+        } else {
+          setIsAddOpen(false);
+
+          setNewItem({
+            description: "",
+            price: "",
+            barcode: "",
+            product_id: "",
+            character: "",
+            photo: "",
+            receipt_id: receipt.id,
+          });
+          setError({
+            description: "",
+            price: "",
+            result: "",
+          });
+        }
+      });
+    } catch (error) {
+      let errorsObject = {};
+
+      if (error instanceof Yup.ValidationError) {
+        errorsObject = error.inner.reduce((acc, curr) => {
+          const key = curr.path || "unknownField";
+          acc[key] = curr.message;
+          return acc;
+        }, {} as Record<string, string>);
+      }
+
+      setError(
+        errorsObject as {
+          description: string;
+          price: string;
+          result: string;
+        }
+      );
+    }
+  };
 
   const total_amount = receipt.items.reduce((acc: number, curr: ItemType) => {
     return acc + curr.price;
@@ -430,7 +502,16 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
               onClose={() => setUploadError("")}
             />
           )}
-          {isAddOpen && <AddItem setIsAddOpen={setIsAddOpen} id={receipt.id} />}
+          {isAddOpen && (
+            <AddItem
+              setIsAddOpen={setIsAddOpen}
+              handleSubmit={handleSubmit}
+              setNewItem={setNewItem}
+              newItem={newItem}
+              error={error}
+              isPending={isPending}
+            />
+          )}
           {isPending && <Loading loading={isPending} />}
         </div>
       )}

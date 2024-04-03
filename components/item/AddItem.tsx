@@ -1,3 +1,4 @@
+"use client";
 import { addItem } from "@/actions/items/addItem";
 import RegularButton from "@/components/buttons/RegularButton";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
@@ -23,8 +24,6 @@ export const AddItem = ({ setIsAddOpen, id }: AddItemModalProps) => {
     photo: "",
     receipt_id: id,
   });
-
-  console.log(newItem);
 
   const [showScanner, setShowScanner] = useState(false);
 
@@ -242,7 +241,7 @@ export const AddItem = ({ setIsAddOpen, id }: AddItemModalProps) => {
                 <FileUploadDropzone
                   onFileUpload={onFileUpload}
                   button={
-                    <div className="w-full h-[100px] overflow-hidden  border-[1px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-md  relative flex items-center justify-center">
+                    <div className="w-full h-[100px] overflow-hidden  border-[1px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-md  relative flex items-center justify-center cursor-pointer">
                       <Image
                         src="/image_b.png"
                         alt=""

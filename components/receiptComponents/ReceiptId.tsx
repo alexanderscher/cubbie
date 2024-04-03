@@ -65,7 +65,7 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
             <p className="text-emerald-900 text-xs">Add item</p>
           </RegularButton>
           <RegularButton
-            styles="bg  border-emerald-900"
+            styles="bg border-emerald-900"
             href={`/receipt/${receipt.id}/edit`}
           >
             <p className="text-emerald-900 text-xs">Edit</p>

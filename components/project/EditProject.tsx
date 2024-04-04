@@ -3,10 +3,13 @@ import { editProject } from "@/actions/projects/editProject";
 import RegularButton from "@/components/buttons/RegularButton";
 import { FormError } from "@/components/form-error";
 import Loading from "@/components/Loading";
+import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 
 import { Project as ProjectType } from "@/types/AppTypes";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 import React, { useState, useTransition } from "react";
+import CurrencyInput from "react-currency-input-field";
 
 interface EditProjectProps {
   setEdit: (value: boolean) => void;
@@ -14,21 +17,32 @@ interface EditProjectProps {
 }
 
 export const EditProject = ({ setEdit, project }: EditProjectProps) => {
-  const [name, setName] = useState(project.name);
+  const [editProjectObj, setProject] = useState({
+    name: project.name,
+    asset_amount: project.asset_amount ? project.asset_amount.toString() : "",
+  });
   const [error, setError] = useState("");
   const [uploadError, setUploadError] = useState("");
   const [isPending, startTransition] = useTransition();
 
   const handleSubmit = async () => {
-    if (name === "") {
+    if (editProjectObj.name === "") {
       setError("Project name is required");
       return;
     }
-    if (name === project.name || name === "") {
+    if (
+      editProjectObj.name === project.name &&
+      editProjectObj.asset_amount === project.asset_amount.toString()
+    ) {
+      console.log("false");
       setEdit(false);
-    } else if (name !== "" && project.id) {
+    } else if (editProjectObj.name !== "" && project.id) {
       startTransition(async () => {
-        const result = await editProject(project.id, name);
+        const result = await editProject(
+          project.id,
+          editProjectObj.name,
+          editProjectObj.asset_amount
+        );
 
         if (result.error) {
           setUploadError(result.error);
@@ -78,12 +92,39 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
                 <input
                   type="text"
                   name="description"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={editProjectObj.name}
+                  onChange={(e) =>
+                    setProject({ ...editProjectObj, name: e.target.value })
+                  }
                   className="w-full p-2 border-[1px] border-emerald-900 focus:outline-none rounded"
                 />
                 {error && <p className="text-orange-900 text-xs">{error}</p>}
               </div>
+            </div>
+            <div>
+              <div className="flex items-center gap-1 mb-2">
+                <p className="text-xs text-emerald-900">Project Asset Amount</p>
+                <TooltipWithHelperIcon content="Set a Project Asset Amount to determine the minimum cost an item must have to be considered an asset. This helps in identifying and tracking valuable items across all project receipts easily." />
+              </div>
+
+              <CurrencyInput
+                id="assetAmount"
+                name="assetAmount"
+                className="w-full border-[1px]  p-2  border-emerald-900 rounded  focus:outline-none"
+                placeholder={
+                  editProjectObj.asset_amount
+                    ? formatCurrency(editProjectObj.asset_amount)
+                    : ""
+                }
+                defaultValue={""}
+                decimalsLimit={2}
+                onValueChange={(value) => {
+                  setProject((prevState) => ({
+                    ...prevState,
+                    asset_amount: value || "",
+                  }));
+                }}
+              />
             </div>
 
             <div className="flex justify-end ">

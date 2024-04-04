@@ -27,6 +27,9 @@ export const getProjects = async () => {
             },
           },
         },
+        orderBy: {
+          created_at: "desc",
+        },
       });
 
       return projects;

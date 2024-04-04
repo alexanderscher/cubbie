@@ -5,7 +5,7 @@ import { Session } from "@/types/AppTypes";
 
 import { revalidateTag } from "next/cache";
 
-export const createProject = async (name: string) => {
+export const createProject = async (name: string, asset_amount: string) => {
   try {
     const session = (await auth()) as Session;
     const userId = session?.user?.id as string;
@@ -14,9 +14,16 @@ export const createProject = async (name: string) => {
       return { error: "Unauthorized" };
     }
 
+    let new_asset_amount = "";
+
+    if (asset_amount) {
+      new_asset_amount = asset_amount.replace(/[^0-9.]/g, "");
+    }
+
     await prisma.project.create({
       data: {
-        name,
+        name: name,
+        asset_amount: parseInt(new_asset_amount),
         userId,
         created_at: new Date().toISOString(),
       },

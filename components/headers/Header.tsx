@@ -1,14 +1,10 @@
 "use client";
-import RegularButton from "@/components/buttons/RegularButton";
 import SearchBar from "@/components/search/SearchBar";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useState } from "react";
-import styles from "./Header.module.css";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import { CreateProject } from "@/components/project/CreateProject";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
-import { useSearchItemContext } from "@/components/context/SearchItemContext";
-import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 import Image from "next/image";
 import Link from "next/link";
 import Filters from "@/components/headers/Filters";
@@ -65,13 +61,34 @@ const Header = ({ type }: HeaderProps) => {
                     className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
                     href="/receipts"
                   >
-                    Receipts
+                    <div className="flex items-center gap-3">
+                      <div className="pl-1">
+                        <Image
+                          src="/receipt_b.png"
+                          width={13}
+                          height={13}
+                          alt="folder"
+                        ></Image>
+                      </div>
+                      <p>Receipts</p>
+                    </div>
                   </Link>
                   <Link
                     className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
                     href="/items"
                   >
-                    Items
+                    <div className="flex items-center gap-2">
+                      <div>
+                        <Image
+                          src="/item_b.png"
+                          width={20}
+                          height={20}
+                          alt="folder"
+                        ></Image>
+                      </div>
+
+                      <p>Items</p>
+                    </div>
                   </Link>
                 </div>
               )}
@@ -81,13 +98,32 @@ const Header = ({ type }: HeaderProps) => {
                     className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
                     href="/"
                   >
-                    Projects
+                    <div className="flex items-center gap-2">
+                      <Image
+                        src="/folder.png"
+                        width={20}
+                        height={20}
+                        alt="folder"
+                      ></Image>
+                      <p>Projects</p>
+                    </div>
                   </Link>
                   <Link
                     className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
                     href="/items"
                   >
-                    Items
+                    <div className="flex items-center gap-2">
+                      <div>
+                        <Image
+                          src="/item_b.png"
+                          width={20}
+                          height={20}
+                          alt="folder"
+                        ></Image>
+                      </div>
+
+                      <p>Items</p>
+                    </div>
                   </Link>
                 </div>
               )}
@@ -97,13 +133,31 @@ const Header = ({ type }: HeaderProps) => {
                     className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
                     href="/"
                   >
-                    Projects
+                    <div className="flex items-center gap-2">
+                      <Image
+                        src="/folder.png"
+                        width={20}
+                        height={20}
+                        alt="folder"
+                      ></Image>
+                      <p>Projects</p>
+                    </div>
                   </Link>
                   <Link
                     className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
                     href="/receipts"
                   >
-                    Receipts
+                    <div className="flex items-center gap-3">
+                      <div className="pl-1">
+                        <Image
+                          src="/receipt_b.png"
+                          width={13}
+                          height={13}
+                          alt="folder"
+                        ></Image>
+                      </div>
+                      <p>Receipts</p>
+                    </div>
                   </Link>
                 </div>
               )}

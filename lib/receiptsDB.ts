@@ -62,7 +62,7 @@ export const getReceipts = async () => {
           project: true,
         },
         orderBy: {
-          created_at: "desc",
+          purchase_date: "desc",
         },
       });
 

@@ -30,6 +30,9 @@ export const getItems = async () => {
             },
           },
         },
+        orderBy: {
+          created_at: "desc",
+        },
       });
 
       return items;

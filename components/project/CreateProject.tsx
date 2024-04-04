@@ -3,29 +3,37 @@ import { createProject } from "@/actions/projects/createProject";
 import RegularButton from "@/components/buttons/RegularButton";
 import { FormError } from "@/components/form-error";
 import Loading from "@/components/Loading";
+import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 
 import { useState, useTransition } from "react";
+import CurrencyInput from "react-currency-input-field";
 
 interface AddProjectModalProps {
   setAddProjectOpen: (value: boolean) => void;
 }
 
 export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
-  const [project, setProject] = useState("");
+  const [project, setProject] = useState({
+    name: "",
+    asset_amount: "",
+  });
   const [error, setError] = useState("");
   const [uploadError, setUploadError] = useState("");
   const [isPending, startTransition] = useTransition();
 
   const handleSubmit = async () => {
-    if (project === "") {
+    if (project.name === "") {
       setError("Please enter a project name");
     } else {
       startTransition(async () => {
-        const result = await createProject(project);
+        const result = await createProject(project.name, project.asset_amount);
         if (result.error) {
           setUploadError(result.error);
         } else {
-          setProject("");
+          setProject({
+            name: "",
+            asset_amount: "",
+          });
           setAddProjectOpen(false);
         }
       });
@@ -64,16 +72,36 @@ export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
           <div className="flex flex-col gap-4">
             <div className="space-y-4">
               <div>
-                <p className="text-xs text-emerald-900">Project name*</p>
+                <p className="text-xs text-emerald-900 mb-2">Project name*</p>
                 <input
                   type="text"
                   name="description"
-                  value={project}
-                  onChange={(e) => setProject(e.target.value)}
-                  className="w-full p-2 border-[1px]  rounded-md border-emerald-900"
+                  value={project.name}
+                  onChange={(e) =>
+                    setProject({ ...project, name: e.target.value })
+                  }
+                  className="w-full p-2 border-[1px]  rounded border-emerald-900"
                 />
                 {error && <p className="text-orange-900 text-xs">{error}</p>}
               </div>
+            </div>
+            <div>
+              <div className="flex items-center gap-1 mb-2">
+                <p className="text-xs text-emerald-900">Project Asset Amount</p>
+                <TooltipWithHelperIcon content="Set a Project Asset Amount to determine the minimum cost an item must have to be considered an asset. This helps in identifying and tracking valuable items across all project receipts easily." />
+              </div>
+
+              <CurrencyInput
+                id="assetAmount"
+                name="assetAmount"
+                className="w-full border-[1px]  p-2  border-emerald-900 rounded  focus:outline-none"
+                placeholder=""
+                defaultValue={""}
+                decimalsLimit={2}
+                onValueChange={(value) =>
+                  setProject({ ...project, asset_amount: value || "" })
+                }
+              />
             </div>
 
             <div className="flex justify-end mt-6">

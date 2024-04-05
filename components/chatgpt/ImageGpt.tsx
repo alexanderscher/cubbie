@@ -1,6 +1,6 @@
 "use client";
 import RegularButton from "@/components/buttons/RegularButton";
-import ProjectSelect from "@/components/createForm/ProjectSelectForm";
+import ProjectSelectForm from "@/components/createForm/ProjectSelectForm";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
@@ -8,8 +8,7 @@ import { Project } from "@/types/AppTypes";
 import { convertHeic } from "@/utils/media";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ChangeEvent, useState, useRef, useEffect } from "react";
-import { Form } from "react-hook-form";
+import { useState, useRef, use } from "react";
 import { FormError } from "@/components/form-error";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import Loading from "@/components/Loading";
@@ -34,7 +33,6 @@ export default function ImageGpt({
   validateForm,
   projects,
 }: Props) {
-  const pathname = usePathname();
   const [image, setImage] = useState<string>("");
   const [noImage, setNoImage] = useState(false);
   const [prompt, setPrompt] = useState(false);
@@ -42,17 +40,9 @@ export default function ImageGpt({
   const [noReceipt, setNoReceipt] = useState(false);
   const [invalidImage, setInvalidImage] = useState(false);
   const [apiError, setApiError] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-
   const [validationErrors, setValidationErrors] = useState({
     folderName: "",
   });
-
-  const handleContainerClick = () => {
-    if (fileInputRef.current !== null) {
-      fileInputRef.current.click();
-    }
-  };
 
   const OnlineGptCall = async () => {
     const res = await fetch("/api/gpt/analyze-image", {
@@ -289,10 +279,13 @@ export default function ImageGpt({
     setPrompt(true);
   };
 
+  const pathname = usePathname();
+
   return (
     <div>
       <div className="flex flex-col gap-4">
-        <ProjectSelect
+        <h1 className="text-3xl text-orange-600">Analyze Image</h1>
+        <ProjectSelectForm
           handleChange={handleChange}
           projects={projects}
           setFieldValue={setFieldValue}
@@ -402,12 +395,20 @@ export default function ImageGpt({
 
             <div className="w-full">
               <RegularButton
-                styles="border-emerald-900 bg-emerald-900  w-full "
+                styles={`${
+                  loading
+                    ? "border-emerald-900 bg-emerald-900"
+                    : "border-emerald-900 bg"
+                }  w-full mt-2`}
                 handleClick={() => {
                   handleSubmit();
                 }}
               >
-                <p className="text-white text-sm">
+                <p
+                  className={
+                    loading ? "text-white text-sm" : "text-emerald-900 text-sm"
+                  }
+                >
                   {loading ? "Analyzing..." : "Analyze Image"}
                 </p>
               </RegularButton>
@@ -416,31 +417,32 @@ export default function ImageGpt({
         </div>
 
         {prompt && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex justify-center items-center">
-            <div className="flex flex-col gap-4 mt-10 bg-orange-200 p-6 rounded-md shadow items-center justify-center text-emerald-900 max-w-lg w-3/4">
-              <ExclamationTriangleIcon className="h-6 w-1/6" />
-              <p className="text-sm text-center text-emerald-900">
+          <div className="fixed inset-0 bg-black bg-opacity-10 z-[2000] flex justify-center items-center">
+            <div className="p-10 flex flex-col gap-4 mt-10 bg-orange-50 rounded-md shadow-md items-center justify-center text-emerald-900 max-w-lg w-[400px]">
+              <div className="bg-orange-100 rounded-full flex items-center justify-center h-[50px] w-[50px]">
+                <ExclamationTriangleIcon className=" text-orange-600 w-3/4 h-1/2" />
+              </div>
+              <p className="text-sm text-center text-orange-600 ">
                 Are you sure you want to analyze the image? This will overwrite
                 your current data.
               </p>
               <div className="flex flex-col gap-2 w-full">
                 <RegularButton
-                  styles="bg-orange-200 border-emerald-900 text-emerald-900 w-full"
+                  styles="bg-orange-50 border-orange-600 text-orange-600  w-full"
                   handleClick={() => {
-                    const pathname = window.location.pathname; // Assuming you have access to 'window'
                     pathname === "/create/memo"
                       ? MemoGptCall()
                       : OnlineGptCall();
                     setPrompt(false); // Close modal after action
                   }}
                 >
-                  <p className="text-xs">Confirm</p>
+                  <p className="text-xs">Yes, anaylze.</p>
                 </RegularButton>
                 <RegularButton
-                  styles="bg-orange-200 border-emerald-900 text-emerald-900 w-full"
+                  styles="bg-orange-50 border-orange-600 text-orange-600  w-full"
                   handleClick={() => setPrompt(false)}
                 >
-                  <p className="text-xs">Cancel</p>
+                  <p className="text-xs">No, cancel.</p>
                 </RegularButton>
               </div>
             </div>

@@ -1,16 +1,14 @@
 "use client";
 import ProjectSelect from "@/components/createForm/ProjectSelectForm";
-import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import styles from "@/app/create/upload.module.css";
-import { getProjects } from "@/lib/projectsDB";
 import { ReceiptStoreStage } from "@/constants/form";
 import { Project } from "@/types/AppTypes";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import { convertHeic } from "@/utils/media";
 import Image from "next/image";
-import React, { ChangeEvent, use, useEffect, useRef, useState } from "react";
-import CurrencyInput from "react-currency-input-field";
+import React, { useRef } from "react";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
+import { usePathname } from "next/navigation";
 
 interface ReceiptManualProps {
   values: any;
@@ -32,12 +30,7 @@ const ReceiptManual = ({
 }: ReceiptManualProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleContainerClick = () => {
-    if (fileInputRef.current !== null) {
-      fileInputRef.current.click();
-    }
-  };
-
+  const pathname = usePathname();
   const onFileUpload = async (file: File) => {
     if (file === null) {
       return;
@@ -73,21 +66,23 @@ const ReceiptManual = ({
     };
   };
 
-  const handleCurrencyChangeAsset = (value: string | undefined) => {
-    setFieldValue("assetAmount", value || "");
-  };
-
   return (
     <div className="flex flex-col gap-10  w-full justify-center items-center mt-10">
       <div className=" max-w-[600px] w-full">
         <div className="flex flex-col gap-2">
-          <input
-            className="w-full bg border-b-[1px] border-emerald-900   focus:outline-none placeholder:text-3xl placeholder:text-orange-600 h-[50px] text-2xl text-orange-600"
-            name="store"
-            placeholder="Store Name*"
-            value={values.store}
-            onChange={handleChange("store")}
-          />
+          <h1 className="text-3xl text-orange-600 mb-4">
+            {pathname === "/create/manual" ? "Manual Entry" : "Analyze Text"}
+          </h1>
+
+          <div className="w-full">
+            <p className="text-sm text-emerald-900 ">Store name*</p>
+            <input
+              className="w-full border-[1px] bg  p-2  border-emerald-900 rounded  focus:outline-none"
+              name="store"
+              value={values.store}
+              onChange={handleChange("store")}
+            />
+          </div>
 
           {errors.store && (
             <p className="text-orange-800 text-sm">{errors.store}</p>
@@ -103,28 +98,6 @@ const ReceiptManual = ({
               values={values}
               errors={errors}
             />
-            <div className="flex gap-2 w-full">
-              <div className="w-full">
-                <div className="flex gap-2 mb-1">
-                  <p className="text-sm text-emerald-900 ">Asset Amount</p>
-                  <TooltipWithHelperIcon
-                    content="Asset amount determines which item is considered an asset.
-                    An asset is an item that is worth more than a certain
-                    amount."
-                  />
-                </div>
-
-                <CurrencyInput
-                  id="assetAmount"
-                  name="assetAmount"
-                  className="w-full border-[1px] bg  p-2  border-emerald-900 rounded  focus:outline-none"
-                  placeholder=""
-                  defaultValue={values.assetAmount || ""}
-                  decimalsLimit={2}
-                  onValueChange={handleCurrencyChangeAsset}
-                />
-              </div>
-            </div>
 
             <div className="w-full">
               <p className="text-sm text-emerald-900 ">Card</p>

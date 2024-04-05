@@ -180,11 +180,11 @@ const TextPage = ({ projects }: Pages) => {
                       <div className="flex justify-center items-center w-full">
                         <div className="flex flex-col gap-6 max-w-[600px] w-full">
                           <div className="flex flex-col gap-6">
-                            <h1 className="text-2xl text-orange-600">
-                              {values.store}
+                            <h1 className="text-3xl text-orange-600">
+                              Analyze Text
                             </h1>
                             <h1 className="text-emerald-900 text-xl ">
-                              Receipt Items
+                              {values.store}
                             </h1>
                             <div className="flex  rounded text-xs border-[1px] border-emerald-900 p-4">
                               <div className="w-1/2 border-r-[1px] border-slate-300 pl-2 pr-2">

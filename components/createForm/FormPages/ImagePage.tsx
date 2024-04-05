@@ -84,8 +84,8 @@ const ImagePage = ({ projects }: Pages) => {
                 switch (stage) {
                   case ReceiptStoreStage.IN_STORE_GPT:
                     return (
-                      <div className="flex justify-center mt-8 w-full h-screen">
-                        <div className="flex flex-col gap-6 max-w-[500px] w-full pb-[200px]">
+                      <div className="flex justify-center mt-[60px] w-full h-screen">
+                        <div className="flex flex-col gap-6 max-w-[550px] w-full pb-[200px]">
                           <ImageGpt
                             handleChange={handleChange}
                             setFieldValue={setFieldValue}

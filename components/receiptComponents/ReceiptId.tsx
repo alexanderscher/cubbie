@@ -231,19 +231,21 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
                 <p className="text-slate-400 text-xs">Card</p>
                 <p className="">{receipt.card ? receipt.card : "None"}</p>
               </div>
+              <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+                <p className="text-slate-400 text-xs">Project Asset Amount</p>
+                <p className="">
+                  {receipt.project &&
+                  receipt.project.asset_amount !== null &&
+                  receipt.project.asset_amount !== undefined
+                    ? receipt.project.asset_amount
+                    : "None"}
+                </p>
+              </div>
 
               <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
                 <p className="text-slate-400 text-xs">Tracking Link</p>
                 <p className="">
                   {receipt.tracking_number ? receipt.tracking_number : "None"}
-                </p>
-              </div>
-              <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
-                <p className="text-slate-400 text-xs">Asset Amount</p>
-                <p className="">
-                  {receipt.asset_amount
-                    ? formatCurrency(receipt.asset_amount)
-                    : "None"}
                 </p>
               </div>
             </div>
@@ -258,6 +260,7 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
                 receipt.items.length > 0 &&
                 receipt.items.map((item: ItemType, index: number) => (
                   <Item
+                    project={receipt.project}
                     key={item.id}
                     item={item}
                     isOpen={openItemId === item.id}

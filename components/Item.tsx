@@ -1,11 +1,10 @@
 "use client";
 import { deleteItem } from "@/actions/items/deleteItem";
 import { markAsReturned, unreturn } from "@/actions/return";
-import RegularButton from "@/components/buttons/RegularButton";
 import Loading from "@/components/Loading";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import { TruncateText } from "@/components/text/Truncate";
-import { Item as ItemType } from "@/types/AppTypes";
+import { Item as ItemType, Project } from "@/types/AppTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
@@ -17,10 +16,12 @@ interface Props {
   item: any;
   isOpen: boolean;
   onToggleOpen: (event: React.MouseEvent<HTMLDivElement>) => void;
+  project?: Project;
 }
 
-const Item = ({ item, isOpen, onToggleOpen }: Props) => {
+const Item = ({ item, isOpen, onToggleOpen, project }: Props) => {
   const pathname = usePathname();
+  console.log(item);
 
   return (
     <div className="box justify-between relative">
@@ -28,7 +29,6 @@ const Item = ({ item, isOpen, onToggleOpen }: Props) => {
         <div className="">
           {item.photo_url && (
             <div className="w-full h-[110px] overflow-hidden flex justify-center flex-shrink-0 flex-col relative">
-              {/* Image Container */}
               <Image
                 src={item.photo_url}
                 alt=""
@@ -37,6 +37,15 @@ const Item = ({ item, isOpen, onToggleOpen }: Props) => {
                 className="w-full h-full object-cover rounded-t-lg"
                 style={{ objectPosition: "top" }}
               />
+              {pathname.startsWith("/receipt") &&
+                project &&
+                project.asset_amount !== null &&
+                project.asset_amount !== undefined &&
+                project.asset_amount < item.price && (
+                  <p className="absolute top-2 left-2 flex  text-orange-600 text-xs border-[1px] border-orange-600 rounded-full px-3 py-1">
+                    Asset
+                  </p>
+                )}
 
               {pathname === "/items" && item?.receipt?.expired && (
                 <div className="absolute top-0 left-0 w-full h-full bg-orange-400 opacity-30  rounded-t-lg"></div>
@@ -67,6 +76,15 @@ const Item = ({ item, isOpen, onToggleOpen }: Props) => {
                     : "bg-slate-100"
                 }`}
               >
+                {pathname.startsWith("/receipt") &&
+                  project &&
+                  project.asset_amount !== null &&
+                  project.asset_amount !== undefined &&
+                  project.asset_amount < item.price && (
+                    <p className="absolute top-2 left-2 flex  text-orange-600 text-xs border-[1px] border-orange-600 rounded-full px-3 py-1">
+                      Asset
+                    </p>
+                  )}
                 <div className="w-full h-full flex justify-center items-center">
                   <Image
                     src="/item_b.png"

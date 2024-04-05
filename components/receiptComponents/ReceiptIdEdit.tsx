@@ -421,21 +421,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                       className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded-md p-2"
                     />
                   </div>
-                  <div className="w-full">
-                    <p className="text-emerald-900 text-xs">Asset Amount</p>
-                    <CurrencyInput
-                      id="asset_amount"
-                      name="asset_amount"
-                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded-md p-2"
-                      placeholder=""
-                      value={values.asset_amount}
-                      defaultValue={values.asset_amount || ""}
-                      decimalsLimit={2}
-                      onValueChange={(values) => {
-                        setFieldValue("asset_amount", values);
-                      }}
-                    />
-                  </div>
+
                   <div className="w-full">
                     <p className="text-emerald-900 text-xs">Tracking Link</p>
                     <input

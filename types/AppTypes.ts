@@ -6,7 +6,6 @@ export interface Receipt {
   tracking_number: string;
   purchase_date: Date;
   days_until_return: number;
-  asset_amount: number;
   return_date: Date;
   receipt_image_url: string;
   receipt_image_key: string;

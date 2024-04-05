@@ -25,7 +25,6 @@ export async function POST(request: Request) {
       receiptImage,
       items,
       memo,
-      assetAmount,
       folder,
     } = json;
 
@@ -120,7 +119,6 @@ export async function POST(request: Request) {
         type,
         store,
         card,
-        asset_amount: parseInt(assetAmount),
         tracking_number: tracking_number,
         purchase_date: purchaseDate,
         days_until_return: days_until_return,

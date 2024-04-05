@@ -98,7 +98,7 @@ model TwoFactorConfirmation {
 model Project {
   id           Int       @id @default(autoincrement())
   name         String
-  asset_amount Int?
+  asset_amount Float?
   created_at   DateTime
   userId       String
   user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -113,7 +113,6 @@ model Receipt {
   tracking_number   String?
   purchase_date     DateTime
   days_until_return Int
-  asset_amount      Int?
   return_date       DateTime
   receipt_image_url String?
   receipt_image_key String?

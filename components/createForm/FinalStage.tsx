@@ -16,7 +16,6 @@ import BottomBar from "@/components/createForm/BottomBar";
 import { formatCurrency } from "@/utils/formatCurrency";
 import ImageModal from "@/components/images/ImageModal";
 import CurrencyInput from "react-currency-input-field";
-import LargeButton from "@/components/buttons/LargeButton";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
 import { usePathname, useRouter } from "next/navigation";
 import PurchaseTypeSelect from "@/components/select/PurchaseTypeSelect";
@@ -109,17 +108,16 @@ interface ReceiptPageProps {
 const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isAddOpen, setIsAddOpen] = React.useState(false);
-  const handleCurrencyChangeAsset = (value: string | undefined) => {
-    setFieldValue("assetAmount", value || "");
-  };
+
   const pathname = usePathname();
 
   return (
     <div className="flex flex-col gap-8  w-full h-full mt-8">
       {values.items.length > 0 && (
-        <div className="w-full flex justify-end">
+        <div className="w-full flex justify-between">
+          <h1 className="text-2xl text-orange-600">Items</h1>
           <RegularButton
-            styles={"bg-emerald-900 text-white text-xs  border-emerald-900"}
+            styles={"bg text-emerald-900 text-xs  border-emerald-900"}
             handleClick={() => {
               setIsAddOpen(true);
             }}
@@ -286,21 +284,6 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
                   />
                 </div>
               )}
-
-              <div className="w-full pb-2 ">
-                <p className="text-emerald-900 text-xs">Asset Amount</p>
-
-                <CurrencyInput
-                  id="price"
-                  name="price"
-                  className="text-sm bg-white border-[1px] rounded p-2 bg border-emerald-900 focus:border-emerald-900 focus:outline-none w-full"
-                  placeholder=""
-                  value={values.assetAmount}
-                  defaultValue={values.assetAmount || ""}
-                  decimalsLimit={2}
-                  onValueChange={handleCurrencyChangeAsset}
-                />
-              </div>
             </div>
           </div>
         </div>
@@ -319,7 +302,6 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
                   index={index}
                   items={values.items}
                   setFieldValue={setFieldValue}
-                  asset_amount={parseInt(values.assetAmount)}
                 />
               ))}
             </div>
@@ -369,7 +351,6 @@ const PlaceHolder = ({ setIsAddOpen }: PlaceHolderProps) => {
 
 interface ReceiptItemsProps {
   item: ItemInput;
-  asset_amount: number;
   index: number;
   items: ItemInput[];
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
@@ -381,7 +362,6 @@ const ReceiptItems = ({
   index,
   items,
   setFieldValue,
-  asset_amount,
 }: ReceiptItemsProps) => {
   const [showScanner, setShowScanner] = useState(false);
 
@@ -494,9 +474,6 @@ const ReceiptItems = ({
         </div>
 
         <div className="text-sm flex flex-col gap-4 items-start w-full ">
-          {parseInt(item.price) > asset_amount && (
-            <p className="text-orange-600">Asset</p>
-          )}
           <div className="w-full">
             <h1 className="text-emerald-900 text-xs">Description</h1>
 

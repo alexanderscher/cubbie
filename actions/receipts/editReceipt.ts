@@ -17,7 +17,6 @@ interface ExtendedReceipt {
   tracking_number: string;
   purchase_date: Date;
   return_date: Date;
-  asset_amount: number;
   edit_image: string;
 }
 
@@ -40,7 +39,6 @@ export const editReceipt = async (params: {
       tracking_number,
       purchase_date,
       return_date,
-      asset_amount,
       edit_image,
     } = params.values;
 
@@ -84,7 +82,6 @@ export const editReceipt = async (params: {
         tracking_number,
         purchase_date: moment(purchase_date).toISOString(),
         return_date: moment(return_date).toISOString(),
-        asset_amount: asset_amount,
         days_until_return: moment(return_date).diff(
           moment(purchase_date),
           "days"

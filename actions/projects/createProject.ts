@@ -17,13 +17,13 @@ export const createProject = async (name: string, asset_amount: string) => {
     let new_asset_amount = "";
 
     if (asset_amount) {
-      new_asset_amount = asset_amount.replace(/[^0-9.]/g, "");
+      new_asset_amount = asset_amount;
     }
 
     await prisma.project.create({
       data: {
         name: name,
-        asset_amount: parseInt(new_asset_amount),
+        asset_amount: parseFloat(new_asset_amount),
         userId,
         created_at: new Date().toISOString(),
       },

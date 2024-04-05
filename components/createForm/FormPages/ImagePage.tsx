@@ -10,6 +10,7 @@ import { GPT_IMAGE_SCHEMA } from "@/utils/receiptValidation";
 import Loading from "@/components/Loading";
 import BottomBar from "@/components/createForm/BottomBar";
 import { Pages } from "@/types/form";
+import { toast } from "sonner";
 
 const getValidationSchema = (stage: ReceiptStoreStage) => {
   switch (stage) {
@@ -46,13 +47,11 @@ const ImagePage = ({ projects }: Pages) => {
     setLoading(false);
     if (response.ok) {
       router.push("/");
+      toast.success("Your operation was successful!");
+    } else {
+      toast.error("An error occurred. Please try again.");
     }
   };
-
-  const [errors, setErrors] = useState({
-    folderName: "",
-    memo: "",
-  });
 
   const router = useRouter();
 
@@ -91,7 +90,6 @@ const ImagePage = ({ projects }: Pages) => {
                             setFieldValue={setFieldValue}
                             values={values}
                             setStage={setStage}
-                            errors={errors}
                             validateForm={validateForm}
                             projects={projects}
                           />

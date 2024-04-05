@@ -6,7 +6,7 @@ import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 interface DeleteModalProps {
   cancelClick: (value: boolean) => void;
   deleteClick: () => void;
-  error: string;
+  error?: string;
   isPending: boolean;
   message: string;
   type: string;

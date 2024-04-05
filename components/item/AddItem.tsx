@@ -33,7 +33,7 @@ export const AddItem = ({
   };
 
   const handleCurrencyChange = (value: string | undefined) => {
-    setNewItem({ ...newItem, price: value || "" });
+    setNewItem({ ...newItem, price: value || "0.00" });
   };
 
   const handleBarcodeResult = (barcodeValue: string) => {
@@ -98,20 +98,17 @@ export const AddItem = ({
               )}
             </div>
             <div>
-              <p className="text-xs text-emerald-900">Price*</p>
+              <p className="text-xs text-emerald-900">Price</p>
               <CurrencyInput
                 id="price"
                 name="price"
                 className="text-sm bg-white border-[1px] rounded p-2  border-emerald-900 focus:outline-none w-full"
                 placeholder=""
                 value={newItem.price}
-                defaultValue={newItem.price || ""}
+                defaultValue={newItem.price || "0.00"}
                 decimalsLimit={2}
                 onValueChange={handleCurrencyChange}
               />
-              {error.price && (
-                <p className="text-orange-900 text-xs">{error.price}</p>
-              )}
             </div>
             <div>
               <p className="text-xs text-emerald-900">Barcode</p>

@@ -1,13 +1,12 @@
 "use client";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { ExtendedItemType } from "@/types/AppTypes";
-import React, { ChangeEvent, useState, useTransition } from "react";
+import React, { useState, useTransition } from "react";
 import RegularButton from "@/components/buttons/RegularButton";
 import Image from "next/image";
 import { Formik } from "formik";
 import { EDIT_ITEM_SCHEMA } from "@/utils/editValidation";
 import CurrencyInput from "react-currency-input-field";
-import ErrorModal from "@/components/error/Modal";
 import Loading from "@/components/Loading";
 import HeaderItemNav from "@/components/navbar/HeaderItemNav";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
@@ -16,6 +15,7 @@ import { convertHeic } from "@/utils/media";
 import { editItem } from "@/actions/items/editItem";
 import { FormError } from "@/components/form-error";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
+import { toast } from "sonner";
 
 interface ItemIdEditProps {
   item: ExtendedItemType;
@@ -24,7 +24,6 @@ interface ItemIdEditProps {
 
 const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
   const router = useRouter();
-  const [uploadError, setUploadError] = useState("");
   const [errorM, setErrorM] = useState({
     price: "",
     description: "",
@@ -69,41 +68,6 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
     };
   };
 
-  // const handleFileChange = async (
-  //   e: ChangeEvent<HTMLInputElement>,
-  //   setFieldValue: any
-  // ) => {
-  //   if (e.target.files && e.target.files[0]) {
-  //     let file = e.target.files[0];
-  //     if (!file.type.match("image.*")) {
-  //       alert("Please upload an image file");
-
-  //       return;
-  //     }
-  //     if (file.type === "image/heic" || file.name.endsWith(".heic")) {
-  //       try {
-  //         file = await convertHeic(file);
-  //       } catch (error) {
-  //         console.error("Error converting HEIC file:", error);
-  //         alert("Error converting HEIC file.");
-  //         return;
-  //       }
-  //     }
-
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => {
-  //       if (typeof reader.result === "string") {
-  //         setFieldValue("photo_url", "");
-  //         setFieldValue("edit_image", reader.result);
-  //       }
-  //     };
-  //     reader.onerror = (error) => {
-  //       console.error("Error converting file to base64:", error);
-  //     };
-  //   }
-  // };
-
   if (!item.receipt) return <div className="min-h-screen">Loading</div>;
   return (
     <Formik
@@ -112,12 +76,17 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
       }}
       onSubmit={(values) => {
         startTransition(async () => {
-          const result = await editItem(id, values);
+          try {
+            const result = await editItem(id, values);
 
-          if (result?.error) {
-            setUploadError(result.error);
-          } else {
-            router.push(`/item/${id}`);
+            if (result?.error) {
+              toast.error("An error occurred. Please try again.");
+            } else {
+              router.push(`/item/${id}`);
+              toast.success("Your operation was successful!");
+            }
+          } catch (e) {
+            toast.error("An error occurred. Please try again.");
           }
         });
       }}
@@ -347,15 +316,6 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                     className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
                   />
                 </div> */}
-                {uploadError && (
-                  <FormError
-                    message={
-                      uploadError === "Unauthorized"
-                        ? "You are not authorized to edit this item"
-                        : "Error editing item"
-                    }
-                  ></FormError>
-                )}
               </div>
             </div>
           </div>

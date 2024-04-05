@@ -24,8 +24,8 @@ const ItemID = ({ item }: ItemIDProps) => {
       <div className="flex flex-col gap-6  w-full max-w-[600px] ">
         <HeaderItemNav item={item} />
         {item.receipt.expired && (
-          <div className="bg-destructive/15 p-3 rounded-md flex items-center gap-x-2 text-sm text-destructive bg-red-100 text-red-500 shadow">
-            <p>This receipt for this item has expired</p>
+          <div className="bg-destructive/15 p-4 rounded-md flex items-center gap-x-2 text-sm text-destructive bg-red-100 text-red-500 shadow-sm">
+            <p>The receipt for this item has expired</p>
           </div>
         )}
 

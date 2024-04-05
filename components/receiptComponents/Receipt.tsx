@@ -18,6 +18,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
+import { toast } from "sonner";
 import * as Yup from "yup";
 
 interface ReceiptProps {
@@ -105,7 +106,7 @@ const OptionsModal = ({ receipt }: OptionsModalProps) => {
 
   const [newItem, setNewItem] = useState({
     description: "",
-    price: "",
+    price: "0.00",
     barcode: "",
     character: "",
     photo: "",
@@ -129,26 +130,31 @@ const OptionsModal = ({ receipt }: OptionsModalProps) => {
       await itemSchema.validate(newItem, { abortEarly: false });
 
       startTransition(async () => {
-        const result = await addItem(newItem);
+        try {
+          const result = await addItem(newItem);
 
-        if (result?.error) {
-          setError({ ...error, result: result.error });
-        } else {
-          setIsAddOpen(false);
+          if (result?.error) {
+            setError({ ...error, result: result.error });
+          } else {
+            setIsAddOpen(false);
+            toast.success("Your operation was successful!");
 
-          setNewItem({
-            description: "",
-            price: "",
-            barcode: "",
-            character: "",
-            photo: "",
-            receipt_id: receipt.id,
-          });
-          setError({
-            description: "",
-            price: "",
-            result: "",
-          });
+            setNewItem({
+              description: "",
+              price: "",
+              barcode: "",
+              character: "",
+              photo: "",
+              receipt_id: receipt.id,
+            });
+            setError({
+              description: "",
+              price: "",
+              result: "",
+            });
+          }
+        } catch (e) {
+          toast.error("An error occurred. Please try again.");
         }
       });
     } catch (error) {
@@ -288,14 +294,19 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
 
     if (selectedProject !== "") {
       startTransition(async () => {
-        const result = await moveReceipt({
-          id: receipt.id,
-          projectId: parseInt(selectedProject),
-        });
-        if (result?.error) {
-          setUploadError(result.error);
-        } else {
-          setIsOpen(false);
+        try {
+          const result = await moveReceipt({
+            id: receipt.id,
+            projectId: parseInt(selectedProject),
+          });
+          if (result?.error) {
+            toast.error("An error occurred. Please try again.");
+          } else {
+            setIsOpen(false);
+            toast.success("Your operation was successful!");
+          }
+        } catch (e) {
+          toast.error("An error occurred. Please try again.");
         }
       });
     }
@@ -376,15 +387,19 @@ interface DeleteModalProps {
 
 const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState("");
 
   const deleteMethod = async () => {
     startTransition(async () => {
-      const result = await deleteReceipt(receipt.id);
-      if (result?.error) {
-        setError("Error deleting receipt");
-      } else {
-        setDeleteOpen(false);
+      try {
+        const result = await deleteReceipt(receipt.id);
+        if (result?.error) {
+          toast.error("An error occurred. Please try again.");
+        } else {
+          setDeleteOpen(false);
+          toast.success("Your operation was successful!");
+        }
+      } catch (e) {
+        toast.error("An error occurred. Please try again.");
       }
     });
   };
@@ -393,7 +408,6 @@ const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
     <DeleteConfirmationModal
       cancelClick={setDeleteOpen}
       deleteClick={deleteMethod}
-      error={error}
       isPending={isPending}
       type="Receipt"
       message={`Are you sure you want to delete ${receipt.store}? This will delete all receipts and items in the project.`}

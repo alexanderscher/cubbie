@@ -45,14 +45,20 @@ export const addItem = async (values: Item) => {
       }
     }
 
+    let newPrice = 0.0;
+    if (price !== "") {
+      newPrice = parseFloat(price);
+    } else {
+      newPrice = 0.0;
+    }
+
     const newItem = await prisma.items.create({
       data: {
         receipt_id: receipt_id,
         description,
-        price: parseFloat(price),
+        price: newPrice,
         barcode,
         character,
-
         photo_url: receiptFileUrl,
         photo_key: receiptFileKey,
         created_at: new Date(),

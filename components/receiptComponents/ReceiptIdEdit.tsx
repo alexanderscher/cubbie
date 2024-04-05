@@ -10,7 +10,7 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import { EDIT_RECEIPT_SCHEMA } from "@/utils/editValidation";
 import CurrencyInput from "react-currency-input-field";
 import Loading from "@/components/Loading";
-import ErrorModal from "@/components/error/Modal";
+import ErrorModal from "@/components/error/ErrorModal";
 import HeaderNav from "@/components/navbar/HeaderNav";
 import ImageModal from "@/components/images/ImageModal";
 import Item from "@/components/Item";
@@ -23,6 +23,7 @@ import { AddItem } from "@/components/item/AddItem";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import * as Yup from "yup";
 import { addItem } from "@/actions/items/addItem";
+import { toast } from "sonner";
 type ExtendedReceiptType = Receipt & {
   edit_image: string;
 };
@@ -50,7 +51,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
 
   const [newItem, setNewItem] = useState({
     description: "",
-    price: "",
+    price: "0.00",
     barcode: "",
     character: "",
     photo: "",
@@ -69,53 +70,6 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
     description: Yup.string().required("Description is required"),
     price: Yup.string().required("Price is required"),
   });
-  const handleSubmit = async () => {
-    try {
-      await itemSchema.validate(newItem, { abortEarly: false });
-
-      startTransition(async () => {
-        const result = await addItem(newItem);
-
-        if (result?.error) {
-          setError({ ...error, result: result.error });
-        } else {
-          setIsAddOpen(false);
-
-          setNewItem({
-            description: "",
-            price: "",
-            barcode: "",
-            character: "",
-            photo: "",
-            receipt_id: receipt.id,
-          });
-          setError({
-            description: "",
-            price: "",
-            result: "",
-          });
-        }
-      });
-    } catch (error) {
-      let errorsObject = {};
-
-      if (error instanceof Yup.ValidationError) {
-        errorsObject = error.inner.reduce((acc, curr) => {
-          const key = curr.path || "unknownField";
-          acc[key] = curr.message;
-          return acc;
-        }, {} as Record<string, string>);
-      }
-
-      setError(
-        errorsObject as {
-          description: string;
-          price: string;
-          result: string;
-        }
-      );
-    }
-  };
 
   const total_amount = receipt.items.reduce((acc: number, curr: ItemType) => {
     return acc + curr.price;
@@ -210,11 +164,16 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
       }}
       onSubmit={(values) => {
         startTransition(async () => {
-          const result = await editReceipt({ id: stringId, values });
-          if (result?.error) {
-            setUploadError(result.error);
-          } else {
-            router.push(`/receipt/${id}`);
+          try {
+            const result = await editReceipt({ id: stringId, values });
+            if (result?.error) {
+              setUploadError(result.error);
+            } else {
+              router.push(`/receipt/${id}`);
+              toast.success("Your operation was successful!");
+            }
+          } catch (e) {
+            toast.error("An error occurred. Please try again.");
           }
         });
       }}

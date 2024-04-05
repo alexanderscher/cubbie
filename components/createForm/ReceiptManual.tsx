@@ -6,9 +6,9 @@ import { Project } from "@/types/AppTypes";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import { convertHeic } from "@/utils/media";
 import Image from "next/image";
-import React, { useRef } from "react";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 interface ReceiptManualProps {
   values: any;
@@ -28,9 +28,11 @@ const ReceiptManual = ({
   online = false,
   projects,
 }: ReceiptManualProps) => {
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-
+  useEffect(() => {
+    setFieldValue("folder", projects[0].id);
+  }, [projects, setFieldValue]);
   const pathname = usePathname();
+
   const onFileUpload = async (file: File) => {
     if (file === null) {
       return;

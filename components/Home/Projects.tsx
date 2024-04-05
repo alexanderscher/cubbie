@@ -14,6 +14,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useState, useTransition } from "react";
+import { toast } from "sonner";
 
 interface Props {
   serverData: ProjectType[];
@@ -214,7 +215,6 @@ const OptionsModal = ({ project }: OptionsModalProps) => {
             className="flex gap-2"
             onClick={(e) => {
               e.preventDefault();
-              // e.stopPropagation();
               setAddReceiptOpen(true);
             }}
           >
@@ -235,10 +235,7 @@ const OptionsModal = ({ project }: OptionsModalProps) => {
           </div>
         </div>
         <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 ">
-          <div
-            className="flex gap-2 cursor-pointer"
-            // onClick={toggleDeleteModal}
-          >
+          <div className="flex gap-2 cursor-pointer">
             <Image src={"/archive.png"} width={20} height={20} alt=""></Image>
             <p>Archive</p>
           </div>
@@ -281,11 +278,16 @@ const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
     }
 
     startTransition(async () => {
-      const result = await deleteProject(project.id);
-      if (result?.error) {
-        setUploadError(result.error);
-      } else {
-        setDeleteOpen(false);
+      try {
+        const result = await deleteProject(project.id);
+        if (result?.error) {
+          toast.error("An error occurred. Please try again.");
+        } else {
+          setDeleteOpen(false);
+          toast.success("Your operation was successful!");
+        }
+      } catch (e) {
+        toast.error("An error occurred. Please try again.");
       }
     });
   };
@@ -293,8 +295,8 @@ const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
   return (
     <DeleteConfirmationModal
       cancelClick={setDeleteOpen}
-      deleteClick={handleSubmit}
       error={uploadError}
+      deleteClick={handleSubmit}
       isPending={isPending}
       type="Project"
       message={`Are you sure you want to delete ${project.name}? This will delete all receipts and items in the project.`}

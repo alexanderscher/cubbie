@@ -98,7 +98,7 @@ const ReceiptManual = ({
               projects={projects}
               setFieldValue={setFieldValue}
               values={values}
-              errors={errors}
+              // errors={errors}
             />
 
             <div className="w-full">

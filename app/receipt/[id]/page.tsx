@@ -37,7 +37,6 @@ export default async function ReceiptIdPage({
   params: { id: string };
 }) {
   const receipt = await fetchReceipt(params.id);
-  console.log(receipt);
 
   return (
     <div className="w-full flex justify-center ">

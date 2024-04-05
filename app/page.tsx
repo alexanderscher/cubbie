@@ -8,7 +8,6 @@ import { Suspense } from "react";
 
 const fetchProject = async () => {
   const projects = await getProjects();
-  console.log(projects);
   return projects as Project[];
 };
 

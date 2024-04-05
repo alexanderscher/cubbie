@@ -62,12 +62,12 @@ export const ReceiptItems = ({ item }: ReceiptItemsProps) => {
                 <p className="">{item.barcode}</p>
               </div>
             )}
-            {item.product_id && (
+            {/* {item.product_id && (
               <div className="">
                 <p className="text-slate-400   ">Product ID</p>
                 <p className="">{item.product_id}</p>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </div>

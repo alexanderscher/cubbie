@@ -96,7 +96,7 @@ export async function POST(request: Request) {
             price: parseFloat(item.price),
             barcode: item.barcode,
             character: item.character,
-            product_id: item.product_id,
+
             created_at: new Date().toISOString(),
           };
         })

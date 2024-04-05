@@ -41,7 +41,7 @@ function SearchBar({ searchType }: Props) {
           searchType === "Receipts"
             ? "receipt by store name"
             : searchType === "Items"
-            ? "item by description, barcode, or product id"
+            ? "item by name, barcode, or product id"
             : "projects"
         }`}
         value={searchTerm}

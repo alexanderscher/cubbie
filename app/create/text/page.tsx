@@ -11,7 +11,6 @@ const fetchProject = async () => {
 
 const UploadText = async () => {
   const projects = await fetchProject();
-  console.log(projects);
   return (
     <FormHeader>
       <TextPage projects={projects} />

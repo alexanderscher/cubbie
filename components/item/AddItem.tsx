@@ -85,7 +85,7 @@ export const AddItem = ({
         <div className="p-6 ">
           <div className="space-y-4">
             <div>
-              <p className="text-xs text-emerald-900">Description*</p>
+              <p className="text-xs text-emerald-900">Item Name*</p>
               <input
                 type="text"
                 name="description"
@@ -168,7 +168,7 @@ export const AddItem = ({
               </div>
             </div>
 
-            <div>
+            {/* <div>
               <p className="text-xs text-emerald-900">Product ID</p>
               <input
                 type="text"
@@ -177,7 +177,7 @@ export const AddItem = ({
                 onChange={handleChange}
                 className="w-full p-2 border-[1px] border-emerald-900 rounded"
               />
-            </div>
+            </div> */}
             <div>
               <p className="text-xs text-emerald-900">Character</p>
               <input

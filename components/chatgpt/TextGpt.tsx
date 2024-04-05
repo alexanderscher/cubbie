@@ -52,7 +52,6 @@ const TextGpt = ({ setFieldValue, values, setStage }: Props) => {
       description: item.description || "",
       photo: item.photo || "",
       price: item.price || 0,
-      product_id: item.product_id || "",
       barcode: "",
       character: "",
     }));

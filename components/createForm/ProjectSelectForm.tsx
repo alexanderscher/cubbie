@@ -13,7 +13,7 @@ interface Props {
   projects: Project[];
   setFieldValue: (field: string, value: any) => void;
   values: any;
-  errors: any;
+  // errors: any;
 }
 
 const ProjectSelectForm = ({
@@ -21,7 +21,6 @@ const ProjectSelectForm = ({
   projects,
   setFieldValue,
   values,
-  errors,
 }: Props) => {
   const customStyles: StylesConfig<Option, false> = {
     control: (provided, state) => ({
@@ -88,9 +87,9 @@ const ProjectSelectForm = ({
         isClearable={true}
         styles={customStyles}
       />
-      {errors.folderName && (
+      {/* {errors.folderName && (
         <p className="text-orange-800 text-sm">{errors.folderName}</p>
-      )}
+      )} */}
     </div>
   );
 };

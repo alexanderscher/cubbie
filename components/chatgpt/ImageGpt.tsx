@@ -19,7 +19,7 @@ interface Props {
   values: ReceiptInput;
   setStage: (stage: any) => void;
   handleChange: any;
-  errors: any;
+  // errors: any;
   validateForm: any;
   projects: Project[];
 }
@@ -29,7 +29,7 @@ export default function ImageGpt({
   values,
   setStage,
   handleChange,
-  errors,
+
   validateForm,
   projects,
 }: Props) {
@@ -290,7 +290,6 @@ export default function ImageGpt({
           projects={projects}
           setFieldValue={setFieldValue}
           values={values}
-          errors={errors}
         />
         {validationErrors.folderName && (
           <p className="text-sm text-orange-900">

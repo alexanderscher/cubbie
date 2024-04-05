@@ -11,6 +11,7 @@ import Loading from "@/components/Loading";
 import BottomBar from "@/components/createForm/BottomBar";
 import ErrorModal from "@/components/error/ErrorModal";
 import { Pages } from "@/types/form";
+import { toast } from "sonner";
 
 const getValidationSchema = (stage: ReceiptOnlineStage) => {
   switch (stage) {
@@ -60,6 +61,9 @@ const ManualPage = ({ projects }: Pages) => {
 
     if (response.ok) {
       router.push("/");
+      toast.success("Your operation was successful!");
+    } else {
+      toast.error("An error occurred. Please try again.");
     }
   };
 

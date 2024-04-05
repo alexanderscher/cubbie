@@ -252,7 +252,7 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                   </div>
                 )}
                 <div className="w-full ">
-                  <p className="text-emerald-900 text-xs">Description</p>
+                  <p className="text-emerald-900 text-xs">Item Name</p>
                   <input
                     value={values.description}
                     onChange={handleChange("description")}
@@ -339,14 +339,14 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                     className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
                   />
                 </div>
-                <div className="w-full ">
+                {/* <div className="w-full ">
                   <p className="text-emerald-900 text-xs">Product ID</p>
                   <input
                     value={values.product_id}
                     onChange={handleChange("product_id")}
                     className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
                   />
-                </div>
+                </div> */}
                 {uploadError && (
                   <FormError
                     message={

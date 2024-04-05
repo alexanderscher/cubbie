@@ -475,7 +475,7 @@ const ReceiptItems = ({
 
         <div className="text-sm flex flex-col gap-4 items-start w-full ">
           <div className="w-full">
-            <h1 className="text-emerald-900 text-xs">Description</h1>
+            <h1 className="text-emerald-900 text-xs">Item Name</h1>
 
             <input
               className="  text-sm bg-white border-[1px] rounded p-2 bg border-emerald-900 focus:outline-none w-full"
@@ -510,7 +510,7 @@ const ReceiptItems = ({
             />
           </div>
 
-          <div className="w-full">
+          {/* <div className="w-full">
             <h1 className="text-emerald-900 text-xs">Product ID</h1>
 
             <input
@@ -519,7 +519,7 @@ const ReceiptItems = ({
               value={item.product_id}
               onChange={handleItemChange}
             />
-          </div>
+          </div> */}
           <div className="w-full">
             <h1 className="text-emerald-900 text-xs">Barcode</h1>
 
@@ -605,7 +605,6 @@ const AddItemModal = ({
     description: "",
     price: "",
     barcode: "",
-    product_id: "",
     character: "",
     photo: "",
   });
@@ -616,7 +615,7 @@ const AddItemModal = ({
   });
 
   const itemSchema = Yup.object({
-    description: Yup.string().required("Description is required"),
+    description: Yup.string().required("Item name is required"),
     price: Yup.string().required("Price is required"),
   });
 
@@ -629,7 +628,6 @@ const AddItemModal = ({
         description: "",
         price: "",
         barcode: "",
-        product_id: "",
         character: "",
         photo: "",
       });

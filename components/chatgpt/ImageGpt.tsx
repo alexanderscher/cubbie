@@ -150,7 +150,7 @@ export default function ImageGpt({
         photo: item.photo || "",
         price: item.price || 0,
         barcode: item.barcode || "",
-        product_id: item.product_id || "",
+
         character: "",
       })
     );

@@ -28,9 +28,7 @@ function SearchAllItems({ projectData, receiptData }: SearchAllItemsProps) {
   const [showScanner, setShowScanner] = useState(false);
   const [barcodeValue, setBarcodeValue] = useState("");
 
-  useEffect(() => {
-    console.log("projectData", projectData);
-  }, [receiptData, projectData]);
+  useEffect(() => {}, [receiptData, projectData]);
 
   const handleBarcodeResult = (barcodeValue: string) => {
     const matchingItems = receiptData
@@ -67,10 +65,10 @@ function SearchAllItems({ projectData, receiptData }: SearchAllItemsProps) {
           item.description && item.description.toLowerCase().includes(input);
         const barcodeMatch =
           item.barcode && item.barcode.toLowerCase().includes(input);
-        const productIdMatch =
-          item.product_id && item.product_id.toLowerCase().includes(input);
+        // const productIdMatch =
+        //   item.product_id && item.product_id.toLowerCase().includes(input);
 
-        return descriptionMatch || barcodeMatch || productIdMatch;
+        return descriptionMatch || barcodeMatch;
       });
 
     setFilteredItems(matchingItems);
@@ -87,8 +85,7 @@ function SearchAllItems({ projectData, receiptData }: SearchAllItemsProps) {
   return (
     <div className="pb-[200px] w-full flex-col overflow-y-auto">
       <p className="text-xs mb-4 text-white">
-        Search for all items and receipts by store, description, barcode or
-        product id
+        Search for all items and receipts by store, description, or barcode
       </p>
       <div className="w-full flex gap-4 items-center justify-center pb-4">
         <input

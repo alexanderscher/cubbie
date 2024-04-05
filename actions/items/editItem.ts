@@ -24,7 +24,6 @@ export const editItem = async (id: string, values: any) => {
       price,
       barcode,
       character,
-      product_id,
     } = values;
 
     const uploadedFileKeys = [];
@@ -56,7 +55,7 @@ export const editItem = async (id: string, values: any) => {
         price: parseFloat(price),
         barcode,
         character,
-        product_id,
+
         photo_url: receiptFileUrl === "" ? photo_url : receiptFileUrl,
         photo_key: receiptFileUrl === "" ? photo_key : receiptFileKey,
       },

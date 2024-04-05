@@ -132,7 +132,6 @@ model Items {
   price       Float
   barcode     String?
   character   String?
-  product_id  String?
   receipt_id  Int
   receipt     Receipt  @relation(fields: [receipt_id], references: [id], onDelete: Cascade)
   created_at  DateTime

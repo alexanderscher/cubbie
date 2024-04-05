@@ -25,7 +25,6 @@ export interface Item {
   price: number;
   barcode: string;
   character: string;
-  product_id: string;
   receipt_id: number;
   created_at: Date;
   returned: boolean;

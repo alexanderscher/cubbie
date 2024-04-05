@@ -121,10 +121,10 @@ const ItemID = ({ item }: ItemIDProps) => {
             <p className="text-xs text-slate-400">Character</p>
             <p>{item.character ? item.character : "None"}</p>
           </div>
-          <div className="w-full  bg-white rounded-md shadow p-4 ">
+          {/* <div className="w-full  bg-white rounded-md shadow p-4 ">
             <p className="text-xs text-slate-400">Product ID</p>
             <p>{item.product_id ? item.product_id : "None"}</p>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

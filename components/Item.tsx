@@ -21,7 +21,6 @@ interface Props {
 
 const Item = ({ item, isOpen, onToggleOpen, project }: Props) => {
   const pathname = usePathname();
-  console.log(item);
 
   return (
     <div className="box justify-between relative">

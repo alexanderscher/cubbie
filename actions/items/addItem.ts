@@ -11,7 +11,6 @@ interface Item {
   price: string;
   barcode: string;
   character: string;
-  product_id: string;
   photo: string;
   receipt_id: number;
 }
@@ -30,7 +29,7 @@ export const addItem = async (values: Item) => {
       price,
       barcode,
       character,
-      product_id,
+
       photo,
       receipt_id,
     } = values;
@@ -53,7 +52,7 @@ export const addItem = async (values: Item) => {
         price: parseFloat(price),
         barcode,
         character,
-        product_id,
+
         photo_url: receiptFileUrl,
         photo_key: receiptFileKey,
         created_at: new Date(),

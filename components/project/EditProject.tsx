@@ -34,7 +34,6 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
       editProjectObj.name === project.name &&
       editProjectObj.asset_amount === project.asset_amount.toString()
     ) {
-      console.log("false");
       setEdit(false);
     } else if (editProjectObj.name !== "" && project.id) {
       startTransition(async () => {
@@ -111,12 +110,8 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
                 id="assetAmount"
                 name="assetAmount"
                 className="w-full border-[1px]  p-2  border-emerald-900 rounded  focus:outline-none"
-                placeholder={
-                  editProjectObj.asset_amount
-                    ? formatCurrency(editProjectObj.asset_amount)
-                    : ""
-                }
-                defaultValue={""}
+                placeholder={""}
+                defaultValue={project.asset_amount}
                 decimalsLimit={2}
                 onValueChange={(value) => {
                   setProject((prevState) => ({

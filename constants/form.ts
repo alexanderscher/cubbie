@@ -8,7 +8,6 @@ export const DEFAULT_INPUT_VALUES: ReceiptInput = {
   card: "",
   tracking_number: "",
   purchase_date: TODAY,
-  assetAmount: "",
   days_until_return: 30,
   return_date: "",
   receiptImage: "",

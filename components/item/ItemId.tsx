@@ -20,7 +20,7 @@ const ItemID = ({ item }: ItemIDProps) => {
 
   if (!item.receipt) return <div className="min-h-screen">Loading</div>;
   return (
-    <div className="w-full flex justify-center items-center">
+    <div className="w-full flex justify-center items-center mb-[200px]">
       <div className="flex flex-col gap-6  w-full max-w-[600px] ">
         <HeaderItemNav item={item} />
         {item.receipt.expired && (
@@ -28,6 +28,7 @@ const ItemID = ({ item }: ItemIDProps) => {
             <p>This receipt for this item has expired</p>
           </div>
         )}
+
         <div className="w-full flex flex-col gap-4">
           <div className="flex justify-between">
             <p className="text-xl text-orange-600">{item.description}</p>
@@ -40,7 +41,15 @@ const ItemID = ({ item }: ItemIDProps) => {
           </div>
 
           {item.photo_url && (
-            <div className="w-full  bg-white p-6 rounded-md shadow ">
+            <div className="relative w-full  bg-white p-6 rounded-md shadow ">
+              {item.receipt.project &&
+                item.receipt.project.asset_amount !== null &&
+                item.receipt.project.asset_amount !== undefined &&
+                item.receipt.project.asset_amount < item.price && (
+                  <p className="absolute top-8 left-8 flex  text-orange-600 text-xs border-[1px] border-orange-600 rounded-full px-3 py-1">
+                    Asset
+                  </p>
+                )}
               <div className="max-h-[300px] w-full overflow-hidden rounded-md">
                 <Image
                   src={item.photo_url}
@@ -61,8 +70,16 @@ const ItemID = ({ item }: ItemIDProps) => {
           )}
 
           {!item.photo_url && (
-            <div className="max-h-[300px] w-full overflow-hidden rounded-md">
+            <div className=" max-h-[300px] w-full overflow-hidden rounded-md">
               <div className="w-full h-[110px] overflow-hidden relative flex justify-center items-center bg-white">
+                {item.receipt.project &&
+                  item.receipt.project.asset_amount !== null &&
+                  item.receipt.project.asset_amount !== undefined &&
+                  item.receipt.project.asset_amount < item.price && (
+                    <p className="absolute top-2 left-2 flex  text-orange-600 text-xs border-[1px] border-orange-600 rounded-full px-3 py-1">
+                      Asset
+                    </p>
+                  )}
                 <div className="w-full h-full flex justify-center items-center">
                   <Image
                     src="/item_b.png"
@@ -78,8 +95,8 @@ const ItemID = ({ item }: ItemIDProps) => {
           )}
         </div>
 
-        {item.receipt.asset_amount &&
-          item.receipt.asset_amount < item.price && (
+        {item.receipt.project.asset_amount &&
+          item.receipt.project.asset_amount < item.price && (
             <p className="text-md text-emerald-900">Asset</p>
           )}
 

@@ -9,12 +9,11 @@ import Link from "next/link";
 
 interface ReceiptItemsProps {
   item: Item;
-  asset_amount: number;
   index: number;
   length: number;
 }
 
-export const ReceiptItems = ({ item, asset_amount }: ReceiptItemsProps) => {
+export const ReceiptItems = ({ item }: ReceiptItemsProps) => {
   // const pathname = usePathname();
   // const [isOpen, setIsOpen] = useState(false);
   return (
@@ -53,11 +52,6 @@ export const ReceiptItems = ({ item, asset_amount }: ReceiptItemsProps) => {
 
         <div>
           <div className=" border-slate-300 flex flex-col  gap-2 text-xs">
-            {asset_amount < item.price && (
-              <div className="">
-                <p className="text-emerald-900">Asset</p>
-              </div>
-            )}
             <div className="">
               <p className="text-slate-400   ">Price</p>
               <p className="">{formatCurrency(item.price)}</p>
@@ -77,9 +71,7 @@ export const ReceiptItems = ({ item, asset_amount }: ReceiptItemsProps) => {
           </div>
         </div>
       </div>
-      {/* <div className="border-t-[1px] text-sm text-center  text-emerald-900 p-2">
-        <Link href={`/item/${item.id}/edit/`}>Edit</Link>
-      </div> */}
+
       <div className="border-t-[1px] text-xs text-center text-emerald-900 p-2">
         <p>Mark as Returned</p>
       </div>

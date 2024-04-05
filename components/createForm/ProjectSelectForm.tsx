@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import ReactSelect, { StylesConfig } from "react-select";
 import { Project } from "@/types/AppTypes";
 
@@ -15,14 +16,13 @@ interface Props {
   errors: any;
 }
 
-const ProjectSelect = ({
+const ProjectSelectForm = ({
   handleChange,
   projects,
   setFieldValue,
   values,
   errors,
 }: Props) => {
-  // Define custom styles
   const customStyles: StylesConfig<Option, false> = {
     control: (provided, state) => ({
       ...provided,
@@ -54,7 +54,6 @@ const ProjectSelect = ({
     }),
   };
 
-  // Convert projects to options for ReactSelect
   const options: Option[] = projects.map((project) => ({
     value: project.id.toString(),
     label: project.name,
@@ -69,15 +68,24 @@ const ProjectSelect = ({
     }
   };
 
+  useEffect(() => {
+    const initialOption =
+      options.find((option) => option.label === values.folderName) ||
+      options[0];
+
+    if (values.folderName !== initialOption.label) {
+      setFieldValue("folderName", initialOption.label);
+    }
+  }, [options, setFieldValue, values.folderName]);
+
   return (
-    <div className="w-full ">
+    <div className="w-full">
       <p className="text-emerald-900">Project folder*</p>
       <ReactSelect
         options={options}
         onChange={handleSelectChange}
         value={options.find((option) => option.label === values.folderName)}
         isClearable={true}
-        placeholder="Choose project folder"
         styles={customStyles}
       />
       {errors.folderName && (
@@ -87,4 +95,4 @@ const ProjectSelect = ({
   );
 };
 
-export default ProjectSelect;
+export default ProjectSelectForm;

@@ -18,7 +18,11 @@ export const editProject = async (
 
     let new_asset_amount = "";
     if (asset_amount !== "") {
-      new_asset_amount = asset_amount;
+      if (asset_amount === "0") {
+        new_asset_amount = "";
+      } else {
+        new_asset_amount = asset_amount;
+      }
     }
 
     await prisma.project.update({
@@ -26,7 +30,7 @@ export const editProject = async (
         userId,
         id: projectId,
       },
-      data: { name, asset_amount: parseInt(new_asset_amount) },
+      data: { name, asset_amount: parseFloat(new_asset_amount) },
     });
 
     revalidateTag(`projects_user_${userId}`);

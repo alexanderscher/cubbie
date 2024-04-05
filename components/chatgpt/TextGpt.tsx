@@ -98,43 +98,56 @@ const TextGpt = ({ setFieldValue, values, setStage }: Props) => {
 
       <textarea
         value={inputText}
-        className="w-full border-[1px] p-2 mb-2 rounded  h-[300px] resize-none bg border-slate-400 focus:border-emerald-900 focus:outline-none"
+        className="w-full border-[1px] p-2 mb-2 rounded  h-[300px] resize-none bg  border-emerald-900 "
         onChange={(e) => setInputText(e.target.value)}
         placeholder="Copy and paste receipt items from email or website"
       />
 
-      <RegularButton
-        styles={"bg border-emerald-900 w-full"}
-        handleClick={handleSubmit}
-      >
-        <p className="text-emerald-900 ">
-          {loading ? "Analyzing..." : "Analyze Text"}
-        </p>
-      </RegularButton>
+      <div className="w-full">
+        <RegularButton
+          styles={`${
+            loading
+              ? "border-emerald-900 bg-emerald-900"
+              : "border-emerald-900 bg"
+          }  w-full mt-2`}
+          handleClick={() => {
+            handleSubmit();
+          }}
+        >
+          <p
+            className={
+              loading ? "text-white text-sm" : "text-emerald-900 text-sm"
+            }
+          >
+            {loading ? "Analyzing..." : "Analyze Image"}
+          </p>
+        </RegularButton>
+      </div>
       {prompt && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex justify-center items-center">
-          {/* Modal Content */}
-          <div className="flex flex-col gap-4 mt-10 bg-orange-200 p-6 rounded-md shadow items-center justify-center w-3/4 text-emerald-900 max-w-lg">
-            <ExclamationTriangleIcon className="h-6 w-1/6" />
-            <p className="text-sm text-center text-emerald-900">
+        <div className="fixed inset-0 bg-black bg-opacity-10 z-[2000] flex justify-center items-center">
+          <div className="p-10 flex flex-col gap-4 mt-10 bg-orange-50 rounded-md shadow-md items-center justify-center text-emerald-900 max-w-lg w-[400px]">
+            <div className="bg-orange-100 rounded-full flex items-center justify-center h-[50px] w-[50px]">
+              <ExclamationTriangleIcon className=" text-orange-600 w-3/4 h-1/2" />
+            </div>
+            <p className="text-sm text-center text-orange-600">
               Are you sure you want to analyze the image? This will overwrite
               your current data.
             </p>
             <div className="flex flex-col gap-2 w-full">
               <RegularButton
-                styles="bg-orange-200 border-emerald-900 text-emerald-900 w-full"
+                styles="bg-orange-50 border-orange-600 text-orange-600 w-full"
                 handleClick={() => {
                   run();
                   setPrompt(false);
                 }}
               >
-                <p className="text-xs">Confirm</p>
+                <p className="text-xs">Yes, anaylze.</p>
               </RegularButton>
               <RegularButton
-                styles="bg-orange-200 border-emerald-900 text-emerald-900 w-full"
+                styles="bg-orange-50 border-orange-600 text-orange-600 w-full"
                 handleClick={() => setPrompt(false)}
               >
-                <p className="text-xs">Cancel</p>
+                <p className="text-xs">No, cancel.</p>
               </RegularButton>
             </div>
           </div>

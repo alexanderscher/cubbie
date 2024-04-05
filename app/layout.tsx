@@ -5,6 +5,7 @@ import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
 import localFont from "next/font/local";
 import { Providers } from "@/components/providers/SessionProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 const myFont = localFont({
   src: "../font/SuisseIntl-Medium.woff",
@@ -27,6 +28,7 @@ export default function RootLayout({
           <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
           <main className="bg-[#e2f1e2]">{children}</main>
         </Providers>
+        <Toaster />
       </body>
     </html>
   );

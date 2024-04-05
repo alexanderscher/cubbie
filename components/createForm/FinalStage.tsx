@@ -11,7 +11,7 @@ import styles from "./form.module.css";
 import * as Yup from "yup";
 import Image from "next/image";
 import React, { useState } from "react";
-import ErrorModal from "@/components/error/Modal";
+import ErrorModal from "@/components/error/ErrorModal";
 import BottomBar from "@/components/createForm/BottomBar";
 import { formatCurrency } from "@/utils/formatCurrency";
 import ImageModal from "@/components/images/ImageModal";
@@ -603,7 +603,7 @@ const AddItemModal = ({
 }: AddItemModalProps) => {
   const [newItem, setNewItem] = useState({
     description: "",
-    price: "",
+    price: "0.00",
     barcode: "",
     character: "",
     photo: "",
@@ -626,7 +626,7 @@ const AddItemModal = ({
       setIsAddOpen(false);
       setNewItem({
         description: "",
-        price: "",
+        price: "0.00",
         barcode: "",
         character: "",
         photo: "",

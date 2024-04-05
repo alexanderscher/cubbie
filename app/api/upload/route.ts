@@ -89,11 +89,18 @@ export async function POST(request: Request) {
             }
           }
 
+          let newPrice = 0.0;
+          if (item.price !== "") {
+            newPrice = parseFloat(item.price);
+          } else {
+            newPrice = 0.0;
+          }
+
           return {
             description: item.description,
             photo_url: itemPhotoUrl,
             photo_key: itemPhotoKey,
-            price: parseFloat(item.price),
+            price: newPrice,
             barcode: item.barcode,
             character: item.character,
 

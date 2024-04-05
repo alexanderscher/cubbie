@@ -46,7 +46,7 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
 
   const [newItem, setNewItem] = useState({
     description: "",
-    price: "",
+    price: "0.00",
     barcode: "",
     character: "",
     photo: "",
@@ -79,7 +79,7 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
 
           setNewItem({
             description: "",
-            price: "",
+            price: "0.00",
             barcode: "",
             character: "",
             photo: "",
@@ -217,7 +217,7 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
                 <p className="">{receipt.items.length}</p>
               </div>
               <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
-                <p className="text-slate-400 text-xs">Created at</p>
+                <p className="text-slate-400 text-xs">Created on</p>
                 <p className="">{formatDateToMMDDYY(receipt.created_at)}</p>
               </div>
               <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">

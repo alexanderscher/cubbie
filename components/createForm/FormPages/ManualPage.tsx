@@ -9,7 +9,7 @@ import FinalStage from "@/components/createForm/FinalStage";
 import { ITEMS_SCHEMA, RECEIPT_SCHEMA } from "@/utils/receiptValidation";
 import Loading from "@/components/Loading";
 import BottomBar from "@/components/createForm/BottomBar";
-import ErrorModal from "@/components/error/Modal";
+import ErrorModal from "@/components/error/ErrorModal";
 import { Pages } from "@/types/form";
 
 const getValidationSchema = (stage: ReceiptOnlineStage) => {
@@ -75,6 +75,7 @@ const ManualPage = ({ projects }: Pages) => {
         onSubmit={async (values) => {
           try {
             await ITEMS_SCHEMA.validate(values, { abortEarly: false });
+            console.log("values", values);
 
             submitDB(values);
           } catch (error) {

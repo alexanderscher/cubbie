@@ -11,6 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState, useTransition } from "react";
+import { toast } from "sonner";
 
 interface Props {
   item: any;
@@ -179,22 +180,21 @@ interface OptionsModalProps {
 const OptionsModal = ({ item }: OptionsModalProps) => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const [error, setDeleteError] = useState("");
   const pathname = usePathname();
 
   const deleteMethod = () => {
     startTransition(async () => {
       try {
         const result = await deleteItem(item.id);
+
         if (result?.error) {
-          // Handle error based on your application's structure
-          setDeleteError(result.error);
+          toast.error("An error occurred. Please try again.");
         } else {
-          setDeleteError("");
           setDeleteOpen(false);
+          toast.success("Your operation was successful!");
         }
       } catch (error) {
-        setDeleteError("Failed to delete item.");
+        toast.error("An error occurred. Please try again.");
       }
     });
   };
@@ -247,7 +247,12 @@ const OptionsModal = ({ item }: OptionsModalProps) => {
               <button
                 onClick={async (e) => {
                   startTransition(async () => {
-                    await unreturn(item.id);
+                    try {
+                      await unreturn(item.id);
+                      toast.success("Your operation was successful!");
+                    } catch (e) {
+                      toast.error("An error occurred. Please try again.");
+                    }
                   });
                 }}
               >
@@ -265,7 +270,12 @@ const OptionsModal = ({ item }: OptionsModalProps) => {
               <button
                 onClick={async () => {
                   startTransition(async () => {
-                    await markAsReturned(item.id);
+                    try {
+                      toast.success("Your operation was successful!");
+                      await markAsReturned(item.id);
+                    } catch (e) {
+                      toast.error("An error occurred. Please try again.");
+                    }
                   });
                 }}
               >
@@ -288,7 +298,6 @@ const OptionsModal = ({ item }: OptionsModalProps) => {
             <DeleteConfirmationModal
               cancelClick={setDeleteOpen}
               deleteClick={deleteMethod}
-              error={error}
               isPending={isPending}
               type="Item"
               message={`Are you sure you want to delete ${item.description}? This will delete all receipts and items in the project.`}

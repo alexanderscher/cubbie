@@ -4,10 +4,8 @@ import RegularButton from "@/components/buttons/RegularButton";
 import { FormError } from "@/components/form-error";
 import Loading from "@/components/Loading";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
-
+import { toast } from "sonner";
 import { Project as ProjectType } from "@/types/AppTypes";
-import { formatCurrency } from "@/utils/formatCurrency";
-
 import React, { useState, useTransition } from "react";
 import CurrencyInput from "react-currency-input-field";
 
@@ -32,21 +30,26 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
     }
     if (
       editProjectObj.name === project.name &&
-      editProjectObj.asset_amount === project.asset_amount.toString()
+      parseFloat(editProjectObj.asset_amount) === project.asset_amount
     ) {
       setEdit(false);
     } else if (editProjectObj.name !== "" && project.id) {
       startTransition(async () => {
-        const result = await editProject(
-          project.id,
-          editProjectObj.name,
-          editProjectObj.asset_amount
-        );
+        try {
+          const result = await editProject(
+            project.id,
+            editProjectObj.name,
+            editProjectObj.asset_amount
+          );
 
-        if (result.error) {
-          setUploadError(result.error);
-        } else {
-          setEdit(false);
+          if (result.error) {
+            setUploadError(result.error);
+          } else {
+            setEdit(false);
+            toast.success("Your operation was successful!");
+          }
+        } catch (e) {
+          toast.error("An error occurred. Please try again.");
         }
       });
     }

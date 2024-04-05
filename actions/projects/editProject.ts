@@ -36,7 +36,6 @@ export const editProject = async (
     revalidateTag(`projects_user_${userId}`);
     return { success: true };
   } catch (error) {
-    console.error("Failed to edit project:", error);
     return { error: "Failed to edit project" };
   }
 };

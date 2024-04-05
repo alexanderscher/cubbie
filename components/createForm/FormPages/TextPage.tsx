@@ -11,7 +11,7 @@ import { ITEMS_SCHEMA, RECEIPT_SCHEMA } from "@/utils/receiptValidation";
 import Loading from "@/components/Loading";
 import BottomBar from "@/components/createForm/BottomBar";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
-import ErrorModal from "@/components/error/Modal";
+import ErrorModal from "@/components/error/ErrorModal";
 import { Pages } from "@/types/form";
 
 const getValidationSchema = (stage: ReceiptOnlineStage) => {

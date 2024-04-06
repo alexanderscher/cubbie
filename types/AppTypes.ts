@@ -42,6 +42,7 @@ export interface Project {
   userId: string;
   receipts: Receipt[];
   asset_amount: number;
+  archive: boolean;
 }
 export interface LayoutProps {
   children?: React.ReactNode;

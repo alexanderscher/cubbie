@@ -101,6 +101,7 @@ model Project {
   asset_amount Float?
   created_at   DateTime
   userId       String
+  archive      Boolean   @default(false)
   user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   receipts     Receipt[]
 }

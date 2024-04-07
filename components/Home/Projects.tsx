@@ -16,13 +16,7 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import React, {
-  startTransition,
-  useEffect,
-  useMemo,
-  useState,
-  useTransition,
-} from "react";
+import React, { useEffect, useMemo, useState, useTransition } from "react";
 import { toast } from "sonner";
 
 interface Props {
@@ -96,14 +90,18 @@ const Projects = ({ serverData }: Props) => {
     return filteredProjectData.sort(compareProjects);
   }, [filteredProjectData, sortField, sortOrder]);
 
-  // if (filteredData.length === 0 && !isProjectLoading) {
-  //   return (
-  //     <NoProjects
-  //       setAddProjectOpen={setAddProjectOpen}
-  //       addProjectOpen={addProjectOpen}
-  //     />
-  //   );
-  // }
+  if (isProjectLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (filteredData.length === 0 && !isProjectLoading) {
+    return (
+      <NoProjects
+        setAddProjectOpen={setAddProjectOpen}
+        addProjectOpen={addProjectOpen}
+      />
+    );
+  }
   if (searchParams.get("archive") === "false" || !searchParams.get("archive")) {
     return filteredData.filter(
       (project: ProjectType) => project.archive === false

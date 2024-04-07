@@ -1,10 +1,8 @@
 "use client";
 import SearchBar from "@/components/search/SearchBar";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import { CreateProject } from "@/components/project/CreateProject";
-import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
 import Image from "next/image";
 import Link from "next/link";
 import Filters from "@/components/headers/Filters";
@@ -14,26 +12,8 @@ interface HeaderProps {
 }
 
 const Header = ({ type }: HeaderProps) => {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const router = useRouter();
   const [addProjectOpen, setAddProjectOpen] = useState(false);
   const [addReceiptOpen, setAddReceiptOpen] = useState(false);
-  const { filteredReceiptData } = useSearchReceiptContext();
-
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(name, value);
-
-      return params.toString();
-    },
-    [searchParams]
-  );
-
-  // const handleExpiredlick = (name: string) => {
-  //   router.push(pathname + "?" + createQueryString("expired", name));
-  // };
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   return (
@@ -176,36 +156,6 @@ const Header = ({ type }: HeaderProps) => {
 
       <div className=" flex justify-between items-center relative flex-wrap gap-4 ">
         <SearchBar searchType={type} />
-
-        {/* {pathname === "/receipts" && filteredReceiptData.length > 0 && (
-          <div className="flex w-full    ">
-            <button
-              className={`${
-                searchParams.get("expired") === "false" ||
-                !searchParams.get("expired")
-                  ? "p-2  underline text-emerald-900"
-                  : "p-2  rounded-full"
-              }`}
-              onClick={() => {
-                handleExpiredlick("false");
-              }}
-            >
-              <p className="text-sm text-emerald-900">Active Receipts</p>
-            </button>
-            <button
-              className={`${
-                searchParams.get("expired") === "true"
-                  ? "p-2 underline text-emerald-900"
-                  : "p-2  rounded-full"
-              }`}
-              onClick={() => {
-                handleExpiredlick("true");
-              }}
-            >
-              <p className="text-sm text-emerald-900">Expired Receipts</p>
-            </button>
-          </div>
-        )} */}
       </div>
       <Filters />
       <AddButton

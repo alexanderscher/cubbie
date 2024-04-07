@@ -31,19 +31,29 @@ const Filters = () => {
     <div>
       {pathname === "/" && filteredProjectData.length > 0 && (
         <div className="flex gap-2">
-          <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
+          <FilterButton
+            openModal={openModal}
+            setOpenModal={setOpenModal}
+            label={"Current Projects"}
+          />
           <SortButton
             openModal={openSortModal}
             setOpenModal={setOpenSortModal}
+            label={"Sort by"}
           />
         </div>
       )}
       {pathname === "/receipts" && filteredReceiptData.length > 0 && (
         <div className="flex gap-2">
-          <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
+          <FilterButton
+            openModal={openModal}
+            setOpenModal={setOpenModal}
+            label={"Filter"}
+          />
           <SortButton
             openModal={openSortModal}
             setOpenModal={setOpenSortModal}
+            label={"All Purchases"}
           />
           <RegularButton
             styles="border-emerald-900 text-emerald-900 "
@@ -57,10 +67,15 @@ const Filters = () => {
       )}
       {pathname === "/items" && filteredItemData.length > 0 && (
         <div className="flex gap-2">
-          <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
+          <FilterButton
+            openModal={openModal}
+            setOpenModal={setOpenModal}
+            label={"All items"}
+          />
           <SortButton
             openModal={openSortModal}
             setOpenModal={setOpenSortModal}
+            label={"Sort by"}
           />
         </div>
       )}
@@ -147,9 +162,17 @@ export default Filters;
 interface FilterButtonProps {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   openModal: boolean;
+  label: string;
 }
 
-const FilterButton = ({ setOpenModal, openModal }: FilterButtonProps) => {
+const FilterButton = ({
+  setOpenModal,
+  openModal,
+  label,
+}: FilterButtonProps) => {
+  // const searchParams = useSearchParams();
+
+  // const sortFieldParam = searchParams.get("sort");
   return (
     <RegularButton
       styles="border-emerald-900 text-emerald-900 "
@@ -157,12 +180,12 @@ const FilterButton = ({ setOpenModal, openModal }: FilterButtonProps) => {
         setOpenModal(!openModal);
       }}
     >
-      <p className="text-xs">Filter</p>
+      <p className="text-xs">{label}</p>
     </RegularButton>
   );
 };
 
-const SortButton = ({ setOpenModal, openModal }: FilterButtonProps) => {
+const SortButton = ({ setOpenModal, openModal, label }: FilterButtonProps) => {
   return (
     <RegularButton
       styles="border-emerald-900 text-emerald-900 "
@@ -170,7 +193,7 @@ const SortButton = ({ setOpenModal, openModal }: FilterButtonProps) => {
         setOpenModal(!openModal);
       }}
     >
-      <p className="text-xs">Sort</p>
+      <p className="text-xs">{label}</p>
     </RegularButton>
   );
 };

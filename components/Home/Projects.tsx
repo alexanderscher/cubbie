@@ -7,7 +7,6 @@ import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal
 import { CreateProject } from "@/components/project/CreateProject";
 import { EditProject } from "@/components/project/EditProject";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
-import { NoReceipts } from "@/components/receiptComponents/NoReceipts";
 import { Receipt } from "@/types/AppTypes";
 import { Project as ProjectType } from "@/types/AppTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";

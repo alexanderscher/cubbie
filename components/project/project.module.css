@@ -3,9 +3,24 @@
   justify-content: space-between;
 }
 
+.dot {
+  display: block;
+}
+
+.mobileDot {
+  display: none;
+}
+
 @media (max-width: 500px) {
   .header {
     flex-direction: column;
     gap: 1rem;
+  }
+  .dot {
+    display: none;
+    margin-right: 0;
+  }
+  .mobileDot {
+    display: block;
   }
 }

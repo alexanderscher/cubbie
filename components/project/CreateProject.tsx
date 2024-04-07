@@ -90,7 +90,7 @@ export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
                   onChange={(e) =>
                     setProject({ ...project, name: e.target.value })
                   }
-                  className="w-full p-2 border-[1px]  rounded border-emerald-900"
+                  className="w-full p-2 border-[1px] rounded border-emerald-900 focus:outline-none"
                 />
                 {error && <p className="text-orange-900 text-xs">{error}</p>}
               </div>

@@ -125,7 +125,7 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
               />
             </div>
 
-            <div className="flex justify-end ">
+            <div className="flex justify-end mt-2">
               <RegularButton
                 type="button"
                 styles=" text-white border-emerald-900"

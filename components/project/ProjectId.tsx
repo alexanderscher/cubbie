@@ -1,6 +1,5 @@
 "use client";
 import RegularButton from "@/components/buttons/RegularButton";
-import { EditProject } from "@/components/project/EditProject";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import Receipt from "@/components/receiptComponents/Receipt";
 import { Project as ProjectType } from "@/types/AppTypes";
@@ -10,14 +9,15 @@ import Link from "next/link";
 import React, { useState } from "react";
 import styles from "./project.module.css";
 import { NoReceipts } from "@/components/receiptComponents/NoReceipts";
+import { ProjectOptionsModal } from "@/components/options/ProjectOptions";
 
 interface ProjectIdProps {
   project: ProjectType;
 }
 
 export const ProjectId = ({ project }: ProjectIdProps) => {
-  const [edit, setEdit] = useState(false);
   const [isAddOpen, setAddReceiptOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const [openReceiptId, setOpenReceiptId] = useState(null as number | null);
 
@@ -47,29 +47,34 @@ export const ProjectId = ({ project }: ProjectIdProps) => {
           <p className="text-emerald-900 text-sm">/</p>
           <p className="text-emerald-900 text-sm">{project.name}</p>
         </div>
-        <div></div>
       </div>
       <div className="flex flex-col gap-8 mt-10">
         <div className={styles.header}>
-          <div>
-            <h1 className="text-xl text-orange-600">{project.name}</h1>
-            <p className="text-sm">
-              Created on {formatDateToMMDDYY(project.created_at)}
-            </p>{" "}
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-xl text-orange-600">{project.name}</h1>
+              <p className="text-sm">
+                Created on {formatDateToMMDDYY(project.created_at)}
+              </p>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <RegularButton
-              handleClick={() => setEdit(!edit)}
-              styles=" border-emerald-900 text-emerald-900"
-            >
-              <p className="text-xs">Edit</p>
-            </RegularButton>
+
+          <div className="flex items-center gap-2 ">
             <RegularButton
               handleClick={() => setAddReceiptOpen(true)}
               styles=" border-emerald-900 text-emerald-900"
             >
               <p className="text-xs">Add receipt</p>
             </RegularButton>
+            <div
+              className={` relative hover:border-[1px] hover:border-emerald-900 px-4 py-1 rounded-full cursor-pointer`}
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              <Image src="/three-dots.png" alt="" width={20} height={20} />
+              {isOpen && (
+                <ProjectOptionsModal isOpen={isOpen} project={project} />
+              )}
+            </div>
           </div>
           {isAddOpen && <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />}
         </div>
@@ -90,7 +95,7 @@ export const ProjectId = ({ project }: ProjectIdProps) => {
           ))}
         </div>
       </div>
-      {edit && <EditProject setEdit={setEdit} project={project} />}
+      {/* {edit && <EditProject setEdit={setEdit} project={project} />} */}
     </div>
   );
 };

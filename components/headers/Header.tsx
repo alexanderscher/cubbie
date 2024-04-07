@@ -31,14 +31,14 @@ const Header = ({ type }: HeaderProps) => {
     [searchParams]
   );
 
-  const handleExpiredlick = (name: string) => {
-    router.push(pathname + "?" + createQueryString("expired", name));
-  };
+  // const handleExpiredlick = (name: string) => {
+  //   router.push(pathname + "?" + createQueryString("expired", name));
+  // };
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   return (
-    <div className="flex flex-col gap-6 pb-4 ">
-      <div className={` flex justify-between pb-2`}>
+    <div className="flex flex-col gap-6 pb-8">
+      <div className={` flex justify-between `}>
         <div className="cursor-pointer relative">
           <div onClick={() => setIsModalVisible(!isModalVisible)}>
             <div className="flex gap-2 items-center ">
@@ -176,8 +176,8 @@ const Header = ({ type }: HeaderProps) => {
 
       <div className=" flex justify-between items-center relative flex-wrap gap-4 ">
         <SearchBar searchType={type} />
-        <Filters />
-        {pathname === "/receipts" && filteredReceiptData.length > 0 && (
+
+        {/* {pathname === "/receipts" && filteredReceiptData.length > 0 && (
           <div className="flex w-full    ">
             <button
               className={`${
@@ -205,8 +205,9 @@ const Header = ({ type }: HeaderProps) => {
               <p className="text-sm text-emerald-900">Expired Receipts</p>
             </button>
           </div>
-        )}
+        )} */}
       </div>
+      <Filters />
       <AddButton
         setAddReceiptOpen={setAddReceiptOpen}
         setAddProjectOpen={setAddProjectOpen}

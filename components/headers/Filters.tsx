@@ -7,14 +7,15 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback } from "react";
 
 const Filters = () => {
+  const router = useRouter();
   const pathname = usePathname();
   const [openModal, setOpenModal] = React.useState(false);
+  const [openSortModal, setOpenSortModal] = React.useState(false);
+  const [openStatusModal, setOpenStatusModal] = React.useState(false);
   const { filteredItemData } = useSearchItemContext();
   const { filteredProjectData } = useSearchProjectContext();
   const { filteredReceiptData } = useSearchReceiptContext();
-
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -26,55 +27,115 @@ const Filters = () => {
     [searchParams]
   );
 
-  const handleExpiredlick = (name: string) => {
-    router.push(pathname + "?" + createQueryString("expired", name));
-  };
-
   return (
     <div>
+      {pathname === "/" && filteredProjectData.length > 0 && (
+        <div className="flex gap-2">
+          <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
+          <SortButton
+            openModal={openSortModal}
+            setOpenModal={setOpenSortModal}
+          />
+        </div>
+      )}
       {pathname === "/receipts" && filteredReceiptData.length > 0 && (
-        <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
+        <div className="flex gap-2">
+          <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
+          <SortButton
+            openModal={openSortModal}
+            setOpenModal={setOpenSortModal}
+          />
+          <RegularButton
+            styles="border-emerald-900 text-emerald-900 "
+            handleClick={() => {
+              setOpenStatusModal(!openStatusModal);
+            }}
+          >
+            <p className="text-xs">Active</p>
+          </RegularButton>
+        </div>
       )}
       {pathname === "/items" && filteredItemData.length > 0 && (
-        <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
-      )}
-      <div className="w-full flex justify-end">
         <div className="flex gap-2">
-          {pathname === "/" && filteredProjectData.length > 0 && (
-            <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
-          )}
-          {pathname === "/" && filteredProjectData.length > 0 && (
-            <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
-          )}
+          <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
+          <SortButton
+            openModal={openSortModal}
+            setOpenModal={setOpenSortModal}
+          />
         </div>
-      </div>
+      )}
+
       <div className="flex gap-2 ">
         <div className="">
-          {openModal && pathname === "/" && (
-            <FilterProjectOptions
-              pathname={pathname}
-              onClose={() => setOpenModal(false)}
-              createQueryString={createQueryString}
-              searchParams={searchParams}
-            />
-          )}
-          {openModal && pathname === "/receipts" && (
-            <FilterOptions
-              pathname={pathname}
-              onClose={() => setOpenModal(false)}
-              createQueryString={createQueryString}
-              searchParams={searchParams}
-            />
-          )}
-
-          {openModal && pathname === "/items" && (
-            <FilterItemsOptions
-              pathname={pathname}
-              onClose={() => setOpenModal(false)}
-              createQueryString={createQueryString}
-              searchParams={searchParams}
-            />
-          )}
+          <>
+            {openModal && pathname === "/" && (
+              <FilterProjectOptions
+                router={router}
+                pathname={pathname}
+                onClose={() => setOpenModal(false)}
+                createQueryString={createQueryString}
+                searchParams={searchParams}
+              />
+            )}
+            {openSortModal && pathname === "/" && (
+              <SortProjectOptions
+                router={router}
+                pathname={pathname}
+                onClose={() => setOpenSortModal(false)}
+                createQueryString={createQueryString}
+                searchParams={searchParams}
+              />
+            )}
+          </>
+          <>
+            {openModal && pathname === "/receipts" && (
+              <FilterReceiptOptions
+                router={router}
+                pathname={pathname}
+                onClose={() => setOpenModal(false)}
+                createQueryString={createQueryString}
+                searchParams={searchParams}
+              />
+            )}
+            {openSortModal && pathname === "/receipts" && (
+              <SortReceiptOptions
+                router={router}
+                pathname={pathname}
+                onClose={() => setOpenSortModal(false)}
+                createQueryString={createQueryString}
+                searchParams={searchParams}
+              />
+            )}
+            {openStatusModal && pathname === "/receipts" && (
+              <StatusReceiptOptions
+                router={router}
+                pathname={pathname}
+                onClose={() => setOpenStatusModal(false)}
+                createQueryString={createQueryString}
+                searchParams={searchParams}
+              />
+            )}
+          </>
+          <>
+            {openModal && pathname === "/items" && (
+              <FilterItemsOptions
+                router={router}
+                pathname={pathname}
+                onClose={() => setOpenModal(false)}
+                createQueryString={createQueryString}
+                searchParams={searchParams}
+              />
+            )}
+            {openSortModal && pathname === "/items" && (
+              <SortItemsOptions
+                router={router}
+                pathname={pathname}
+                onClose={() => setOpenSortModal(false)}
+                createQueryString={createQueryString}
+                searchParams={searchParams}
+              />
+            )}
+          </>
         </div>
       </div>
     </div>
@@ -101,18 +162,115 @@ const FilterButton = ({ setOpenModal, openModal }: FilterButtonProps) => {
   );
 };
 
+const SortButton = ({ setOpenModal, openModal }: FilterButtonProps) => {
+  return (
+    <RegularButton
+      styles="border-emerald-900 text-emerald-900 "
+      handleClick={() => {
+        setOpenModal(!openModal);
+      }}
+    >
+      <p className="text-xs">Sort</p>
+    </RegularButton>
+  );
+};
+
 interface FilterOptionsProps {
   onClose: () => void;
   createQueryString: (name: string, value: string) => string;
   pathname: string;
   searchParams: URLSearchParams;
+  router: any;
 }
 
 const FilterProjectOptions = ({
   pathname,
   searchParams,
   onClose,
+  router,
 }: FilterOptionsProps) => {
+  const handleArchiveClick = (isArchived: string) => {
+    const queryParams = new URLSearchParams(window.location.search);
+    queryParams.set("archive", isArchived);
+    router.push(`${pathname}?${queryParams.toString()}`);
+  };
+
+  const handleOverlayClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (
+      event.target instanceof HTMLDivElement &&
+      event.target.id === "modal-overlay"
+    ) {
+      onClose();
+    }
+  };
+
+  const handleModalContentClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => e.stopPropagation();
+  return (
+    <div id="modal-overlay" className={`overlay`} onClick={handleOverlayClick}>
+      <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
+        <div className=" border-black flex flex-col">
+          <div className="border-b-[1px] border-black flex ">
+            <div className="p-2 flex w-full">
+              <p className="text-center w-full text-black text-lg">Filter</p>
+              <button className="text-black" onClick={onClose}>
+                &times;
+              </button>
+            </div>
+          </div>
+          <div className="flex flex-col w-full p-4 gap-3">
+            <button
+              className={`${
+                searchParams.get("archive") === "false" ||
+                !searchParams.get("archive")
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
+              }`}
+              onClick={() => {
+                handleArchiveClick("false");
+              }}
+            >
+              <p className="text-xs">Current Projects</p>
+            </button>
+
+            <button
+              className={`${
+                searchParams.get("archive") === "true"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
+              }`}
+              onClick={() => {
+                handleArchiveClick("true");
+              }}
+            >
+              <p className="text-xs">Archived Projects</p>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const SortProjectOptions = ({
+  pathname,
+  searchParams,
+  onClose,
+  router,
+}: FilterOptionsProps) => {
+  const handleOverlayClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (
+      event.target instanceof HTMLDivElement &&
+      event.target.id === "modal-overlay"
+    ) {
+      onClose();
+    }
+  };
   const handleSortClick = (name: string) => {
     const queryParams = new URLSearchParams(window.location.search);
 
@@ -133,25 +291,6 @@ const FilterProjectOptions = ({
     router.push(`${pathname}?${queryParams.toString()}`);
   };
 
-  const handleArchiveClick = (isArchived: string) => {
-    const queryParams = new URLSearchParams(window.location.search);
-    queryParams.set("archive", isArchived);
-    router.push(`${pathname}?${queryParams.toString()}`);
-  };
-
-  const router = useRouter();
-
-  const handleOverlayClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (
-      event.target instanceof HTMLDivElement &&
-      event.target.id === "modal-overlay"
-    ) {
-      onClose();
-    }
-  };
-
   const handleModalContentClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => e.stopPropagation();
@@ -160,17 +299,14 @@ const FilterProjectOptions = ({
       <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
         <div className="border-b-[1px] border-black flex ">
           <div className="p-2 flex w-full">
-            <p className="text-center w-full text-black text-lg">Filter</p>
+            <p className="text-center w-full text-black text-lg">Sort</p>
             <button className="text-black" onClick={onClose}>
               &times;
             </button>
           </div>
         </div>
 
-        <div className=" border-black border-b-[1px] flex flex-col">
-          <div className="pt-2">
-            <p className="text-sm w-full text-center text-black">Sort</p>
-          </div>
+        <div className=" border-black flex flex-col">
           <div className="flex flex-col w-full p-4 gap-3">
             <button
               className={`${
@@ -219,39 +355,6 @@ const FilterProjectOptions = ({
             </button>
           </div>
         </div>
-        <div className=" border-black flex flex-col">
-          <div className="pt-2">
-            <p className="text-sm w-full text-center text-black">Filter</p>
-          </div>
-          <div className="flex flex-col w-full p-4 gap-3">
-            <button
-              className={`${
-                searchParams.get("archive") === "false" ||
-                !searchParams.get("archive")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleArchiveClick("false");
-              }}
-            >
-              <p className="text-xs">Current Projects</p>
-            </button>
-
-            <button
-              className={`${
-                searchParams.get("archive") === "true"
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleArchiveClick("true");
-              }}
-            >
-              <p className="text-xs">Archived Projects</p>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );
@@ -264,11 +367,11 @@ interface FilterOptionsProps {
   searchParams: URLSearchParams;
 }
 
-const FilterOptions = ({
-  createQueryString,
+const FilterReceiptOptions = ({
   pathname,
   searchParams,
   onClose,
+  router,
 }: FilterOptionsProps) => {
   const handleSortClick = (name: string) => {
     const queryParams = new URLSearchParams(window.location.search);
@@ -290,12 +393,6 @@ const FilterOptions = ({
     router.push(`${pathname}?${queryParams.toString()}`);
   };
 
-  const handleStoreClick = (name: string) => {
-    router.push(pathname + "?" + createQueryString("storeType", name));
-  };
-
-  const router = useRouter();
-
   const handleOverlayClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
@@ -315,7 +412,7 @@ const FilterOptions = ({
       <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
         <div className="border-b-[1px] border-black flex ">
           <div className="p-2 flex w-full">
-            <p className="text-center w-full text-black text-lg">Filter</p>
+            <p className="text-center w-full text-black text-lg">Sort</p>
             <button className="text-black" onClick={onClose}>
               &times;
             </button>
@@ -323,9 +420,6 @@ const FilterOptions = ({
         </div>
 
         <div className="border-b-[1px] border-black flex flex-col">
-          <div className="pt-2">
-            <p className="text-sm w-full text-center text-black">Sort</p>
-          </div>
           <div className="flex flex-col w-full p-4 gap-3">
             <button
               className={`${
@@ -415,10 +509,49 @@ const FilterOptions = ({
             </button>
           </div>
         </div>
-        <div className="border-b-[1px] border-black flex flex-col">
-          <div className="pt-2">
-            <p className="text-sm w-full text-center text-black">Filter</p>
+      </div>
+    </div>
+  );
+};
+
+const SortReceiptOptions = ({
+  createQueryString,
+  pathname,
+  searchParams,
+  onClose,
+  router,
+}: FilterOptionsProps) => {
+  const handleStoreClick = (name: string) => {
+    router.push(pathname + "?" + createQueryString("storeType", name));
+  };
+
+  const handleOverlayClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (
+      event.target instanceof HTMLDivElement &&
+      event.target.id === "modal-overlay"
+    ) {
+      onClose();
+    }
+  };
+
+  const handleModalContentClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => e.stopPropagation();
+  return (
+    <div id="modal-overlay" className={`overlay`} onClick={handleOverlayClick}>
+      <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
+        <div className="border-b-[1px] border-black flex ">
+          <div className="p-2 flex w-full">
+            <p className="text-center w-full text-black text-lg">Filter</p>
+            <button className="text-black" onClick={onClose}>
+              &times;
+            </button>
           </div>
+        </div>
+
+        <div className="border-b-[1px] border-black flex flex-col">
           <div className="flex flex-col w-full p-4 gap-3">
             <button
               className={`${
@@ -464,34 +597,83 @@ const FilterOptions = ({
   );
 };
 
+const StatusReceiptOptions = ({
+  createQueryString,
+  pathname,
+  searchParams,
+  onClose,
+  router,
+}: FilterOptionsProps) => {
+  const handleExpiredlick = (name: string) => {
+    router.push(pathname + "?" + createQueryString("expired", name));
+  };
+
+  const handleOverlayClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (
+      event.target instanceof HTMLDivElement &&
+      event.target.id === "modal-overlay"
+    ) {
+      onClose();
+    }
+  };
+
+  const handleModalContentClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => e.stopPropagation();
+  return (
+    <div id="modal-overlay" className={`overlay`} onClick={handleOverlayClick}>
+      <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
+        <div className="border-b-[1px] border-black flex ">
+          <div className="p-2 flex w-full">
+            <p className="text-center w-full text-black text-lg">Filter</p>
+            <button className="text-black" onClick={onClose}>
+              &times;
+            </button>
+          </div>
+        </div>
+
+        <div className="border-b-[1px] border-black flex flex-col">
+          <div className="flex flex-col w-full p-4 gap-3">
+            <button
+              className={`${
+                searchParams.get("expired") === "false"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
+              }`}
+              onClick={() => {
+                handleExpiredlick("false");
+              }}
+            >
+              <p className="text-xs">Active</p>
+            </button>
+            <button
+              className={`${
+                searchParams.get("expired") === "true"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
+              }`}
+              onClick={() => {
+                handleExpiredlick("true");
+              }}
+            >
+              <p className="text-xs">Expired</p>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const FilterItemsOptions = ({
   pathname,
   searchParams,
   onClose,
   createQueryString,
+  router,
 }: FilterOptionsProps) => {
-  const handleSortClick = (name: string) => {
-    const queryParams = new URLSearchParams(window.location.search);
-
-    const currentSort = queryParams.get("sort");
-    const currentDirection = currentSort?.includes("-") ? "desc" : "asc";
-
-    let newDirection;
-    if (currentSort === name && currentDirection === "asc") {
-      newDirection = "desc";
-    } else {
-      newDirection = "asc";
-    }
-
-    const newSortValue = newDirection === "asc" ? name : `-${name}`;
-
-    queryParams.set("sort", newSortValue);
-
-    router.push(`${pathname}?${queryParams.toString()}`);
-  };
-
-  const router = useRouter();
-
   const handleTypeClick = (name: string) => {
     router.push(pathname + "?" + createQueryString("type", name));
   };
@@ -519,10 +701,103 @@ const FilterItemsOptions = ({
           </div>
         </div>
 
-        <div className="border-b-[1px] border-black flex flex-col">
-          <div className="pt-2">
-            <p className="text-sm w-full text-center text-black">Sort</p>
+        <div className=" border-black flex flex-col">
+          <div className="flex flex-col w-full p-4 gap-3 text-xs">
+            <button
+              className={`${
+                searchParams.get("type")?.includes("all") ||
+                !searchParams.get("type")
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
+              }`}
+              onClick={() => {
+                handleTypeClick("all");
+              }}
+            >
+              <p>All</p>
+            </button>
+            <button
+              className={`${
+                searchParams.get("type")?.includes("current")
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
+              }`}
+              onClick={() => {
+                handleTypeClick("current");
+              }}
+            >
+              <p>In possesion</p>
+            </button>
+            <button
+              className={`${
+                searchParams.get("type")?.includes("returned")
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
+              }`}
+              onClick={() => {
+                handleTypeClick("returned");
+              }}
+            >
+              <p>Returned</p>
+            </button>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const SortItemsOptions = ({
+  pathname,
+  searchParams,
+  onClose,
+  router,
+}: FilterOptionsProps) => {
+  const handleSortClick = (name: string) => {
+    const queryParams = new URLSearchParams(window.location.search);
+
+    const currentSort = queryParams.get("sort");
+    const currentDirection = currentSort?.includes("-") ? "desc" : "asc";
+
+    let newDirection;
+    if (currentSort === name && currentDirection === "asc") {
+      newDirection = "desc";
+    } else {
+      newDirection = "asc";
+    }
+
+    const newSortValue = newDirection === "asc" ? name : `-${name}`;
+
+    queryParams.set("sort", newSortValue);
+
+    router.push(`${pathname}?${queryParams.toString()}`);
+  };
+
+  const handleOverlayClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (
+      event.target instanceof HTMLDivElement &&
+      event.target.id === "modal-overlay"
+    ) {
+      onClose();
+    }
+  };
+  const handleModalContentClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => e.stopPropagation();
+
+  return (
+    <div id="modal-overlay" className={`overlay`} onClick={handleOverlayClick}>
+      <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
+        <div className="border-b-[1px] border-black flex ">
+          <div className="p-4 flex w-full">
+            <p className="text-center w-full text-black text-lg">Sort</p>
+            <button onClick={onClose}>&times;</button>
+          </div>
+        </div>
+
+        <div className="border-b-[1px] border-black flex flex-col">
           <div className="flex flex-col w-full p-4 gap-3">
             <button
               className={`${
@@ -609,50 +884,6 @@ const FilterItemsOptions = ({
               ) : (
                 <p className="text-xs">Price</p>
               )}
-            </button>
-          </div>
-        </div>
-        <div className="border-b-[1px] border-black flex flex-col">
-          <div className="pt-2">
-            <p className="text-sm w-full text-center text-black">Filter</p>
-          </div>
-          <div className="flex flex-col w-full p-4 gap-3 text-xs">
-            <button
-              className={`${
-                searchParams.get("type")?.includes("all") ||
-                !searchParams.get("type")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleTypeClick("all");
-              }}
-            >
-              <p>All</p>
-            </button>
-            <button
-              className={`${
-                searchParams.get("type")?.includes("current")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleTypeClick("current");
-              }}
-            >
-              <p>In possesion</p>
-            </button>
-            <button
-              className={`${
-                searchParams.get("type")?.includes("returned")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleTypeClick("returned");
-              }}
-            >
-              <p>Returned</p>
             </button>
           </div>
         </div>

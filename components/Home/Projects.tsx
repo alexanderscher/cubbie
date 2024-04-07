@@ -1,10 +1,13 @@
 "use client";
+import { archiveProject } from "@/actions/projects/archive";
 import { deleteProject } from "@/actions/projects/deleteProject";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
+import Loading from "@/components/Loading";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import { CreateProject } from "@/components/project/CreateProject";
 import { EditProject } from "@/components/project/EditProject";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
+import { NoReceipts } from "@/components/receiptComponents/NoReceipts";
 import { Receipt } from "@/types/AppTypes";
 import { Project as ProjectType } from "@/types/AppTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
@@ -13,7 +16,13 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useMemo, useState, useTransition } from "react";
+import React, {
+  startTransition,
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+} from "react";
 import { toast } from "sonner";
 
 interface Props {
@@ -87,47 +96,60 @@ const Projects = ({ serverData }: Props) => {
     return filteredProjectData.sort(compareProjects);
   }, [filteredProjectData, sortField, sortOrder]);
 
-  if (filteredData.length === 0 && !isProjectLoading) {
-    return (
+  // if (filteredData.length === 0 && !isProjectLoading) {
+  //   return (
+  //     <NoProjects
+  //       setAddProjectOpen={setAddProjectOpen}
+  //       addProjectOpen={addProjectOpen}
+  //     />
+  //   );
+  // }
+  if (searchParams.get("archive") === "false" || !searchParams.get("archive")) {
+    return filteredData.filter(
+      (project: ProjectType) => project.archive === false
+    ).length === 0 ? (
+      <NoProjects
+        setAddProjectOpen={setAddProjectOpen}
+        addProjectOpen={addProjectOpen}
+      />
+    ) : (
       <div className="boxes">
-        <div className="box relative">
-          <div className="flex flex-col gap-4 justify-center items-center  p-6">
-            <Image
-              src="/folder.png"
-              alt=""
-              width={40}
-              height={40}
-              className="object-cover "
-              style={{ objectFit: "cover", objectPosition: "center" }}
+        {filteredData
+          .filter((project: ProjectType) => project.archive === false)
+          .map((project: ProjectType) => (
+            <Project
+              project={project}
+              key={project.id}
+              isOpen={openProjectId === project.id}
+              onToggleOpen={(e) => toggleOpenProject(project.id, e)}
             />
-            <p className="text-lg text-emerald-900">No projects</p>
-            <button
-              className="border-[1px]  border-emerald-900 py-2 px-10 text-xs text-emerald-900 rounded-full w-full"
-              onClick={() => setAddProjectOpen(true)}
-            >
-              <p className="">Create</p>
-            </button>
-            {addProjectOpen && (
-              <CreateProject setAddProjectOpen={setAddProjectOpen} />
-            )}
-          </div>
-        </div>
+          ))}
       </div>
     );
   }
-
-  return (
-    <div className="boxes">
-      {filteredData.map((project) => (
-        <Project
-          project={project}
-          key={project.id}
-          isOpen={openProjectId === project.id}
-          onToggleOpen={(e) => toggleOpenProject(project.id, e)}
-        />
-      ))}
-    </div>
-  );
+  if (searchParams.get("archive") === "true") {
+    return filteredData.filter(
+      (project: ProjectType) => project.archive === true
+    ).length === 0 ? (
+      <NoProjects
+        setAddProjectOpen={setAddProjectOpen}
+        addProjectOpen={addProjectOpen}
+      />
+    ) : (
+      <div className="boxes">
+        {filteredData
+          .filter((project: ProjectType) => project.archive === true)
+          .map((project: ProjectType) => (
+            <Project
+              project={project}
+              key={project.id}
+              isOpen={openProjectId === project.id}
+              onToggleOpen={(e) => toggleOpenProject(project.id, e)}
+            />
+          ))}
+      </div>
+    );
+  }
 };
 
 export default Projects;
@@ -202,11 +224,24 @@ const OptionsModal = ({ project }: OptionsModalProps) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [edit, setEdit] = useState(false);
   const [isAddOpen, setAddReceiptOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const toggleDeleteModal = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDeleteOpen(!isDeleteOpen);
   };
+
+  const setArchive = async (projectId: number, archive: string) => {
+    startTransition(async () => {
+      try {
+        await archiveProject(projectId, archive);
+        toast.success("Your operation was successful!");
+      } catch (e) {
+        toast.error("An error occurred. Please try again.");
+      }
+    });
+  };
+
   return (
     <div className="absolute bg-white shadow-1 -right-2 top-6 rounded-md w-[200px] z-100">
       <div className="p-4 rounded text-sm flex flex-col gap-2">
@@ -234,12 +269,35 @@ const OptionsModal = ({ project }: OptionsModalProps) => {
             <p>Edit</p>
           </div>
         </div>
-        <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 ">
-          <div className="flex gap-2 cursor-pointer">
-            <Image src={"/archive.png"} width={20} height={20} alt=""></Image>
-            <p>Archive</p>
+        {project.archive && (
+          <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 ">
+            <div
+              className="flex gap-2 cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                setArchive(project.id, "false");
+              }}
+            >
+              <Image src={"/archive.png"} width={20} height={20} alt=""></Image>
+              <p>Unarchive</p>
+            </div>
           </div>
-        </div>
+        )}
+        {!project.archive && (
+          <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 ">
+            <div
+              className="flex gap-2 cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                setArchive(project.id, "true");
+              }}
+            >
+              <Image src={"/archive.png"} width={20} height={20} alt=""></Image>
+              <p>Archive</p>
+            </div>
+          </div>
+        )}
+
         <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 ">
           <div
             className="flex gap-2 cursor-pointer"
@@ -250,6 +308,7 @@ const OptionsModal = ({ project }: OptionsModalProps) => {
           </div>
         </div>
       </div>
+      {isPending && <Loading loading={isPending} />}
       {edit && <EditProject setEdit={setEdit} project={project} />}
       {isDeleteOpen && (
         <DeleteModal
@@ -301,5 +360,39 @@ const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
       type="Project"
       message={`Are you sure you want to delete ${project.name}? This will delete all receipts and items in the project.`}
     />
+  );
+};
+
+interface NoProjectsProps {
+  setAddProjectOpen: (value: boolean) => void;
+  addProjectOpen: boolean;
+}
+
+const NoProjects = ({ setAddProjectOpen, addProjectOpen }: NoProjectsProps) => {
+  return (
+    <div className="boxes">
+      <div className="box relative">
+        <div className="flex flex-col gap-4 justify-center items-center  p-6">
+          <Image
+            src="/folder.png"
+            alt=""
+            width={40}
+            height={40}
+            className="object-cover "
+            style={{ objectFit: "cover", objectPosition: "center" }}
+          />
+          <p className="text-lg text-emerald-900">No projects</p>
+          <button
+            className="border-[1px]  border-emerald-900 py-2 px-10 text-xs text-emerald-900 rounded-full w-full"
+            onClick={() => setAddProjectOpen(true)}
+          >
+            <p className="">Create</p>
+          </button>
+          {addProjectOpen && (
+            <CreateProject setAddProjectOpen={setAddProjectOpen} />
+          )}
+        </div>
+      </div>
+    </div>
   );
 };

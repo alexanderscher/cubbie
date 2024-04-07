@@ -7,6 +7,7 @@ import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIc
 
 import { useState, useTransition } from "react";
 import CurrencyInput from "react-currency-input-field";
+import { toast } from "sonner";
 
 interface AddProjectModalProps {
   setAddProjectOpen: (value: boolean) => void;
@@ -25,18 +26,27 @@ export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
     if (project.name === "") {
       setError("Please enter a project name");
     } else {
-      startTransition(async () => {
-        const result = await createProject(project.name, project.asset_amount);
-        if (result.error) {
-          setUploadError(result.error);
-        } else {
-          setProject({
-            name: "",
-            asset_amount: "",
-          });
-          setAddProjectOpen(false);
-        }
-      });
+      try {
+        startTransition(async () => {
+          const result = await createProject(
+            project.name,
+            project.asset_amount
+          );
+          if (result.error) {
+            setUploadError(result.error);
+            toast.error("An error occurred. Please try again.");
+          } else {
+            toast.success("Your operation was successful!");
+            setProject({
+              name: "",
+              asset_amount: "",
+            });
+            setAddProjectOpen(false);
+          }
+        });
+      } catch (e) {
+        toast.error("An error occurred. Please try again.");
+      }
     }
   };
 

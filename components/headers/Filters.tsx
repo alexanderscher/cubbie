@@ -32,12 +32,12 @@ const Filters = () => {
 
   return (
     <div>
-      {/* {pathname === "/receipts" && filteredReceiptData.length > 0 && (
-          <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
-        )}
-        {pathname === "/items" && filteredItemData.length > 0 && (
-          <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
-        )} */}
+      {pathname === "/receipts" && filteredReceiptData.length > 0 && (
+        <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
+      )}
+      {pathname === "/items" && filteredItemData.length > 0 && (
+        <FilterButton openModal={openModal} setOpenModal={setOpenModal} />
+      )}
       <div className="w-full flex justify-end">
         <div className="flex gap-2">
           {pathname === "/" && filteredProjectData.length > 0 && (
@@ -133,6 +133,12 @@ const FilterProjectOptions = ({
     router.push(`${pathname}?${queryParams.toString()}`);
   };
 
+  const handleArchiveClick = (isArchived: string) => {
+    const queryParams = new URLSearchParams(window.location.search);
+    queryParams.set("archive", isArchived);
+    router.push(`${pathname}?${queryParams.toString()}`);
+  };
+
   const router = useRouter();
 
   const handleOverlayClick = (
@@ -161,7 +167,7 @@ const FilterProjectOptions = ({
           </div>
         </div>
 
-        <div className=" border-black flex flex-col">
+        <div className=" border-black border-b-[1px] flex flex-col">
           <div className="pt-2">
             <p className="text-sm w-full text-center text-black">Sort</p>
           </div>
@@ -213,6 +219,39 @@ const FilterProjectOptions = ({
             </button>
           </div>
         </div>
+        <div className=" border-black flex flex-col">
+          <div className="pt-2">
+            <p className="text-sm w-full text-center text-black">Filter</p>
+          </div>
+          <div className="flex flex-col w-full p-4 gap-3">
+            <button
+              className={`${
+                searchParams.get("archive") === "false" ||
+                !searchParams.get("archive")
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
+              }`}
+              onClick={() => {
+                handleArchiveClick("false");
+              }}
+            >
+              <p className="text-xs">Current Projects</p>
+            </button>
+
+            <button
+              className={`${
+                searchParams.get("archive") === "true"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
+              }`}
+              onClick={() => {
+                handleArchiveClick("true");
+              }}
+            >
+              <p className="text-xs">Archived Projects</p>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -231,10 +270,6 @@ const FilterOptions = ({
   searchParams,
   onClose,
 }: FilterOptionsProps) => {
-  const handleTypeClick = (name: string) => {
-    router.push(pathname + "?" + createQueryString("receiptType", name));
-  };
-
   const handleSortClick = (name: string) => {
     const queryParams = new URLSearchParams(window.location.search);
 

@@ -12,7 +12,7 @@ import { Project } from "@/types/AppTypes";
 
 interface SearchProjectContextType {
   projects: Project[];
-  filteredProjectData: Project[]; // Stores the currently displayed list, which may be filtered
+  filteredProjectData: Project[];
   initializeProjects: (data: Project[]) => void; // Initializes projects data
   filterProjects: (searchTerm: string) => void; // Filters projects based on a search term
   isProjectLoading: boolean; // Indicates if the project data is currently loading

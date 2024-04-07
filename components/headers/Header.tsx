@@ -54,7 +54,7 @@ const Header = ({ type }: HeaderProps) => {
           </div>
 
           {isModalVisible && (
-            <div className="absolute bg-[#97cb97] rounded shadow p-3 -bottom-[120px] z-[200] w-[160px]">
+            <div className="absolute bg-[#97cb97] rounded shadow p-3 -bottom-[120px] z-[200] w-[180px]">
               {type === "Projects" && (
                 <div className="flex flex-col gap-2 text-sm">
                   <Link
@@ -164,7 +164,6 @@ const Header = ({ type }: HeaderProps) => {
             </div>
           )}
         </div>
-        <Filters />
 
         {addProjectOpen && (
           <CreateProject setAddProjectOpen={setAddProjectOpen} />
@@ -177,6 +176,7 @@ const Header = ({ type }: HeaderProps) => {
 
       <div className=" flex justify-between items-center relative flex-wrap gap-4 ">
         <SearchBar searchType={type} />
+        <Filters />
         {pathname === "/receipts" && filteredReceiptData.length > 0 && (
           <div className="flex w-full    ">
             <button

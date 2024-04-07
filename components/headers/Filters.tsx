@@ -2,6 +2,7 @@ import RegularButton from "@/components/buttons/RegularButton";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
+import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import React, { useCallback, useEffect, useState } from "react";
@@ -17,6 +18,19 @@ const Filters = () => {
   const { filteredReceiptData } = useSearchReceiptContext();
   const searchParams = useSearchParams();
 
+  const determineLabel = (type: string | null) => {
+    switch (type) {
+      case "all":
+        return "All items";
+      case "current":
+        return "Current items";
+      case "returned":
+        return "Returned items";
+      default:
+        return "All items";
+    }
+  };
+
   const createQueryString = useCallback(
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString());
@@ -31,19 +45,16 @@ const Filters = () => {
     <div>
       {pathname === "/" && filteredProjectData.length > 0 && (
         <div className="flex gap-2">
-          <RegularButton
-            styles="border-emerald-900 text-emerald-900 "
-            handleClick={() => {
-              setOpenModal(!openModal);
-            }}
-          >
-            <p className="text-xs">
-              {searchParams.get("archive") === "false" ||
+          <FilterButton
+            setOpenModal={setOpenModal}
+            openModal={openModal}
+            label={
+              searchParams.get("archive") === "false" ||
               !searchParams.get("archive")
                 ? "Currect projects"
-                : "Archived projects"}
-            </p>
-          </RegularButton>
+                : "Archived projects"
+            }
+          />
           <SortButton
             openModal={openSortModal}
             setOpenModal={setOpenSortModal}
@@ -53,28 +64,24 @@ const Filters = () => {
       )}
       {pathname === "/receipts" && filteredReceiptData.length > 0 && (
         <div className="flex gap-2">
-          <RegularButton
-            styles="border-emerald-900 text-emerald-900 "
-            handleClick={() => {
-              setOpenModal(!openModal);
-            }}
-          >
-            <p className="text-xs">
-              {searchParams.get("storeType") === "all"
-                ? "All purchases"
-                : !searchParams.get("storeType") && "All purchases"}
-              {searchParams.get("storeType") === "online" && "Online purchases"}
-              {searchParams.get("storeType") === "store" &&
-                "In-store purchases"}
-            </p>
-          </RegularButton>
+          <FilterButton
+            setOpenModal={setOpenModal}
+            openModal={openModal}
+            label={
+              searchParams.get("archive") === "false" ||
+              !searchParams.get("archive")
+                ? "Currect projects"
+                : "Archived projects"
+            }
+          />
+
           <SortButton
             openModal={openSortModal}
             setOpenModal={setOpenSortModal}
             label={"All Purchases"}
           />
           <RegularButton
-            styles="border-emerald-900 text-emerald-900 "
+            styles="border-emerald-900 text-emerald-900 flex justify-between items-center gap-2"
             handleClick={() => {
               setOpenStatusModal(!openStatusModal);
             }}
@@ -85,25 +92,23 @@ const Filters = () => {
                 ? "Active receipts"
                 : "Expired receipts"}
             </p>
+            <Image
+              src="/arrow_grey.png"
+              width={8}
+              height={8}
+              alt="arrow"
+              className="rotate-90"
+            />
           </RegularButton>
         </div>
       )}
       {pathname === "/items" && filteredItemData.length > 0 && (
         <div className="flex gap-2">
-          <RegularButton
-            styles="border-emerald-900 text-emerald-900 "
-            handleClick={() => {
-              setOpenModal(!openModal);
-            }}
-          >
-            <p className="text-xs">
-              {searchParams.get("type") === "all"
-                ? "All items"
-                : !searchParams.get("type") && "All items"}
-              {searchParams.get("type") === "current" && "Current items"}
-              {searchParams.get("type") === "returned" && "Returned items"}
-            </p>
-          </RegularButton>
+          <FilterButton
+            setOpenModal={setOpenModal}
+            openModal={openModal}
+            label={determineLabel(searchParams.get("type"))}
+          />
 
           <SortButton
             openModal={openSortModal}
@@ -198,6 +203,30 @@ interface FilterButtonProps {
   label: string;
 }
 
+const FilterButton = ({
+  setOpenModal,
+  openModal,
+  label,
+}: FilterButtonProps) => {
+  return (
+    <RegularButton
+      styles="border-emerald-900 text-emerald-900 flex justify-between items-center gap-2"
+      handleClick={() => {
+        setOpenModal(!openModal);
+      }}
+    >
+      <p className="text-xs">{label}</p>
+      <Image
+        src="/arrow_grey.png"
+        width={8}
+        height={8}
+        alt="arrow"
+        className="rotate-90"
+      />
+    </RegularButton>
+  );
+};
+
 const SortButton = ({ setOpenModal, openModal, label }: FilterButtonProps) => {
   const [sortLabel, setSortLabel] = useState("Sort by");
   const searchParams = useSearchParams();
@@ -233,12 +262,19 @@ const SortButton = ({ setOpenModal, openModal, label }: FilterButtonProps) => {
 
   return (
     <RegularButton
-      styles="border-emerald-900 text-emerald-900 "
+      styles="border-emerald-900 text-emerald-900 flex justify-between items-center gap-2"
       handleClick={() => {
         setOpenModal(!openModal);
       }}
     >
       <p className="text-xs">{sortLabel}</p>
+      <Image
+        src="/arrow_grey.png"
+        width={8}
+        height={8}
+        alt="arrow"
+        className="rotate-90"
+      />
     </RegularButton>
   );
 };

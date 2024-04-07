@@ -1,12 +1,9 @@
 "use client";
-import { archiveProject } from "@/actions/projects/archive";
-import { deleteProject } from "@/actions/projects/deleteProject";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
-import Loading from "@/components/Loading";
-import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
+
+import { ProjectOptionsModal } from "@/components/options/ProjectOptions";
 import { CreateProject } from "@/components/project/CreateProject";
-import { EditProject } from "@/components/project/EditProject";
-import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
+
 import { Receipt } from "@/types/AppTypes";
 import { Project as ProjectType } from "@/types/AppTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
@@ -15,8 +12,7 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useMemo, useState, useTransition } from "react";
-import { toast } from "sonner";
+import React, { useEffect, useMemo, useState } from "react";
 
 interface Props {
   serverData: ProjectType[];
@@ -179,7 +175,7 @@ const Project = ({ project, isOpen, onToggleOpen }: ProjectProps) => {
             </div>
           </div>
         </div>
-        {isOpen && <OptionsModal isOpen={isOpen} project={project} />}
+
         <div className="p-3 flex flex-col gap-2">
           <h2 className="text-sm text-orange-600">{project.name}</h2>
 
@@ -208,155 +204,8 @@ const Project = ({ project, isOpen, onToggleOpen }: ProjectProps) => {
           </p>
         </div>
       </Link>
+      {isOpen && <ProjectOptionsModal isOpen={isOpen} project={project} />}
     </div>
-  );
-};
-
-interface OptionsModalProps {
-  isOpen: boolean;
-  project: ProjectType;
-}
-
-const OptionsModal = ({ project }: OptionsModalProps) => {
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const [edit, setEdit] = useState(false);
-  const [isAddOpen, setAddReceiptOpen] = useState(false);
-  const [isPending, startTransition] = useTransition();
-
-  const toggleDeleteModal = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDeleteOpen(!isDeleteOpen);
-  };
-
-  const setArchive = async (projectId: number, archive: string) => {
-    startTransition(async () => {
-      try {
-        await archiveProject(projectId, archive);
-        toast.success("Your operation was successful!");
-      } catch (e) {
-        toast.error("An error occurred. Please try again.");
-      }
-    });
-  };
-
-  return (
-    <div className="absolute bg-white shadow-1 -right-2 top-6 rounded-md w-[200px] z-100">
-      <div className="p-4 rounded text-sm flex flex-col gap-2">
-        <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2">
-          <div
-            className="flex gap-2"
-            onClick={(e) => {
-              e.preventDefault();
-              setAddReceiptOpen(true);
-            }}
-          >
-            <Image src={"/add.png"} width={20} height={20} alt=""></Image>
-            <p>Add receipt</p>
-          </div>
-        </div>
-        <div
-          className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 cursor-pointer"
-          onClick={(e) => {
-            e.preventDefault();
-            setEdit(true);
-          }}
-        >
-          <div className="flex gap-2">
-            <Image src={"/edit.png"} width={20} height={20} alt=""></Image>
-            <p>Edit</p>
-          </div>
-        </div>
-        {project.archive && (
-          <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 ">
-            <div
-              className="flex gap-2 cursor-pointer"
-              onClick={(e) => {
-                e.preventDefault();
-                setArchive(project.id, "false");
-              }}
-            >
-              <Image src={"/archive.png"} width={20} height={20} alt=""></Image>
-              <p>Unarchive</p>
-            </div>
-          </div>
-        )}
-        {!project.archive && (
-          <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 ">
-            <div
-              className="flex gap-2 cursor-pointer"
-              onClick={(e) => {
-                e.preventDefault();
-                setArchive(project.id, "true");
-              }}
-            >
-              <Image src={"/archive.png"} width={20} height={20} alt=""></Image>
-              <p>Archive</p>
-            </div>
-          </div>
-        )}
-
-        <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 ">
-          <div
-            className="flex gap-2 cursor-pointer"
-            onClick={toggleDeleteModal}
-          >
-            <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
-            <p>Delete</p>
-          </div>
-        </div>
-      </div>
-      {isPending && <Loading loading={isPending} />}
-      {edit && <EditProject setEdit={setEdit} project={project} />}
-      {isDeleteOpen && (
-        <DeleteModal
-          setDeleteOpen={setIsDeleteOpen}
-          project={project}
-        ></DeleteModal>
-      )}
-      {isAddOpen && <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />}
-    </div>
-  );
-};
-
-interface DeleteModalProps {
-  setDeleteOpen: (value: boolean) => void;
-  project: ProjectType;
-}
-
-const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
-  const [uploadError, setUploadError] = useState("");
-  const [isPending, startTransition] = useTransition();
-
-  const handleSubmit = async () => {
-    if (!project.id) {
-      setUploadError("No project selected for deletion");
-      return;
-    }
-
-    startTransition(async () => {
-      try {
-        const result = await deleteProject(project.id);
-        if (result?.error) {
-          toast.error("An error occurred. Please try again.");
-        } else {
-          setDeleteOpen(false);
-          toast.success("Your operation was successful!");
-        }
-      } catch (e) {
-        toast.error("An error occurred. Please try again.");
-      }
-    });
-  };
-
-  return (
-    <DeleteConfirmationModal
-      cancelClick={setDeleteOpen}
-      error={uploadError}
-      deleteClick={handleSubmit}
-      isPending={isPending}
-      type="Project"
-      message={`Are you sure you want to delete ${project.name}? This will delete all receipts and items in the project.`}
-    />
   );
 };
 

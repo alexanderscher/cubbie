@@ -4,7 +4,7 @@ import { useSearchProjectContext } from "@/components/context/SearchProjectConte
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 const Filters = () => {
   const router = useRouter();
@@ -31,11 +31,19 @@ const Filters = () => {
     <div>
       {pathname === "/" && filteredProjectData.length > 0 && (
         <div className="flex gap-2">
-          <FilterButton
-            openModal={openModal}
-            setOpenModal={setOpenModal}
-            label={"Current Projects"}
-          />
+          <RegularButton
+            styles="border-emerald-900 text-emerald-900 "
+            handleClick={() => {
+              setOpenModal(!openModal);
+            }}
+          >
+            <p className="text-xs">
+              {searchParams.get("archive") === "false" ||
+              !searchParams.get("archive")
+                ? "Currect projects"
+                : "Archived projects"}
+            </p>
+          </RegularButton>
           <SortButton
             openModal={openSortModal}
             setOpenModal={setOpenSortModal}
@@ -45,11 +53,21 @@ const Filters = () => {
       )}
       {pathname === "/receipts" && filteredReceiptData.length > 0 && (
         <div className="flex gap-2">
-          <FilterButton
-            openModal={openModal}
-            setOpenModal={setOpenModal}
-            label={"Filter"}
-          />
+          <RegularButton
+            styles="border-emerald-900 text-emerald-900 "
+            handleClick={() => {
+              setOpenModal(!openModal);
+            }}
+          >
+            <p className="text-xs">
+              {searchParams.get("storeType") === "all"
+                ? "All purchases"
+                : !searchParams.get("storeType") && "All purchases"}
+              {searchParams.get("storeType") === "online" && "Online purchases"}
+              {searchParams.get("storeType") === "store" &&
+                "In-store purchases"}
+            </p>
+          </RegularButton>
           <SortButton
             openModal={openSortModal}
             setOpenModal={setOpenSortModal}
@@ -61,17 +79,32 @@ const Filters = () => {
               setOpenStatusModal(!openStatusModal);
             }}
           >
-            <p className="text-xs">Active</p>
+            <p className="text-xs">
+              {searchParams.get("expired") === "false" ||
+              !searchParams.get("expired")
+                ? "Active receipts"
+                : "Expired receipts"}
+            </p>
           </RegularButton>
         </div>
       )}
       {pathname === "/items" && filteredItemData.length > 0 && (
         <div className="flex gap-2">
-          <FilterButton
-            openModal={openModal}
-            setOpenModal={setOpenModal}
-            label={"All items"}
-          />
+          <RegularButton
+            styles="border-emerald-900 text-emerald-900 "
+            handleClick={() => {
+              setOpenModal(!openModal);
+            }}
+          >
+            <p className="text-xs">
+              {searchParams.get("type") === "all"
+                ? "All items"
+                : !searchParams.get("type") && "All items"}
+              {searchParams.get("type") === "current" && "Current items"}
+              {searchParams.get("type") === "returned" && "Returned items"}
+            </p>
+          </RegularButton>
+
           <SortButton
             openModal={openSortModal}
             setOpenModal={setOpenSortModal}
@@ -165,27 +198,39 @@ interface FilterButtonProps {
   label: string;
 }
 
-const FilterButton = ({
-  setOpenModal,
-  openModal,
-  label,
-}: FilterButtonProps) => {
-  // const searchParams = useSearchParams();
-
-  // const sortFieldParam = searchParams.get("sort");
-  return (
-    <RegularButton
-      styles="border-emerald-900 text-emerald-900 "
-      handleClick={() => {
-        setOpenModal(!openModal);
-      }}
-    >
-      <p className="text-xs">{label}</p>
-    </RegularButton>
-  );
-};
-
 const SortButton = ({ setOpenModal, openModal, label }: FilterButtonProps) => {
+  const [sortLabel, setSortLabel] = useState("Sort by");
+  const searchParams = useSearchParams();
+
+  const sortFieldParam = searchParams.get("sort");
+
+  useEffect(() => {
+    if (sortFieldParam === "created_at") {
+      setSortLabel("Created at (oldest)");
+    }
+    if (sortFieldParam === "-created_at") {
+      setSortLabel("Created at (newest)");
+    }
+    if (sortFieldParam === "price") {
+      setSortLabel("Price ascending");
+    }
+    if (sortFieldParam === "-price") {
+      setSortLabel("Price descending");
+    }
+    if (sortFieldParam === "return_date") {
+      setSortLabel("Return Date (oldest)");
+    }
+    if (sortFieldParam === "-return_date") {
+      setSortLabel("Return Date (newest)");
+    }
+    if (sortFieldParam === "purchase_date") {
+      setSortLabel("Purchase Date (oldest)");
+    }
+    if (sortFieldParam === "-purchase_date") {
+      setSortLabel("Purchase Date (newest)");
+    }
+  }, [sortFieldParam]);
+
   return (
     <RegularButton
       styles="border-emerald-900 text-emerald-900 "
@@ -193,7 +238,7 @@ const SortButton = ({ setOpenModal, openModal, label }: FilterButtonProps) => {
         setOpenModal(!openModal);
       }}
     >
-      <p className="text-xs">{label}</p>
+      <p className="text-xs">{sortLabel}</p>
     </RegularButton>
   );
 };
@@ -389,8 +434,90 @@ interface FilterOptionsProps {
   pathname: string;
   searchParams: URLSearchParams;
 }
-
 const FilterReceiptOptions = ({
+  createQueryString,
+  pathname,
+  searchParams,
+  onClose,
+  router,
+}: FilterOptionsProps) => {
+  const handleStoreClick = (name: string) => {
+    router.push(pathname + "?" + createQueryString("storeType", name));
+  };
+
+  const handleOverlayClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (
+      event.target instanceof HTMLDivElement &&
+      event.target.id === "modal-overlay"
+    ) {
+      onClose();
+    }
+  };
+
+  const handleModalContentClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => e.stopPropagation();
+  return (
+    <div id="modal-overlay" className={`overlay`} onClick={handleOverlayClick}>
+      <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
+        <div className="border-b-[1px] border-black flex ">
+          <div className="p-2 flex w-full">
+            <p className="text-center w-full text-black text-lg">Filter</p>
+            <button className="text-black" onClick={onClose}>
+              &times;
+            </button>
+          </div>
+        </div>
+
+        <div className=" border-black flex flex-col">
+          <div className="flex flex-col w-full p-4 gap-3">
+            <button
+              className={`${
+                searchParams.get("storeType") === "all" ||
+                !searchParams.get("storeType")
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
+              }`}
+              onClick={() => {
+                handleStoreClick("all");
+              }}
+            >
+              <p className="text-xs">All purchases</p>
+            </button>
+            <button
+              className={`${
+                searchParams.get("storeType") === "online"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
+              }`}
+              onClick={() => {
+                handleStoreClick("online");
+              }}
+            >
+              <p className="text-xs">Online purchases</p>
+            </button>
+            <button
+              className={`${
+                searchParams.get("storeType") === "store"
+                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
+                  : "w-full border-[1px] p-2 border-black rounded-md"
+              }`}
+              onClick={() => {
+                handleStoreClick("store");
+              }}
+            >
+              <p className="text-xs">In-store purchases</p>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const SortReceiptOptions = ({
   pathname,
   searchParams,
   onClose,
@@ -442,7 +569,7 @@ const FilterReceiptOptions = ({
           </div>
         </div>
 
-        <div className="border-b-[1px] border-black flex flex-col">
+        <div className=" border-black flex flex-col">
           <div className="flex flex-col w-full p-4 gap-3">
             <button
               className={`${
@@ -537,89 +664,6 @@ const FilterReceiptOptions = ({
   );
 };
 
-const SortReceiptOptions = ({
-  createQueryString,
-  pathname,
-  searchParams,
-  onClose,
-  router,
-}: FilterOptionsProps) => {
-  const handleStoreClick = (name: string) => {
-    router.push(pathname + "?" + createQueryString("storeType", name));
-  };
-
-  const handleOverlayClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (
-      event.target instanceof HTMLDivElement &&
-      event.target.id === "modal-overlay"
-    ) {
-      onClose();
-    }
-  };
-
-  const handleModalContentClick = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => e.stopPropagation();
-  return (
-    <div id="modal-overlay" className={`overlay`} onClick={handleOverlayClick}>
-      <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
-        <div className="border-b-[1px] border-black flex ">
-          <div className="p-2 flex w-full">
-            <p className="text-center w-full text-black text-lg">Filter</p>
-            <button className="text-black" onClick={onClose}>
-              &times;
-            </button>
-          </div>
-        </div>
-
-        <div className="border-b-[1px] border-black flex flex-col">
-          <div className="flex flex-col w-full p-4 gap-3">
-            <button
-              className={`${
-                searchParams.get("storeType") === "all" ||
-                !searchParams.get("storeType")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleStoreClick("all");
-              }}
-            >
-              <p className="text-xs">All purchases</p>
-            </button>
-            <button
-              className={`${
-                searchParams.get("storeType") === "online"
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleStoreClick("online");
-              }}
-            >
-              <p className="text-xs">Online purchases</p>
-            </button>
-            <button
-              className={`${
-                searchParams.get("storeType") === "store"
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleStoreClick("store");
-              }}
-            >
-              <p className="text-xs">In-store purchases</p>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const StatusReceiptOptions = ({
   createQueryString,
   pathname,
@@ -650,18 +694,19 @@ const StatusReceiptOptions = ({
       <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
         <div className="border-b-[1px] border-black flex ">
           <div className="p-2 flex w-full">
-            <p className="text-center w-full text-black text-lg">Filter</p>
+            <p className="text-center w-full text-black text-lg">Status</p>
             <button className="text-black" onClick={onClose}>
               &times;
             </button>
           </div>
         </div>
 
-        <div className="border-b-[1px] border-black flex flex-col">
+        <div className=" border-black flex flex-col">
           <div className="flex flex-col w-full p-4 gap-3">
             <button
               className={`${
-                searchParams.get("expired") === "false"
+                searchParams.get("expired") === "false" ||
+                !searchParams.get("expired")
                   ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
                   : "w-full border-[1px] p-2 border-black rounded-md"
               }`}
@@ -749,7 +794,7 @@ const FilterItemsOptions = ({
                 handleTypeClick("current");
               }}
             >
-              <p>In possesion</p>
+              <p>Current Items</p>
             </button>
             <button
               className={`${
@@ -761,7 +806,7 @@ const FilterItemsOptions = ({
                 handleTypeClick("returned");
               }}
             >
-              <p>Returned</p>
+              <p>Returned items</p>
             </button>
           </div>
         </div>
@@ -820,7 +865,7 @@ const SortItemsOptions = ({
           </div>
         </div>
 
-        <div className="border-b-[1px] border-black flex flex-col">
+        <div className=" border-black flex flex-col">
           <div className="flex flex-col w-full p-4 gap-3">
             <button
               className={`${

@@ -3,6 +3,11 @@
   gap: 40px;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
 .receiptLeft {
   width: 50%;
   min-width: 400px;
@@ -68,6 +73,13 @@
   .box {
     width: 100%;
     max-width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .header {
+    flex-direction: column;
+    gap: 1rem;
   }
 }
 

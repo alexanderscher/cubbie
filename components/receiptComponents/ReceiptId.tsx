@@ -19,6 +19,7 @@ interface ReceiptIdProps {
 
 const ReceiptId = ({ receipt }: ReceiptIdProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isOptionsOpen, setisOptionsOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [openItemId, setOpenItemId] = useState(null as number | null);
   const [isClient, setIsClient] = useState(false);
@@ -122,10 +123,10 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
           <p>This receipt has expired</p>
         </div>
       )}
-      <div className="flex justify-between items-center w-full flex-wrap gap-4">
+      <div className={styles.header}>
         <h1 className="text-2xl text-orange-600 ">{receipt.store}</h1>
 
-        <div className="flex gap-2  justify-end">
+        <div className="flex gap-2 ">
           <RegularButton
             styles="bg  border-emerald-900"
             handleClick={() => setIsAddOpen(true)}
@@ -138,6 +139,15 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
           >
             <p className="text-emerald-900 text-xs">Edit</p>
           </RegularButton>
+          <div
+            className={`relative hover:border-[1px] hover:border-emerald-900 px-4 py-1 rounded-full cursor-pointer flex items-center ${
+              isOpen && "border-[1px] border-emerald-900 px-4 py-1 rounded-full"
+            }`}
+            // onClick={() => setisOptionsOpen(!isOpen)}
+          >
+            <Image src="/three-dots.png" alt="" width={20} height={20} />
+            {/* {isOpen && <ItemOptionsModal item={item} />} */}
+          </div>
         </div>
       </div>
       {isAddOpen && (

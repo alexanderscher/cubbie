@@ -34,7 +34,6 @@ export const ProjectOptionsModal = ({ project }: OptionsModalProps) => {
       setColor(green);
     }
   }, [pathname]);
-  console.log("edit", edit);
 
   const toggleDeleteModal = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();

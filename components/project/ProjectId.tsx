@@ -67,7 +67,10 @@ export const ProjectId = ({ project }: ProjectIdProps) => {
               <p className="text-xs">Add receipt</p>
             </RegularButton>
             <div
-              className={` relative hover:border-[1px] hover:border-emerald-900 px-4 py-1 rounded-full cursor-pointer`}
+              className={`relative hover:border-[1px] hover:border-emerald-900 px-4 py-1 rounded-full cursor-pointer flex items-center ${
+                isOpen &&
+                "border-[1px] border-emerald-900 px-4 py-1 rounded-full"
+              }`}
               onClick={() => setIsOpen(!isOpen)}
             >
               <Image src="/three-dots.png" alt="" width={20} height={20} />

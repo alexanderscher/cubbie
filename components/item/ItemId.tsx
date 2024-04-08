@@ -8,6 +8,7 @@ import Image from "next/image";
 import HeaderItemNav from "@/components/navbar/HeaderItemNav";
 import ImageModal from "@/components/images/ImageModal";
 import { formatDateToMMDDYY } from "@/utils/Date";
+import { ItemOptionsModal } from "@/components/options/ItemsOptions";
 
 interface ItemIDProps {
   item: ItemType;
@@ -29,15 +30,27 @@ const ItemID = ({ item }: ItemIDProps) => {
           </div>
         )}
 
-        <div className="w-full flex flex-col gap-4">
+        <div className="w-full flex flex-col gap-4 justify-center">
           <div className="flex justify-between">
             <p className="text-xl text-orange-600">{item.description}</p>
-            <RegularButton
-              styles="bg border-emerald-900"
-              href={`/item/${id}/edit`}
-            >
-              <p className="text-emerald-900 text-xs">Edit</p>
-            </RegularButton>
+            <div className="flex gap-2">
+              <RegularButton
+                styles="bg border-emerald-900"
+                href={`/item/${id}/edit`}
+              >
+                <p className="text-emerald-900 text-xs">Edit</p>
+              </RegularButton>
+              <div
+                className={`relative hover:border-[1px] hover:border-emerald-900 px-4 py-1 rounded-full cursor-pointer flex items-center ${
+                  isOpen &&
+                  "border-[1px] border-emerald-900 px-4 py-1 rounded-full"
+                }`}
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                <Image src="/three-dots.png" alt="" width={20} height={20} />
+                {isOpen && <ItemOptionsModal item={item} />}
+              </div>
+            </div>
           </div>
 
           {item.photo_url && (

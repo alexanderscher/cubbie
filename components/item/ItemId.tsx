@@ -108,11 +108,6 @@ const ItemID = ({ item }: ItemIDProps) => {
           )}
         </div>
 
-        {item.receipt.project.asset_amount &&
-          item.receipt.project.asset_amount < item.price && (
-            <p className="text-md text-emerald-900">Asset</p>
-          )}
-
         <div className="flex flex-col gap-4">
           <div className="w-full  bg-white rounded-md shadow p-4 ">
             <p className="text-xs text-slate-400">Store</p>

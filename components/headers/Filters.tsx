@@ -31,6 +31,19 @@ const Filters = () => {
     }
   };
 
+  const determineStoreTypeLabel = (type: string | null) => {
+    switch (type) {
+      case "all":
+        return "All purchases";
+      case "online":
+        return "Online purchases";
+      case "store":
+        return "In-store purchases";
+      default:
+        return "All purchases";
+    }
+  };
+
   const createQueryString = useCallback(
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString());
@@ -67,12 +80,7 @@ const Filters = () => {
           <FilterButton
             setOpenModal={setOpenModal}
             openModal={openModal}
-            label={
-              searchParams.get("archive") === "false" ||
-              !searchParams.get("archive")
-                ? "Currect projects"
-                : "Archived projects"
-            }
+            label={determineStoreTypeLabel(searchParams.get("storeType"))}
           />
 
           <SortButton

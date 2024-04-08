@@ -12,6 +12,8 @@ import Item from "@/components/Item";
 import { Item as ItemType, Receipt } from "@/types/AppTypes";
 import * as Yup from "yup";
 import { addItem } from "@/actions/items/addItem";
+import { ItemOptionsModal } from "@/components/options/ItemsOptions";
+import { ReceiptOptionsModal } from "@/components/options/ReceiptOptions";
 
 interface ReceiptIdProps {
   receipt: Receipt;
@@ -133,20 +135,15 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
           >
             <p className="text-emerald-900 text-xs">Add item</p>
           </RegularButton>
-          <RegularButton
-            styles="bg border-emerald-900"
-            href={`/receipt/${receipt.id}/edit`}
-          >
-            <p className="text-emerald-900 text-xs">Edit</p>
-          </RegularButton>
+
           <div
             className={`relative hover:border-[1px] hover:border-emerald-900 px-4 py-1 rounded-full cursor-pointer flex items-center ${
               isOpen && "border-[1px] border-emerald-900 px-4 py-1 rounded-full"
             }`}
-            // onClick={() => setisOptionsOpen(!isOpen)}
+            onClick={() => setisOptionsOpen(!isOptionsOpen)}
           >
             <Image src="/three-dots.png" alt="" width={20} height={20} />
-            {/* {isOpen && <ItemOptionsModal item={item} />} */}
+            {isOptionsOpen && <ReceiptOptionsModal receipt={receipt} />}
           </div>
         </div>
       </div>

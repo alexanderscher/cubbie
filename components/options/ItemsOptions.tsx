@@ -51,7 +51,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
 
   return (
     <div
-      className={`absolute  shadow-1 -right-2 top-6 rounded-md w-[200px] ${
+      className={`absolute  shadow-1 -right-2 top-10 rounded-md w-[200px] ${
         !pathname.startsWith("/item/")
           ? "z-200 bg-white"
           : "z-[500] bg-[#97cb97] "
@@ -80,7 +80,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
             </Link>
           </div>
         )}
-        {pathname === "/items" && (
+        {!pathname.startsWith("/item/") && (
           <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2">
             <Link href={`/item/${item.id}/edit`}>
               <div className="flex gap-2">

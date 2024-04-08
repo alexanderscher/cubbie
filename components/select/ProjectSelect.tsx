@@ -93,16 +93,16 @@ const ProjectSelect = ({
     }),
   };
 
-  const options: Option[] = projects.map((project) => ({
-    value: project.id.toString(),
-    label: project.name,
-  }));
-
   const handleSelectChange = (selectedOption: Option | null) => {
     if (selectedOption) {
       handleChange(selectedOption.value);
     }
   };
+
+  const projectOptions: Option[] = projects.map((project) => ({
+    value: project.id.toString(),
+    label: project.name,
+  }));
 
   return (
     <div className="w-full ">
@@ -114,9 +114,14 @@ const ProjectSelect = ({
         Project Folder
       </p>
       <ReactSelect
-        options={options}
+        options={projectOptions.filter((option) => {
+          const project = projects.find(
+            (project) => project.id.toString() === option.value
+          );
+          return project && !project.archive;
+        })}
         onChange={handleSelectChange}
-        value={options.find((option) => option.value === values)}
+        value={projectOptions.find((option) => option.value === values)}
         isClearable={true}
         placeholder="Change project folder"
         styles={color === "green" ? customGreenStyles : customStyles}

@@ -58,21 +58,50 @@ const Filters = () => {
     <div>
       {pathname === "/" && filteredProjectData.length > 0 && (
         <div className="flex gap-2">
-          <FilterButton
-            setOpenModal={setOpenModal}
-            openModal={openModal}
-            label={
-              searchParams.get("archive") === "false" ||
-              !searchParams.get("archive")
-                ? "Currect projects"
-                : "Archived projects"
-            }
-          />
-          <SortButton
-            openModal={openSortModal}
-            setOpenModal={setOpenSortModal}
-            label={"Sort by"}
-          />
+          <div className="relative">
+            <FilterButton
+              setOpenModal={setOpenModal}
+              openModal={openModal}
+              label={
+                searchParams.get("archive") === "false" ||
+                !searchParams.get("archive")
+                  ? "Currect projects"
+                  : "Archived projects"
+              }
+            />
+            {openModal && pathname === "/" && (
+              <>
+                <FilterProjectOptions
+                  router={router}
+                  pathname={pathname}
+                  onClose={() => setOpenModal(false)}
+                  createQueryString={createQueryString}
+                  searchParams={searchParams}
+                />
+                <Overlay onClose={() => setOpenModal(false)} />
+              </>
+            )}
+          </div>
+
+          <div className="relative">
+            <SortButton
+              openModal={openSortModal}
+              setOpenModal={setOpenSortModal}
+              label={"Sort by"}
+            />
+            {openSortModal && pathname === "/" && (
+              <>
+                <SortProjectOptions
+                  router={router}
+                  pathname={pathname}
+                  onClose={() => setOpenSortModal(false)}
+                  createQueryString={createQueryString}
+                  searchParams={searchParams}
+                />
+                <Overlay onClose={() => setOpenSortModal(false)} />
+              </>
+            )}
+          </div>
         </div>
       )}
       {pathname === "/receipts" && filteredReceiptData.length > 0 && (
@@ -128,26 +157,6 @@ const Filters = () => {
 
       <div className="flex gap-2 ">
         <div className="">
-          <>
-            {openModal && pathname === "/" && (
-              <FilterProjectOptions
-                router={router}
-                pathname={pathname}
-                onClose={() => setOpenModal(false)}
-                createQueryString={createQueryString}
-                searchParams={searchParams}
-              />
-            )}
-            {openSortModal && pathname === "/" && (
-              <SortProjectOptions
-                router={router}
-                pathname={pathname}
-                onClose={() => setOpenSortModal(false)}
-                createQueryString={createQueryString}
-                searchParams={searchParams}
-              />
-            )}
-          </>
           <>
             {openModal && pathname === "/receipts" && (
               <FilterReceiptOptions
@@ -307,23 +316,15 @@ const FilterProjectOptions = ({
     router.push(`${pathname}?${queryParams.toString()}`);
   };
 
-  const handleOverlayClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (
-      event.target instanceof HTMLDivElement &&
-      event.target.id === "modal-overlay"
-    ) {
-      onClose();
-    }
-  };
-
   const handleModalContentClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => e.stopPropagation();
   return (
-    <div id="modal-overlay" className={`overlay`} onClick={handleOverlayClick}>
-      <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
+    <div className="absolute z-[1001]">
+      <div
+        className={`flex flex-col  bg-white rounded-lg z-[1000] shadow-lg w-[200px]`}
+        onClick={handleModalContentClick}
+      >
         <div className=" border-black flex flex-col">
           <div className="border-b-[1px] border-black flex ">
             <div className="p-2 flex w-full">
@@ -363,6 +364,7 @@ const FilterProjectOptions = ({
           </div>
         </div>
       </div>
+      {/* </div> */}
     </div>
   );
 };
@@ -373,16 +375,6 @@ const SortProjectOptions = ({
   onClose,
   router,
 }: FilterOptionsProps) => {
-  const handleOverlayClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (
-      event.target instanceof HTMLDivElement &&
-      event.target.id === "modal-overlay"
-    ) {
-      onClose();
-    }
-  };
   const handleSortClick = (name: string) => {
     const queryParams = new URLSearchParams(window.location.search);
 
@@ -407,8 +399,11 @@ const SortProjectOptions = ({
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => e.stopPropagation();
   return (
-    <div id="modal-overlay" className={`overlay`} onClick={handleOverlayClick}>
-      <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
+    <div className="absolute z-[1001]">
+      <div
+        className={`flex flex-col  bg-white rounded-lg z-[1000] shadow-lg w-[200px]`}
+        onClick={handleModalContentClick}
+      >
         <div className="border-b-[1px] border-black flex ">
           <div className="p-2 flex w-full">
             <p className="text-center w-full text-black text-lg">Sort</p>
@@ -1001,5 +996,29 @@ const SortItemsOptions = ({
         </div>
       </div>
     </div>
+  );
+};
+
+interface OverlayProps {
+  onClose: () => void;
+}
+
+const Overlay = ({ onClose }: OverlayProps) => {
+  const handleOverlayClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (
+      event.target instanceof HTMLDivElement &&
+      event.target.id === "modal-overlay"
+    ) {
+      onClose();
+    }
+  };
+  return (
+    <div
+      id="modal-overlay"
+      className={`filter-overlay`}
+      onClick={handleOverlayClick}
+    ></div>
   );
 };

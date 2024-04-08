@@ -320,9 +320,9 @@ const FilterProjectOptions = ({
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => e.stopPropagation();
   return (
-    <div className="absolute z-[1001]">
+    <div className="absolute z-[901]">
       <div
-        className={`flex flex-col  bg-white rounded-lg z-[1000] shadow-lg w-[200px]`}
+        className={`flex flex-col  bg-white rounded-lg shadow-lg w-[200px]`}
         onClick={handleModalContentClick}
       >
         <div className=" border-black flex flex-col">
@@ -399,9 +399,9 @@ const SortProjectOptions = ({
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => e.stopPropagation();
   return (
-    <div className="absolute z-[1001]">
+    <div className="absolute z-[901]">
       <div
-        className={`flex flex-col  bg-white rounded-lg z-[1000] shadow-lg w-[200px]`}
+        className={`flex flex-col  bg-white rounded-lg shadow-lg w-[200px]`}
         onClick={handleModalContentClick}
       >
         <div className="border-b-[1px] border-black flex ">

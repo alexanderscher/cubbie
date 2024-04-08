@@ -14,7 +14,6 @@ interface HeaderProps {
 const Header = ({ type }: HeaderProps) => {
   const [addProjectOpen, setAddProjectOpen] = useState(false);
   const [addReceiptOpen, setAddReceiptOpen] = useState(false);
-
   const [isModalVisible, setIsModalVisible] = useState(false);
   return (
     <div className="flex flex-col gap-6 pb-8">
@@ -34,114 +33,117 @@ const Header = ({ type }: HeaderProps) => {
           </div>
 
           {isModalVisible && (
-            <div className="absolute bg-[#97cb97] rounded shadow p-3 -bottom-[120px] z-[200] w-[180px]">
-              {type === "Projects" && (
-                <div className="flex flex-col gap-2 text-sm">
-                  <Link
-                    className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
-                    href="/receipts"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="pl-1">
-                        <Image
-                          src="/receipt_b.png"
-                          width={13}
-                          height={13}
-                          alt="folder"
-                        ></Image>
+            <>
+              <Overlay onClose={() => setIsModalVisible(false)} />
+              <div className="absolute bg-[#97cb97] rounded shadow p-3 -bottom-[120px] z-[200] w-[180px]">
+                {type === "Projects" && (
+                  <div className="flex flex-col gap-2 text-sm">
+                    <Link
+                      className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
+                      href="/receipts"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="pl-1">
+                          <Image
+                            src="/receipt_b.png"
+                            width={13}
+                            height={13}
+                            alt="folder"
+                          ></Image>
+                        </div>
+                        <p>Receipts</p>
                       </div>
-                      <p>Receipts</p>
-                    </div>
-                  </Link>
-                  <Link
-                    className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
-                    href="/items"
-                  >
-                    <div className="flex items-center gap-2">
-                      <div>
+                    </Link>
+                    <Link
+                      className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
+                      href="/items"
+                    >
+                      <div className="flex items-center gap-2">
+                        <div>
+                          <Image
+                            src="/item_b.png"
+                            width={20}
+                            height={20}
+                            alt="folder"
+                          ></Image>
+                        </div>
+
+                        <p>Items</p>
+                      </div>
+                    </Link>
+                  </div>
+                )}
+                {type === "Receipts" && (
+                  <div className="flex flex-col gap-2 text-sm">
+                    <Link
+                      className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
+                      href="/"
+                    >
+                      <div className="flex items-center gap-2">
                         <Image
-                          src="/item_b.png"
+                          src="/folder.png"
                           width={20}
                           height={20}
                           alt="folder"
                         ></Image>
+                        <p>Projects</p>
                       </div>
+                    </Link>
+                    <Link
+                      className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
+                      href="/items"
+                    >
+                      <div className="flex items-center gap-2">
+                        <div>
+                          <Image
+                            src="/item_b.png"
+                            width={20}
+                            height={20}
+                            alt="folder"
+                          ></Image>
+                        </div>
 
-                      <p>Items</p>
-                    </div>
-                  </Link>
-                </div>
-              )}
-              {type === "Receipts" && (
-                <div className="flex flex-col gap-2 text-sm">
-                  <Link
-                    className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
-                    href="/"
-                  >
-                    <div className="flex items-center gap-2">
-                      <Image
-                        src="/folder.png"
-                        width={20}
-                        height={20}
-                        alt="folder"
-                      ></Image>
-                      <p>Projects</p>
-                    </div>
-                  </Link>
-                  <Link
-                    className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
-                    href="/items"
-                  >
-                    <div className="flex items-center gap-2">
-                      <div>
+                        <p>Items</p>
+                      </div>
+                    </Link>
+                  </div>
+                )}
+                {type === "Items" && (
+                  <div className="flex flex-col gap-2 text-sm">
+                    <Link
+                      className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
+                      href="/"
+                    >
+                      <div className="flex items-center gap-2">
                         <Image
-                          src="/item_b.png"
+                          src="/folder.png"
                           width={20}
                           height={20}
                           alt="folder"
                         ></Image>
+                        <p>Projects</p>
                       </div>
-
-                      <p>Items</p>
-                    </div>
-                  </Link>
-                </div>
-              )}
-              {type === "Items" && (
-                <div className="flex flex-col gap-2 text-sm">
-                  <Link
-                    className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
-                    href="/"
-                  >
-                    <div className="flex items-center gap-2">
-                      <Image
-                        src="/folder.png"
-                        width={20}
-                        height={20}
-                        alt="folder"
-                      ></Image>
-                      <p>Projects</p>
-                    </div>
-                  </Link>
-                  <Link
-                    className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
-                    href="/receipts"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="pl-1">
-                        <Image
-                          src="/receipt_b.png"
-                          width={13}
-                          height={13}
-                          alt="folder"
-                        ></Image>
+                    </Link>
+                    <Link
+                      className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
+                      href="/receipts"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="pl-1">
+                          <Image
+                            src="/receipt_b.png"
+                            width={13}
+                            height={13}
+                            alt="folder"
+                          ></Image>
+                        </div>
+                        <p>Receipts</p>
                       </div>
-                      <p>Receipts</p>
-                    </div>
-                  </Link>
-                </div>
-              )}
-            </div>
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </>
           )}
         </div>
 
@@ -226,5 +228,29 @@ const OptionsModal = ({
         </div>
       </div>
     </div>
+  );
+};
+
+interface OverlayProps {
+  onClose: () => void;
+}
+
+const Overlay = ({ onClose }: OverlayProps) => {
+  const handleOverlayClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (
+      event.target instanceof HTMLDivElement &&
+      event.target.id === "modal-overlay"
+    ) {
+      onClose();
+    }
+  };
+  return (
+    <div
+      id="modal-overlay"
+      className={`filter-overlay`}
+      onClick={handleOverlayClick}
+    ></div>
   );
 };

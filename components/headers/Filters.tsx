@@ -4,8 +4,11 @@ import { useSearchProjectContext } from "@/components/context/SearchProjectConte
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-
 import React, { useCallback, useEffect, useState } from "react";
+const clicked =
+  "w-full border-[1px] p-2 border-emerald-900 text-white rounded-md bg-emerald-900 text";
+const notClicked =
+  "w-full border-[1px] p-2 border-emerald-900 rounded-md text-emerald-900";
 
 const Filters = () => {
   const router = useRouter();
@@ -182,44 +185,47 @@ const Filters = () => {
       )}
       {pathname === "/items" && filteredItemData.length > 0 && (
         <div className="flex gap-2">
-          <FilterButton
-            setOpenModal={setOpenModal}
-            openModal={openModal}
-            label={determineLabel(searchParams.get("type"))}
-          />
+          <div className="relative">
+            <FilterButton
+              setOpenModal={setOpenModal}
+              openModal={openModal}
+              label={determineLabel(searchParams.get("type"))}
+            />
+            {openModal && pathname === "/items" && (
+              <>
+                <FilterItemsOptions
+                  router={router}
+                  pathname={pathname}
+                  onClose={() => setOpenModal(false)}
+                  createQueryString={createQueryString}
+                  searchParams={searchParams}
+                />
+                <Overlay onClose={() => setOpenModal(false)} />
+              </>
+            )}
+          </div>
 
-          <SortButton
-            openModal={openSortModal}
-            setOpenModal={setOpenSortModal}
-            label={"Sort by"}
-          />
+          <div className="relative">
+            <SortButton
+              openModal={openSortModal}
+              setOpenModal={setOpenSortModal}
+              label={"Sort by"}
+            />
+            {openSortModal && pathname === "/items" && (
+              <>
+                <SortItemsOptions
+                  router={router}
+                  pathname={pathname}
+                  onClose={() => setOpenSortModal(false)}
+                  createQueryString={createQueryString}
+                  searchParams={searchParams}
+                />
+                <Overlay onClose={() => setOpenSortModal(false)} />
+              </>
+            )}
+          </div>
         </div>
       )}
-
-      <div className="flex gap-2 ">
-        <div className="">
-          <>
-            {openModal && pathname === "/items" && (
-              <FilterItemsOptions
-                router={router}
-                pathname={pathname}
-                onClose={() => setOpenModal(false)}
-                createQueryString={createQueryString}
-                searchParams={searchParams}
-              />
-            )}
-            {openSortModal && pathname === "/items" && (
-              <SortItemsOptions
-                router={router}
-                pathname={pathname}
-                onClose={() => setOpenSortModal(false)}
-                createQueryString={createQueryString}
-                searchParams={searchParams}
-              />
-            )}
-          </>
-        </div>
-      </div>
     </div>
   );
 };
@@ -308,6 +314,28 @@ const SortButton = ({ setOpenModal, openModal, label }: FilterButtonProps) => {
   );
 };
 
+interface WrapperProps {
+  children: React.ReactNode;
+  handleModalContentClick: (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => void;
+}
+
+const Wrapper = ({ children, handleModalContentClick }: WrapperProps) => {
+  return (
+    <div className="absolute z-[901] -top-0">
+      <div
+        className={`flex flex-col  bg-white rounded-lg shadow-xl w-[200px]`}
+        onClick={handleModalContentClick}
+      >
+        <div className=" border-emerald-900 flex flex-col">
+          <div className="flex flex-col w-full p-4 gap-3">{children}</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 interface FilterOptionsProps {
   onClose: () => void;
   createQueryString: (name: string, value: string) => string;
@@ -319,72 +347,59 @@ interface FilterOptionsProps {
 const FilterProjectOptions = ({
   pathname,
   searchParams,
-  onClose,
   router,
 }: FilterOptionsProps) => {
-  const handleArchiveClick = (isArchived: string) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const handleArchiveClick = async (isArchived: string) => {
+    setIsLoading(true);
+
     const queryParams = new URLSearchParams(window.location.search);
     queryParams.set("archive", isArchived);
-    router.push(`${pathname}?${queryParams.toString()}`);
+
+    try {
+      await router.push(`${pathname}?${queryParams.toString()}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleModalContentClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => e.stopPropagation();
   return (
-    <div className="absolute z-[901] -top-0">
-      <div
-        className={`flex flex-col  bg-white rounded-lg shadow-lg w-[200px]`}
-        onClick={handleModalContentClick}
+    <Wrapper handleModalContentClick={handleModalContentClick}>
+      <button
+        className={`${
+          searchParams.get("archive") === "false" ||
+          !searchParams.get("archive")
+            ? clicked
+            : notClicked
+        }`}
+        onClick={() => {
+          handleArchiveClick("false");
+        }}
       >
-        <div className=" border-black flex flex-col">
-          <div className="border-b-[1px] border-black flex ">
-            <div className="p-2 flex w-full">
-              <p className="text-center w-full text-black text-lg">Filter</p>
-              <button className="text-black" onClick={onClose}>
-                &times;
-              </button>
-            </div>
-          </div>
-          <div className="flex flex-col w-full p-4 gap-3">
-            <button
-              className={`${
-                searchParams.get("archive") === "false" ||
-                !searchParams.get("archive")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleArchiveClick("false");
-              }}
-            >
-              <p className="text-xs">Current Projects</p>
-            </button>
+        <p className="text-xs"> {isLoading ? "Loading" : "Current Projects"}</p>
+      </button>
 
-            <button
-              className={`${
-                searchParams.get("archive") === "true"
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleArchiveClick("true");
-              }}
-            >
-              <p className="text-xs">Archived Projects</p>
-            </button>
-          </div>
-        </div>
-      </div>
-      {/* </div> */}
-    </div>
+      <button
+        className={`${
+          searchParams.get("archive") === "true" ? clicked : notClicked
+        }`}
+        onClick={() => {
+          handleArchiveClick("true");
+        }}
+      >
+        <p className="text-xs">{isLoading ? "Loading" : "Archived Projects"}</p>
+      </button>
+    </Wrapper>
   );
 };
 
 const SortProjectOptions = ({
   pathname,
   searchParams,
-  onClose,
+
   router,
 }: FilterOptionsProps) => {
   const handleSortClick = (name: string) => {
@@ -411,71 +426,51 @@ const SortProjectOptions = ({
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => e.stopPropagation();
   return (
-    <div className="absolute z-[901] -top-0">
-      <div
-        className={`flex flex-col  bg-white rounded-lg shadow-lg w-[200px]`}
-        onClick={handleModalContentClick}
+    <Wrapper handleModalContentClick={handleModalContentClick}>
+      <button
+        className={`${
+          searchParams.get("sort")?.includes("created_at") ||
+          !searchParams.get("sort")
+            ? clicked
+            : notClicked
+        }`}
+        onClick={() => {
+          handleSortClick("created_at");
+        }}
       >
-        <div className="border-b-[1px] border-black flex ">
-          <div className="p-2 flex w-full">
-            <p className="text-center w-full text-black text-lg">Sort</p>
-            <button className="text-black" onClick={onClose}>
-              &times;
-            </button>
-          </div>
-        </div>
+        {searchParams.get("sort")?.includes("created_at") ||
+        !searchParams.get("sort") ? (
+          <p className="text-xs">
+            {searchParams.get("sort")?.includes("-created_at") ||
+            !searchParams.get("sort")
+              ? "Created At (newest)"
+              : "Created At (oldest)"}
+          </p>
+        ) : (
+          <p className="text-xs">Created at</p>
+        )}
+      </button>
 
-        <div className=" border-black flex flex-col">
-          <div className="flex flex-col w-full p-4 gap-3">
-            <button
-              className={`${
-                searchParams.get("sort")?.includes("created_at") ||
-                !searchParams.get("sort")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleSortClick("created_at");
-              }}
-            >
-              {searchParams.get("sort")?.includes("created_at") ||
-              !searchParams.get("sort") ? (
-                <p className="text-xs">
-                  {searchParams.get("sort")?.includes("-created_at") ||
-                  !searchParams.get("sort")
-                    ? "Created At (newest)"
-                    : "Created At (oldest)"}
-                </p>
-              ) : (
-                <p className="text-xs">Created at</p>
-              )}
-            </button>
-
-            <button
-              className={`${
-                searchParams.get("sort")?.includes("price")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleSortClick("price");
-              }}
-            >
-              {searchParams.get("sort")?.includes("price") ? (
-                <p className="text-xs">
-                  {searchParams.get("sort")?.includes("-price") ||
-                  !searchParams.get("sort")
-                    ? "Price ascending"
-                    : "Price descending"}
-                </p>
-              ) : (
-                <p className="text-xs">Price</p>
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+      <button
+        className={`${
+          searchParams.get("sort")?.includes("price") ? clicked : notClicked
+        }`}
+        onClick={() => {
+          handleSortClick("price");
+        }}
+      >
+        {searchParams.get("sort")?.includes("price") ? (
+          <p className="text-xs">
+            {searchParams.get("sort")?.includes("-price") ||
+            !searchParams.get("sort")
+              ? "Price ascending"
+              : "Price descending"}
+          </p>
+        ) : (
+          <p className="text-xs">Price</p>
+        )}
+      </button>
+    </Wrapper>
   );
 };
 
@@ -489,85 +484,52 @@ const FilterReceiptOptions = ({
   createQueryString,
   pathname,
   searchParams,
-  onClose,
+
   router,
 }: FilterOptionsProps) => {
   const handleStoreClick = (name: string) => {
     router.push(pathname + "?" + createQueryString("storeType", name));
   };
 
-  const handleOverlayClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (
-      event.target instanceof HTMLDivElement &&
-      event.target.id === "modal-overlay"
-    ) {
-      onClose();
-    }
-  };
-
   const handleModalContentClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => e.stopPropagation();
   return (
-    <div className="absolute z-[901] -top-0">
-      <div
-        className={`flex flex-col  bg-white rounded-lg shadow-lg w-[200px]`}
-        onClick={handleModalContentClick}
+    <Wrapper handleModalContentClick={handleModalContentClick}>
+      <button
+        className={`${
+          searchParams.get("storeType") === "all" ||
+          !searchParams.get("storeType")
+            ? clicked
+            : notClicked
+        }`}
+        onClick={() => {
+          handleStoreClick("all");
+        }}
       >
-        <div className="border-b-[1px] border-black flex ">
-          <div className="p-2 flex w-full">
-            <p className="text-center w-full text-black text-lg">Filter</p>
-            <button className="text-black" onClick={onClose}>
-              &times;
-            </button>
-          </div>
-        </div>
-
-        <div className=" border-black flex flex-col">
-          <div className="flex flex-col w-full p-4 gap-3">
-            <button
-              className={`${
-                searchParams.get("storeType") === "all" ||
-                !searchParams.get("storeType")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleStoreClick("all");
-              }}
-            >
-              <p className="text-xs">All purchases</p>
-            </button>
-            <button
-              className={`${
-                searchParams.get("storeType") === "online"
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleStoreClick("online");
-              }}
-            >
-              <p className="text-xs">Online purchases</p>
-            </button>
-            <button
-              className={`${
-                searchParams.get("storeType") === "store"
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleStoreClick("store");
-              }}
-            >
-              <p className="text-xs">In-store purchases</p>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+        <p className="text-xs">All purchases</p>
+      </button>
+      <button
+        className={`${
+          searchParams.get("storeType") === "online" ? clicked : notClicked
+        }`}
+        onClick={() => {
+          handleStoreClick("online");
+        }}
+      >
+        <p className="text-xs">Online purchases</p>
+      </button>
+      <button
+        className={`${
+          searchParams.get("storeType") === "store" ? clicked : notClicked
+        }`}
+        onClick={() => {
+          handleStoreClick("store");
+        }}
+      >
+        <p className="text-xs">In-store purchases</p>
+      </button>
+    </Wrapper>
   );
 };
 
@@ -597,127 +559,96 @@ const SortReceiptOptions = ({
     router.push(`${pathname}?${queryParams.toString()}`);
   };
 
-  const handleOverlayClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (
-      event.target instanceof HTMLDivElement &&
-      event.target.id === "modal-overlay"
-    ) {
-      onClose();
-    }
-  };
-
   const handleModalContentClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => e.stopPropagation();
   return (
-    <div className="absolute z-[901] -top-0">
-      <div
-        className={`flex flex-col  bg-white rounded-lg shadow-lg w-[200px]`}
-        onClick={handleModalContentClick}
+    <Wrapper handleModalContentClick={handleModalContentClick}>
+      <button
+        className={`${
+          searchParams.get("sort")?.includes("created_at") ||
+          !searchParams.get("sort")
+            ? clicked
+            : notClicked
+        }`}
+        onClick={() => {
+          handleSortClick("created_at");
+        }}
       >
-        <div className="border-b-[1px] border-black flex ">
-          <div className="p-2 flex w-full">
-            <p className="text-center w-full text-black text-lg">Sort</p>
-            <button className="text-black" onClick={onClose}>
-              &times;
-            </button>
-          </div>
-        </div>
-
-        <div className=" border-black flex flex-col">
-          <div className="flex flex-col w-full p-4 gap-3">
-            <button
-              className={`${
-                searchParams.get("sort")?.includes("created_at") ||
-                !searchParams.get("sort")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleSortClick("created_at");
-              }}
-            >
-              {searchParams.get("sort")?.includes("created_at") ||
-              !searchParams.get("sort") ? (
-                <p className="text-xs">
-                  {searchParams.get("sort")?.includes("-created_at") ||
-                  !searchParams.get("sort")
-                    ? "Created At (newest)"
-                    : "Created At (oldest)"}
-                </p>
-              ) : (
-                <p className="text-xs">Created at</p>
-              )}
-            </button>
-            <button
-              className={`${
-                searchParams.get("sort")?.includes("return_date")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleSortClick("return_date");
-              }}
-            >
-              {searchParams.get("sort")?.includes("return_date") ? (
-                <p className="text-xs">
-                  {searchParams.get("sort")?.includes("-return_date") ||
-                  !searchParams.get("sort")
-                    ? "Return Date (newest)"
-                    : "Return Date (oldest)"}
-                </p>
-              ) : (
-                <p className="text-xs">Return date</p>
-              )}
-            </button>
-            <button
-              className={`${
-                searchParams.get("sort")?.includes("purchase_date")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleSortClick("purchase_date");
-              }}
-            >
-              {searchParams.get("sort")?.includes("purchase_date") ? (
-                <p className="text-xs">
-                  {searchParams.get("sort")?.includes("-purchase_date") ||
-                  !searchParams.get("sort")
-                    ? "Purchase Date (newest)"
-                    : "Purchase Date (oldest)"}
-                </p>
-              ) : (
-                <p className="text-xs">Purchase date</p>
-              )}
-            </button>
-            <button
-              className={`${
-                searchParams.get("sort")?.includes("price")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleSortClick("price");
-              }}
-            >
-              {searchParams.get("sort")?.includes("price") ? (
-                <p className="text-xs">
-                  {searchParams.get("sort")?.includes("-price") ||
-                  !searchParams.get("sort")
-                    ? "Price ascending"
-                    : "Price descending"}
-                </p>
-              ) : (
-                <p className="text-xs">Price</p>
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+        {searchParams.get("sort")?.includes("created_at") ||
+        !searchParams.get("sort") ? (
+          <p className="text-xs">
+            {searchParams.get("sort")?.includes("-created_at") ||
+            !searchParams.get("sort")
+              ? "Created At (newest)"
+              : "Created At (oldest)"}
+          </p>
+        ) : (
+          <p className="text-xs">Created at</p>
+        )}
+      </button>
+      <button
+        className={`${
+          searchParams.get("sort")?.includes("return_date")
+            ? clicked
+            : notClicked
+        }`}
+        onClick={() => {
+          handleSortClick("return_date");
+        }}
+      >
+        {searchParams.get("sort")?.includes("return_date") ? (
+          <p className="text-xs">
+            {searchParams.get("sort")?.includes("-return_date") ||
+            !searchParams.get("sort")
+              ? "Return Date (newest)"
+              : "Return Date (oldest)"}
+          </p>
+        ) : (
+          <p className="text-xs">Return date</p>
+        )}
+      </button>
+      <button
+        className={`${
+          searchParams.get("sort")?.includes("purchase_date")
+            ? clicked
+            : notClicked
+        }`}
+        onClick={() => {
+          handleSortClick("purchase_date");
+        }}
+      >
+        {searchParams.get("sort")?.includes("purchase_date") ? (
+          <p className="text-xs">
+            {searchParams.get("sort")?.includes("-purchase_date") ||
+            !searchParams.get("sort")
+              ? "Purchase Date (newest)"
+              : "Purchase Date (oldest)"}
+          </p>
+        ) : (
+          <p className="text-xs">Purchase date</p>
+        )}
+      </button>
+      <button
+        className={`${
+          searchParams.get("sort")?.includes("price") ? clicked : notClicked
+        }`}
+        onClick={() => {
+          handleSortClick("price");
+        }}
+      >
+        {searchParams.get("sort")?.includes("price") ? (
+          <p className="text-xs">
+            {searchParams.get("sort")?.includes("-price") ||
+            !searchParams.get("sort")
+              ? "Price ascending"
+              : "Price descending"}
+          </p>
+        ) : (
+          <p className="text-xs">Price</p>
+        )}
+      </button>
+    </Wrapper>
   );
 };
 
@@ -725,163 +656,101 @@ const StatusReceiptOptions = ({
   createQueryString,
   pathname,
   searchParams,
-  onClose,
+
   router,
 }: FilterOptionsProps) => {
   const handleExpiredlick = (name: string) => {
     router.push(pathname + "?" + createQueryString("expired", name));
   };
 
-  const handleOverlayClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (
-      event.target instanceof HTMLDivElement &&
-      event.target.id === "modal-overlay"
-    ) {
-      onClose();
-    }
-  };
-
   const handleModalContentClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => e.stopPropagation();
   return (
-    <div className="absolute z-[901] -top-0">
-      <div
-        className={`flex flex-col  bg-white rounded-lg shadow-lg w-[200px]`}
-        onClick={handleModalContentClick}
+    <Wrapper handleModalContentClick={handleModalContentClick}>
+      <button
+        className={`${
+          searchParams.get("expired") === "false" ||
+          !searchParams.get("expired")
+            ? clicked
+            : notClicked
+        }`}
+        onClick={() => {
+          handleExpiredlick("false");
+        }}
       >
-        <div className="border-b-[1px] border-black flex ">
-          <div className="p-2 flex w-full">
-            <p className="text-center w-full text-black text-lg">Status</p>
-            <button className="text-black" onClick={onClose}>
-              &times;
-            </button>
-          </div>
-        </div>
-
-        <div className=" border-black flex flex-col">
-          <div className="flex flex-col w-full p-4 gap-3">
-            <button
-              className={`${
-                searchParams.get("expired") === "false" ||
-                !searchParams.get("expired")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleExpiredlick("false");
-              }}
-            >
-              <p className="text-xs">Active</p>
-            </button>
-            <button
-              className={`${
-                searchParams.get("expired") === "true"
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleExpiredlick("true");
-              }}
-            >
-              <p className="text-xs">Expired</p>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+        <p className="text-xs">Active</p>
+      </button>
+      <button
+        className={`${
+          searchParams.get("expired") === "true" ? clicked : notClicked
+        }`}
+        onClick={() => {
+          handleExpiredlick("true");
+        }}
+      >
+        <p className="text-xs">Expired</p>
+      </button>
+    </Wrapper>
   );
 };
 
 const FilterItemsOptions = ({
   pathname,
   searchParams,
-  onClose,
+
   createQueryString,
   router,
 }: FilterOptionsProps) => {
   const handleTypeClick = (name: string) => {
     router.push(pathname + "?" + createQueryString("type", name));
   };
-  const handleOverlayClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (
-      event.target instanceof HTMLDivElement &&
-      event.target.id === "modal-overlay"
-    ) {
-      onClose();
-    }
-  };
+
   const handleModalContentClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => e.stopPropagation();
 
   return (
-    <div className="absolute z-[901] -top-0">
-      <div
-        className={`flex flex-col  bg-white rounded-lg shadow-lg w-[200px]`}
-        onClick={handleModalContentClick}
+    <Wrapper handleModalContentClick={handleModalContentClick}>
+      <button
+        className={`${
+          searchParams.get("type")?.includes("all") || !searchParams.get("type")
+            ? clicked
+            : notClicked
+        }`}
+        onClick={() => {
+          handleTypeClick("all");
+        }}
       >
-        <div className="border-b-[1px] border-black flex ">
-          <div className="p-4 flex w-full">
-            <p className="text-center w-full text-black text-lg">Filter</p>
-            <button onClick={onClose}>&times;</button>
-          </div>
-        </div>
-
-        <div className=" border-black flex flex-col">
-          <div className="flex flex-col w-full p-4 gap-3 text-xs">
-            <button
-              className={`${
-                searchParams.get("type")?.includes("all") ||
-                !searchParams.get("type")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleTypeClick("all");
-              }}
-            >
-              <p>All</p>
-            </button>
-            <button
-              className={`${
-                searchParams.get("type")?.includes("current")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleTypeClick("current");
-              }}
-            >
-              <p>Current Items</p>
-            </button>
-            <button
-              className={`${
-                searchParams.get("type")?.includes("returned")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleTypeClick("returned");
-              }}
-            >
-              <p>Returned items</p>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+        <p className="text-xs">All</p>
+      </button>
+      <button
+        className={`${
+          searchParams.get("type")?.includes("current") ? clicked : notClicked
+        }`}
+        onClick={() => {
+          handleTypeClick("current");
+        }}
+      >
+        <p className="text-xs">Current Items</p>
+      </button>
+      <button
+        className={`${
+          searchParams.get("type")?.includes("returned") ? clicked : notClicked
+        }`}
+        onClick={() => {
+          handleTypeClick("returned");
+        }}
+      >
+        <p className="text-xs">Returned items</p>
+      </button>
+    </Wrapper>
   );
 };
 
 const SortItemsOptions = ({
   pathname,
   searchParams,
-  onClose,
   router,
 }: FilterOptionsProps) => {
   const handleSortClick = (name: string) => {
@@ -904,125 +773,97 @@ const SortItemsOptions = ({
     router.push(`${pathname}?${queryParams.toString()}`);
   };
 
-  const handleOverlayClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (
-      event.target instanceof HTMLDivElement &&
-      event.target.id === "modal-overlay"
-    ) {
-      onClose();
-    }
-  };
   const handleModalContentClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => e.stopPropagation();
 
   return (
-    <div className="absolute z-[901] -top-0">
-      <div
-        className={`flex flex-col  bg-white rounded-lg shadow-lg w-[200px]`}
-        onClick={handleModalContentClick}
+    <Wrapper handleModalContentClick={handleModalContentClick}>
+      <button
+        className={`${
+          searchParams.get("sort")?.includes("created_at") ||
+          !searchParams.get("sort")
+            ? clicked
+            : notClicked
+        }`}
+        onClick={() => {
+          handleSortClick("created_at");
+        }}
       >
-        <div className="border-b-[1px] border-black flex ">
-          <div className="p-4 flex w-full">
-            <p className="text-center w-full text-black text-lg">Sort</p>
-            <button onClick={onClose}>&times;</button>
-          </div>
-        </div>
-
-        <div className=" border-black flex flex-col">
-          <div className="flex flex-col w-full p-4 gap-3">
-            <button
-              className={`${
-                searchParams.get("sort")?.includes("created_at") ||
-                !searchParams.get("sort")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleSortClick("created_at");
-              }}
-            >
-              {searchParams.get("sort")?.includes("created_at") ||
-              !searchParams.get("sort") ? (
-                <p className="text-xs">
-                  {searchParams.get("sort")?.includes("-created_at") ||
-                  !searchParams.get("sort")
-                    ? "Created At (newest)"
-                    : "Created At (oldest)"}
-                </p>
-              ) : (
-                <p className="text-xs">Created at</p>
-              )}
-            </button>
-            <button
-              className={`${
-                searchParams.get("sort")?.includes("return_date")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleSortClick("return_date");
-              }}
-            >
-              {searchParams.get("sort")?.includes("return_date") ? (
-                <p className="text-xs">
-                  {searchParams.get("sort")?.includes("-return_date") ||
-                  !searchParams.get("sort")
-                    ? "Return Date (newest)"
-                    : "Return Date (oldest)"}
-                </p>
-              ) : (
-                <p className="text-xs">Return date</p>
-              )}
-            </button>
-            <button
-              className={`${
-                searchParams.get("sort")?.includes("purchase_date")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleSortClick("purchase_date");
-              }}
-            >
-              {searchParams.get("sort")?.includes("purchase_date") ? (
-                <p className="text-xs">
-                  {searchParams.get("sort")?.includes("-purchase_date") ||
-                  !searchParams.get("sort")
-                    ? "Purchase Date (newest)"
-                    : "Purchase Date (oldest)"}
-                </p>
-              ) : (
-                <p className="text-xs">Purchase date</p>
-              )}
-            </button>
-            <button
-              className={`${
-                searchParams.get("sort")?.includes("price")
-                  ? "w-full border-[1px] p-2 border-black text-white rounded-md bg-black"
-                  : "w-full border-[1px] p-2 border-black rounded-md"
-              }`}
-              onClick={() => {
-                handleSortClick("price");
-              }}
-            >
-              {searchParams.get("sort")?.includes("price") ? (
-                <p className="text-xs">
-                  {searchParams.get("sort")?.includes("-price") ||
-                  !searchParams.get("sort")
-                    ? "Price ascending"
-                    : "Price descending"}
-                </p>
-              ) : (
-                <p className="text-xs">Price</p>
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+        {searchParams.get("sort")?.includes("created_at") ||
+        !searchParams.get("sort") ? (
+          <p className="text-xs">
+            {searchParams.get("sort")?.includes("-created_at") ||
+            !searchParams.get("sort")
+              ? "Created At (newest)"
+              : "Created At (oldest)"}
+          </p>
+        ) : (
+          <p className="text-xs">Created at</p>
+        )}
+      </button>
+      <button
+        className={`${
+          searchParams.get("sort")?.includes("return_date")
+            ? clicked
+            : notClicked
+        }`}
+        onClick={() => {
+          handleSortClick("return_date");
+        }}
+      >
+        {searchParams.get("sort")?.includes("return_date") ? (
+          <p className="text-xs">
+            {searchParams.get("sort")?.includes("-return_date") ||
+            !searchParams.get("sort")
+              ? "Return Date (newest)"
+              : "Return Date (oldest)"}
+          </p>
+        ) : (
+          <p className="text-xs">Return date</p>
+        )}
+      </button>
+      <button
+        className={`${
+          searchParams.get("sort")?.includes("purchase_date")
+            ? clicked
+            : notClicked
+        }`}
+        onClick={() => {
+          handleSortClick("purchase_date");
+        }}
+      >
+        {searchParams.get("sort")?.includes("purchase_date") ? (
+          <p className="text-xs">
+            {searchParams.get("sort")?.includes("-purchase_date") ||
+            !searchParams.get("sort")
+              ? "Purchase Date (newest)"
+              : "Purchase Date (oldest)"}
+          </p>
+        ) : (
+          <p className="text-xs">Purchase date</p>
+        )}
+      </button>
+      <button
+        className={`${
+          searchParams.get("sort")?.includes("price") ? clicked : notClicked
+        }`}
+        onClick={() => {
+          handleSortClick("price");
+        }}
+      >
+        {searchParams.get("sort")?.includes("price") ? (
+          <p className="text-xs">
+            {searchParams.get("sort")?.includes("-price") ||
+            !searchParams.get("sort")
+              ? "Price ascending"
+              : "Price descending"}
+          </p>
+        ) : (
+          <p className="text-xs">Price</p>
+        )}
+      </button>
+    </Wrapper>
   );
 };
 

@@ -69,7 +69,7 @@ const Filters = () => {
                   : "Archived projects"
               }
             />
-            {openModal && pathname === "/" && (
+            {openModal && (
               <>
                 <FilterProjectOptions
                   router={router}
@@ -89,7 +89,7 @@ const Filters = () => {
               setOpenModal={setOpenSortModal}
               label={"Sort by"}
             />
-            {openSortModal && pathname === "/" && (
+            {openSortModal && (
               <>
                 <SortProjectOptions
                   router={router}
@@ -106,37 +106,78 @@ const Filters = () => {
       )}
       {pathname === "/receipts" && filteredReceiptData.length > 0 && (
         <div className="flex gap-2">
-          <FilterButton
-            setOpenModal={setOpenModal}
-            openModal={openModal}
-            label={determineStoreTypeLabel(searchParams.get("storeType"))}
-          />
-
-          <SortButton
-            openModal={openSortModal}
-            setOpenModal={setOpenSortModal}
-            label={"All Purchases"}
-          />
-          <RegularButton
-            styles="border-emerald-900 text-emerald-900 flex justify-between items-center gap-2"
-            handleClick={() => {
-              setOpenStatusModal(!openStatusModal);
-            }}
-          >
-            <p className="text-xs">
-              {searchParams.get("expired") === "false" ||
-              !searchParams.get("expired")
-                ? "Active receipts"
-                : "Expired receipts"}
-            </p>
-            <Image
-              src="/arrow_grey.png"
-              width={8}
-              height={8}
-              alt="arrow"
-              className="rotate-90"
+          <div className="relative">
+            <FilterButton
+              setOpenModal={setOpenModal}
+              openModal={openModal}
+              label={determineStoreTypeLabel(searchParams.get("storeType"))}
             />
-          </RegularButton>
+            {openModal && (
+              <>
+                <FilterReceiptOptions
+                  router={router}
+                  pathname={pathname}
+                  onClose={() => setOpenModal(false)}
+                  createQueryString={createQueryString}
+                  searchParams={searchParams}
+                />
+                <Overlay onClose={() => setOpenModal(false)} />
+              </>
+            )}
+          </div>
+          <div className="relative">
+            <SortButton
+              openModal={openSortModal}
+              setOpenModal={setOpenSortModal}
+              label={"All Purchases"}
+            />
+            {openSortModal && (
+              <>
+                <SortReceiptOptions
+                  router={router}
+                  pathname={pathname}
+                  onClose={() => setOpenSortModal(false)}
+                  createQueryString={createQueryString}
+                  searchParams={searchParams}
+                />
+                <Overlay onClose={() => setOpenSortModal(false)} />
+              </>
+            )}
+          </div>
+          <div className="relative">
+            <RegularButton
+              styles="border-emerald-900 text-emerald-900 flex justify-between items-center gap-2"
+              handleClick={() => {
+                setOpenStatusModal(!openStatusModal);
+              }}
+            >
+              <p className="text-xs">
+                {searchParams.get("expired") === "false" ||
+                !searchParams.get("expired")
+                  ? "Active receipts"
+                  : "Expired receipts"}
+              </p>
+              <Image
+                src="/arrow_grey.png"
+                width={8}
+                height={8}
+                alt="arrow"
+                className="rotate-90"
+              />
+            </RegularButton>
+            {openStatusModal && (
+              <>
+                <StatusReceiptOptions
+                  router={router}
+                  pathname={pathname}
+                  onClose={() => setOpenStatusModal(false)}
+                  createQueryString={createQueryString}
+                  searchParams={searchParams}
+                />
+                <Overlay onClose={() => setOpenStatusModal(false)} />
+              </>
+            )}
+          </div>
         </div>
       )}
       {pathname === "/items" && filteredItemData.length > 0 && (
@@ -157,35 +198,6 @@ const Filters = () => {
 
       <div className="flex gap-2 ">
         <div className="">
-          <>
-            {openModal && pathname === "/receipts" && (
-              <FilterReceiptOptions
-                router={router}
-                pathname={pathname}
-                onClose={() => setOpenModal(false)}
-                createQueryString={createQueryString}
-                searchParams={searchParams}
-              />
-            )}
-            {openSortModal && pathname === "/receipts" && (
-              <SortReceiptOptions
-                router={router}
-                pathname={pathname}
-                onClose={() => setOpenSortModal(false)}
-                createQueryString={createQueryString}
-                searchParams={searchParams}
-              />
-            )}
-            {openStatusModal && pathname === "/receipts" && (
-              <StatusReceiptOptions
-                router={router}
-                pathname={pathname}
-                onClose={() => setOpenStatusModal(false)}
-                createQueryString={createQueryString}
-                searchParams={searchParams}
-              />
-            )}
-          </>
           <>
             {openModal && pathname === "/items" && (
               <FilterItemsOptions
@@ -320,7 +332,7 @@ const FilterProjectOptions = ({
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => e.stopPropagation();
   return (
-    <div className="absolute z-[901]">
+    <div className="absolute z-[901] -top-0">
       <div
         className={`flex flex-col  bg-white rounded-lg shadow-lg w-[200px]`}
         onClick={handleModalContentClick}
@@ -399,7 +411,7 @@ const SortProjectOptions = ({
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => e.stopPropagation();
   return (
-    <div className="absolute z-[901]">
+    <div className="absolute z-[901] -top-0">
       <div
         className={`flex flex-col  bg-white rounded-lg shadow-lg w-[200px]`}
         onClick={handleModalContentClick}
@@ -499,8 +511,11 @@ const FilterReceiptOptions = ({
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => e.stopPropagation();
   return (
-    <div id="modal-overlay" className={`overlay`} onClick={handleOverlayClick}>
-      <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
+    <div className="absolute z-[901] -top-0">
+      <div
+        className={`flex flex-col  bg-white rounded-lg shadow-lg w-[200px]`}
+        onClick={handleModalContentClick}
+      >
         <div className="border-b-[1px] border-black flex ">
           <div className="p-2 flex w-full">
             <p className="text-center w-full text-black text-lg">Filter</p>
@@ -597,8 +612,11 @@ const SortReceiptOptions = ({
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => e.stopPropagation();
   return (
-    <div id="modal-overlay" className={`overlay`} onClick={handleOverlayClick}>
-      <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
+    <div className="absolute z-[901] -top-0">
+      <div
+        className={`flex flex-col  bg-white rounded-lg shadow-lg w-[200px]`}
+        onClick={handleModalContentClick}
+      >
         <div className="border-b-[1px] border-black flex ">
           <div className="p-2 flex w-full">
             <p className="text-center w-full text-black text-lg">Sort</p>
@@ -729,8 +747,11 @@ const StatusReceiptOptions = ({
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => e.stopPropagation();
   return (
-    <div id="modal-overlay" className={`overlay`} onClick={handleOverlayClick}>
-      <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
+    <div className="absolute z-[901] -top-0">
+      <div
+        className={`flex flex-col  bg-white rounded-lg shadow-lg w-[200px]`}
+        onClick={handleModalContentClick}
+      >
         <div className="border-b-[1px] border-black flex ">
           <div className="p-2 flex w-full">
             <p className="text-center w-full text-black text-lg">Status</p>
@@ -799,8 +820,11 @@ const FilterItemsOptions = ({
   ) => e.stopPropagation();
 
   return (
-    <div id="modal-overlay" className={`overlay`} onClick={handleOverlayClick}>
-      <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
+    <div className="absolute z-[901] -top-0">
+      <div
+        className={`flex flex-col  bg-white rounded-lg shadow-lg w-[200px]`}
+        onClick={handleModalContentClick}
+      >
         <div className="border-b-[1px] border-black flex ">
           <div className="p-4 flex w-full">
             <p className="text-center w-full text-black text-lg">Filter</p>
@@ -895,8 +919,11 @@ const SortItemsOptions = ({
   ) => e.stopPropagation();
 
   return (
-    <div id="modal-overlay" className={`overlay`} onClick={handleOverlayClick}>
-      <div className={`flex flex-col modal`} onClick={handleModalContentClick}>
+    <div className="absolute z-[901] -top-0">
+      <div
+        className={`flex flex-col  bg-white rounded-lg shadow-lg w-[200px]`}
+        onClick={handleModalContentClick}
+      >
         <div className="border-b-[1px] border-black flex ">
           <div className="p-4 flex w-full">
             <p className="text-center w-full text-black text-lg">Sort</p>

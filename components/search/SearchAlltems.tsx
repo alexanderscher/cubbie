@@ -1,12 +1,13 @@
 "use client";
 import { useSearchBarContext } from "@/components/context/SearchBarContext";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
+import { unifiedSearch } from "@/lib/searchbar";
 
-import { Receipt } from "@/types/AppTypes";
-import { Project } from "@/types/AppTypes";
+import { Receipt, Project } from "@/types/AppTypes";
 import Image from "next/image";
 import Link from "next/link";
 import React, { ChangeEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface SearchAllItemsProps {
   projectData: Project[];
@@ -27,8 +28,24 @@ function SearchAllItems({ projectData, receiptData }: SearchAllItemsProps) {
 
   const [showScanner, setShowScanner] = useState(false);
   const [barcodeValue, setBarcodeValue] = useState("");
+  const [isPending, startTransition] = useState(false);
+  const [query, setQuery] = useState("");
 
-  useEffect(() => {}, [receiptData, projectData]);
+  // const searchFetch = () => {
+  //   startTransition(async () => {
+  //     try {
+  //       const result = await unifiedSearch(query);
+
+  //       if (result?.error) {
+  //         toast.error("An error occurred. Please try again.");
+  //       } else {
+  //         toast.success("Your operation was successful!");
+  //       }
+  //     } catch (error) {
+  //       toast.error("An error occurred. Please try again.");
+  //     }
+  //   });
+  // };
 
   const handleBarcodeResult = (barcodeValue: string) => {
     const matchingItems = receiptData
@@ -65,8 +82,6 @@ function SearchAllItems({ projectData, receiptData }: SearchAllItemsProps) {
           item.description && item.description.toLowerCase().includes(input);
         const barcodeMatch =
           item.barcode && item.barcode.toLowerCase().includes(input);
-        // const productIdMatch =
-        //   item.product_id && item.product_id.toLowerCase().includes(input);
 
         return descriptionMatch || barcodeMatch;
       });

@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSearchBarContext } from "@/components/context/SearchBarContext";
-import SearchAllItems from "@/components/search/AlItems";
 import { LogOutButton } from "@/components/LogOutButton";
 import { useState } from "react";
 import { Session } from "@/types/AppTypes";

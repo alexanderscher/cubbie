@@ -1,4 +1,4 @@
-import SearchAllItems from "@/components/search/AlItems";
+import SearchAllItems from "@/components/search/SearchAlltems";
 import { getProjects } from "@/lib/projectsDB";
 import { getReceipts } from "@/lib/receiptsDB";
 import { Project, Receipt } from "@/types/AppTypes";

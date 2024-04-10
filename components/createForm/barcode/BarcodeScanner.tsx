@@ -35,7 +35,7 @@ export const BarcodeScanner = ({
             setShowScanner(false);
           }}
         >
-          Close
+          X
         </button>
         <div className={`${styles.scannerStyle}`}>
           <Webcam

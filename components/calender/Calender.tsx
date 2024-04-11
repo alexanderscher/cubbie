@@ -3,10 +3,11 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
-
+import { useEffect, useRef, useState } from "react";
+import styles from "./calender.module.css";
 import { TooltipComponent } from "@/components/tooltips/ToolTip";
 import { Receipt } from "@/types/AppTypes";
+import { useMediaQuery } from "react-responsive";
 
 interface Event {
   title: string;
@@ -20,6 +21,14 @@ interface CalenderProps {
 }
 
 const Calender = ({ receipts }: CalenderProps) => {
+  const isMobileDeviceQuery = useMediaQuery({ maxWidth: 700 });
+  const [isMobileDevice, setIsMobileDevice] = useState<any>(null);
+  // console.log("isMobileDeviceQuery", isMobileDeviceQuery);
+
+  useEffect(() => {
+    setIsMobileDevice(isMobileDeviceQuery);
+  }, [isMobileDeviceQuery]);
+
   const [allEvents, setAllEvents] = useState<Event[]>([
     { title: "", start: "", id: 0 },
   ]);
@@ -53,20 +62,20 @@ const Calender = ({ receipts }: CalenderProps) => {
   }, [receipts]);
 
   const calendarRef = useRef<any>(null);
-  const [currentDate, setCurrentDate] = useState(new Date());
+  // const [currentDate, setCurrentDate] = useState(new Date());
 
-  const handleMonthChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const year = currentDate.getFullYear();
-    const month = parseInt(event.target.value, 10);
-    const newDate = new Date(year, month);
+  // const handleMonthChange = (event: ChangeEvent<HTMLSelectElement>) => {
+  //   const year = currentDate.getFullYear();
+  //   const month = parseInt(event.target.value, 10);
+  //   const newDate = new Date(year, month);
 
-    setCurrentDate(newDate);
+  //   setCurrentDate(newDate);
 
-    if (calendarRef.current) {
-      const api = calendarRef.current.getApi();
-      api.gotoDate(newDate);
-    }
-  };
+  //   if (calendarRef.current) {
+  //     const api = calendarRef.current.getApi();
+  //     api.gotoDate(newDate);
+  //   }
+  // };
 
   const [activeEventId, setActiveEventId] = useState<string | null>(null);
 
@@ -74,10 +83,10 @@ const Calender = ({ receipts }: CalenderProps) => {
     setActiveEventId(eventId);
   };
   return (
-    <div className="">
-      <div className="sm:-ml-2 sm:-mr-2 -ml-3 -mr-3 relative ">
+    <div className={styles.calendarContainer}>
+      <div className={styles.fullcalendar}>
         <FullCalendar
-          height={"98vh"}
+          {...(isMobileDevice && { height: "100%" })}
           ref={calendarRef}
           plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
           headerToolbar={{

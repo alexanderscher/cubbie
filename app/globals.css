@@ -137,9 +137,9 @@ input:-webkit-autofill::first-line {
   color: rgb(6 78 59);
 }
 
-.fc .fc-daygrid-day {
-  height: 100px; /* Adjust based on your design */
-}
+/* .fc .fc-daygrid-day {
+  height: 100px;
+} */
 
 .fc .fc-popover {
   box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 6px;

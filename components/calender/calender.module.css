@@ -1,0 +1,113 @@
+.calendarContainer {
+  display: flex;
+  width: 100%;
+  height: 90vh;
+  justify-content: center;
+}
+
+.fullcalendar {
+  width: 100%;
+  max-width: 1000px;
+  height: auto;
+  aspect-ratio: 4 / 3;
+}
+@media (max-width: 550px) {
+  .calendarContainer {
+    height: 500px;
+  }
+}
+
+.fc .fc-daygrid-event {
+  margin-top: 1px;
+  z-index: auto;
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+  margin-bottom: 1.5em;
+  flex-wrap: wrap;
+}
+
+.fc {
+  border: none;
+  font-size: 14px;
+  color: rgb(6 78 59);
+}
+
+.fc .fc-daygrid-day {
+  height: 100px;
+}
+
+.fc .fc-popover {
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 6px;
+  position: absolute;
+  z-index: 10;
+}
+
+.fc .fc-event-purchase {
+  background-color: rgb(6 78 59);
+  border: 1px solid rgb(6 78 59);
+  color: white;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  padding: 2px 4px;
+  cursor: pointer;
+}
+
+.fc .fc-event-return {
+  background-color: rgb(234 88 12);
+  border: 1px solid rgb(234 88 12);
+  color: white;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  padding: 2px 4px;
+  cursor: pointer;
+}
+
+.fc-theme-standard .fc-scrollgrid {
+  border: 1px solid #adbbce;
+}
+
+.fc .fc-daygrid-day {
+  border-color: #adbbce !important;
+}
+
+.fc .fc-daygrid-day-frame, /* Day grid */
+.fc .fc-daygrid-day-top, /* Day number */
+.fc .fc-col-header-cell {
+  /* Column headers */
+  border-color: #adbbce !important; /* Your desired border color */
+}
+
+.fc .fc-toolbar .fc-today-button {
+  background-color: #e2f1e2; /* Green background */
+  color: rgb(6 78 59); /* White text */
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.fc .fc-toolbar .fc-prev-button {
+  background-color: #e2f1e2;
+  color: rgb(6 78 59);
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.fc .fc-toolbar .fc-next-button {
+  background-color: #e2f1e2;
+  color: rgb(6 78 59);
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.fc .fc-toolbar .fc-today-button:active,
+.fc .fc-toolbar .fc-prev-button:active,
+.fc .fc-toolbar .fc-next-button:active {
+  background-color: #e2f1e2;
+  color: rgb(6 78 59);
+  outline: none;
+}

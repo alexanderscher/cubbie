@@ -14,9 +14,8 @@ export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
   const isApiCronRoute = nextUrl.pathname === "/api/cron";
-  const apiKey = req.headers.get("x-api-key");
 
-  if (isApiCronRoute && apiKey === process.env.CRON_SECRET) {
+  if (isApiCronRoute) {
     return;
   }
 

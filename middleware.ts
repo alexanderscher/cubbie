@@ -13,6 +13,12 @@ const { auth } = NextAuth(authConfig);
 export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
+  const isApiCronRoute = nextUrl.pathname === "/api/cron";
+  const apiKey = req.headers.get("x-api-key");
+
+  if (isApiCronRoute && apiKey === process.env.CRON_API_KEY) {
+    return;
+  }
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);

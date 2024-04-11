@@ -3,7 +3,7 @@ import prisma from "@/prisma/client";
 import { getBaseUrl } from "@/utils/baseUrl";
 import moment from "moment";
 import { revalidateTag } from "next/cache";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const domain = getBaseUrl();
 
@@ -79,9 +79,28 @@ const sendReminder = async (daysUntilDue: number, reminderType: string) => {
 };
 export const revalidate = 0;
 
-export async function GET() {
-  await sendReminder(0, "TODAY_REMINDER");
-  await sendReminder(1, "1_DAY_REMINDER");
-  await sendReminder(7, "1_WEEK_REMINDER");
-  return NextResponse.json({ message: "Reminders sent successfully." });
+export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get("authorization");
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response("Unauthorized", {
+      status: 401,
+    });
+  }
+  try {
+    await sendReminder(0, "TODAY_REMINDER");
+    await sendReminder(1, "1_DAY_REMINDER");
+    await sendReminder(7, "1_WEEK_REMINDER");
+    return new Response(
+      JSON.stringify({ message: "Reminders sent successfully." }),
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  } catch (error) {
+    console.error("Error sending reminders:", error);
+    return new Response("Internal Server Error", { status: 500 });
+  }
 }

@@ -679,7 +679,7 @@ const StatusReceiptOptions = ({
           handleExpiredlick("false");
         }}
       >
-        <p className="text-xs">Active</p>
+        <p className="text-xs">Active receipts</p>
       </button>
       <button
         className={`${
@@ -689,7 +689,7 @@ const StatusReceiptOptions = ({
           handleExpiredlick("true");
         }}
       >
-        <p className="text-xs">Expired</p>
+        <p className="text-xs">Expired receipts</p>
       </button>
     </Wrapper>
   );

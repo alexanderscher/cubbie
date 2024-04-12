@@ -20,6 +20,7 @@ export const getItems = async () => {
           receipt: {
             project: {
               userId: userId,
+              archive: false,
             },
           },
         },

@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { Project as ProjectType } from "@/types/AppTypes";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import { usePathname } from "next/navigation";
+import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 
 interface OptionsModalProps {
   isOpen: boolean;
@@ -53,7 +54,7 @@ export const ProjectOptionsModal = ({ project }: OptionsModalProps) => {
 
   return (
     <div
-      className={`absolute  shadow-1 -right-2 top-10 rounded-md w-[200px] ${
+      className={`absolute  shadow-1 -right-2 top-10 rounded-md w-[202px] ${
         pathname === "/" ? "z-200 bg-white" : "z-[500] bg-[#97cb97] "
       }`}
       onClick={(e) => {
@@ -113,8 +114,23 @@ export const ProjectOptionsModal = ({ project }: OptionsModalProps) => {
                 setArchive(project.id, "true");
               }}
             >
-              <Image src={"/archive.png"} width={20} height={20} alt=""></Image>
-              <p>Archive project</p>
+              <div>
+                {" "}
+                <Image
+                  src={"/archive.png"}
+                  width={20}
+                  height={20}
+                  alt=""
+                ></Image>
+              </div>
+
+              <div className="flex justify-between w-full">
+                <p>Archive project</p>
+                <TooltipWithHelperIcon
+                  iconColor="text-black"
+                  content="Archiving this project will make its receipts and items hidden. You can unarchive this project at any time to restore visibility."
+                />
+              </div>
             </div>
           </div>
         )}

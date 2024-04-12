@@ -71,3 +71,30 @@ export interface Alert {
   userId: string;
   read: boolean;
 }
+
+export interface DefaultReceipt {
+  id: number;
+  type: string;
+  store: string;
+  card?: string | null;
+  tracking_number: string | null;
+  purchase_date: Date;
+  days_until_return: number;
+  return_date: Date;
+  receipt_image_url: string | null;
+  receipt_image_key: string | null;
+  memo: boolean;
+  created_at: Date;
+  expired: boolean;
+  project_id: number;
+  items?: Item[];
+}
+
+export interface DefaulteProject {
+  id: number;
+  name: string;
+  created_at: Date;
+  userId: string;
+  asset_amount: number | null;
+  archive: boolean;
+}

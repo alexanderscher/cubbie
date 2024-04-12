@@ -55,6 +55,7 @@ export const getReceipts = async () => {
         where: {
           project: {
             userId: userId,
+            archive: false,
           },
         },
         include: {

@@ -14,6 +14,12 @@ export const getAlerts = async () => {
         where: {
           userId,
         },
+        include: {
+          receipt: true,
+        },
+        orderBy: {
+          date: "desc",
+        },
       });
 
       return alerts;

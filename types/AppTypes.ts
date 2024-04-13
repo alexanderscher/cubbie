@@ -70,6 +70,7 @@ export interface Alert {
   date: Date;
   userId: string;
   read: boolean;
+  receipt: Receipt;
 }
 
 export interface DefaultReceipt {

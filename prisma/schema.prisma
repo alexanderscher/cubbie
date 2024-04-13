@@ -35,6 +35,7 @@ model Alerts {
   id         String   @id @default(cuid())
   date       DateTime
   receipt_id Int
+  receipt    Receipt  @relation(fields: [receipt_id], references: [id])
   userId     String
   type       String
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -123,6 +124,7 @@ model Receipt {
   expired           Boolean  @default(false)
   project_id        Int
   project           Project  @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  Alerts            Alerts[]
 }
 
 model Items {

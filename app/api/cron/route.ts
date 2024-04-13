@@ -46,19 +46,23 @@ const sendReminder = async (daysUntilDue: number, reminderType: string) => {
         if (user?.email) {
           const link = `${domain}/receipt/${receipt.id}`;
           let emailSubject = "Receipt Reminder";
+          let date = "";
           if (reminderType === "TODAY_REMINDER") {
             emailSubject = "Your Receipt is Due Today";
+            date = "today";
           } else if (reminderType === "1_DAY_REMINDER") {
             emailSubject = "Your Receipt is Due Tomorrow";
+            date = "tomorrow";
           } else if (reminderType === "1_WEEK_REMINDER") {
             emailSubject = "Your Receipt is Due Next Week";
+            date = "in one week";
           }
 
           await resend.emails.send({
             from: "noreply@cubbie.io",
             to: user.email,
             subject: emailSubject,
-            html: `<p>Your receipt from <a href="${link}">${receipt.store}</a> is due.</p>`,
+            html: `<p>Your receipt from <a href="${link}">${receipt.store}</a> is due ${date}.</p>`,
           });
 
           await prisma.alerts.create({

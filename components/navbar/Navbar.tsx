@@ -6,13 +6,15 @@ import { usePathname } from "next/navigation";
 import { useSearchBarContext } from "@/components/context/SearchBarContext";
 import { LogOutButton } from "@/components/LogOutButton";
 import { useState } from "react";
-import { Session } from "@/types/AppTypes";
+import { Alert, Session } from "@/types/AppTypes";
 
 interface NavbarProps {
   session: Session;
   children: React.ReactNode;
+  alerts?: number;
 }
-const Navbar = ({ session, children }: NavbarProps) => {
+const Navbar = ({ session, children, alerts }: NavbarProps) => {
+  console.log("alerts", alerts);
   const pathname = usePathname();
   const { searchBarOpen, setSearchBarOpen } = useSearchBarContext();
   const [isModalVisible, setModalVisible] = useState(false);
@@ -130,7 +132,7 @@ const Navbar = ({ session, children }: NavbarProps) => {
           </Link>
         </div>
 
-        <div className={styles.linkWrapper}>
+        <div className={`${styles.linkWrapper} relative`}>
           <Link
             href="/alerts"
             className="flex flex-col justify-center items-center gap-2"
@@ -144,6 +146,9 @@ const Navbar = ({ session, children }: NavbarProps) => {
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
             <p className="text-xs">Alerts</p>
+            <div className="absolute right-0.5 top-0.5 shadow-xl w-5 h-5 flex items-center justify-center text-xl  bg-orange-600 rounded-full cursor-pointer mb-4">
+              <p className="text-white text-xs">{alerts}</p>
+            </div>
           </Link>
         </div>
         <div className="relative">

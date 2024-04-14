@@ -24,7 +24,7 @@ const PageWrapper = async ({ children }: PageWrapperProps) => {
 
   return (
     <SearchBarContextProvider>
-      <Topbar session={session}>
+      <Topbar session={session} alerts={alerts}>
         <SearchFetch />
       </Topbar>
       <div className="flex bg-[#e2f1e2]">

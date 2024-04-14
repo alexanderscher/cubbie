@@ -10,9 +10,10 @@ import { Session } from "@/types/AppTypes";
 interface TopbarProps {
   session: Session;
   children: React.ReactNode;
+  alerts?: number;
 }
 
-const Topbar = ({ session, children }: TopbarProps) => {
+const Topbar = ({ session, children, alerts }: TopbarProps) => {
   const [menu, setMenu] = useState(false);
   const { searchBarOpen, setSearchBarOpen } = useSearchBarContext();
 
@@ -59,10 +60,13 @@ const Topbar = ({ session, children }: TopbarProps) => {
       {menu && (
         <div className={`${styles.menu} p-4 `}>
           <div className="flex flex-col gap-4 p-2">
-            <div className="flex justify-between">
-              <Link onClick={() => setMenu(false)} href="/">
-                <p className="text-white text-3xl">Projects</p>
-              </Link>
+            <Link
+              className="flex justify-between"
+              onClick={() => setMenu(false)}
+              href="/"
+            >
+              <p className="text-white text-3xl">Projects</p>
+
               <div>
                 <Image
                   src="/folder.png"
@@ -73,26 +77,34 @@ const Topbar = ({ session, children }: TopbarProps) => {
                   style={{ objectFit: "cover", objectPosition: "center" }}
                 />
               </div>
-            </div>
-            <div className="flex justify-between">
-              <Link onClick={() => setMenu(false)} href="/receipts">
-                <p className="text-white text-3xl">Receipts</p>
-              </Link>
+            </Link>
+
+            <Link
+              onClick={() => setMenu(false)}
+              href="/receipts"
+              className="flex justify-between "
+            >
+              <p className="text-white text-3xl">Receipts</p>
+
               <div className="">
                 <Image
                   src="/receipt_w.png"
                   alt=""
                   width={20}
                   height={20}
-                  className="object-cover "
+                  className="object-cover mr-[5px]"
                   style={{ objectFit: "cover", objectPosition: "center" }}
                 />
               </div>
-            </div>
-            <div className="flex justify-between">
-              <Link onClick={() => setMenu(false)} href="/items">
-                <p className="text-white text-3xl">Items</p>
-              </Link>
+            </Link>
+
+            <Link
+              className="flex justify-between"
+              onClick={() => setMenu(false)}
+              href="/items"
+            >
+              <p className="text-white text-3xl">Items</p>
+
               <div>
                 <Image
                   src="/item_w.png"
@@ -103,11 +115,15 @@ const Topbar = ({ session, children }: TopbarProps) => {
                   style={{ objectFit: "cover", objectPosition: "center" }}
                 />
               </div>
-            </div>
-            <div className="flex justify-between">
-              <Link onClick={() => setMenu(false)} href="/calender">
-                <p className="text-white text-3xl">Calender</p>
-              </Link>
+            </Link>
+
+            <Link
+              className="flex justify-between"
+              onClick={() => setMenu(false)}
+              href="/calender"
+            >
+              <p className="text-white text-3xl">Calender</p>
+
               <div>
                 <Image
                   src="/calendar_w.png"
@@ -118,13 +134,16 @@ const Topbar = ({ session, children }: TopbarProps) => {
                   style={{ objectFit: "cover", objectPosition: "center" }}
                 />
               </div>
-            </div>
+            </Link>
 
-            <div className="flex justify-between">
-              <Link onClick={() => setMenu(false)} href="/">
-                <p className="text-white text-3xl">Alerts</p>
-              </Link>
-              <div>
+            <Link
+              onClick={() => setMenu(false)}
+              className="flex justify-between"
+              href="/"
+            >
+              <p className="text-white text-3xl">Alerts</p>
+
+              <div className="relative">
                 <Image
                   src="/notification_w.png"
                   alt=""
@@ -133,26 +152,36 @@ const Topbar = ({ session, children }: TopbarProps) => {
                   className="object-cover "
                   style={{ objectFit: "cover", objectPosition: "center" }}
                 />
+                {alerts && alerts > 0 && (
+                  <div className="absolute -right-3 -top-1 shadow-xl w-5 h-5 flex items-center justify-center text-xl  bg-orange-600 rounded-full cursor-pointer mb-4">
+                    <p className="text-white text-xs">{alerts}</p>
+                  </div>
+                )}
               </div>
-            </div>
-            <div className="flex justify-between">
-              <Link onClick={() => setMenu(false)} href="/profile">
-                <p className="text-white text-3xl">Account</p>
-              </Link>
+            </Link>
+
+            <Link
+              className="flex justify-between"
+              onClick={() => setMenu(false)}
+              href="/profile"
+            >
+              <p className="text-white text-3xl">Account</p>
+
               <div>
                 {" "}
                 <Image
                   src="/account_w.png"
                   alt=""
-                  width={25}
-                  height={25}
+                  width={27}
+                  height={27}
                   className="object-cover "
                   style={{ objectFit: "cover", objectPosition: "center" }}
                 />
               </div>
-            </div>
-            <div className="mt-3">{session && <LogOutButton />}</div>
+            </Link>
           </div>
+
+          <div className="mt-4">{session && <LogOutButton />}</div>
         </div>
       )}
     </div>

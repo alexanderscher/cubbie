@@ -10,7 +10,7 @@ import { Session } from "@/types/AppTypes";
 interface TopbarProps {
   session: Session;
   children: React.ReactNode;
-  alerts?: number;
+  alerts: number;
 }
 
 const Topbar = ({ session, children, alerts }: TopbarProps) => {
@@ -152,7 +152,7 @@ const Topbar = ({ session, children, alerts }: TopbarProps) => {
                   className="object-cover "
                   style={{ objectFit: "cover", objectPosition: "center" }}
                 />
-                {alerts && alerts > 0 && (
+                {alerts > 0 && (
                   <div className="absolute -right-3 -top-1 shadow-xl w-5 h-5 flex items-center justify-center text-xl  bg-orange-600 rounded-full cursor-pointer mb-4">
                     <p className="text-white text-xs">{alerts}</p>
                   </div>

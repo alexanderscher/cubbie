@@ -11,10 +11,10 @@ import { Alert, Session } from "@/types/AppTypes";
 interface NavbarProps {
   session: Session;
   children: React.ReactNode;
-  alerts?: number;
+  alerts: number;
 }
 const Navbar = ({ session, children, alerts }: NavbarProps) => {
-  console.log("alerts", alerts);
+  console.log(alerts);
   const pathname = usePathname();
   const { searchBarOpen, setSearchBarOpen } = useSearchBarContext();
   const [isModalVisible, setModalVisible] = useState(false);
@@ -147,7 +147,7 @@ const Navbar = ({ session, children, alerts }: NavbarProps) => {
             />
 
             <p className="text-xs">Alerts</p>
-            {alerts && alerts > 0 && (
+            {alerts > 0 && (
               <div className="absolute right-0.5 top-0.5 shadow-xl w-5 h-5 flex items-center justify-center text-xl  bg-orange-600 rounded-full cursor-pointer mb-4">
                 <p className="text-white text-xs ">{alerts}</p>
               </div>

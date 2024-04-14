@@ -145,10 +145,13 @@ const Navbar = ({ session, children, alerts }: NavbarProps) => {
               className="object-cover "
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
+
             <p className="text-xs">Alerts</p>
-            <div className="absolute right-0.5 top-0.5 shadow-xl w-5 h-5 flex items-center justify-center text-xl  bg-orange-600 rounded-full cursor-pointer mb-4">
-              <p className="text-white text-xs">{alerts}</p>
-            </div>
+            {alerts && alerts > 0 && (
+              <div className="absolute right-0.5 top-0.5 shadow-xl w-5 h-5 flex items-center justify-center text-xl  bg-orange-600 rounded-full cursor-pointer mb-4">
+                <p className="text-white text-xs ">{alerts}</p>
+              </div>
+            )}
           </Link>
         </div>
         <div className="relative">

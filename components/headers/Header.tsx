@@ -35,7 +35,10 @@ const Header = ({ type }: HeaderProps) => {
           {isModalVisible && (
             <>
               <Overlay onClose={() => setIsModalVisible(false)} />
-              <div className="absolute bg-[#97cb97] rounded shadow p-3 -bottom-[120px] z-[200] w-[180px]">
+              <div
+                className="absolute bg-[#97cb97] rounded shadow p-3 -bottom-[120px] z-[200] w-[180px]"
+                onClick={(e) => e.preventDefault()}
+              >
                 {type === "Projects" && (
                   <div className="flex flex-col gap-2 text-sm">
                     <Link
@@ -181,7 +184,7 @@ const AddButton = ({
 }: AddButtonProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   return (
-    <div className="fixed z-10 bottom-8 right-8 shadow-xl w-12 h-12 flex items-center justify-center border-2 border-orange-600 bg-orange-600 text-white rounded-full ">
+    <div className="fixed z-[500] bottom-8 right-8 shadow-xl w-12 h-12 flex items-center justify-center border-2 border-orange-600 bg-orange-600 text-white rounded-full ">
       <div className="relative">
         <button onClick={() => setIsModalVisible(!isModalVisible)} className="">
           <p className="text-xl">+</p>
@@ -206,7 +209,7 @@ const OptionsModal = ({
   setIsModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   return (
-    <div className="absolute -right-1 -bottom-1 w-48 bg-orange-300 shadow-lg rounded-md flex flex-col text-black z-200">
+    <div className="absolute -right-1 -bottom-1 w-48 bg-orange-300 shadow-lg rounded-md flex flex-col text-black ">
       <div className="flex flex-col text-start gap-3 relative p-4">
         <div
           className="bg-orange-100 hover:bg-orange-200 rounded-md p-3 cursor-pointer"
@@ -221,10 +224,10 @@ const OptionsModal = ({
           <button className="text-sm text-orange-600">Create Receipt</button>
         </div>
         <div
-          className="absolute -right-3 -top-3 shadow-xl w-12 h-12 flex items-center justify-center  bg-white text-orange-600 rounded-full cursor-pointer"
+          className="absolute -right-3 -top-3 shadow-xl w-12 h-12 flex items-center justify-center text-xl  bg-white text-orange-600 rounded-full cursor-pointer mb-4"
           onClick={() => setIsModalVisible(false)}
         >
-          X
+          &times;
         </div>
       </div>
     </div>

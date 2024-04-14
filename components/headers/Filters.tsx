@@ -323,9 +323,9 @@ interface WrapperProps {
 
 const Wrapper = ({ children, handleModalContentClick }: WrapperProps) => {
   return (
-    <div className="absolute z-[901] -top-0">
+    <div className="absolute z-[401] -top-0 ">
       <div
-        className={`flex flex-col  bg-white rounded-lg shadow-xl w-[200px]`}
+        className={`flex flex-col  bg-white rounded-lg shadow-xl w-[200px] border-[1px] border-slate-200 `}
         onClick={handleModalContentClick}
       >
         <div className=" border-emerald-900 flex flex-col">

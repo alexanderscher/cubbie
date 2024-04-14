@@ -16,7 +16,7 @@ export default async function Alerts() {
     <PageWrapper>
       <div className="flex flex-col items-center pb-[400px]">
         <Suspense fallback={<div>Loading</div>}>
-          <div className="w-full max-w-[900px]">
+          <div className="w-full max-w-[600px]">
             <AlertComponent alerts={alerts} />
           </div>
         </Suspense>

@@ -26,8 +26,6 @@ function SearchAllItems({ projectData, receiptData }: SearchAllItemsProps) {
 
   const [showScanner, setShowScanner] = useState(false);
   const [barcodeValue, setBarcodeValue] = useState("");
-  const [isPending, startTransition] = useState(false);
-  const [query, setQuery] = useState("");
 
   const handleBarcodeResult = (barcodeValue: string) => {
     const matchingItems = receiptData
@@ -44,7 +42,6 @@ function SearchAllItems({ projectData, receiptData }: SearchAllItemsProps) {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value.toLowerCase().trim();
     setSearchInput(e.target.value);
-
     const filteredProjects = projectData.filter(
       (project) => project.name && project.name.toLowerCase().includes(input)
     );

@@ -9,6 +9,7 @@ import { format, parse, isToday, isYesterday, subDays } from "date-fns";
 import { markAsRead, unmarkAsRead } from "@/actions/alerts/read";
 import { toast } from "sonner";
 import { deleteAlert } from "@/actions/alerts/deleteAlert";
+import Loading from "@/components/Loading";
 
 const describeDate = (dateString: string) => {
   const date = parse(dateString, "MM/dd/yy", new Date());
@@ -88,6 +89,17 @@ const SingleAlert = ({ alertObj }: SingleAlertProps) => {
     <div
       key={alertObj.id}
       className="relative bg-white p-4 rounded-md shadow flex gap-8 items-center "
+      // onClick={(e) => {
+      //   e.preventDefault();
+      //   if (alertObj.read) return;
+      //   else {
+      //     try {
+      //       markAsRead({ alertID: alertObj.id });
+      //     } catch (e) {
+      //       toast.error("An error occurred. Please try again.");
+      //     }
+      //   }
+      // }}
     >
       {isOpen && (
         <>
@@ -114,16 +126,27 @@ const SingleAlert = ({ alertObj }: SingleAlertProps) => {
         {alertObj.type === "1_DAY_REMINDER" && (
           <p>
             Your receipt from{" "}
-            <Link href={`/receipt/${alertObj.receipt_id}`}>
+            <Link
+              className={` ${
+                alertObj.read ? "text-slate-500" : "text-emerald-900"
+              } underline`}
+              href={`/receipt/${alertObj.receipt_id}`}
+            >
               {alertObj.receipt.store}
             </Link>{" "}
             is due tomorrow
           </p>
         )}
+
         {alertObj.type === "TODAY_REMINDER" && (
           <p>
             Your receipt from{" "}
-            <Link href={`/receipt/${alertObj.receipt_id}`}>
+            <Link
+              className={` ${
+                alertObj.read ? "text-slate-500" : "text-emerald-900"
+              } underline`}
+              href={`/receipt/${alertObj.receipt_id}`}
+            >
               {alertObj.receipt.store}
             </Link>{" "}
             is due today
@@ -132,7 +155,12 @@ const SingleAlert = ({ alertObj }: SingleAlertProps) => {
         {alertObj.type === "1_WEEK_REMINDER" && (
           <p>
             Your receipt from{" "}
-            <Link href={`/receipt/${alertObj.receipt_id}`}>
+            <Link
+              className={` ${
+                alertObj.read ? "text-slate-500" : "text-emerald-900"
+              } underline`}
+              href={`/receipt/${alertObj.receipt_id}`}
+            >
               {alertObj.receipt.store}
             </Link>{" "}
             is due in one week
@@ -167,7 +195,10 @@ const AlertOptionsModal = ({ alertObj }: SingleAlertProps) => {
   return (
     <div
       className={`absolute shadow-1 -right-2 top-10 rounded-md w-[230px] bg-white p-4 z-[201] text-sm`}
-      onClick={(e) => e.preventDefault()}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
     >
       <div className="flex flex-col gap-2">
         <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 cursor-pointer">
@@ -176,6 +207,7 @@ const AlertOptionsModal = ({ alertObj }: SingleAlertProps) => {
               className="flex gap-2"
               onClick={(e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 startTransition(() => {
                   try {
                     unmarkAsRead({ alertID: alertObj.id });
@@ -199,10 +231,10 @@ const AlertOptionsModal = ({ alertObj }: SingleAlertProps) => {
               className="flex gap-2"
               onClick={(e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 startTransition(() => {
                   try {
                     markAsRead({ alertID: alertObj.id });
-                    toast.success("Your operation was successful!");
                   } catch (e) {
                     toast.error("An error occurred. Please try again.");
                   }
@@ -224,10 +256,10 @@ const AlertOptionsModal = ({ alertObj }: SingleAlertProps) => {
             className="flex gap-2"
             onClick={(e) => {
               e.preventDefault();
+              e.stopPropagation();
               startTransition(() => {
                 try {
                   deleteAlert({ alertID: alertObj.id });
-                  toast.success("Your operation was successful!");
                 } catch (e) {
                   toast.error("An error occurred. Please try again.");
                 }
@@ -239,6 +271,7 @@ const AlertOptionsModal = ({ alertObj }: SingleAlertProps) => {
           </div>
         </div>
       </div>
+      {isPending && <Loading loading={isPending} />}
     </div>
   );
 };

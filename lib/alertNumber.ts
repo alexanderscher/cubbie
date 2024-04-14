@@ -8,7 +8,7 @@ function getDynamicCacheKey(userId: string) {
   return `alert_user_${userId}`;
 }
 
-export const getAlerts = async () => {
+export const getAlertsNumber = async () => {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
   const dynamicKey = getDynamicCacheKey(userId);
@@ -17,16 +17,11 @@ export const getAlerts = async () => {
       const alerts = await prisma.alerts.findMany({
         where: {
           userId,
-        },
-        include: {
-          receipt: true,
-        },
-        orderBy: {
-          date: "desc",
+          read: false,
         },
       });
 
-      return alerts;
+      return alerts.length;
     },
     ["alerts", dynamicKey],
     { tags: ["alerts", dynamicKey], revalidate: 60 }

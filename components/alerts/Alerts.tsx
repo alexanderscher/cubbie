@@ -2,24 +2,86 @@
 import Filters from "@/components/headers/Filters";
 import { Alert } from "@/types/AppTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
-
+import Image from "next/image";
+import Link from "next/link";
 import React from "react";
+import { format, parse, isToday, isYesterday, subDays } from "date-fns";
+
+const describeDate = (dateString: string) => {
+  const date = parse(dateString, "MM/dd/yy", new Date());
+
+  if (isToday(date)) {
+    return "Today";
+  }
+
+  if (isYesterday(date)) {
+    return "Yesterday";
+  }
+
+  const oneWeekAgo = subDays(new Date(), 7);
+  if (format(date, "MM/dd/yyyy") === format(oneWeekAgo, "MM/dd/yyyy")) {
+    return "One week ago";
+  }
+
+  return format(date, "MMMM dd, yyyy");
+};
 
 interface AlertProps {
   alerts: Alert[];
 }
 
 const AlertComponent = ({ alerts }: AlertProps) => {
-  console.log(alerts);
   return (
     <div>
       <AlertHeader />
       <div className="flex flex-col gap-6">
         {alerts.map((alert) => (
-          <div key={alert.id} className="bg-white p-6 rounded-md shadow">
-            <div>{formatDateToMMDDYY(alert.date)}</div>
-            <div>{alert.receipt.store}</div>
-            <div>{alert.type}</div>
+          <div
+            key={alert.id}
+            className="bg-white p-6 rounded-md shadow flex gap-4 items-center"
+          >
+            <div>
+              <Image
+                src="/notification_b.png"
+                alt=""
+                width={25}
+                height={25}
+                className="object-cover "
+                style={{ objectFit: "cover", objectPosition: "center" }}
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              {alert.type === "1_DAY_REMINDER" && (
+                <p>
+                  Your receipt from{" "}
+                  <Link href={`/receipt/${alert.receipt_id}`}>
+                    {alert.receipt.store}
+                  </Link>{" "}
+                  is due tomorrow
+                </p>
+              )}
+              {alert.type === "TODAY_REMINDER" && (
+                <p>
+                  Your receipt from{" "}
+                  <Link href={`/receipt/${alert.receipt_id}`}>
+                    {alert.receipt.store}
+                  </Link>{" "}
+                  is due today
+                </p>
+              )}
+              {alert.type === "1_WEEK_REMINDER" && (
+                <p>
+                  Your receipt from{" "}
+                  <Link href={`/receipt/${alert.receipt_id}`}>
+                    {alert.receipt.store}
+                  </Link>{" "}
+                  is due in one week
+                </p>
+              )}
+              <div className="text-sm">
+                {describeDate(formatDateToMMDDYY(alert.date))}
+              </div>
+            </div>
           </div>
         ))}
       </div>

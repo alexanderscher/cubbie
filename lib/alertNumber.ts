@@ -14,10 +14,10 @@ export const getAlertsNumber = async () => {
   const dynamicKey = getDynamicCacheKey(userId);
   return unstable_cache(
     async (userId) => {
-      const alerts = await prisma.alerts.findMany({
+      const alerts = await prisma.alert.findMany({
         where: {
           userId,
-          read: false,
+          // read: false,
         },
       });
 

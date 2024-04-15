@@ -18,6 +18,7 @@ interface Props {
 const Projects = ({ serverData }: Props) => {
   const { isProjectLoading, filteredProjectData, initializeProjects } =
     useSearchProjectContext();
+  console.log(serverData);
 
   useEffect(() => {
     if (serverData) {

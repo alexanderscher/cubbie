@@ -3,6 +3,7 @@ import { useSearchProjectContext } from "@/components/context/SearchProjectConte
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
 import { usePathname } from "next/navigation";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
+import { useSearchAlertContext } from "@/components/context/SearchFilterAlerts";
 
 interface Props {
   searchType: string;
@@ -15,6 +16,7 @@ function SearchBar({ searchType }: Props) {
   const { filterProjects } = useSearchProjectContext();
   const { filterReceipts } = useSearchReceiptContext();
   const { filterItems } = useSearchItemContext();
+  const { filterAlerts } = useSearchAlertContext();
 
   useEffect(() => {
     setSearchTerm("");
@@ -30,6 +32,8 @@ function SearchBar({ searchType }: Props) {
       filterReceipts(newSearchTerm);
     } else if (pathname.includes("items")) {
       filterItems(newSearchTerm);
+    } else if (pathname.includes("alerts")) {
+      filterAlerts(newSearchTerm);
     }
   };
 
@@ -42,6 +46,8 @@ function SearchBar({ searchType }: Props) {
             ? "receipt by store name"
             : searchType === "Items"
             ? "item by name, barcode, or product id"
+            : searchType === "Alerts"
+            ? "alerts by store name"
             : "projects"
         }`}
         value={searchTerm}

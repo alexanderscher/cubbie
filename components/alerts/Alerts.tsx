@@ -4,12 +4,15 @@ import { Alert } from "@/types/AppTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useTransition } from "react";
+import React, { useEffect, useMemo, useState, useTransition } from "react";
 import { format, parse, isToday, isYesterday, subDays } from "date-fns";
 import { markAsRead, unmarkAsRead } from "@/actions/alerts/read";
 import { toast } from "sonner";
 import { deleteAlert } from "@/actions/alerts/deleteAlert";
 import Loading from "@/components/Loading";
+import SearchBar from "@/components/search/SearchBar";
+import { useSearchAlertContext } from "@/components/context/SearchFilterAlerts";
+import { useSearchParams } from "next/navigation";
 
 const describeDate = (dateString: string) => {
   const date = parse(dateString, "MM/dd/yy", new Date());
@@ -35,18 +38,102 @@ interface AlertProps {
 }
 
 const AlertComponent = ({ alerts }: AlertProps) => {
-  return (
-    <div>
-      <AlertHeader />
-      <div className="flex flex-col gap-6">
-        {alerts.map((alertObj) => (
-          <>
-            <SingleAlert alertObj={alertObj} />
-          </>
-        ))}
+  const { filteredAlertData, initializeAlerts } = useSearchAlertContext();
+  useEffect(() => {
+    if (alerts) {
+      initializeAlerts(alerts);
+    }
+  }, [alerts, initializeAlerts]);
+  const searchParams = useSearchParams();
+
+  const sortFieldParam = searchParams.get("sort");
+  const sortField = sortFieldParam?.startsWith("-")
+    ? sortFieldParam.slice(1)
+    : sortFieldParam;
+  const sortOrder = sortFieldParam?.startsWith("-") ? "desc" : "asc";
+
+  const sortedAndFilteredData = useMemo(() => {
+    if (!sortField) return filteredAlertData;
+
+    return filteredAlertData.sort((a: Alert, b: Alert) => {
+      let valueA: any, valueB: any;
+
+      if (sortField === "alert_date") {
+        valueA = a.date;
+        valueB = b.date;
+      } else {
+        console.warn(`Sort field ${sortField} is not handled.`);
+        return 0;
+      }
+
+      if (valueA === undefined || valueB === undefined) return 0;
+
+      if (typeof valueA === "number" && typeof valueB === "number") {
+        return sortOrder === "asc" ? valueA - valueB : valueB - valueA;
+      }
+
+      if (typeof valueA === "string" && typeof valueB === "string") {
+        return sortOrder === "asc"
+          ? valueA.localeCompare(valueB)
+          : valueB.localeCompare(valueA);
+      }
+
+      return 0;
+    });
+  }, [filteredAlertData, sortField, sortOrder]);
+
+  if (
+    searchParams.get("alertType") === "all" ||
+    !searchParams.get("alertType")
+  ) {
+    return (
+      <div>
+        <AlertHeader />
+        <div className="flex flex-col gap-6">
+          {filteredAlertData.map((alertObj) => (
+            <>
+              <SingleAlert alertObj={alertObj} />
+            </>
+          ))}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  if (searchParams.get("alertType") === "unread") {
+    return (
+      <div>
+        <AlertHeader />
+        <div className="flex flex-col gap-6">
+          {filteredAlertData.map(
+            (alertObj) =>
+              !alertObj.read && (
+                <>
+                  <SingleAlert alertObj={alertObj} />
+                </>
+              )
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (searchParams.get("alertType") === "read") {
+    return (
+      <div>
+        <AlertHeader />
+        <div className="flex flex-col gap-6">
+          {filteredAlertData.map(
+            (alertObj) =>
+              alertObj.read && (
+                <>
+                  <SingleAlert alertObj={alertObj} />
+                </>
+              )
+          )}
+        </div>
+      </div>
+    );
+  }
 };
 
 export default AlertComponent;
@@ -61,18 +148,8 @@ const AlertHeader = () => {
           </div>
         </div>
       </div>
+      <SearchBar searchType="Alerts" />
 
-      <div className=" flex justify-between items-center relative flex-wrap gap-4 ">
-        <div className="w-full">
-          <input
-            className="searchBar  border-[1px] border-emerald-900 placeholder:text-emerald-900 placeholder:text-xs flex items-center text-sm text-emerald-900 p-3"
-            placeholder={`Search alerts by type, date, or store name`}
-
-            // value={searchTerm}
-            // onChange={handleChange}
-          />
-        </div>
-      </div>
       <Filters />
     </div>
   );
@@ -89,17 +166,6 @@ const SingleAlert = ({ alertObj }: SingleAlertProps) => {
     <div
       key={alertObj.id}
       className="relative bg-white p-4 rounded-md shadow flex gap-8 items-center "
-      // onClick={(e) => {
-      //   e.preventDefault();
-      //   if (alertObj.read) return;
-      //   else {
-      //     try {
-      //       markAsRead({ alertID: alertObj.id });
-      //     } catch (e) {
-      //       toast.error("An error occurred. Please try again.");
-      //     }
-      //   }
-      // }}
     >
       {isOpen && (
         <>

@@ -1,4 +1,5 @@
 import RegularButton from "@/components/buttons/RegularButton";
+import { useSearchAlertContext } from "@/components/context/SearchFilterAlerts";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
@@ -19,6 +20,7 @@ const Filters = () => {
   const { filteredItemData } = useSearchItemContext();
   const { filteredProjectData } = useSearchProjectContext();
   const { filteredReceiptData } = useSearchReceiptContext();
+  const { filteredAlertData } = useSearchAlertContext();
   const searchParams = useSearchParams();
 
   const determineLabel = (type: string | null) => {
@@ -31,6 +33,19 @@ const Filters = () => {
         return "Returned items";
       default:
         return "All items";
+    }
+  };
+
+  const determineAlertLabel = (type: string | null) => {
+    switch (type) {
+      case "all":
+        return "All alerts";
+      case "unread":
+        return "Unread alerts";
+      case "read":
+        return "Read alerts";
+      default:
+        return "All alerts";
     }
   };
 
@@ -214,6 +229,49 @@ const Filters = () => {
             {openSortModal && pathname === "/items" && (
               <>
                 <SortItemsOptions
+                  router={router}
+                  pathname={pathname}
+                  onClose={() => setOpenSortModal(false)}
+                  createQueryString={createQueryString}
+                  searchParams={searchParams}
+                />
+                <Overlay onClose={() => setOpenSortModal(false)} />
+              </>
+            )}
+          </div>
+        </div>
+      )}
+      {pathname === "/alerts" && filteredAlertData.length > 0 && (
+        <div className="flex gap-2">
+          <div className="relative">
+            <FilterButton
+              setOpenModal={setOpenModal}
+              openModal={openModal}
+              label={determineAlertLabel(searchParams.get("type"))}
+            />
+            {openModal && pathname === "/alerts" && (
+              <>
+                <FilterAlertOptions
+                  router={router}
+                  pathname={pathname}
+                  onClose={() => setOpenModal(false)}
+                  createQueryString={createQueryString}
+                  searchParams={searchParams}
+                />
+                <Overlay onClose={() => setOpenModal(false)} />
+              </>
+            )}
+          </div>
+
+          <div className="relative">
+            <SortButton
+              openModal={openSortModal}
+              setOpenModal={setOpenSortModal}
+              label={"Sort by"}
+            />
+            {openSortModal && pathname === "/alerts" && (
+              <>
+                <SortAlertOptions
                   router={router}
                   pathname={pathname}
                   onClose={() => setOpenSortModal(false)}
@@ -888,5 +946,112 @@ const Overlay = ({ onClose }: OverlayProps) => {
       className={`filter-overlay`}
       onClick={handleOverlayClick}
     ></div>
+  );
+};
+
+const FilterAlertOptions = ({
+  pathname,
+  searchParams,
+
+  createQueryString,
+  router,
+}: FilterOptionsProps) => {
+  const handleTypeClick = (name: string) => {
+    router.push(pathname + "?" + createQueryString("alertType", name));
+  };
+
+  const handleModalContentClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => e.stopPropagation();
+
+  return (
+    <Wrapper handleModalContentClick={handleModalContentClick}>
+      <button
+        className={`${
+          searchParams.get("alertType")?.includes("all") ||
+          !searchParams.get("alertType")
+            ? clicked
+            : notClicked
+        }`}
+        onClick={() => {
+          handleTypeClick("all");
+        }}
+      >
+        <p className="text-xs">All alerts</p>
+      </button>
+      <button
+        className={`${
+          searchParams.get("alertType") === "unread" ? clicked : notClicked
+        }`}
+        onClick={() => {
+          handleTypeClick("unread");
+        }}
+      >
+        <p className="text-xs">Unread alerts</p>
+      </button>
+      <button
+        className={`${
+          searchParams.get("alertType") === "read" ? clicked : notClicked
+        }`}
+        onClick={() => {
+          handleTypeClick("read");
+        }}
+      >
+        <p className="text-xs">Read alerts</p>
+      </button>
+    </Wrapper>
+  );
+};
+
+const SortAlertOptions = ({
+  pathname,
+  searchParams,
+  router,
+}: FilterOptionsProps) => {
+  const handleSortClick = (name: string) => {
+    const queryParams = new URLSearchParams(window.location.search);
+
+    const currentSort = queryParams.get("sort");
+    const currentDirection = currentSort?.includes("-") ? "desc" : "asc";
+
+    let newDirection;
+    if (currentSort === name && currentDirection === "asc") {
+      newDirection = "desc";
+    } else {
+      newDirection = "asc";
+    }
+
+    const newSortValue = newDirection === "asc" ? name : `-${name}`;
+
+    queryParams.set("sort", newSortValue);
+
+    router.push(`${pathname}?${queryParams.toString()}`);
+  };
+
+  const handleModalContentClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => e.stopPropagation();
+
+  return (
+    <Wrapper handleModalContentClick={handleModalContentClick}>
+      <button
+        className={`${clicked}`}
+        onClick={() => {
+          handleSortClick("alert_date");
+        }}
+      >
+        {searchParams.get("sort")?.includes("alert_date") ||
+        !searchParams.get("sort") ? (
+          <p className="text-xs">
+            {searchParams.get("sort")?.includes("-alert_date") ||
+            !searchParams.get("sort")
+              ? "Alert date (newest)"
+              : "Alert date (oldest)"}
+          </p>
+        ) : (
+          <p className="text-xs">Alert date</p>
+        )}
+      </button>
+    </Wrapper>
   );
 };

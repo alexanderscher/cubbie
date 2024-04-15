@@ -1,14 +1,11 @@
 "use client";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
-
 import { ProjectOptionsModal } from "@/components/options/ProjectOptions";
 import { CreateProject } from "@/components/project/CreateProject";
-
 import { Receipt } from "@/types/AppTypes";
 import { Project as ProjectType } from "@/types/AppTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
-
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";

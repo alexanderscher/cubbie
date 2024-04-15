@@ -25,7 +25,7 @@ const Account = ({ session }: Props) => {
       className={`${styles.layout} gap-6 w-full justify-center items center`}
     >
       <div
-        className={`${styles.header}  bg-white min-w-[200px] rounded shadow p-6 flex flex-col gap-4 `}
+        className={`${styles.header}  text-emerald-900 bg-white min-w-[200px] rounded shadow p-6 flex flex-col gap-4 `}
       >
         <h1 className="text-lg">Account</h1>
         <div className="flex flex-col gap-4 text-sm ">
@@ -37,7 +37,7 @@ const Account = ({ session }: Props) => {
       <div className="flex flex-col gap-4 w-full max-w-[600px]">
         <div className="bg-white rounded p-6  flex flex-col gap-4">
           <div className="flex justify-between">
-            <p>User Profile</p>
+            <p className="text-emerald-900">User Profile</p>
             <div className={styles.button}>
               <Image
                 src={"/dashboard_b.png"}
@@ -99,7 +99,7 @@ const PersonalInformation = ({ session }: Props) => {
     });
   };
   return (
-    <div className="bg-white rounded-md shadow  w-full  p-6  justify-center">
+    <div className="bg-white rounded-md shadow  w-full  p-8  justify-center">
       <Formik
         initialValues={{
           name: session?.user.name || undefined,
@@ -191,7 +191,7 @@ const Password = () => {
           handleChange,
         }) => (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
-            <div className="bg-white rounded-md shadow  w-full flex flex-col p-6 gap-4">
+            <div className="bg-white rounded-md shadow  w-full flex flex-col p-8 gap-4">
               <h1 className="text-emerald-900">Change Password</h1>
 
               <FormikInput

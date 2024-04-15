@@ -27,19 +27,91 @@ model User {
   isTwoFactorEnabled    Boolean                @default(false)
   phone                 String?
   twoFactorConfirmation TwoFactorConfirmation?
-  projects              Project[]
-  alerts                Alerts[]
+  projects              Project[] // Projects where the user is an owner or a collaborator
+  projectOwnerships     Project[]              @relation("projectOwner")
+  alerts                Alert[]
+  ProjectUser           ProjectUser[]
+  AlertRead             AlertRead[]
 }
 
-model Alerts {
-  id         String   @id @default(cuid())
-  date       DateTime
-  receipt_id Int
-  receipt    Receipt  @relation(fields: [receipt_id], references: [id])
-  userId     String
-  type       String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  read       Boolean  @default(false)
+model Project {
+  id           Int           @id @default(autoincrement())
+  name         String
+  asset_amount Float?
+  created_at   DateTime
+  userId       String
+  archive      Boolean       @default(false)
+  user         User          @relation(name: "projectOwner", fields: [userId], references: [id], onDelete: Cascade, map: "Project_userId_fkey_owner")
+  projectUsers ProjectUser[]
+  receipts     Receipt[]
+  User         User          @relation(fields: [userId], references: [id])
+  Alert        Alert[]
+}
+
+model ProjectUser {
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId Int
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
+
+  @@id([projectId, userId])
+}
+
+model Alert {
+  id        String      @id @default(cuid())
+  date      DateTime
+  receiptId Int
+  receipt   Receipt     @relation(fields: [receiptId], references: [id])
+  projectId Int
+  project   Project     @relation(fields: [projectId], references: [id])
+  type      String
+  readBy    AlertRead[]
+  User      User?       @relation(fields: [userId], references: [id])
+  userId    String?
+}
+
+model AlertRead {
+  alertId String
+  alert   Alert   @relation(fields: [alertId], references: [id])
+  userId  String
+  user    User    @relation(fields: [userId], references: [id])
+  read    Boolean @default(false)
+  
+  @@id([alertId, userId])
+}
+
+model Receipt {
+  id                Int      @id @default(autoincrement())
+  type              String
+  store             String
+  card              String?
+  tracking_number   String?
+  purchase_date     DateTime
+  days_until_return Int
+  return_date       DateTime
+  receipt_image_url String?
+  receipt_image_key String?
+  items             Items[]
+  memo              Boolean
+  created_at        DateTime
+  expired           Boolean  @default(false)
+  project_id        Int
+  project           Project  @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  Alert             Alert[]
+}
+
+model Items {
+  id          Int      @id @default(autoincrement())
+  description String
+  photo_url   String?
+  photo_key   String?
+  price       Float
+  barcode     String?
+  character   String?
+  receipt_id  Int
+  receipt     Receipt  @relation(fields: [receipt_id], references: [id], onDelete: Cascade)
+  created_at  DateTime
+  returned    Boolean  @default(false)
 }
 
 model Account {
@@ -94,49 +166,4 @@ model TwoFactorConfirmation {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId])
-}
-
-model Project {
-  id           Int       @id @default(autoincrement())
-  name         String
-  asset_amount Float?
-  created_at   DateTime
-  userId       String
-  archive      Boolean   @default(false)
-  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  receipts     Receipt[]
-}
-
-model Receipt {
-  id                Int      @id @default(autoincrement())
-  type              String
-  store             String
-  card              String?
-  tracking_number   String?
-  purchase_date     DateTime
-  days_until_return Int
-  return_date       DateTime
-  receipt_image_url String?
-  receipt_image_key String?
-  items             Items[]
-  memo              Boolean
-  created_at        DateTime
-  expired           Boolean  @default(false)
-  project_id        Int
-  project           Project  @relation(fields: [project_id], references: [id], onDelete: Cascade)
-  Alerts            Alerts[]
-}
-
-model Items {
-  id          Int      @id @default(autoincrement())
-  description String
-  photo_url   String?
-  photo_key   String?
-  price       Float
-  barcode     String?
-  character   String?
-  receipt_id  Int
-  receipt     Receipt  @relation(fields: [receipt_id], references: [id], onDelete: Cascade)
-  created_at  DateTime
-  returned    Boolean  @default(false)
 }

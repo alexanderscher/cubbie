@@ -14,14 +14,18 @@ export const getAlertsNumber = async () => {
   const dynamicKey = getDynamicCacheKey(userId);
   return unstable_cache(
     async (userId) => {
-      const alerts = await prisma.alert.findMany({
+      const unreadAlertsCount = await prisma.alert.count({
         where: {
           userId,
-          // read: false,
+          readBy: {
+            none: {
+              userId,
+            },
+          },
         },
       });
 
-      return alerts.length;
+      return unreadAlertsCount;
     },
     ["alerts", dynamicKey],
     { tags: ["alerts", dynamicKey], revalidate: 60 }

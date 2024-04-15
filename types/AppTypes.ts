@@ -60,11 +60,12 @@ export interface User {
 
 export interface ProjectUser {
   id: number;
-  user_id: string;
-  project_id: number;
+  userId: string;
+  projectId: number;
   user: User;
   project: DefaultProject;
 }
+
 export interface Project {
   id: number;
   name: string;

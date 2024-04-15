@@ -26,11 +26,11 @@ export const getProjects = async () => {
               items: true,
             },
           },
-          // projectUsers: {
-          //   include: {
-          //     user: true,
-          //   },
-          // },
+          projectUsers: {
+            include: {
+              user: true,
+            },
+          },
         },
         orderBy: {
           created_at: "desc",

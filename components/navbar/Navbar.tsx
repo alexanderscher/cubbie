@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useSearchBarContext } from "@/components/context/SearchBarContext";
 import { LogOutButton } from "@/components/LogOutButton";
 import { useState } from "react";
-import { Alert, Session } from "@/types/AppTypes";
+import { Session } from "@/types/AppTypes";
 
 interface NavbarProps {
   session: Session;

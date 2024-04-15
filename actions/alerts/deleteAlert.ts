@@ -12,7 +12,7 @@ export const deleteAlert = async (params: { alertID: string }) => {
     return { error: "Unauthorized" };
   }
 
-  const foundAlert = await prisma.alerts.findFirst({
+  const foundAlert = await prisma.alert.findFirst({
     where: {
       AND: [{ id: params.alertID }, { userId: userId }],
     },
@@ -22,7 +22,7 @@ export const deleteAlert = async (params: { alertID: string }) => {
     return { error: "Alert not found or doesn't belong to the user" };
   }
   try {
-    await prisma.alerts.delete({
+    await prisma.alert.delete({
       where: {
         id: params.alertID,
       },

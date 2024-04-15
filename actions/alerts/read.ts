@@ -12,7 +12,7 @@ export const markAsRead = async (params: { alertID: string }) => {
     return { error: "Unauthorized" };
   }
 
-  const foundAlert = await prisma.alerts.findFirst({
+  const foundAlert = await prisma.alert.findFirst({
     where: {
       AND: [{ id: params.alertID }, { userId: userId }],
     },
@@ -22,11 +22,10 @@ export const markAsRead = async (params: { alertID: string }) => {
     return { error: "Alert not found or doesn't belong to the user" };
   }
   try {
-    await prisma.alerts.update({
-      where: {
-        id: params.alertID,
-      },
+    await prisma.alertRead.create({
       data: {
+        alertId: params.alertID,
+        userId: userId,
         read: true,
       },
     });
@@ -43,7 +42,7 @@ export const unmarkAsRead = async (params: { alertID: string }) => {
     return { error: "Unauthorized" };
   }
 
-  const foundAlert = await prisma.alerts.findFirst({
+  const foundAlert = await prisma.alert.findFirst({
     where: {
       AND: [{ id: params.alertID }, { userId: userId }],
     },
@@ -53,12 +52,12 @@ export const unmarkAsRead = async (params: { alertID: string }) => {
     return { error: "Alert not found or doesn't belong to the user" };
   }
   try {
-    await prisma.alerts.update({
+    await prisma.alertRead.delete({
       where: {
-        id: params.alertID,
-      },
-      data: {
-        read: false,
+        alertId_userId: {
+          alertId: params.alertID,
+          userId: userId,
+        },
       },
     });
     revalidateTag(`alert_user_${userId}`);

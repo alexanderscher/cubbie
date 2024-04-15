@@ -1,3 +1,7 @@
+enum UserRole {
+  USER = "USER",
+  ADMIN = "ADMIN",
+}
 export interface Receipt {
   id: number;
   type: string;
@@ -35,6 +39,32 @@ export interface ExtendedItemType extends Item {
   edit_image: string;
 }
 
+export interface User {
+  id: string;
+  name?: string;
+  email?: string;
+  emailVerified?: Date;
+  image?: string;
+  password?: string;
+  role: UserRole;
+  accounts: any;
+  isTwoFactorEnabled: boolean;
+  phone?: string;
+  twoFactorConfirmation?: any;
+  projects: DefaultProject[];
+  projectOwnerships: DefaultProject[];
+  alerts: Alert[];
+  ProjectUser: ProjectUser[];
+  AlertRead: ReadEntry[];
+}
+
+export interface ProjectUser {
+  id: number;
+  user_id: string;
+  project_id: number;
+  user: User;
+  project: DefaultProject;
+}
 export interface Project {
   id: number;
   name: string;
@@ -43,12 +73,13 @@ export interface Project {
   receipts: Receipt[];
   asset_amount: number;
   archive: boolean;
+  projectUsers: ProjectUser[];
 }
 export interface LayoutProps {
   children?: React.ReactNode;
 }
 
-export interface User {
+export interface UserForSession {
   email: string;
   id: string;
   image: string | null;
@@ -60,17 +91,23 @@ export interface User {
 
 export interface Session {
   expires: string;
-  user: User;
+  user: UserForSession;
 }
 
 export interface Alert {
   id: string;
   type: string;
-  receipt_id: number;
+  receiptId: number;
   date: Date;
+  projectId: number;
+  receipt: DefaultReceipt;
+  readBy: ReadEntry[];
+}
+
+export interface ReadEntry {
+  alertId: string;
   userId: string;
   read: boolean;
-  receipt: Receipt;
 }
 
 export interface DefaultReceipt {
@@ -91,11 +128,12 @@ export interface DefaultReceipt {
   items?: Item[];
 }
 
-export interface DefaulteProject {
+export interface DefaultProject {
   id: number;
   name: string;
   created_at: Date;
   userId: string;
   asset_amount: number | null;
   archive: boolean;
+  projectUsers: ProjectUser[];
 }

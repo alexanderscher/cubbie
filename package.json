@@ -20,7 +20,7 @@
     "@fullcalendar/timegrid": "^6.1.11",
     "@hookform/resolvers": "^3.3.3",
     "@material-tailwind/react": "^2.1.9",
-    "@prisma/client": "^5.11.0",
+    "@prisma/client": "^5.12.1",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
@@ -36,7 +36,6 @@
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
-    "core-js": "^3.36.1",
     "date-fns": "^3.6.0",
     "dynamsoft-camera-enhancer": "^4.0.1",
     "dynamsoft-javascript-barcode": "^9.6.32",
@@ -82,7 +81,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
     "postcss": "^8",
-    "prisma": "^5.11.0",
+    "prisma": "^5.12.1",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
   }

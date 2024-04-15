@@ -184,7 +184,7 @@ const AddButton = ({
 }: AddButtonProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   return (
-    <div className="fixed z-[500] bottom-8 right-8 shadow-xl w-12 h-12 flex items-center justify-center border-2 border-orange-600 bg-orange-600 text-white rounded-full ">
+    <div className="fixed z-[500] bottom-8 right-8 shadow-xl w-12 h-12 flex items-center justify-center border-2 border-orange-600 bg-orange-600 text-white rounded-full cursor-pointer ">
       <div className="relative">
         <button onClick={() => setIsModalVisible(!isModalVisible)} className="">
           <p className="text-xl">+</p>

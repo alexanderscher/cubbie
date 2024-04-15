@@ -3,7 +3,7 @@ import prisma from "@/prisma/client";
 import { deleteUploadThingImage } from "@/actions/uploadthing/deletePhoto";
 
 export async function POST(request: Request) {
-  await prisma.alerts.deleteMany({});
+  await prisma.alert.deleteMany({});
   //   const items = await prisma.items.findMany({});
 
   //   for (let i = 0; i < items.length; i++) {

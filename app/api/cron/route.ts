@@ -65,11 +65,12 @@ const sendReminder = async (daysUntilDue: number, reminderType: string) => {
             html: `<p>Your receipt from <a href="${link}">${receipt.store}</a> is due ${date}.</p>`,
           });
 
-          await prisma.alerts.create({
+          await prisma.alert.create({
             data: {
               userId: user.id,
               type: reminderType,
-              receipt_id: receipt.id,
+              receiptId: receipt.id,
+              projectId: receipt.project_id,
               date: new Date(),
             },
           });
@@ -84,12 +85,12 @@ const sendReminder = async (daysUntilDue: number, reminderType: string) => {
 export const revalidate = 0;
 
 export async function GET(request: NextRequest) {
-  const authHeader = request.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return new Response("Unauthorized", {
-      status: 401,
-    });
-  }
+  // const authHeader = request.headers.get("authorization");
+  // if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  //   return new Response("Unauthorized", {
+  //     status: 401,
+  //   });
+  // }
   try {
     await sendReminder(0, "TODAY_REMINDER");
     await sendReminder(1, "1_DAY_REMINDER");

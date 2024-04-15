@@ -4,7 +4,7 @@ import { Alert } from "@/types/AppTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useMemo, useState, useTransition } from "react";
+import React, { useEffect, useMemo, useTransition } from "react";
 import { format, parse, isToday, isYesterday, subDays } from "date-fns";
 import { markAsRead, unmarkAsRead } from "@/actions/alerts/read";
 import { toast } from "sonner";
@@ -35,9 +35,10 @@ const describeDate = (dateString: string) => {
 
 interface AlertProps {
   alerts: Alert[];
+  userId: string | undefined;
 }
 
-const AlertComponent = ({ alerts }: AlertProps) => {
+const AlertComponent = ({ alerts, userId }: AlertProps) => {
   const { filteredAlertData, initializeAlerts } = useSearchAlertContext();
   useEffect(() => {
     if (alerts) {
@@ -82,6 +83,22 @@ const AlertComponent = ({ alerts }: AlertProps) => {
     });
   }, [filteredAlertData, sortField, sortOrder]);
 
+  const unreadAlerts = filteredAlertData.map((alertObj) => {
+    const isReadByUser = alertObj.readBy.some(
+      (entry) => entry.userId === userId?.toString()
+    );
+
+    return !isReadByUser && <SingleAlert alertObj={alertObj} userId={userId} />;
+  });
+
+  const readAlerts = filteredAlertData.map((alertObj) => {
+    const isReadByUser = alertObj.readBy.some(
+      (entry) => entry.userId === userId
+    );
+
+    return isReadByUser && <SingleAlert alertObj={alertObj} userId={userId} />;
+  });
+
   if (
     searchParams.get("alertType") === "all" ||
     !searchParams.get("alertType")
@@ -90,9 +107,9 @@ const AlertComponent = ({ alerts }: AlertProps) => {
       <div>
         <AlertHeader />
         <div className="flex flex-col gap-6">
-          {filteredAlertData.map((alertObj) => (
+          {sortedAndFilteredData.map((alertObj) => (
             <>
-              <SingleAlert alertObj={alertObj} />
+              <SingleAlert alertObj={alertObj} userId={userId} />
             </>
           ))}
         </div>
@@ -104,16 +121,7 @@ const AlertComponent = ({ alerts }: AlertProps) => {
     return (
       <div>
         <AlertHeader />
-        <div className="flex flex-col gap-6">
-          {filteredAlertData.map(
-            (alertObj) =>
-              !alertObj.read && (
-                <>
-                  <SingleAlert alertObj={alertObj} />
-                </>
-              )
-          )}
-        </div>
+        <div className="flex flex-col gap-6">{unreadAlerts}</div>
       </div>
     );
   }
@@ -121,16 +129,7 @@ const AlertComponent = ({ alerts }: AlertProps) => {
     return (
       <div>
         <AlertHeader />
-        <div className="flex flex-col gap-6">
-          {filteredAlertData.map(
-            (alertObj) =>
-              alertObj.read && (
-                <>
-                  <SingleAlert alertObj={alertObj} />
-                </>
-              )
-          )}
-        </div>
+        <div className="flex flex-col gap-6">{readAlerts}</div>
       </div>
     );
   }
@@ -157,11 +156,12 @@ const AlertHeader = () => {
 
 interface SingleAlertProps {
   alertObj: Alert;
+  userId: string | undefined;
 }
 
-const SingleAlert = ({ alertObj }: SingleAlertProps) => {
+const SingleAlert = ({ alertObj, userId }: SingleAlertProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
-
+  const isReadByUser = alertObj.readBy.some((entry) => entry.userId === userId);
   return (
     <div
       key={alertObj.id}
@@ -170,7 +170,7 @@ const SingleAlert = ({ alertObj }: SingleAlertProps) => {
       {isOpen && (
         <>
           <Overlay onClose={() => setIsOpen(false)} />
-          <AlertOptionsModal alertObj={alertObj} />
+          <AlertOptionsModal alertObj={alertObj} userId={userId} />
         </>
       )}
 
@@ -186,7 +186,7 @@ const SingleAlert = ({ alertObj }: SingleAlertProps) => {
       </div>
       <div
         className={`flex flex-col gap-1 text-sm ${
-          alertObj.read && "text-slate-500"
+          isReadByUser ? "text-slate-500" : ""
         }`}
       >
         {alertObj.type === "1_DAY_REMINDER" && (
@@ -194,9 +194,9 @@ const SingleAlert = ({ alertObj }: SingleAlertProps) => {
             Your receipt from{" "}
             <Link
               className={` ${
-                alertObj.read ? "text-slate-500" : "text-emerald-900"
+                isReadByUser ? "text-slate-500" : "text-emerald-900"
               } underline`}
-              href={`/receipt/${alertObj.receipt_id}`}
+              href={`/receipt/${alertObj.receiptId}`}
             >
               {alertObj.receipt.store}
             </Link>{" "}
@@ -209,9 +209,9 @@ const SingleAlert = ({ alertObj }: SingleAlertProps) => {
             Your receipt from{" "}
             <Link
               className={` ${
-                alertObj.read ? "text-slate-500" : "text-emerald-900"
+                isReadByUser ? "text-slate-500" : "text-emerald-900"
               } underline`}
-              href={`/receipt/${alertObj.receipt_id}`}
+              href={`/receipt/${alertObj.receiptId}`}
             >
               {alertObj.receipt.store}
             </Link>{" "}
@@ -223,9 +223,9 @@ const SingleAlert = ({ alertObj }: SingleAlertProps) => {
             Your receipt from{" "}
             <Link
               className={` ${
-                alertObj.read ? "text-slate-500" : "text-emerald-900"
+                isReadByUser ? "text-slate-500" : "text-emerald-900"
               } underline`}
-              href={`/receipt/${alertObj.receipt_id}`}
+              href={`/receipt/${alertObj.receiptId}`}
             >
               {alertObj.receipt.store}
             </Link>{" "}
@@ -234,7 +234,7 @@ const SingleAlert = ({ alertObj }: SingleAlertProps) => {
         )}
         <div
           className={`text-xs ${
-            alertObj.read ? "text-slate-500" : "text-orange-600"
+            isReadByUser ? "text-slate-500" : "text-orange-600"
           }`}
         >
           {describeDate(formatDateToMMDDYY(alertObj.date))}
@@ -256,8 +256,9 @@ const SingleAlert = ({ alertObj }: SingleAlertProps) => {
   );
 };
 
-const AlertOptionsModal = ({ alertObj }: SingleAlertProps) => {
+const AlertOptionsModal = ({ alertObj, userId }: SingleAlertProps) => {
   const [isPending, startTransition] = useTransition();
+  const isReadByUser = alertObj.readBy.some((entry) => entry.userId === userId);
   return (
     <div
       className={`absolute shadow-1 -right-2 top-10 rounded-md w-[230px] bg-white p-4 z-[201] text-sm`}
@@ -268,7 +269,7 @@ const AlertOptionsModal = ({ alertObj }: SingleAlertProps) => {
     >
       <div className="flex flex-col gap-2">
         <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 cursor-pointer">
-          {alertObj.read ? (
+          {isReadByUser ? (
             <div
               className="flex gap-2"
               onClick={(e) => {

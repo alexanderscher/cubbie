@@ -15,7 +15,7 @@ import { AddUser } from "@/components/project/AddUser";
 interface OptionsModalProps {
   isOpen: boolean;
   project: ProjectType;
-  archived?: boolean;
+  archived: boolean;
 }
 
 const white = "bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2";

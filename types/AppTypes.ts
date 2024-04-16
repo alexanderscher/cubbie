@@ -70,7 +70,6 @@ export interface ProjectUserArchive {
   id: number;
   userId: string;
   projectId: number;
-  isArchived: boolean;
   project: DefaultProject;
   user: User;
 }

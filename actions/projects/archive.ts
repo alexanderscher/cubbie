@@ -34,7 +34,6 @@ export const archiveProject = async (projectId: number, action: string) => {
         data: {
           userId: userId,
           projectId: projectId,
-          isArchived: archive,
         },
       });
     }

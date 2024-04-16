@@ -1,8 +1,8 @@
 "use server";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
-import { Session } from "@/types/AppTypes";
 import moment from "moment";
+import { Session } from "next-auth";
 import { unstable_cache } from "next/cache";
 
 function getDynamicCacheKey(userId: string) {
@@ -55,7 +55,11 @@ export const getReceipts = async () => {
         where: {
           project: {
             userId: userId,
-            archive: false,
+            projectUserArchive: {
+              none: {
+                userId: userId,
+              },
+            },
           },
         },
         include: {
@@ -66,7 +70,6 @@ export const getReceipts = async () => {
           return_date: "asc",
         },
       });
-
       return updatedReceipts;
     },
     dynamicKey,

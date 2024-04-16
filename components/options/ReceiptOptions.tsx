@@ -2,7 +2,6 @@ import { addItem } from "@/actions/items/addItem";
 import { deleteReceipt } from "@/actions/receipts/deleteReceipt";
 import { moveReceipt } from "@/actions/receipts/moveReceipt";
 import RegularButton from "@/components/buttons/RegularButton";
-import { FormError } from "@/components/form-error";
 import { AddItem } from "@/components/item/AddItem";
 import Loading from "@/components/Loading";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";

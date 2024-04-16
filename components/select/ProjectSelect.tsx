@@ -1,6 +1,7 @@
 import React from "react";
 import ReactSelect, { StylesConfig } from "react-select";
 import { Project } from "@/types/AppTypes";
+import { useSession } from "next-auth/react";
 
 interface Option {
   value: string;
@@ -15,13 +16,16 @@ interface Props {
   color?: string;
 }
 
-const ProjectSelect = ({
+export const ProjectSelect = ({
   handleChange,
   projects,
   values,
   errors,
   color,
 }: Props) => {
+  const session = useSession();
+  console.log(session);
+
   const customGreenStyles: StylesConfig<Option, false> = {
     control: (provided, state) => ({
       ...provided,
@@ -104,6 +108,26 @@ const ProjectSelect = ({
     label: project.name,
   }));
 
+  // const archiveProjects = filteredData
+  //   .filter((project) => {
+  //     return (
+  //       project.projectUserArchive?.some(
+  //         (entry) => entry.userId === userId?.toString()
+  //       ) || false
+  //     );
+  //   })
+  //   .map((project) => {
+  //     return (
+  //       <Project
+  //         archived={true}
+  //         project={project}
+  //         key={project.id}
+  //         isOpen={openProjectId === project.id}
+  //         onToggleOpen={(e) => toggleOpenProject(project.id, e)}
+  //       />
+  //     );
+  //   });
+
   return (
     <div className="w-full ">
       <p
@@ -113,19 +137,27 @@ const ProjectSelect = ({
       >
         Project Folder
       </p>
-      <ReactSelect
+      {/* <ReactSelect
         options={projectOptions.filter((option) => {
+          // Find the corresponding project based on the option's value
           const project = projects.find(
             (project) => project.id.toString() === option.value
           );
-          return project && !project.archive;
+
+          // Check if the project is not archived by the current user
+          return (
+            project &&
+            !project.projectUserArchive?.some(
+              (entry) => entry.userId === session.user.id
+            )
+          );
         })}
         onChange={handleSelectChange}
         value={projectOptions.find((option) => option.value === values)}
         isClearable={true}
         placeholder="Change project folder"
         styles={color === "green" ? customGreenStyles : customStyles}
-      />
+      /> */}
       {errors.folderName && (
         <p className="text-orange-800 text-sm">{errors.folderName}</p>
       )}

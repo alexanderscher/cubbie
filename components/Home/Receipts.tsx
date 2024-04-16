@@ -1,10 +1,8 @@
 "use client";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
-import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import { NoReceipts } from "@/components/receiptComponents/NoReceipts";
 import Receipt from "@/components/receiptComponents/Receipt";
 import { Item, Receipt as ReceiptType } from "@/types/AppTypes";
-import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 

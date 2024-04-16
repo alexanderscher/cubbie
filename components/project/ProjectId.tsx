@@ -18,8 +18,14 @@ interface ProjectIdProps {
 export const ProjectId = ({ project }: ProjectIdProps) => {
   const [isAddOpen, setAddReceiptOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const userId = project.userId;
 
   const [openReceiptId, setOpenReceiptId] = useState(null as number | null);
+
+  const isArchived =
+    project.projectUserArchive?.some(
+      (entry) => entry.userId === userId?.toString()
+    ) || false;
 
   const toggleOpenReceipt = (
     receiptId: number | undefined,
@@ -75,7 +81,11 @@ export const ProjectId = ({ project }: ProjectIdProps) => {
             >
               <Image src="/three-dots.png" alt="" width={20} height={20} />
               {isOpen && (
-                <ProjectOptionsModal isOpen={isOpen} project={project} />
+                <ProjectOptionsModal
+                  archived={isArchived}
+                  isOpen={isOpen}
+                  project={project}
+                />
               )}
             </div>
           </div>

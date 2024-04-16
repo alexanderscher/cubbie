@@ -1,9 +1,11 @@
+import { auth } from "@/auth";
 import Projects from "@/components/Home/Projects";
 import { SearchProjectProvider } from "@/components/context/SearchProjectContext";
 import Header from "@/components/headers/Header";
 import PageWrapper from "@/components/wrapper/PageWrapper";
 import { getProjects } from "@/lib/projectsDB";
 import { Project } from "@/types/AppTypes";
+import { Session } from "@/types/AppTypes";
 import { Suspense } from "react";
 
 const fetchProject = async () => {
@@ -14,6 +16,7 @@ const fetchProject = async () => {
 
 export default async function Home() {
   const projects = await fetchProject();
+  const session = (await auth()) as Session;
 
   return (
     <PageWrapper>
@@ -22,7 +25,7 @@ export default async function Home() {
           <Suspense fallback={<div>Loading</div>}>
             <div className="w-full max-w-[1090px]">
               <Header type="Projects" />
-              <Projects serverData={projects} />
+              <Projects serverData={projects} userId={session.user.id} />
             </div>
           </Suspense>
         </div>

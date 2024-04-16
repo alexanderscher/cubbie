@@ -66,6 +66,15 @@ export interface ProjectUser {
   project: DefaultProject;
 }
 
+export interface ProjectUserArchive {
+  id: number;
+  userId: string;
+  projectId: number;
+  isArchived: boolean;
+  project: DefaultProject;
+  user: User;
+}
+
 export interface Project {
   id: number;
   name: string;
@@ -73,8 +82,8 @@ export interface Project {
   userId: string;
   receipts: Receipt[];
   asset_amount: number;
-  archive: boolean;
   projectUsers: ProjectUser[];
+  projectUserArchive: ProjectUserArchive[];
 }
 export interface LayoutProps {
   children?: React.ReactNode;

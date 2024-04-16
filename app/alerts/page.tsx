@@ -3,8 +3,8 @@ import AlertComponent from "@/components/alerts/Alerts";
 import { SearchAlertProvider } from "@/components/context/SearchFilterAlerts";
 import PageWrapper from "@/components/wrapper/PageWrapper";
 import { getAlerts } from "@/lib/alerts";
-import { Alert } from "@/types/AppTypes";
-import { Session } from "next-auth";
+import { Alert, Session } from "@/types/AppTypes";
+
 import { Suspense } from "react";
 
 const fetchAlert = async () => {

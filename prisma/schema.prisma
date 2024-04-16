@@ -32,20 +32,31 @@ model User {
   alerts                Alert[]
   ProjectUser           ProjectUser[]
   AlertRead             AlertRead[]
+  ProjectUserArchive    ProjectUserArchive[]
 }
 
 model Project {
-  id           Int           @id @default(autoincrement())
-  name         String
-  asset_amount Float?
-  created_at   DateTime
-  userId       String
-  archive      Boolean       @default(false)
-  user         User          @relation(name: "projectOwner", fields: [userId], references: [id], onDelete: Cascade, map: "Project_userId_fkey_owner")
-  projectUsers ProjectUser[]
-  receipts     Receipt[]
-  User         User          @relation(fields: [userId], references: [id])
-  Alert        Alert[]
+  id                 Int                  @id @default(autoincrement())
+  name               String
+  asset_amount       Float?
+  created_at         DateTime
+  userId             String
+  projectUserArchive ProjectUserArchive[]
+  user               User                 @relation(name: "projectOwner", fields: [userId], references: [id], onDelete: Cascade, map: "Project_userId_fkey_owner")
+  projectUsers       ProjectUser[]
+  receipts           Receipt[]
+  Alert              Alert[]
+  User               User                 @relation(fields: [userId], references: [id])
+}
+
+model ProjectUserArchive {
+  id         Int     @id @default(autoincrement())
+  projectId  Int
+  userId     String
+  project    Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
 }
 
 model ProjectUser {
@@ -76,7 +87,7 @@ model AlertRead {
   userId  String
   user    User    @relation(fields: [userId], references: [id])
   read    Boolean @default(false)
-  
+
   @@id([alertId, userId])
 }
 

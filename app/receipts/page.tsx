@@ -15,6 +15,7 @@ const receipt = async () => {
 
 export default async function ReceiptPage() {
   const receipts = await receipt();
+  console.log(receipts);
 
   return (
     <PageWrapper>

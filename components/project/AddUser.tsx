@@ -5,7 +5,7 @@ interface AddReceiptModalProps {
   setAddReceiptOpen: (value: boolean) => void;
 }
 
-export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
+export const AddUser = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
   const handleOverlayClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {

@@ -20,7 +20,11 @@ export const getItems = async () => {
           receipt: {
             project: {
               userId: userId,
-              archive: false,
+              projectUserArchive: {
+                none: {
+                  userId: userId,
+                },
+              },
             },
           },
         },
@@ -33,7 +37,6 @@ export const getItems = async () => {
         },
         orderBy: {
           created_at: "desc",
-          // receipt.return_date
         },
       });
 

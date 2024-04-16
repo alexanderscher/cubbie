@@ -31,6 +31,7 @@ export const getProjects = async () => {
               user: true,
             },
           },
+          projectUserArchive: true,
         },
         orderBy: {
           created_at: "desc",

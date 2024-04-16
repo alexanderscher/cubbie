@@ -12,25 +12,37 @@ export const archiveProject = async (projectId: number, action: string) => {
       return { error: "Unauthorized" };
     }
 
-    let archive = false;
+    const archive = action === "true";
 
-    if (action === "true") {
-      archive = true;
-    } else {
-      archive = false;
-    }
-
-    await prisma.project.update({
+    const existingArchive = await prisma.projectUserArchive.findUnique({
       where: {
-        userId,
-        id: projectId,
+        projectId_userId: {
+          projectId: projectId,
+          userId: userId,
+        },
       },
-      data: { archive: archive },
     });
+
+    if (existingArchive) {
+      await prisma.projectUserArchive.delete({
+        where: {
+          id: existingArchive.id,
+        },
+      });
+    } else {
+      await prisma.projectUserArchive.create({
+        data: {
+          userId: userId,
+          projectId: projectId,
+          isArchived: archive,
+        },
+      });
+    }
 
     revalidateTag(`projects_user_${userId}`);
     return { success: true };
   } catch (error) {
-    return { error: "Failed to edit project" };
+    console.error("Failed to modify archive status:", error);
+    return { error: "Failed to edit project archive status" };
   }
 };

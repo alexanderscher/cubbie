@@ -13,12 +13,12 @@ import React, { useEffect, useMemo, useState } from "react";
 
 interface Props {
   serverData: ProjectType[];
+  userId: string;
 }
 
-const Projects = ({ serverData }: Props) => {
+const Projects = ({ serverData, userId }: Props) => {
   const { isProjectLoading, filteredProjectData, initializeProjects } =
     useSearchProjectContext();
-  console.log(serverData);
 
   useEffect(() => {
     if (serverData) {
@@ -95,50 +95,71 @@ const Projects = ({ serverData }: Props) => {
       />
     );
   }
+  const currentProjects = filteredData
+    .filter((project) => {
+      return !(
+        project.projectUserArchive?.some(
+          (entry) => entry.userId === userId?.toString()
+        ) || false
+      );
+    })
+    .map((project) => {
+      return (
+        <Project
+          archived={false}
+          project={project}
+          key={project.id}
+          isOpen={openProjectId === project.id}
+          onToggleOpen={(e) => toggleOpenProject(project.id, e)}
+        />
+      );
+    });
+  const archiveProjects = filteredData
+    .filter((project) => {
+      return (
+        project.projectUserArchive?.some(
+          (entry) => entry.userId === userId?.toString()
+        ) || false
+      );
+    })
+    .map((project) => {
+      return (
+        <Project
+          archived={true}
+          project={project}
+          key={project.id}
+          isOpen={openProjectId === project.id}
+          onToggleOpen={(e) => toggleOpenProject(project.id, e)}
+        />
+      );
+    });
+
   if (searchParams.get("archive") === "false" || !searchParams.get("archive")) {
-    return filteredData.filter(
-      (project: ProjectType) => project.archive === false
-    ).length === 0 ? (
-      <NoProjects
-        setAddProjectOpen={setAddProjectOpen}
-        addProjectOpen={addProjectOpen}
-      />
-    ) : (
-      <div className="boxes">
-        {filteredData
-          .filter((project: ProjectType) => project.archive === false)
-          .map((project: ProjectType) => (
-            <Project
-              project={project}
-              key={project.id}
-              isOpen={openProjectId === project.id}
-              onToggleOpen={(e) => toggleOpenProject(project.id, e)}
-            />
-          ))}
-      </div>
+    return (
+      <>
+        {currentProjects.length > 0 ? (
+          <div className="boxes">{currentProjects}</div>
+        ) : (
+          <NoProjects
+            setAddProjectOpen={setAddProjectOpen}
+            addProjectOpen={addProjectOpen}
+          />
+        )}
+      </>
     );
   }
   if (searchParams.get("archive") === "true") {
-    return filteredData.filter(
-      (project: ProjectType) => project.archive === true
-    ).length === 0 ? (
-      <NoProjects
-        setAddProjectOpen={setAddProjectOpen}
-        addProjectOpen={addProjectOpen}
-      />
-    ) : (
-      <div className="boxes">
-        {filteredData
-          .filter((project: ProjectType) => project.archive === true)
-          .map((project: ProjectType) => (
-            <Project
-              project={project}
-              key={project.id}
-              isOpen={openProjectId === project.id}
-              onToggleOpen={(e) => toggleOpenProject(project.id, e)}
-            />
-          ))}
-      </div>
+    return (
+      <>
+        {archiveProjects.length > 0 ? (
+          <div className="boxes">{archiveProjects}</div>
+        ) : (
+          <NoProjects
+            setAddProjectOpen={setAddProjectOpen}
+            addProjectOpen={addProjectOpen}
+          />
+        )}
+      </>
     );
   }
 };
@@ -149,9 +170,10 @@ interface ProjectProps {
   project: ProjectType;
   isOpen: boolean;
   onToggleOpen: (event: React.MouseEvent<HTMLDivElement>) => void;
+  archived: boolean;
 }
 
-const Project = ({ project, isOpen, onToggleOpen }: ProjectProps) => {
+const Project = ({ project, isOpen, onToggleOpen, archived }: ProjectProps) => {
   return (
     <div className="box xs:pb-6 pb-4 relative" key={project.id}>
       <Link href={`/project/${project.id}`}>
@@ -202,7 +224,13 @@ const Project = ({ project, isOpen, onToggleOpen }: ProjectProps) => {
           </p>
         </div>
       </Link>
-      {isOpen && <ProjectOptionsModal isOpen={isOpen} project={project} />}
+      {isOpen && (
+        <ProjectOptionsModal
+          isOpen={isOpen}
+          project={project}
+          archived={archived}
+        />
+      )}
     </div>
   );
 };

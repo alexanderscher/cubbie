@@ -2,7 +2,7 @@
 import RegularButton from "@/components/buttons/RegularButton";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import Receipt from "@/components/receiptComponents/Receipt";
-import { Project as ProjectType } from "@/types/AppTypes";
+import { Project as ProjectType, User } from "@/types/AppTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import Image from "next/image";
 import Link from "next/link";
@@ -202,23 +202,44 @@ const Members = ({
             <p className="text-slate-500">Owner</p>
           </div>
           {project.projectUsers.map((user) => (
-            <div
-              key={user.id}
-              className="flex items-center border-t-[1px] justify-between gap-4 py-4 px-6 text-sm"
-            >
-              <div className="flex items-center gap-2">
-                <p className="text-emerald-900">{user.user?.name}</p>
-                <p className="text-emerald-900">{user.user?.email}</p>
-              </div>
-
-              <div
-                // onClick={onToggleOpen}
-                className="cursor-pointer"
-              >
-                <Image src="/three-dots.png" alt="" width={20} height={20} />
-              </div>
+            <div key={user.id}>
+              <MembersBlock user={user} />
             </div>
           ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const MembersBlock = ({ user }: { user: any }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div className="flex items-center border-t-[1px] justify-between gap-4 py-4 px-6 text-sm relative">
+      <div className="flex items-center gap-2">
+        <p className="text-emerald-900">{user.user?.name}</p>
+        <p className="text-emerald-900">{user.user?.email}</p>
+      </div>
+
+      <div className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
+        <Image src="/three-dots.png" alt="" width={20} height={20} />
+      </div>
+      {isOpen && <MembersOptionModal />}
+    </div>
+  );
+};
+
+const MembersOptionModal = () => {
+  return (
+    <div
+      className={`absolute  shadow-1 -right-2 top-10 rounded-md w-[200px] bg-white`}
+    >
+      <div className="p-4 rounded text-sm flex flex-col gap-2">
+        <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2">
+          <div className="flex gap-4">
+            <Image src={"/receipt_b.png"} width={12} height={12} alt=""></Image>
+            <p>Remove user</p>
+          </div>
         </div>
       </div>
     </div>

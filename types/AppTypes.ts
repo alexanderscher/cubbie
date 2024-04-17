@@ -79,6 +79,7 @@ export interface Project {
   name: string;
   created_at: Date;
   userId: string;
+  user?: User;
   receipts: Receipt[];
   asset_amount: number;
   projectUsers: ProjectUser[];

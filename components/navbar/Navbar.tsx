@@ -14,7 +14,6 @@ interface NavbarProps {
   alerts: number;
 }
 const Navbar = ({ session, children, alerts }: NavbarProps) => {
-  console.log(alerts);
   const pathname = usePathname();
   const { searchBarOpen, setSearchBarOpen } = useSearchBarContext();
   const [isModalVisible, setModalVisible] = useState(false);

@@ -1,11 +1,29 @@
-import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
-import Link from "next/link";
+"use client";
+import { addUserToProject } from "@/actions/projects/addUserToProject";
+import RegularButton from "@/components/buttons/RegularButton";
+import { FormError } from "@/components/form-error";
+import Loading from "@/components/Loading";
+import { Formik } from "formik";
+import { usePathname } from "next/navigation";
+import { useState, useTransition } from "react";
+import { toast } from "sonner";
 
 interface AddReceiptModalProps {
-  setAddReceiptOpen: (value: boolean) => void;
+  setMembersOpen?: (value: boolean) => void;
+  setAddUserOpen: (value: boolean) => void;
+  projectId: number;
 }
 
-export const AddUser = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
+export const AddUser = ({
+  setAddUserOpen,
+  projectId,
+  setMembersOpen,
+}: AddReceiptModalProps) => {
+  const pathname = usePathname();
+  const [invalidEmailFormat, setInvalidEmailFormat] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [uploadError, setUploadError] = useState("");
+
   const handleOverlayClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
@@ -13,8 +31,16 @@ export const AddUser = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
       event.target instanceof HTMLDivElement &&
       event.target.id === "modal-overlay"
     ) {
-      setAddReceiptOpen(false);
+      setAddUserOpen(false);
     }
+  };
+
+  const emailValidation = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return "Invalid email";
+    }
+    return "";
   };
 
   return (
@@ -26,53 +52,85 @@ export const AddUser = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
         e.preventDefault();
       }}
     >
-      <div className="bg-white rounded-md shadow-xl m-4 max-w-md w-full rounded-t-md">
-        <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3 ">
-          <h3 className=" text-emerald-900">Create Receipt Options</h3>
-          <button
-            type="button"
-            className="text-emerald-900 "
-            onClick={() => setAddReceiptOpen(false)}
-          >
-            <span className="text-2xl">&times;</span>
-          </button>
-        </div>
-        <div className="flex flex-col p-6 gap-3">
-          <div className="p-4 bg-slate-100   rounded-md text-sm cursor-pointer hover:bg-slate-200">
-            <div className="flex gap-3 justify-center items-center">
-              <Link href="/create/image">
-                <p className="text-emerald-900">Analyze Receipt Image</p>
-              </Link>
-              <TooltipWithHelperIcon
-                iconColor="text-emerald-900"
-                content="  Take a photo of your receipt and upload it. We use AI to extract
-              and fill in the details of your receipt and item information. This
-              process works best with physical receipts or memo receipts."
-              />
-            </div>
-          </div>
+      <Formik
+        initialValues={{
+          email: "",
+        }}
+        onSubmit={async (values) => {
+          const isNotEmail = emailValidation(values.email);
+          if (isNotEmail) {
+            setInvalidEmailFormat(true);
+            return;
+          }
 
-          <div className="p-4 bg-slate-100   rounded-md text-sm  cursor-pointer hover:bg-slate-200">
-            <div className="flex gap-3 justify-center items-center">
-              <Link href="/create/text">
-                <p className="text-emerald-900">Analyze Receipt Text</p>
-              </Link>
-              <TooltipWithHelperIcon
-                iconColor="text-emerald-900"
-                content="Enter your receipt details first, then copy and paste the item
-              information from your online receipt email. We use AI to
-              accurately populate the item details."
-              />
-            </div>
-          </div>
+          try {
+            startTransition(async () => {
+              const result = await addUserToProject(values.email, projectId);
+              if (result.error) {
+                setUploadError(result.error);
+                toast.error("An error occurred. Please try again.");
+              } else {
+                toast.success("Your operation was successful!");
 
-          <button className="p-4 bg-slate-100   rounded-md text-sm  cursor-pointer hover:bg-slate-200">
-            <Link href="/create/manual">
-              <p className="text-emerald-900">Manually Enter Receipt</p>
-            </Link>
-          </button>
-        </div>
-      </div>
+                setInvalidEmailFormat(false);
+                setUploadError("");
+              }
+            });
+          } catch (e) {
+            toast.error("An error occurred. Please try again.");
+          }
+        }}
+        // validationSchema={getValidationSchema(stage)}
+      >
+        {({ handleChange, handleSubmit }) => (
+          <div className="bg-white rounded-md shadow-xl m-4 max-w-md w-full rounded-t-md">
+            <form onSubmit={handleSubmit}>
+              <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3 ">
+                {pathname.startsWith("/project") && setMembersOpen && (
+                  <button
+                    type="button"
+                    className="text-emerald-900 "
+                    onClick={() => {
+                      setMembersOpen(true);
+                      setAddUserOpen(false);
+                    }}
+                  >
+                    <span className="text-sm">Back</span>
+                  </button>
+                )}
+                <h3 className=" text-emerald-900">Add user</h3>
+                <button
+                  type="button"
+                  className="text-emerald-900 "
+                  onClick={() => setAddUserOpen(false)}
+                >
+                  <span className="text-2xl">&times;</span>
+                </button>
+              </div>
+              <div className="flex flex-col p-6 gap-6">
+                <input
+                  className="w-full border-[1px]  p-2 rounded border-emerald-900 focus:border-emerald-900 focus:outline-none cursor-pointer placeholder:text-xs text-sm"
+                  // value={e.}
+                  placeholder="Email"
+                  onChange={handleChange("email")}
+                  style={{ WebkitAppearance: "none" }}
+                />
+                <RegularButton
+                  handleClick={() => handleSubmit()}
+                  styles="bg-white border-emerald-900"
+                >
+                  <p className="text-emerald-900 text-xs">Add user</p>
+                </RegularButton>
+                {invalidEmailFormat && (
+                  <FormError message="Invalid email format" />
+                )}
+                {uploadError && <FormError message={uploadError} />}
+              </div>
+            </form>
+          </div>
+        )}
+      </Formik>
+      {isPending && <Loading loading={isPending} />}
     </div>
   );
 };

@@ -74,7 +74,7 @@ export const ProjectOptionsModal = ({
           onClick={(e) => {
             e.preventDefault();
 
-            setEdit(true);
+            setAddUserOpen(true);
           }}
         >
           <div className="flex gap-2">
@@ -173,7 +173,9 @@ export const ProjectOptionsModal = ({
         ></DeleteModal>
       )}
       {isAddOpen && <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />}
-      {isAddUserOpen && <AddUser setAddReceiptOpen={setAddUserOpen} />}
+      {isAddUserOpen && (
+        <AddUser setAddUserOpen={setAddUserOpen} projectId={project.id} />
+      )}
     </div>
   );
 };

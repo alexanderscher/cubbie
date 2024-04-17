@@ -15,6 +15,12 @@ const getProjectById = async (id: string) => {
       id: parseInt(id),
     },
     include: {
+      user: true,
+      projectUsers: {
+        select: {
+          user: true,
+        },
+      },
       receipts: {
         include: {
           items: true,

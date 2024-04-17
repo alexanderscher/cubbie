@@ -3,7 +3,7 @@ import prisma from "@/prisma/client";
 import { revalidateTag } from "next/cache";
 
 export const addUserToProject = async (
-  userId: string,
+  email: string,
   projectId: number
 ): Promise<any> => {
   try {
@@ -15,7 +15,7 @@ export const addUserToProject = async (
     }
 
     const user = await prisma.user.findUnique({
-      where: { id: userId },
+      where: { email: email },
     });
     if (!user) {
       return { error: "User not found" };
@@ -25,7 +25,7 @@ export const addUserToProject = async (
       where: {
         projectId_userId: {
           projectId: projectId,
-          userId: userId,
+          userId: user.id,
         },
       },
     });
@@ -36,7 +36,7 @@ export const addUserToProject = async (
 
     const projectUser = await prisma.projectUser.create({
       data: {
-        userId: userId,
+        userId: user.id,
         projectId: projectId,
       },
     });

@@ -106,6 +106,7 @@ const AlertComponent = ({ alerts, userId }: AlertProps) => {
     return (
       <div>
         <AlertHeader />
+        {sortedAndFilteredData.length === 0 && <NoAlerts />}
         <div className="flex flex-col gap-6">
           {sortedAndFilteredData.map((alertObj) => (
             <>
@@ -121,6 +122,7 @@ const AlertComponent = ({ alerts, userId }: AlertProps) => {
     return (
       <div>
         <AlertHeader />
+        {sortedAndFilteredData.length === 0 && <NoAlerts />}
         <div className="flex flex-col gap-6">{unreadAlerts}</div>
       </div>
     );
@@ -129,6 +131,7 @@ const AlertComponent = ({ alerts, userId }: AlertProps) => {
     return (
       <div>
         <AlertHeader />
+        {sortedAndFilteredData.length === 0 && <NoAlerts />}
         <div className="flex flex-col gap-6">{readAlerts}</div>
       </div>
     );
@@ -148,7 +151,6 @@ const AlertHeader = () => {
         </div>
       </div>
       <SearchBar searchType="Alerts" />
-
       <Filters />
     </div>
   );
@@ -364,5 +366,13 @@ const Overlay = ({ onClose }: OverlayProps) => {
       className={`filter-overlay`}
       onClick={handleOverlayClick}
     ></div>
+  );
+};
+
+const NoAlerts = () => {
+  return (
+    <div>
+      <h1>No alerts</h1>
+    </div>
   );
 };

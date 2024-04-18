@@ -16,6 +16,7 @@ interface OptionsModalProps {
   isOpen: boolean;
   project: ProjectType;
   archived: boolean;
+  sessionUserId: string | undefined;
 }
 
 const white = "bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2";
@@ -24,6 +25,7 @@ const green = "bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2";
 export const ProjectOptionsModal = ({
   project,
   archived,
+  sessionUserId,
 }: OptionsModalProps) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [edit, setEdit] = useState(false);
@@ -69,19 +71,27 @@ export const ProjectOptionsModal = ({
       }}
     >
       <div className="p-4 rounded text-sm flex flex-col gap-2">
-        <div
-          className={`${color} cursor-pointer`}
-          onClick={(e) => {
-            e.preventDefault();
+        {sessionUserId && sessionUserId === project.user?.id && (
+          <div
+            className={`${color} cursor-pointer`}
+            onClick={(e) => {
+              e.preventDefault();
 
-            setAddUserOpen(true);
-          }}
-        >
-          <div className="flex gap-2">
-            <Image src={"/account_b.png"} width={20} height={20} alt=""></Image>
-            <p>Invite User</p>
+              setAddUserOpen(true);
+            }}
+          >
+            <div className="flex gap-2">
+              <Image
+                src={"/account_b.png"}
+                width={20}
+                height={20}
+                alt=""
+              ></Image>
+              <p>Invite User</p>
+            </div>
           </div>
-        </div>
+        )}
+
         {pathname === "/" && (
           <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2">
             <div

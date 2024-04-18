@@ -1,6 +1,7 @@
 .header {
   display: flex;
   justify-content: space-between;
+  align-items: end;
 }
 
 .dot {
@@ -15,6 +16,7 @@
   .header {
     flex-direction: column;
     gap: 1rem;
+    align-items: start;
   }
   .dot {
     display: none;

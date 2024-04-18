@@ -12,8 +12,6 @@ export const archiveProject = async (projectId: number, action: string) => {
       return { error: "Unauthorized" };
     }
 
-    const archive = action === "true";
-
     const existingArchive = await prisma.projectUserArchive.findUnique({
       where: {
         projectId_userId: {

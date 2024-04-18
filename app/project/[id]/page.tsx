@@ -1,37 +1,38 @@
 import { auth } from "@/auth";
 import { ProjectId } from "@/components/project/ProjectId";
 import PageWrapper from "@/components/wrapper/PageWrapper";
+import { getProjectById } from "@/lib/projectsDB";
 import prisma from "@/prisma/client";
 import { Project } from "@/types/AppTypes";
 import { Session } from "next-auth";
 
-const getProjectById = async (id: string) => {
-  const session = (await auth()) as Session;
-  const userId = session?.user?.id as string;
+// const getProjectById = async (id: string) => {
+//   const session = (await auth()) as Session;
+//   const userId = session?.user?.id as string;
 
-  const project = await prisma.project.findUnique({
-    where: {
-      userId,
-      id: parseInt(id),
-    },
-    include: {
-      user: true,
-      projectUsers: {
-        select: {
-          user: true,
-        },
-      },
-      receipts: {
-        include: {
-          items: true,
-          project: true,
-        },
-      },
-    },
-  });
+//   const project = await prisma.project.findUnique({
+//     where: {
+//       userId,
+//       id: parseInt(id),
+//     },
+//     include: {
+//       user: true,
+//       projectUsers: {
+//         select: {
+//           user: true,
+//         },
+//       },
+//       receipts: {
+//         include: {
+//           items: true,
+//           project: true,
+//         },
+//       },
+//     },
+//   });
 
-  return project;
-};
+//   return project;
+// };
 
 const fetchProject = async (id: string) => {
   const project = await getProjectById(id);
@@ -43,12 +44,14 @@ export default async function ProjectID({
 }: {
   params: { id: string };
 }) {
+  const session = (await auth()) as Session;
   const project = await fetchProject(params.id);
+  console.log(project);
 
   return (
     <PageWrapper>
       <div className="w-full flex justify-center ">
-        <ProjectId project={project} />
+        <ProjectId project={project} sessionUserId={session.user.id} />
       </div>
     </PageWrapper>
   );

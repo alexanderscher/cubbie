@@ -10,7 +10,6 @@ import { Suspense } from "react";
 
 const fetchProject = async () => {
   const projects = await getProjects();
-  console.log(projects);
   return projects as Project[];
 };
 
@@ -25,7 +24,7 @@ export default async function Home() {
           <Suspense fallback={<div>Loading</div>}>
             <div className="w-full max-w-[1090px]">
               <Header type="Projects" />
-              <Projects serverData={projects} userId={session.user.id} />
+              <Projects serverData={projects} sessionUserId={session.user.id} />
             </div>
           </Suspense>
         </div>

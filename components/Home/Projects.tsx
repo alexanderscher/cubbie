@@ -13,10 +13,12 @@ import React, { useEffect, useMemo, useState } from "react";
 
 interface Props {
   serverData: ProjectType[];
-  userId: string;
+  sessionUserId: string;
 }
 
-const Projects = ({ serverData, userId }: Props) => {
+const Projects = ({ serverData, sessionUserId }: Props) => {
+  console.log(serverData);
+
   const { isProjectLoading, filteredProjectData, initializeProjects } =
     useSearchProjectContext();
 
@@ -99,13 +101,14 @@ const Projects = ({ serverData, userId }: Props) => {
     .filter((project) => {
       return !(
         project.projectUserArchive?.some(
-          (entry) => entry.userId === userId?.toString()
+          (entry) => entry.userId === sessionUserId?.toString()
         ) || false
       );
     })
     .map((project) => {
       return (
         <Project
+          sessionUserId={sessionUserId}
           archived={false}
           project={project}
           key={project.id}
@@ -118,13 +121,14 @@ const Projects = ({ serverData, userId }: Props) => {
     .filter((project) => {
       return (
         project.projectUserArchive?.some(
-          (entry) => entry.userId === userId?.toString()
+          (entry) => entry.userId === sessionUserId?.toString()
         ) || false
       );
     })
     .map((project) => {
       return (
         <Project
+          sessionUserId={sessionUserId}
           archived={true}
           project={project}
           key={project.id}
@@ -171,9 +175,16 @@ interface ProjectProps {
   isOpen: boolean;
   onToggleOpen: (event: React.MouseEvent<HTMLDivElement>) => void;
   archived: boolean;
+  sessionUserId: string;
 }
 
-const Project = ({ project, isOpen, onToggleOpen, archived }: ProjectProps) => {
+const Project = ({
+  project,
+  isOpen,
+  onToggleOpen,
+  archived,
+  sessionUserId,
+}: ProjectProps) => {
   return (
     <div className="box xs:pb-6 pb-4 relative" key={project.id}>
       <Link href={`/project/${project.id}`}>
@@ -229,6 +240,7 @@ const Project = ({ project, isOpen, onToggleOpen, archived }: ProjectProps) => {
           isOpen={isOpen}
           project={project}
           archived={archived}
+          sessionUserId={sessionUserId}
         />
       )}
     </div>

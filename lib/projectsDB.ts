@@ -18,7 +18,10 @@ export const getProjects = async () => {
     async (userId) => {
       const projects = await prisma.project.findMany({
         where: {
-          userId,
+          OR: [
+            { userId }, // Projects where the user is the owner
+            { projectUsers: { some: { userId } } }, // Projects where the user is a collaborator
+          ],
         },
         include: {
           receipts: {
@@ -54,13 +57,19 @@ export const getProjectById = async (id: string) => {
     async (userId) => {
       const project = await prisma.project.findUnique({
         where: {
-          userId,
+          OR: [{ userId }, { projectUsers: { some: { userId } } }],
           id: parseInt(id),
         },
         include: {
+          user: true,
           receipts: {
             include: {
               items: true,
+            },
+          },
+          projectUsers: {
+            select: {
+              user: true,
             },
           },
         },

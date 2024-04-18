@@ -4,8 +4,8 @@ import prisma from "@/prisma/client";
 import { Session } from "@/types/AppTypes";
 import { revalidateTag } from "next/cache";
 
-export const addUserToProject = async (
-  email: string,
+export const removeUserFromProject = async (
+  removeUserId: string,
   projectId: number
 ): Promise<any> => {
   const session = (await auth()) as Session;
@@ -19,13 +19,13 @@ export const addUserToProject = async (
     }
 
     const user = await prisma.user.findUnique({
-      where: { email: email },
+      where: { id: removeUserId },
     });
     if (!user) {
       return { error: "User not found" };
     }
 
-    const projectUserExist = await prisma.projectUser.findUnique({
+    const projectUser = await prisma.projectUser.delete({
       where: {
         projectId_userId: {
           projectId: projectId,
@@ -33,19 +33,7 @@ export const addUserToProject = async (
         },
       },
     });
-
-    if (projectUserExist) {
-      return { error: "User already added to the project" };
-    }
-
-    const projectUser = await prisma.projectUser.create({
-      data: {
-        userId: user.id,
-        projectId: projectId,
-      },
-    });
     revalidateTag(`projects_user_${userId}`);
-
     revalidateUsersInProject(projectId);
 
     return projectUser;

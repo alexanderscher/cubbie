@@ -43,7 +43,6 @@ export const SearchAlertProvider: React.FC<{ children: ReactNode }> = ({
   }, []);
 
   const filterAlerts = (searchTerm: string) => {
-    console.log("searchTerm", searchTerm);
     if (!searchTerm) {
       setFilteredAlertData(alerts);
     } else {

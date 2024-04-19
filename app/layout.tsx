@@ -14,7 +14,7 @@ const myFont = localFont({
 
 export const metadata: Metadata = {
   title: "Cubbie",
-  // themeColor: "#ecd96f",
+  themeColor: "#ecd96f",
 };
 
 export default async function RootLayout({

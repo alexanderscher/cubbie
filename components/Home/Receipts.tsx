@@ -83,28 +83,22 @@ const Receipts = ({ serverData }: ReceiptsProps) => {
   if (isReceiptLoading) {
     return <div>Loading...</div>;
   }
-  if (sortedAndFilteredData.length === 0 && !isReceiptLoading) {
-    return (
-      <NoReceipts
-        setAddReceiptOpen={setAddReceiptOpen}
-        addReceiptOpen={addReceiptOpen}
-      />
-    );
-  }
 
-  if (searchParams.get("expired") === "false" || !searchParams.get("expired")) {
-    return sortedAndFilteredData.filter(
-      (receipt: ReceiptType) => receipt.expired === false
-    ).length === 0 ? (
-      <NoReceipts
-        setAddReceiptOpen={setAddReceiptOpen}
-        addReceiptOpen={addReceiptOpen}
-      />
-    ) : (
-      <div className="boxes">
-        {sortedAndFilteredData
-          .filter((receipt: ReceiptType) => receipt.expired === false)
-          .map((receipt: ReceiptType) => (
+  if (searchParams.get("expired") === "false") {
+    const activeReceipts = sortedAndFilteredData.filter(
+      (receipt: ReceiptType) => !receipt.expired
+    );
+    if (activeReceipts.length === 0) {
+      return (
+        <NoReceipts
+          setAddReceiptOpen={setAddReceiptOpen}
+          addReceiptOpen={addReceiptOpen}
+        />
+      );
+    } else {
+      return (
+        <div className="boxes">
+          {activeReceipts.map((receipt: ReceiptType) => (
             <Receipt
               key={receipt.id}
               receipt={receipt}
@@ -112,21 +106,24 @@ const Receipts = ({ serverData }: ReceiptsProps) => {
               isOpen={openReceiptId === receipt.id}
             />
           ))}
-      </div>
+        </div>
+      );
+    }
+  } else if (searchParams.get("expired") === "true") {
+    const expiredReceipts = sortedAndFilteredData.filter(
+      (receipt: ReceiptType) => receipt.expired
     );
-  } else
-    return sortedAndFilteredData.filter(
-      (receipt: ReceiptType) => receipt.expired === true
-    ).length === 0 ? (
-      <NoReceipts
-        setAddReceiptOpen={setAddReceiptOpen}
-        addReceiptOpen={addReceiptOpen}
-      />
-    ) : (
-      <div className="boxes">
-        {sortedAndFilteredData
-          .filter((receipt: ReceiptType) => receipt.expired === true)
-          .map((receipt: ReceiptType) => (
+    if (expiredReceipts.length === 0) {
+      return (
+        <NoReceipts
+          setAddReceiptOpen={setAddReceiptOpen}
+          addReceiptOpen={addReceiptOpen}
+        />
+      );
+    } else {
+      return (
+        <div className="boxes">
+          {expiredReceipts.map((receipt: ReceiptType) => (
             <Receipt
               key={receipt.id}
               receipt={receipt}
@@ -134,8 +131,32 @@ const Receipts = ({ serverData }: ReceiptsProps) => {
               isOpen={openReceiptId === receipt.id}
             />
           ))}
-      </div>
-    );
+        </div>
+      );
+    }
+  } else {
+    if (sortedAndFilteredData.length === 0 && !isReceiptLoading) {
+      return (
+        <NoReceipts
+          setAddReceiptOpen={setAddReceiptOpen}
+          addReceiptOpen={addReceiptOpen}
+        />
+      );
+    } else {
+      return (
+        <div className="boxes">
+          {sortedAndFilteredData.map((receipt: ReceiptType) => (
+            <Receipt
+              key={receipt.id}
+              receipt={receipt}
+              onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
+              isOpen={openReceiptId === receipt.id}
+            />
+          ))}
+        </div>
+      );
+    }
+  }
 };
 
 export default Receipts;

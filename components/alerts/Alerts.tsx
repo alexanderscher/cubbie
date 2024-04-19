@@ -371,8 +371,16 @@ const Overlay = ({ onClose }: OverlayProps) => {
 
 const NoAlerts = () => {
   return (
-    <div>
-      <h1>No alerts</h1>
+    <div className="w-full flex justify-center flex-col items-center gap-5">
+      <Image
+        src="/notification_b.png"
+        alt=""
+        width={50}
+        height={50}
+        className="object-cover "
+        style={{ objectFit: "cover", objectPosition: "center" }}
+      />
+      <h1 className="text-xl">No alerts</h1>
     </div>
   );
 };

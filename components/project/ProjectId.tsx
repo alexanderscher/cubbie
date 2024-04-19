@@ -33,7 +33,11 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isMemebersOpen, setMembersOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const userId = project.userId;
+  const [filteredReceiptData, setFilteredReceiptData] = useState(
+    project.receipts
+  );
 
   const [openReceiptId, setOpenReceiptId] = useState(null as number | null);
 
@@ -99,6 +103,24 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
     return filteredByStoreType.sort(compareReceipts);
   }, [project, storeType, sortField, sortOrder]);
 
+  const filterReceipts = (searchTerm: string) => {
+    if (!searchTerm) {
+      setFilteredReceiptData(sortedAndFilteredData);
+    } else {
+      const filtered = sortedAndFilteredData.filter((receipt) =>
+        receipt.store.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      setFilteredReceiptData(filtered);
+    }
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newSearchTerm = event.target.value;
+    setSearchTerm(newSearchTerm);
+    filterReceipts(newSearchTerm);
+  };
+
   return (
     <div className="flex flex-col  w-full h-full max-w-[1090px]">
       <div className="flex justify-between items-center gap-4 border-b-[1px] border-emerald-900 pb-4">
@@ -114,61 +136,69 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
       </div>
       <div className="flex flex-col gap-8 mt-10 bg">
         <div className={`${styles.header} `}>
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col justify-between gap-4">
             <div>
               <h1 className="text-2xl text-orange-600">{project.name}</h1>
               <p className="text-sm">
                 Created on {formatDateToMMDDYY(project.created_at)}
               </p>
             </div>
-          </div>
-
-          <div className="flex items-center gap-2 ">
-            <RegularButton
-              handleClick={() => setAddReceiptOpen(true)}
-              styles=" border-orange-600 text-orange-600"
-            >
-              <p className="text-xs">Add receipt</p>
-            </RegularButton>
-            <RegularButton
-              handleClick={() => setMembersOpen(true)}
-              styles=" border-orange-600 text-orange-600"
-            >
-              <p className="text-xs">Members</p>
-            </RegularButton>
-            <div
-              className={`relative border-[1px] border-orange-600 px-4 py-1 rounded-full cursor-pointer flex items-center ${
-                isOpen &&
-                "border-[1px] border-orange-600 px-4 py-1 rounded-full"
-              }`}
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              <Image src="/three-dots.png" alt="" width={20} height={20} />
-              {isOpen && (
-                <ProjectOptionsModal
-                  archived={isArchived}
-                  isOpen={isOpen}
-                  project={project}
-                  sessionUserId={sessionUserId}
-                />
-              )}
+            <div className="flex items-center gap-2 ">
+              <RegularButton
+                handleClick={() => setAddReceiptOpen(true)}
+                styles=" border-emerald-900 text-white bg-emerald-900"
+              >
+                <p className="text-xs">Add receipt</p>
+              </RegularButton>
+              <RegularButton
+                handleClick={() => setMembersOpen(true)}
+                styles=" border-emerald-900 text-white bg-emerald-900"
+              >
+                <p className="text-xs">Members</p>
+              </RegularButton>
+              <div
+                className={`relative border-[1px] border-emerald-900 px-4 py-1 rounded-full cursor-pointer flex items-center ${
+                  isOpen &&
+                  "border-[1px] border-emerald-900 px-4 py-1 rounded-full"
+                }`}
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                <Image src="/three-dots.png" alt="" width={20} height={20} />
+                {isOpen && (
+                  <ProjectOptionsModal
+                    archived={isArchived}
+                    isOpen={isOpen}
+                    project={project}
+                    sessionUserId={sessionUserId}
+                  />
+                )}
+              </div>
             </div>
           </div>
+
           {isAddOpen && <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />}
+        </div>
+        <div className="w-full">
+          <input
+            className="searchBar border-[1px] border-emerald-900 placeholder:text-emerald-900 placeholder:text-xs flex items-center text-sm text-emerald-900 p-3"
+            placeholder={`Search receipts from ${project.name}`}
+            value={searchTerm}
+            onChange={handleChange}
+          />
         </div>
         <Filters />
 
         <>
           {searchParams.get("expired") === "all" ||
           !searchParams.get("expired") ? (
-            sortedAndFilteredData.length === 0 ? (
+            filteredReceiptData.length === 0 ? (
               <NoReceipts
                 setAddReceiptOpen={setAddReceiptOpen}
                 addReceiptOpen={isAddOpen}
               />
             ) : (
               <div className="boxes">
-                {sortedAndFilteredData.map((receipt: ReceiptType) => (
+                {filteredReceiptData.map((receipt: ReceiptType) => (
                   <Receipt
                     key={receipt.id}
                     receipt={receipt}
@@ -181,7 +211,7 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
           ) : null}
 
           {searchParams.get("expired") === "false" ? (
-            sortedAndFilteredData.filter(
+            filteredReceiptData.filter(
               (receipt: ReceiptType) => !receipt.expired
             ).length === 0 ? (
               <NoReceipts
@@ -190,7 +220,7 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
               />
             ) : (
               <div className="boxes">
-                {sortedAndFilteredData
+                {filteredReceiptData
                   .filter((receipt: ReceiptType) => !receipt.expired)
                   .map((receipt: ReceiptType) => (
                     <Receipt
@@ -205,7 +235,7 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
           ) : null}
 
           {searchParams.get("expired") === "true" ? (
-            sortedAndFilteredData.filter(
+            filteredReceiptData.filter(
               (receipt: ReceiptType) => receipt.expired
             ).length === 0 ? (
               <NoReceipts
@@ -214,7 +244,7 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
               />
             ) : (
               <div className="boxes">
-                {sortedAndFilteredData
+                {filteredReceiptData
                   .filter((receipt: ReceiptType) => receipt.expired)
                   .map((receipt: ReceiptType) => (
                     <Receipt

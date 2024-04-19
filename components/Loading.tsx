@@ -7,7 +7,7 @@ interface LoadingProps {
 
 const Loading = ({ loading }: LoadingProps) => {
   return (
-    <div className="overlay">
+    <div className="overlay z-[2000]">
       <BeatLoader loading={loading} size={15} color={"rgb(6 78 59)"} />
     </div>
   );

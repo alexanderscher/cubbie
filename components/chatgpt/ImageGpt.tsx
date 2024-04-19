@@ -405,7 +405,9 @@ export default function ImageGpt({
               >
                 <p
                   className={
-                    loading ? "text-white text-sm" : "text-emerald-900 text-sm"
+                    loading
+                      ? "text-white text-sm p-1"
+                      : "text-emerald-900 text-sm p-1"
                   }
                 >
                   {loading ? "Analyzing..." : "Analyze Image"}

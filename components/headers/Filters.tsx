@@ -170,10 +170,11 @@ const Filters = () => {
               }}
             >
               <p className="text-xs">
-                {searchParams.get("expired") === "false" ||
-                !searchParams.get("expired")
-                  ? "Active receipts"
-                  : "Expired receipts"}
+                {searchParams.get("expired") === "false"
+                  ? "All active receipts"
+                  : searchParams.get("expired") === "true"
+                  ? "Expired receipts"
+                  : "All receipts"}
               </p>
               <Image
                 src="/arrow_grey.png"
@@ -279,6 +280,83 @@ const Filters = () => {
                   searchParams={searchParams}
                 />
                 <Overlay onClose={() => setOpenSortModal(false)} />
+              </>
+            )}
+          </div>
+        </div>
+      )}
+      {pathname.includes("project") && (
+        <div className="flex gap-2">
+          <div className="relative">
+            <FilterButton
+              setOpenModal={setOpenModal}
+              openModal={openModal}
+              label={determineStoreTypeLabel(searchParams.get("storeType"))}
+            />
+            {openModal && (
+              <>
+                <FilterReceiptOptions
+                  router={router}
+                  pathname={pathname}
+                  onClose={() => setOpenModal(false)}
+                  createQueryString={createQueryString}
+                  searchParams={searchParams}
+                />
+                <Overlay onClose={() => setOpenModal(false)} />
+              </>
+            )}
+          </div>
+          <div className="relative">
+            <SortButton
+              openModal={openSortModal}
+              setOpenModal={setOpenSortModal}
+              label={"All Purchases"}
+            />
+            {openSortModal && (
+              <>
+                <SortReceiptOptions
+                  router={router}
+                  pathname={pathname}
+                  onClose={() => setOpenSortModal(false)}
+                  createQueryString={createQueryString}
+                  searchParams={searchParams}
+                />
+                <Overlay onClose={() => setOpenSortModal(false)} />
+              </>
+            )}
+          </div>
+          <div className="relative">
+            <RegularButton
+              styles="border-emerald-900 text-emerald-900 flex justify-between items-center gap-2"
+              handleClick={() => {
+                setOpenStatusModal(!openStatusModal);
+              }}
+            >
+              <p className="text-xs">
+                {searchParams.get("expired") === "false"
+                  ? "All active receipts"
+                  : searchParams.get("expired") === "true"
+                  ? "Expired receipts"
+                  : "All receipts"}
+              </p>
+              <Image
+                src="/arrow_grey.png"
+                width={8}
+                height={8}
+                alt="arrow"
+                className="rotate-90"
+              />
+            </RegularButton>
+            {openStatusModal && (
+              <>
+                <StatusReceiptOptions
+                  router={router}
+                  pathname={pathname}
+                  onClose={() => setOpenStatusModal(false)}
+                  createQueryString={createQueryString}
+                  searchParams={searchParams}
+                />
+                <Overlay onClose={() => setOpenStatusModal(false)} />
               </>
             )}
           </div>
@@ -728,10 +806,19 @@ const StatusReceiptOptions = ({
     <Wrapper handleModalContentClick={handleModalContentClick}>
       <button
         className={`${
-          searchParams.get("expired") === "false" ||
-          !searchParams.get("expired")
+          searchParams.get("expired") === "all" || !searchParams.get("expired")
             ? clicked
             : notClicked
+        }`}
+        onClick={() => {
+          handleExpiredlick("all");
+        }}
+      >
+        <p className="text-xs">All receipts</p>
+      </button>
+      <button
+        className={`${
+          searchParams.get("expired") === "false" ? clicked : notClicked
         }`}
         onClick={() => {
           handleExpiredlick("false");

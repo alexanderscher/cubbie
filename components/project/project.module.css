@@ -2,6 +2,9 @@
   display: flex;
   justify-content: space-between;
   align-items: end;
+  /* background-color: white;
+  padding: 15px;
+  border-radius: 10px; */
 }
 
 .dot {

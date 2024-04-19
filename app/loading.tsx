@@ -1,9 +1,9 @@
-import { BeatLoader } from "react-spinners";
+import MainLoading from "@/components/skeletons/MainLoading";
 
 export default function Loading() {
   return (
     <div className="loading-overlay">
-      <BeatLoader size={15} color={"rgb(6 78 59)"} />
+      <MainLoading />
     </div>
   );
 }

@@ -123,7 +123,7 @@ const Filters = () => {
         </div>
       )}
       {pathname === "/receipts" && filteredReceiptData.length > 0 && (
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <div className="relative">
             <FilterButton
               setOpenModal={setOpenModal}
@@ -1030,7 +1030,7 @@ const Overlay = ({ onClose }: OverlayProps) => {
   return (
     <div
       id="modal-overlay"
-      className={`filter-overlay`}
+      className={`filter-page-overlay`}
       onClick={handleOverlayClick}
     ></div>
   );

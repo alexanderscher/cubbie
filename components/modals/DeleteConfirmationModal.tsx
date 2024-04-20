@@ -20,7 +20,7 @@ const DeleteConfirmationModal = ({
   type,
 }: DeleteModalProps) => {
   return (
-    <div className="overlay" onClick={(e) => e.preventDefault()}>
+    <div className="delete-overlay" onClick={(e) => e.preventDefault()}>
       <div className="relative p-10 bg-red-50  max-w-md m-auto flex-col flex  rounded-lg shadow-md gap-4 w-[340px] items-center ">
         <div className="bg-red-100 rounded-full flex items-center justify-center h-[50px] w-[50px]">
           <ExclamationTriangleIcon className=" text-red-500 w-3/4 h-1/2" />

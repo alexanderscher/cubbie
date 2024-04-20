@@ -1,3 +1,4 @@
+"use client";
 import { addItem } from "@/actions/items/addItem";
 import { deleteReceipt } from "@/actions/receipts/deleteReceipt";
 import { moveReceipt } from "@/actions/receipts/moveReceipt";

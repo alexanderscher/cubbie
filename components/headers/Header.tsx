@@ -36,7 +36,7 @@ const Header = ({ type }: HeaderProps) => {
             <>
               <Overlay onClose={() => setIsModalVisible(false)} />
               <div
-                className="absolute bg-[#97cb97] rounded shadow p-3 -bottom-[120px] z-[200] w-[180px]"
+                className="absolute bg-[#97cb97] rounded shadow p-3 -bottom-[120px] z-[1001] w-[180px]"
                 onClick={(e) => e.preventDefault()}
               >
                 {type === "Projects" && (

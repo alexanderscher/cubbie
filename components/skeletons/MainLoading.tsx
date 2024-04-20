@@ -5,7 +5,7 @@ import { BeatLoader } from "react-spinners";
 
 const MainLoading = () => {
   return (
-    <div>
+    <div className="w-full">
       <TopbarSkeleton />
 
       <div className="flex bg-[#e2f1e2]">
@@ -23,7 +23,7 @@ export default MainLoading;
 const TopbarSkeleton = () => {
   return (
     <div
-      className={`${styles.topbar} p-4 justify-between  bg-emerald-900 text-white`}
+      className={`${styles.topbar} p-4 justify-between  bg-emerald-900 text-white w-full`}
     >
       <h1>Cubbie</h1>
       <div className="flex gap-4">

@@ -137,7 +137,7 @@ export const ProjectSelect = ({
       >
         Project Folder
       </p>
-      {/* <ReactSelect
+      <ReactSelect
         options={projectOptions.filter((option) => {
           // Find the corresponding project based on the option's value
           const project = projects.find(
@@ -148,7 +148,7 @@ export const ProjectSelect = ({
           return (
             project &&
             !project.projectUserArchive?.some(
-              (entry) => entry.userId === session.user.id
+              (entry) => entry.userId === session.data?.user.id
             )
           );
         })}
@@ -157,7 +157,7 @@ export const ProjectSelect = ({
         isClearable={true}
         placeholder="Change project folder"
         styles={color === "green" ? customGreenStyles : customStyles}
-      /> */}
+      />
       {errors.folderName && (
         <p className="text-orange-800 text-sm">{errors.folderName}</p>
       )}

@@ -163,6 +163,7 @@ const Header = ({ type }: HeaderProps) => {
         <SearchBar searchType={type} />
       </div>
       <Filters />
+
       <AddButton
         setAddReceiptOpen={setAddReceiptOpen}
         setAddProjectOpen={setAddProjectOpen}
@@ -191,11 +192,14 @@ const AddButton = ({
         </button>
       </div>
       {isModalVisible && (
-        <OptionsModal
-          setAddProjectOpen={setAddProjectOpen}
-          setAddReceiptOpen={setAddReceiptOpen}
-          setIsModalVisible={setIsModalVisible}
-        />
+        <>
+          <OptionsModal
+            setAddProjectOpen={setAddProjectOpen}
+            setAddReceiptOpen={setAddReceiptOpen}
+            setIsModalVisible={setIsModalVisible}
+          />
+          <Overlay onClose={() => setIsModalVisible(false)} />
+        </>
       )}
     </div>
   );

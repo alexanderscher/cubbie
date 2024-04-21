@@ -114,6 +114,7 @@ const Projects = ({ serverData, sessionUserId }: Props) => {
           key={project.id}
           isOpen={openProjectId === project.id}
           onToggleOpen={(e) => toggleOpenProject(project.id, e)}
+          setOpenProjectId={setOpenProjectId}
         />
       );
     });
@@ -133,6 +134,7 @@ const Projects = ({ serverData, sessionUserId }: Props) => {
           project={project}
           key={project.id}
           isOpen={openProjectId === project.id}
+          setOpenProjectId={setOpenProjectId}
           onToggleOpen={(e) => toggleOpenProject(project.id, e)}
         />
       );
@@ -176,6 +178,7 @@ interface ProjectProps {
   onToggleOpen: (event: React.MouseEvent<HTMLDivElement>) => void;
   archived: boolean;
   sessionUserId: string;
+  setOpenProjectId: (value: number | null) => void;
 }
 
 const Project = ({
@@ -184,8 +187,8 @@ const Project = ({
   onToggleOpen,
   archived,
   sessionUserId,
+  setOpenProjectId,
 }: ProjectProps) => {
-  console.log(project);
   return (
     <div className="box xs:pb-6 pb-4 relative" key={project.id}>
       <Link href={`/project/${project.id}`}>
@@ -237,14 +240,41 @@ const Project = ({
         </div>
       </Link>
       {isOpen && (
-        <ProjectOptionsModal
-          isOpen={isOpen}
-          project={project}
-          archived={archived}
-          sessionUserId={sessionUserId}
-        />
+        <>
+          <Overlay onClose={() => setOpenProjectId(null)} />
+          <ProjectOptionsModal
+            isOpen={isOpen}
+            project={project}
+            archived={archived}
+            sessionUserId={sessionUserId}
+          />
+        </>
       )}
     </div>
+  );
+};
+
+interface OverlayProps {
+  onClose: () => void;
+}
+
+const Overlay = ({ onClose }: OverlayProps) => {
+  const handleOverlayClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (
+      event.target instanceof HTMLDivElement &&
+      event.target.id === "modal-overlay"
+    ) {
+      onClose();
+    }
+  };
+  return (
+    <div
+      id="modal-overlay"
+      className={`filter-overlay`}
+      onClick={handleOverlayClick}
+    ></div>
   );
 };
 

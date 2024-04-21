@@ -136,20 +136,20 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
             </div>
           </Link>
         )}
-        {pathname === "/receipts" && (
-          <div
-            className={color}
-            onClick={(e) => {
-              e.preventDefault();
-              setIsAddOpen(true);
-            }}
-          >
-            <div className="flex gap-2">
-              <Image src={"/add.png"} width={20} height={20} alt=""></Image>
-              <p>Add item</p>
-            </div>
+        {/* {pathname === "/receipts" && ( */}
+        <div
+          className={color}
+          onClick={(e) => {
+            e.preventDefault();
+            setIsAddOpen(true);
+          }}
+        >
+          <div className="flex gap-2">
+            <Image src={"/add.png"} width={20} height={20} alt=""></Image>
+            <p>Add item</p>
           </div>
-        )}
+        </div>
+        {/* )} */}
         <div className={color}>
           <div
             className="flex gap-2"

@@ -29,6 +29,7 @@ export const getProjects = async () => {
               items: true,
             },
           },
+          user: true,
           projectUsers: {
             include: {
               user: true,

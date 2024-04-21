@@ -10,7 +10,11 @@ import { toast } from "sonner";
 import { Project as ProjectType } from "@/types/AppTypes";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import { usePathname } from "next/navigation";
-import { AddUser } from "@/components/project/AddUser";
+import { Formik } from "formik";
+import { addUserToProject } from "@/actions/projects/addUserToProject";
+import RegularButton from "@/components/buttons/RegularButton";
+import { FormError } from "@/components/form-error";
+import { removeUserFromProject } from "@/actions/projects/removeUserFromProject";
 
 interface OptionsModalProps {
   isOpen: boolean;
@@ -29,10 +33,12 @@ export const ProjectOptionsModal = ({
 }: OptionsModalProps) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [edit, setEdit] = useState(false);
-  const [isAddUserOpen, setAddUserOpen] = useState(false);
   const [isAddOpen, setAddReceiptOpen] = useState(false);
+  const [isAddUserOpen, setAddUserOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [color, setColor] = useState(white);
+  const [isMemebersOpen, setMembersOpen] = useState(false);
+
   const pathname = usePathname();
   console.log(archived);
 
@@ -72,13 +78,13 @@ export const ProjectOptionsModal = ({
     >
       <div>
         <div className="p-4 rounded text-sm flex flex-col gap-2">
-          {sessionUserId && sessionUserId === project.user?.id && (
+          {sessionUserId && sessionUserId === project.userId && (
             <div
               className={`${color} cursor-pointer`}
               onClick={(e) => {
                 e.preventDefault();
 
-                setAddUserOpen(true);
+                setMembersOpen(true);
               }}
             >
               <div className="flex gap-2">
@@ -88,25 +94,23 @@ export const ProjectOptionsModal = ({
                   height={20}
                   alt=""
                 ></Image>
-                <p>Invite User</p>
+                <p>Members</p>
               </div>
             </div>
           )}
 
-          {pathname === "/" && (
-            <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2">
-              <div
-                className="flex gap-2"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setAddReceiptOpen(true);
-                }}
-              >
-                <Image src={"/add.png"} width={20} height={20} alt=""></Image>
-                <p>Add receipt</p>
-              </div>
+          <div className={`${color} cursor-pointer`}>
+            <div
+              className="flex gap-2"
+              onClick={(e) => {
+                e.preventDefault();
+                setAddReceiptOpen(true);
+              }}
+            >
+              <Image src={"/add.png"} width={20} height={20} alt=""></Image>
+              <p>Add receipt</p>
             </div>
-          )}
+          </div>
 
           <div
             className={`${color} cursor-pointer`}
@@ -193,7 +197,19 @@ export const ProjectOptionsModal = ({
         )}
         {isAddOpen && <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />}
         {isAddUserOpen && (
-          <AddUser setAddUserOpen={setAddUserOpen} projectId={project.id} />
+          <AddUser
+            setMembersOpen={setMembersOpen}
+            projectId={project.id}
+            setAddUserOpen={setAddUserOpen}
+          />
+        )}
+        {isMemebersOpen && (
+          <Members
+            project={project}
+            setMembersOpen={setMembersOpen}
+            sessionUserId={sessionUserId}
+            setAddUserOpen={setAddUserOpen}
+          />
         )}
       </div>
     </div>
@@ -239,5 +255,299 @@ const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
       type="Project"
       message={`Are you sure you want to delete ${project.name}? This will delete all receipts and items in the project.`}
     />
+  );
+};
+
+const Members = ({
+  project,
+  setMembersOpen,
+  sessionUserId,
+  setAddUserOpen,
+}: {
+  project: ProjectType;
+  setMembersOpen: (value: boolean) => void;
+  sessionUserId: string | undefined;
+  setAddUserOpen: (value: boolean) => void;
+}) => {
+  const handleOverlayClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (
+      event.target instanceof HTMLDivElement &&
+      event.target.id === "modal-overlay"
+    ) {
+      setMembersOpen(false);
+    }
+  };
+
+  console.log(sessionUserId, project.user?.id);
+
+  return (
+    <div
+      id="modal-overlay"
+      className="fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center z-[2000] "
+      onClick={(e) => {
+        handleOverlayClick;
+        e.preventDefault();
+      }}
+    >
+      <div className="bg-white rounded-md shadow-xl m-4 max-w-md w-full rounded-t-md">
+        {sessionUserId && sessionUserId === project.user?.id && (
+          <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3 ">
+            <button
+              type="button"
+              className="text-emerald-900 "
+              onClick={() => {
+                setMembersOpen(false);
+                setAddUserOpen(false);
+              }}
+            >
+              <span className="text-2xl">&times;</span>
+            </button>
+
+            <h3 className=" text-emerald-900">{`${project.name} members`}</h3>
+
+            <button
+              type="button"
+              className="text-emerald-900 "
+              onClick={() => {
+                setMembersOpen(false);
+                setAddUserOpen(true);
+              }}
+            >
+              <span className="text-2xl">+</span>
+            </button>
+          </div>
+        )}
+        {sessionUserId && sessionUserId !== project.user?.id && (
+          <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3 ">
+            <h3 className=" text-emerald-900">{`${project.name} members`}</h3>
+            <button
+              type="button"
+              className="text-emerald-900 "
+              onClick={() => {
+                setMembersOpen(false);
+                setAddUserOpen(false);
+              }}
+            >
+              <span className="text-2xl">&times;</span>
+            </button>
+          </div>
+        )}
+        <div className="flex flex-col ">
+          <div className="flex items-cenfter justify-between gap-4 py-4 px-6 text-sm">
+            <div className="flex items-center gap-2">
+              <p className="text-emerald-900">{project.user?.name}</p>
+              <p className="text-emerald-900">{project.user?.email}</p>
+            </div>
+
+            <p className="text-slate-500">Owner</p>
+          </div>
+          {project.projectUsers.map((user) => (
+            <div key={user.id}>
+              <MembersBlock
+                user={user}
+                projecUserId={project.user?.id}
+                sessionUserId={sessionUserId}
+                projectId={project.id}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const MembersBlock = ({
+  user,
+  sessionUserId,
+  projecUserId,
+  projectId,
+}: {
+  user: any;
+
+  sessionUserId: string | undefined;
+  projecUserId: string | undefined;
+  projectId: number;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div className="flex items-center border-t-[1px] justify-between gap-4 py-4 px-6 text-sm relative">
+      <div className="flex items-center gap-2">
+        <p className="text-emerald-900">{user.user?.name}</p>
+        <p className="text-emerald-900">{user.user?.email}</p>
+      </div>
+      {sessionUserId && sessionUserId === projecUserId && (
+        <div className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
+          <Image src="/three-dots.png" alt="" width={20} height={20} />
+        </div>
+      )}
+
+      {isOpen && <MembersOptionModal user={user} projectId={projectId} />}
+    </div>
+  );
+};
+
+const MembersOptionModal = ({
+  user,
+  projectId,
+}: {
+  user: any;
+  projectId: number;
+}) => {
+  const [isPending, startTransition] = useTransition();
+
+  const removeUser = async () => {
+    startTransition(() => {
+      try {
+        removeUserFromProject(user.user.id, projectId);
+        toast.success("User removed from project");
+      } catch (e) {
+        toast.error(
+          "An error occurred while removing the user from the project"
+        );
+      }
+    });
+  };
+  return (
+    <div
+      className={`absolute  bg-slate-200 shadow-lg -right-2 top-10 rounded-md w-[260px] `}
+    >
+      <div className="p-4 rounded text-sm flex flex-col gap-2">
+        <div className="bg-slate-50	 cursor-pointer hover:bg-slate-100 rounded-md w-full p-2">
+          <div className="flex gap-4" onClick={removeUser}>
+            <Image src={"/receipt_b.png"} width={12} height={12} alt=""></Image>
+            <p>Remove {user.user.name}</p>
+          </div>
+        </div>
+      </div>
+      {isPending && <Loading loading={isPending} />}
+    </div>
+  );
+};
+
+interface AddReceiptModalProps {
+  setMembersOpen: (value: boolean) => void;
+  setAddUserOpen: (value: boolean) => void;
+  projectId: number;
+}
+
+const AddUser = ({
+  setAddUserOpen,
+  projectId,
+  setMembersOpen,
+}: AddReceiptModalProps) => {
+  const [invalidEmailFormat, setInvalidEmailFormat] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [uploadError, setUploadError] = useState("");
+
+  const handleOverlayClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (
+      event.target instanceof HTMLDivElement &&
+      event.target.id === "modal-overlay"
+    ) {
+      setAddUserOpen(false);
+    }
+  };
+
+  const emailValidation = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return "Invalid email";
+    }
+    return "";
+  };
+
+  return (
+    <div
+      id="modal-overlay"
+      className="fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center z-[2000] "
+      onClick={(e) => {
+        handleOverlayClick;
+        e.preventDefault();
+      }}
+    >
+      <Formik
+        initialValues={{
+          email: "",
+        }}
+        onSubmit={async (values) => {
+          const isNotEmail = emailValidation(values.email);
+          if (isNotEmail) {
+            setInvalidEmailFormat(true);
+            return;
+          }
+
+          try {
+            startTransition(async () => {
+              const result = await addUserToProject(values.email, projectId);
+              if (result.error) {
+                setUploadError(result.error);
+                toast.error("An error occurred. Please try again.");
+              } else {
+                toast.success("Your operation was successful!");
+
+                setInvalidEmailFormat(false);
+                setUploadError("");
+              }
+            });
+          } catch (e) {
+            toast.error("An error occurred. Please try again.");
+          }
+        }}
+        // validationSchema={getValidationSchema(stage)}
+      >
+        {({ handleChange, handleSubmit }) => (
+          <div className="bg-white rounded-md shadow-xl m-4 max-w-md w-full rounded-t-md">
+            <form onSubmit={handleSubmit}>
+              <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3 ">
+                <button
+                  type="button"
+                  className="text-emerald-900 "
+                  onClick={() => {
+                    setMembersOpen(true);
+                    setAddUserOpen(false);
+                  }}
+                >
+                  <span className="text-sm">Back</span>
+                </button>
+
+                <h3 className=" text-emerald-900">Add user</h3>
+                <button
+                  type="button"
+                  className="text-emerald-900 "
+                  onClick={() => setAddUserOpen(false)}
+                >
+                  <span className="text-2xl">&times;</span>
+                </button>
+              </div>
+              <div className="flex flex-col p-6 gap-6">
+                <input
+                  className="w-full border-[1px]  p-2 rounded border-emerald-900 focus:border-emerald-900 focus:outline-none cursor-pointer placeholder:text-xs text-sm"
+                  // value={e.}
+                  placeholder="Email"
+                  onChange={handleChange("email")}
+                  style={{ WebkitAppearance: "none" }}
+                />
+                <RegularButton
+                  handleClick={() => handleSubmit()}
+                  styles="bg-white border-emerald-900"
+                >
+                  <p className="text-emerald-900 text-xs">Add user</p>
+                </RegularButton>
+                {invalidEmailFormat && (
+                  <FormError message="Invalid email format" />
+                )}
+                {uploadError && <FormError message={uploadError} />}
+              </div>
+            </form>
+          </div>
+        )}
+      </Formik>
+      {isPending && <Loading loading={isPending} />}
+    </div>
   );
 };

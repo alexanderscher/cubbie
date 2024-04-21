@@ -39,7 +39,7 @@ export async function handleUpload(
   if (Array.isArray(result)) {
     result.forEach(processResponse);
   } else {
-    processResponse(result);
+    processResponse(result as UploadFileResponse);
   }
 
   return uploadResults;

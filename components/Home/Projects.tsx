@@ -185,6 +185,7 @@ const Project = ({
   archived,
   sessionUserId,
 }: ProjectProps) => {
+  console.log(project);
   return (
     <div className="box xs:pb-6 pb-4 relative" key={project.id}>
       <Link href={`/project/${project.id}`}>

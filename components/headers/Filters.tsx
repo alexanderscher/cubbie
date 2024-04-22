@@ -18,6 +18,7 @@ const Filters = () => {
   const [openModal, setOpenModal] = React.useState(false);
   const [openSortModal, setOpenSortModal] = React.useState(false);
   const [openStatusModal, setOpenStatusModal] = React.useState(false);
+  const [openItemExpiredModal, setOpenItemExpiredModal] = React.useState(false);
   const { filteredItemData } = useSearchItemContext();
   const { filteredProjectData } = useSearchProjectContext();
   const { filteredReceiptData } = useSearchReceiptContext();
@@ -29,9 +30,22 @@ const Filters = () => {
       case "all":
         return "All items";
       case "current":
-        return "Current items";
+        return "In possesion";
       case "returned":
         return "Returned items";
+      default:
+        return "Return Status";
+    }
+  };
+
+  const determineItemExpiredLabel = (type: string | null) => {
+    switch (type) {
+      case "all":
+        return "All items";
+      case "active":
+        return "Active items";
+      case "expired":
+        return "Expired items";
       default:
         return "All items";
     }
@@ -206,8 +220,9 @@ const Filters = () => {
             <FilterButton
               setOpenModal={setOpenModal}
               openModal={openModal}
-              label={determineLabel(searchParams.get("type"))}
+              label={determineLabel(searchParams.get("status"))}
             />
+
             {openModal && pathname === "/items" && (
               <>
                 <FilterItemsOptions
@@ -218,6 +233,26 @@ const Filters = () => {
                   searchParams={searchParams}
                 />
                 <Overlay onClose={() => setOpenModal(false)} />
+              </>
+            )}
+          </div>
+          <div className="relative">
+            <FilterButton
+              setOpenModal={setOpenItemExpiredModal}
+              openModal={openItemExpiredModal}
+              label={determineItemExpiredLabel(searchParams.get("type"))}
+            />
+
+            {openItemExpiredModal && pathname === "/items" && (
+              <>
+                <FilterItemsExpiredOptions
+                  router={router}
+                  pathname={pathname}
+                  onClose={() => setOpenItemExpiredModal(false)}
+                  createQueryString={createQueryString}
+                  searchParams={searchParams}
+                />
+                <Overlay onClose={() => setOpenItemExpiredModal(false)} />
               </>
             )}
           </div>
@@ -849,6 +884,62 @@ const FilterItemsOptions = ({
   router,
 }: FilterOptionsProps) => {
   const handleTypeClick = (name: string) => {
+    router.push(pathname + "?" + createQueryString("status", name));
+  };
+
+  const handleModalContentClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => e.stopPropagation();
+
+  return (
+    <Wrapper handleModalContentClick={handleModalContentClick}>
+      <button
+        className={`${
+          searchParams.get("status")?.includes("all") ||
+          !searchParams.get("status")
+            ? clicked
+            : notClicked
+        }`}
+        onClick={() => {
+          handleTypeClick("all");
+        }}
+      >
+        <p className="text-xs">All</p>
+      </button>
+      <button
+        className={`${
+          searchParams.get("status")?.includes("current") ? clicked : notClicked
+        }`}
+        onClick={() => {
+          handleTypeClick("current");
+        }}
+      >
+        <p className="text-xs">In possesion</p>
+      </button>
+      <button
+        className={`${
+          searchParams.get("status")?.includes("returned")
+            ? clicked
+            : notClicked
+        }`}
+        onClick={() => {
+          handleTypeClick("returned");
+        }}
+      >
+        <p className="text-xs">Returned items</p>
+      </button>
+    </Wrapper>
+  );
+};
+
+const FilterItemsExpiredOptions = ({
+  pathname,
+  searchParams,
+
+  createQueryString,
+  router,
+}: FilterOptionsProps) => {
+  const handleTypeClick = (name: string) => {
     router.push(pathname + "?" + createQueryString("type", name));
   };
 
@@ -868,27 +959,27 @@ const FilterItemsOptions = ({
           handleTypeClick("all");
         }}
       >
-        <p className="text-xs">All</p>
+        <p className="text-xs">All items</p>
       </button>
       <button
         className={`${
-          searchParams.get("type")?.includes("current") ? clicked : notClicked
+          searchParams.get("type")?.includes("active") ? clicked : notClicked
         }`}
         onClick={() => {
-          handleTypeClick("current");
+          handleTypeClick("active");
         }}
       >
-        <p className="text-xs">Current Items</p>
+        <p className="text-xs">Active items</p>
       </button>
       <button
         className={`${
-          searchParams.get("type")?.includes("returned") ? clicked : notClicked
+          searchParams.get("type")?.includes("expired") ? clicked : notClicked
         }`}
         onClick={() => {
-          handleTypeClick("returned");
+          handleTypeClick("expired");
         }}
       >
-        <p className="text-xs">Returned items</p>
+        <p className="text-xs">Expired items</p>
       </button>
     </Wrapper>
   );

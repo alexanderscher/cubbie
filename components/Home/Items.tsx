@@ -93,75 +93,43 @@ const Items = ({ items }: ItemsProps) => {
     return (
       <div className="boxes">
         <div className="box relative">
-          <div className="flex flex-col gap-4 justify-center items-center p-6">
-            <Image
-              src="/item_b.png"
-              alt=""
-              width={50}
-              height={50}
-              className="object-cover "
-              style={{ objectFit: "cover", objectPosition: "center" }}
-            />
-            <p className="text-md text-emerald-900">No items</p>
-            <button
-              className="border-[1px]  border-emerald-900 py-2 px-10 text-xs text-emerald-900 rounded-full w-full"
-              onClick={() => setAddReceiptOpen(true)}
-            >
-              <p className="">Create</p>
-            </button>
-            {addReceiptOpen && (
-              <ModalOverlay onClose={() => setAddReceiptOpen(false)}>
-                <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
-              </ModalOverlay>
-            )}
-          </div>
+          <NoItems
+            setAddReceiptOpen={setAddReceiptOpen}
+            addReceiptOpen={addReceiptOpen}
+          />
         </div>
       </div>
     );
   }
+  const status = searchParams.get("status");
+  const type = searchParams.get("type");
 
-  if (searchParams.get("type") === "returned") {
+  let filteredData = sortedAndFilteredData.filter((item) => {
+    if (type === "expired") {
+      return item.receipt.expired;
+    } else if (type === "active") {
+      return !item.receipt.expired;
+    }
+    return true;
+  });
+
+  if (status === "returned" || status === "current") {
+    filteredData = filteredData.filter((item) =>
+      status === "returned" ? item.returned : !item.returned
+    );
+
+    if (filteredData.length === 0) {
+      return (
+        <NoItems
+          setAddReceiptOpen={setAddReceiptOpen}
+          addReceiptOpen={addReceiptOpen}
+        />
+      );
+    }
+
     return (
       <div className="boxes pb-20">
-        {sortedAndFilteredData.length > 0 &&
-          sortedAndFilteredData.map(
-            (item: ItemType) =>
-              item.returned && (
-                <Item
-                  setOpenItemId={setOpenItemId}
-                  key={item.id}
-                  item={item}
-                  isOpen={openItemId === item.id}
-                  onToggleOpen={(e) => toggleOpenItem(item.id, e)}
-                />
-              )
-          )}
-      </div>
-    );
-  } else if (searchParams.get("type") === "current") {
-    return (
-      <div className="boxes pb-20">
-        {sortedAndFilteredData.length > 0 &&
-          sortedAndFilteredData.map(
-            (item: ItemType) =>
-              !item.returned && (
-                <Item
-                  setOpenItemId={setOpenItemId}
-                  key={item.id}
-                  item={item}
-                  onToggleOpen={(e) => toggleOpenItem(item.id, e)}
-                  isOpen={openItemId === item.id}
-                />
-              )
-          )}
-      </div>
-    );
-  }
-
-  return (
-    <div className="boxes pb-20">
-      {sortedAndFilteredData.length > 0 &&
-        sortedAndFilteredData.map((item: ItemType) => (
+        {filteredData.map((item) => (
           <Item
             setOpenItemId={setOpenItemId}
             key={item.id}
@@ -170,8 +138,67 @@ const Items = ({ items }: ItemsProps) => {
             onToggleOpen={(e) => toggleOpenItem(item.id, e)}
           />
         ))}
+      </div>
+    );
+  }
+
+  if (filteredData.length === 0) {
+    return (
+      <NoItems
+        setAddReceiptOpen={setAddReceiptOpen}
+        addReceiptOpen={addReceiptOpen}
+      />
+    );
+  }
+
+  return (
+    <div className="boxes pb-20">
+      {filteredData.map((item) => (
+        <Item
+          setOpenItemId={setOpenItemId}
+          key={item.id}
+          item={item}
+          isOpen={openItemId === item.id}
+          onToggleOpen={(e) => toggleOpenItem(item.id, e)}
+        />
+      ))}
     </div>
   );
 };
 
 export default Items;
+
+const NoItems = ({
+  setAddReceiptOpen,
+  addReceiptOpen,
+}: {
+  setAddReceiptOpen: (value: boolean) => void;
+  addReceiptOpen: boolean;
+}) => {
+  return (
+    <div className="box relative">
+      <div className="flex flex-col gap-4 justify-center items-center p-6">
+        <Image
+          src="/item_b.png"
+          alt=""
+          width={50}
+          height={50}
+          className="object-cover "
+          style={{ objectFit: "cover", objectPosition: "center" }}
+        />
+        <p className="text-md text-emerald-900">No items</p>
+        <button
+          className="border-[1px]  border-emerald-900 py-2 px-10 text-xs text-emerald-900 rounded-full w-full"
+          onClick={() => setAddReceiptOpen(true)}
+        >
+          <p className="">Create</p>
+        </button>
+        {addReceiptOpen && (
+          <ModalOverlay onClose={() => setAddReceiptOpen(false)}>
+            <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
+          </ModalOverlay>
+        )}
+      </div>
+    </div>
+  );
+};

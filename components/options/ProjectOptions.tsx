@@ -15,6 +15,7 @@ import { addUserToProject } from "@/actions/projects/addUserToProject";
 import RegularButton from "@/components/buttons/RegularButton";
 import { FormError } from "@/components/form-error";
 import { removeUserFromProject } from "@/actions/projects/removeUserFromProject";
+import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 
 interface OptionsModalProps {
   isOpen: boolean;
@@ -186,12 +187,17 @@ export const ProjectOptionsModal = ({
         {isPending && <Loading loading={isPending} />}
         {edit && <EditProject setEdit={setEdit} project={project} />}
         {isDeleteOpen && (
-          <DeleteModal
-            setDeleteOpen={setIsDeleteOpen}
-            project={project}
-          ></DeleteModal>
+          <ModalOverlay onClose={() => setIsDeleteOpen(false)}>
+            <DeleteModal setDeleteOpen={setIsDeleteOpen} project={project} />
+          </ModalOverlay>
         )}
-        {isAddOpen && <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />}
+        {isAddOpen && (
+          <>
+            <ModalOverlay onClose={() => setAddReceiptOpen(false)}>
+              <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
+            </ModalOverlay>
+          </>
+        )}
         {isAddUserOpen && (
           <AddUser
             setMembersOpen={setMembersOpen}

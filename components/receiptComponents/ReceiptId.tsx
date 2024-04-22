@@ -14,6 +14,7 @@ import * as Yup from "yup";
 import { addItem } from "@/actions/items/addItem";
 import { ReceiptOptionsModal } from "@/components/options/ReceiptOptions";
 import { Overlay } from "@/components/overlays/Overlay";
+import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 
 interface ReceiptIdProps {
   receipt: Receipt;
@@ -144,14 +145,16 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
         </div>
       </div>
       {isAddOpen && (
-        <AddItem
-          setIsAddOpen={setIsAddOpen}
-          handleSubmit={handleSubmit}
-          setNewItem={setNewItem}
-          newItem={newItem}
-          error={error}
-          isPending={isPending}
-        />
+        <ModalOverlay onClose={() => setIsAddOpen(false)}>
+          <AddItem
+            setIsAddOpen={setIsAddOpen}
+            handleSubmit={handleSubmit}
+            setNewItem={setNewItem}
+            newItem={newItem}
+            error={error}
+            isPending={isPending}
+          />
+        </ModalOverlay>
       )}
       <div className="flex bg-white  rounded-md text-sm shadow p-6 h-[80px] items-center">
         <div className="w-1/3 border-r-[1px] border-slate-300  ">

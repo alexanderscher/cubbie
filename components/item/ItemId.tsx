@@ -19,6 +19,7 @@ const ItemID = ({ item }: ItemIDProps) => {
   const { id } = useParams();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isOptionsOpen, setIsOptionsOpen] = useState(false);
 
   if (!item.receipt) return <div className="min-h-screen">Loading</div>;
   return (
@@ -46,12 +47,12 @@ const ItemID = ({ item }: ItemIDProps) => {
                   isOpen &&
                   "border-[1px] border-emerald-900 px-4 py-1 rounded-full"
                 }`}
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={() => setIsOptionsOpen(!isOptionsOpen)}
               >
                 <Image src="/three-dots.png" alt="" width={20} height={20} />
-                {isOpen && (
+                {isOptionsOpen && (
                   <>
-                    <Overlay onClose={() => setIsOpen(false)} />
+                    <Overlay onClose={() => setIsOptionsOpen(false)} />
                     <ItemOptionsModal item={item} />
                   </>
                 )}

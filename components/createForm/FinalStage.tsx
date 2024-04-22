@@ -22,6 +22,7 @@ import PurchaseTypeSelect from "@/components/select/PurchaseTypeSelect";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import { convertHeic } from "@/utils/media";
 import { AddItem } from "@/components/item/AddItem";
+import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 
 interface FinalStageProps {
   values: any;
@@ -309,12 +310,14 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
         )}
       </div>
       {isAddOpen && (
-        <AddItemModal
-          isAddOpen={isAddOpen}
-          setIsAddOpen={setIsAddOpen}
-          items={values.items}
-          setFieldValue={setFieldValue}
-        />
+        <ModalOverlay onClose={() => setIsAddOpen(false)}>
+          <AddItemModal
+            isAddOpen={isAddOpen}
+            setIsAddOpen={setIsAddOpen}
+            items={values.items}
+            setFieldValue={setFieldValue}
+          />
+        </ModalOverlay>
       )}
     </div>
   );

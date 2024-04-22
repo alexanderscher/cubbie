@@ -1,3 +1,4 @@
+import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import Image from "next/image";
 
@@ -30,7 +31,9 @@ export const NoReceipts = ({
             <p className="">Create</p>
           </button>
           {addReceiptOpen && (
-            <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
+            <ModalOverlay onClose={() => setAddReceiptOpen(false)}>
+              <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
+            </ModalOverlay>
           )}
         </div>
       </div>

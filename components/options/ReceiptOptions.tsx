@@ -6,6 +6,7 @@ import RegularButton from "@/components/buttons/RegularButton";
 import { AddItem } from "@/components/item/AddItem";
 import Loading from "@/components/Loading";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
+import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import ProjectSelect from "@/components/select/ProjectSelect";
 import { getProjects } from "@/lib/projectsDB";
 import { Receipt as ReceiptType } from "@/types/AppTypes";
@@ -181,19 +182,27 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
           </div>
         </div>
       </div>
-      {isOpen && <MoveModal setIsOpen={setIsOpen} receipt={receipt} />}
+      {isOpen && (
+        <ModalOverlay onClose={() => setIsOpen(false)}>
+          <MoveModal setIsOpen={setIsOpen} receipt={receipt} />
+        </ModalOverlay>
+      )}
       {isAddOpen && (
-        <AddItem
-          setIsAddOpen={setIsAddOpen}
-          handleSubmit={handleSubmit}
-          setNewItem={setNewItem}
-          newItem={newItem}
-          error={error}
-          isPending={isPending}
-        />
+        <ModalOverlay onClose={() => setIsAddOpen(false)}>
+          <AddItem
+            setIsAddOpen={setIsAddOpen}
+            handleSubmit={handleSubmit}
+            setNewItem={setNewItem}
+            newItem={newItem}
+            error={error}
+            isPending={isPending}
+          />
+        </ModalOverlay>
       )}
       {isDeleteOpen && (
-        <DeleteModal setDeleteOpen={setIsDeleteOpen} receipt={receipt} />
+        <ModalOverlay onClose={() => setIsDeleteOpen(false)}>
+          <DeleteModal setDeleteOpen={setIsDeleteOpen} receipt={receipt} />
+        </ModalOverlay>
       )}
     </div>
   );
@@ -249,64 +258,44 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
     }
   };
 
-  const handleOverlayClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (
-      event.target instanceof HTMLDivElement &&
-      event.target.id === "modal-overlay"
-    ) {
-      setIsOpen(false);
-    }
-  };
-
   return (
-    <div
-      id="modal-overlay"
-      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]"
-      onClick={(e) => {
-        e.preventDefault();
-        handleOverlayClick(e);
-      }}
-    >
-      <div className="bg-white rounded shadow-xl m-4 max-w-md w-full">
-        <div className="flex justify-between items-center border-b border-emerald-900 px-5 py-3 rounded-t-lg">
-          <h3 className="text-md text-emerald-900">Move project</h3>
-          <button
-            type="button"
-            className="emerald-900"
-            onClick={() => setIsOpen(false)}
-          >
-            <span className="text-2xl">&times;</span>
-          </button>
-        </div>
-        <div className="p-6 flex flex-col gap-4">
-          <div className="flex flex-col gap-4">
-            <div className="space-y-4">
-              <div className="flex flex-col gap-2">
-                {project && (
-                  <ProjectSelect
-                    projects={project}
-                    handleChange={setSelectedProject}
-                    values={selectedProject}
-                    errors={error}
-                    color="green"
-                  ></ProjectSelect>
-                )}
+    <div className="bg-white rounded shadow-xl m-4 max-w-md w-full">
+      <div className="flex justify-between items-center border-b border-emerald-900 px-5 py-3 rounded-t-lg">
+        <h3 className="text-md text-emerald-900">Move project</h3>
+        <button
+          type="button"
+          className="emerald-900"
+          onClick={() => setIsOpen(false)}
+        >
+          <span className="text-2xl">&times;</span>
+        </button>
+      </div>
+      <div className="p-6 flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
+          <div className="space-y-4">
+            <div className="flex flex-col gap-2">
+              {project && (
+                <ProjectSelect
+                  projects={project}
+                  handleChange={setSelectedProject}
+                  values={selectedProject}
+                  errors={error}
+                  color="green"
+                ></ProjectSelect>
+              )}
 
-                {error && <p className="text-orange-900 text-xs">{error}</p>}
-              </div>
+              {error && <p className="text-orange-900 text-xs">{error}</p>}
             </div>
+          </div>
 
-            <div className="flex justify-end mt-6">
-              <RegularButton
-                type="button"
-                styles=" text-white border-emerald-900"
-                handleClick={handleSubmit}
-              >
-                <p className="text-xs text-emerald-900">Move</p>
-              </RegularButton>
-            </div>
+          <div className="flex justify-end mt-6">
+            <RegularButton
+              type="button"
+              styles=" text-white border-emerald-900"
+              handleClick={handleSubmit}
+            >
+              <p className="text-xs text-emerald-900">Move</p>
+            </RegularButton>
           </div>
         </div>
       </div>

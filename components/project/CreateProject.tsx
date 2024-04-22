@@ -50,83 +50,66 @@ export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
     }
   };
 
-  const handleOverlayClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (
-      event.target instanceof HTMLDivElement &&
-      event.target.id === "modal-overlay"
-    ) {
-      setAddProjectOpen(false);
-    }
-  };
-
   return (
-    <div
-      id="modal-overlay"
-      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[2000]"
-      onClick={handleOverlayClick}
-    >
-      <div className="bg-white rounded-md shadow-xl m-4 max-w-md w-full">
-        <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3  rounded-t-lg">
-          <h3 className="text-md text-emerald-900">Create Project</h3>
-          <button
-            type="button"
-            className="text-emerald-900"
-            onClick={() => setAddProjectOpen(false)}
-          >
-            <span className="text-2xl">&times;</span>
-          </button>
-        </div>
-        <div className="p-6 flex flex-col gap-4">
-          <div className="flex flex-col gap-4">
-            <div className="space-y-4">
-              <div>
-                <p className="text-xs text-emerald-900 mb-2">Project name*</p>
-                <input
-                  type="text"
-                  name="description"
-                  value={project.name}
-                  onChange={(e) =>
-                    setProject({ ...project, name: e.target.value })
-                  }
-                  className="w-full p-2 border-[1px] rounded border-emerald-900 focus:outline-none"
-                />
-                {error && <p className="text-orange-900 text-xs">{error}</p>}
-              </div>
-            </div>
+    <div className="bg-white rounded-md shadow-xl m-4 max-w-md w-full">
+      <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3  rounded-t-lg">
+        <h3 className="text-md text-emerald-900">Create Project</h3>
+        <button
+          type="button"
+          className="text-emerald-900"
+          onClick={() => setAddProjectOpen(false)}
+        >
+          <span className="text-2xl">&times;</span>
+        </button>
+      </div>
+      <div className="p-6 flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
+          <div className="space-y-4">
             <div>
-              <div className="flex items-center gap-1 mb-2">
-                <p className="text-xs text-emerald-900">Project Asset Amount</p>
-                <TooltipWithHelperIcon content="Set a Project Asset Amount to determine the minimum cost an item must have to be considered an asset. This helps in identifying and tracking valuable items across all project receipts easily." />
-              </div>
-
-              <CurrencyInput
-                id="assetAmount"
-                name="assetAmount"
-                className="w-full border-[1px]  p-2  border-emerald-900 rounded  focus:outline-none"
-                placeholder=""
-                defaultValue={""}
-                decimalsLimit={2}
-                onValueChange={(value) =>
-                  setProject({ ...project, asset_amount: value || "" })
+              <p className="text-xs text-emerald-900 mb-2">Project name*</p>
+              <input
+                type="text"
+                name="description"
+                value={project.name}
+                onChange={(e) =>
+                  setProject({ ...project, name: e.target.value })
                 }
+                className="w-full p-2 border-[1px] rounded border-emerald-900 focus:outline-none"
               />
-            </div>
-
-            <div className="flex justify-end mt-6">
-              <RegularButton
-                type="button"
-                styles="text-emerald-900 border-emerald-900"
-                handleClick={handleSubmit}
-              >
-                <p className="text-xs">Create Project</p>
-              </RegularButton>
+              {error && <p className="text-orange-900 text-xs">{error}</p>}
             </div>
           </div>
+          <div>
+            <div className="flex items-center gap-1 mb-2">
+              <p className="text-xs text-emerald-900">Project Asset Amount</p>
+              <TooltipWithHelperIcon content="Set a Project Asset Amount to determine the minimum cost an item must have to be considered an asset. This helps in identifying and tracking valuable items across all project receipts easily." />
+            </div>
 
-          {uploadError && <FormError message={uploadError} />}
+            <CurrencyInput
+              id="assetAmount"
+              name="assetAmount"
+              className="w-full border-[1px]  p-2  border-emerald-900 rounded  focus:outline-none"
+              placeholder=""
+              defaultValue={""}
+              decimalsLimit={2}
+              onValueChange={(value) =>
+                setProject({ ...project, asset_amount: value || "" })
+              }
+            />
+          </div>
+
+          <div className="flex justify-end mt-6">
+            <RegularButton
+              type="button"
+              styles="text-emerald-900 border-emerald-900"
+              handleClick={handleSubmit}
+            >
+              <p className="text-xs">Create Project</p>
+            </RegularButton>
+          </div>
         </div>
+
+        {uploadError && <FormError message={uploadError} />}
       </div>
       {isPending && <Loading loading={isPending} />}
     </div>

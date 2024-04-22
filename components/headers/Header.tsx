@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Filters from "@/components/headers/Filters";
 import { Overlay } from "@/components/overlays/Overlay";
+import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 
 interface HeaderProps {
   type: string;
@@ -152,11 +153,15 @@ const Header = ({ type }: HeaderProps) => {
         </div>
 
         {addProjectOpen && (
-          <CreateProject setAddProjectOpen={setAddProjectOpen} />
+          <ModalOverlay onClose={() => setAddProjectOpen(false)}>
+            <CreateProject setAddProjectOpen={setAddProjectOpen} />
+          </ModalOverlay>
         )}
 
         {addReceiptOpen && (
-          <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
+          <ModalOverlay onClose={() => setAddReceiptOpen(false)}>
+            <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
+          </ModalOverlay>
         )}
       </div>
 
@@ -187,7 +192,7 @@ const AddButton = ({
   const [isModalVisible, setIsModalVisible] = useState(false);
   return (
     <div
-      className="fixed  bottom-8 right-8 shadow-xl w-12 h-12 flex items-center justify-center border-2 border-orange-600 bg-orange-600 text-white rounded-full cursor-pointer "
+      className="fixed  bottom-8 right-8 shadow-xl w-12 h-12 flex items-center justify-center border-2 border-orange-600 bg-orange-600 text-white rounded-full cursor-pointer z-[100]"
       onClick={() => setIsModalVisible(!isModalVisible)}
     >
       <p className="text-xl">+</p>

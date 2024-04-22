@@ -6,6 +6,7 @@ import { Item as ItemType } from "@/types/AppTypes";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
 import Image from "next/image";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
+import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 
 interface ItemsProps {
   items: ItemType[];
@@ -109,7 +110,9 @@ const Items = ({ items }: ItemsProps) => {
               <p className="">Create</p>
             </button>
             {addReceiptOpen && (
-              <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
+              <ModalOverlay onClose={() => setAddReceiptOpen(false)}>
+                <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
+              </ModalOverlay>
             )}
           </div>
         </div>

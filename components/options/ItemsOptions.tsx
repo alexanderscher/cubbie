@@ -3,6 +3,7 @@ import { deleteItem } from "@/actions/items/deleteItem";
 import { markAsReturned, unreturn } from "@/actions/return";
 import Loading from "@/components/Loading";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
+import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { TruncateText } from "@/components/text/Truncate";
 import { Item as ItemType } from "@/types/AppTypes";
 import Image from "next/image";
@@ -162,13 +163,15 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
       {isPending && <Loading loading={isPending} />}
       <div className="z-[2000]">
         {deleteOpen && (
-          <DeleteConfirmationModal
-            cancelClick={setDeleteOpen}
-            deleteClick={deleteMethod}
-            isPending={isPending}
-            type="Item"
-            message={`Are you sure you want to delete ${item.description}? This will delete all receipts and items in the project.`}
-          />
+          <ModalOverlay onClose={() => setDeleteOpen(false)}>
+            <DeleteConfirmationModal
+              cancelClick={setDeleteOpen}
+              deleteClick={deleteMethod}
+              isPending={isPending}
+              type="Item"
+              message={`Are you sure you want to delete ${item.description}? This will delete all receipts and items in the project.`}
+            />
+          </ModalOverlay>
         )}
       </div>
     </div>

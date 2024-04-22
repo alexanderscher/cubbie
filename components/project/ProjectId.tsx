@@ -17,6 +17,7 @@ import { ProjectOptionsModal } from "@/components/options/ProjectOptions";
 import Filters from "@/components/headers/Filters";
 import { useSearchParams } from "next/navigation";
 import { Overlay } from "@/components/overlays/Overlay";
+import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 interface ProjectIdProps {
   project: ProjectType;
   sessionUserId: string | undefined;
@@ -162,7 +163,11 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
             </div>
           </div>
 
-          {isAddOpen && <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />}
+          {isAddOpen && (
+            <ModalOverlay onClose={() => setAddReceiptOpen(false)}>
+              <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
+            </ModalOverlay>
+          )}
         </div>
         <div className="w-full">
           <input

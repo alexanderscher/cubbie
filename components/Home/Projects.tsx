@@ -1,6 +1,7 @@
 "use client";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 import { ProjectOptionsModal } from "@/components/options/ProjectOptions";
+import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { Overlay } from "@/components/overlays/Overlay";
 import { CreateProject } from "@/components/project/CreateProject";
 import { Receipt } from "@/types/AppTypes";
@@ -281,7 +282,9 @@ const NoProjects = ({ setAddProjectOpen, addProjectOpen }: NoProjectsProps) => {
             <p className="">Create</p>
           </button>
           {addProjectOpen && (
-            <CreateProject setAddProjectOpen={setAddProjectOpen} />
+            <ModalOverlay onClose={() => setAddProjectOpen(false)}>
+              <CreateProject setAddProjectOpen={setAddProjectOpen} />
+            </ModalOverlay>
           )}
         </div>
       </div>

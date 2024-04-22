@@ -49,7 +49,29 @@ const Topbar = ({ session, children, alerts }: TopbarProps) => {
             setSearchBarOpen(false);
           }}
         >
-          Menu
+          {menu ? (
+            <Image
+              src="/hamburger.png"
+              alt=""
+              width={30}
+              height={30}
+              className="object-cover"
+              style={{
+                objectFit: "cover",
+                objectPosition: "center",
+                transform: "rotate(90deg)", // Rotates the image 90 degrees clockwise
+              }}
+            />
+          ) : (
+            <Image
+              src="/hamburger.png"
+              alt=""
+              width={30}
+              height={30}
+              className="object-cover"
+              style={{ objectFit: "cover", objectPosition: "center" }}
+            />
+          )}
         </button>
       </div>
 

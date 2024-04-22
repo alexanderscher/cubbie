@@ -22,8 +22,8 @@ import PurchaseTypeSelect from "@/components/select/PurchaseTypeSelect";
 import { AddItem } from "@/components/item/AddItem";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import * as Yup from "yup";
-import { addItem } from "@/actions/items/addItem";
 import { toast } from "sonner";
+import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 type ExtendedReceiptType = Receipt & {
   edit_image: string;
 };
@@ -447,14 +447,16 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
             />
           )}
           {isAddOpen && (
-            <AddItem
-              setIsAddOpen={setIsAddOpen}
-              handleSubmit={handleSubmit}
-              setNewItem={setNewItem}
-              newItem={newItem}
-              error={error}
-              isPending={isPending}
-            />
+            <ModalOverlay onClose={() => setIsAddOpen(false)}>
+              <AddItem
+                setIsAddOpen={setIsAddOpen}
+                handleSubmit={handleSubmit}
+                setNewItem={setNewItem}
+                newItem={newItem}
+                error={error}
+                isPending={isPending}
+              />
+            </ModalOverlay>
           )}
           {isPending && <Loading loading={isPending} />}
         </div>

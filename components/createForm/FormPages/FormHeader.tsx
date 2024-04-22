@@ -1,4 +1,5 @@
 "use client";
+import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -41,7 +42,11 @@ const FormHeader = ({ children }: FormHeaderProps) => {
         </button>
       </div>
       {children}
-      {options && <CreateReceipt setAddReceiptOpen={setOptions} />}
+      {options && (
+        <ModalOverlay onClose={() => setOptions(false)}>
+          <CreateReceipt setAddReceiptOpen={setOptions} />
+        </ModalOverlay>
+      )}
     </div>
   );
 };

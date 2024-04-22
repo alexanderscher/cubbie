@@ -264,7 +264,7 @@ const AlertOptionsModal = ({ alertObj, userId }: SingleAlertProps) => {
   const isReadByUser = alertObj.readBy.some((entry) => entry.userId === userId);
   return (
     <div
-      className={`absolute shadow-1 -right-2 top-10 rounded-md w-[230px] bg-white p-4 z-[201] text-sm`}
+      className={`absolute shadow-1 -right-2 top-10 rounded-md w-[230px] bg-white p-4 z-[2000] text-sm`}
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();

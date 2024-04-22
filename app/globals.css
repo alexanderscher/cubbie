@@ -87,8 +87,8 @@ input:-webkit-autofill::first-line {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgb(226, 241, 226);
-  z-index: 3000;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 2001;
   display: flex;
   justify-content: center;
   align-items: center;

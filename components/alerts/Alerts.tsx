@@ -13,6 +13,7 @@ import Loading from "@/components/Loading";
 import SearchBar from "@/components/search/SearchBar";
 import { useSearchAlertContext } from "@/components/context/SearchFilterAlerts";
 import { useSearchParams } from "next/navigation";
+import { Overlay } from "@/components/overlays/Overlay";
 
 const describeDate = (dateString: string) => {
   const date = parse(dateString, "MM/dd/yy", new Date());
@@ -342,30 +343,6 @@ const AlertOptionsModal = ({ alertObj, userId }: SingleAlertProps) => {
       </div>
       {isPending && <Loading loading={isPending} />}
     </div>
-  );
-};
-
-interface OverlayProps {
-  onClose: () => void;
-}
-
-const Overlay = ({ onClose }: OverlayProps) => {
-  const handleOverlayClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (
-      event.target instanceof HTMLDivElement &&
-      event.target.id === "modal-overlay"
-    ) {
-      onClose();
-    }
-  };
-  return (
-    <div
-      id="modal-overlay"
-      className={`filter-overlay`}
-      onClick={handleOverlayClick}
-    ></div>
   );
 };
 

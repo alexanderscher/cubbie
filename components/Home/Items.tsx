@@ -125,6 +125,7 @@ const Items = ({ items }: ItemsProps) => {
             (item: ItemType) =>
               item.returned && (
                 <Item
+                  setOpenItemId={setOpenItemId}
                   key={item.id}
                   item={item}
                   isOpen={openItemId === item.id}
@@ -142,6 +143,7 @@ const Items = ({ items }: ItemsProps) => {
             (item: ItemType) =>
               !item.returned && (
                 <Item
+                  setOpenItemId={setOpenItemId}
                   key={item.id}
                   item={item}
                   onToggleOpen={(e) => toggleOpenItem(item.id, e)}
@@ -158,6 +160,7 @@ const Items = ({ items }: ItemsProps) => {
       {sortedAndFilteredData.length > 0 &&
         sortedAndFilteredData.map((item: ItemType) => (
           <Item
+            setOpenItemId={setOpenItemId}
             key={item.id}
             item={item}
             isOpen={openItemId === item.id}

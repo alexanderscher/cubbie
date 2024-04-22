@@ -56,10 +56,8 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
       }}
     >
       <div
-        className={`absolute  shadow-1 -right-2 top-10 rounded-md w-[200px] ${
-          !pathname.startsWith("/item/")
-            ? "z-[300] bg-white"
-            : "z-[500] bg-[#97cb97] "
+        className={`absolute  shadow-1 -right-2 top-10 rounded-md w-[200px] z-[2000] ${
+          !pathname.startsWith("/item/") ? " bg-white" : " bg-[#97cb97] "
         }`}
       >
         <div className="p-4 rounded text-sm flex flex-col gap-2">

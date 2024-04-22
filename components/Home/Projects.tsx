@@ -1,6 +1,7 @@
 "use client";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 import { ProjectOptionsModal } from "@/components/options/ProjectOptions";
+import { Overlay } from "@/components/overlays/Overlay";
 import { CreateProject } from "@/components/project/CreateProject";
 import { Receipt } from "@/types/AppTypes";
 import { Project as ProjectType } from "@/types/AppTypes";
@@ -251,30 +252,6 @@ const Project = ({
         </>
       )}
     </div>
-  );
-};
-
-interface OverlayProps {
-  onClose: () => void;
-}
-
-const Overlay = ({ onClose }: OverlayProps) => {
-  const handleOverlayClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (
-      event.target instanceof HTMLDivElement &&
-      event.target.id === "modal-overlay"
-    ) {
-      onClose();
-    }
-  };
-  return (
-    <div
-      id="modal-overlay"
-      className={`filter-overlay`}
-      onClick={handleOverlayClick}
-    ></div>
   );
 };
 

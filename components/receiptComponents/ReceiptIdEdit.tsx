@@ -408,6 +408,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                         item={item}
                         isOpen={openItemId === item.id}
                         onToggleOpen={(e) => toggleOpenItem(item.id, e)}
+                        setOpenItemId={setOpenItemId}
                       />
                     ))}
                 </div>

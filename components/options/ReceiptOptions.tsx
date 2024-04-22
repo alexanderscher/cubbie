@@ -117,10 +117,8 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
 
   return (
     <div
-      className={`absolute  shadow-1 -right-2 top-10 rounded-md w-[200px] ${
-        !pathname.startsWith("/receipt/")
-          ? "z-300 bg-white"
-          : "z-[500] bg-[#97cb97] "
+      className={`absolute  shadow-1 -right-2 top-10 rounded-md w-[200px] z-[2000] ${
+        !pathname.startsWith("/receipt/") ? "bg-white" : " bg-[#97cb97] "
       }`}
       onClick={(e) => {
         e.preventDefault();
@@ -136,7 +134,6 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
             </div>
           </Link>
         )}
-        {/* {pathname === "/receipts" && ( */}
         <div
           className={color}
           onClick={(e) => {

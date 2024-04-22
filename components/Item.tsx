@@ -1,6 +1,7 @@
 "use client";
 
 import { ItemOptionsModal } from "@/components/options/ItemsOptions";
+import { Overlay } from "@/components/overlays/Overlay";
 import { TruncateText } from "@/components/text/Truncate";
 import { Project } from "@/types/AppTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
@@ -14,9 +15,16 @@ interface Props {
   isOpen: boolean;
   onToggleOpen: (event: React.MouseEvent<HTMLDivElement>) => void;
   project?: Project;
+  setOpenItemId: (id: number | null) => void;
 }
 
-const Item = ({ item, isOpen, onToggleOpen, project }: Props) => {
+const Item = ({
+  item,
+  isOpen,
+  onToggleOpen,
+  project,
+  setOpenItemId,
+}: Props) => {
   const pathname = usePathname();
 
   return (
@@ -62,7 +70,7 @@ const Item = ({ item, isOpen, onToggleOpen, project }: Props) => {
               />
             </div>
           )}
-          {isOpen && <ItemOptionsModal item={item} />}
+
           {!item.photo_url && (
             <div className="">
               <div
@@ -163,6 +171,12 @@ const Item = ({ item, isOpen, onToggleOpen, project }: Props) => {
           )}
         </div>
       </Link>
+      {isOpen && (
+        <>
+          <Overlay onClose={() => setOpenItemId(null)} />
+          <ItemOptionsModal item={item} />
+        </>
+      )}
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { useSearchAlertContext } from "@/components/context/SearchFilterAlerts";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
+import { Overlay } from "@/components/overlays/Overlay";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
@@ -459,7 +460,7 @@ interface WrapperProps {
 
 const Wrapper = ({ children, handleModalContentClick }: WrapperProps) => {
   return (
-    <div className="absolute z-[501] -top-0 ">
+    <div className="absolute z-[2000] -top-0 ">
       <div
         className={`flex flex-col  bg-white rounded-lg shadow-xl w-[200px] border-[1px] border-slate-200 `}
         onClick={handleModalContentClick}
@@ -1015,26 +1016,6 @@ const SortItemsOptions = ({
 interface OverlayProps {
   onClose: () => void;
 }
-
-const Overlay = ({ onClose }: OverlayProps) => {
-  const handleOverlayClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (
-      event.target instanceof HTMLDivElement &&
-      event.target.id === "modal-overlay"
-    ) {
-      onClose();
-    }
-  };
-  return (
-    <div
-      id="modal-overlay"
-      className={`filter-page-overlay`}
-      onClick={handleOverlayClick}
-    ></div>
-  );
-};
 
 const FilterAlertOptions = ({
   pathname,

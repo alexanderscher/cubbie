@@ -6,6 +6,7 @@ import { CreateProject } from "@/components/project/CreateProject";
 import Image from "next/image";
 import Link from "next/link";
 import Filters from "@/components/headers/Filters";
+import { Overlay } from "@/components/overlays/Overlay";
 
 interface HeaderProps {
   type: string;
@@ -36,7 +37,7 @@ const Header = ({ type }: HeaderProps) => {
             <>
               <Overlay onClose={() => setIsModalVisible(false)} />
               <div
-                className="absolute bg-[#97cb97] rounded shadow p-3 -bottom-[120px] z-[1001] w-[180px]"
+                className="absolute bg-[#97cb97] rounded shadow p-3 -bottom-[120px] z-[2000] w-[180px]"
                 onClick={(e) => e.preventDefault()}
               >
                 {type === "Projects" && (
@@ -185,12 +186,12 @@ const AddButton = ({
 }: AddButtonProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   return (
-    <div className="fixed z-[500] bottom-8 right-8 shadow-xl w-12 h-12 flex items-center justify-center border-2 border-orange-600 bg-orange-600 text-white rounded-full cursor-pointer ">
-      <div className="relative">
-        <button onClick={() => setIsModalVisible(!isModalVisible)} className="">
-          <p className="text-xl">+</p>
-        </button>
-      </div>
+    <div
+      className="fixed  bottom-8 right-8 shadow-xl w-12 h-12 flex items-center justify-center border-2 border-orange-600 bg-orange-600 text-white rounded-full cursor-pointer "
+      onClick={() => setIsModalVisible(!isModalVisible)}
+    >
+      <p className="text-xl">+</p>
+
       {isModalVisible && (
         <>
           <OptionsModal
@@ -213,7 +214,7 @@ const OptionsModal = ({
   setIsModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   return (
-    <div className="absolute -right-1 -bottom-1 w-48 bg-orange-300 shadow-lg rounded-md flex flex-col text-black ">
+    <div className="absolute -right-1 -bottom-1 w-48 bg-orange-300 shadow-lg rounded-md flex flex-col text-black z-[2000]">
       <div className="flex flex-col text-start gap-3 relative p-4">
         <div
           className="bg-orange-100 hover:bg-orange-200 rounded-md p-3 cursor-pointer"
@@ -235,29 +236,5 @@ const OptionsModal = ({
         </div>
       </div>
     </div>
-  );
-};
-
-interface OverlayProps {
-  onClose: () => void;
-}
-
-const Overlay = ({ onClose }: OverlayProps) => {
-  const handleOverlayClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (
-      event.target instanceof HTMLDivElement &&
-      event.target.id === "modal-overlay"
-    ) {
-      onClose();
-    }
-  };
-  return (
-    <div
-      id="modal-overlay"
-      className={`filter-overlay`}
-      onClick={handleOverlayClick}
-    ></div>
   );
 };

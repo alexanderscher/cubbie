@@ -16,6 +16,7 @@ import { ProjectOptionsModal } from "@/components/options/ProjectOptions";
 
 import Filters from "@/components/headers/Filters";
 import { useSearchParams } from "next/navigation";
+import { Overlay } from "@/components/overlays/Overlay";
 interface ProjectIdProps {
   project: ProjectType;
   sessionUserId: string | undefined;
@@ -147,29 +148,18 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
               >
                 <Image src="/three-dots.png" alt="" width={20} height={20} />
                 {isOpen && (
-                  <ProjectOptionsModal
-                    archived={isArchived}
-                    isOpen={isOpen}
-                    project={project}
-                    sessionUserId={sessionUserId}
-                  />
+                  <>
+                    <Overlay onClose={() => setIsOpen(false)} />
+                    <ProjectOptionsModal
+                      archived={isArchived}
+                      isOpen={isOpen}
+                      project={project}
+                      sessionUserId={sessionUserId}
+                    />
+                  </>
                 )}
               </div>
             </div>
-            {/* <div className="flex items-center gap-2 ">
-              <RegularButton
-                handleClick={() => setAddReceiptOpen(true)}
-                styles=" border-emerald-900 text-white bg-emerald-900"
-              >
-                <p className="text-xs">Add receipt</p>
-              </RegularButton>
-              {/* <RegularButton
-                handleClick={() => setMembersOpen(true)}
-                styles=" border-emerald-900 text-white bg-emerald-900"
-              >
-                <p className="text-xs">Members</p>
-              </RegularButton> */}
-            {/* </div>  */}
           </div>
 
           {isAddOpen && <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />}
@@ -200,6 +190,7 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
                     receipt={receipt}
                     onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
                     isOpen={openReceiptId === receipt.id}
+                    setOpenReceiptId={setOpenReceiptId}
                   />
                 ))}
               </div>
@@ -224,6 +215,7 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
                       receipt={receipt}
                       onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
                       isOpen={openReceiptId === receipt.id}
+                      setOpenReceiptId={setOpenReceiptId}
                     />
                   ))}
               </div>
@@ -248,6 +240,7 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
                       receipt={receipt}
                       onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
                       isOpen={openReceiptId === receipt.id}
+                      setOpenReceiptId={setOpenReceiptId}
                     />
                   ))}
               </div>

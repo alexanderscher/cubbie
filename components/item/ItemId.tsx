@@ -9,6 +9,7 @@ import HeaderItemNav from "@/components/navbar/HeaderItemNav";
 import ImageModal from "@/components/images/ImageModal";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { ItemOptionsModal } from "@/components/options/ItemsOptions";
+import { Overlay } from "@/components/overlays/Overlay";
 
 interface ItemIDProps {
   item: ItemType;
@@ -48,7 +49,12 @@ const ItemID = ({ item }: ItemIDProps) => {
                 onClick={() => setIsOpen(!isOpen)}
               >
                 <Image src="/three-dots.png" alt="" width={20} height={20} />
-                {isOpen && <ItemOptionsModal item={item} />}
+                {isOpen && (
+                  <>
+                    <Overlay onClose={() => setIsOpen(false)} />
+                    <ItemOptionsModal item={item} />
+                  </>
+                )}
               </div>
             </div>
           </div>

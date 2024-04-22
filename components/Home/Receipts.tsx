@@ -104,6 +104,7 @@ const Receipts = ({ serverData }: ReceiptsProps) => {
               receipt={receipt}
               onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
               isOpen={openReceiptId === receipt.id}
+              setOpenReceiptId={setOpenReceiptId}
             />
           ))}
         </div>
@@ -129,6 +130,7 @@ const Receipts = ({ serverData }: ReceiptsProps) => {
               receipt={receipt}
               onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
               isOpen={openReceiptId === receipt.id}
+              setOpenReceiptId={setOpenReceiptId}
             />
           ))}
         </div>
@@ -151,6 +153,7 @@ const Receipts = ({ serverData }: ReceiptsProps) => {
               receipt={receipt}
               onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
               isOpen={openReceiptId === receipt.id}
+              setOpenReceiptId={setOpenReceiptId}
             />
           ))}
         </div>

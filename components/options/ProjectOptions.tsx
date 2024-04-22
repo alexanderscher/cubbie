@@ -40,7 +40,6 @@ export const ProjectOptionsModal = ({
   const [isMemebersOpen, setMembersOpen] = useState(false);
 
   const pathname = usePathname();
-  console.log(archived);
 
   useEffect(() => {
     if (pathname === "/") {
@@ -68,13 +67,10 @@ export const ProjectOptionsModal = ({
 
   return (
     <div
-      className={`absolute  shadow-1 -right-2 top-10 rounded-md w-[202px] z-[200] ${
+      className={`absolute  shadow-1 -right-2 top-10 rounded-md w-[202px] z-[2000] ${
         pathname === "/" ? " bg-white" : " bg-[#97cb97] "
       }`}
-      onClick={(e) => {
-        e.stopPropagation();
-        e.preventDefault();
-      }}
+      onClick={(e) => e.preventDefault()}
     >
       <div>
         <div className="p-4 rounded text-sm flex flex-col gap-2">

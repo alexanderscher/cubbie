@@ -13,6 +13,7 @@ import { Item as ItemType, Receipt } from "@/types/AppTypes";
 import * as Yup from "yup";
 import { addItem } from "@/actions/items/addItem";
 import { ReceiptOptionsModal } from "@/components/options/ReceiptOptions";
+import { Overlay } from "@/components/overlays/Overlay";
 
 interface ReceiptIdProps {
   receipt: Receipt;
@@ -126,6 +127,7 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
       )}
       <div className={styles.header}>
         <h1 className="text-2xl text-orange-600 ">{receipt.store}</h1>
+
         <div
           className={`relative hover:border-[1px] hover:border-emerald-900 px-4 py-1 rounded-full cursor-pointer flex items-center ${
             isOpen && "border-[1px] border-emerald-900 px-4 py-1 rounded-full"
@@ -133,27 +135,13 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
           onClick={() => setisOptionsOpen(!isOptionsOpen)}
         >
           <Image src="/three-dots.png" alt="" width={20} height={20} />
-          {isOptionsOpen && <ReceiptOptionsModal receipt={receipt} />}
+          {isOptionsOpen && (
+            <>
+              <Overlay onClose={() => setIsOpen(false)} />
+              <ReceiptOptionsModal receipt={receipt} />
+            </>
+          )}
         </div>
-
-        {/* <div className="flex gap-2 ">
-          <RegularButton
-            styles="bg  border-emerald-900"
-            handleClick={() => setIsAddOpen(true)}
-          >
-            <p className="text-emerald-900 text-xs">Add item</p>
-          </RegularButton>
-
-          <div
-            className={`relative hover:border-[1px] hover:border-emerald-900 px-4 py-1 rounded-full cursor-pointer flex items-center ${
-              isOpen && "border-[1px] border-emerald-900 px-4 py-1 rounded-full"
-            }`}
-            onClick={() => setisOptionsOpen(!isOptionsOpen)}
-          >
-            <Image src="/three-dots.png" alt="" width={20} height={20} />
-            {isOptionsOpen && <ReceiptOptionsModal receipt={receipt} />}
-          </div>
-        </div> */}
       </div>
       {isAddOpen && (
         <AddItem
@@ -278,6 +266,7 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
                     item={item}
                     isOpen={openItemId === item.id}
                     onToggleOpen={(e) => toggleOpenItem(item.id, e)}
+                    setOpenItemId={setOpenItemId}
                   />
                 ))}
             </div>

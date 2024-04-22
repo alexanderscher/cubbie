@@ -1,6 +1,7 @@
 "use client";
 
 import { ReceiptOptionsModal } from "@/components/options/ReceiptOptions";
+import { Overlay } from "@/components/overlays/Overlay";
 import { TruncateText } from "@/components/text/Truncate";
 import { Item, Receipt as ReceiptType } from "@/types/AppTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
@@ -12,9 +13,15 @@ interface ReceiptProps {
   receipt: ReceiptType;
   isOpen: boolean;
   onToggleOpen: (event: React.MouseEvent<HTMLDivElement>) => void;
+  setOpenReceiptId: (id: number | null) => void;
 }
 
-const Receipt = ({ receipt, onToggleOpen, isOpen }: ReceiptProps) => {
+const Receipt = ({
+  receipt,
+  onToggleOpen,
+  isOpen,
+  setOpenReceiptId,
+}: ReceiptProps) => {
   const total_amount = receipt.items.reduce((acc: number, curr: Item) => {
     return acc + curr.price;
   }, 0);
@@ -49,7 +56,6 @@ const Receipt = ({ receipt, onToggleOpen, isOpen }: ReceiptProps) => {
             />
           </div>
         </div>
-        {isOpen && <ReceiptOptionsModal receipt={receipt} />}
 
         <div className="p-3 flex flex-col justify-between">
           <div className="">
@@ -75,6 +81,12 @@ const Receipt = ({ receipt, onToggleOpen, isOpen }: ReceiptProps) => {
           </div>
         </div>
       </Link>
+      {isOpen && (
+        <>
+          <Overlay onClose={() => setOpenReceiptId(null)} />
+          <ReceiptOptionsModal receipt={receipt} />
+        </>
+      )}
     </div>
   );
 };

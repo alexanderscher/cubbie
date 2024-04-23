@@ -21,6 +21,7 @@ import { Overlay } from "@/components/overlays/Overlay";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import RegularButton from "@/components/buttons/RegularButton";
 import { formatCurrency } from "@/utils/formatCurrency";
+import { TruncateText } from "@/components/text/Truncate";
 interface ProjectIdProps {
   project: ProjectType;
   sessionUserId: string | undefined;
@@ -139,7 +140,10 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
           <div className="flex flex-col justify-between gap-4 w-full">
             <div className="flex justify-between w-full items-start">
               <div>
-                <h1 className="text-2xl text-orange-600">{project.name}</h1>
+                <TruncateText
+                  text={project.name}
+                  styles={"text-2xl text-orange-600 "}
+                />
                 <p className="text-sm">
                   Created on {formatDateToMMDDYY(project.created_at)}
                 </p>

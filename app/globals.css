@@ -113,6 +113,11 @@ input:-webkit-autofill::first-line {
 .box:hover {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1), 0px 6px 16px rgba(0, 0, 0, 0.1);
 }
+
+.modal-content {
+  max-height: 90vh; /* Limit the height of the modal content */
+  overflow-y: auto; /* Enable vertical scrolling within the modal */
+}
 .shadow {
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.02);
 }
@@ -121,7 +126,24 @@ input:-webkit-autofill::first-line {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.fc .fc-daygrid-event {
+.truncate-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+  .truncate-text {
+    max-width: 150px;
+  }
+}
+
+@media (min-width: 769px) {
+  .truncate-text {
+    max-width: 250px;
+  }
+}
+*/ .fc .fc-daygrid-event {
   margin-top: 1px;
   z-index: auto;
 }

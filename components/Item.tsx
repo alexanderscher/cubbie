@@ -126,7 +126,6 @@ const Item = ({
             <div className="">
               <TruncateText
                 text={item.description}
-                maxLength={18}
                 styles={"text-orange-600 text-sm"}
               />
             </div>

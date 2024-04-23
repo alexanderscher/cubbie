@@ -45,7 +45,6 @@ export const ReceiptItems = ({ item }: ReceiptItemsProps) => {
         <Link href={`/item/${item.id}`} className="">
           <TruncateText
             text={item.description}
-            maxLength={18}
             styles={"text-orange-600 text-sm"}
           />
         </Link>

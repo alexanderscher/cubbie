@@ -28,7 +28,7 @@ const Filters = () => {
   const determineLabel = (type: string | null) => {
     switch (type) {
       case "all":
-        return "All items";
+        return "Return Status";
       case "current":
         return "In possesion";
       case "returned":
@@ -449,7 +449,7 @@ const Filters = () => {
             />
             {openSortModal && pathname.startsWith("/receipt/") && (
               <>
-                <SortItemsOptions
+                <SortReceiptItemsOptions
                   router={router}
                   pathname={pathname}
                   onClose={() => setOpenSortModal(false)}
@@ -1048,7 +1048,59 @@ const FilterItemsExpiredOptions = ({
     </Wrapper>
   );
 };
+const SortReceiptItemsOptions = ({
+  pathname,
+  searchParams,
+  router,
+}: FilterOptionsProps) => {
+  const handleSortClick = (name: string) => {
+    const queryParams = new URLSearchParams(window.location.search);
 
+    const currentSort = queryParams.get("sort");
+    const currentDirection = currentSort?.includes("-") ? "desc" : "asc";
+
+    let newDirection;
+    if (currentSort === name && currentDirection === "asc") {
+      newDirection = "desc";
+    } else {
+      newDirection = "asc";
+    }
+
+    const newSortValue = newDirection === "asc" ? name : `-${name}`;
+
+    queryParams.set("sort", newSortValue);
+
+    router.push(`${pathname}?${queryParams.toString()}`);
+  };
+
+  const handleModalContentClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => e.stopPropagation();
+
+  return (
+    <Wrapper handleModalContentClick={handleModalContentClick}>
+      <button
+        className={`${
+          searchParams.get("sort")?.includes("price") ? clicked : notClicked
+        }`}
+        onClick={() => {
+          handleSortClick("price");
+        }}
+      >
+        {searchParams.get("sort")?.includes("price") ? (
+          <p className="text-xs">
+            {searchParams.get("sort")?.includes("-price") ||
+            !searchParams.get("sort")
+              ? "Price ascending"
+              : "Price descending"}
+          </p>
+        ) : (
+          <p className="text-xs">Price</p>
+        )}
+      </button>
+    </Wrapper>
+  );
+};
 const SortItemsOptions = ({
   pathname,
   searchParams,

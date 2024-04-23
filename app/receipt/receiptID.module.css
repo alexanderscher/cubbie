@@ -3,12 +3,23 @@
   gap: 40px;
 }
 
+.receiptIdHeading {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.receiptIdItemHeader {
+  display: none;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
 }
 
 .receiptLeft {
+  display: block;
   width: 50%;
   min-width: 400px;
   max-width: 450px;

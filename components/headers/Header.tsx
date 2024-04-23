@@ -219,16 +219,16 @@ const OptionsModal = ({
   setIsModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   return (
-    <div className="absolute -right-1 -bottom-1 w-48 bg-orange-300 shadow-lg rounded-md flex flex-col text-black z-[2000]">
+    <div className="absolute -right-1 -bottom-1 w-48 bg-orange-300 shadow-lg rounded-lg flex flex-col text-black z-[2000]">
       <div className="flex flex-col text-start gap-3 relative p-4">
         <div
-          className="bg-orange-100 hover:bg-orange-200 rounded-md p-3 cursor-pointer"
+          className="bg-orange-100 hover:bg-orange-200 rounded-lg p-3 cursor-pointer"
           onClick={() => setAddProjectOpen(true)}
         >
           <button className="text-sm text-orange-600">Create Project</button>
         </div>
         <div
-          className="bg-orange-100 hover:bg-orange-200 rounded-md p-3 cursor-pointer"
+          className="bg-orange-100 hover:bg-orange-200 rounded-lg p-3 cursor-pointer"
           onClick={() => setAddReceiptOpen(true)}
         >
           <button className="text-sm text-orange-600">Create Receipt</button>

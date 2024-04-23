@@ -15,6 +15,8 @@ import { addItem } from "@/actions/items/addItem";
 import { ReceiptOptionsModal } from "@/components/options/ReceiptOptions";
 import { Overlay } from "@/components/overlays/Overlay";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
+import Filters from "@/components/headers/Filters";
+import { TruncateText } from "@/components/text/Truncate";
 
 interface ReceiptIdProps {
   receipt: Receipt;
@@ -22,6 +24,7 @@ interface ReceiptIdProps {
 
 const ReceiptId = ({ receipt }: ReceiptIdProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDetailsOpen, setDetailsOpen] = useState(false);
   const [isOptionsOpen, setisOptionsOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [openItemId, setOpenItemId] = useState(null as number | null);
@@ -44,9 +47,6 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
       setOpenItemId(itemId);
     }
   };
-  const total_amount = receipt.items.reduce((acc: number, curr: ItemType) => {
-    return acc + curr.price;
-  }, 0);
 
   const [newItem, setNewItem] = useState({
     description: "",
@@ -119,31 +119,63 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
 
   if (!receipt.items) return <div className="min-h-screen">Loading</div>;
   return (
-    <div className="flex flex-col gap-8 w-full h-full max-w-[1260px] ">
+    <div className="flex flex-col gap-8 w-full h-full max-w-[1090px] ">
       <HeaderNav receipt={receipt} />
       {receipt.expired && (
-        <div className="bg-destructive/15 p-3 rounded-md flex items-center gap-x-2 text-sm text-destructive bg-red-100 text-red-500 shadow">
+        <div className="bg-destructive/15 p-3 rounded-lg flex items-center gap-x-2 text-sm text-destructive bg-red-100 text-red-500 shadow">
           <p>This receipt has expired</p>
         </div>
       )}
       <div className={styles.header}>
-        <h1 className="text-2xl text-orange-600 ">{receipt.store}</h1>
-
-        <div
-          className={`relative hover:border-[1px] hover:border-emerald-900 px-4 py-1 rounded-full cursor-pointer flex items-center ${
-            isOpen && "border-[1px] border-emerald-900 px-4 py-1 rounded-full"
-          }`}
-          onClick={() => setisOptionsOpen(!isOptionsOpen)}
-        >
-          <Image src="/three-dots.png" alt="" width={20} height={20} />
-          {isOptionsOpen && (
-            <>
-              <Overlay onClose={() => setIsOpen(false)} />
-              <ReceiptOptionsModal receipt={receipt} />
-            </>
-          )}
+        <TruncateText
+          text={receipt.store}
+          styles={"text-2xl text-orange-600 "}
+          maxLength={30}
+        />
+        <div className="flex gap-2">
+          <RegularButton
+            styles="border-emerald-900 text-white bg-emerald-900 text-xs"
+            handleClick={() => {
+              setDetailsOpen(true);
+            }}
+          >
+            <p>Receipt details</p>
+          </RegularButton>
+          <div
+            className={`relative hover:border-[1px] hover:border-emerald-900 px-4 py-1 rounded-full cursor-pointer flex items-center ${
+              isOpen && "border-[1px] border-emerald-900 px-4 py-1 rounded-full"
+            }`}
+            onClick={() => setisOptionsOpen(!isOptionsOpen)}
+          >
+            <Image src="/three-dots.png" alt="" width={20} height={20} />
+            {isOptionsOpen && (
+              <>
+                <Overlay onClose={() => setIsOpen(false)} />
+                <ReceiptOptionsModal receipt={receipt} />
+              </>
+            )}
+          </div>
         </div>
+        {isDetailsOpen && (
+          <ModalOverlay onClose={() => setDetailsOpen(false)}>
+            <ReceiptDetails
+              receipt={receipt}
+              isDetailsOpen={isDetailsOpen}
+              setDetailsOpen={setDetailsOpen}
+            />
+          </ModalOverlay>
+        )}
       </div>
+
+      <div className="w-full">
+        <input
+          className="searchBar border-[1px] border-emerald-900 placeholder:text-emerald-900 placeholder:text-xs flex items-center text-sm text-emerald-900 p-3"
+          placeholder={`Search items from ${receipt.store}`}
+          // value={searchTerm}
+          // onChange={handleChange}
+        />
+      </div>
+      <Filters />
       {isAddOpen && (
         <ModalOverlay onClose={() => setIsAddOpen(false)}>
           <AddItem
@@ -156,105 +188,7 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
           />
         </ModalOverlay>
       )}
-      <div className="flex bg-white  rounded-md text-sm shadow p-6 h-[80px] items-center">
-        <div className="w-1/3 border-r-[1px] border-slate-300  ">
-          <p className="text-slate-400 text-xs">Total amount</p>
-          <p>{formatCurrency(total_amount)}</p>
-        </div>
-        <div className="w-1/3 border-r-[1px] border-slate-300 pl-2 pr-2">
-          <p className="text-slate-400 text-xs">Purchase Date</p>
-          <p>{formatDateToMMDDYY(receipt.purchase_date)}</p>
-        </div>
-
-        <div className="pl-2 pr-2">
-          <p className="text-slate-400 text-xs">Return Date</p>
-          <p>{formatDateToMMDDYY(receipt.return_date)}</p>
-        </div>
-      </div>
       <div className={`${styles.receipt} pb-[200px]`}>
-        <div className={`${styles.receiptLeft} shadow  flex flex-col gap-2`}>
-          <div
-            className={`shadow rounded-md  bg-white flex flex-col gap-4 p-8   `}
-          >
-            {!receipt.receipt_image_url && (
-              <div className="w-full  overflow-hidden relative flex justify-center items-center ">
-                <div className="w-full h-full flex justify-center items-start ">
-                  <Image
-                    src="/receipt_b.png"
-                    alt=""
-                    width={40}
-                    height={40}
-                    className="object-cover bg-white pt-4"
-                    style={{ objectFit: "cover", objectPosition: "center" }}
-                  />
-                </div>
-              </div>
-            )}
-
-            {receipt.receipt_image_url && (
-              <div className="w-full flex justify-center items-center  ">
-                <div className=" w-[200px] max-h-[200px]  rounded-md overflow-hidden">
-                  <Image
-                    src={receipt.receipt_image_url}
-                    width={280}
-                    height={280}
-                    alt="Receipt Image"
-                    className="object-contain rounded-md cursor-pointer"
-                    layout="intrinsic"
-                    onClick={() => setIsOpen(true)}
-                  />
-                </div>
-              </div>
-            )}
-            <ImageModal
-              isOpen={isOpen}
-              setIsOpen={setIsOpen}
-              imageUrl={receipt.receipt_image_url}
-              altText="Your Image Description"
-            />
-
-            <div className="flex flex-col gap-4 text-sm ">
-              <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
-                <p className="text-slate-400 text-xs">Receipt Type</p>
-                <p className="">{receipt.memo ? "Memo" : "Receipt"}</p>
-              </div>
-              <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
-                <p className="text-slate-400 text-xs">Quantity</p>
-                <p className="">{receipt.items.length}</p>
-              </div>
-              <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
-                <p className="text-slate-400 text-xs">Created on</p>
-                <p className="">{formatDateToMMDDYY(receipt.created_at)}</p>
-              </div>
-              <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
-                <p className="text-slate-400 text-xs">Purchase Type</p>
-                <p className="">{receipt.type}</p>
-              </div>
-
-              <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
-                <p className="text-slate-400 text-xs">Card</p>
-                <p className="">{receipt.card ? receipt.card : "None"}</p>
-              </div>
-              <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
-                <p className="text-slate-400 text-xs">Project Asset Amount</p>
-                <p className="">
-                  {receipt.project &&
-                  receipt.project.asset_amount !== null &&
-                  receipt.project.asset_amount !== undefined
-                    ? receipt.project.asset_amount
-                    : "None"}
-                </p>
-              </div>
-
-              <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
-                <p className="text-slate-400 text-xs">Tracking Link</p>
-                <p className="">
-                  {receipt.tracking_number ? receipt.tracking_number : "None"}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
         {receipt.items.length > 0 && (
           <div
             className={`flex flex-col gap-2 pb-[200px] ${styles.boxContainer}`}
@@ -306,3 +240,115 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
 };
 
 export default ReceiptId;
+
+const ReceiptDetails = ({
+  receipt,
+  isDetailsOpen,
+  setDetailsOpen,
+}: {
+  receipt: Receipt;
+  isDetailsOpen: boolean;
+  setDetailsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const total_amount = receipt.items.reduce((acc: number, curr: ItemType) => {
+    return acc + curr.price;
+  }, 0);
+
+  return (
+    <div className={`${styles.receiptLeft} shadow  flex flex-col gap-2`}>
+      <div className={`shadow rounded-lg  bg-white flex flex-col gap-4 p-8   `}>
+        {!receipt.receipt_image_url && (
+          <div className="w-full  overflow-hidden relative flex justify-center items-center ">
+            <div className="w-full h-full flex justify-center items-start ">
+              <Image
+                src="/receipt_b.png"
+                alt=""
+                width={40}
+                height={40}
+                className="object-cover bg-white pt-4"
+                style={{ objectFit: "cover", objectPosition: "center" }}
+              />
+            </div>
+          </div>
+        )}
+
+        {receipt.receipt_image_url && (
+          <div className="w-full flex justify-center items-center  ">
+            <div className=" w-[200px] max-h-[200px]  rounded-lg overflow-hidden">
+              <Image
+                src={receipt.receipt_image_url}
+                width={280}
+                height={280}
+                alt="Receipt Image"
+                className="object-contain rounded-lg cursor-pointer"
+                layout="intrinsic"
+                onClick={() => setIsOpen(true)}
+              />
+            </div>
+          </div>
+        )}
+        <ImageModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          imageUrl={receipt.receipt_image_url}
+          altText="Your Image Description"
+        />
+
+        <div className="flex flex-col gap-4 text-sm ">
+          <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+            <p className="text-slate-400 text-xs">Return Date</p>
+            <p className="">{formatDateToMMDDYY(receipt.return_date)}</p>
+          </div>
+          <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+            <p className="text-slate-400 text-xs">Date Purcashed</p>
+            <p className="">{formatDateToMMDDYY(receipt.purchase_date)}</p>
+          </div>
+          <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+            <p className="text-slate-400 text-xs">Total Amount</p>
+            <p className="">{formatCurrency(total_amount)}</p>
+          </div>
+          <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+            <p className="text-slate-400 text-xs">Receipt Type</p>
+            <p className="">{receipt.memo ? "Memo" : "Receipt"}</p>
+          </div>
+          <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+            <p className="text-slate-400 text-xs">Quantity</p>
+            <p className="">{receipt.items.length}</p>
+          </div>
+          <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+            <p className="text-slate-400 text-xs">Created on</p>
+            <p className="">{formatDateToMMDDYY(receipt.created_at)}</p>
+          </div>
+          <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+            <p className="text-slate-400 text-xs">Purchase Type</p>
+            <p className="">{receipt.type}</p>
+          </div>
+
+          <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+            <p className="text-slate-400 text-xs">Card</p>
+            <p className="">{receipt.card ? receipt.card : "None"}</p>
+          </div>
+          <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+            <p className="text-slate-400 text-xs">Project Asset Amount</p>
+            <p className="">
+              {receipt.project &&
+              receipt.project.asset_amount !== null &&
+              receipt.project.asset_amount !== undefined
+                ? receipt.project.asset_amount
+                : "None"}
+            </p>
+          </div>
+
+          <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+            <p className="text-slate-400 text-xs">Tracking Link</p>
+            <p className="">
+              {receipt.tracking_number ? receipt.tracking_number : "None"}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

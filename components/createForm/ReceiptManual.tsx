@@ -189,7 +189,7 @@ const ReceiptManual = ({
             <FileUploadDropzone
               onFileUpload={onFileUpload}
               button={
-                <div className="w-full h-[100px] soverflow-hidden  border-[1.5px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-md  relative flex flex-col items-center justify-center cursor-pointer gap-5">
+                <div className="w-full h-[100px] soverflow-hidden  border-[1.5px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-lg  relative flex flex-col items-center justify-center cursor-pointer gap-5">
                   <Image
                     src="/image_b.png"
                     alt=""

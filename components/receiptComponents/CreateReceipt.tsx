@@ -7,8 +7,8 @@ interface AddReceiptModalProps {
 
 export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
   return (
-    <div className="bg-white rounded-md shadow-xl m-4 max-w-md rounded-t-md w-1/2">
-      <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3 ">
+    <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full">
+      <div className="flex justify-between items-center border-b  px-5 py-3 rounded-t-lg border-emerald-900">
         <h3 className=" text-emerald-900">Create Receipt Options</h3>
         <button
           type="button"
@@ -19,7 +19,7 @@ export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
         </button>
       </div>
       <div className="flex flex-col p-6 gap-3">
-        <div className="p-4 bg-slate-100   rounded-md text-sm cursor-pointer hover:bg-slate-200">
+        <div className="p-4 bg-slate-100   rounded-lg text-sm cursor-pointer hover:bg-slate-200">
           <div className="flex gap-3 justify-center items-center">
             <Link href="/create/image">
               <p className="text-emerald-900">Analyze Receipt Image</p>
@@ -33,7 +33,7 @@ export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
           </div>
         </div>
 
-        <div className="p-4 bg-slate-100   rounded-md text-sm  cursor-pointer hover:bg-slate-200">
+        <div className="p-4 bg-slate-100   rounded-lg text-sm  cursor-pointer hover:bg-slate-200">
           <div className="flex gap-3 justify-center items-center">
             <Link href="/create/text">
               <p className="text-emerald-900">Analyze Receipt Text</p>
@@ -47,7 +47,7 @@ export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
           </div>
         </div>
 
-        <button className="p-4 bg-slate-100   rounded-md text-sm  cursor-pointer hover:bg-slate-200">
+        <button className="p-4 bg-slate-100   rounded-lg text-sm  cursor-pointer hover:bg-slate-200">
           <Link href="/create/manual">
             <p className="text-emerald-900">Manually Enter Receipt</p>
           </Link>

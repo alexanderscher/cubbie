@@ -99,7 +99,7 @@ const PersonalInformation = ({ session }: Props) => {
     });
   };
   return (
-    <div className="bg-white rounded-md shadow  w-full  p-8  justify-center">
+    <div className="bg-white rounded-lg shadow  w-full  p-8  justify-center">
       <Formik
         initialValues={{
           name: session?.user.name || undefined,
@@ -172,7 +172,7 @@ const Password = () => {
     });
   };
   return (
-    <div className="bg-white rounded-md shadow  w-full justify-center">
+    <div className="bg-white rounded-lg shadow  w-full justify-center">
       <Formik
         initialValues={{
           password: "",
@@ -191,7 +191,7 @@ const Password = () => {
           handleChange,
         }) => (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
-            <div className="bg-white rounded-md shadow  w-full flex flex-col p-8 gap-4">
+            <div className="bg-white rounded-lg shadow  w-full flex flex-col p-8 gap-4">
               <h1 className="text-emerald-900">Change Password</h1>
 
               <FormikInput

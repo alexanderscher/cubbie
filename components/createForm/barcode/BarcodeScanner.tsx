@@ -45,7 +45,7 @@ export const BarcodeScanner = ({
           />
           <div
             style={{ transform: "translate(-50%, -50%)" }}
-            className="absolute border-[3px] w-[300px] h-[200px] left-[50%] top-[50%] rounded-md "
+            className="absolute border-[3px] w-[300px] h-[200px] left-[50%] top-[50%] rounded-lg "
           ></div>
           <video ref={zxingRef} style={{ display: "none" }}></video>
         </div>

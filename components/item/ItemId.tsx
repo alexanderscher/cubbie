@@ -27,7 +27,7 @@ const ItemID = ({ item }: ItemIDProps) => {
       <div className="flex flex-col gap-6  w-full max-w-[600px] ">
         <HeaderItemNav item={item} />
         {item.receipt.expired && (
-          <div className="bg-destructive/15 p-4 rounded-md flex items-center gap-x-2 text-sm text-destructive bg-red-100 text-red-500 shadow-sm">
+          <div className="bg-destructive/15 p-4 rounded-lg flex items-center gap-x-2 text-sm text-destructive bg-red-100 text-red-500 shadow-sm">
             <p>The receipt for this item has expired</p>
           </div>
         )}
@@ -61,7 +61,7 @@ const ItemID = ({ item }: ItemIDProps) => {
           </div>
 
           {item.photo_url && (
-            <div className="relative w-full  bg-white p-6 rounded-md shadow ">
+            <div className="relative w-full  bg-white p-6 rounded-lg shadow ">
               {item.receipt.project &&
                 item.receipt.project.asset_amount !== null &&
                 item.receipt.project.asset_amount !== undefined &&
@@ -70,7 +70,7 @@ const ItemID = ({ item }: ItemIDProps) => {
                     Asset
                   </p>
                 )}
-              <div className="max-h-[300px] w-full overflow-hidden rounded-md">
+              <div className="max-h-[300px] w-full overflow-hidden rounded-lg">
                 <Image
                   src={item.photo_url}
                   width={600}
@@ -90,7 +90,7 @@ const ItemID = ({ item }: ItemIDProps) => {
           )}
 
           {!item.photo_url && (
-            <div className=" max-h-[300px] w-full overflow-hidden rounded-md">
+            <div className=" max-h-[300px] w-full overflow-hidden rounded-lg">
               <div className="w-full h-[110px] overflow-hidden relative flex justify-center items-center bg-white">
                 {item.receipt.project &&
                   item.receipt.project.asset_amount !== null &&
@@ -116,27 +116,27 @@ const ItemID = ({ item }: ItemIDProps) => {
         </div>
 
         <div className="flex flex-col gap-4">
-          <div className="w-full  bg-white rounded-md shadow p-4 ">
+          <div className="w-full  bg-white rounded-lg shadow p-4 ">
             <p className="text-xs text-slate-400">Store</p>
             <p>{item.receipt.store}</p>
           </div>
-          <div className="w-full  bg-white rounded-md shadow p-4 ">
+          <div className="w-full  bg-white rounded-lg shadow p-4 ">
             <p className="text-xs text-slate-400">Return Date</p>
             <p>{formatDateToMMDDYY(item.receipt.return_date)}</p>
           </div>
-          <div className="w-full  bg-white rounded-md shadow p-4 ">
+          <div className="w-full  bg-white rounded-lg shadow p-4 ">
             <p className="text-xs text-slate-400">Price</p>
             <p>{formatCurrency(item.price)}</p>
           </div>
-          <div className="w-full  bg-white rounded-md shadow p-4 ">
+          <div className="w-full  bg-white rounded-lg shadow p-4 ">
             <p className="text-xs text-slate-400">Barcode</p>
             <p>{item.barcode ? item.barcode : "None"}</p>
           </div>
-          <div className="w-full  bg-white rounded-md shadow p-4 ">
+          <div className="w-full  bg-white rounded-lg shadow p-4 ">
             <p className="text-xs text-slate-400">Character</p>
             <p>{item.character ? item.character : "None"}</p>
           </div>
-          {/* <div className="w-full  bg-white rounded-md shadow p-4 ">
+          {/* <div className="w-full  bg-white rounded-lg shadow p-4 ">
             <p className="text-xs text-slate-400">Product ID</p>
             <p>{item.product_id ? item.product_id : "None"}</p>
           </div> */}

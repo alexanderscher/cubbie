@@ -23,7 +23,7 @@ interface OptionsModalProps {
 }
 
 const white =
-  "bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 cursor-pointer";
+  "bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer";
 const green =
   "bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2 cursor-pointer";
 
@@ -118,7 +118,7 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
 
   return (
     <div
-      className={`absolute  shadow-1 -right-2 top-10 rounded-md w-[200px] z-[2000] ${
+      className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-[200px] z-[2000] ${
         !pathname.startsWith("/receipt/") ? "bg-white" : " bg-[#97cb97] "
       }`}
       onClick={(e) => {

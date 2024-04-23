@@ -10,6 +10,7 @@ import ImageModal from "@/components/images/ImageModal";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { ItemOptionsModal } from "@/components/options/ItemsOptions";
 import { Overlay } from "@/components/overlays/Overlay";
+import { TruncateText } from "@/components/text/Truncate";
 
 interface ItemIDProps {
   item: ItemType;
@@ -34,7 +35,10 @@ const ItemID = ({ item }: ItemIDProps) => {
 
         <div className="w-full flex flex-col gap-4 justify-center">
           <div className="flex justify-between">
-            <p className="text-xl text-orange-600">{item.description}</p>
+            <TruncateText
+              text={item.description}
+              styles={"text-2xl text-orange-600 "}
+            />
             <div className="flex gap-2">
               <RegularButton
                 styles="bg border-emerald-900"

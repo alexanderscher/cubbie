@@ -59,11 +59,7 @@ const Receipt = ({
 
         <div className="p-3 flex flex-col justify-between">
           <div className="">
-            <TruncateText
-              text={receipt.store}
-              maxLength={18}
-              styles={"text-orange-600"}
-            />
+            <TruncateText text={receipt.store} styles={"text-orange-600"} />
 
             <p className="text-xs text-slate-400">
               Return by {formatDateToMMDDYY(receipt.return_date)}

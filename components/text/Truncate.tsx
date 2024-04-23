@@ -1,15 +1,10 @@
+import React from "react";
+
 interface TruncateTextProps {
   text: string;
-  maxLength: number;
   styles: string;
 }
-export const TruncateText = ({
-  text,
-  maxLength,
-  styles,
-}: TruncateTextProps) => {
-  const truncated =
-    text.length > maxLength ? `${text.substr(0, maxLength)}...` : text;
 
-  return <p className={styles}>{truncated}</p>;
+export const TruncateText = ({ text, styles }: TruncateTextProps) => {
+  return <p className={`${styles} truncate-text`}>{text}</p>;
 };

@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { DEFAULT_INPUT_VALUES, ReceiptOnlineStage } from "@/constants/form";
 import FinalStage from "@/components/createForm/FinalStage";
 import { ITEMS_SCHEMA, RECEIPT_SCHEMA } from "@/utils/receiptValidation";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import BottomBar from "@/components/createForm/BottomBar";
 import ErrorModal from "@/components/error/ErrorModal";
 import { Pages } from "@/types/form";

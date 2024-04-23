@@ -1,5 +1,6 @@
 "use client";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
+import PageLoading from "@/components/Loading/PageLoading";
 import { ProjectOptionsModal } from "@/components/options/ProjectOptions";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { Overlay } from "@/components/overlays/Overlay";
@@ -88,7 +89,11 @@ const Projects = ({ serverData, sessionUserId }: Props) => {
   }, [filteredProjectData, sortField, sortOrder]);
 
   if (isProjectLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-[60vh]">
+        <PageLoading loading={isProjectLoading} />
+      </div>
+    );
   }
 
   if (filteredData.length === 0 && !isProjectLoading) {

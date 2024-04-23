@@ -1,5 +1,6 @@
 "use client";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
+import PageLoading from "@/components/Loading/PageLoading";
 import { NoReceipts } from "@/components/receiptComponents/NoReceipts";
 import Receipt from "@/components/receiptComponents/Receipt";
 import { Item, Receipt as ReceiptType } from "@/types/AppTypes";
@@ -81,7 +82,11 @@ const Receipts = ({ serverData }: ReceiptsProps) => {
   }, [filteredReceiptData, storeType, sortField, sortOrder]);
 
   if (isReceiptLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-[60vh]">
+        <PageLoading loading={isReceiptLoading} />
+      </div>
+    );
   }
 
   if (searchParams.get("expired") === "false") {

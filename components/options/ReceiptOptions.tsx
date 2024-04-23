@@ -4,7 +4,7 @@ import { deleteReceipt } from "@/actions/receipts/deleteReceipt";
 import { moveReceipt } from "@/actions/receipts/moveReceipt";
 import RegularButton from "@/components/buttons/RegularButton";
 import { AddItem } from "@/components/item/AddItem";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import ProjectSelect from "@/components/select/ProjectSelect";

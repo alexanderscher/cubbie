@@ -7,6 +7,7 @@ import { useSearchItemContext } from "@/components/context/SearchItemContext";
 import Image from "next/image";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
+import PageLoading from "@/components/Loading/PageLoading";
 
 interface ItemsProps {
   items: ItemType[];
@@ -87,7 +88,11 @@ const Items = ({ items }: ItemsProps) => {
   }, [filteredItemData, sortField, sortOrder]);
 
   if (isItemLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-[60vh]">
+        <PageLoading loading={isItemLoading} />
+      </div>
+    );
   }
   if (sortedAndFilteredData.length === 0 && !isItemLoading) {
     return (

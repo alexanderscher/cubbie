@@ -2,7 +2,7 @@
 import RegularButton from "@/components/buttons/RegularButton";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import { convertHeic } from "@/utils/media";
 import Image from "next/image";
 import { useState } from "react";

@@ -7,7 +7,7 @@ import Image from "next/image";
 import { Formik } from "formik";
 import { EDIT_ITEM_SCHEMA } from "@/utils/editValidation";
 import CurrencyInput from "react-currency-input-field";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import HeaderItemNav from "@/components/navbar/HeaderItemNav";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
 import ImageModal from "@/components/images/ImageModal";

@@ -11,7 +11,7 @@ import { usePathname } from "next/navigation";
 import { useState, useRef, use } from "react";
 import { FormError } from "@/components/form-error";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 
 interface Props {

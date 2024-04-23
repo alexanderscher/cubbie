@@ -23,7 +23,6 @@ interface CalenderProps {
 const Calender = ({ receipts }: CalenderProps) => {
   const isMobileDeviceQuery = useMediaQuery({ maxWidth: 700 });
   const [isMobileDevice, setIsMobileDevice] = useState<any>(null);
-  // console.log("isMobileDeviceQuery", isMobileDeviceQuery);
 
   useEffect(() => {
     setIsMobileDevice(isMobileDeviceQuery);

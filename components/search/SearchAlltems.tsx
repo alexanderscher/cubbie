@@ -6,6 +6,7 @@ import { Receipt, Project } from "@/types/AppTypes";
 import Image from "next/image";
 import Link from "next/link";
 import React, { ChangeEvent, useState } from "react";
+import { BeatLoader } from "react-spinners";
 
 interface SearchAllItemsProps {
   projectData: Project[];
@@ -71,7 +72,7 @@ function SearchAllItems({ projectData, receiptData }: SearchAllItemsProps) {
   {
     receiptData === undefined && projectData === undefined && (
       <div>
-        <h1>Loading...</h1>
+        <BeatLoader loading={receiptData} size={15} color={"rgb(6 78 59)"} />
       </div>
     );
   }

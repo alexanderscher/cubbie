@@ -18,10 +18,7 @@ export const getProjects = async () => {
     async (userId) => {
       const projects = await prisma.project.findMany({
         where: {
-          OR: [
-            { userId }, // Projects where the user is the owner
-            { projectUsers: { some: { userId } } }, // Projects where the user is a collaborator
-          ],
+          OR: [{ userId }, { projectUsers: { some: { userId } } }],
         },
         include: {
           receipts: {

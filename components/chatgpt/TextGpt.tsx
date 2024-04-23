@@ -1,6 +1,6 @@
 import RegularButton from "@/components/buttons/RegularButton";
 import { FormError } from "@/components/form-error";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";

@@ -9,7 +9,7 @@ import React, { ChangeEvent, useEffect, useState, useTransition } from "react";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { EDIT_RECEIPT_SCHEMA } from "@/utils/editValidation";
 import CurrencyInput from "react-currency-input-field";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import ErrorModal from "@/components/error/ErrorModal";
 import HeaderNav from "@/components/navbar/HeaderNav";
 import ImageModal from "@/components/images/ImageModal";

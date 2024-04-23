@@ -9,11 +9,12 @@ import { format, parse, isToday, isYesterday, subDays } from "date-fns";
 import { markAsRead, unmarkAsRead } from "@/actions/alerts/read";
 import { toast } from "sonner";
 import { deleteAlert } from "@/actions/alerts/deleteAlert";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import SearchBar from "@/components/search/SearchBar";
 import { useSearchAlertContext } from "@/components/context/SearchFilterAlerts";
 import { useSearchParams } from "next/navigation";
 import { Overlay } from "@/components/overlays/Overlay";
+import PageLoading from "@/components/Loading/PageLoading";
 
 const describeDate = (dateString: string) => {
   const date = parse(dateString, "MM/dd/yy", new Date());
@@ -40,7 +41,8 @@ interface AlertProps {
 }
 
 const AlertComponent = ({ alerts, userId }: AlertProps) => {
-  const { filteredAlertData, initializeAlerts } = useSearchAlertContext();
+  const { filteredAlertData, initializeAlerts, isAlertLoading } =
+    useSearchAlertContext();
   useEffect(() => {
     if (alerts) {
       initializeAlerts(alerts);
@@ -99,6 +101,14 @@ const AlertComponent = ({ alerts, userId }: AlertProps) => {
 
     return isReadByUser && <SingleAlert alertObj={alertObj} userId={userId} />;
   });
+
+  if (isAlertLoading) {
+    return (
+      <div className="flex items-center justify-center h-[60vh]">
+        <PageLoading loading={isAlertLoading} />
+      </div>
+    );
+  }
 
   if (
     searchParams.get("alertType") === "all" ||

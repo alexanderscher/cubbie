@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { DEFAULT_INPUT_VALUES, ReceiptStoreStage } from "@/constants/form";
 import FinalStage from "@/components/createForm/FinalStage";
 import { GPT_IMAGE_SCHEMA } from "@/utils/receiptValidation";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import BottomBar from "@/components/createForm/BottomBar";
 import { Pages } from "@/types/form";
 import { toast } from "sonner";

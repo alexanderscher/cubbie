@@ -84,7 +84,7 @@ function SearchAllItems({ projectData, receiptData }: SearchAllItemsProps) {
       </p>
       <div className="w-full flex gap-4 items-center justify-center pb-4">
         <input
-          className="bg-emerald-900  placeholder:text-sm placeholder:text-white border-[1px] border-white p-2 rounded-md w-full text-white focus:outline-none"
+          className="bg-emerald-900  placeholder:text-sm placeholder:text-white border-[1px] border-white p-2 rounded-lg w-full text-white focus:outline-none"
           placeholder={`Search `}
           onChange={handleChange}
           value={searchInput}
@@ -93,7 +93,7 @@ function SearchAllItems({ projectData, receiptData }: SearchAllItemsProps) {
         <div>
           <button
             type="button"
-            className="w-[40px] h-[40px] border-[1px] border-white p-1 rounded-md flex justify-center items-center "
+            className="w-[40px] h-[40px] border-[1px] border-white p-1 rounded-lg flex justify-center items-center "
             onClick={() => {
               setShowScanner(true);
             }}

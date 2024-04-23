@@ -356,7 +356,7 @@ export default function ImageGpt({
             <FileUploadDropzone
               onFileUpload={onFileUpload}
               button={
-                <div className="w-full h-[150px] soverflow-hidden  border-[1.5px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-md  relative flex flex-col items-center justify-center cursor-pointer gap-5">
+                <div className="w-full h-[150px] soverflow-hidden  border-[1.5px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-lg  relative flex flex-col items-center justify-center cursor-pointer gap-5">
                   <Image
                     src="/image_b.png"
                     alt=""
@@ -377,7 +377,7 @@ export default function ImageGpt({
 
             {image && (
               <div className="relative w-24 h-24 ">
-                <div className="w-24 h-24 overflow-hidden flex items-center justify-center rounded-md border-[1px] border-emerald-900">
+                <div className="w-24 h-24 overflow-hidden flex items-center justify-center rounded-lg border-[1px] border-emerald-900">
                   <button
                     type="button"
                     onClick={() => {
@@ -419,7 +419,7 @@ export default function ImageGpt({
 
         {prompt && (
           <div className="fixed inset-0 bg-black bg-opacity-10 z-[2000] flex justify-center items-center">
-            <div className="p-10 flex flex-col gap-4 mt-10 bg-orange-50 rounded-md shadow-md items-center justify-center text-emerald-900 max-w-lg w-[400px]">
+            <div className="p-10 flex flex-col gap-4 mt-10 bg-orange-50 rounded-lg shadow-md items-center justify-center text-emerald-900 max-w-lg w-[400px]">
               <div className="bg-orange-100 rounded-full flex items-center justify-center h-[50px] w-[50px]">
                 <ExclamationTriangleIcon className=" text-orange-600 w-3/4 h-1/2" />
               </div>

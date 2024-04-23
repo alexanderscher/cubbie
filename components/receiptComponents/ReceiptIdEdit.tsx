@@ -71,10 +71,6 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
     price: Yup.string().required("Price is required"),
   });
 
-  const total_amount = receipt.items.reduce((acc: number, curr: ItemType) => {
-    return acc + curr.price;
-  }, 0);
-
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -229,26 +225,16 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
               )}
             </div>
           </div>
-          <div className="flex bg-white rounded-md text-sm shadow p-6">
-            <div className="w-1/2 border-r-[1px] border-emerald-900 ">
-              <p className="text-slate-400 text-xs">Total amount</p>
-              <p>{formatCurrency(total_amount)}</p>
-            </div>
-            <div className="w-1/2 pl-4 ">
-              <p className="text-slate-400 text-xs">Quantity</p>
-              <p>{receipt.items.length}</p>
-            </div>
-          </div>
 
           <div className={`${styles.receipt} `}>
             <div className={`${styles.receiptLeft}  flex flex-col gap-2 `}>
-              <div className={` rounded-md  bg-white flex flex-col gap-4 p-8`}>
+              <div className={` rounded  bg-white flex flex-col gap-4 p-8`}>
                 {!values.receipt_image_url && !values.edit_image && (
                   <div className="w-full  overflow-hidden  relative">
                     <FileUploadDropzone
                       onFileUpload={(e) => onFileUpload(e, setFieldValue)}
                       button={
-                        <div className="w-full h-[150px] soverflow-hidden  border-[1px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-md  relative flex flex-col items-center justify-center cursor-pointer gap-5">
+                        <div className="w-full h-[150px] soverflow-hidden  border-[1px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded  relative flex flex-col items-center justify-center cursor-pointer gap-5">
                           <Image
                             src="/image_b.png"
                             alt=""
@@ -270,7 +256,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                 )}
                 {values.edit_image && (
                   <div className="w-full flex justify-center items-center relative group">
-                    <div className="relative  w-[200px] max-h-[400px] rounded-md overflow-hidden">
+                    <div className="relative  w-[200px] max-h-[400px] rounded overflow-hidden">
                       <Image
                         src={values.edit_image}
                         width={300}
@@ -295,7 +281,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
 
                 {values.receipt_image_url && (
                   <div className="w-full flex justify-center items-center relative">
-                    <div className="relative  w-[200px] max-h-[400px] rounded-md overflow-hidden hover:opacity-80 transition-all duration-300 ease-in-out">
+                    <div className="relative  w-[200px] max-h-[400px] rounded overflow-hidden hover:opacity-80 transition-all duration-300 ease-in-out">
                       <Image
                         src={values.receipt_image_url}
                         width={300}
@@ -324,7 +310,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                     <input
                       value={values.store}
                       onChange={handleChange("store")}
-                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded-md p-2"
+                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2"
                     />
                     {errorM.store && (
                       <p className="text-orange-900 text-xs mt-2">
@@ -345,7 +331,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                       style={{ WebkitAppearance: "none" }}
                       value={formatDateToYYYYMMDD(values.purchase_date)}
                       onChange={handleChange("purchase_date")}
-                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded-md p-2 bg-white"
+                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2 bg-white"
                     />
                     {errorM.purchase_date && (
                       <p className="text-orange-900 text-xs mt-2">
@@ -361,7 +347,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                       style={{ WebkitAppearance: "none" }}
                       value={formatDateToYYYYMMDD(values.return_date)}
                       onChange={handleChange("return_date")}
-                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded-md p-2 bg-white"
+                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2 bg-white"
                     />
                     {errorM.return_date && (
                       <p className="text-orange-900 text-xs mt-2">
@@ -375,7 +361,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                     <input
                       value={values.card}
                       onChange={handleChange("card")}
-                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded-md p-2"
+                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2"
                     />
                   </div>
 
@@ -384,7 +370,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                     <input
                       value={values.tracking_number}
                       onChange={handleChange("tracking_number")}
-                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded-md p-2"
+                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2"
                     />
                     {errorM.tracking_number && (
                       <p className="text-orange-900 text-xs mt-2">

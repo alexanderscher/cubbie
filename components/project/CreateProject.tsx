@@ -51,7 +51,7 @@ export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
   };
 
   return (
-    <div className="bg-white rounded-md shadow-xl m-4 max-w-md w-full">
+    <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full">
       <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3  rounded-t-lg">
         <h3 className="text-md text-emerald-900">Create Project</h3>
         <button

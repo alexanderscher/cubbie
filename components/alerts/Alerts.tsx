@@ -178,7 +178,7 @@ const SingleAlert = ({ alertObj, userId }: SingleAlertProps) => {
   return (
     <div
       key={alertObj.id}
-      className="relative bg-white p-4 rounded-md shadow flex gap-8 items-center "
+      className="relative bg-white p-4 rounded-lg shadow flex gap-8 items-center "
     >
       {isOpen && (
         <>
@@ -274,14 +274,14 @@ const AlertOptionsModal = ({ alertObj, userId }: SingleAlertProps) => {
   const isReadByUser = alertObj.readBy.some((entry) => entry.userId === userId);
   return (
     <div
-      className={`absolute shadow-1 -right-2 top-10 rounded-md w-[230px] bg-white p-4 z-[2000] text-sm`}
+      className={`absolute shadow-1 -right-2 top-10 rounded-lg w-[230px] bg-white p-4 z-[2000] text-sm`}
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
       }}
     >
       <div className="flex flex-col gap-2">
-        <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 cursor-pointer">
+        <div className="bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer">
           {isReadByUser ? (
             <div
               className="flex gap-2"
@@ -331,7 +331,7 @@ const AlertOptionsModal = ({ alertObj, userId }: SingleAlertProps) => {
             </div>
           )}
         </div>
-        <div className="bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2 cursor-pointer">
+        <div className="bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer">
           <div
             className="flex gap-2"
             onClick={(e) => {

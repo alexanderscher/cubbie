@@ -455,7 +455,7 @@ const ReceiptItems = ({
             <FileUploadDropzone
               onFileUpload={onFileUpload}
               button={
-                <div className="w-full h-[150px] soverflow-hidden  border-[1px]  border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-md  relative flex flex-col items-center justify-center cursor-pointer gap-5">
+                <div className="w-full h-[150px] soverflow-hidden  border-[1px]  border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-lg  relative flex flex-col items-center justify-center cursor-pointer gap-5">
                   <Image
                     src="/image_b.png"
                     alt=""

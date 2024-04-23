@@ -126,7 +126,7 @@ const TextGpt = ({ setFieldValue, values, setStage }: Props) => {
       </div>
       {prompt && (
         <div className="fixed inset-0 bg-black bg-opacity-10 z-[2000] flex justify-center items-center">
-          <div className="p-10 flex flex-col gap-4 mt-10 bg-orange-50 rounded-md shadow-md items-center justify-center text-emerald-900 max-w-lg w-[400px]">
+          <div className="p-10 flex flex-col gap-4 mt-10 bg-orange-50 rounded-lg shadow-md items-center justify-center text-emerald-900 max-w-lg w-[400px]">
             <div className="bg-orange-100 rounded-full flex items-center justify-center h-[50px] w-[50px]">
               <ExclamationTriangleIcon className=" text-orange-600 w-3/4 h-1/2" />
             </div>

@@ -211,7 +211,7 @@ interface ModalProps {
 
 const Modal = ({ session }: ModalProps) => {
   return (
-    <div className="absolute left-full top-0 mt-[-1rem] ml-2 w-48  bg-white shadow-lg rounded-md border border-gray-200 flex flex-col  text-black z-[2000]">
+    <div className="absolute left-full top-0 mt-[-1rem] ml-2 w-48  bg-white shadow-lg rounded-lg border border-gray-200 flex flex-col  text-black z-[2000]">
       <div className="text-black border-b-[1px]">
         <p className="p-3">{session && session.user.name}</p>
       </div>

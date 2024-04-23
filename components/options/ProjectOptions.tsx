@@ -16,6 +16,7 @@ import RegularButton from "@/components/buttons/RegularButton";
 import { FormError } from "@/components/form-error";
 import { removeUserFromProject } from "@/actions/projects/removeUserFromProject";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
+import { Overlay } from "@/components/overlays/Overlay";
 
 interface OptionsModalProps {
   isOpen: boolean;
@@ -24,7 +25,7 @@ interface OptionsModalProps {
   sessionUserId: string | undefined;
 }
 
-const white = "bg-slate-100 hover:bg-slate-200 rounded-md w-full p-2";
+const white = "bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2";
 const green = "bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2";
 
 export const ProjectOptionsModal = ({
@@ -68,10 +69,13 @@ export const ProjectOptionsModal = ({
 
   return (
     <div
-      className={`absolute  shadow-1 -right-2 top-10 rounded-md w-[202px] z-[2000] ${
+      className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-[202px] z-[2000] ${
         pathname === "/" ? " bg-white" : " bg-[#97cb97] "
       }`}
-      onClick={(e) => e.preventDefault()}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
     >
       <div>
         <div className="p-4 rounded text-sm flex flex-col gap-2">
@@ -185,7 +189,11 @@ export const ProjectOptionsModal = ({
 
       <div className="z-[2000]">
         {isPending && <Loading loading={isPending} />}
-        {edit && <EditProject setEdit={setEdit} project={project} />}
+        {edit && (
+          <ModalOverlay onClose={() => setEdit(false)}>
+            <EditProject setEdit={setEdit} project={project} />
+          </ModalOverlay>
+        )}
         {isDeleteOpen && (
           <ModalOverlay onClose={() => setIsDeleteOpen(false)}>
             <DeleteModal setDeleteOpen={setIsDeleteOpen} project={project} />
@@ -293,7 +301,7 @@ const Members = ({
         e.preventDefault();
       }}
     >
-      <div className="bg-white rounded-md shadow-xl m-4 max-w-md w-full rounded-t-md">
+      <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full rounded-t-md">
         {sessionUserId && sessionUserId === project.user?.id && (
           <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3 ">
             <button
@@ -414,10 +422,10 @@ const MembersOptionModal = ({
   };
   return (
     <div
-      className={`absolute  bg-slate-200 shadow-lg -right-2 top-10 rounded-md w-[260px] `}
+      className={`absolute  bg-slate-200 shadow-lg -right-2 top-10 rounded-lg w-[260px] `}
     >
       <div className="p-4 rounded text-sm flex flex-col gap-2">
-        <div className="bg-slate-50	 cursor-pointer hover:bg-slate-100 rounded-md w-full p-2">
+        <div className="bg-slate-50	 cursor-pointer hover:bg-slate-100 rounded-lg w-full p-2">
           <div className="flex gap-4" onClick={removeUser}>
             <Image src={"/receipt_b.png"} width={12} height={12} alt=""></Image>
             <p>Remove {user.user.name}</p>
@@ -503,7 +511,7 @@ const AddUser = ({
         // validationSchema={getValidationSchema(stage)}
       >
         {({ handleChange, handleSubmit }) => (
-          <div className="bg-white rounded-md shadow-xl m-4 max-w-md w-full rounded-t-md">
+          <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full rounded-t-md">
             <form onSubmit={handleSubmit}>
               <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3 ">
                 <button

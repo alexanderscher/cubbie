@@ -152,7 +152,7 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                       onFileUpload(e, setFieldValue);
                     }}
                     button={
-                      <div className="w-full h-[150px] soverflow-hidden  border-[1.5px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-md  relative flex flex-col items-center justify-center cursor-pointer gap-5">
+                      <div className="w-full h-[150px] soverflow-hidden  border-[1.5px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded  relative flex flex-col items-center justify-center cursor-pointer gap-5">
                         <Image
                           src="/image_b.png"
                           alt=""
@@ -173,13 +173,13 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                 )}
                 {values.edit_image && (
                   <div className="w-full flex justify-center items-center relative group">
-                    <div className="relative  w-[200px] max-h-[400px] rounded-md overflow-hidden">
+                    <div className="relative  w-[200px] max-h-[400px] rounded overflow-hidden">
                       <Image
                         src={values.edit_image}
                         width={300}
                         height={300}
                         alt="Receipt Image"
-                        className="object-contain rounded-md w-full cursor-pointer hover:opacity-80 transition-all duration-300 ease-in-out"
+                        className="object-contain rounded w-full cursor-pointer hover:opacity-80 transition-all duration-300 ease-in-out"
                         layout="intrinsic"
                         onClick={() => setIsOpen(true)}
                       />
@@ -225,7 +225,7 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                   <input
                     value={values.description}
                     onChange={handleChange("description")}
-                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
+                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded p-2"
                   />
                 </div>
                 {errorM.description && (
@@ -238,7 +238,7 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                   <CurrencyInput
                     id="price"
                     name="price"
-                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
+                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded p-2"
                     placeholder=""
                     value={values.price}
                     defaultValue={values.price || ""}
@@ -257,11 +257,11 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                     <input
                       value={values.barcode}
                       onChange={handleChange("barcode")}
-                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
+                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded p-2"
                     />
                     <button
                       type="button"
-                      className="w-[40px] h-[40px] border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none p-1 rounded-md flex justify-center items-center "
+                      className="w-[40px] h-[40px] border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none p-1 rounded flex justify-center items-center "
                       onClick={() => {
                         setShowScanner(true);
                       }}
@@ -305,7 +305,7 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                   <input
                     value={values.character}
                     onChange={handleChange("character")}
-                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
+                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded p-2"
                   />
                 </div>
                 {/* <div className="w-full ">
@@ -313,7 +313,7 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                   <input
                     value={values.product_id}
                     onChange={handleChange("product_id")}
-                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded-md p-2"
+                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded p-2"
                   />
                 </div> */}
               </div>

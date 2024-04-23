@@ -188,7 +188,7 @@ export const AddItem = ({
               <FileUploadDropzone
                 onFileUpload={onFileUpload}
                 button={
-                  <div className="w-full h-[100px] overflow-hidden  border-[1px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-md  relative flex items-center justify-center cursor-pointer">
+                  <div className="w-full h-[100px] overflow-hidden  border-[1px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-lg  relative flex items-center justify-center cursor-pointer">
                     <Image
                       src="/image_b.png"
                       alt=""
@@ -208,7 +208,7 @@ export const AddItem = ({
           <div>
             {newItem.photo && (
               <div className="w-24 h-24 relative">
-                <div className="w-24 h-24 overflow-hidden flex items-center justify-center rounded-md border-[1px] border-emerald-900">
+                <div className="w-24 h-24 overflow-hidden flex items-center justify-center rounded-lg border-[1px] border-emerald-900">
                   <button
                     type="button"
                     onClick={() => {

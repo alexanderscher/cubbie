@@ -72,11 +72,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
                     height={12}
                     alt=""
                   ></Image>
-                  <TruncateText
-                    text={item.receipt?.store}
-                    maxLength={15}
-                    styles={"text-md"}
-                  />
+                  <TruncateText text={item.receipt?.store} styles={"text-md"} />
                 </div>
               </Link>
             </div>

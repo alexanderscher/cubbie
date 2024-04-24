@@ -174,14 +174,6 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
           styles={"text-2xl text-orange-600 "}
         />
         <div className="flex gap-2">
-          {/* <RegularButton
-            styles="border-emerald-900 text-white bg-emerald-900 text-xs"
-            handleClick={() => {
-              setDetailsOpen(true);
-            }}
-          >
-            <p>Receipt details</p>
-          </RegularButton> */}
           <div
             className={`relative hover:border-[1px] hover:border-emerald-900 px-4 py-1 rounded-full cursor-pointer flex items-center ${
               isOpen && "border-[1px] border-emerald-900 px-4 py-1 rounded-full"

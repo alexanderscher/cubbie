@@ -131,7 +131,10 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
             </p>
           </Link>
           <p className="text-emerald-900 text-sm">/</p>
-          <p className="text-emerald-900 text-sm">{project.name}</p>
+          <TruncateText
+            text={project.name}
+            styles={"text-emerald-900 text-sm"}
+          />
         </div>
       </div>
       <div className="flex flex-col gap-8 mt-10 bg">

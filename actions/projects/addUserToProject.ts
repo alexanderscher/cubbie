@@ -22,7 +22,9 @@ export const addUserToProject = async (
       where: { email: email },
     });
     if (!user) {
-      return { error: "User not found" };
+      return {
+        error: `User not found with email ${email}.`,
+      };
     }
 
     const projectUserExist = await prisma.projectUser.findUnique({

@@ -483,6 +483,8 @@ const AddUser = ({
         const isNotEmail = emailValidation(values.email);
         if (isNotEmail) {
           setInvalidEmailFormat(true);
+          setUploadError("");
+
           return;
         }
 
@@ -491,7 +493,8 @@ const AddUser = ({
             const result = await addUserToProject(values.email, projectId);
             if (result.error) {
               setUploadError(result.error);
-              toast.error("An error occurred. Please try again.");
+
+              setInvalidEmailFormat(false);
             } else {
               toast.success("Your operation was successful!");
 
@@ -505,7 +508,7 @@ const AddUser = ({
       }}
       // validationSchema={getValidationSchema(stage)}
     >
-      {({ handleChange, handleSubmit }) => (
+      {({ handleChange, handleSubmit, values }) => (
         <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full rounded-t-md">
           <form onSubmit={handleSubmit}>
             <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3 ">
@@ -547,6 +550,19 @@ const AddUser = ({
                 <FormError message="Invalid email format" />
               )}
               {uploadError && <FormError message={uploadError} />}
+              {uploadError && uploadError.startsWith("User") && (
+                <div className="p-3 rounded-lg flex items-center w-full gap-4 text-sm bg-[#d2edd2] text-emerald-900 shadow flex-col">
+                  <p className="text-sm">
+                    Would you like to invite {values.email} to join Cubbie?
+                  </p>
+                  <RegularButton
+                    handleClick={() => handleSubmit()}
+                    styles=" border-emerald-900 bg-[#d2edd2]"
+                  >
+                    <p className="text-emerald-900 text-xs">Send invite</p>
+                  </RegularButton>
+                </div>
+              )}
             </div>
           </form>
           {isPending && <Loading loading={isPending} />}

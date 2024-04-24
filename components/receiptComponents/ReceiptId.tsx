@@ -26,18 +26,13 @@ interface ReceiptIdProps {
 
 const ReceiptId = ({ receipt }: ReceiptIdProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isDetailsOpen, setDetailsOpen] = useState(false);
+  // const [isDetailsOpen, setDetailsOpen] = useState(false);
   const [isOptionsOpen, setisOptionsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [openItemId, setOpenItemId] = useState(null as number | null);
-  const [isClient, setIsClient] = useState(false);
   const searchParams = useSearchParams();
   const [filteredItemData, setFilteredItemData] = useState(receipt.items);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const [newItem, setNewItem] = useState({
     description: "",
@@ -179,14 +174,14 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
           styles={"text-2xl text-orange-600 "}
         />
         <div className="flex gap-2">
-          <RegularButton
+          {/* <RegularButton
             styles="border-emerald-900 text-white bg-emerald-900 text-xs"
             handleClick={() => {
               setDetailsOpen(true);
             }}
           >
             <p>Receipt details</p>
-          </RegularButton>
+          </RegularButton> */}
           <div
             className={`relative hover:border-[1px] hover:border-emerald-900 px-4 py-1 rounded-full cursor-pointer flex items-center ${
               isOpen && "border-[1px] border-emerald-900 px-4 py-1 rounded-full"
@@ -202,11 +197,6 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
             )}
           </div>
         </div>
-        {isDetailsOpen && (
-          <ModalOverlay onClose={() => setDetailsOpen(false)}>
-            <ReceiptDetails receipt={receipt} />
-          </ModalOverlay>
-        )}
       </div>
 
       <div className="w-full">
@@ -283,110 +273,6 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
 };
 
 export default ReceiptId;
-
-const ReceiptDetails = ({ receipt }: { receipt: Receipt }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const total_amount = receipt.items.reduce((acc: number, curr: ItemType) => {
-    return acc + curr.price;
-  }, 0);
-
-  return (
-    <div
-      className={`shadow rounded-lg bg-white flex flex-col gap-4 p-8 overflow-auto h-[600px] w-[400px]`}
-    >
-      {!receipt.receipt_image_url && (
-        <div className="w-full flex justify-center items-center  ">
-          <div className="  overflow-hidden">
-            <Image
-              src="/receipt_b.png"
-              alt=""
-              width={40}
-              height={40}
-              className="object-cover bg-white pt-4"
-              style={{ objectFit: "cover", objectPosition: "center" }}
-            />
-          </div>
-        </div>
-      )}
-
-      {receipt.receipt_image_url && (
-        <div className="w-full flex justify-center items-center  ">
-          <div className=" w-[200px] max-h-[200px]  rounded-lg overflow-hidden">
-            <Image
-              src={receipt.receipt_image_url}
-              width={280}
-              height={280}
-              alt="Receipt Image"
-              className="object-contain rounded-lg cursor-pointer"
-              layout="intrinsic"
-              onClick={() => setIsOpen(true)}
-            />
-          </div>
-        </div>
-      )}
-      <ImageModal
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        imageUrl={receipt.receipt_image_url}
-        altText="Your Image Description"
-      />
-
-      <div className="flex flex-col gap-4 text-sm ">
-        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
-          <p className="text-slate-400 text-xs">Return Date</p>
-          <p className="">{formatDateToMMDDYY(receipt.return_date)}</p>
-        </div>
-        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
-          <p className="text-slate-400 text-xs">Date Purcashed</p>
-          <p className="">{formatDateToMMDDYY(receipt.purchase_date)}</p>
-        </div>
-        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
-          <p className="text-slate-400 text-xs">Total Amount</p>
-          <p className="">{formatCurrency(total_amount)}</p>
-        </div>
-        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
-          <p className="text-slate-400 text-xs">Receipt Type</p>
-          <p className="">{receipt.memo ? "Memo" : "Receipt"}</p>
-        </div>
-        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
-          <p className="text-slate-400 text-xs">Quantity</p>
-          <p className="">{receipt.items.length}</p>
-        </div>
-        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
-          <p className="text-slate-400 text-xs">Created on</p>
-          <p className="">{formatDateToMMDDYY(receipt.created_at)}</p>
-        </div>
-        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
-          <p className="text-slate-400 text-xs">Purchase Type</p>
-          <p className="">{receipt.type}</p>
-        </div>
-
-        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
-          <p className="text-slate-400 text-xs">Card</p>
-          <p className="">{receipt.card ? receipt.card : "None"}</p>
-        </div>
-        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
-          <p className="text-slate-400 text-xs">Project Asset Amount</p>
-          <p className="">
-            {receipt.project &&
-            receipt.project.asset_amount !== null &&
-            receipt.project.asset_amount !== undefined
-              ? receipt.project.asset_amount
-              : "None"}
-          </p>
-        </div>
-
-        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
-          <p className="text-slate-400 text-xs">Tracking Link</p>
-          <p className="">
-            {receipt.tracking_number ? receipt.tracking_number : "None"}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const Items = ({
   filteredItemData,

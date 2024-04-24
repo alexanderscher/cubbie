@@ -134,13 +134,13 @@ input:-webkit-autofill::first-line {
 
 @media (max-width: 768px) {
   .truncate-text {
-    max-width: 150px;
+    max-width: 200px;
   }
 }
 
 @media (min-width: 769px) {
   .truncate-text {
-    max-width: 250px;
+    max-width: 300px;
   }
 }
 .fc .fc-daygrid-event {

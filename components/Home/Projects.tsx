@@ -5,6 +5,7 @@ import { ProjectOptionsModal } from "@/components/options/ProjectOptions";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { Overlay } from "@/components/overlays/Overlay";
 import { CreateProject } from "@/components/project/CreateProject";
+import { TruncateText } from "@/components/text/Truncate";
 import { Receipt } from "@/types/AppTypes";
 import { Project as ProjectType } from "@/types/AppTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
@@ -219,7 +220,12 @@ const Project = ({
         </div>
 
         <div className="p-3 flex flex-col gap-2">
-          <h2 className="text-sm text-orange-600">{project.name}</h2>
+          <TruncateText
+            text={project.name}
+            styles={"text-orange-600 text-sm"}
+            type="not"
+            maxLength={25}
+          />
 
           <div className="flex gap-1 text-sm">
             <p className=" ">

@@ -322,7 +322,7 @@ const Filters = () => {
         </div>
       )}
       {pathname.includes("project") && (
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <div className="relative">
             <FilterButton
               setOpenModal={setOpenModal}

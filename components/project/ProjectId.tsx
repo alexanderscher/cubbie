@@ -2,7 +2,6 @@
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import Receipt from "@/components/receiptComponents/Receipt";
 import {
-  ExtendedItemType,
   Item,
   Project as ProjectType,
   Receipt as ReceiptType,
@@ -29,7 +28,7 @@ interface ProjectIdProps {
 
 export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
   const [isAddOpen, setAddReceiptOpen] = useState(false);
-  const [isDetailsOpen, setDetailsOpen] = useState(false);
+  // const [isDetailsOpen, setDetailsOpen] = useState(false);
 
   const searchParams = useSearchParams();
 
@@ -149,14 +148,14 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
                 </p>
               </div>
               <div className="flex gap-2">
-                <RegularButton
+                {/* <RegularButton
                   styles="border-emerald-900 text-white bg-emerald-900 text-xs"
                   handleClick={() => {
                     setDetailsOpen(true);
                   }}
                 >
                   <p>Project details</p>
-                </RegularButton>
+                </RegularButton> */}
                 <div
                   className={`relative hover:border-[1px] hover:border-emerald-900 px-4 py-1 rounded-full cursor-pointer flex items-center ${
                     isOpen &&
@@ -177,14 +176,14 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
                     </>
                   )}
                 </div>
-                {isDetailsOpen && (
+                {/* {isDetailsOpen && (
                   <ModalOverlay onClose={() => setDetailsOpen(false)}>
                     <ProjectDetails
                       project={project}
                       setDetailsOpen={setDetailsOpen}
                     />
                   </ModalOverlay>
-                )}
+                )} */}
               </div>
             </div>
           </div>
@@ -285,50 +284,50 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
 
 export default ProjectId;
 
-const ProjectDetails = ({
-  project,
-  setDetailsOpen,
-}: {
-  project: ProjectType;
-  setDetailsOpen: (value: boolean) => void;
-}) => {
-  const totalAmount = project.receipts.reduce(
-    (totalAcc: number, receipt: ReceiptType) => {
-      const receiptTotal = receipt.items.reduce(
-        (itemAcc: number, item: Item) => {
-          return itemAcc + item.price;
-        },
-        0
-      );
+// const ProjectDetails = ({
+//   project,
+//   setDetailsOpen,
+// }: {
+//   project: ProjectType;
+//   setDetailsOpen: (value: boolean) => void;
+// }) => {
+//   const totalAmount = project.receipts.reduce(
+//     (totalAcc: number, receipt: ReceiptType) => {
+//       const receiptTotal = receipt.items.reduce(
+//         (itemAcc: number, item: Item) => {
+//           return itemAcc + item.price;
+//         },
+//         0
+//       );
 
-      return totalAcc + receiptTotal;
-    },
-    0
-  );
+//       return totalAcc + receiptTotal;
+//     },
+//     0
+//   );
 
-  return (
-    <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full">
-      <div className="flex justify-between items-center border-b  px-5 py-3 rounded-t-lg border-emerald-900">
-        <h3 className=" text-emerald-900">Project Details</h3>
-        <button
-          type="button"
-          className="text-emerald-900 "
-          onClick={() => setDetailsOpen(false)}
-        >
-          <span className="text-2xl">&times;</span>
-        </button>
-      </div>
-      <div className="">
-        <div className="p-4 ">
-          <p className="text-slate-400 text-xs">Number of receipts</p>
-          <p className="text-sm">{project.receipts.length}</p>
-        </div>
+//   return (
+//     <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full">
+//       <div className="flex justify-between items-center border-b  px-5 py-3 rounded-t-lg border-emerald-900">
+//         <h3 className=" text-emerald-900">Project Details</h3>
+//         <button
+//           type="button"
+//           className="text-emerald-900 "
+//           onClick={() => setDetailsOpen(false)}
+//         >
+//           <span className="text-2xl">&times;</span>
+//         </button>
+//       </div>
+//       <div className="">
+//         <div className="p-4 ">
+//           <p className="text-slate-400 text-xs">Number of receipts</p>
+//           <p className="text-sm">{project.receipts.length}</p>
+//         </div>
 
-        <div className="p-4 border-t-[1px] ">
-          <p className="text-slate-400 text-xs ">Project total amount</p>
-          <p className="text-sm">{formatCurrency(totalAmount)}</p>
-        </div>
-      </div>
-    </div>
-  );
-};
+//         <div className="p-4 border-t-[1px] ">
+//           <p className="text-slate-400 text-xs ">Project total amount</p>
+//           <p className="text-sm">{formatCurrency(totalAmount)}</p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };

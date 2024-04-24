@@ -138,7 +138,7 @@ const Filters = () => {
         </div>
       )}
       {pathname === "/receipts" && filteredReceiptData.length > 0 && (
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 flex-wrap gap-y-3">
           <div className="relative">
             <FilterButton
               setOpenModal={setOpenModal}
@@ -322,7 +322,7 @@ const Filters = () => {
         </div>
       )}
       {pathname.includes("project") && (
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 flex-wrap gap-y-3">
           <div className="relative">
             <FilterButton
               setOpenModal={setOpenModal}
@@ -399,7 +399,7 @@ const Filters = () => {
         </div>
       )}
       {pathname.startsWith("/receipt/") && (
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap gap-y-3	">
           <div className="relative">
             <FilterButton
               setOpenModal={setOpenModal}

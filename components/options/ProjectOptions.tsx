@@ -21,6 +21,7 @@ import { FormError } from "@/components/form-error";
 import { removeUserFromProject } from "@/actions/projects/removeUserFromProject";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { formatCurrency } from "@/utils/formatCurrency";
+import { sendInvite } from "@/actions/email/sendInvite";
 
 interface OptionsModalProps {
   isOpen: boolean;
@@ -474,6 +475,18 @@ const AddUser = ({
     return "";
   };
 
+  const sendEmail = async (email: string) => {
+    startTransition(async () => {
+      try {
+        await sendInvite(email);
+        setUploadError("");
+        toast.success("Invite sent successfully");
+      } catch (e) {
+        toast.error("An error occurred while sending the invite");
+      }
+    });
+  };
+
   return (
     <Formik
       initialValues={{
@@ -551,15 +564,15 @@ const AddUser = ({
               )}
               {uploadError && <FormError message={uploadError} />}
               {uploadError && uploadError.startsWith("User") && (
-                <div className="p-3 rounded-lg flex items-center w-full gap-4 text-sm bg-[#d2edd2] text-emerald-900 shadow flex-col">
+                <div className="p-6 rounded-lg flex items-center w-full gap-4 text-sm bg-[#d2edd2] text-emerald-900 shadow flex-col">
                   <p className="text-sm">
                     Would you like to invite {values.email} to join Cubbie?
                   </p>
                   <RegularButton
-                    handleClick={() => handleSubmit()}
-                    styles=" border-emerald-900 bg-[#d2edd2]"
+                    handleClick={() => sendEmail(values.email)}
+                    styles=" border-emerald-900 bg-emerald-900"
                   >
-                    <p className="text-emerald-900 text-xs">Send invite</p>
+                    <p className="text-white text-xs">Send invite</p>
                   </RegularButton>
                 </div>
               )}

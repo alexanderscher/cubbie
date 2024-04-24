@@ -3,14 +3,17 @@ import { addItem } from "@/actions/items/addItem";
 import { deleteReceipt } from "@/actions/receipts/deleteReceipt";
 import { moveReceipt } from "@/actions/receipts/moveReceipt";
 import RegularButton from "@/components/buttons/RegularButton";
+import ImageModal from "@/components/images/ImageModal";
 import { AddItem } from "@/components/item/AddItem";
 import Loading from "@/components/Loading/Loading";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import ProjectSelect from "@/components/select/ProjectSelect";
 import { getProjects } from "@/lib/projectsDB";
-import { Receipt as ReceiptType } from "@/types/AppTypes";
+import { Receipt as ReceiptType, Item as ItemType } from "@/types/AppTypes";
 import { Project } from "@/types/AppTypes";
+import { formatDateToMMDDYY } from "@/utils/Date";
+import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -33,6 +36,7 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const pathname = usePathname();
   const [color, setColor] = useState(white);
+  const [isDetailsOpen, setDetailsOpen] = useState(false);
 
   useEffect(() => {
     if (!pathname.startsWith("/receipt/")) {
@@ -135,6 +139,26 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
             </div>
           </Link>
         )}
+        {pathname.startsWith("/receipt/") && (
+          <div
+            className={color}
+            onClick={(e) => {
+              e.preventDefault();
+              setDetailsOpen(true);
+            }}
+          >
+            <div className="flex gap-2">
+              <Image
+                src={"/dashboard_b.png"}
+                width={20}
+                height={20}
+                alt=""
+              ></Image>
+              <p>Receipt Details</p>
+            </div>
+          </div>
+        )}
+
         <div
           className={color}
           onClick={(e) => {
@@ -202,6 +226,11 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
       {isDeleteOpen && (
         <ModalOverlay onClose={() => setIsDeleteOpen(false)}>
           <DeleteModal setDeleteOpen={setIsDeleteOpen} receipt={receipt} />
+        </ModalOverlay>
+      )}
+      {isDetailsOpen && (
+        <ModalOverlay onClose={() => setDetailsOpen(false)}>
+          <ReceiptDetails receipt={receipt} />
         </ModalOverlay>
       )}
     </div>
@@ -336,5 +365,109 @@ const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
       type="Receipt"
       message={`Are you sure you want to delete ${receipt.store}? This will delete all receipts and items in the project.`}
     />
+  );
+};
+
+const ReceiptDetails = ({ receipt }: { receipt: ReceiptType }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const total_amount = receipt.items.reduce((acc: number, curr: ItemType) => {
+    return acc + curr.price;
+  }, 0);
+
+  return (
+    <div
+      className={`shadow rounded-lg bg-white flex flex-col gap-4 p-8 overflow-auto h-[500px]  max-w-[400px] w-5/6`}
+    >
+      {!receipt.receipt_image_url && (
+        <div className="w-full flex justify-center items-center  ">
+          <div className="  overflow-hidden">
+            <Image
+              src="/receipt_b.png"
+              alt=""
+              width={40}
+              height={40}
+              className="object-cover bg-white pt-4"
+              style={{ objectFit: "cover", objectPosition: "center" }}
+            />
+          </div>
+        </div>
+      )}
+
+      {receipt.receipt_image_url && (
+        <div className="w-full flex justify-center items-center  ">
+          <div className=" w-[200px] max-h-[200px]  rounded-lg overflow-hidden">
+            <Image
+              src={receipt.receipt_image_url}
+              width={280}
+              height={280}
+              alt="Receipt Image"
+              className="object-contain rounded-lg cursor-pointer"
+              layout="intrinsic"
+              onClick={() => setIsOpen(true)}
+            />
+          </div>
+        </div>
+      )}
+      <ImageModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        imageUrl={receipt.receipt_image_url}
+        altText="Your Image Description"
+      />
+
+      <div className="flex flex-col gap-4 text-sm ">
+        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+          <p className="text-slate-400 text-xs">Return Date</p>
+          <p className="">{formatDateToMMDDYY(receipt.return_date)}</p>
+        </div>
+        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+          <p className="text-slate-400 text-xs">Date Purcashed</p>
+          <p className="">{formatDateToMMDDYY(receipt.purchase_date)}</p>
+        </div>
+        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+          <p className="text-slate-400 text-xs">Total Amount</p>
+          <p className="">{formatCurrency(total_amount)}</p>
+        </div>
+        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+          <p className="text-slate-400 text-xs">Receipt Type</p>
+          <p className="">{receipt.memo ? "Memo" : "Receipt"}</p>
+        </div>
+        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+          <p className="text-slate-400 text-xs">Quantity</p>
+          <p className="">{receipt.items.length}</p>
+        </div>
+        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+          <p className="text-slate-400 text-xs">Created on</p>
+          <p className="">{formatDateToMMDDYY(receipt.created_at)}</p>
+        </div>
+        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+          <p className="text-slate-400 text-xs">Purchase Type</p>
+          <p className="">{receipt.type}</p>
+        </div>
+
+        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+          <p className="text-slate-400 text-xs">Card</p>
+          <p className="">{receipt.card ? receipt.card : "None"}</p>
+        </div>
+        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+          <p className="text-slate-400 text-xs">Project Asset Amount</p>
+          <p className="">
+            {receipt.project &&
+            receipt.project.asset_amount !== null &&
+            receipt.project.asset_amount !== undefined
+              ? receipt.project.asset_amount
+              : "None"}
+          </p>
+        </div>
+
+        <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
+          <p className="text-slate-400 text-xs">Tracking Link</p>
+          <p className="">
+            {receipt.tracking_number ? receipt.tracking_number : "None"}
+          </p>
+        </div>
+      </div>
+    </div>
   );
 };

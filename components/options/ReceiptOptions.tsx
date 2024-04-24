@@ -377,7 +377,7 @@ const ReceiptDetails = ({ receipt }: { receipt: ReceiptType }) => {
 
   return (
     <div
-      className={`shadow rounded-lg bg-white flex flex-col gap-4 p-8 overflow-auto h-[500px]  max-w-[400px] w-5/6`}
+      className={`shadow rounded-lg bg-white flex flex-col gap-4 p-8 overflow-auto h-[500px]  max-w-[400px] w-3/4 mt-[50px]`}
     >
       {!receipt.receipt_image_url && (
         <div className="w-full flex justify-center items-center  ">

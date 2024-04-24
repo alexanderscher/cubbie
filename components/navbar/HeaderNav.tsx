@@ -1,4 +1,5 @@
 import RegularButton from "@/components/buttons/RegularButton";
+import { TruncateText } from "@/components/text/Truncate";
 import { Receipt } from "@/types/AppTypes";
 
 import Link from "next/link";
@@ -25,7 +26,11 @@ const HeaderNav = ({ receipt }: HeaderNavProps) => {
         )}
         {receipt.project && <p className="text-emerald-900 text-sm">/</p>}
 
-        <p className="text-emerald-900 text-sm">{receipt.store}</p>
+        {/* <p className="text-emerald-900 text-sm">{receipt.store}</p> */}
+        <TruncateText
+          text={receipt.store}
+          styles={"text-emerald-900 text-sm"}
+        />
       </div>
 
       {/* <RegularButton

@@ -63,7 +63,7 @@ const Receipt = ({
               text={receipt.store}
               styles={"text-orange-600 text-sm"}
               type="not"
-              maxLength={25}
+              // maxLength={20}
             />
 
             <p className="text-xs text-slate-400">

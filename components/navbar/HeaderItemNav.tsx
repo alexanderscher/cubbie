@@ -1,4 +1,5 @@
 import RegularButton from "@/components/buttons/RegularButton";
+import { TruncateText } from "@/components/text/Truncate";
 import { Item } from "@/types/AppTypes";
 import Link from "next/link";
 import React from "react";
@@ -33,7 +34,10 @@ const HeaderNav = ({ item }: HeaderNavProps) => {
         </Link>
 
         <p className="text-emerald-900 text-sm">/</p>
-        <p className="text-emerald-900 text-sm">{item.description}</p>
+        <TruncateText
+          text={item.description}
+          styles={"text-emerald-900 text-sm"}
+        />
       </div>
     </div>
   );

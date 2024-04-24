@@ -20,7 +20,7 @@ const DeleteConfirmationModal = ({
   type,
 }: DeleteModalProps) => {
   return (
-    <div className="relative p-10 bg-red-50  max-w-md m-auto flex-col flex  rounded-lg shadow-md gap-4 w-[340px] items-center ">
+    <div className="relative p-8 bg-red-50  w-3/4 m-auto flex-col flex  rounded-lg shadow-md gap-4 max-w-[340px] min-w-[310px] items-center ">
       <div className="bg-red-100 rounded-full flex items-center justify-center h-[50px] w-[50px]">
         <ExclamationTriangleIcon className=" text-red-500 w-3/4 h-1/2" />
       </div>

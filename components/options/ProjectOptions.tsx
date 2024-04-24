@@ -7,7 +7,11 @@ import { EditProject } from "@/components/project/EditProject";
 import Image from "next/image";
 import React, { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
-import { Project as ProjectType } from "@/types/AppTypes";
+import {
+  Item,
+  Project as ProjectType,
+  Receipt as ReceiptType,
+} from "@/types/AppTypes";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import { usePathname } from "next/navigation";
 import { Formik } from "formik";
@@ -16,7 +20,7 @@ import RegularButton from "@/components/buttons/RegularButton";
 import { FormError } from "@/components/form-error";
 import { removeUserFromProject } from "@/actions/projects/removeUserFromProject";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
-import { Overlay } from "@/components/overlays/Overlay";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 interface OptionsModalProps {
   isOpen: boolean;
@@ -40,6 +44,7 @@ export const ProjectOptionsModal = ({
   const [isPending, startTransition] = useTransition();
   const [color, setColor] = useState(white);
   const [isMemebersOpen, setMembersOpen] = useState(false);
+  const [isDetailsOpen, setDetailsOpen] = useState(false);
 
   const pathname = usePathname();
 
@@ -79,26 +84,48 @@ export const ProjectOptionsModal = ({
     >
       <div>
         <div className="p-4 rounded text-sm flex flex-col gap-2">
-          {sessionUserId && sessionUserId === project.userId && (
+          {pathname.includes("project") && (
             <div
               className={`${color} cursor-pointer`}
               onClick={(e) => {
                 e.preventDefault();
 
-                setMembersOpen(true);
+                setDetailsOpen(true);
               }}
             >
               <div className="flex gap-2">
                 <Image
-                  src={"/account_b.png"}
+                  src={"/dashboard_b.png"}
                   width={20}
                   height={20}
                   alt=""
                 ></Image>
-                <p>Members</p>
+                <p>Project Details</p>
               </div>
             </div>
           )}
+          {sessionUserId &&
+            sessionUserId === project.userId &&
+            pathname.includes("project") && (
+              <div
+                className={`${color} cursor-pointer`}
+                onClick={(e) => {
+                  e.preventDefault();
+
+                  setMembersOpen(true);
+                }}
+              >
+                <div className="flex gap-2">
+                  <Image
+                    src={"/account_b.png"}
+                    width={20}
+                    height={20}
+                    alt=""
+                  ></Image>
+                  <p>Members</p>
+                </div>
+              </div>
+            )}
 
           <div className={`${color} cursor-pointer`}>
             <div
@@ -188,6 +215,11 @@ export const ProjectOptionsModal = ({
       </div>
 
       <div className="z-[2000]">
+        {isDetailsOpen && (
+          <ModalOverlay onClose={() => setDetailsOpen(false)}>
+            <ProjectDetails project={project} setDetailsOpen={setDetailsOpen} />
+          </ModalOverlay>
+        )}
         {isPending && <Loading loading={isPending} />}
         {edit && (
           <ModalOverlay onClose={() => setEdit(false)}>
@@ -207,19 +239,23 @@ export const ProjectOptionsModal = ({
           </>
         )}
         {isAddUserOpen && (
-          <AddUser
-            setMembersOpen={setMembersOpen}
-            projectId={project.id}
-            setAddUserOpen={setAddUserOpen}
-          />
+          <ModalOverlay onClose={() => setAddUserOpen(false)}>
+            <AddUser
+              setMembersOpen={setMembersOpen}
+              projectId={project.id}
+              setAddUserOpen={setAddUserOpen}
+            />
+          </ModalOverlay>
         )}
         {isMemebersOpen && (
-          <Members
-            project={project}
-            setMembersOpen={setMembersOpen}
-            sessionUserId={sessionUserId}
-            setAddUserOpen={setAddUserOpen}
-          />
+          <ModalOverlay onClose={() => setMembersOpen(false)}>
+            <Members
+              project={project}
+              setMembersOpen={setMembersOpen}
+              sessionUserId={sessionUserId}
+              setAddUserOpen={setAddUserOpen}
+            />
+          </ModalOverlay>
         )}
       </div>
     </div>
@@ -279,91 +315,69 @@ const Members = ({
   sessionUserId: string | undefined;
   setAddUserOpen: (value: boolean) => void;
 }) => {
-  const handleOverlayClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (
-      event.target instanceof HTMLDivElement &&
-      event.target.id === "modal-overlay"
-    ) {
-      setMembersOpen(false);
-    }
-  };
-
-  console.log(sessionUserId, project.user?.id);
-
   return (
-    <div
-      id="modal-overlay"
-      className="fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center z-[2000] "
-      onClick={(e) => {
-        handleOverlayClick;
-        e.preventDefault();
-      }}
-    >
-      <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full rounded-t-md">
-        {sessionUserId && sessionUserId === project.user?.id && (
-          <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3 ">
-            <button
-              type="button"
-              className="text-emerald-900 "
-              onClick={() => {
-                setMembersOpen(false);
-                setAddUserOpen(false);
-              }}
-            >
-              <span className="text-2xl">&times;</span>
-            </button>
+    <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full rounded-t-md">
+      {sessionUserId && sessionUserId === project.user?.id && (
+        <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3 ">
+          <button
+            type="button"
+            className="text-emerald-900 "
+            onClick={() => {
+              setMembersOpen(false);
+              setAddUserOpen(false);
+            }}
+          >
+            <span className="text-2xl">&times;</span>
+          </button>
 
-            <h3 className=" text-emerald-900">{`${project.name} members`}</h3>
+          <h3 className=" text-emerald-900">{`${project.name} members`}</h3>
 
-            <button
-              type="button"
-              className="text-emerald-900 "
-              onClick={() => {
-                setMembersOpen(false);
-                setAddUserOpen(true);
-              }}
-            >
-              <span className="text-2xl">+</span>
-            </button>
-          </div>
-        )}
-        {sessionUserId && sessionUserId !== project.user?.id && (
-          <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3 ">
-            <h3 className=" text-emerald-900">{`${project.name} members`}</h3>
-            <button
-              type="button"
-              className="text-emerald-900 "
-              onClick={() => {
-                setMembersOpen(false);
-                setAddUserOpen(false);
-              }}
-            >
-              <span className="text-2xl">&times;</span>
-            </button>
-          </div>
-        )}
-        <div className="flex flex-col ">
-          <div className="flex items-cenfter justify-between gap-4 py-4 px-6 text-sm">
-            <div className="flex items-center gap-2">
-              <p className="text-emerald-900">{project.user?.name}</p>
-              <p className="text-emerald-900">{project.user?.email}</p>
-            </div>
-
-            <p className="text-slate-500">Owner</p>
-          </div>
-          {project.projectUsers.map((user) => (
-            <div key={user.id}>
-              <MembersBlock
-                user={user}
-                projecUserId={project.user?.id}
-                sessionUserId={sessionUserId}
-                projectId={project.id}
-              />
-            </div>
-          ))}
+          <button
+            type="button"
+            className="text-emerald-900 "
+            onClick={() => {
+              setMembersOpen(false);
+              setAddUserOpen(true);
+            }}
+          >
+            <span className="text-2xl">+</span>
+          </button>
         </div>
+      )}
+      {sessionUserId && sessionUserId !== project.user?.id && (
+        <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3 ">
+          <h3 className=" text-emerald-900">{`${project.name} members`}</h3>
+          <button
+            type="button"
+            className="text-emerald-900 "
+            onClick={() => {
+              setMembersOpen(false);
+              setAddUserOpen(false);
+            }}
+          >
+            <span className="text-2xl">&times;</span>
+          </button>
+        </div>
+      )}
+      <div className="flex flex-col ">
+        <div className="flex items-cenfter justify-between gap-4 py-4 px-6 text-sm">
+          <div className="flex items-center gap-2">
+            <p className="text-emerald-900">{project.user?.name}</p>
+            <p className="text-emerald-900">{project.user?.email}</p>
+          </div>
+
+          <p className="text-slate-500">Owner</p>
+        </div>
+        {project.projectUsers.map((user) => (
+          <div key={user.id}>
+            <MembersBlock
+              user={user}
+              projecUserId={project.user?.id}
+              sessionUserId={sessionUserId}
+              projectId={project.id}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -452,17 +466,6 @@ const AddUser = ({
   const [isPending, startTransition] = useTransition();
   const [uploadError, setUploadError] = useState("");
 
-  const handleOverlayClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (
-      event.target instanceof HTMLDivElement &&
-      event.target.id === "modal-overlay"
-    ) {
-      setAddUserOpen(false);
-    }
-  };
-
   const emailValidation = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -472,92 +475,131 @@ const AddUser = ({
   };
 
   return (
-    <div
-      id="modal-overlay"
-      className="fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center z-[2000] "
-      onClick={(e) => {
-        handleOverlayClick;
-        e.preventDefault();
+    <Formik
+      initialValues={{
+        email: "",
       }}
+      onSubmit={async (values) => {
+        const isNotEmail = emailValidation(values.email);
+        if (isNotEmail) {
+          setInvalidEmailFormat(true);
+          return;
+        }
+
+        try {
+          startTransition(async () => {
+            const result = await addUserToProject(values.email, projectId);
+            if (result.error) {
+              setUploadError(result.error);
+              toast.error("An error occurred. Please try again.");
+            } else {
+              toast.success("Your operation was successful!");
+
+              setInvalidEmailFormat(false);
+              setUploadError("");
+            }
+          });
+        } catch (e) {
+          toast.error("An error occurred. Please try again.");
+        }
+      }}
+      // validationSchema={getValidationSchema(stage)}
     >
-      <Formik
-        initialValues={{
-          email: "",
-        }}
-        onSubmit={async (values) => {
-          const isNotEmail = emailValidation(values.email);
-          if (isNotEmail) {
-            setInvalidEmailFormat(true);
-            return;
-          }
+      {({ handleChange, handleSubmit }) => (
+        <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full rounded-t-md">
+          <form onSubmit={handleSubmit}>
+            <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3 ">
+              <button
+                type="button"
+                className="text-emerald-900 "
+                onClick={() => {
+                  setMembersOpen(true);
+                  setAddUserOpen(false);
+                }}
+              >
+                <span className="text-sm">Back</span>
+              </button>
 
-          try {
-            startTransition(async () => {
-              const result = await addUserToProject(values.email, projectId);
-              if (result.error) {
-                setUploadError(result.error);
-                toast.error("An error occurred. Please try again.");
-              } else {
-                toast.success("Your operation was successful!");
+              <h3 className=" text-emerald-900">Add user</h3>
+              <button
+                type="button"
+                className="text-emerald-900 "
+                onClick={() => setAddUserOpen(false)}
+              >
+                <span className="text-2xl">&times;</span>
+              </button>
+            </div>
+            <div className="flex flex-col p-6 gap-6">
+              <input
+                className="w-full border-[1px]  p-2 rounded border-emerald-900 focus:border-emerald-900 focus:outline-none cursor-pointer placeholder:text-xs text-sm"
+                // value={e.}
+                placeholder="Email"
+                onChange={handleChange("email")}
+                style={{ WebkitAppearance: "none" }}
+              />
+              <RegularButton
+                handleClick={() => handleSubmit()}
+                styles="bg-white border-emerald-900"
+              >
+                <p className="text-emerald-900 text-xs">Add user</p>
+              </RegularButton>
+              {invalidEmailFormat && (
+                <FormError message="Invalid email format" />
+              )}
+              {uploadError && <FormError message={uploadError} />}
+            </div>
+          </form>
+          {isPending && <Loading loading={isPending} />}
+        </div>
+      )}
+    </Formik>
+  );
+};
 
-                setInvalidEmailFormat(false);
-                setUploadError("");
-              }
-            });
-          } catch (e) {
-            toast.error("An error occurred. Please try again.");
-          }
-        }}
-        // validationSchema={getValidationSchema(stage)}
-      >
-        {({ handleChange, handleSubmit }) => (
-          <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full rounded-t-md">
-            <form onSubmit={handleSubmit}>
-              <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3 ">
-                <button
-                  type="button"
-                  className="text-emerald-900 "
-                  onClick={() => {
-                    setMembersOpen(true);
-                    setAddUserOpen(false);
-                  }}
-                >
-                  <span className="text-sm">Back</span>
-                </button>
+const ProjectDetails = ({
+  project,
+  setDetailsOpen,
+}: {
+  project: ProjectType;
+  setDetailsOpen: (value: boolean) => void;
+}) => {
+  const totalAmount = project.receipts.reduce(
+    (totalAcc: number, receipt: ReceiptType) => {
+      const receiptTotal = receipt.items.reduce(
+        (itemAcc: number, item: Item) => {
+          return itemAcc + item.price;
+        },
+        0
+      );
 
-                <h3 className=" text-emerald-900">Add user</h3>
-                <button
-                  type="button"
-                  className="text-emerald-900 "
-                  onClick={() => setAddUserOpen(false)}
-                >
-                  <span className="text-2xl">&times;</span>
-                </button>
-              </div>
-              <div className="flex flex-col p-6 gap-6">
-                <input
-                  className="w-full border-[1px]  p-2 rounded border-emerald-900 focus:border-emerald-900 focus:outline-none cursor-pointer placeholder:text-xs text-sm"
-                  // value={e.}
-                  placeholder="Email"
-                  onChange={handleChange("email")}
-                  style={{ WebkitAppearance: "none" }}
-                />
-                <RegularButton
-                  handleClick={() => handleSubmit()}
-                  styles="bg-white border-emerald-900"
-                >
-                  <p className="text-emerald-900 text-xs">Add user</p>
-                </RegularButton>
-                {invalidEmailFormat && (
-                  <FormError message="Invalid email format" />
-                )}
-                {uploadError && <FormError message={uploadError} />}
-              </div>
-            </form>
-          </div>
-        )}
-      </Formik>
-      {isPending && <Loading loading={isPending} />}
+      return totalAcc + receiptTotal;
+    },
+    0
+  );
+
+  return (
+    <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full">
+      <div className="flex justify-between items-center border-b  px-5 py-3 rounded-t-lg border-emerald-900">
+        <h3 className=" text-emerald-900">Project Details</h3>
+        <button
+          type="button"
+          className="text-emerald-900 "
+          onClick={() => setDetailsOpen(false)}
+        >
+          <span className="text-2xl">&times;</span>
+        </button>
+      </div>
+      <div className="">
+        <div className="p-4 ">
+          <p className="text-slate-400 text-xs">Number of receipts</p>
+          <p className="text-sm">{project.receipts.length}</p>
+        </div>
+
+        <div className="p-4 border-t-[1px] ">
+          <p className="text-slate-400 text-xs ">Project total amount</p>
+          <p className="text-sm">{formatCurrency(totalAmount)}</p>
+        </div>
+      </div>
     </div>
   );
 };

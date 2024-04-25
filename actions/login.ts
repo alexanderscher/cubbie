@@ -1,11 +1,11 @@
 "use server";
 
 import * as z from "zod";
-import { AuthError } from "next-auth";
+import { AuthError, Session } from "next-auth";
 import bcrypt from "bcryptjs";
 
 import prisma from "@/prisma/client";
-import { signIn } from "@/auth";
+import { auth, signIn } from "@/auth";
 import { LoginSchema } from "@/schemas";
 import { getUserByEmail } from "@/data/user";
 import { getTwoFactorTokenByEmail } from "@/data/two-factor-token";
@@ -16,11 +16,14 @@ import {
 } from "@/lib/tokens";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { revalidatePath } from "next/cache";
 
 export const login = async (
   values: z.infer<typeof LoginSchema>,
   callbackUrl?: string | null
 ) => {
+  const session = (await auth()) as Session;
+  const userId = session?.user?.id as string;
   const validatedFields = LoginSchema.safeParse(values);
 
   if (!validatedFields.success) {
@@ -105,6 +108,8 @@ export const login = async (
       password,
       redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     });
+    revalidatePath(`projects_user_${userId}`);
+    revalidatePath(`user_${userId}`);
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {

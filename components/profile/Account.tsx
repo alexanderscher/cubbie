@@ -7,7 +7,8 @@ import { EmailSchema, PasswordSchema } from "@/schemas";
 import { Session } from "@/types/AppTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Formik } from "formik";
-import React, { startTransition } from "react";
+import React, { ReactNode, startTransition, useEffect, useState } from "react";
+
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import styles from "./profile.module.css";
@@ -19,13 +20,13 @@ interface Props {
 }
 
 const Account = ({ session }: Props) => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div
       className={`${styles.layout} gap-6 w-full justify-center items center`}
     >
       <div
-        className={`${styles.header}  text-emerald-900 bg-white min-w-[200px] rounded shadow p-6 flex flex-col gap-4 `}
+        className={`${styles.header}  text-emerald-900 bg-white min-w-[200px] rounded-lg shadow p-6 flex flex-col gap-4 `}
       >
         <h1 className="text-lg">Account</h1>
         <div className="flex flex-col gap-4 text-sm ">
@@ -35,7 +36,7 @@ const Account = ({ session }: Props) => {
         </div>
       </div>
       <div className="flex flex-col gap-4 w-full max-w-[600px]">
-        <div className="bg-white rounded p-6  flex flex-col gap-4">
+        <div className="bg-white rounded-lg p-6  flex flex-col gap-4">
           <div className="flex justify-between">
             <p className="text-emerald-900">User Profile</p>
             <div className={styles.button}>
@@ -56,7 +57,11 @@ const Account = ({ session }: Props) => {
           {!session.user.isOAuth && <Password />}
         </div>
       </div>
-      {isOpen && <Menu setIsOpen={setIsOpen} />}
+      {isOpen && (
+        <ModalOverlay onClose={() => setIsOpen(false)}>
+          <Menu setIsOpen={setIsOpen} />
+        </ModalOverlay>
+      )}
     </div>
   );
 };
@@ -68,8 +73,8 @@ interface Props {
 }
 
 const PersonalInformation = ({ session }: Props) => {
-  const [error, setError] = React.useState("");
-  const [success, setSuccess] = React.useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const form = useForm<z.infer<typeof EmailSchema>>({
     resolver: zodResolver(EmailSchema),
     defaultValues: {
@@ -145,8 +150,8 @@ const PersonalInformation = ({ session }: Props) => {
 };
 
 const Password = () => {
-  const [error, setError] = React.useState("");
-  const [success, setSuccess] = React.useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const form = useForm<z.infer<typeof PasswordSchema>>({
     resolver: zodResolver(PasswordSchema),
     defaultValues: {
@@ -230,29 +235,58 @@ interface MenuProps {
 const Menu = ({ setIsOpen }: MenuProps) => {
   return (
     <div
-      className={`${styles.modal} fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center`}
+      className={` ${styles.modal} bg-white rounded-lg shadow-xl m-4 max-w-md w-[400px]`}
     >
-      <div className="bg-white  rounded-lg shadow-lg w-[300px] text-sm">
-        {/* <h2 className="text-2xl font-bold mb-4">Menu</h2> */}
-        <ul>
-          <div className="border-b-[1px] border-slate-300 hover:bg-slate-100 rounded-t-lg">
-            <li className="p-6">User Profile</li>
+      <div className="flex flex-col p-6 gap-3">
+        <div className="p-4 bg-slate-100   rounded-lg text-sm cursor-pointer hover:bg-slate-200">
+          <div className="flex gap-3 justify-center items-center">
+            <p className="text-emerald-900">User Profile</p>
           </div>
-
-          <div className="border-b-[1px] border-slate-300 hover:bg-slate-100 ">
-            <li className="p-6">Alerts</li>
+        </div>
+        <div className="p-4 bg-slate-100   rounded-lg text-sm cursor-pointer hover:bg-slate-200">
+          <div className="flex gap-3 justify-center items-center">
+            <p className="text-emerald-900">Alert settings</p>
           </div>
-          <div className="border-b-[1px] border-slate-300 hover:bg-slate-100 ">
-            <li className="p-6">Plans & Billing</li>
+        </div>
+        <div className="p-4 bg-slate-100   rounded-lg text-sm cursor-pointer hover:bg-slate-200">
+          <div className="flex gap-3 justify-center items-center">
+            <p className="text-emerald-900">Plan & Billing</p>
           </div>
-          <div
-            onClick={() => setIsOpen(false)}
-            className="p-6 hover:bg-slate-100 rounded-b-lg"
-          >
-            Close
-          </div>
-        </ul>
+        </div>
       </div>
+    </div>
+  );
+};
+
+interface OverlayProps {
+  onClose: () => void;
+  children: ReactNode;
+}
+
+const ModalOverlay = ({ onClose, children }: OverlayProps) => {
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+  const handleOverlayClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (event.currentTarget === event.target) {
+      onClose();
+    }
+  };
+
+  return (
+    <div
+      id="modal-overlay"
+      className={styles.menu}
+      onClick={handleOverlayClick}
+    >
+      {children}
     </div>
   );
 };

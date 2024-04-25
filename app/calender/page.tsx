@@ -13,7 +13,9 @@ export default async function CalenderPage() {
   const receipts = await receipt();
   return (
     <PageWrapper>
-      <Calender receipts={receipts} />
+      <div className="flex justify-center items-center">
+        <Calender receipts={receipts} />
+      </div>
     </PageWrapper>
   );
 }

@@ -2,6 +2,10 @@
   display: flex;
 }
 
+.menu {
+  display: none;
+}
+
 .header {
   display: flex;
   flex-direction: column;
@@ -41,6 +45,18 @@
     display: block;
   }
   .modal {
+    display: block;
+  }
+  .menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.2); /* black with 20% opacity */
     display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
   }
 }

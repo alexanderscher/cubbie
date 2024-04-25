@@ -8,6 +8,7 @@ import styles from "./calender.module.css";
 import { TooltipComponent } from "@/components/tooltips/ToolTip";
 import { Receipt } from "@/types/AppTypes";
 import { useMediaQuery } from "react-responsive";
+import { formatDateToMMDDYY } from "@/utils/Date";
 
 interface Event {
   title: string;
@@ -23,6 +24,15 @@ interface CalenderProps {
 const Calender = ({ receipts }: CalenderProps) => {
   const isMobileDeviceQuery = useMediaQuery({ maxWidth: 700 });
   const [isMobileDevice, setIsMobileDevice] = useState<any>(null);
+
+  const currentDate = new Date();
+  const sevenDaysLater = new Date();
+  sevenDaysLater.setDate(currentDate.getDate() + 7);
+
+  const filteredReceipts = receipts.filter((receipt) => {
+    const returnDate = new Date(receipt.return_date);
+    return returnDate >= currentDate && returnDate <= sevenDaysLater;
+  });
 
   useEffect(() => {
     setIsMobileDevice(isMobileDeviceQuery);
@@ -61,20 +71,6 @@ const Calender = ({ receipts }: CalenderProps) => {
   }, [receipts]);
 
   const calendarRef = useRef<any>(null);
-  // const [currentDate, setCurrentDate] = useState(new Date());
-
-  // const handleMonthChange = (event: ChangeEvent<HTMLSelectElement>) => {
-  //   const year = currentDate.getFullYear();
-  //   const month = parseInt(event.target.value, 10);
-  //   const newDate = new Date(year, month);
-
-  //   setCurrentDate(newDate);
-
-  //   if (calendarRef.current) {
-  //     const api = calendarRef.current.getApi();
-  //     api.gotoDate(newDate);
-  //   }
-  // };
 
   const [activeEventId, setActiveEventId] = useState<string | null>(null);
 
@@ -82,30 +78,57 @@ const Calender = ({ receipts }: CalenderProps) => {
     setActiveEventId(eventId);
   };
   return (
-    <div className={styles.calendarContainer}>
-      <div className={styles.fullcalendar}>
-        <FullCalendar
-          {...(isMobileDevice && { height: "100%" })}
-          ref={calendarRef}
-          plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
-          headerToolbar={{
-            left: "title",
-            right: "today prev,next",
-          }}
-          events={allEvents as any}
-          nowIndicator={true}
-          selectable={true}
-          dayMaxEventRows={3}
-          selectMirror={true}
-          eventContent={(eventInfo) => (
-            <EventContent
-              eventInfo={eventInfo}
-              isActive={activeEventId === eventInfo.event.id.toString()}
-              onEventClick={handleEventClick}
-              setActiveEventId={setActiveEventId}
-            />
-          )}
-        />
+    <div className="w-full flex flex-col gap-10 h-full max-w-[800px] items-center justify-center">
+      <div className={styles.calendarContainer}>
+        <div className={styles.fullcalendar}>
+          <FullCalendar
+            {...(isMobileDevice && { height: "100%" })}
+            ref={calendarRef}
+            plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
+            headerToolbar={{
+              left: "title",
+              right: "today prev,next",
+            }}
+            events={allEvents as any}
+            nowIndicator={true}
+            selectable={true}
+            dayMaxEventRows={3}
+            selectMirror={true}
+            eventContent={(eventInfo) => (
+              <EventContent
+                eventInfo={eventInfo}
+                isActive={activeEventId === eventInfo.event.id.toString()}
+                onEventClick={handleEventClick}
+                setActiveEventId={setActiveEventId}
+              />
+            )}
+          />
+        </div>
+      </div>
+      <div className="w-full flex flex-col gap-3">
+        <div className="text-emerald-900 text-xl mb-4">Upcoming returns</div>
+        {filteredReceipts.length > 0 &&
+          filteredReceipts.map((receipt) => (
+            <div key={receipt.id} className="bg-white rounded-lg w-full p-6">
+              <div className="flex justify-between">
+                <div>
+                  <p className="text-sm  text-orange-600">{receipt.store}</p>
+                  <p className="text-sm text-slate-400">
+                    {formatDateToMMDDYY(receipt.return_date)}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        {filteredReceipts.length === 0 && (
+          <div className="bg-white rounded-lg w-full p-6">
+            <div className="flex justify-between">
+              <div>
+                <p className="text-sm ">No upcoming receipts</p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ interface TooltipWithHelperIconProps {
   placement?: string;
   item: string;
   date: string;
+  type?: string;
 }
 
 export function TooltipComponent({
@@ -12,6 +13,7 @@ export function TooltipComponent({
   placement = "top",
   item,
   date,
+  type,
 }: TooltipWithHelperIconProps) {
   return (
     <Tooltip
@@ -19,7 +21,7 @@ export function TooltipComponent({
       className="border border-blue-gray-50 bg-white p-6 shadow-xl shadow-black/10 z-[2001]"
       content={
         <div className="w-[200px] min-h-[60px]">
-          <p className="text-black text-lg">{content}</p>
+          <p className="text-emerald-900 text-lg break-words">{content}</p>
           <p className="text-slate-400 text-sm">{date}</p>
         </div>
       }

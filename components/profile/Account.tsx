@@ -7,13 +7,15 @@ import { EmailSchema, PasswordSchema } from "@/schemas";
 import { Session } from "@/types/AppTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Formik } from "formik";
-import React, { ReactNode, startTransition, useEffect, useState } from "react";
+import React, { startTransition, useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import styles from "./profile.module.css";
 import FormikInput from "@/components/ui/FormikInput";
 import Image from "next/image";
+import Header from "@/components/profile/Header";
+import { Menu } from "@/components/profile/Menu";
 
 interface Props {
   session: Session;
@@ -25,16 +27,7 @@ const Account = ({ session }: Props) => {
     <div
       className={`${styles.layout} gap-6 w-full justify-center items center`}
     >
-      <div
-        className={`${styles.header}  text-emerald-900 bg-white min-w-[200px] rounded-lg shadow p-6 flex flex-col gap-4 `}
-      >
-        <h1 className="text-lg">Account</h1>
-        <div className="flex flex-col gap-4 text-sm ">
-          <h1>User Profile</h1>
-          <h1>Alerts</h1>
-          <h1>Plan & Billing</h1>
-        </div>
-      </div>
+      <Header />
       <div className="flex flex-col gap-4 w-full max-w-[600px]">
         <div className="bg-white rounded-lg p-6  flex flex-col gap-4">
           <div className="flex justify-between">
@@ -57,11 +50,7 @@ const Account = ({ session }: Props) => {
           {!session.user.isOAuth && <Password />}
         </div>
       </div>
-      {isOpen && (
-        <ModalOverlay onClose={() => setIsOpen(false)}>
-          <Menu setIsOpen={setIsOpen} />
-        </ModalOverlay>
-      )}
+      {isOpen && <Menu setIsOpen={setIsOpen} />}
     </div>
   );
 };
@@ -78,12 +67,8 @@ const PersonalInformation = ({ session }: Props) => {
   const form = useForm<z.infer<typeof EmailSchema>>({
     resolver: zodResolver(EmailSchema),
     defaultValues: {
-      // password: undefined,
-      // newPassword: undefined,
       name: session?.user.name || undefined,
       email: session?.user.email || undefined,
-      // role: session?.user.role || undefined,
-      // isTwoFactorEnabled: session?.user.isTwoFactorEnabled || undefined,
     },
   });
 
@@ -224,69 +209,6 @@ const Password = () => {
           </form>
         )}
       </Formik>
-    </div>
-  );
-};
-
-interface MenuProps {
-  setIsOpen: (value: boolean) => void;
-}
-
-const Menu = ({ setIsOpen }: MenuProps) => {
-  return (
-    <div
-      className={` ${styles.modal} bg-white rounded-lg shadow-xl m-4 max-w-md w-[400px]`}
-    >
-      <div className="flex flex-col p-6 gap-3">
-        <div className="p-4 bg-slate-100   rounded-lg text-sm cursor-pointer hover:bg-slate-200">
-          <div className="flex gap-3 justify-center items-center">
-            <p className="text-emerald-900">User Profile</p>
-          </div>
-        </div>
-        <div className="p-4 bg-slate-100   rounded-lg text-sm cursor-pointer hover:bg-slate-200">
-          <div className="flex gap-3 justify-center items-center">
-            <p className="text-emerald-900">Alert settings</p>
-          </div>
-        </div>
-        <div className="p-4 bg-slate-100   rounded-lg text-sm cursor-pointer hover:bg-slate-200">
-          <div className="flex gap-3 justify-center items-center">
-            <p className="text-emerald-900">Plan & Billing</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-interface OverlayProps {
-  onClose: () => void;
-  children: ReactNode;
-}
-
-const ModalOverlay = ({ onClose, children }: OverlayProps) => {
-  useEffect(() => {
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, []);
-  const handleOverlayClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (event.currentTarget === event.target) {
-      onClose();
-    }
-  };
-
-  return (
-    <div
-      id="modal-overlay"
-      className={styles.menu}
-      onClick={handleOverlayClick}
-    >
-      {children}
     </div>
   );
 };

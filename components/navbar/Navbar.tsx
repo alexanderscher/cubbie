@@ -217,7 +217,7 @@ const Modal = ({ session }: ModalProps) => {
       </div>
 
       <div className="flex flex-col ">
-        <Link href="/profile" className="hover:bg-slate-100">
+        <Link href="/account/profile" className="hover:bg-slate-100">
           <p className="p-3">Profile</p>
         </Link>
         <div className="hover:bg-slate-100">

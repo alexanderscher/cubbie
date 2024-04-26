@@ -4,9 +4,10 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 
 import prisma from "@/prisma/client";
 import authConfig from "@/auth.config";
-import { getUserById } from "@/data/user";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 import { getAccountByUserId } from "./data/account";
+import { getUserByEmail } from "@/lib/userDb";
+import { getUserById } from "@/data/user";
 
 export const {
   handlers: { GET, POST },
@@ -29,7 +30,32 @@ export const {
   callbacks: {
     async signIn({ user, account }) {
       // Allow OAuth without email verification
-      if (account?.provider !== "credentials") return true;
+      if (account?.provider === "google" && user.email) {
+        const existingUser = await getUserByEmail(user.email);
+
+        if (!existingUser) {
+          await prisma.user.create({
+            data: {
+              email: user.email,
+              name: user.name,
+              alertSettings: {
+                create: {
+                  notifyToday: true,
+                  notifyInOneDay: true,
+                  notifyInOneWeek: true,
+                  timezone: {
+                    create: {
+                      value: "America/Detroit",
+                      label: "(GMT-4:00) Eastern Time",
+                    },
+                  },
+                },
+              },
+            },
+          });
+        }
+        return true;
+      }
 
       if (user.id) {
         const existingUser = await getUserById(user.id);

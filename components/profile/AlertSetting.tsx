@@ -19,6 +19,7 @@ interface AlertSettingsProps {
 }
 
 const AlertSettings = ({ user }: AlertSettingsProps) => {
+  console.log(user.alertSettings.timezone);
   const defaultTimezone = {
     value: "America/New_York",
     label: "New York (GMT-4)",
@@ -43,6 +44,8 @@ const AlertSettings = ({ user }: AlertSettingsProps) => {
       });
     }
   };
+
+  console.log(selectedTimezone);
   return (
     <div className="flex flex-col gap-4 w-full max-w-[600px]">
       <div className="bg-white rounded-lg p-6  flex flex-col gap-4">

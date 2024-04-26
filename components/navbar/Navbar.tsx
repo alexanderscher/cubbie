@@ -220,7 +220,7 @@ const Modal = ({ session }: ModalProps) => {
         <Link href="/account/profile" className="hover:bg-slate-100">
           <p className="p-3">Profile</p>
         </Link>
-        <div className="hover:bg-slate-100">
+        <div className="hover:bg-slate-100 rounded-b-lg">
           <p className="text-black p-3">
             {session && <LogOutButton type="not" />}
           </p>

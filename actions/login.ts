@@ -110,6 +110,7 @@ export const login = async (
     });
     revalidatePath(`projects_user_${userId}`);
     revalidatePath(`user_${userId}`);
+    revalidatePath(`alerts_user_${userId}`);
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {

@@ -1,14 +1,25 @@
 import { auth } from "@/auth";
-import Account from "@/components/profile/Account";
-import { Session } from "@/types/AppTypes";
+import Header from "@/components/profile/Header";
+import { Session, User, UserAlerts } from "@/types/AppTypes";
 import React from "react";
+import styles from "@/components/profile/profile.module.css";
+import AlertSettings from "@/components/profile/AlertSetting";
+import { getUserInfo } from "@/lib/userDb";
 
-export default async function Profile() {
-  const session = (await auth()) as Session;
+const getUser = async () => {
+  const user = await getUserInfo();
+  return user as UserAlerts;
+};
+
+export default async function Alerts() {
+  const user = await getUser();
 
   return (
-    <div>
-      <Account session={session} />
+    <div
+      className={`${styles.layout} gap-6 w-full justify-center items center `}
+    >
+      <Header />
+      <AlertSettings user={user} />
     </div>
   );
 }

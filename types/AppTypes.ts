@@ -58,6 +58,27 @@ export interface User {
   AlertRead: ReadEntry[];
 }
 
+export interface UserAlerts {
+  id: string;
+  name?: string;
+  email?: string;
+  emailVerified?: Date;
+  image?: string;
+  password?: string;
+  role: UserRole;
+  isTwoFactorEnabled: boolean;
+  phone?: string;
+  alertSettings: AlertSettings;
+}
+
+export interface AlertSettings {
+  id: string;
+  userId: string;
+  notifyToday: boolean;
+  notifyInOneDay: boolean;
+  notifyInOneWeek: boolean;
+}
+
 export interface ProjectUser {
   id: number;
   userId: string;

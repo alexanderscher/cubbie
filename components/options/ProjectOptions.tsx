@@ -22,6 +22,8 @@ import { removeUserFromProject } from "@/actions/projects/removeUserFromProject"
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { sendInvite } from "@/actions/email/sendInvite";
+import { leaveProject } from "@/actions/projects/leaveProject";
+import { useRouter } from "next/navigation";
 
 interface OptionsModalProps {
   isOpen: boolean;
@@ -105,28 +107,26 @@ export const ProjectOptionsModal = ({
               </div>
             </div>
           )}
-          {sessionUserId &&
-            sessionUserId === project.userId &&
-            pathname.includes("project") && (
-              <div
-                className={`${color} cursor-pointer`}
-                onClick={(e) => {
-                  e.preventDefault();
+          {pathname.includes("project") && (
+            <div
+              className={`${color} cursor-pointer`}
+              onClick={(e) => {
+                e.preventDefault();
 
-                  setMembersOpen(true);
-                }}
-              >
-                <div className="flex gap-2">
-                  <Image
-                    src={"/account_b.png"}
-                    width={20}
-                    height={20}
-                    alt=""
-                  ></Image>
-                  <p>Members</p>
-                </div>
+                setMembersOpen(true);
+              }}
+            >
+              <div className="flex gap-2">
+                <Image
+                  src={"/account_b.png"}
+                  width={20}
+                  height={20}
+                  alt=""
+                ></Image>
+                <p>Members</p>
               </div>
-            )}
+            </div>
+          )}
 
           <div className={`${color} cursor-pointer`}>
             <div
@@ -370,7 +370,7 @@ const Members = ({
           <p className="text-slate-500">Owner</p>
         </div>
         {project.projectUsers.map((user) => (
-          <div key={user.id}>
+          <div key={user.user.id}>
             <MembersBlock
               user={user}
               projecUserId={project.user?.id}
@@ -391,18 +391,26 @@ const MembersBlock = ({
   projectId,
 }: {
   user: any;
-
   sessionUserId: string | undefined;
   projecUserId: string | undefined;
   projectId: number;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLeaveOpen, setIsLeaveOpen] = useState(false);
   return (
     <div className="flex items-center border-t-[1px] justify-between gap-4 py-4 px-6 text-sm relative">
       <div className="flex items-center gap-2">
         <p className="text-emerald-900">{user.user?.name}</p>
         <p className="text-emerald-900">{user.user?.email}</p>
       </div>
+      {sessionUserId && sessionUserId === user.user.id && (
+        <div
+          className="cursor-pointer"
+          onClick={() => setIsLeaveOpen(!isLeaveOpen)}
+        >
+          <Image src="/three-dots.png" alt="" width={20} height={20} />
+        </div>
+      )}
       {sessionUserId && sessionUserId === projecUserId && (
         <div className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
           <Image src="/three-dots.png" alt="" width={20} height={20} />
@@ -410,6 +418,54 @@ const MembersBlock = ({
       )}
 
       {isOpen && <MembersOptionModal user={user} projectId={projectId} />}
+      {isLeaveOpen && <LeaveProject user={user} projectId={projectId} />}
+    </div>
+  );
+};
+
+const LeaveProject = ({
+  user,
+  projectId,
+}: {
+  user: any;
+  projectId: number;
+}) => {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
+  const leave = async () => {
+    startTransition(() => {
+      try {
+        leaveProject(projectId);
+        router.push("/");
+      } catch (e) {
+        toast.error(
+          "An error occurred while removing the user from the project"
+        );
+      }
+    });
+  };
+  return (
+    <div
+      className={`absolute  bg-slate-200 shadow-lg -right-2 top-10 rounded-lg w-[260px] `}
+    >
+      <div className="p-4 rounded text-sm flex flex-col gap-2">
+        <div className="bg-slate-50	 cursor-pointer hover:bg-slate-100 rounded-lg w-full p-2">
+          <div className="flex gap-4" onClick={leave}>
+            <div>
+              <Image
+                src={"/account_b.png"}
+                width={20}
+                height={20}
+                alt=""
+              ></Image>
+            </div>
+
+            <p>Leave Project</p>
+          </div>
+        </div>
+      </div>
+      {isPending && <Loading loading={isPending} />}
     </div>
   );
 };
@@ -442,7 +498,15 @@ const MembersOptionModal = ({
       <div className="p-4 rounded text-sm flex flex-col gap-2">
         <div className="bg-slate-50	 cursor-pointer hover:bg-slate-100 rounded-lg w-full p-2">
           <div className="flex gap-4" onClick={removeUser}>
-            <Image src={"/receipt_b.png"} width={12} height={12} alt=""></Image>
+            <div>
+              <Image
+                src={"/account_b.png"}
+                width={20}
+                height={20}
+                alt=""
+              ></Image>
+            </div>
+
             <p>Remove {user.user.name}</p>
           </div>
         </div>
@@ -480,6 +544,7 @@ const AddUser = ({
       try {
         await sendInvite(email);
         setUploadError("");
+
         toast.success("Invite sent successfully");
       } catch (e) {
         toast.error("An error occurred while sending the invite");
@@ -513,6 +578,9 @@ const AddUser = ({
 
               setInvalidEmailFormat(false);
               setUploadError("");
+              console.log("email sent");
+              setAddUserOpen(false);
+              setMembersOpen(true);
             }
           });
         } catch (e) {
@@ -563,19 +631,20 @@ const AddUser = ({
                 <FormError message="Invalid email format" />
               )}
               {uploadError && <FormError message={uploadError} />}
-              {uploadError && uploadError.startsWith("User") && (
-                <div className="p-6 rounded-lg flex items-center w-full gap-4 text-sm bg-[#d2edd2] text-emerald-900 shadow flex-col">
-                  <p className="text-sm">
-                    Would you like to invite {values.email} to join Cubbie?
-                  </p>
-                  <RegularButton
-                    handleClick={() => sendEmail(values.email)}
-                    styles=" border-emerald-900 bg-emerald-900"
-                  >
-                    <p className="text-white text-xs">Send invite</p>
-                  </RegularButton>
-                </div>
-              )}
+              {uploadError &&
+                uploadError.startsWith("User not found with email") && (
+                  <div className="p-6 rounded-lg flex items-center w-full gap-4 text-sm bg-[#d2edd2] text-emerald-900 shadow flex-col">
+                    <p className="text-sm">
+                      Would you like to invite {values.email} to join Cubbie?
+                    </p>
+                    <RegularButton
+                      handleClick={() => sendEmail(values.email)}
+                      styles=" border-emerald-900 bg-emerald-900"
+                    >
+                      <p className="text-white text-xs">Send invite</p>
+                    </RegularButton>
+                  </div>
+                )}
             </div>
           </form>
           {isPending && <Loading loading={isPending} />}

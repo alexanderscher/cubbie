@@ -9,7 +9,7 @@ export const sendInvite = async (email: string): Promise<any> => {
   try {
     await resend.emails.send({
       from: "noreply@cubbie.io",
-      to: "alexcscher@gmail.com",
+      to: email,
       subject: `Join ${session.user.name} on Cubbie!`,
       html: `<p>
       You've been invited to join Cubbie. Click the link below to sign up.

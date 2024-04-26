@@ -27,12 +27,22 @@ model User {
   isTwoFactorEnabled    Boolean                @default(false)
   phone                 String?
   twoFactorConfirmation TwoFactorConfirmation?
-  projects              Project[] // Projects where the user is an owner or a collaborator
+  projects              Project[]
   projectOwnerships     Project[]              @relation("projectOwner")
   alerts                Alert[]
-  ProjectUser           ProjectUser[]
-  AlertRead             AlertRead[]
-  ProjectUserArchive    ProjectUserArchive[]
+  projectUser           ProjectUser[]
+  alertRead             AlertRead[]
+  projectUserArchive    ProjectUserArchive[]
+  alertSettings         AlertSettings?
+}
+
+model AlertSettings {
+  id              String  @id @default(cuid())
+  userId          String  @unique
+  user            User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notifyToday     Boolean @default(true)
+  notifyInOneDay  Boolean @default(true)
+  notifyInOneWeek Boolean @default(true)
 }
 
 model Project {
@@ -45,8 +55,8 @@ model Project {
   user               User                 @relation(name: "projectOwner", fields: [userId], references: [id], onDelete: Cascade, map: "Project_userId_fkey_owner")
   projectUsers       ProjectUser[]
   receipts           Receipt[]
-  Alert              Alert[]
-  User               User                 @relation(fields: [userId], references: [id])
+  alert              Alert[]
+  User               User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model ProjectUserArchive {
@@ -60,9 +70,9 @@ model ProjectUserArchive {
 }
 
 model ProjectUser {
-  project   Project @relation(fields: [projectId], references: [id])
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId Int
-  user      User    @relation(fields: [userId], references: [id])
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
 
   @@id([projectId, userId])
@@ -72,20 +82,20 @@ model Alert {
   id        String      @id @default(cuid())
   date      DateTime
   receiptId Int
-  receipt   Receipt     @relation(fields: [receiptId], references: [id])
+  receipt   Receipt     @relation(fields: [receiptId], references: [id], onDelete: Cascade)
   projectId Int
-  project   Project     @relation(fields: [projectId], references: [id])
+  project   Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
   type      String
   readBy    AlertRead[]
-  User      User?       @relation(fields: [userId], references: [id])
+  User      User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String?
 }
 
 model AlertRead {
   alertId String
-  alert   Alert   @relation(fields: [alertId], references: [id])
+  alert   Alert   @relation(fields: [alertId], references: [id], onDelete: Cascade)
   userId  String
-  user    User    @relation(fields: [userId], references: [id])
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   read    Boolean @default(false)
 
   @@id([alertId, userId])

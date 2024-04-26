@@ -8,13 +8,11 @@ import { Session } from "@/types/AppTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Formik } from "formik";
 import React, { startTransition, useState } from "react";
-
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import styles from "./profile.module.css";
 import FormikInput from "@/components/ui/FormikInput";
 import Image from "next/image";
-import Header from "@/components/profile/Header";
 import { Menu } from "@/components/profile/Menu";
 
 interface Props {
@@ -23,32 +21,31 @@ interface Props {
 
 const Account = ({ session }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div
-      className={`${styles.layout} gap-6 w-full justify-center items center`}
-    >
-      <Header />
-      <div className="flex flex-col gap-4 w-full max-w-[600px]">
-        <div className="bg-white rounded-lg p-6  flex flex-col gap-4">
-          <div className="flex justify-between">
-            <p className="text-emerald-900">User Profile</p>
-            <div className={styles.button}>
-              <Image
-                src={"/dashboard_b.png"}
-                alt="user image"
-                width={20}
-                height={20}
-                className="cursor-pointer"
-                onClick={() => setIsOpen(!isOpen)}
-              />
-            </div>
+    <div className="flex flex-col gap-4 w-full max-w-[600px]">
+      <div className="bg-white rounded-lg p-6  flex flex-col gap-4">
+        <div className="flex justify-between">
+          <p className="text-emerald-900">User Profile</p>
+          <div className={styles.button}>
+            <Image
+              src={"/dashboard_b.png"}
+              alt="user image"
+              width={20}
+              height={20}
+              className="cursor-pointer"
+              onClick={() => {
+                console.log(isOpen);
+                setIsOpen(!isOpen);
+              }}
+            />
           </div>
         </div>
+      </div>
 
-        <div className="flex flex-col gap-4 ">
-          <PersonalInformation session={session} />
-          {!session.user.isOAuth && <Password />}
-        </div>
+      <div className="flex flex-col gap-4 ">
+        <PersonalInformation session={session} />
+        {!session.user.isOAuth && <Password />}
       </div>
       {isOpen && <Menu setIsOpen={setIsOpen} />}
     </div>

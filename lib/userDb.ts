@@ -31,6 +31,9 @@ export const getUserInfo = async () => {
         where: {
           id: userId,
         },
+        include: {
+          alertSettings: true,
+        },
       });
 
       return user;

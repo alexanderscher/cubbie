@@ -24,12 +24,25 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     return { error: "Email already in use!" };
   }
 
-  await prisma.user.create({
-    data: {
-      name,
-      email,
-      password: hashedPassword,
-    },
+  const user = await prisma.$transaction(async (prisma) => {
+    const newUser = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+      },
+    });
+
+    await prisma.alertSettings.create({
+      data: {
+        userId: newUser.id,
+        notifyToday: true,
+        notifyInOneDay: true,
+        notifyInOneWeek: true,
+      },
+    });
+
+    return newUser;
   });
 
   const verificationToken = await generateVerificationToken(email);

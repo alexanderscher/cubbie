@@ -1,7 +1,7 @@
 "use client";
 import { Menu } from "@/components/profile/Menu";
 import Image from "next/image";
-import React, { useState, useTransition } from "react";
+import React, { CSSProperties, useState, useTransition } from "react";
 import styles from "./profile.module.css";
 import { UserAlerts } from "@/types/AppTypes";
 import { toggleSettings } from "@/actions/alerts/toggleSettings";
@@ -12,16 +12,25 @@ import RegularButton from "@/components/buttons/RegularButton";
 import { addPhone } from "@/actions/user/addPhone";
 import { toast } from "sonner";
 import Loading from "@/components/Loading/Loading";
+import TimezoneSelect, { ITimezone } from "react-timezone-select";
 
 interface AlertSettingsProps {
   user: UserAlerts;
 }
 
 const AlertSettings = ({ user }: AlertSettingsProps) => {
+  const defaultTimezone = {
+    value: "America/New_York",
+    label: "New York (GMT-4)",
+  };
+
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState<string | undefined>();
   const [isPending, startTransition] = useTransition();
   const [editPhone, setEditPhone] = useState(false);
+  const [selectedTimezone, setSelectedTimezone] =
+    useState<ITimezone>(defaultTimezone);
+
   const submitPhone = async () => {
     if (value) {
       startTransition(() => {
@@ -122,6 +131,13 @@ const AlertSettings = ({ user }: AlertSettingsProps) => {
           </RegularButton>
         </div>
       )}
+      <div className="bg-white rounded-lg  flex flex-col p-6 gap-4 justify-between">
+        <p className="text-xs">Time zone</p>
+        <TimezoneSelect
+          value={selectedTimezone}
+          onChange={setSelectedTimezone}
+        />
+      </div>
 
       {isOpen && <Menu setIsOpen={setIsOpen} />}
       {isPending && <Loading loading={isPending} />}

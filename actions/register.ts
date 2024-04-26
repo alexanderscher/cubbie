@@ -30,15 +30,19 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
         name,
         email,
         password: hashedPassword,
-      },
-    });
-
-    await prisma.alertSettings.create({
-      data: {
-        userId: newUser.id,
-        notifyToday: true,
-        notifyInOneDay: true,
-        notifyInOneWeek: true,
+        alertSettings: {
+          create: {
+            notifyToday: true,
+            notifyInOneDay: true,
+            notifyInOneWeek: true,
+            timezone: {
+              create: {
+                value: "America/Detroit",
+                label: "(GMT-4:00) Eastern Time",
+              },
+            },
+          },
+        },
       },
     });
 

@@ -37,12 +37,21 @@ model User {
 }
 
 model AlertSettings {
-  id              String  @id @default(cuid())
-  userId          String  @unique
-  user            User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  notifyToday     Boolean @default(true)
-  notifyInOneDay  Boolean @default(true)
-  notifyInOneWeek Boolean @default(true)
+  id              String    @id @default(cuid())
+  userId          String    @unique
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notifyToday     Boolean   @default(true)
+  notifyInOneDay  Boolean   @default(true)
+  notifyInOneWeek Boolean   @default(true)
+  timezone        Timezone?
+}
+
+model Timezone {
+  id              String        @id @default(cuid())
+  value           String        @default("America/Detroit")
+  label           String        @default("(GMT-4:00) Eastern Time")
+  alertSettingsId String        @unique
+  alertSettings   AlertSettings @relation(fields: [alertSettingsId], references: [id], onDelete: Cascade)
 }
 
 model Project {

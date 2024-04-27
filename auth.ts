@@ -26,34 +26,42 @@ export const {
         data: { emailVerified: new Date() },
       });
     },
+    async signIn({ isNewUser, user }) {
+      try {
+        if (isNewUser) {
+          console.log("New user signed in", user);
+          if (user.id) {
+            // Create alert settings for the new user
+            const newAlertSettings = await prisma.alertSettings.create({
+              data: {
+                userId: user.id, // Associate the alert settings with the user
+                notifyToday: true,
+                notifyInOneDay: true,
+                notifyInOneWeek: true,
+                timezone: {
+                  create: {
+                    value: "America/Detroit",
+                    label: "(GMT-4:00) Eastern Time",
+                  },
+                },
+              },
+            });
+            console.log("Created alert settings:", newAlertSettings);
+          } else {
+            console.error("User ID not found for the new user.");
+            // Handle the case where user ID is not available
+          }
+        }
+      } catch (error) {
+        console.error("Error creating alert settings:", error);
+        // Handle the error appropriately
+      }
+    },
   },
   callbacks: {
     async signIn({ user, account }) {
       // Allow OAuth without email verification
-      if (account?.provider === "google" && user.email) {
-        const existingUser = await getUserByEmail(user.email);
-
-        if (!existingUser) {
-          await prisma.user.create({
-            data: {
-              email: user.email,
-              name: user.name,
-              alertSettings: {
-                create: {
-                  notifyToday: true,
-                  notifyInOneDay: true,
-                  notifyInOneWeek: true,
-                  timezone: {
-                    create: {
-                      value: "America/Detroit",
-                      label: "(GMT-4:00) Eastern Time",
-                    },
-                  },
-                },
-              },
-            },
-          });
-        }
+      if (account?.provider !== "credentials") {
         return true;
       }
 

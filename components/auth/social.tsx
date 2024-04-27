@@ -14,6 +14,7 @@ export const Social = () => {
   const onClick = (provider: "google") => {
     signIn(provider, {
       callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT,
+      redirect: false,
     });
   };
 

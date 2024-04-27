@@ -16,6 +16,9 @@ export const getUserByEmail = async (email: string) => {
     where: {
       email,
     },
+    include: {
+      alertSettings: true,
+    },
   });
 
   return user;
@@ -32,7 +35,11 @@ export const getUserInfo = async () => {
           id: userId,
         },
         include: {
-          alertSettings: true,
+          alertSettings: {
+            include: {
+              timezone: true,
+            },
+          },
         },
       });
 

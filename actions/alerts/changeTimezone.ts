@@ -5,15 +5,22 @@ import prisma from "@/prisma/client";
 import { Session } from "@/types/AppTypes";
 import { revalidateTag } from "next/cache";
 
-export const changeTimezone = async ({
-  value,
-  label,
-}: {
+interface ChangeTimezone {
+  abbrev: string;
+  offset: number;
+  altName: string;
   value: string;
   label: string;
+}
+
+export const changeTimezone = async ({
+  selectedTimezone,
+}: {
+  selectedTimezone: ChangeTimezone;
 }) => {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
+
   if (!userId) {
     return { error: "Unauthorized" };
   }
@@ -26,8 +33,8 @@ export const changeTimezone = async ({
       data: {
         timezone: {
           update: {
-            value,
-            label,
+            value: selectedTimezone.value,
+            label: selectedTimezone.label,
           },
         },
       },

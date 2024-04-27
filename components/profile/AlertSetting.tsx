@@ -13,16 +13,16 @@ import { addPhone } from "@/actions/user/addPhone";
 import { toast } from "sonner";
 import Loading from "@/components/Loading/Loading";
 import TimezoneSelect, { ITimezone } from "react-timezone-select";
+import { changeTimezone } from "@/actions/alerts/changeTimezone";
 
 interface AlertSettingsProps {
   user: UserAlerts;
 }
 
 const AlertSettings = ({ user }: AlertSettingsProps) => {
-  console.log(user.alertSettings.timezone);
   const defaultTimezone = {
-    value: "America/New_York",
-    label: "New York (GMT-4)",
+    value: user.alertSettings.timezone.value,
+    label: user.alertSettings.timezone.label,
   };
 
   const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +30,7 @@ const AlertSettings = ({ user }: AlertSettingsProps) => {
   const [isPending, startTransition] = useTransition();
   const [editPhone, setEditPhone] = useState(false);
   const [selectedTimezone, setSelectedTimezone] =
-    useState<ITimezone>(defaultTimezone);
+    useState<any>(defaultTimezone);
 
   const submitPhone = async () => {
     if (value) {
@@ -45,7 +45,19 @@ const AlertSettings = ({ user }: AlertSettingsProps) => {
     }
   };
 
-  console.log(selectedTimezone);
+  const changeTimezoneCall = async () => {
+    startTransition(() => {
+      try {
+        console.log(selectedTimezone);
+        changeTimezone({ selectedTimezone });
+
+        toast.success("Timezone updated successfully");
+      } catch (error) {
+        toast.error("An error occurred");
+      }
+    });
+  };
+
   return (
     <div className="flex flex-col gap-4 w-full max-w-[600px]">
       <div className="bg-white rounded-lg p-6  flex flex-col gap-4">
@@ -140,6 +152,12 @@ const AlertSettings = ({ user }: AlertSettingsProps) => {
           value={selectedTimezone}
           onChange={setSelectedTimezone}
         />
+        <RegularButton
+          styles="border-emerald-900 "
+          handleClick={changeTimezoneCall}
+        >
+          <p className="text-emerald-900 text-xs">Edit</p>
+        </RegularButton>
       </div>
 
       {isOpen && <Menu setIsOpen={setIsOpen} />}
@@ -184,11 +202,3 @@ const formatE164ToReadable = (phoneNumber: string) => {
 
   return `(${areaCode}) ${prefix}-${lineNumber}`;
 };
-
-// Example Usage
-try {
-  const formattedNumber = formatE164ToReadable("+15555550123");
-  console.log(formattedNumber); // Outputs: (555) 555-0123
-} catch (error) {
-  console.error(error);
-}

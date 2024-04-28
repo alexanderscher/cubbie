@@ -25,12 +25,11 @@ interface ReceiptIdProps {
 }
 
 const ReceiptId = ({ receipt }: ReceiptIdProps) => {
+  console.log(receipt);
   const [isOpen, setIsOpen] = useState(false);
-  // const [isDetailsOpen, setDetailsOpen] = useState(false);
   const [isOptionsOpen, setisOptionsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddOpen, setIsAddOpen] = useState(false);
-  const [openItemId, setOpenItemId] = useState(null as number | null);
   const searchParams = useSearchParams();
   const [filteredItemData, setFilteredItemData] = useState(receipt.items);
 
@@ -213,53 +212,6 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
         </ModalOverlay>
       )}
       <Items filteredItemData={filteredItemData} receipt={receipt} />
-      {/* <div className={`${styles.receipt} pb-[200px]`}>
-        {receipt.items.length > 0 && (
-          <div
-            className={`flex flex-col gap-2 pb-[200px] ${styles.boxContainer}`}
-          >
-            <div className={`${styles.boxes} `}>
-              {isClient &&
-                filteredItemData.length > 0 &&
-                filteredItemData.map((item: ItemType, index: number) => (
-                  <Item
-                    project={receipt.project}
-                    key={item.id}
-                    item={item}
-                    isOpen={openItemId === item.id}
-                    onToggleOpen={(e) => toggleOpenItem(item.id, e)}
-                    setOpenItemId={setOpenItemId}
-                  />
-                ))}
-            </div>
-          </div>
-        )}
-        {receipt.items.length === 0 && (
-          <div className={`${styles.placeholder} shadow`}>
-            <div className="w-full  flex justify-center items-center">
-              <Image
-                src="/item_b.png"
-                alt=""
-                width={60}
-                height={60}
-                className="object-cover "
-                style={{ objectFit: "cover", objectPosition: "center" }}
-              />
-            </div>
-
-            <RegularButton
-              styles={
-                "bg-emerald-900 text-white text-xs w-1/2  border-emerald-900"
-              }
-              handleClick={() => {
-                setIsAddOpen(true);
-              }}
-            >
-              Add Item
-            </RegularButton>
-          </div>
-        )}
-      </div> */}
     </div>
   );
 };

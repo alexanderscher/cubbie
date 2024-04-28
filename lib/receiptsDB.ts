@@ -4,6 +4,7 @@ import prisma from "@/prisma/client";
 import moment from "moment";
 import { Session } from "next-auth";
 import { unstable_cache } from "next/cache";
+import "moment-timezone";
 
 function getDynamicCacheKey(userId: string) {
   return [`projects_user_${userId}`];
@@ -31,26 +32,57 @@ export const getReceipts = async () => {
         },
       });
 
-      const currentDate = moment.utc().startOf("day");
+      const getUser = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+        include: {
+          alertSettings: {
+            include: {
+              timezone: true,
+            },
+          },
+        },
+      });
 
+      const userTimezone = getUser?.alertSettings?.timezone?.value || "UTC"; // Providing a default value
+
+      const currentDateInUserTimezone = moment()
+        .tz(userTimezone)
+        .startOf("day");
+      console.log("currentDateInUserTimezone", currentDateInUserTimezone);
       const updatePromises = receipts.map((receipt) => {
+        if (!userTimezone) {
+          // Handle the case where userTimezone is undefined
+          console.error("User timezone is undefined.");
+          return null;
+        }
+
         const receiptReturnDate = moment
-          .utc(receipt.return_date)
+          .tz(receipt.return_date, userTimezone) // Using user's timezone
           .startOf("day");
 
-        const isExpired = receiptReturnDate.isBefore(currentDate);
+        const isExpired = receiptReturnDate.isBefore(
+          currentDateInUserTimezone,
+          "day"
+        );
 
-        if (!receipt.expired && isExpired) {
+        if (isExpired) {
           return prisma.receipt.update({
             where: { id: receipt.id },
             data: { expired: true },
           });
         }
-      });
-      await Promise.all(
-        updatePromises.filter((promise) => promise !== undefined)
-      );
 
+        if (!isExpired && receipt.expired) {
+          return prisma.receipt.update({
+            where: { id: receipt.id },
+            data: { expired: false },
+          });
+        }
+      });
+
+      await Promise.all(updatePromises.filter((promise) => promise !== null));
       const updatedReceipts = await prisma.receipt.findMany({
         where: {
           project: {
@@ -80,10 +112,25 @@ export const getReceipts = async () => {
 export const getReceiptById = async (id: string) => {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
-  const dynamicKey = getDynamicCacheKey(userId);
+  const dynamicKey = getDynamicCacheKey(userId); // Assuming you have a function to generate dynamic cache keys
 
   return unstable_cache(
     async () => {
+      const getUser = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+        include: {
+          alertSettings: {
+            include: {
+              timezone: true,
+            },
+          },
+        },
+      });
+
+      const userTimezone = getUser?.alertSettings?.timezone?.value || "UTC"; // Providing a default value
+
       const receipt = await prisma.receipt.findUnique({
         where: {
           project: {
@@ -96,6 +143,39 @@ export const getReceiptById = async (id: string) => {
           project: true,
         },
       });
+
+      if (!receipt) {
+        // Handle the case where receipt is not found
+        console.error("Receipt not found.");
+        return null;
+      }
+
+      const receiptReturnDate = moment
+        .tz(receipt.return_date, userTimezone)
+        .startOf("day");
+
+      const currentDateInUserTimezone = moment()
+        .tz(userTimezone)
+        .startOf("day");
+
+      const isExpired = receiptReturnDate.isBefore(
+        currentDateInUserTimezone,
+        "day"
+      );
+
+      if (isExpired) {
+        await prisma.receipt.update({
+          where: { id: receipt.id },
+          data: { expired: true },
+        });
+      }
+      if (!isExpired && receipt.expired) {
+        return prisma.receipt.update({
+          where: { id: receipt.id },
+          data: { expired: false },
+        });
+      }
+
       return receipt;
     },
     dynamicKey,

@@ -1,12 +1,8 @@
 "use client";
 import styles from "@/app/receipt/receiptID.module.css";
-import RegularButton from "@/components/buttons/RegularButton";
-import { formatDateToMMDDYY } from "@/utils/Date";
-import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import React, { useEffect, useMemo, useState, useTransition } from "react";
 import HeaderNav from "@/components/navbar/HeaderNav";
-import ImageModal from "@/components/images/ImageModal";
 import { AddItem } from "@/components/item/AddItem";
 import { Item as ItemType, Receipt } from "@/types/AppTypes";
 import * as Yup from "yup";
@@ -211,7 +207,11 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
           />
         </ModalOverlay>
       )}
-      <Items filteredItemData={filteredItemData} receipt={receipt} />
+      <Items
+        filteredItemData={filteredItemData}
+        receipt={receipt}
+        setIsAddOpen={setIsAddOpen}
+      />
     </div>
   );
 };
@@ -221,9 +221,11 @@ export default ReceiptId;
 const Items = ({
   filteredItemData,
   receipt,
+  setIsAddOpen,
 }: {
   filteredItemData: ItemType[];
   receipt: Receipt;
+  setIsAddOpen: (value: boolean) => void;
 }) => {
   console.log(filteredItemData);
   const toggleOpenItem = (
@@ -288,7 +290,7 @@ const Items = ({
   if (filteredData.length === 0) {
     return (
       <NoItems
-        setAddReceiptOpen={setAddReceiptOpen}
+        setAddReceiptOpen={setIsAddOpen}
         addReceiptOpen={addReceiptOpen}
       />
     );

@@ -7,13 +7,16 @@ import { EmailSchema, PasswordSchema } from "@/schemas";
 import { Session } from "@/types/AppTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Formik } from "formik";
-import React, { startTransition, useState } from "react";
+import React, { startTransition, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import styles from "./profile.module.css";
 import FormikInput from "@/components/ui/FormikInput";
 import Image from "next/image";
 import { Menu } from "@/components/profile/Menu";
+import { toast } from "sonner";
+import { deleteAccount } from "@/actions/user/deleteAccount";
+import Loading from "@/components/Loading/Loading";
 
 interface Props {
   session: Session;
@@ -21,7 +24,17 @@ interface Props {
 
 const Account = ({ session }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [isPending, startTransition] = useTransition();
+  const deleteAccountCall = async () => {
+    startTransition(() => {
+      try {
+        deleteAccount();
+        toast.success("Account deleted successfully.");
+      } catch (e) {
+        toast.error("An error occurred. Please try again.");
+      }
+    });
+  };
   return (
     <div className="flex flex-col gap-4 w-full max-w-[600px]">
       <div className="bg-white rounded-lg p-6  flex flex-col gap-4">
@@ -46,8 +59,26 @@ const Account = ({ session }: Props) => {
       <div className="flex flex-col gap-4 ">
         <PersonalInformation session={session} />
         {!session.user.isOAuth && <Password />}
+        <div className="bg-white rounded-lg shadow  w-full  p-8 flex flex-col justify-center gap-4">
+          <h1 className="text-emerald-900">Delete my account</h1>
+          <p className="text-sm">
+            Once deleted, you will lose all your data linked to your account. If
+            you are a project owner, please transfer your projects to another
+            account before deleting your account.
+          </p>
+          <RegularButton
+            handleClick={deleteAccountCall}
+            type="submit"
+            styles="mt-2  border-emerald-900 text-emerald-900 h-[40px] w-full
+            
+            "
+          >
+            <p className="text-xs">Delete my account</p>
+          </RegularButton>
+        </div>
       </div>
       {isOpen && <Menu setIsOpen={setIsOpen} />}
+      {isPending && <Loading loading={isPending} />}
     </div>
   );
 };

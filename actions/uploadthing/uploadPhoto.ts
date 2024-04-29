@@ -25,7 +25,9 @@ type UploadResult = {
 export async function handleUpload(
   receiptImage: string
 ): Promise<UploadResult[]> {
-  const result = await utapi.uploadFilesFromUrl(receiptImage);
+  const blob = await fetch(receiptImage).then((res) => res.blob());
+  const file = new File([blob], "receipt_image"); // You can adjust the file name as needed
+  const result = await utapi.uploadFiles(file); // Pass the File object to uploadFiles
   let uploadResults: UploadResult[] = [];
 
   const processResponse = (response: UploadFileResponse) => {

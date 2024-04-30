@@ -4,10 +4,16 @@ import RegularButton from "@/components/buttons/RegularButton";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { EmailSchema, PasswordSchema } from "@/schemas";
-import { Session } from "@/types/AppTypes";
+import { Project, Session } from "@/types/AppTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Formik } from "formik";
-import React, { startTransition, useState, useTransition } from "react";
+import React, {
+  startTransition,
+  use,
+  useEffect,
+  useState,
+  useTransition,
+} from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import styles from "./profile.module.css";
@@ -17,24 +23,24 @@ import { Menu } from "@/components/profile/Menu";
 import { toast } from "sonner";
 import { deleteAccount } from "@/actions/user/deleteAccount";
 import Loading from "@/components/Loading/Loading";
+import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
+import { ModalOverlay } from "@/components/overlays/ModalOverlay";
+
+interface AccountProps {
+  session: Session;
+  projects: Project[];
+}
 
 interface Props {
   session: Session;
 }
 
-const Account = ({ session }: Props) => {
+const Account = ({ session, projects }: AccountProps) => {
+  console.log(session);
   const [isOpen, setIsOpen] = useState(false);
-  const [isPending, startTransition] = useTransition();
-  const deleteAccountCall = async () => {
-    startTransition(() => {
-      try {
-        deleteAccount();
-        toast.success("Account deleted successfully.");
-      } catch (e) {
-        toast.error("An error occurred. Please try again.");
-      }
-    });
-  };
+
+  const [deletePrompt, setDeletePrompt] = useState(false);
+
   return (
     <div className="flex flex-col gap-4 w-full max-w-[600px]">
       <div className="bg-white rounded-lg p-6  flex flex-col gap-4">
@@ -60,14 +66,18 @@ const Account = ({ session }: Props) => {
         <PersonalInformation session={session} />
         {!session.user.isOAuth && <Password />}
         <div className="bg-white rounded-lg shadow  w-full  p-8 flex flex-col justify-center gap-4">
-          <h1 className="text-emerald-900">Delete my account</h1>
-          <p className="text-sm">
-            Once deleted, you will lose all your data linked to your account. If
+          <div className="flex items-center gap-1">
+            <h1 className="text-emerald-900">Delete my account</h1>
+            <TooltipWithHelperIcon
+              content="Once deleted, you will lose all your data linked to your account. If
             you are a project owner, please transfer your projects to another
             account before deleting your account.
-          </p>
+        "
+            />
+          </div>
+
           <RegularButton
-            handleClick={deleteAccountCall}
+            handleClick={() => setDeletePrompt(true)}
             type="submit"
             styles="mt-2  border-emerald-900 text-emerald-900 h-[40px] w-full
             
@@ -78,7 +88,11 @@ const Account = ({ session }: Props) => {
         </div>
       </div>
       {isOpen && <Menu setIsOpen={setIsOpen} />}
-      {isPending && <Loading loading={isPending} />}
+      {deletePrompt && (
+        <ModalOverlay onClose={() => setDeletePrompt(false)}>
+          <DeleteModal projects={projects} />
+        </ModalOverlay>
+      )}
     </div>
   );
 };
@@ -237,6 +251,51 @@ const Password = () => {
           </form>
         )}
       </Formik>
+    </div>
+  );
+};
+
+interface DeleteModalProps {
+  projects: Project[];
+}
+
+const DeleteModal = ({ projects }: DeleteModalProps) => {
+  const [isPending, startTransition] = useTransition();
+  const [projectUsers, setProjectUsers] = useState(false);
+  const deleteAccountCall = async () => {
+    startTransition(() => {
+      try {
+        deleteAccount();
+        toast.success("Account deleted successfully.");
+      } catch (e) {
+        toast.error("An error occurred. Please try again.");
+      }
+    });
+  };
+
+  useEffect(() => {
+    projects.map(
+      (project) => project.projectUsers.length > 0 && setProjectUsers(true)
+    );
+  }, [projects]);
+
+  return (
+    <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full p-6">
+      {projectUsers && (
+        <div>
+          <p>hello</p>
+          {projects.map(
+            (project) =>
+              project.projectUsers.length > 0 && (
+                <div key={project.id} className="bg-red-200 rounded-lg p-2">
+                  {project.name}
+                </div>
+              )
+          )}
+        </div>
+      )}
+
+      {isPending && <Loading loading={isPending} />}
     </div>
   );
 };

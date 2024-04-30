@@ -6,9 +6,5 @@ import React from "react";
 export default async function Profile() {
   const session = (await auth()) as Session;
 
-  return (
-    <div>
-      <Account session={session} />
-    </div>
-  );
+  return <div>{/* <Account session={session} /> */}</div>;
 }

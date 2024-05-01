@@ -6,6 +6,7 @@ import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { Overlay } from "@/components/overlays/Overlay";
 import { CreateProject } from "@/components/project/CreateProject";
 import { TruncateText } from "@/components/text/Truncate";
+import { getProjectsClient } from "@/lib/getProjectsClient";
 import { getProjects } from "@/lib/projectsDB";
 import { Receipt } from "@/types/AppTypes";
 import { Project as ProjectType } from "@/types/AppTypes";
@@ -17,7 +18,7 @@ import { useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 
 const fetchProject = async () => {
-  const projects = await getProjects();
+  const projects = await getProjectsClient();
   return projects as ProjectType[];
 };
 interface Props {
@@ -33,7 +34,7 @@ const Projects = ({ sessionUserId }: Props) => {
     fetchProject().then((data) => {
       initializeProjects(data);
     });
-  }, [initializeProjects]);
+  }, [, initializeProjects]);
 
   const [openProjectId, setOpenProjectId] = useState(null as number | null);
   const [addProjectOpen, setAddProjectOpen] = useState(false);

@@ -46,10 +46,14 @@ export const getProjects = async () => {
   )(userId);
 };
 
+function getDynamicCacheKeyId(project_id: string) {
+  return [`project_${project_id}`];
+}
+
 export const getProjectById = async (id: string) => {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
-  const dynamicKey = getDynamicCacheKey(userId);
+  const dynamicKey = getDynamicCacheKeyId(id);
 
   return unstable_cache(
     async (userId) => {

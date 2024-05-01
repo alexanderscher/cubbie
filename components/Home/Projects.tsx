@@ -7,7 +7,6 @@ import { Overlay } from "@/components/overlays/Overlay";
 import { CreateProject } from "@/components/project/CreateProject";
 import { TruncateText } from "@/components/text/Truncate";
 import { getProjectsClient } from "@/lib/getProjectsClient";
-import { getProjects } from "@/lib/projectsDB";
 import { Receipt } from "@/types/AppTypes";
 import { Project as ProjectType } from "@/types/AppTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";

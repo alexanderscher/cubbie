@@ -274,6 +274,7 @@ interface DeleteModalProps {
 const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
   const [uploadError, setUploadError] = useState("");
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const handleSubmit = async () => {
     if (!project.id) {
@@ -289,6 +290,7 @@ const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
         } else {
           setDeleteOpen(false);
           toast.success("Your operation was successful!");
+          router.push("/");
         }
       } catch (e) {
         toast.error("An error occurred. Please try again.");

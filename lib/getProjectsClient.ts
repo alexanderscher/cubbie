@@ -32,3 +32,31 @@ export const getProjectsClient = async () => {
 
   return projects;
 };
+
+export const getProjectByIdClient = async (id: string) => {
+  const session = (await auth()) as Session;
+  const userId = session?.user?.id as string;
+
+  const project = await prisma.project.findUnique({
+    where: {
+      OR: [{ userId }, { projectUsers: { some: { userId } } }],
+      id: parseInt(id),
+    },
+    include: {
+      user: true,
+      receipts: {
+        include: {
+          items: true,
+        },
+      },
+      projectUsers: {
+        include: {
+          user: true,
+        },
+      },
+      projectUserArchive: true,
+    },
+  });
+
+  return project;
+};

@@ -34,8 +34,7 @@ export const editProject = async (
       data: { name, asset_amount: parseFloat(new_asset_amount) },
     });
 
-    revalidateTag(`projects_user_${userId}`);
-    revalidateUsersInProject(projectId);
+    revalidateTag(`project_${projectId}`);
 
     return { success: true };
   } catch (error) {

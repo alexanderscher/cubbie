@@ -14,6 +14,7 @@ export function revalidateUsersInProject(projectId: number) {
     .then((projectUsers) => {
       projectUsers.forEach((projectUser) => {
         try {
+          console.log(`Revalidating user ${projectUser.userId}`);
           revalidateTag(`projects_user_${projectUser.userId}`);
         } catch (err) {
           console.error(

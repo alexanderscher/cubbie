@@ -27,27 +27,32 @@ export const deleteAccount = async () => {
     try {
       await Promise.all(
         projects.map(async (project) => {
-          await Promise.all(
-            project.receipts.map(async (receipt) => {
-              if (receipt.receipt_image_key) {
-                await deleteUploadThingImage(receipt.receipt_image_key);
-              }
-              await Promise.all(
-                receipt.items.map(async (item) => {
-                  if (item.photo_key) {
-                    await deleteUploadThingImage(item.photo_key);
-                  }
-                })
-              );
-            })
-          );
+          if (project.userId === userId) {
+            await Promise.all(
+              project.receipts.map(async (receipt) => {
+                if (receipt.receipt_image_key) {
+                  await deleteUploadThingImage(receipt.receipt_image_key);
+                }
+                await Promise.all(
+                  receipt.items.map(async (item) => {
+                    if (item.photo_key) {
+                      await deleteUploadThingImage(item.photo_key);
+                    }
+                  })
+                );
+              })
+            );
+          }
         })
       );
 
-      //   await prisma.user.delete({
-      //     where: { id: userId },
-      //   });
+      await prisma.user.delete({
+        where: { id: userId },
+      });
       revalidateTag(`projects_user_${userId}`);
+      revalidateTag(`user_${userId}`);
+      revalidateTag(`alerts_user_${userId}`);
+      return { success: true };
     } catch (error) {
       console.error(error);
       return { error: "An error occurred" };

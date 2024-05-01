@@ -68,14 +68,19 @@ const ProjectSelectForm = ({
   };
 
   useEffect(() => {
-    const initialOption =
-      options.find((option) => option.label === values.folderName) ||
-      options[0];
+    if (projects.length > 0) {
+      const initialProject = projects[0];
+      const initialOption = {
+        value: initialProject.id.toString(),
+        label: initialProject.name,
+      };
 
-    if (values.folderName !== initialOption.label) {
+      handleChange("folder")(initialOption.value);
       setFieldValue("folderName", initialOption.label);
+    } else {
+      setFieldValue("folderName", "");
     }
-  }, [options, setFieldValue, values.folderName]);
+  }, [projects, handleChange, setFieldValue]);
 
   return (
     <div className="w-full">

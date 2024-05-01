@@ -1,14 +1,16 @@
 "use server";
 
+import { revalidateUsersInProject } from "@/actions/revalidateUsers";
 import { deleteUploadThingImage } from "@/actions/uploadthing/deletePhoto";
 import { handleUpload } from "@/actions/uploadthing/uploadPhoto";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
+import { Receipt } from "@/types/AppTypes";
 import { Session } from "next-auth";
 
 import { revalidateTag } from "next/cache";
 
-export const editItem = async (id: string, values: any) => {
+export const editItem = async (id: string, values: any, receipt: Receipt) => {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
   if (!userId) {
@@ -61,6 +63,9 @@ export const editItem = async (id: string, values: any) => {
       },
     });
     revalidateTag(`projects_user_${userId}`);
+    if (receipt?.project_id) {
+      revalidateUsersInProject(receipt?.project_id);
+    }
   } catch (error) {
     console.error(error);
     return { error: "An error occurred" };

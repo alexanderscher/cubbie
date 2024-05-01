@@ -1,9 +1,10 @@
 "use server";
+import { revalidateUsersInProject } from "@/actions/revalidateUsers";
 import { deleteUploadThingImage } from "@/actions/uploadthing/deletePhoto";
 import { handleUpload } from "@/actions/uploadthing/uploadPhoto";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
-import { Session } from "@/types/AppTypes";
+import { Receipt, Session } from "@/types/AppTypes";
 import moment from "moment";
 import { revalidateTag } from "next/cache";
 
@@ -20,10 +21,13 @@ interface ExtendedReceipt {
   edit_image: string;
 }
 
-export const editReceipt = async (params: {
-  id: string;
-  values: ExtendedReceipt;
-}) => {
+export const editReceipt = async (
+  params: {
+    id: string;
+    values: ExtendedReceipt;
+  },
+  receipt: Receipt
+) => {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
   if (!userId) {
@@ -91,6 +95,9 @@ export const editReceipt = async (params: {
     });
 
     revalidateTag(`projects_user_${userId}`);
+    if (receipt?.project_id) {
+      revalidateUsersInProject(receipt?.project_id);
+    }
   } catch (error) {
     return { error: "An error occured" };
   }

@@ -16,7 +16,7 @@ import {
 } from "@/lib/tokens";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export const login = async (
   values: z.infer<typeof LoginSchema>,
@@ -108,9 +108,9 @@ export const login = async (
       password,
       redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     });
-    revalidatePath(`projects_user_${userId}`);
-    revalidatePath(`user_${userId}`);
-    revalidatePath(`alerts_user_${userId}`);
+    revalidateTag(`projects_user_${userId}`);
+    revalidateTag(`user_${userId}`);
+    revalidateTag(`alerts_user_${userId}`);
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {

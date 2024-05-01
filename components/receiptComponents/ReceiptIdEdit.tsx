@@ -161,7 +161,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
       onSubmit={(values) => {
         startTransition(async () => {
           try {
-            const result = await editReceipt({ id: stringId, values });
+            const result = await editReceipt({ id: stringId, values }, receipt);
             if (result?.error) {
               setUploadError(result.error);
             } else {

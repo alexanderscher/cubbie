@@ -77,186 +77,191 @@ export const ProjectOptionsModal = ({
   };
 
   return (
-    <div
-      className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-[202px] z-[2000] ${
-        pathname === "/" ? " bg-white" : " bg-[#97cb97] "
-      }`}
-      onClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-    >
-      <div>
-        <div className="p-4 rounded text-sm flex flex-col gap-2">
-          {pathname.includes("project") && (
-            <div
-              className={`${color} cursor-pointer`}
-              onClick={(e) => {
-                e.preventDefault();
-
-                setDetailsOpen(true);
-              }}
-            >
-              <div className="flex gap-2">
-                <Image
-                  src={"/dashboard_b.png"}
-                  width={20}
-                  height={20}
-                  alt=""
-                ></Image>
-                <p>Project Details</p>
-              </div>
-            </div>
-          )}
-          {pathname.includes("project") && (
-            <div
-              className={`${color} cursor-pointer`}
-              onClick={(e) => {
-                e.preventDefault();
-
-                setMembersOpen(true);
-              }}
-            >
-              <div className="flex gap-2">
-                <Image
-                  src={"/account_b.png"}
-                  width={20}
-                  height={20}
-                  alt=""
-                ></Image>
-                <p>Members</p>
-              </div>
-            </div>
-          )}
-
-          <div className={`${color} cursor-pointer`}>
-            <div
-              className="flex gap-2"
-              onClick={(e) => {
-                e.preventDefault();
-                setAddReceiptOpen(true);
-              }}
-            >
-              <Image src={"/add.png"} width={20} height={20} alt=""></Image>
-              <p>Add receipt</p>
-            </div>
-          </div>
-
-          <div
-            className={`${color} cursor-pointer`}
-            onClick={(e) => {
-              e.preventDefault();
-
-              setEdit(true);
-            }}
-          >
-            <div className="flex gap-2">
-              <Image src={"/edit.png"} width={20} height={20} alt=""></Image>
-              <p>Edit project</p>
-            </div>
-          </div>
-          {archived && (
-            <div className={color}>
+    <div>
+      <div
+        className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-[202px] z-[2000] ${
+          pathname === "/" ? " bg-white" : " bg-[#97cb97] "
+        }`}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+      >
+        <div>
+          <div className="p-4 rounded text-sm flex flex-col gap-2">
+            {pathname.includes("project") && (
               <div
-                className="flex gap-2 cursor-pointer"
+                className={`${color} cursor-pointer`}
                 onClick={(e) => {
                   e.preventDefault();
-                  setArchive(project.id, "false");
+
+                  setDetailsOpen(true);
                 }}
               >
-                <Image
-                  src={"/archive.png"}
-                  width={20}
-                  height={20}
-                  alt=""
-                ></Image>
-                <p>Unarchive project</p>
+                <div className="flex gap-2">
+                  <Image
+                    src={"/dashboard_b.png"}
+                    width={20}
+                    height={20}
+                    alt=""
+                  ></Image>
+                  <p>Project Details</p>
+                </div>
               </div>
-            </div>
-          )}
-          {!archived && (
+            )}
+            {pathname.includes("project") && (
+              <div
+                className={`${color} cursor-pointer`}
+                onClick={(e) => {
+                  e.preventDefault();
+
+                  setMembersOpen(true);
+                }}
+              >
+                <div className="flex gap-2">
+                  <Image
+                    src={"/account_b.png"}
+                    width={20}
+                    height={20}
+                    alt=""
+                  ></Image>
+                  <p>Members</p>
+                </div>
+              </div>
+            )}
+
             <div className={`${color} cursor-pointer`}>
               <div
-                className="flex gap-2 cursor-pointer"
+                className="flex gap-2"
                 onClick={(e) => {
                   e.preventDefault();
-                  setArchive(project.id, "true");
+                  setAddReceiptOpen(true);
                 }}
               >
-                <div>
-                  {" "}
+                <Image src={"/add.png"} width={20} height={20} alt=""></Image>
+                <p>Add receipt</p>
+              </div>
+            </div>
+
+            <div
+              className={`${color} cursor-pointer`}
+              onClick={(e) => {
+                e.preventDefault();
+
+                setEdit(true);
+              }}
+            >
+              <div className="flex gap-2">
+                <Image src={"/edit.png"} width={20} height={20} alt=""></Image>
+                <p>Edit project</p>
+              </div>
+            </div>
+            {archived && (
+              <div className={color}>
+                <div
+                  className="flex gap-2 cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setArchive(project.id, "false");
+                  }}
+                >
                   <Image
                     src={"/archive.png"}
                     width={20}
                     height={20}
                     alt=""
                   ></Image>
+                  <p>Unarchive project</p>
                 </div>
+              </div>
+            )}
+            {!archived && (
+              <div className={`${color} cursor-pointer`}>
+                <div
+                  className="flex gap-2 cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setArchive(project.id, "true");
+                  }}
+                >
+                  <div>
+                    {" "}
+                    <Image
+                      src={"/archive.png"}
+                      width={20}
+                      height={20}
+                      alt=""
+                    ></Image>
+                  </div>
 
-                <div className="flex justify-between w-full">
-                  <p>Archive project</p>
+                  <div className="flex justify-between w-full">
+                    <p>Archive project</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-          {project.userId === sessionUserId && (
-            <div className={`${color} cursor-pointer`}>
-              <div
-                className="flex gap-2 cursor-pointer"
-                onClick={toggleDeleteModal}
-              >
-                <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
-                <p>Delete project</p>
+            )}
+            {project.userId === sessionUserId && (
+              <div className={`${color} cursor-pointer`}>
+                <div
+                  className="flex gap-2 cursor-pointer"
+                  onClick={toggleDeleteModal}
+                >
+                  <Image
+                    src={"/trash.png"}
+                    width={20}
+                    height={20}
+                    alt=""
+                  ></Image>
+                  <p>Delete project</p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
-
-      <div className="z-[2000]">
-        {isDetailsOpen && (
-          <ModalOverlay onClose={() => setDetailsOpen(false)}>
-            <ProjectDetails project={project} setDetailsOpen={setDetailsOpen} />
+      <div></div>
+      {isDetailsOpen && (
+        <ModalOverlay onClose={() => setDetailsOpen(false)}>
+          <ProjectDetails project={project} setDetailsOpen={setDetailsOpen} />
+        </ModalOverlay>
+      )}
+      {isPending && <Loading loading={isPending} />}
+      {edit && (
+        <ModalOverlay onClose={() => setEdit(false)}>
+          <EditProject setEdit={setEdit} project={project} />
+        </ModalOverlay>
+      )}
+      {isDeleteOpen && (
+        <ModalOverlay onClose={() => setIsDeleteOpen(false)}>
+          <DeleteModal setDeleteOpen={setIsDeleteOpen} project={project} />
+        </ModalOverlay>
+      )}
+      {isAddOpen && (
+        <>
+          <ModalOverlay onClose={() => setAddReceiptOpen(false)}>
+            <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
           </ModalOverlay>
-        )}
-        {isPending && <Loading loading={isPending} />}
-        {edit && (
-          <ModalOverlay onClose={() => setEdit(false)}>
-            <EditProject setEdit={setEdit} project={project} />
-          </ModalOverlay>
-        )}
-        {isDeleteOpen && (
-          <ModalOverlay onClose={() => setIsDeleteOpen(false)}>
-            <DeleteModal setDeleteOpen={setIsDeleteOpen} project={project} />
-          </ModalOverlay>
-        )}
-        {isAddOpen && (
-          <>
-            <ModalOverlay onClose={() => setAddReceiptOpen(false)}>
-              <CreateReceipt setAddReceiptOpen={setAddReceiptOpen} />
-            </ModalOverlay>
-          </>
-        )}
-        {isAddUserOpen && (
-          <ModalOverlay onClose={() => setAddUserOpen(false)}>
-            <AddUser
-              setMembersOpen={setMembersOpen}
-              projectId={project.id}
-              setAddUserOpen={setAddUserOpen}
-            />
-          </ModalOverlay>
-        )}
-        {isMemebersOpen && (
-          <ModalOverlay onClose={() => setMembersOpen(false)}>
-            <Members
-              project={project}
-              setMembersOpen={setMembersOpen}
-              sessionUserId={sessionUserId}
-              setAddUserOpen={setAddUserOpen}
-            />
-          </ModalOverlay>
-        )}
-      </div>
+        </>
+      )}
+      {isAddUserOpen && (
+        <ModalOverlay onClose={() => setAddUserOpen(false)}>
+          <AddUser
+            setMembersOpen={setMembersOpen}
+            projectId={project.id}
+            setAddUserOpen={setAddUserOpen}
+          />
+        </ModalOverlay>
+      )}
+      {isMemebersOpen && (
+        <ModalOverlay onClose={() => setMembersOpen(false)}>
+          <Members
+            project={project}
+            setMembersOpen={setMembersOpen}
+            sessionUserId={sessionUserId}
+            setAddUserOpen={setAddUserOpen}
+          />
+        </ModalOverlay>
+      )}
     </div>
   );
 };

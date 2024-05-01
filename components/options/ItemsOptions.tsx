@@ -36,7 +36,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
   const deleteMethod = () => {
     startTransition(async () => {
       try {
-        const result = await deleteItem(item.id);
+        const result = await deleteItem(item.id, item.receipt);
 
         if (result?.error) {
           toast.error("An error occurred. Please try again.");

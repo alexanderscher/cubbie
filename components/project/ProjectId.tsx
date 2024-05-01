@@ -18,8 +18,6 @@ import Filters from "@/components/headers/Filters";
 import { useSearchParams } from "next/navigation";
 import { Overlay } from "@/components/overlays/Overlay";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
-import RegularButton from "@/components/buttons/RegularButton";
-import { formatCurrency } from "@/utils/formatCurrency";
 import { TruncateText } from "@/components/text/Truncate";
 interface ProjectIdProps {
   project: ProjectType;
@@ -27,6 +25,7 @@ interface ProjectIdProps {
 }
 
 export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
+  console.log("project", project);
   const [isAddOpen, setAddReceiptOpen] = useState(false);
   // const [isDetailsOpen, setDetailsOpen] = useState(false);
 

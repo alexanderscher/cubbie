@@ -8,13 +8,13 @@ import { Project } from "@/types/AppTypes";
 import { Session } from "@/types/AppTypes";
 import { Suspense } from "react";
 
-const fetchProject = async () => {
-  const projects = await getProjects();
-  return projects as Project[];
-};
+// const fetchProject = async () => {
+//   const projects = await getProjects();
+//   return projects as Project[];
+// };
 
 export default async function Home() {
-  const projects = await fetchProject();
+  // const projects = await fetchProject();
   const session = (await auth()) as Session;
 
   return (
@@ -24,7 +24,7 @@ export default async function Home() {
           <Suspense fallback={<div>Loading</div>}>
             <div className="w-full max-w-[1090px]">
               <Header type="Projects" />
-              <Projects serverData={projects} sessionUserId={session.user.id} />
+              <Projects sessionUserId={session.user.id} />
             </div>
           </Suspense>
         </div>

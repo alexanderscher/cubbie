@@ -6,6 +6,7 @@ import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { Overlay } from "@/components/overlays/Overlay";
 import { CreateProject } from "@/components/project/CreateProject";
 import { TruncateText } from "@/components/text/Truncate";
+import { getProjects } from "@/lib/projectsDB";
 import { Receipt } from "@/types/AppTypes";
 import { Project as ProjectType } from "@/types/AppTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
@@ -15,22 +16,24 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 
+const fetchProject = async () => {
+  const projects = await getProjects();
+  return projects as ProjectType[];
+};
 interface Props {
-  serverData: ProjectType[];
+  // serverData: ProjectType[];
   sessionUserId: string;
 }
 
-const Projects = ({ serverData, sessionUserId }: Props) => {
-  console.log(serverData);
-
+const Projects = ({ sessionUserId }: Props) => {
   const { isProjectLoading, filteredProjectData, initializeProjects } =
     useSearchProjectContext();
 
   useEffect(() => {
-    if (serverData) {
-      initializeProjects(serverData);
-    }
-  }, [serverData, initializeProjects]);
+    fetchProject().then((data) => {
+      initializeProjects(data);
+    });
+  }, [initializeProjects]);
 
   const [openProjectId, setOpenProjectId] = useState(null as number | null);
   const [addProjectOpen, setAddProjectOpen] = useState(false);

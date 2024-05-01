@@ -1,4 +1,5 @@
 "use server";
+import { revalidateUsersInProject } from "@/actions/revalidateUsers";
 import { deleteUploadThingImage } from "@/actions/uploadthing/deletePhoto";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
@@ -59,6 +60,8 @@ export const deleteProject = async (projectId: number) => {
     });
 
     revalidateTag(`projects_user_${userId}`);
+
+    revalidateUsersInProject(projectId);
     console.log(`Project with ID ${projectId} successfully deleted.`);
   } catch (error) {
     console.error("Error deleting project:", error);

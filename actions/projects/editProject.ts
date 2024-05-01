@@ -1,4 +1,5 @@
 "use server";
+import { revalidateUsersInProject } from "@/actions/revalidateUsers";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
 import { Session } from "@/types/AppTypes";
@@ -34,6 +35,8 @@ export const editProject = async (
     });
 
     revalidateTag(`projects_user_${userId}`);
+    revalidateUsersInProject(projectId);
+
     return { success: true };
   } catch (error) {
     return { error: "Failed to edit project" };

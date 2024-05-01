@@ -25,6 +25,10 @@ import { deleteAccount } from "@/actions/user/deleteAccount";
 import Loading from "@/components/Loading/Loading";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { changeProjectOwner } from "@/actions/projects/transferOwnership";
+import { useRouter } from "next/navigation";
+import { logout } from "@/actions/logout";
 
 interface AccountProps {
   session: Session;
@@ -36,7 +40,6 @@ interface Props {
 }
 
 const Account = ({ session, projects }: AccountProps) => {
-  console.log(session);
   const [isOpen, setIsOpen] = useState(false);
 
   const [deletePrompt, setDeletePrompt] = useState(false);
@@ -90,7 +93,11 @@ const Account = ({ session, projects }: AccountProps) => {
       {isOpen && <Menu setIsOpen={setIsOpen} />}
       {deletePrompt && (
         <ModalOverlay onClose={() => setDeletePrompt(false)}>
-          <DeleteModal projects={projects} />
+          <DeleteModal
+            projects={projects}
+            session={session}
+            setDeletePrompt={setDeletePrompt}
+          />
         </ModalOverlay>
       )}
     </div>
@@ -257,45 +264,190 @@ const Password = () => {
 
 interface DeleteModalProps {
   projects: Project[];
+  session: Session;
+  setDeletePrompt: (value: boolean) => void;
 }
 
-const DeleteModal = ({ projects }: DeleteModalProps) => {
+interface CheckedUser {
+  userId: string;
+  projectId: number | null;
+}
+const DeleteModal = ({
+  projects,
+  session,
+  setDeletePrompt,
+}: DeleteModalProps) => {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [projectUsers, setProjectUsers] = useState(false);
+  const [checkedUser, setCheckedUser] = useState<CheckedUser>({
+    userId: "",
+    projectId: null,
+  });
+
+  const handleCheckboxChange = (userId: string, projectId: number) => {
+    if (checkedUser.userId === userId) {
+      setCheckedUser({
+        userId: "",
+        projectId: null,
+      });
+      return;
+    }
+    setCheckedUser({
+      userId: userId,
+      projectId: projectId,
+    });
+  };
+
   const deleteAccountCall = async () => {
     startTransition(() => {
       try {
         deleteAccount();
         toast.success("Account deleted successfully.");
+        logout();
       } catch (e) {
         toast.error("An error occurred. Please try again.");
       }
     });
   };
 
-  useEffect(() => {
-    projects.map(
-      (project) => project.projectUsers.length > 0 && setProjectUsers(true)
-    );
-  }, [projects]);
+  const makeOwner = async () => {
+    startTransition(() => {
+      try {
+        if (!checkedUser.projectId) {
+          return;
+        }
+        changeProjectOwner(checkedUser.projectId, checkedUser.userId);
+        toast.success("User is now the owner of the project");
+      } catch (e) {
+        toast.error("An error occurred while making the user the owner");
+      }
+    });
+  };
 
-  return (
-    <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full p-6">
-      {projectUsers && (
-        <div>
-          <p>hello</p>
+  useEffect(() => {
+    const hasOtherUsers = projects.some(
+      (project) =>
+        project.projectUsers.length > 0 && project.userId === session.user.id
+    );
+    setProjectUsers(hasOtherUsers);
+  }, [projects, session.user.id]);
+
+  if (!projectUsers) {
+    return (
+      <div className="shadow rounded-lg bg-red-50 flex flex-col gap-4 p-8 overflow-auto  max-w-[400px] w-3/4 mt-[50px]] items-center">
+        <div className="bg-red-100 rounded-full flex items-center justify-center h-[50px] w-[50px] ">
+          <ExclamationTriangleIcon className=" text-red-500 w-3/4 h-1/2" />
+        </div>
+        <p className="text-sm text-center text-red-400">
+          Are you sure you want to delete your account? Once deleted, you will
+          loose all your data.
+        </p>
+        <div className="flex  gap-2 w-full justify-between mt-4">
+          <RegularButton
+            styles="bg-red-50 border-red-400 text-red-400  w-full"
+            handleClick={() => setDeletePrompt(false)}
+          >
+            <p className="text-xs">Cancel</p>
+          </RegularButton>
+          <RegularButton
+            styles="bg-red-400 t border-red-400 t text-white  w-full"
+            handleClick={deleteAccountCall}
+          >
+            <p className="text-xs">Delete account</p>
+          </RegularButton>
+        </div>
+        {isPending && <Loading loading={isPending} />}
+      </div>
+    );
+  }
+
+  if (projectUsers) {
+    return (
+      <div className="shadow rounded-lg bg-red-50 flex flex-col gap-4 p-8 overflow-auto h-[600px]  max-w-[400px] w-3/4 mt-[50px]] ">
+        <div className="flex-col flex items-center w-full gap-4">
+          <div className="bg-red-100 rounded-full flex items-center justify-center h-[50px] w-[50px] ">
+            <ExclamationTriangleIcon className=" text-red-500 w-3/4 h-1/2" />
+          </div>
+          <p className="text-sm text-center">
+            Caution: You are the owner of the following projects, which also
+            include other users. If you proceed with deletion, please ensure
+            ownership is transferred to another user. Otherwise, the projects
+            will be deleted for all users.
+          </p>
           {projects.map(
             (project) =>
+              project.userId === session.user.id &&
               project.projectUsers.length > 0 && (
-                <div key={project.id} className="bg-red-200 rounded-lg p-2">
-                  {project.name}
+                <div
+                  key={project.id}
+                  className="bg-red-200 rounded-lg w-full flex flex-col gap-4 p-3"
+                >
+                  <p> {project.name}</p>
+                  <div className="">
+                    {project.projectUsers.map((user) => (
+                      <div
+                        key={user.id}
+                        className="p-2 bg-red-300 rounded-lg flex justify-between items-center gap-2"
+                      >
+                        <p className="text-xs">{user.user.name}</p>
+                        <label>
+                          <input
+                            type="checkbox"
+                            checked={
+                              checkedUser.userId === user.user.id &&
+                              checkedUser.projectId === project.id
+                            }
+                            onChange={() =>
+                              handleCheckboxChange(user.user.id, project.id)
+                            }
+                            value={user.id}
+                          />
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                  <RegularButton
+                    styles={
+                      checkedUser.projectId === project.id
+                        ? "border-red-400 bg-red-400 "
+                        : "border-red-400  "
+                    }
+                    handleClick={() => {
+                      makeOwner();
+                    }}
+                  >
+                    <p
+                      className={
+                        checkedUser.projectId === project.id
+                          ? "text-white text-xs"
+                          : "text-red-400 text-xs"
+                      }
+                    >
+                      Transfer
+                    </p>
+                  </RegularButton>
                 </div>
               )
           )}
         </div>
-      )}
+        <div className="flex  gap-2 w-full justify-between mt-4">
+          <RegularButton
+            styles="bg-red-50 border-red-400 text-red-400  w-full"
+            handleClick={() => setDeletePrompt(false)}
+          >
+            <p className="text-xs">Cancel</p>
+          </RegularButton>
+          <RegularButton
+            styles="bg-red-400 t border-red-400 t text-white  w-full"
+            handleClick={deleteAccountCall}
+          >
+            <p className="text-xs">Delete account</p>
+          </RegularButton>
+        </div>
 
-      {isPending && <Loading loading={isPending} />}
-    </div>
-  );
+        {isPending && <Loading loading={isPending} />}
+      </div>
+    );
+  }
 };

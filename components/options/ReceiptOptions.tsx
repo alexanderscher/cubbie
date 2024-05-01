@@ -121,118 +121,125 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
   };
 
   return (
-    <div
-      className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-[200px] z-[2000] ${
-        !pathname.startsWith("/receipt/") ? "bg-white" : " bg-[#97cb97] "
-      }`}
-      onClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-    >
-      <div className="p-4 rounded text-sm flex flex-col gap-2">
-        {pathname === "/receipts" && (
-          <Link href={`/project/${receipt.project.id}`} className={color}>
-            <div className="flex gap-2">
-              <Image src={"/folder.png"} width={20} height={20} alt=""></Image>
-              <p>{receipt.project.name}</p>
+    <div>
+      <div
+        className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-[200px] z-[2000] ${
+          !pathname.startsWith("/receipt/") ? "bg-white" : " bg-[#97cb97] "
+        }`}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+      >
+        <div className="p-4 rounded text-sm flex flex-col gap-2">
+          {pathname === "/receipts" && (
+            <Link href={`/project/${receipt.project.id}`} className={color}>
+              <div className="flex gap-2">
+                <Image
+                  src={"/folder.png"}
+                  width={20}
+                  height={20}
+                  alt=""
+                ></Image>
+                <p>{receipt.project.name}</p>
+              </div>
+            </Link>
+          )}
+          {pathname.startsWith("/receipt/") && (
+            <div
+              className={color}
+              onClick={(e) => {
+                e.preventDefault();
+                setDetailsOpen(true);
+              }}
+            >
+              <div className="flex gap-2">
+                <Image
+                  src={"/dashboard_b.png"}
+                  width={20}
+                  height={20}
+                  alt=""
+                ></Image>
+                <p>Receipt Details</p>
+              </div>
             </div>
-          </Link>
-        )}
-        {pathname.startsWith("/receipt/") && (
+          )}
+
           <div
             className={color}
             onClick={(e) => {
               e.preventDefault();
-              setDetailsOpen(true);
+              setIsAddOpen(true);
             }}
           >
             <div className="flex gap-2">
-              <Image
-                src={"/dashboard_b.png"}
-                width={20}
-                height={20}
-                alt=""
-              ></Image>
-              <p>Receipt Details</p>
+              <Image src={"/add.png"} width={20} height={20} alt=""></Image>
+              <p>Add item</p>
             </div>
           </div>
+          {/* )} */}
+          <div className={color}>
+            <div
+              className="flex gap-2"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsOpen(true);
+              }}
+            >
+              <Image src={"/move.png"} width={20} height={20} alt=""></Image>
+              <p>Move</p>
+            </div>
+          </div>
+          <div className={color}>
+            <Link href={`/receipt/${receipt.id}/edit`}>
+              <div className="flex gap-2">
+                <Image src={"/edit.png"} width={20} height={20} alt=""></Image>
+                <p>Edit</p>
+              </div>
+            </Link>
+          </div>
+
+          <div className={color}>
+            <div
+              className="flex gap-2 cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsDeleteOpen(true);
+              }}
+            >
+              <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
+              <p>Delete</p>
+            </div>
+          </div>
+        </div>
+        {isOpen && (
+          <ModalOverlay onClose={() => setIsOpen(false)}>
+            <MoveModal setIsOpen={setIsOpen} receipt={receipt} />
+          </ModalOverlay>
         )}
-
-        <div
-          className={color}
-          onClick={(e) => {
-            e.preventDefault();
-            setIsAddOpen(true);
-          }}
-        >
-          <div className="flex gap-2">
-            <Image src={"/add.png"} width={20} height={20} alt=""></Image>
-            <p>Add item</p>
-          </div>
-        </div>
-        {/* )} */}
-        <div className={color}>
-          <div
-            className="flex gap-2"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsOpen(true);
-            }}
-          >
-            <Image src={"/move.png"} width={20} height={20} alt=""></Image>
-            <p>Move</p>
-          </div>
-        </div>
-        <div className={color}>
-          <Link href={`/receipt/${receipt.id}/edit`}>
-            <div className="flex gap-2">
-              <Image src={"/edit.png"} width={20} height={20} alt=""></Image>
-              <p>Edit</p>
-            </div>
-          </Link>
-        </div>
-
-        <div className={color}>
-          <div
-            className="flex gap-2 cursor-pointer"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsDeleteOpen(true);
-            }}
-          >
-            <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
-            <p>Delete</p>
-          </div>
-        </div>
+        {isAddOpen && (
+          <ModalOverlay onClose={() => setIsAddOpen(false)}>
+            <AddItem
+              setIsAddOpen={setIsAddOpen}
+              handleSubmit={handleSubmit}
+              setNewItem={setNewItem}
+              newItem={newItem}
+              error={error}
+              isPending={isPending}
+            />
+          </ModalOverlay>
+        )}
+        {isDeleteOpen && (
+          <ModalOverlay onClose={() => setIsDeleteOpen(false)}>
+            <DeleteModal setDeleteOpen={setIsDeleteOpen} receipt={receipt} />
+          </ModalOverlay>
+        )}
+        {isDetailsOpen && (
+          <ModalOverlay onClose={() => setDetailsOpen(false)}>
+            <ReceiptDetails receipt={receipt} />
+          </ModalOverlay>
+        )}
       </div>
-      {isOpen && (
-        <ModalOverlay onClose={() => setIsOpen(false)}>
-          <MoveModal setIsOpen={setIsOpen} receipt={receipt} />
-        </ModalOverlay>
-      )}
-      {isAddOpen && (
-        <ModalOverlay onClose={() => setIsAddOpen(false)}>
-          <AddItem
-            setIsAddOpen={setIsAddOpen}
-            handleSubmit={handleSubmit}
-            setNewItem={setNewItem}
-            newItem={newItem}
-            error={error}
-            isPending={isPending}
-          />
-        </ModalOverlay>
-      )}
-      {isDeleteOpen && (
-        <ModalOverlay onClose={() => setIsDeleteOpen(false)}>
-          <DeleteModal setDeleteOpen={setIsDeleteOpen} receipt={receipt} />
-        </ModalOverlay>
-      )}
-      {isDetailsOpen && (
-        <ModalOverlay onClose={() => setDetailsOpen(false)}>
-          <ReceiptDetails receipt={receipt} />
-        </ModalOverlay>
-      )}
     </div>
   );
 };
@@ -377,7 +384,7 @@ const ReceiptDetails = ({ receipt }: { receipt: ReceiptType }) => {
 
   return (
     <div
-      className={`shadow rounded-lg bg-white flex flex-col gap-4 p-8 overflow-auto h-[500px]  max-w-[400px] w-3/4 mt-[50px]`}
+      className={`shadow rounded-lg bg-white flex flex-col gap-4 p-8 overflow-auto h-[600px]  max-w-[400px] w-3/4 mt-[50px]`}
     >
       {!receipt.receipt_image_url && (
         <div className="w-full flex justify-center items-center  ">

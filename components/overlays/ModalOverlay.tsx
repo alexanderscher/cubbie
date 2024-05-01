@@ -26,11 +26,19 @@ export const ModalOverlay = ({ onClose, children }: OverlayProps) => {
     <div
       id="modal-overlay"
       className={
-        "fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center z-[2000]"
+        "fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center z-[20000]"
       }
       onClick={handleOverlayClick}
     >
-      {children}
+      <div
+        className="w-full flex justify-center items-center "
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
 };

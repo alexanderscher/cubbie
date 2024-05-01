@@ -1,4 +1,5 @@
 "use server";
+import { revalidateUsersInProject } from "@/actions/revalidateUsers";
 import { deleteUploadThingImage } from "@/actions/uploadthing/deletePhoto";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
@@ -20,6 +21,7 @@ export const deleteReceipt = async (receiptId: number) => {
         id: true,
         receipt_image_key: true,
         items: { select: { id: true, photo_key: true } },
+        project_id: true,
       },
     });
 
@@ -48,6 +50,10 @@ export const deleteReceipt = async (receiptId: number) => {
     });
 
     revalidateTag(`projects_user_${userId}`);
+
+    if (receipt?.project_id) {
+      revalidateUsersInProject(receipt?.project_id);
+    }
   } catch (error) {
     return { error: "Error deleting receipt" };
   }

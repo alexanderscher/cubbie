@@ -1,4 +1,5 @@
 "use server";
+import { revalidateUsersInProject } from "@/actions/revalidateUsers";
 import { deleteUploadThingImage } from "@/actions/uploadthing/deletePhoto";
 import { handleUpload } from "@/actions/uploadthing/uploadPhoto";
 import { auth } from "@/auth";
@@ -65,6 +66,20 @@ export const addItem = async (values: Item) => {
       },
     });
     revalidateTag(`projects_user_${userId}`);
+    if (receipt_id) {
+      const receipt = await prisma.receipt.findUnique({
+        where: { id: receipt_id },
+        select: {
+          id: true,
+          receipt_image_key: true,
+          items: { select: { id: true, photo_key: true } },
+          project_id: true,
+        },
+      });
+      if (receipt?.project_id) {
+        revalidateUsersInProject(receipt?.project_id);
+      }
+    }
   } catch (error) {
     console.error(error);
     return { error: "Failed to add item" };

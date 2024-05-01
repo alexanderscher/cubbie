@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidateUsersInProject } from "@/actions/revalidateUsers";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
 import { Session } from "@/types/AppTypes";
@@ -35,6 +36,7 @@ export const moveReceipt = async (params: {
       },
     });
     revalidateTag(`projects_user_${userId}`);
+    revalidateUsersInProject(params.projectId);
   } catch (e) {
     return { error: "An error occured" };
   }

@@ -23,6 +23,7 @@ interface ItemIdEditProps {
 }
 
 const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
+  console.log(item.receipt);
   const router = useRouter();
   const [errorM, setErrorM] = useState({
     price: "",
@@ -77,7 +78,7 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
       onSubmit={(values) => {
         startTransition(async () => {
           try {
-            const result = await editItem(id, values);
+            const result = await editItem(id, values, item.receipt);
 
             if (result?.error) {
               toast.error("An error occurred. Please try again.");

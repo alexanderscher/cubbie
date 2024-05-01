@@ -16,7 +16,7 @@ export default async function Profile() {
 
   return (
     <div
-      className={`${styles.layout} gap-6 w-full justify-center items center`}
+      className={`${styles.layout} gap-6 w-full justify-center items center mb-[200px]`}
     >
       <Header />
       <Account session={session} projects={projects} />

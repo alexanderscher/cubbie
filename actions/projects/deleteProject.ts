@@ -59,9 +59,7 @@ export const deleteProject = async (projectId: number) => {
       where: { id: projectId },
     });
 
-    revalidateTag(`projects_user_${userId}`);
-
-    revalidateUsersInProject(projectId);
+    revalidateTag(`project_${projectId}`);
     console.log(`Project with ID ${projectId} successfully deleted.`);
   } catch (error) {
     console.error("Error deleting project:", error);

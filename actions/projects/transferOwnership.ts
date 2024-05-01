@@ -47,9 +47,7 @@ export const changeProjectOwner = async (
         userId: newOwnerId,
       },
     });
-    revalidateTag(`projects_user_${project.user.id}`);
-
-    revalidateUsersInProject(projectId);
+    revalidateTag(`project_${projectId}`);
     return { success: true };
   } catch (error) {
     console.error("Failed to change project owner:", error);

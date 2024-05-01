@@ -51,9 +51,7 @@ export const addUserToProject = async (
         projectId: projectId,
       },
     });
-    revalidateTag(`projects_user_${userId}`);
-
-    revalidateUsersInProject(projectId);
+    revalidateTag(`project_${projectId}`);
 
     return projectUser;
   } catch (error) {

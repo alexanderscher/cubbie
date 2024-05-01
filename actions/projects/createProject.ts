@@ -3,8 +3,6 @@ import { auth } from "@/auth";
 import prisma from "@/prisma/client";
 import { Session } from "@/types/AppTypes";
 
-import { revalidateTag } from "next/cache";
-
 export const createProject = async (name: string, asset_amount: string) => {
   try {
     const session = (await auth()) as Session;
@@ -28,8 +26,6 @@ export const createProject = async (name: string, asset_amount: string) => {
         created_at: new Date().toISOString(),
       },
     });
-
-    revalidateTag(`projects_user_${userId}`);
 
     return { success: true };
   } catch (error) {

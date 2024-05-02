@@ -1,16 +1,17 @@
 "use client";
 import { useSearchBarContext } from "@/components/context/SearchBarContext";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
+import { ProjectType } from "@/types/ProjectTypes";
+import { ReceiptType } from "@/types/ReceiptTypes";
 
-import { Receipt, Project } from "@/types/AppTypes";
 import Image from "next/image";
 import Link from "next/link";
 import React, { ChangeEvent, useState } from "react";
 import { BeatLoader } from "react-spinners";
 
 interface SearchAllItemsProps {
-  projectData: Project[];
-  receiptData: Receipt[];
+  projectData: ProjectType[];
+  receiptData: ReceiptType[];
 }
 
 function SearchAllItems({ projectData, receiptData }: SearchAllItemsProps) {
@@ -178,7 +179,7 @@ const ItemResults = ({ filteredItems }: ResultsProps) => {
 };
 
 interface ReceiptResultsProps {
-  filteredReceipts: Receipt[];
+  filteredReceipts: ReceiptType[];
 }
 
 const ReceiptResults = ({ filteredReceipts }: ReceiptResultsProps) => {
@@ -205,7 +206,7 @@ const ReceiptResults = ({ filteredReceipts }: ReceiptResultsProps) => {
 };
 
 interface ProjectResultsProps {
-  filteredProjects: Project[];
+  filteredProjects: ProjectType[];
 }
 
 const ProjectResults = ({ filteredProjects }: ProjectResultsProps) => {

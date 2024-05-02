@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import Account from "@/components/profile/Account";
-import { Session } from "@/types/AppTypes";
+import { Session } from "@/types/Session";
 import React from "react";
 
 export default async function Profile() {

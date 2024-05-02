@@ -4,7 +4,7 @@ import RegularButton from "@/components/buttons/RegularButton";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { EmailSchema, PasswordSchema } from "@/schemas";
-import { Project, Session } from "@/types/AppTypes";
+import { Session } from "@/types/Session";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Formik } from "formik";
 import React, {
@@ -29,10 +29,11 @@ import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { changeProjectOwner } from "@/actions/projects/transferOwnership";
 import { useRouter } from "next/navigation";
 import { logout } from "@/actions/logout";
+import { ProjectType, ProjectUserType } from "@/types/ProjectTypes";
 
 interface AccountProps {
   session: Session;
-  projects: Project[];
+  projects: ProjectType[];
 }
 
 interface Props {
@@ -263,7 +264,7 @@ const Password = () => {
 };
 
 interface DeleteModalProps {
-  projects: Project[];
+  projects: ProjectType[];
   session: Session;
   setDeletePrompt: (value: boolean) => void;
 }
@@ -385,9 +386,9 @@ const DeleteModal = ({
                 >
                   <p> {project.name}</p>
                   <div className="">
-                    {project.projectUsers.map((user) => (
+                    {project.projectUsers.map((user: ProjectUserType) => (
                       <div
-                        key={user.id}
+                        key={user.user.id}
                         className="p-2 bg-red-300 rounded-lg flex justify-between items-center gap-2"
                       >
                         <p className="text-xs">{user.user.name}</p>
@@ -401,7 +402,7 @@ const DeleteModal = ({
                             onChange={() =>
                               handleCheckboxChange(user.user.id, project.id)
                             }
-                            value={user.id}
+                            value={user.user.id}
                           />
                         </label>
                       </div>

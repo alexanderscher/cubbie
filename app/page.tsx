@@ -3,7 +3,7 @@ import Projects from "@/components/Home/Projects";
 import { SearchProjectProvider } from "@/components/context/SearchProjectContext";
 import Header from "@/components/headers/Header";
 import PageWrapper from "@/components/wrapper/PageWrapper";
-import { Session } from "@/types/AppTypes";
+import { Session } from "@/types/Session";
 import { Suspense } from "react";
 
 export default async function Home() {

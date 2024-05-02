@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useSearchBarContext } from "@/components/context/SearchBarContext";
 import { LogOutButton } from "@/components/LogOutButton";
-import { Session } from "@/types/AppTypes";
+import { Session } from "@/types/Session";
 
 interface TopbarProps {
   session: Session;

@@ -1,3 +1,9 @@
+import {
+  ProjectUserArchiveType,
+  ProjectUserType,
+  User,
+} from "@/types/ProjectTypes";
+
 export interface ReceiptType {
   created_at: Date;
   days_until_return: number;
@@ -36,4 +42,5 @@ export interface ReceiptProjectType {
   asset_amount: number | null;
   created_at: Date;
   userId: string;
+  projectUserArchive: ProjectUserArchiveType[];
 }

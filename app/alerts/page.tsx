@@ -3,7 +3,8 @@ import AlertComponent from "@/components/alerts/Alerts";
 import { SearchAlertProvider } from "@/components/context/SearchFilterAlerts";
 import PageWrapper from "@/components/wrapper/PageWrapper";
 import { getAlerts } from "@/lib/alerts";
-import { Alert, Session } from "@/types/AppTypes";
+import { Alert } from "@/types/AppTypes";
+import { Session } from "@/types/Session";
 
 import { Suspense } from "react";
 

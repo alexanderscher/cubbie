@@ -4,7 +4,7 @@ import Navbar from "@/components/navbar/Navbar";
 import Topbar from "@/components/navbar/Topbar";
 import SearchFetch from "@/components/search/SearchFetch";
 import { getAlertsNumber } from "@/lib/alertNumber";
-import { Session } from "@/types/AppTypes";
+import { Session } from "@/types/Session";
 
 import React from "react";
 

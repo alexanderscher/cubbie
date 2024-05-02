@@ -2,7 +2,7 @@ import { deleteUploadThingImage } from "@/actions/uploadthing/deletePhoto";
 import { handleUpload } from "@/actions/uploadthing/uploadPhoto";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
-import { Session } from "@/types/AppTypes";
+import { Session } from "@/types/Session";
 import { ItemInput } from "@/types/form";
 
 import { calculateReturnDate } from "@/utils/Date";

@@ -19,6 +19,7 @@ export interface ProjectUserArchiveType {
 export interface ProjectUserType {
   projectId: number;
   user: User;
+  userId: string;
 }
 
 export interface ProjectReceiptType {

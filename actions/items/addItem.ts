@@ -4,7 +4,7 @@ import { deleteUploadThingImage } from "@/actions/uploadthing/deletePhoto";
 import { handleUpload } from "@/actions/uploadthing/uploadPhoto";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
-import { Session } from "@/types/AppTypes";
+import { Session } from "@/types/Session";
 import { revalidateTag } from "next/cache";
 
 interface Item {

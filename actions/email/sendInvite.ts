@@ -1,7 +1,7 @@
 "use server";
 import { auth } from "@/auth";
 import { resend } from "@/lib/mail";
-import { Session } from "@/types/AppTypes";
+import { Session } from "@/types/Session";
 
 export const sendInvite = async (email: string): Promise<any> => {
   const session = (await auth()) as Session;

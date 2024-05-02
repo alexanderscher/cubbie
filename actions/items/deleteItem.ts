@@ -3,7 +3,7 @@ import { revalidateUsersInProject } from "@/actions/revalidateUsers";
 import { deleteUploadThingImage } from "@/actions/uploadthing/deletePhoto";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
-import { Session } from "@/types/AppTypes";
+import { Session } from "@/types/Session";
 import { ItemReceiptType } from "@/types/ItemsTypes";
 import { revalidateTag } from "next/cache";
 

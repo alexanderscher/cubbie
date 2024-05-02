@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import Header from "@/components/profile/Header";
 import { UserAlerts } from "@/types/AppTypes";
 import React from "react";

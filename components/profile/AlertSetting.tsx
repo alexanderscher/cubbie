@@ -1,7 +1,7 @@
 "use client";
 import { Menu } from "@/components/profile/Menu";
 import Image from "next/image";
-import React, { CSSProperties, useState, useTransition } from "react";
+import React, { useState, useTransition } from "react";
 import styles from "./profile.module.css";
 import { UserAlerts } from "@/types/AppTypes";
 import { toggleSettings } from "@/actions/alerts/toggleSettings";

@@ -1,7 +1,8 @@
 import React from "react";
 import ReactSelect, { StylesConfig } from "react-select";
 import { useSession } from "next-auth/react";
-import { ProjectType } from "@/types/ProjectTypes";
+import { ProjectUserArchiveType } from "@/types/ProjectTypes";
+import { ReceiptProjectType } from "@/types/ReceiptTypes";
 
 interface Option {
   value: string;
@@ -10,7 +11,7 @@ interface Option {
 
 interface Props {
   handleChange: (value: any) => void;
-  projects: ProjectType[];
+  projects: ReceiptProjectType[];
   values: any;
   errors: any;
   color?: string;
@@ -58,7 +59,7 @@ export const ProjectSelect = ({
     }),
     singleValue: (provided) => ({
       ...provided,
-      fontSize: "14px", // Set the font size for the selected option text here
+      fontSize: "14px",
     }),
   };
   const customStyles: StylesConfig<Option, false> = {
@@ -93,7 +94,7 @@ export const ProjectSelect = ({
     }),
     singleValue: (provided) => ({
       ...provided,
-      fontSize: "14px", // Set the font size for the selected option text here
+      fontSize: "14px",
     }),
   };
 
@@ -108,26 +109,6 @@ export const ProjectSelect = ({
     label: project.name,
   }));
 
-  // const archiveProjects = filteredData
-  //   .filter((project) => {
-  //     return (
-  //       project.projectUserArchive?.some(
-  //         (entry) => entry.userId === userId?.toString()
-  //       ) || false
-  //     );
-  //   })
-  //   .map((project) => {
-  //     return (
-  //       <Project
-  //         archived={true}
-  //         project={project}
-  //         key={project.id}
-  //         isOpen={openProjectId === project.id}
-  //         onToggleOpen={(e) => toggleOpenProject(project.id, e)}
-  //       />
-  //     );
-  //   });
-
   return (
     <div className="w-full ">
       <p
@@ -139,16 +120,15 @@ export const ProjectSelect = ({
       </p>
       <ReactSelect
         options={projectOptions.filter((option) => {
-          // Find the corresponding project based on the option's value
           const project = projects.find(
             (project) => project.id.toString() === option.value
           );
 
-          // Check if the project is not archived by the current user
           return (
             project &&
             !project.projectUserArchive?.some(
-              (entry) => entry.userId === session.data?.user.id
+              (entry: ProjectUserArchiveType) =>
+                entry.userId === session.data?.user.id
             )
           );
         })}

@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import Account from "@/components/profile/Account";
 import Header from "@/components/profile/Header";
-import { Session } from "@/types/AppTypes";
+import { Session } from "@/types/Session";
 import React from "react";
 import styles from "@/components/profile/profile.module.css";
 import { getProjects } from "@/lib/projectsDB";

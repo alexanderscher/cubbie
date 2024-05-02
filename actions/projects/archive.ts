@@ -1,7 +1,7 @@
 "use server";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
-import { Session } from "@/types/AppTypes";
+import { Session } from "@/types/Session";
 import { revalidateTag } from "next/cache";
 
 export const archiveProject = async (projectId: number, action: string) => {

@@ -10,9 +10,11 @@ import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import ProjectSelect from "@/components/select/ProjectSelect";
 import { getProjects } from "@/lib/projectsDB";
-import { Receipt as ReceiptType, Item as ItemType } from "@/types/AppTypes";
-import { Project } from "@/types/AppTypes";
-import { ReceiptIDItem, ReceiptIDType } from "@/types/ReceiptTypes";
+import {
+  ReceiptItemType,
+  ReceiptProjectType,
+  ReceiptType,
+} from "@/types/ReceiptTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
@@ -23,7 +25,7 @@ import { toast } from "sonner";
 import * as Yup from "yup";
 
 interface OptionsModalProps {
-  receipt: ReceiptIDType;
+  receipt: ReceiptType;
 }
 
 const white =
@@ -247,11 +249,11 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
 
 interface AddItemModalProps {
   setIsOpen: (value: boolean) => void;
-  receipt: ReceiptType | ReceiptIDType;
+  receipt: ReceiptType;
 }
 
 const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
-  const [project, setProject] = useState<Project[]>([]);
+  const [project, setProject] = useState<ReceiptProjectType[]>([]);
   const [error, setError] = useState("");
   const [selectedProject, setSelectedProject] = useState("");
   const [isPending, startTransition] = useTransition();
@@ -260,7 +262,7 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
   useEffect(() => {
     const fetchProjects = async () => {
       const data = await getProjects();
-      setProject(data as Project[]);
+      setProject(data as ReceiptProjectType[]);
     };
     fetchProjects();
   }, []);
@@ -343,7 +345,7 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
 
 interface DeleteModalProps {
   setDeleteOpen: (value: boolean) => void;
-  receipt: ReceiptType | ReceiptIDType;
+  receipt: ReceiptType;
 }
 
 const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
@@ -376,13 +378,13 @@ const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
   );
 };
 
-const ReceiptDetails = ({ receipt }: { receipt: ReceiptIDType }) => {
+const ReceiptDetails = ({ receipt }: { receipt: ReceiptType }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
 
   useEffect(() => {
     const calculatedTotal = receipt.items.reduce(
-      (acc: number, curr: ReceiptIDItem) => {
+      (acc: number, curr: ReceiptItemType) => {
         return acc + curr.price;
       },
       0

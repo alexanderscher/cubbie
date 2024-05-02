@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useSearchBarContext } from "@/components/context/SearchBarContext";
 import { LogOutButton } from "@/components/LogOutButton";
 import { useState } from "react";
-import { Session } from "@/types/AppTypes";
+import { Session } from "@/types/Session";
 import { Overlay } from "@/components/overlays/Overlay";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 

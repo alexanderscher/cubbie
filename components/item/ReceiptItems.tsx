@@ -1,14 +1,14 @@
 "use client";
 import Shirt from "@/components/placeholderImages/Shirt";
 import { TruncateText } from "@/components/text/Truncate";
-import { Item } from "@/types/AppTypes";
+import { ReceiptItemType } from "@/types/ReceiptTypes";
 
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
 
 interface ReceiptItemsProps {
-  item: Item;
+  item: ReceiptItemType;
   index: number;
   length: number;
 }

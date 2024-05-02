@@ -17,7 +17,11 @@ export const getReceiptsClient = async () => {
     },
     include: {
       items: true,
-      project: true,
+      project: {
+        include: {
+          projectUserArchive: true,
+        },
+      },
     },
     orderBy: {
       created_at: "desc",
@@ -123,7 +127,11 @@ export const getReceiptByIdClient = async (id: string) => {
     },
     include: {
       items: true,
-      project: true,
+      project: {
+        include: {
+          projectUserArchive: true,
+        },
+      },
     },
   });
 

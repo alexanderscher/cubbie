@@ -1,7 +1,7 @@
 "use server";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
-import { Session } from "@/types/AppTypes";
+import { Session } from "@/types/Session";
 import { unstable_cache } from "next/cache";
 
 function getDynamicCacheKey(userId: string) {

@@ -7,11 +7,8 @@ import { Overlay } from "@/components/overlays/Overlay";
 import { CreateProject } from "@/components/project/CreateProject";
 import { TruncateText } from "@/components/text/Truncate";
 import { getProjectsClient } from "@/lib/getProjectsClient";
-import {
-  ProjectReceiptType,
-  ProjectType,
-  ProjectUserArchiveType,
-} from "@/types/ProjectTypes";
+import { ProjectType, ProjectUserArchiveType } from "@/types/ProjectTypes";
+import { ReceiptType } from "@/types/ReceiptTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
@@ -61,7 +58,7 @@ const Projects = ({ sessionUserId }: Props) => {
     ? sortFieldParam.slice(1)
     : sortFieldParam;
   const sortOrder = sortFieldParam?.startsWith("-") ? "desc" : "asc";
-  const getTotalPrice = (receipts: ProjectReceiptType[]) => {
+  const getTotalPrice = (receipts: ReceiptType[]) => {
     if (receipts.length === 0) return 0;
     else {
       return receipts.reduce((acc, receipt) => {
@@ -77,8 +74,8 @@ const Projects = ({ sessionUserId }: Props) => {
   const filteredData = useMemo(() => {
     const compareProjects = (a: ProjectType, b: ProjectType) => {
       if (sortField === "price" && a.receipts && b.receipts) {
-        const totalPriceA = getTotalPrice(a.receipts as ProjectReceiptType[]);
-        const totalPriceB = getTotalPrice(b.receipts as ProjectReceiptType[]);
+        const totalPriceA = getTotalPrice(a.receipts as ReceiptType[]);
+        const totalPriceB = getTotalPrice(b.receipts as ReceiptType[]);
         return sortOrder === "asc"
           ? totalPriceB - totalPriceA
           : totalPriceA - totalPriceB;

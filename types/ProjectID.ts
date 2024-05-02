@@ -1,3 +1,5 @@
+import { ReceiptIDType } from "@/types/ReceiptId";
+
 export interface ProjectIdType {
   asset_amount: number | null;
   created_at: Date;
@@ -5,7 +7,7 @@ export interface ProjectIdType {
   name: string;
   projectUserArchive: ProjectUserArchive[];
   projectUsers: ProjectUser[];
-  receipts: DefaultReceipt[];
+  receipts: ReceiptIDType[];
   userId: string;
   user: User;
 }

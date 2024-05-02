@@ -20,7 +20,6 @@ const fetchProject = async () => {
   return projects as ProjectIdType[];
 };
 interface Props {
-  // serverData: ProjectType[];
   sessionUserId: string;
 }
 

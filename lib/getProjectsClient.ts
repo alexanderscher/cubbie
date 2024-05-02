@@ -12,12 +12,12 @@ export const getProjectsClient = async () => {
       OR: [{ userId }, { projectUsers: { some: { userId } } }],
     },
     include: {
+      user: true,
       receipts: {
         include: {
           items: true,
         },
       },
-      user: true,
       projectUsers: {
         include: {
           user: true,

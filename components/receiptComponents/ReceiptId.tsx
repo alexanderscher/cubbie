@@ -15,19 +15,53 @@ import { TruncateText } from "@/components/text/Truncate";
 import { useSearchParams } from "next/navigation";
 import { NoItems } from "@/components/item/NoItems";
 import Item from "@/components/Item";
+import { getReceiptByIdClient } from "@/lib/getReceiptsClient";
+import PageLoading from "@/components/Loading/PageLoading";
+import { ReceiptIDItem, ReceiptIDType } from "@/types/ReceiptId";
 
-interface ReceiptIdProps {
-  receipt: Receipt;
-}
+const itemSchema = Yup.object({
+  description: Yup.string().required("Description is required"),
+  price: Yup.string().required("Price is required"),
+});
 
-const ReceiptId = ({ receipt }: ReceiptIdProps) => {
-  console.log(receipt);
+const ReceiptId = ({ receiptId }: { receiptId: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOptionsOpen, setisOptionsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [receipt, setReceipt] = useState<ReceiptIDType>({
+    card: "",
+    created_at: new Date(),
+    days_until_return: 0,
+    expired: false,
+    id: 0,
+    items: [], // Initialize items as an empty array
+    memo: false,
+    project: {
+      id: 0,
+      name: "",
+      asset_amount: 0,
+      created_at: new Date(),
+      userId: "",
+    },
+    project_id: 0,
+    purchase_date: new Date(),
+    receipt_image_key: "",
+    receipt_image_url: "",
+    return_date: new Date(),
+    store: "",
+    tracking_number: "",
+    type: "",
+  });
+
+  console.log(receipt);
+
   const searchParams = useSearchParams();
-  const [filteredItemData, setFilteredItemData] = useState(receipt.items);
+  const [filteredItemData, setFilteredItemData] = useState<ReceiptIDItem[]>(
+    receipt.items
+  );
+
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
 
   const [newItem, setNewItem] = useState({
     description: "",
@@ -46,10 +80,19 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
 
   const [isPending, startTransition] = useTransition();
 
-  const itemSchema = Yup.object({
-    description: Yup.string().required("Description is required"),
-    price: Yup.string().required("Price is required"),
-  });
+  useEffect(() => {
+    const fetchReceipt = async () => {
+      const receipt = await getReceiptByIdClient(receiptId);
+      if (receipt) {
+        setReceipt(receipt);
+        setFilteredItemData(receipt.items);
+      }
+      setIsLoading(false);
+    };
+
+    fetchReceipt();
+  }, [receiptId]);
+
   const handleSubmit = async () => {
     try {
       await itemSchema.validate(newItem, { abortEarly: false });
@@ -99,65 +142,31 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
   };
 
   const sortFieldParam = searchParams.get("sort");
-  const sortField = sortFieldParam?.startsWith("-")
-    ? sortFieldParam.slice(1)
-    : sortFieldParam;
-  const sortOrder = sortFieldParam?.startsWith("-") ? "desc" : "asc";
 
-  const sortedAndFilteredData = useMemo(() => {
-    if (!sortField) return filteredItemData;
-    return filteredItemData.sort((a: ItemType, b: ItemType) => {
-      let valueA: any, valueB: any;
-
-      if (sortField === "created_at") {
-        valueA = a.receipt?.created_at;
-        valueB = b.receipt?.created_at;
-      } else if (sortField === "purchase_date") {
-        valueA = a.receipt?.purchase_date;
-        valueB = b.receipt?.purchase_date;
-      } else if (sortField === "return_date") {
-        valueA = a.receipt?.purchase_date;
-        valueB = b.receipt?.purchase_date;
-      } else if (sortField === "price") {
-        valueA = b.price;
-        valueB = a.price;
-      } else {
-        console.warn(`Sort field ${sortField} is not handled.`);
-        return 0;
-      }
-
-      if (valueA === undefined || valueB === undefined) return 0;
-
-      if (typeof valueA === "number" && typeof valueB === "number") {
-        return sortOrder === "asc" ? valueA - valueB : valueB - valueA;
-      }
-
-      if (typeof valueA === "string" && typeof valueB === "string") {
-        return sortOrder === "asc"
-          ? valueA.localeCompare(valueB)
-          : valueB.localeCompare(valueA);
-      }
-
-      return 0;
-    });
-  }, [filteredItemData, sortField, sortOrder]);
-
-  const filterItems = (searchTerm: string) => {
-    const filteredItems = sortedAndFilteredData.filter((item) => {
-      return item.description.toLowerCase().includes(searchTerm.toLowerCase());
-    });
-
-    setFilteredItemData(filteredItems);
-  };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = event.target.value;
     setSearchTerm(newSearchTerm);
-    filterItems(newSearchTerm);
   };
+
+  useEffect(() => {
+    const filterItems = () => {
+      const filteredItems = receipt.items.filter((item) => {
+        return item.description
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
+      });
+      setFilteredItemData(filteredItems);
+    };
+
+    if (receipt.id) {
+      filterItems();
+    }
+  }, [receipt, searchTerm]);
 
   return (
     <div className="flex flex-col gap-8 w-full h-full max-w-[1090px] ">
-      <HeaderNav receipt={receipt} />
+      {!isLoading && <HeaderNav receipt={receipt} />}
+
       {receipt.expired && (
         <div className="bg-destructive/15 p-3 rounded-lg flex items-center gap-x-2 text-sm text-destructive bg-red-100 text-red-500 shadow">
           <p>This receipt has expired</p>
@@ -189,7 +198,7 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
       <div className="w-full">
         <input
           className="searchBar border-[1px] border-emerald-900 placeholder:text-emerald-900 placeholder:text-xs flex items-center text-sm text-emerald-900 p-3"
-          placeholder={`Search items from ${receipt.store}`}
+          placeholder={!isLoading ? `Search items from ${receipt.store}` : ""}
           value={searchTerm}
           onChange={handleChange}
         />
@@ -207,11 +216,14 @@ const ReceiptId = ({ receipt }: ReceiptIdProps) => {
           />
         </ModalOverlay>
       )}
-      <Items
-        filteredItemData={filteredItemData}
-        receipt={receipt}
-        setIsAddOpen={setIsAddOpen}
-      />
+      {isLoading && <PageLoading loading={isLoading} />}
+      {filteredItemData && (
+        <Items
+          filteredItemData={filteredItemData}
+          receipt={receipt}
+          setIsAddOpen={setIsAddOpen}
+        />
+      )}
     </div>
   );
 };
@@ -223,8 +235,8 @@ const Items = ({
   receipt,
   setIsAddOpen,
 }: {
-  filteredItemData: ItemType[];
-  receipt: Receipt;
+  filteredItemData: ReceiptIDItem[];
+  receipt: ReceiptIDType;
   setIsAddOpen: (value: boolean) => void;
 }) => {
   console.log(filteredItemData);
@@ -249,7 +261,7 @@ const Items = ({
   const status = searchParams.get("status");
   const type = searchParams.get("type");
 
-  let filteredData = filteredItemData.filter((item: ItemType) => {
+  let filteredData = filteredItemData.filter((item: ReceiptIDItem) => {
     if (type === "expired") {
       return receipt.expired;
     } else if (type === "active") {
@@ -259,7 +271,7 @@ const Items = ({
   });
 
   if (status === "returned" || status === "current") {
-    filteredData = filteredData.filter((item: ItemType) =>
+    filteredData = filteredData.filter((item: ReceiptIDItem) =>
       status === "returned" ? item.returned : !item.returned
     );
 
@@ -274,7 +286,7 @@ const Items = ({
 
     return (
       <div className="boxes pb-20">
-        {filteredData.map((item: ItemType) => (
+        {filteredData.map((item: ReceiptIDItem) => (
           <Item
             setOpenItemId={setOpenItemId}
             key={item.id}
@@ -298,7 +310,7 @@ const Items = ({
 
   return (
     <div className="boxes pb-20">
-      {filteredData.map((item: ItemType) => (
+      {filteredData.map((item: ReceiptIDItem) => (
         <Item
           setOpenItemId={setOpenItemId}
           key={item.id}

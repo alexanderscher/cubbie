@@ -3,14 +3,16 @@
 import { ReceiptOptionsModal } from "@/components/options/ReceiptOptions";
 import { Overlay } from "@/components/overlays/Overlay";
 import { TruncateText } from "@/components/text/Truncate";
-import { Item, Receipt as ReceiptType } from "@/types/AppTypes";
+import { Item } from "@/types/AppTypes";
+import { DefaultItem } from "@/types/ProjectID";
+import { ReceiptIDType } from "@/types/ReceiptId";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
 
 interface ReceiptProps {
-  receipt: ReceiptType;
+  receipt: ReceiptIDType;
   isOpen: boolean;
   onToggleOpen: (event: React.MouseEvent<HTMLDivElement>) => void;
   setOpenReceiptId: (id: number | null) => void;
@@ -22,9 +24,12 @@ const Receipt = ({
   isOpen,
   setOpenReceiptId,
 }: ReceiptProps) => {
-  const total_amount = receipt.items.reduce((acc: number, curr: Item) => {
-    return acc + curr.price;
-  }, 0);
+  const total_amount = receipt.items.reduce(
+    (acc: number, curr: Item | DefaultItem) => {
+      return acc + curr.price;
+    },
+    0
+  );
   return (
     <div className="box xs:pb-6 pb-4 relative ">
       <Link href={`/receipt/${receipt.id}`}>

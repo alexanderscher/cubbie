@@ -8,10 +8,11 @@ import { toast } from "sonner";
 import { Project as ProjectType } from "@/types/AppTypes";
 import React, { useState, useTransition } from "react";
 import CurrencyInput from "react-currency-input-field";
+import { ProjectIdType } from "@/types/ProjectID";
 
 interface EditProjectProps {
   setEdit: (value: boolean) => void;
-  project: ProjectType;
+  project: ProjectIdType;
 }
 
 export const EditProject = ({ setEdit, project }: EditProjectProps) => {
@@ -98,7 +99,7 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
               name="assetAmount"
               className="w-full border-[1px]  p-2  border-emerald-900 rounded  focus:outline-none"
               placeholder={""}
-              defaultValue={project.asset_amount}
+              defaultValue={project.asset_amount ? project.asset_amount : ""}
               decimalsLimit={2}
               onValueChange={(value) => {
                 setProject((prevState) => ({

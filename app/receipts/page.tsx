@@ -7,15 +7,7 @@ import { Receipt } from "@/types/AppTypes";
 
 import { Suspense } from "react";
 
-const receipt = async () => {
-  const receipts = await getReceipts();
-
-  return receipts as Receipt[];
-};
-
 export default async function ReceiptPage() {
-  const receipts = await receipt();
-
   return (
     <PageWrapper>
       <div className="flex flex-col items-center pb-[400px]">
@@ -23,7 +15,7 @@ export default async function ReceiptPage() {
           <Suspense fallback={<div>Loading</div>}>
             <div className="w-full max-w-[1090px]">
               <Header type="Receipts" />
-              <Receipts serverData={receipts} />
+              <Receipts />
             </div>
           </Suspense>
         </SearchReceiptProvider>

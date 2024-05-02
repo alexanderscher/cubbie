@@ -1,12 +1,13 @@
 import RegularButton from "@/components/buttons/RegularButton";
 import { TruncateText } from "@/components/text/Truncate";
 import { Receipt } from "@/types/AppTypes";
+import { ReceiptIDType } from "@/types/ReceiptId";
 
 import Link from "next/link";
 import React from "react";
 
 interface HeaderNavProps {
-  receipt: Receipt;
+  receipt: Receipt | ReceiptIDType;
 }
 
 const HeaderNav = ({ receipt }: HeaderNavProps) => {

@@ -1,49 +1,88 @@
 "use client";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import Receipt from "@/components/receiptComponents/Receipt";
-import {
-  Item,
-  Project as ProjectType,
-  Receipt as ReceiptType,
-} from "@/types/AppTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from "./project.module.css";
 import { NoReceipts } from "@/components/receiptComponents/NoReceipts";
 import { ProjectOptionsModal } from "@/components/options/ProjectOptions";
-
 import Filters from "@/components/headers/Filters";
 import { useSearchParams } from "next/navigation";
 import { Overlay } from "@/components/overlays/Overlay";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { TruncateText } from "@/components/text/Truncate";
+import { getProjectByIdClient } from "@/lib/getProjectsClient";
+import PageLoading from "@/components/Loading/PageLoading";
+import { DefaultItem, DefaultReceipt, ProjectIdType } from "@/types/ProjectID";
+import { Receipt as ReceiptType } from "@/types/AppTypes";
+
 interface ProjectIdProps {
-  project: ProjectType;
   sessionUserId: string | undefined;
+  projectId: string;
 }
 
-export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
-  console.log("project", project);
+const defaultProject: ProjectIdType = {
+  id: 0,
+  name: "",
+  created_at: new Date(),
+  userId: "",
+  receipts: [],
+  asset_amount: 0,
+  projectUsers: [],
+  projectUserArchive: [],
+  user: {
+    id: "",
+    name: "",
+    email: "",
+    emailVerified: undefined,
+    image: "",
+    role: "",
+    password: "",
+    isTwoFactorEnabled: false,
+    phone: "",
+  },
+};
+
+export const ProjectId = ({ sessionUserId, projectId }: ProjectIdProps) => {
   const [isAddOpen, setAddReceiptOpen] = useState(false);
-  // const [isDetailsOpen, setDetailsOpen] = useState(false);
+  const [project, setProject] = useState<ProjectIdType>(defaultProject);
 
-  const searchParams = useSearchParams();
-
+  console.log(project);
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const userId = project.userId;
-  const [filteredReceiptData, setFilteredReceiptData] = useState(
-    project.receipts
-  );
+  const [filteredReceiptData, setFilteredReceiptData] = useState<
+    DefaultReceipt[]
+  >([]);
+  const [isArchived, setIsArchived] = useState(false);
+  const [openReceiptId, setOpenReceiptId] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
 
-  const [openReceiptId, setOpenReceiptId] = useState(null as number | null);
+  useEffect(() => {
+    const fetchProject = async () => {
+      const data = await getProjectByIdClient(projectId);
+      if (data) {
+        setProject(data);
+        setIsLoading(false);
+      }
+      setIsLoading(false);
+    };
+    fetchProject();
+  }, [projectId]);
 
-  const isArchived =
-    project.projectUserArchive?.some(
-      (entry) => entry.userId === userId?.toString()
-    ) || false;
+  useEffect(() => {
+    if (project.id) {
+      const userId = project.userId;
+      const isArchived =
+        project.projectUserArchive?.some(
+          (entry) => entry.userId === userId?.toString()
+        ) || false;
+      setIsArchived(isArchived);
+    }
+  }, [project]);
+
+  const searchParams = useSearchParams();
 
   const toggleOpenReceipt = (
     receiptId: number | undefined,
@@ -64,22 +103,24 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
     ? sortFieldParam.slice(1)
     : sortFieldParam;
   const sortOrder = sortFieldParam?.startsWith("-") ? "desc" : "asc";
-  const getTotalPrice = (items: Item[]) =>
+  const getTotalPrice = (items: DefaultItem[]) =>
     items.reduce((acc, item) => acc + item.price, 0);
 
   const storeType = searchParams.get("storeType") || "all";
 
   const sortedAndFilteredData = useMemo(() => {
+    if (!project.id) return []; // Return an empty array if project is not fetched yet
+
     const filteredByStoreType =
       storeType === "all"
         ? project.receipts
         : project.receipts.filter(
             (receipt) => receipt.type.toLocaleLowerCase() === storeType
           );
-    const compareReceipts = (a: ReceiptType, b: ReceiptType) => {
+    const compareReceipts = (a: DefaultReceipt, b: DefaultReceipt) => {
       if (sortField === "price") {
-        const totalPriceA = getTotalPrice(a.items);
-        const totalPriceB = getTotalPrice(b.items);
+        const totalPriceA = getTotalPrice(a.items || []);
+        const totalPriceB = getTotalPrice(b.items || []);
         if (sortOrder === "asc") {
           return totalPriceB - totalPriceA;
         } else {
@@ -87,10 +128,10 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
         }
       } else {
         const dateA = new Date(
-          a[sortField as keyof ReceiptType] as Date
+          a[sortField as keyof DefaultReceipt] as Date
         ).getTime();
         const dateB = new Date(
-          b[sortField as keyof ReceiptType] as Date
+          b[sortField as keyof DefaultReceipt] as Date
         ).getTime();
         if (sortOrder === "asc") {
           return dateA - dateB;
@@ -102,24 +143,27 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
     return filteredByStoreType.sort(compareReceipts);
   }, [project, storeType, sortField, sortOrder]);
 
-  const filterReceipts = (searchTerm: string) => {
-    if (!searchTerm) {
-      setFilteredReceiptData(sortedAndFilteredData);
-    } else {
-      const filtered = sortedAndFilteredData.filter((receipt) =>
-        receipt.store.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-
-      setFilteredReceiptData(filtered);
-    }
-  };
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = event.target.value;
     setSearchTerm(newSearchTerm);
-    filterReceipts(newSearchTerm);
   };
 
+  useEffect(() => {
+    const filterReceipts = (searchTerm: string) => {
+      if (!searchTerm) {
+        setFilteredReceiptData(sortedAndFilteredData);
+      } else {
+        const filtered = sortedAndFilteredData.filter((receipt) =>
+          receipt.store.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredReceiptData(filtered);
+      }
+    };
+
+    if (project.id) {
+      filterReceipts(searchTerm);
+    }
+  }, [project, searchTerm, sortedAndFilteredData]);
   return (
     <div className="flex flex-col  w-full h-full max-w-[1090px]">
       <div className="flex justify-between items-center gap-4 border-b-[1px] border-emerald-900 pb-4">
@@ -178,14 +222,6 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
                     </>
                   )}
                 </div>
-                {/* {isDetailsOpen && (
-                  <ModalOverlay onClose={() => setDetailsOpen(false)}>
-                    <ProjectDetails
-                      project={project}
-                      setDetailsOpen={setDetailsOpen}
-                    />
-                  </ModalOverlay>
-                )} */}
               </div>
             </div>
           </div>
@@ -199,49 +235,27 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
         <div className="w-full">
           <input
             className="searchBar border-[1px] border-emerald-900 placeholder:text-emerald-900 placeholder:text-xs flex items-center text-sm text-emerald-900 p-3"
-            placeholder={`Search receipts from ${project.name}`}
+            placeholder={
+              !isLoading ? `Search receipts from ${project.name}` : ""
+            }
             value={searchTerm}
             onChange={handleChange}
           />
         </div>
         <Filters />
-
-        <>
-          {searchParams.get("expired") === "all" ||
-          !searchParams.get("expired") ? (
-            filteredReceiptData.length === 0 ? (
-              <NoReceipts
-                setAddReceiptOpen={setAddReceiptOpen}
-                addReceiptOpen={isAddOpen}
-              />
-            ) : (
-              <div className="boxes">
-                {filteredReceiptData.map((receipt: ReceiptType) => (
-                  <Receipt
-                    key={receipt.id}
-                    receipt={receipt}
-                    onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
-                    isOpen={openReceiptId === receipt.id}
-                    setOpenReceiptId={setOpenReceiptId}
-                  />
-                ))}
-              </div>
-            )
-          ) : null}
-
-          {searchParams.get("expired") === "false" ? (
-            filteredReceiptData.filter(
-              (receipt: ReceiptType) => !receipt.expired
-            ).length === 0 ? (
-              <NoReceipts
-                setAddReceiptOpen={setAddReceiptOpen}
-                addReceiptOpen={isAddOpen}
-              />
-            ) : (
-              <div className="boxes">
-                {filteredReceiptData
-                  .filter((receipt: ReceiptType) => !receipt.expired)
-                  .map((receipt: ReceiptType) => (
+        {isLoading && <PageLoading loading={isLoading} />}
+        {!isLoading && (
+          <>
+            {searchParams.get("expired") === "all" ||
+            !searchParams.get("expired") ? (
+              filteredReceiptData.length === 0 ? (
+                <NoReceipts
+                  setAddReceiptOpen={setAddReceiptOpen}
+                  addReceiptOpen={isAddOpen}
+                />
+              ) : (
+                <div className="boxes">
+                  {filteredReceiptData.map((receipt: DefaultReceipt) => (
                     <Receipt
                       key={receipt.id}
                       receipt={receipt}
@@ -250,35 +264,61 @@ export const ProjectId = ({ project, sessionUserId }: ProjectIdProps) => {
                       setOpenReceiptId={setOpenReceiptId}
                     />
                   ))}
-              </div>
-            )
-          ) : null}
+                </div>
+              )
+            ) : null}
 
-          {searchParams.get("expired") === "true" ? (
-            filteredReceiptData.filter(
-              (receipt: ReceiptType) => receipt.expired
-            ).length === 0 ? (
-              <NoReceipts
-                setAddReceiptOpen={setAddReceiptOpen}
-                addReceiptOpen={isAddOpen}
-              />
-            ) : (
-              <div className="boxes">
-                {filteredReceiptData
-                  .filter((receipt: ReceiptType) => receipt.expired)
-                  .map((receipt: ReceiptType) => (
-                    <Receipt
-                      key={receipt.id}
-                      receipt={receipt}
-                      onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
-                      isOpen={openReceiptId === receipt.id}
-                      setOpenReceiptId={setOpenReceiptId}
-                    />
-                  ))}
-              </div>
-            )
-          ) : null}
-        </>
+            {searchParams.get("expired") === "false" ? (
+              filteredReceiptData.filter(
+                (receipt: DefaultReceipt) => !receipt.expired
+              ).length === 0 ? (
+                <NoReceipts
+                  setAddReceiptOpen={setAddReceiptOpen}
+                  addReceiptOpen={isAddOpen}
+                />
+              ) : (
+                <div className="boxes">
+                  {filteredReceiptData
+                    .filter((receipt: DefaultReceipt) => !receipt.expired)
+                    .map((receipt: DefaultReceipt) => (
+                      <Receipt
+                        key={receipt.id}
+                        receipt={receipt}
+                        onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
+                        isOpen={openReceiptId === receipt.id}
+                        setOpenReceiptId={setOpenReceiptId}
+                      />
+                    ))}
+                </div>
+              )
+            ) : null}
+
+            {searchParams.get("expired") === "true" ? (
+              filteredReceiptData.filter(
+                (receipt: DefaultReceipt) => receipt.expired
+              ).length === 0 ? (
+                <NoReceipts
+                  setAddReceiptOpen={setAddReceiptOpen}
+                  addReceiptOpen={isAddOpen}
+                />
+              ) : (
+                <div className="boxes">
+                  {filteredReceiptData
+                    .filter((receipt: DefaultReceipt) => receipt.expired)
+                    .map((receipt: DefaultReceipt) => (
+                      <Receipt
+                        key={receipt.id}
+                        receipt={receipt}
+                        onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
+                        isOpen={openReceiptId === receipt.id}
+                        setOpenReceiptId={setOpenReceiptId}
+                      />
+                    ))}
+                </div>
+              )
+            ) : null}
+          </>
+        )}
       </div>
     </div>
   );

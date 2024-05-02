@@ -1,3 +1,5 @@
+import { ReceiptType } from "@/types/ReceiptTypes";
+
 export interface ProjectType {
   asset_amount: number | null;
   created_at: Date;
@@ -5,7 +7,7 @@ export interface ProjectType {
   name: string;
   projectUserArchive: ProjectUserArchiveType[];
   projectUsers: ProjectUserType[];
-  receipts: ProjectReceiptType[];
+  receipts: ReceiptType[];
   userId: string;
   user: User;
 }
@@ -20,24 +22,6 @@ export interface ProjectUserType {
   projectId: number;
   user: User;
   userId: string;
-}
-
-export interface ProjectReceiptType {
-  id: number;
-  type: string;
-  store: string;
-  card?: string | null | undefined;
-  tracking_number: string | null;
-  purchase_date: Date;
-  days_until_return: number;
-  return_date: Date;
-  receipt_image_url: string | null;
-  receipt_image_key: string | null;
-  memo: boolean;
-  created_at: Date;
-  expired: boolean;
-  project_id: number;
-  items: ProjectItemType[];
 }
 
 export interface ProjectItemType {

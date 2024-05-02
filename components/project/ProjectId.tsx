@@ -15,8 +15,8 @@ import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { TruncateText } from "@/components/text/Truncate";
 import { getProjectByIdClient } from "@/lib/getProjectsClient";
 import PageLoading from "@/components/Loading/PageLoading";
-import { DefaultItem, DefaultReceipt, ProjectIdType } from "@/types/ProjectID";
-import { Receipt as ReceiptType } from "@/types/AppTypes";
+import { DefaultItem, ProjectIdType } from "@/types/ProjectID";
+import { ReceiptIDType } from "@/types/ReceiptId";
 
 interface ProjectIdProps {
   sessionUserId: string | undefined;
@@ -53,7 +53,7 @@ export const ProjectId = ({ sessionUserId, projectId }: ProjectIdProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredReceiptData, setFilteredReceiptData] = useState<
-    DefaultReceipt[]
+    ReceiptIDType[]
   >([]);
   const [isArchived, setIsArchived] = useState(false);
   const [openReceiptId, setOpenReceiptId] = useState<number | null>(null);
@@ -117,7 +117,7 @@ export const ProjectId = ({ sessionUserId, projectId }: ProjectIdProps) => {
         : project.receipts.filter(
             (receipt) => receipt.type.toLocaleLowerCase() === storeType
           );
-    const compareReceipts = (a: DefaultReceipt, b: DefaultReceipt) => {
+    const compareReceipts = (a: ReceiptIDType, b: ReceiptIDType) => {
       if (sortField === "price") {
         const totalPriceA = getTotalPrice(a.items || []);
         const totalPriceB = getTotalPrice(b.items || []);
@@ -128,10 +128,10 @@ export const ProjectId = ({ sessionUserId, projectId }: ProjectIdProps) => {
         }
       } else {
         const dateA = new Date(
-          a[sortField as keyof DefaultReceipt] as Date
+          a[sortField as keyof ReceiptIDType] as Date
         ).getTime();
         const dateB = new Date(
-          b[sortField as keyof DefaultReceipt] as Date
+          b[sortField as keyof ReceiptIDType] as Date
         ).getTime();
         if (sortOrder === "asc") {
           return dateA - dateB;
@@ -255,7 +255,7 @@ export const ProjectId = ({ sessionUserId, projectId }: ProjectIdProps) => {
                 />
               ) : (
                 <div className="boxes">
-                  {filteredReceiptData.map((receipt: DefaultReceipt) => (
+                  {filteredReceiptData.map((receipt: ReceiptIDType) => (
                     <Receipt
                       key={receipt.id}
                       receipt={receipt}
@@ -270,7 +270,7 @@ export const ProjectId = ({ sessionUserId, projectId }: ProjectIdProps) => {
 
             {searchParams.get("expired") === "false" ? (
               filteredReceiptData.filter(
-                (receipt: DefaultReceipt) => !receipt.expired
+                (receipt: ReceiptIDType) => !receipt.expired
               ).length === 0 ? (
                 <NoReceipts
                   setAddReceiptOpen={setAddReceiptOpen}
@@ -279,8 +279,8 @@ export const ProjectId = ({ sessionUserId, projectId }: ProjectIdProps) => {
               ) : (
                 <div className="boxes">
                   {filteredReceiptData
-                    .filter((receipt: DefaultReceipt) => !receipt.expired)
-                    .map((receipt: DefaultReceipt) => (
+                    .filter((receipt: ReceiptIDType) => !receipt.expired)
+                    .map((receipt: ReceiptIDType) => (
                       <Receipt
                         key={receipt.id}
                         receipt={receipt}
@@ -295,7 +295,7 @@ export const ProjectId = ({ sessionUserId, projectId }: ProjectIdProps) => {
 
             {searchParams.get("expired") === "true" ? (
               filteredReceiptData.filter(
-                (receipt: DefaultReceipt) => receipt.expired
+                (receipt: ReceiptIDType) => receipt.expired
               ).length === 0 ? (
                 <NoReceipts
                   setAddReceiptOpen={setAddReceiptOpen}
@@ -304,8 +304,8 @@ export const ProjectId = ({ sessionUserId, projectId }: ProjectIdProps) => {
               ) : (
                 <div className="boxes">
                   {filteredReceiptData
-                    .filter((receipt: DefaultReceipt) => receipt.expired)
-                    .map((receipt: DefaultReceipt) => (
+                    .filter((receipt: ReceiptIDType) => receipt.expired)
+                    .map((receipt: ReceiptIDType) => (
                       <Receipt
                         key={receipt.id}
                         receipt={receipt}

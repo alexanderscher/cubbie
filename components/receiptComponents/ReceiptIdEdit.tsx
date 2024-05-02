@@ -54,6 +54,7 @@ const ReceiptIdEdit = ({ receiptId }: Props) => {
       asset_amount: 0,
       created_at: new Date(),
       userId: "",
+      projectUserArchive: [],
     },
     project_id: 0,
     purchase_date: new Date(),

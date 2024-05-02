@@ -4,7 +4,7 @@ import Link from "next/link";
 import React from "react";
 
 interface HeaderNavProps {
-  item: ItemId;
+  item: ItemType;
 }
 
 const HeaderNav = ({ item }: HeaderNavProps) => {

@@ -20,11 +20,8 @@ import { sendInvite } from "@/actions/email/sendInvite";
 import { leaveProject } from "@/actions/projects/leaveProject";
 import { useRouter } from "next/navigation";
 import { changeProjectOwner } from "@/actions/projects/transferOwnership";
-import {
-  ProjectItemType,
-  ProjectReceiptType,
-  ProjectType,
-} from "@/types/ProjectTypes";
+import { ProjectItemType, ProjectType } from "@/types/ProjectTypes";
+import { ReceiptType } from "@/types/ReceiptTypes";
 
 interface OptionsModalProps {
   isOpen: boolean;
@@ -695,7 +692,7 @@ const ProjectDetails = ({
 
   useEffect(() => {
     const totalAmount = project.receipts.reduce(
-      (totalAcc: number, receipt: ProjectReceiptType) => {
+      (totalAcc: number, receipt: ReceiptType) => {
         const receiptTotal = receipt.items.reduce(
           (itemAcc: number, item: ProjectItemType) => {
             return itemAcc + item.price;

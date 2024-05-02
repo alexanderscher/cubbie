@@ -18,7 +18,7 @@ export interface Receipt {
   created_at: Date;
   expired: boolean;
   project_id: number;
-  project: Project;
+  project?: Project;
 }
 
 export interface Item {
@@ -110,6 +110,7 @@ export interface Project {
   projectUsers: ProjectUser[];
   projectUserArchive: ProjectUserArchive[];
 }
+
 export interface LayoutProps {
   children?: React.ReactNode;
 }

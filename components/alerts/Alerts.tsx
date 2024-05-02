@@ -103,11 +103,7 @@ const AlertComponent = ({ alerts, userId }: AlertProps) => {
   });
 
   if (isAlertLoading) {
-    return (
-      <div className="flex items-center justify-center h-[60vh]">
-        <PageLoading loading={isAlertLoading} />
-      </div>
-    );
+    return <PageLoading loading={isAlertLoading} />;
   }
 
   if (

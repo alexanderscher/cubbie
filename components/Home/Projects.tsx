@@ -7,8 +7,7 @@ import { Overlay } from "@/components/overlays/Overlay";
 import { CreateProject } from "@/components/project/CreateProject";
 import { TruncateText } from "@/components/text/Truncate";
 import { getProjectsClient } from "@/lib/getProjectsClient";
-import { Receipt } from "@/types/AppTypes";
-import { Project as ProjectType } from "@/types/AppTypes";
+import { DefaultReceipt, ProjectIdType } from "@/types/ProjectID";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
@@ -18,7 +17,7 @@ import React, { useEffect, useMemo, useState } from "react";
 
 const fetchProject = async () => {
   const projects = await getProjectsClient();
-  return projects as ProjectType[];
+  return projects as ProjectIdType[];
 };
 interface Props {
   // serverData: ProjectType[];
@@ -59,7 +58,7 @@ const Projects = ({ sessionUserId }: Props) => {
     ? sortFieldParam.slice(1)
     : sortFieldParam;
   const sortOrder = sortFieldParam?.startsWith("-") ? "desc" : "asc";
-  const getTotalPrice = (receipts: Receipt[]) => {
+  const getTotalPrice = (receipts: DefaultReceipt[]) => {
     if (receipts.length === 0) return 0;
     else {
       return receipts.reduce((acc, receipt) => {
@@ -73,16 +72,16 @@ const Projects = ({ sessionUserId }: Props) => {
   };
 
   const filteredData = useMemo(() => {
-    const compareProjects = (a: ProjectType, b: ProjectType) => {
+    const compareProjects = (a: ProjectIdType, b: ProjectIdType) => {
       if (sortField === "price" && a.receipts && b.receipts) {
-        const totalPriceA = getTotalPrice(a.receipts);
-        const totalPriceB = getTotalPrice(b.receipts);
+        const totalPriceA = getTotalPrice(a.receipts as DefaultReceipt[]);
+        const totalPriceB = getTotalPrice(b.receipts as DefaultReceipt[]);
         return sortOrder === "asc"
           ? totalPriceB - totalPriceA
           : totalPriceA - totalPriceB;
       } else {
-        const keyA = sortField as keyof ProjectType;
-        const keyB = sortField as keyof ProjectType;
+        const keyA = sortField as keyof ProjectIdType;
+        const keyB = sortField as keyof ProjectIdType;
         const dateA = new Date(a[keyA] as Date).getTime();
         const dateB = new Date(b[keyB] as Date).getTime();
         return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
@@ -93,11 +92,7 @@ const Projects = ({ sessionUserId }: Props) => {
   }, [filteredProjectData, sortField, sortOrder]);
 
   if (isProjectLoading) {
-    return (
-      <div className="flex items-center justify-center h-[60vh]">
-        <PageLoading loading={isProjectLoading} />
-      </div>
-    );
+    return <PageLoading loading={isProjectLoading} />;
   }
 
   if (filteredData.length === 0 && !isProjectLoading) {
@@ -184,7 +179,7 @@ const Projects = ({ sessionUserId }: Props) => {
 export default Projects;
 
 interface ProjectProps {
-  project: ProjectType;
+  project: ProjectIdType;
   isOpen: boolean;
   onToggleOpen: (event: React.MouseEvent<HTMLDivElement>) => void;
   archived: boolean;

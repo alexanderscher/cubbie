@@ -3,15 +3,17 @@ import { useSearchReceiptContext } from "@/components/context/SearchReceiptConte
 import PageLoading from "@/components/Loading/PageLoading";
 import { NoReceipts } from "@/components/receiptComponents/NoReceipts";
 import Receipt from "@/components/receiptComponents/Receipt";
+import { getReceiptsClient } from "@/lib/getReceiptsClient";
 import { Item, Receipt as ReceiptType } from "@/types/AppTypes";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
-interface ReceiptsProps {
-  serverData: ReceiptType[];
-}
+const fetchReceipts = async () => {
+  const receipts = await getReceiptsClient();
+  return receipts as ReceiptType[];
+};
 
-const Receipts = ({ serverData }: ReceiptsProps) => {
+const Receipts = () => {
   const { filteredReceiptData, isReceiptLoading, initializeReceipts } =
     useSearchReceiptContext();
   const searchParams = useSearchParams();
@@ -19,10 +21,10 @@ const Receipts = ({ serverData }: ReceiptsProps) => {
   const [addReceiptOpen, setAddReceiptOpen] = useState(false);
 
   useEffect(() => {
-    if (serverData) {
-      initializeReceipts(serverData as ReceiptType[]);
-    }
-  }, [serverData, initializeReceipts]);
+    fetchReceipts().then((data) => {
+      initializeReceipts(data);
+    });
+  }, [initializeReceipts]);
 
   const toggleOpenReceipt = (
     receiptId: number | undefined,
@@ -82,11 +84,7 @@ const Receipts = ({ serverData }: ReceiptsProps) => {
   }, [filteredReceiptData, storeType, sortField, sortOrder]);
 
   if (isReceiptLoading) {
-    return (
-      <div className="flex items-center justify-center h-[60vh]">
-        <PageLoading loading={isReceiptLoading} />
-      </div>
-    );
+    return <PageLoading loading={isReceiptLoading} />;
   }
 
   if (searchParams.get("expired") === "false") {

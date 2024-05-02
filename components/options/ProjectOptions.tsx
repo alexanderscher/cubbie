@@ -5,13 +5,9 @@ import Loading from "@/components/Loading/Loading";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import { EditProject } from "@/components/project/EditProject";
 import Image from "next/image";
-import React, { useEffect, useState, useTransition } from "react";
+import React, { use, useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
-import {
-  Item,
-  Project as ProjectType,
-  Receipt as ReceiptType,
-} from "@/types/AppTypes";
+import { Project as ProjectType } from "@/types/AppTypes";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import { usePathname } from "next/navigation";
 import { Formik } from "formik";
@@ -25,10 +21,11 @@ import { sendInvite } from "@/actions/email/sendInvite";
 import { leaveProject } from "@/actions/projects/leaveProject";
 import { useRouter } from "next/navigation";
 import { changeProjectOwner } from "@/actions/projects/transferOwnership";
+import { DefaultItem, DefaultReceipt, ProjectIdType } from "@/types/ProjectID";
 
 interface OptionsModalProps {
   isOpen: boolean;
-  project: ProjectType;
+  project: ProjectIdType;
   archived: boolean;
   sessionUserId: string | undefined;
 }
@@ -268,7 +265,7 @@ export const ProjectOptionsModal = ({
 
 interface DeleteModalProps {
   setDeleteOpen: (value: boolean) => void;
-  project: ProjectType;
+  project: ProjectType | ProjectIdType;
 }
 
 const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
@@ -316,7 +313,7 @@ const Members = ({
   sessionUserId,
   setAddUserOpen,
 }: {
-  project: ProjectType;
+  project: ProjectIdType;
   setMembersOpen: (value: boolean) => void;
   sessionUserId: string | undefined;
   setAddUserOpen: (value: boolean) => void;
@@ -688,22 +685,28 @@ const ProjectDetails = ({
   project,
   setDetailsOpen,
 }: {
-  project: ProjectType;
+  project: ProjectIdType;
   setDetailsOpen: (value: boolean) => void;
 }) => {
-  const totalAmount = project.receipts.reduce(
-    (totalAcc: number, receipt: ReceiptType) => {
-      const receiptTotal = receipt.items.reduce(
-        (itemAcc: number, item: Item) => {
-          return itemAcc + item.price;
-        },
-        0
-      );
+  const [totalAmount, setTotalAmount] = useState(0);
 
-      return totalAcc + receiptTotal;
-    },
-    0
-  );
+  useEffect(() => {
+    const totalAmount = project.receipts.reduce(
+      (totalAcc: number, receipt: DefaultReceipt) => {
+        const receiptTotal = receipt.items.reduce(
+          (itemAcc: number, item: DefaultItem) => {
+            return itemAcc + item.price;
+          },
+          0
+        );
+
+        return totalAcc + receiptTotal;
+      },
+      0
+    );
+
+    setTotalAmount(totalAmount);
+  }, [project]);
 
   return (
     <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full">

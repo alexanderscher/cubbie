@@ -22,7 +22,7 @@ export default async function ProjectID({
   return (
     <PageWrapper>
       <div className="w-full flex justify-center ">
-        <ProjectId project={project} sessionUserId={session.user.id} />
+        <ProjectId projectId={params.id} sessionUserId={session.user.id} />
       </div>
     </PageWrapper>
   );

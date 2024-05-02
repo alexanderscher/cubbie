@@ -1,21 +1,16 @@
-import RegularButton from "@/components/buttons/RegularButton";
 import { TruncateText } from "@/components/text/Truncate";
-import { Item } from "@/types/AppTypes";
+import { ItemType } from "@/types/ItemsTypes";
 import Link from "next/link";
 import React from "react";
 
 interface HeaderNavProps {
-  item: Item;
+  item: ItemId;
 }
 
 const HeaderNav = ({ item }: HeaderNavProps) => {
   return (
     <div className="flex flex-wrap justify-between items-center gap-4 border-b-[1px] border-emerald-900 pb-4">
       <div className="flex gap-4">
-        {/* <Link href="/">
-          <p className="text-emerald-900 hover:text-orange-600 text-sm">Home</p>
-        </Link> */}
-        {/* <p className="text-emerald-900 text-sm">/</p> */}
         {item.receipt.project && (
           <div className="flex">
             <Link href={`/project/${item.receipt.project.id}`}>

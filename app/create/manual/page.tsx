@@ -2,12 +2,12 @@ import FormHeader from "@/components/createForm/FormPages/FormHeader";
 import ImagePage from "@/components/createForm/FormPages/ImagePage";
 import ManualPage from "@/components/createForm/FormPages/ManualPage";
 import { getProjects } from "@/lib/projectsDB";
-import { Project } from "@/types/AppTypes";
+import { ProjectType } from "@/types/ProjectTypes";
 import React from "react";
 
 const fetchProject = async () => {
   const projects = await getProjects();
-  return projects as Project[];
+  return projects as ProjectType[];
 };
 
 const UploadManual = async () => {

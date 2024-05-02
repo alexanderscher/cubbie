@@ -4,11 +4,9 @@ import styles from "@/app/receipt/receiptID.module.css";
 import RegularButton from "@/components/buttons/RegularButton";
 import { Formik } from "formik";
 import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { ChangeEvent, useEffect, useState, useTransition } from "react";
-import { formatCurrency } from "@/utils/formatCurrency";
 import { EDIT_RECEIPT_SCHEMA } from "@/utils/editValidation";
-import CurrencyInput from "react-currency-input-field";
 import Loading from "@/components/Loading/Loading";
 import ErrorModal from "@/components/error/ErrorModal";
 import HeaderNav from "@/components/navbar/HeaderNav";
@@ -16,7 +14,6 @@ import ImageModal from "@/components/images/ImageModal";
 import Item from "@/components/Item";
 import { convertHeic } from "@/utils/media";
 import { editReceipt } from "@/actions/receipts/editReceipt";
-import { Item as ItemType, Receipt } from "@/types/AppTypes";
 import { formatDateToYYYYMMDD } from "@/utils/Date";
 import PurchaseTypeSelect from "@/components/select/PurchaseTypeSelect";
 import { AddItem } from "@/components/item/AddItem";
@@ -24,22 +21,50 @@ import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import * as Yup from "yup";
 import { toast } from "sonner";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
-type ExtendedReceiptType = Receipt & {
+import { ReceiptItemType, ReceiptType } from "@/types/ReceiptTypes";
+import { getReceiptByIdClient } from "@/lib/getReceiptsClient";
+import { BeatLoader } from "react-spinners";
+type ExtendedReceiptType = ReceiptType & {
   edit_image: string;
 };
 
 interface Props {
-  receipt: ExtendedReceiptType;
+  receiptId: string;
 }
 
-const ReceiptIdEdit = ({ receipt }: Props) => {
+const ReceiptIdEdit = ({ receiptId }: Props) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const { id } = useParams();
   const [isAddOpen, setIsAddOpen] = useState(false);
-  const stringId = Array.isArray(id) ? id[0] : id;
+  const stringId = Array.isArray(receiptId) ? receiptId[0] : receiptId;
   const [uploadError, setUploadError] = useState("");
   const [isClient, setIsClient] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [receipt, setReceipt] = useState<ExtendedReceiptType>({
+    card: "",
+    created_at: new Date(),
+    days_until_return: 0,
+    expired: false,
+    id: 0,
+    items: [],
+    memo: false,
+    project: {
+      id: 0,
+      name: "",
+      asset_amount: 0,
+      created_at: new Date(),
+      userId: "",
+    },
+    project_id: 0,
+    purchase_date: new Date(),
+    receipt_image_key: "",
+    receipt_image_url: "",
+    return_date: new Date(),
+    store: "",
+    tracking_number: "",
+    type: "",
+    edit_image: "",
+  });
 
   const [errorM, setErrorM] = useState({
     purchase_date: "",
@@ -55,7 +80,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
     barcode: "",
     character: "",
     photo: "",
-    receipt_id: receipt.id,
+    receipt_id: receiptId,
   });
 
   const [error, setError] = useState({
@@ -66,10 +91,17 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
 
   const [isPending, startTransition] = useTransition();
 
-  const itemSchema = Yup.object({
-    description: Yup.string().required("Description is required"),
-    price: Yup.string().required("Price is required"),
-  });
+  useEffect(() => {
+    const fetchReceipt = async () => {
+      const receipt = await getReceiptByIdClient(receiptId);
+      if (receipt) {
+        setReceipt({ ...receipt, edit_image: "" });
+      }
+      setIsLoading(false);
+    };
+
+    fetchReceipt();
+  }, [receiptId]);
 
   useEffect(() => {
     setIsClient(true);
@@ -152,7 +184,13 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
     }
   };
 
-  if (!receipt.items) return <div className="mi">Loading</div>;
+  if (isLoading)
+    return (
+      <div className="h-[90vh] w-full flex items-center justify-center">
+        <BeatLoader loading={isLoading} size={15} color={"rgb(6 78 59)"} />
+      </div>
+    );
+
   return (
     <Formik
       initialValues={{
@@ -165,7 +203,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
             if (result?.error) {
               setUploadError(result.error);
             } else {
-              router.push(`/receipt/${id}`);
+              router.push(`/receipt/${receiptId}`);
               toast.success("Your operation was successful!");
             }
           } catch (e) {
@@ -191,7 +229,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                 <div className="flex gap-2">
                   <RegularButton
                     styles="bg  border-emerald-900"
-                    href={`/receipt/${id}`}
+                    href={`/receipt/${receiptId}`}
                   >
                     <p className="text-emerald-900 text-xs">Discard</p>
                   </RegularButton>
@@ -218,7 +256,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
               ) : (
                 <RegularButton
                   styles="bg border-emerald-900"
-                  href={`/receipt/${id}`}
+                  href={`/receipt/${receiptId}`}
                 >
                   <p className="text-emerald-900 text-xs">Cancel</p>
                 </RegularButton>
@@ -359,7 +397,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                   <div className="w-full">
                     <p className="text-emerald-900 text-xs">Card Used</p>
                     <input
-                      value={values.card}
+                      value={values.card || ""}
                       onChange={handleChange("card")}
                       className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2"
                     />
@@ -368,7 +406,7 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
                   <div className="w-full">
                     <p className="text-emerald-900 text-xs">Tracking Link</p>
                     <input
-                      value={values.tracking_number}
+                      value={values.tracking_number || ""}
                       onChange={handleChange("tracking_number")}
                       className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2"
                     />
@@ -388,15 +426,17 @@ const ReceiptIdEdit = ({ receipt }: Props) => {
               >
                 <div className={`${styles.boxes} `}>
                   {isClient &&
-                    receipt.items.map((item: ItemType, index: number) => (
-                      <Item
-                        key={item.id}
-                        item={item}
-                        isOpen={openItemId === item.id}
-                        onToggleOpen={(e) => toggleOpenItem(item.id, e)}
-                        setOpenItemId={setOpenItemId}
-                      />
-                    ))}
+                    receipt.items.map(
+                      (item: ReceiptItemType, index: number) => (
+                        <Item
+                          key={item.id}
+                          item={item}
+                          isOpen={openItemId === item.id}
+                          onToggleOpen={(e) => toggleOpenItem(item.id, e)}
+                          setOpenItemId={setOpenItemId}
+                        />
+                      )
+                    )}
                 </div>
               </div>
             )}

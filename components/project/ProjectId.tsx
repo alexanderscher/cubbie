@@ -15,8 +15,8 @@ import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { TruncateText } from "@/components/text/Truncate";
 import { getProjectByIdClient } from "@/lib/getProjectsClient";
 import PageLoading from "@/components/Loading/PageLoading";
-import { DefaultItem, ProjectIdType } from "@/types/ProjectID";
-import { ReceiptIDType } from "@/types/ReceiptId";
+import { DefaultItem, ProjectIdType } from "@/types/ProjectTypes";
+import { ReceiptIDType } from "@/types/ReceiptTypes";
 
 interface ProjectIdProps {
   sessionUserId: string | undefined;

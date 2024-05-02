@@ -2,7 +2,7 @@
 import ProjectSelect from "@/components/createForm/ProjectSelectForm";
 import styles from "@/app/create/upload.module.css";
 import { ReceiptStoreStage } from "@/constants/form";
-import { Project } from "@/types/AppTypes";
+import { ProjectType } from "@/types/ProjectTypes";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import { convertHeic } from "@/utils/media";
 import Image from "next/image";
@@ -17,7 +17,7 @@ interface ReceiptManualProps {
   errors: any;
   online?: boolean;
   setStage?: (stage: ReceiptStoreStage) => void;
-  projects: Project[];
+  projects: ProjectType[];
 }
 
 const ReceiptManual = ({

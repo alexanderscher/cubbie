@@ -4,7 +4,6 @@ import prisma from "@/prisma/client";
 import moment from "moment";
 import { Session } from "next-auth";
 import "moment-timezone";
-import { Receipt } from "@/types/AppTypes";
 
 export const getReceiptsClient = async () => {
   const session = (await auth()) as Session;

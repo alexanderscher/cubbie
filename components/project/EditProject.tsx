@@ -5,14 +5,13 @@ import { FormError } from "@/components/form-error";
 import Loading from "@/components/Loading/Loading";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import { toast } from "sonner";
-import { Project as ProjectType } from "@/types/AppTypes";
 import React, { useState, useTransition } from "react";
 import CurrencyInput from "react-currency-input-field";
-import { ProjectIdType } from "@/types/ProjectID";
+import { ProjectType } from "@/types/ProjectTypes";
 
 interface EditProjectProps {
   setEdit: (value: boolean) => void;
-  project: ProjectIdType;
+  project: ProjectType;
 }
 
 export const EditProject = ({ setEdit, project }: EditProjectProps) => {

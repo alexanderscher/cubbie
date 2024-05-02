@@ -7,7 +7,6 @@ import { EditProject } from "@/components/project/EditProject";
 import Image from "next/image";
 import React, { use, useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
-import { Project as ProjectType } from "@/types/AppTypes";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import { usePathname } from "next/navigation";
 import { Formik } from "formik";
@@ -21,12 +20,15 @@ import { sendInvite } from "@/actions/email/sendInvite";
 import { leaveProject } from "@/actions/projects/leaveProject";
 import { useRouter } from "next/navigation";
 import { changeProjectOwner } from "@/actions/projects/transferOwnership";
-import { DefaultItem, DefaultReceipt, ProjectIdType } from "@/types/ProjectID";
-import { ReceiptIDType } from "@/types/ReceiptId";
+import {
+  ProjectItemType,
+  ProjectReceiptType,
+  ProjectType,
+} from "@/types/ProjectTypes";
 
 interface OptionsModalProps {
   isOpen: boolean;
-  project: ProjectIdType;
+  project: ProjectType;
   archived: boolean;
   sessionUserId: string | undefined;
 }
@@ -266,7 +268,7 @@ export const ProjectOptionsModal = ({
 
 interface DeleteModalProps {
   setDeleteOpen: (value: boolean) => void;
-  project: ProjectType | ProjectIdType;
+  project: ProjectType;
 }
 
 const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
@@ -314,7 +316,7 @@ const Members = ({
   sessionUserId,
   setAddUserOpen,
 }: {
-  project: ProjectIdType;
+  project: ProjectType;
   setMembersOpen: (value: boolean) => void;
   sessionUserId: string | undefined;
   setAddUserOpen: (value: boolean) => void;
@@ -686,16 +688,16 @@ const ProjectDetails = ({
   project,
   setDetailsOpen,
 }: {
-  project: ProjectIdType;
+  project: ProjectType;
   setDetailsOpen: (value: boolean) => void;
 }) => {
   const [totalAmount, setTotalAmount] = useState(0);
 
   useEffect(() => {
     const totalAmount = project.receipts.reduce(
-      (totalAcc: number, receipt: ReceiptIDType) => {
+      (totalAcc: number, receipt: ProjectReceiptType) => {
         const receiptTotal = receipt.items.reduce(
-          (itemAcc: number, item: DefaultItem) => {
+          (itemAcc: number, item: ProjectItemType) => {
             return itemAcc + item.price;
           },
           0

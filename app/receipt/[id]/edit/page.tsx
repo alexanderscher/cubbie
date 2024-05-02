@@ -1,57 +1,14 @@
-import { auth } from "@/auth";
 import ReceiptIdEdit from "@/components/receiptComponents/ReceiptIdEdit";
-import prisma from "@/prisma/client";
-import { Receipt, Session } from "@/types/AppTypes";
 import React from "react";
-
-type ExtendedReceiptType = Receipt & {
-  edit_image: string;
-};
-
-const getReceiptById = async (id: string) => {
-  const session = (await auth()) as Session;
-  const userId = session?.user?.id as string;
-
-  const receipt = await prisma.receipt.findUnique({
-    where: {
-      project: {
-        userId: userId,
-      },
-      id: parseInt(id),
-    },
-    include: {
-      items: true,
-      project: true,
-    },
-  });
-  return receipt;
-};
-
-const fetchReceipt = async (id: string) => {
-  const receipt = await getReceiptById(id);
-
-  const formattedReceipt = {
-    ...receipt,
-    edit_image: "",
-    purchase_date: receipt?.purchase_date ? receipt.purchase_date : "",
-    return_date: receipt?.return_date ? receipt.return_date : "",
-    project: {
-      ...receipt?.project,
-    },
-  };
-
-  return formattedReceipt as ExtendedReceiptType;
-};
 
 export default async function ReceiptIdPage({
   params,
 }: {
   params: { id: string };
 }) {
-  const receipt = await fetchReceipt(params.id);
   return (
     <div className="w-full flex justify-center ">
-      <ReceiptIdEdit receipt={receipt} />
+      <ReceiptIdEdit receiptId={params.id} />
     </div>
   );
 }

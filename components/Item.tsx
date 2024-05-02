@@ -3,7 +3,7 @@
 import { ItemOptionsModal } from "@/components/options/ItemsOptions";
 import { Overlay } from "@/components/overlays/Overlay";
 import { TruncateText } from "@/components/text/Truncate";
-import { Project } from "@/types/AppTypes";
+import { ReceiptProjectType } from "@/types/ReceiptTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
@@ -14,7 +14,7 @@ interface Props {
   item: any;
   isOpen: boolean;
   onToggleOpen: (event: React.MouseEvent<HTMLDivElement>) => void;
-  project?: Project;
+  project?: ReceiptProjectType;
   setOpenItemId: (id: number | null) => void;
 }
 

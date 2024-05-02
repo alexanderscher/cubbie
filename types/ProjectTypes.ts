@@ -1,29 +1,27 @@
-import { ReceiptIDType } from "@/types/ReceiptId";
-
-export interface ProjectIdType {
+export interface ProjectType {
   asset_amount: number | null;
   created_at: Date;
   id: number;
   name: string;
-  projectUserArchive: ProjectUserArchive[];
-  projectUsers: ProjectUser[];
-  receipts: ReceiptIDType[];
+  projectUserArchive: ProjectUserArchiveType[];
+  projectUsers: ProjectUserType[];
+  receipts: ProjectReceiptType[];
   userId: string;
   user: User;
 }
 
-export interface ProjectUserArchive {
+export interface ProjectUserArchiveType {
   id: number;
   projectId: number;
   userId: string;
 }
 
-export interface ProjectUser {
+export interface ProjectUserType {
   projectId: number;
   user: User;
 }
 
-export interface DefaultReceipt {
+export interface ProjectReceiptType {
   id: number;
   type: string;
   store: string;
@@ -38,10 +36,10 @@ export interface DefaultReceipt {
   created_at: Date;
   expired: boolean;
   project_id: number;
-  items: DefaultItem[];
+  items: ProjectItemType[];
 }
 
-export interface DefaultItem {
+export interface ProjectItemType {
   id: number;
   description: string;
   photo_url: string | null; // Allow null for optional properties

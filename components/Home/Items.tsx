@@ -2,27 +2,26 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Item from "@/components/Item";
-import { Item as ItemType } from "@/types/AppTypes";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
-import Image from "next/image";
-import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
-import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import PageLoading from "@/components/Loading/PageLoading";
 import { NoItems } from "@/components/item/NoItems";
+import { getItemsClient } from "@/lib/getItemsClient";
+import { ItemType } from "@/types/ItemsTypes";
 
-interface ItemsProps {
-  items: ItemType[];
-}
+const fetchItems = async () => {
+  const items = await getItemsClient();
+  return items as ItemType[];
+};
 
-const Items = ({ items }: ItemsProps) => {
+const Items = () => {
   const { filteredItemData, isItemLoading, initializeItems } =
     useSearchItemContext();
 
   useEffect(() => {
-    if (items) {
-      initializeItems(items as ItemType[]);
-    }
-  }, [items, initializeItems]);
+    fetchItems().then((data) => {
+      initializeItems(data);
+    });
+  }, [initializeItems]);
 
   const searchParams = useSearchParams();
   const [addReceiptOpen, setAddReceiptOpen] = useState(false);

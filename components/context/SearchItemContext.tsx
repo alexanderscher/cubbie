@@ -8,12 +8,12 @@ import React, {
   useCallback,
 } from "react";
 import { usePathname } from "next/navigation";
-import { Item } from "@/types/AppTypes";
+import { ItemType } from "@/types/ItemsTypes";
 
 interface SearchItemContextType {
-  items: Item[];
-  filteredItemData: Item[]; // Stores the currently displayed list, which may be filtered
-  initializeItems: (data: Item[]) => void; // Initializes items data
+  items: ItemId[];
+  filteredItemData: ItemId[]; // Stores the currently displayed list, which may be filtered
+  initializeItems: (data: ItemId[]) => void; // Initializes items data
   filterItems: (searchTerm: string) => void; // Filters items based on a search term
   isItemLoading: boolean; // Indicates if the item data is currently loading
   setisItemLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,13 +30,13 @@ export const useSearchItemContext = () => useContext(SearchItemContext);
 export const SearchItemProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [items, setItems] = useState<Item[]>([]);
-  const [filteredItemData, setFilteredItemData] = useState<Item[]>([]);
+  const [items, setItems] = useState<ItemId[]>([]);
+  const [filteredItemData, setFilteredItemData] = useState<ItemId[]>([]);
   const [isItemLoading, setisItemLoading] = useState(true);
   const [isItemRefresh, setItemRefresh] = useState(false);
   const pathname = usePathname();
 
-  const initializeItems = useCallback((data: Item[]) => {
+  const initializeItems = useCallback((data: ItemId[]) => {
     setItems(data);
     setFilteredItemData(data);
     setisItemLoading(false);

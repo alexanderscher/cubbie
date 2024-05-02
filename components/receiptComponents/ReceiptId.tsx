@@ -4,7 +4,6 @@ import Image from "next/image";
 import React, { useEffect, useMemo, useState, useTransition } from "react";
 import HeaderNav from "@/components/navbar/HeaderNav";
 import { AddItem } from "@/components/item/AddItem";
-import { Item as ItemType, Receipt } from "@/types/AppTypes";
 import * as Yup from "yup";
 import { addItem } from "@/actions/items/addItem";
 import { ReceiptOptionsModal } from "@/components/options/ReceiptOptions";
@@ -17,7 +16,7 @@ import { NoItems } from "@/components/item/NoItems";
 import Item from "@/components/Item";
 import { getReceiptByIdClient } from "@/lib/getReceiptsClient";
 import PageLoading from "@/components/Loading/PageLoading";
-import { ReceiptIDItem, ReceiptIDType } from "@/types/ReceiptId";
+import { ReceiptItemType, ReceiptType } from "@/types/ReceiptTypes";
 
 const itemSchema = Yup.object({
   description: Yup.string().required("Description is required"),
@@ -29,7 +28,9 @@ const ReceiptId = ({ receiptId }: { receiptId: string }) => {
   const [isOptionsOpen, setisOptionsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddOpen, setIsAddOpen] = useState(false);
-  const [receipt, setReceipt] = useState<ReceiptIDType>({
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
+
+  const [receipt, setReceipt] = useState<ReceiptType>({
     card: "",
     created_at: new Date(),
     days_until_return: 0,
@@ -54,14 +55,9 @@ const ReceiptId = ({ receiptId }: { receiptId: string }) => {
     type: "",
   });
 
-  console.log(receipt);
-
-  const searchParams = useSearchParams();
-  const [filteredItemData, setFilteredItemData] = useState<ReceiptIDItem[]>(
+  const [filteredItemData, setFilteredItemData] = useState<ReceiptItemType[]>(
     receipt.items
   );
-
-  const [isLoading, setIsLoading] = useState(true); // Add loading state
 
   const [newItem, setNewItem] = useState({
     description: "",
@@ -141,8 +137,6 @@ const ReceiptId = ({ receiptId }: { receiptId: string }) => {
     }
   };
 
-  const sortFieldParam = searchParams.get("sort");
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = event.target.value;
     setSearchTerm(newSearchTerm);
@@ -162,6 +156,8 @@ const ReceiptId = ({ receiptId }: { receiptId: string }) => {
       filterItems();
     }
   }, [receipt, searchTerm]);
+
+  isLoading && <PageLoading loading={isLoading} />;
 
   return (
     <div className="flex flex-col gap-8 w-full h-full max-w-[1090px] ">
@@ -222,6 +218,7 @@ const ReceiptId = ({ receiptId }: { receiptId: string }) => {
           filteredItemData={filteredItemData}
           receipt={receipt}
           setIsAddOpen={setIsAddOpen}
+          isLoading={isLoading}
         />
       )}
     </div>
@@ -234,10 +231,12 @@ const Items = ({
   filteredItemData,
   receipt,
   setIsAddOpen,
+  isLoading,
 }: {
-  filteredItemData: ReceiptIDItem[];
-  receipt: ReceiptIDType;
+  filteredItemData: ReceiptItemType[];
+  receipt: ReceiptType;
   setIsAddOpen: (value: boolean) => void;
+  isLoading: boolean;
 }) => {
   console.log(filteredItemData);
   const toggleOpenItem = (
@@ -261,7 +260,7 @@ const Items = ({
   const status = searchParams.get("status");
   const type = searchParams.get("type");
 
-  let filteredData = filteredItemData.filter((item: ReceiptIDItem) => {
+  let filteredData = filteredItemData.filter((item: ReceiptItemType) => {
     if (type === "expired") {
       return receipt.expired;
     } else if (type === "active") {
@@ -271,11 +270,11 @@ const Items = ({
   });
 
   if (status === "returned" || status === "current") {
-    filteredData = filteredData.filter((item: ReceiptIDItem) =>
+    filteredData = filteredData.filter((item: ReceiptItemType) =>
       status === "returned" ? item.returned : !item.returned
     );
 
-    if (filteredData.length === 0) {
+    if (filteredData.length === 0 && !isLoading) {
       return (
         <NoItems
           setAddReceiptOpen={setAddReceiptOpen}
@@ -286,7 +285,7 @@ const Items = ({
 
     return (
       <div className="boxes pb-20">
-        {filteredData.map((item: ReceiptIDItem) => (
+        {filteredData.map((item: ReceiptItemType) => (
           <Item
             setOpenItemId={setOpenItemId}
             key={item.id}
@@ -299,7 +298,7 @@ const Items = ({
     );
   }
 
-  if (filteredData.length === 0) {
+  if (filteredData.length === 0 && !isLoading) {
     return (
       <NoItems
         setAddReceiptOpen={setIsAddOpen}
@@ -310,7 +309,7 @@ const Items = ({
 
   return (
     <div className="boxes pb-20">
-      {filteredData.map((item: ReceiptIDItem) => (
+      {filteredData.map((item: ReceiptItemType) => (
         <Item
           setOpenItemId={setOpenItemId}
           key={item.id}

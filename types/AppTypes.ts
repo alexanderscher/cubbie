@@ -1,5 +1,30 @@
 import { Receipt } from "@prisma/client";
 
+export interface UserAlerts {
+  id: string;
+  name?: string;
+  email?: string;
+  emailVerified?: Date;
+  image?: string;
+  password?: string;
+  role: string;
+  isTwoFactorEnabled: boolean;
+  phone?: string;
+  alertSettings: AlertSettings;
+}
+
+export interface AlertSettings {
+  id: string;
+  userId: string;
+  notifyToday: boolean;
+  notifyInOneDay: boolean;
+  notifyInOneWeek: boolean;
+  timezone: {
+    value: string;
+    label: string;
+  };
+}
+
 export interface LayoutProps {
   children?: React.ReactNode;
 }

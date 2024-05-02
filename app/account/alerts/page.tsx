@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import Header from "@/components/profile/Header";
-import { Session, User, UserAlerts } from "@/types/AppTypes";
+import { UserAlerts } from "@/types/AppTypes";
 import React from "react";
 import styles from "@/components/profile/profile.module.css";
 import AlertSettings from "@/components/profile/AlertSetting";

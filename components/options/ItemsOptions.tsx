@@ -13,7 +13,7 @@ import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 
 interface OptionsModalProps {
-  item: ItemId;
+  item: ItemType;
 }
 
 const white = "bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2";

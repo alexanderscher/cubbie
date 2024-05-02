@@ -12,8 +12,7 @@ import ProjectSelect from "@/components/select/ProjectSelect";
 import { getProjects } from "@/lib/projectsDB";
 import { Receipt as ReceiptType, Item as ItemType } from "@/types/AppTypes";
 import { Project } from "@/types/AppTypes";
-import { DefaultReceipt } from "@/types/ProjectID";
-import { ReceiptIDType } from "@/types/ReceiptId";
+import { ReceiptIDItem, ReceiptIDType } from "@/types/ReceiptId";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
@@ -24,7 +23,7 @@ import { toast } from "sonner";
 import * as Yup from "yup";
 
 interface OptionsModalProps {
-  receipt: ReceiptType | ReceiptIDType;
+  receipt: ReceiptIDType;
 }
 
 const white =
@@ -377,27 +376,20 @@ const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
   );
 };
 
-const ReceiptDetails = ({
-  receipt,
-}: {
-  receipt: ReceiptType | ReceiptIDType;
-}) => {
+const ReceiptDetails = ({ receipt }: { receipt: ReceiptIDType }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
 
   useEffect(() => {
-    // Calculate the total amount
     const calculatedTotal = receipt.items.reduce(
-      (acc: number, curr: ItemType) => {
+      (acc: number, curr: ReceiptIDItem) => {
         return acc + curr.price;
       },
       0
     );
 
-    // Update the total amount state variable
     setTotalAmount(calculatedTotal);
   }, [receipt]);
-
   return (
     <div
       className={`shadow rounded-lg bg-white flex flex-col gap-4 p-8 overflow-auto h-[600px]  max-w-[400px] w-3/4 mt-[50px]`}
@@ -435,7 +427,7 @@ const ReceiptDetails = ({
       <ImageModal
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        imageUrl={receipt.receipt_image_url}
+        imageUrl={receipt.receipt_image_url ? receipt.receipt_image_url : ""}
         altText="Your Image Description"
       />
 
@@ -450,7 +442,7 @@ const ReceiptDetails = ({
         </div>
         <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
           <p className="text-slate-400 text-xs">Total Amount</p>
-          <p className="">{formatCurrency(total_amount)}</p>
+          <p className="">{formatCurrency(totalAmount)}</p>
         </div>
         <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
           <p className="text-slate-400 text-xs">Receipt Type</p>

@@ -22,6 +22,7 @@ import { leaveProject } from "@/actions/projects/leaveProject";
 import { useRouter } from "next/navigation";
 import { changeProjectOwner } from "@/actions/projects/transferOwnership";
 import { DefaultItem, DefaultReceipt, ProjectIdType } from "@/types/ProjectID";
+import { ReceiptIDType } from "@/types/ReceiptId";
 
 interface OptionsModalProps {
   isOpen: boolean;
@@ -692,7 +693,7 @@ const ProjectDetails = ({
 
   useEffect(() => {
     const totalAmount = project.receipts.reduce(
-      (totalAcc: number, receipt: DefaultReceipt) => {
+      (totalAcc: number, receipt: ReceiptIDType) => {
         const receiptTotal = receipt.items.reduce(
           (itemAcc: number, item: DefaultItem) => {
             return itemAcc + item.price;

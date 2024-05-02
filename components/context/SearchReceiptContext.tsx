@@ -9,11 +9,12 @@ import React, {
 } from "react";
 import { usePathname } from "next/navigation";
 import { Receipt } from "@/types/AppTypes";
+import { ReceiptIDType } from "@/types/ReceiptId";
 
 interface SearchReceiptContextType {
-  receipts: Receipt[];
-  filteredReceiptData: Receipt[];
-  initializeReceipts: (data: Receipt[]) => void;
+  receipts: ReceiptIDType[];
+  filteredReceiptData: ReceiptIDType[];
+  initializeReceipts: (data: ReceiptIDType[]) => void;
   filterReceipts: (searchTerm: string) => void;
   isReceiptLoading: boolean;
   setisReceiptLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,13 +31,15 @@ export const useSearchReceiptContext = () => useContext(SearchReceiptContext);
 export const SearchReceiptProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [receipts, setReceipts] = useState<Receipt[]>([]);
-  const [filteredReceiptData, setFilteredReceiptData] = useState<Receipt[]>([]);
+  const [receipts, setReceipts] = useState<ReceiptIDType[]>([]);
+  const [filteredReceiptData, setFilteredReceiptData] = useState<
+    ReceiptIDType[]
+  >([]);
   const [isReceiptLoading, setisReceiptLoading] = useState(true);
   const [isReceiptRefresh, setReceiptRefresh] = useState(false);
   const pathname = usePathname();
 
-  const initializeReceipts = useCallback((data: Receipt[]) => {
+  const initializeReceipts = useCallback((data: ReceiptIDType[]) => {
     setReceipts(data);
     setFilteredReceiptData(data);
     setisReceiptLoading(false);

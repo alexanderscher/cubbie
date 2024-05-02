@@ -4,13 +4,14 @@ import PageLoading from "@/components/Loading/PageLoading";
 import { NoReceipts } from "@/components/receiptComponents/NoReceipts";
 import Receipt from "@/components/receiptComponents/Receipt";
 import { getReceiptsClient } from "@/lib/getReceiptsClient";
-import { Item, Receipt as ReceiptType } from "@/types/AppTypes";
+import { Item } from "@/types/AppTypes";
+import { ReceiptIDType } from "@/types/ReceiptId";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 const fetchReceipts = async () => {
   const receipts = await getReceiptsClient();
-  return receipts as ReceiptType[];
+  return receipts as ReceiptIDType[];
 };
 
 const Receipts = () => {
@@ -57,10 +58,10 @@ const Receipts = () => {
         : filteredReceiptData.filter(
             (receipt) => receipt.type.toLocaleLowerCase() === storeType
           );
-    const compareReceipts = (a: ReceiptType, b: ReceiptType) => {
+    const compareReceipts = (a: ReceiptIDType, b: ReceiptIDType) => {
       if (sortField === "price") {
-        const totalPriceA = getTotalPrice(a.items);
-        const totalPriceB = getTotalPrice(b.items);
+        const totalPriceA = getTotalPrice(a.items as Item[]);
+        const totalPriceB = getTotalPrice(b.items as Item[]);
         if (sortOrder === "asc") {
           return totalPriceB - totalPriceA;
         } else {
@@ -68,10 +69,10 @@ const Receipts = () => {
         }
       } else {
         const dateA = new Date(
-          a[sortField as keyof ReceiptType] as Date
+          a[sortField as keyof ReceiptIDType] as Date
         ).getTime();
         const dateB = new Date(
-          b[sortField as keyof ReceiptType] as Date
+          b[sortField as keyof ReceiptIDType] as Date
         ).getTime();
         if (sortOrder === "asc") {
           return dateA - dateB;
@@ -89,7 +90,7 @@ const Receipts = () => {
 
   if (searchParams.get("expired") === "false") {
     const activeReceipts = sortedAndFilteredData.filter(
-      (receipt: ReceiptType) => !receipt.expired
+      (receipt) => !receipt.expired
     );
     if (activeReceipts.length === 0) {
       return (
@@ -101,7 +102,7 @@ const Receipts = () => {
     } else {
       return (
         <div className="boxes">
-          {activeReceipts.map((receipt: ReceiptType) => (
+          {activeReceipts.map((receipt) => (
             <Receipt
               key={receipt.id}
               receipt={receipt}
@@ -115,7 +116,7 @@ const Receipts = () => {
     }
   } else if (searchParams.get("expired") === "true") {
     const expiredReceipts = sortedAndFilteredData.filter(
-      (receipt: ReceiptType) => receipt.expired
+      (receipt) => receipt.expired
     );
     if (expiredReceipts.length === 0) {
       return (
@@ -127,7 +128,7 @@ const Receipts = () => {
     } else {
       return (
         <div className="boxes">
-          {expiredReceipts.map((receipt: ReceiptType) => (
+          {expiredReceipts.map((receipt) => (
             <Receipt
               key={receipt.id}
               receipt={receipt}
@@ -150,7 +151,7 @@ const Receipts = () => {
     } else {
       return (
         <div className="boxes">
-          {sortedAndFilteredData.map((receipt: ReceiptType) => (
+          {sortedAndFilteredData.map((receipt) => (
             <Receipt
               key={receipt.id}
               receipt={receipt}

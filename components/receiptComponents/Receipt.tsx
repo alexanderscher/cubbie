@@ -3,16 +3,14 @@
 import { ReceiptOptionsModal } from "@/components/options/ReceiptOptions";
 import { Overlay } from "@/components/overlays/Overlay";
 import { TruncateText } from "@/components/text/Truncate";
-import { Item } from "@/types/AppTypes";
-import { DefaultItem } from "@/types/ProjectID";
-import { ReceiptIDType } from "@/types/ReceiptId";
+import { ReceiptItemType, ReceiptType } from "@/types/ReceiptTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
 
 interface ReceiptProps {
-  receipt: ReceiptIDType;
+  receipt: ReceiptType;
   isOpen: boolean;
   onToggleOpen: (event: React.MouseEvent<HTMLDivElement>) => void;
   setOpenReceiptId: (id: number | null) => void;
@@ -25,7 +23,7 @@ const Receipt = ({
   setOpenReceiptId,
 }: ReceiptProps) => {
   const total_amount = receipt.items.reduce(
-    (acc: number, curr: Item | DefaultItem) => {
+    (acc: number, curr: ReceiptItemType) => {
       return acc + curr.price;
     },
     0

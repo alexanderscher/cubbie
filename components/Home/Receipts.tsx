@@ -4,14 +4,13 @@ import PageLoading from "@/components/Loading/PageLoading";
 import { NoReceipts } from "@/components/receiptComponents/NoReceipts";
 import Receipt from "@/components/receiptComponents/Receipt";
 import { getReceiptsClient } from "@/lib/getReceiptsClient";
-import { Item } from "@/types/AppTypes";
-import { ReceiptIDType } from "@/types/ReceiptId";
+import { ReceiptItemType, ReceiptType } from "@/types/ReceiptTypes";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 const fetchReceipts = async () => {
   const receipts = await getReceiptsClient();
-  return receipts as ReceiptIDType[];
+  return receipts as ReceiptType[];
 };
 
 const Receipts = () => {
@@ -46,7 +45,7 @@ const Receipts = () => {
     ? sortFieldParam.slice(1)
     : sortFieldParam;
   const sortOrder = sortFieldParam?.startsWith("-") ? "desc" : "asc";
-  const getTotalPrice = (items: Item[]) =>
+  const getTotalPrice = (items: ReceiptItemType[]) =>
     items.reduce((acc, item) => acc + item.price, 0);
 
   const storeType = searchParams.get("storeType") || "all";
@@ -58,10 +57,10 @@ const Receipts = () => {
         : filteredReceiptData.filter(
             (receipt) => receipt.type.toLocaleLowerCase() === storeType
           );
-    const compareReceipts = (a: ReceiptIDType, b: ReceiptIDType) => {
+    const compareReceipts = (a: ReceiptType, b: ReceiptType) => {
       if (sortField === "price") {
-        const totalPriceA = getTotalPrice(a.items as Item[]);
-        const totalPriceB = getTotalPrice(b.items as Item[]);
+        const totalPriceA = getTotalPrice(a.items as ReceiptItemType[]);
+        const totalPriceB = getTotalPrice(b.items as ReceiptItemType[]);
         if (sortOrder === "asc") {
           return totalPriceB - totalPriceA;
         } else {
@@ -69,10 +68,10 @@ const Receipts = () => {
         }
       } else {
         const dateA = new Date(
-          a[sortField as keyof ReceiptIDType] as Date
+          a[sortField as keyof ReceiptType] as Date
         ).getTime();
         const dateB = new Date(
-          b[sortField as keyof ReceiptIDType] as Date
+          b[sortField as keyof ReceiptType] as Date
         ).getTime();
         if (sortOrder === "asc") {
           return dateA - dateB;

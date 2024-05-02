@@ -1,7 +1,7 @@
 "use client";
+import { ProjectType } from "@/types/ProjectTypes";
 import React, { useEffect } from "react";
 import ReactSelect, { StylesConfig } from "react-select";
-import { Project } from "@/types/AppTypes";
 
 interface Option {
   value: string;
@@ -10,7 +10,7 @@ interface Option {
 
 interface Props {
   handleChange: (field: string) => (value: any) => void;
-  projects: Project[];
+  projects: ProjectType[];
   setFieldValue: (field: string, value: any) => void;
   values: any;
   // errors: any;

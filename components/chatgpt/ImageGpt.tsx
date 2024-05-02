@@ -4,7 +4,7 @@ import ProjectSelectForm from "@/components/createForm/ProjectSelectForm";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
-import { Project } from "@/types/AppTypes";
+
 import { convertHeic } from "@/utils/media";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -13,6 +13,7 @@ import { FormError } from "@/components/form-error";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import Loading from "@/components/Loading/Loading";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
+import { ProjectType } from "@/types/ProjectTypes";
 
 interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
@@ -21,7 +22,7 @@ interface Props {
   handleChange: any;
   // errors: any;
   validateForm: any;
-  projects: Project[];
+  projects: ProjectType[];
 }
 
 export default function ImageGpt({

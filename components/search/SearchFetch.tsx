@@ -1,18 +1,19 @@
 import SearchAllItems from "@/components/search/SearchAlltems";
 import { getProjects } from "@/lib/projectsDB";
 import { getReceipts } from "@/lib/receiptsDB";
-import { Project, Receipt } from "@/types/AppTypes";
+import { ProjectType } from "@/types/ProjectTypes";
+import { ReceiptType } from "@/types/ReceiptTypes";
 
 import React from "react";
 
 const fetchProjects = async () => {
   const projects = await getProjects();
-  return projects as Project[];
+  return projects as ProjectType[];
 };
 
 const receipt = async () => {
   const receipts = await getReceipts();
-  return receipts as Receipt[];
+  return receipts as ReceiptType[];
 };
 
 export default async function SearchFetch() {

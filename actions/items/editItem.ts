@@ -5,12 +5,16 @@ import { deleteUploadThingImage } from "@/actions/uploadthing/deletePhoto";
 import { handleUpload } from "@/actions/uploadthing/uploadPhoto";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
-import { Receipt } from "@/types/AppTypes";
+import { ItemReceiptType } from "@/types/ItemsTypes";
 import { Session } from "next-auth";
 
 import { revalidateTag } from "next/cache";
 
-export const editItem = async (id: string, values: any, receipt: Receipt) => {
+export const editItem = async (
+  id: string,
+  values: any,
+  receipt: ItemReceiptType
+) => {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
   if (!userId) {

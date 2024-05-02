@@ -3,18 +3,10 @@ import Projects from "@/components/Home/Projects";
 import { SearchProjectProvider } from "@/components/context/SearchProjectContext";
 import Header from "@/components/headers/Header";
 import PageWrapper from "@/components/wrapper/PageWrapper";
-import { getProjects } from "@/lib/projectsDB";
-import { Project } from "@/types/AppTypes";
 import { Session } from "@/types/AppTypes";
 import { Suspense } from "react";
 
-// const fetchProject = async () => {
-//   const projects = await getProjects();
-//   return projects as Project[];
-// };
-
 export default async function Home() {
-  // const projects = await fetchProject();
   const session = (await auth()) as Session;
 
   return (

@@ -3,10 +3,11 @@ import { revalidateUsersInProject } from "@/actions/revalidateUsers";
 import { deleteUploadThingImage } from "@/actions/uploadthing/deletePhoto";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
-import { Receipt, Session } from "@/types/AppTypes";
+import { Session } from "@/types/AppTypes";
+import { ItemReceiptType } from "@/types/ItemsTypes";
 import { revalidateTag } from "next/cache";
 
-export const deleteItem = async (id: number, receipt: Receipt) => {
+export const deleteItem = async (id: number, receipt: ItemReceiptType) => {
   try {
     const session = (await auth()) as Session;
     const userId = session?.user?.id as string;

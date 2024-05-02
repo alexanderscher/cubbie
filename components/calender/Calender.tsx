@@ -6,7 +6,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import { useEffect, useRef, useState } from "react";
 import styles from "./calender.module.css";
 import { TooltipComponent } from "@/components/tooltips/ToolTip";
-import { Receipt } from "@/types/AppTypes";
+import { ReceiptType } from "@/types/ReceiptTypes";
 import { useMediaQuery } from "react-responsive";
 import { formatDateToMMDDYY } from "@/utils/Date";
 
@@ -18,7 +18,7 @@ interface Event {
 }
 
 interface CalenderProps {
-  receipts: Receipt[];
+  receipts: ReceiptType[];
 }
 
 const Calender = ({ receipts }: CalenderProps) => {

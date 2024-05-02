@@ -1,7 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { ExtendedItemType } from "@/types/AppTypes";
-import React, { useState, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import RegularButton from "@/components/buttons/RegularButton";
 import Image from "next/image";
 import { Formik } from "formik";
@@ -13,17 +12,20 @@ import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
 import ImageModal from "@/components/images/ImageModal";
 import { convertHeic } from "@/utils/media";
 import { editItem } from "@/actions/items/editItem";
-import { FormError } from "@/components/form-error";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import { toast } from "sonner";
+import { ItemType } from "@/types/ItemsTypes";
+import { getItemsByIdClient } from "@/lib/getItemsClient";
+import { BeatLoader } from "react-spinners";
 
 interface ItemIdEditProps {
-  item: ExtendedItemType;
-  id: string;
+  itemId: string;
 }
 
-const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
-  console.log(item.receipt);
+type ExtendedItemType = ItemType & {
+  edit_image: string;
+};
+const ItemIdEdit = ({ itemId }: ItemIdEditProps) => {
   const router = useRouter();
   const [errorM, setErrorM] = useState({
     price: "",
@@ -32,6 +34,58 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [item, setItem] = useState<ExtendedItemType>({
+    barcode: "",
+    character: "",
+    created_at: new Date(),
+    description: "",
+    id: 0,
+    photo_key: "",
+    photo_url: "",
+    price: 0,
+    receipt: {
+      card: "",
+      created_at: new Date(),
+      days_until_return: 0,
+      expired: false,
+      id: 0,
+      memo: false,
+      project: {
+        asset_amount: 0,
+        created_at: new Date(),
+        id: 0,
+        name: "",
+        userId: "",
+      },
+      project_id: 0,
+      purchase_date: new Date(),
+      receipt_image_key: "",
+      receipt_image_url: "",
+      return_date: new Date(),
+      store: "",
+      tracking_number: "",
+      type: "",
+    },
+    receipt_id: 0,
+    returned: false,
+    edit_image: "",
+  });
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const getitem = async () => {
+      const item = await getItemsByIdClient(itemId);
+      if (item) {
+        setItem({
+          ...item,
+          edit_image: "",
+        });
+      }
+      setIsLoading(false);
+    };
+
+    getitem();
+  }, [itemId]);
 
   const onFileUpload = async (file: File, setFieldValue: any) => {
     if (file === null) {
@@ -69,7 +123,12 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
     };
   };
 
-  if (!item.receipt) return <div className="min-h-screen">Loading</div>;
+  if (isLoading)
+    return (
+      <div className="h-[90vh] w-full flex items-center justify-center">
+        <BeatLoader loading={isLoading} size={15} color={"rgb(6 78 59)"} />
+      </div>
+    );
   return (
     <Formik
       initialValues={{
@@ -78,12 +137,12 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
       onSubmit={(values) => {
         startTransition(async () => {
           try {
-            const result = await editItem(id, values, item.receipt);
+            const result = await editItem(itemId, values, item.receipt);
 
             if (result?.error) {
               toast.error("An error occurred. Please try again.");
             } else {
-              router.push(`/item/${id}`);
+              router.push(`/item/${itemId}`);
               toast.success("Your operation was successful!");
             }
           } catch (e) {
@@ -102,15 +161,15 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
         setFieldValue,
       }) => (
         <div className="w-full flex justify-center items-center">
-          <div className="flex flex-col gap-6  max-w-[600px] w-full ">
+          <div className="flex flex-col gap-6  max-w-[700px] w-full ">
             <HeaderItemNav item={item} />
             <div className="flex justify-between items-center">
               <div className="flex justify-between ">
                 {dirty ? (
                   <div className="flex gap-2">
                     <RegularButton
-                      styles="bg  border-emerald-900 focus:border-emerald-900 focus:outline-none"
-                      href={`/item/${id}`}
+                      styles="bg border-emerald-900 focus:border-emerald-900 focus:outline-none"
+                      href={`/item/${itemId}`}
                     >
                       <p className="text-emerald-900 text-xs">Discard</p>
                     </RegularButton>
@@ -136,8 +195,8 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                   </div>
                 ) : (
                   <RegularButton
-                    styles="bg border-emerald-900"
-                    href={`/item/${id}`}
+                    styles="border-emerald-900"
+                    href={`/item/${itemId}`}
                   >
                     <p className="text-emerald-900 text-xs">Cancel</p>
                   </RegularButton>
@@ -145,7 +204,7 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
               </div>
             </div>
 
-            <div>
+            <div className="bg-white -white p-10 rounded-lg">
               <div className="flex flex-col gap-4">
                 {!values.photo_url && !values.edit_image && (
                   <FileUploadDropzone
@@ -226,7 +285,7 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                   <input
                     value={values.description}
                     onChange={handleChange("description")}
-                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded p-2"
+                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg-white  rounded p-2"
                   />
                 </div>
                 {errorM.description && (
@@ -239,7 +298,7 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                   <CurrencyInput
                     id="price"
                     name="price"
-                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded p-2"
+                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg-white  rounded p-2"
                     placeholder=""
                     value={values.price}
                     defaultValue={values.price || ""}
@@ -256,9 +315,9 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                   <p className="text-emerald-900 text-xs">Barcode</p>
                   <div className="flex gap-2">
                     <input
-                      value={values.barcode}
+                      value={values.barcode || ""}
                       onChange={handleChange("barcode")}
-                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded p-2"
+                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg-white  rounded p-2"
                     />
                     <button
                       type="button"
@@ -304,9 +363,9 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                 <div className="w-full ">
                   <p className="text-emerald-900 text-xs">Character</p>
                   <input
-                    value={values.character}
+                    value={values.character || ""}
                     onChange={handleChange("character")}
-                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded p-2"
+                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg-white  rounded p-2"
                   />
                 </div>
                 {/* <div className="w-full ">
@@ -314,7 +373,7 @@ const ItemIdEdit = ({ item, id }: ItemIdEditProps) => {
                   <input
                     value={values.product_id}
                     onChange={handleChange("product_id")}
-                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg rounded p-2"
+                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg-white  rounded p-2"
                   />
                 </div> */}
               </div>

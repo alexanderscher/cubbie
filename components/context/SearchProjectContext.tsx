@@ -8,13 +8,12 @@ import React, {
   useCallback,
 } from "react";
 import { usePathname } from "next/navigation";
-import { Project } from "@/types/AppTypes";
-import { ProjectIdType } from "@/types/ProjectID";
+import { ProjectType } from "@/types/ProjectTypes";
 
 interface SearchProjectContextType {
-  projects: ProjectIdType[];
-  filteredProjectData: ProjectIdType[];
-  initializeProjects: (data: ProjectIdType[]) => void; // Initializes projects data
+  projects: ProjectType[];
+  filteredProjectData: ProjectType[];
+  initializeProjects: (data: ProjectType[]) => void; // Initializes projects data
   filterProjects: (searchTerm: string) => void; // Filters projects based on a search term
   isProjectLoading: boolean; // Indicates if the project data is currently loading
   setisProjectLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,15 +30,15 @@ export const useSearchProjectContext = () => useContext(SearchProjectContext);
 export const SearchProjectProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [projects, setProjects] = useState<ProjectIdType[]>([]);
-  const [filteredProjectData, setFilteredProjectData] = useState<
-    ProjectIdType[]
-  >([]);
+  const [projects, setProjects] = useState<ProjectType[]>([]);
+  const [filteredProjectData, setFilteredProjectData] = useState<ProjectType[]>(
+    []
+  );
   const [isProjectLoading, setisProjectLoading] = useState(true);
   const [isProjectRefresh, setProjectRefresh] = useState(false);
   const pathname = usePathname();
 
-  const initializeProjects = useCallback((data: ProjectIdType[]) => {
+  const initializeProjects = useCallback((data: ProjectType[]) => {
     setProjects(data);
     setFilteredProjectData(data);
     setisProjectLoading(false);

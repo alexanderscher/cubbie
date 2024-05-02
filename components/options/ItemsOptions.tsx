@@ -5,7 +5,7 @@ import Loading from "@/components/Loading/Loading";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { TruncateText } from "@/components/text/Truncate";
-import { Item as ItemType } from "@/types/AppTypes";
+import { ItemType } from "@/types/ItemsTypes";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -13,7 +13,7 @@ import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 
 interface OptionsModalProps {
-  item: ItemType;
+  item: ItemId;
 }
 
 const white = "bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2";

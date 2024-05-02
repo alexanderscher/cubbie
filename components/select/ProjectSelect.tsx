@@ -1,7 +1,7 @@
 import React from "react";
 import ReactSelect, { StylesConfig } from "react-select";
-import { Project } from "@/types/AppTypes";
 import { useSession } from "next-auth/react";
+import { ProjectType } from "@/types/ProjectTypes";
 
 interface Option {
   value: string;
@@ -10,7 +10,7 @@ interface Option {
 
 interface Props {
   handleChange: (value: any) => void;
-  projects: Project[];
+  projects: ProjectType[];
   values: any;
   errors: any;
   color?: string;

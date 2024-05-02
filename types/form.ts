@@ -1,4 +1,4 @@
-import { Project } from "@/types/AppTypes";
+import { ProjectType } from "@/types/ProjectTypes";
 
 export interface Photo {
   key: string;
@@ -30,5 +30,5 @@ export interface ReceiptInput {
 }
 
 export interface Pages {
-  projects: Project[];
+  projects: ProjectType[];
 }

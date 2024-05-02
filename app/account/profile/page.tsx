@@ -1,14 +1,15 @@
 import { auth } from "@/auth";
 import Account from "@/components/profile/Account";
 import Header from "@/components/profile/Header";
-import { Project, Session } from "@/types/AppTypes";
+import { Session } from "@/types/AppTypes";
 import React from "react";
 import styles from "@/components/profile/profile.module.css";
 import { getProjects } from "@/lib/projectsDB";
+import { ProjectType } from "@/types/ProjectTypes";
 
 const fetchProject = async () => {
   const projects = await getProjects();
-  return projects as Project[];
+  return projects as ProjectType[];
 };
 export default async function Profile() {
   const session = (await auth()) as Session;

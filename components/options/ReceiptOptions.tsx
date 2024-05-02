@@ -12,7 +12,7 @@ import ProjectSelect from "@/components/select/ProjectSelect";
 import { getProjects } from "@/lib/projectsDB";
 import { Receipt as ReceiptType, Item as ItemType } from "@/types/AppTypes";
 import { Project } from "@/types/AppTypes";
-import { ReceiptIDItem, ReceiptIDType } from "@/types/ReceiptId";
+import { ReceiptIDItem, ReceiptIDType } from "@/types/ReceiptTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";

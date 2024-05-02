@@ -4,29 +4,21 @@ import { deleteUploadThingImage } from "@/actions/uploadthing/deletePhoto";
 import { handleUpload } from "@/actions/uploadthing/uploadPhoto";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
-import { Receipt, Session } from "@/types/AppTypes";
+import { Session } from "@/types/AppTypes";
+import { ReceiptType } from "@/types/ReceiptTypes";
 import moment from "moment";
 import { revalidateTag } from "next/cache";
 
-interface ExtendedReceipt {
-  id: number;
-  type: string;
-  store: string;
-  card: string;
-  receipt_image_url: string;
-  receipt_image_key: string;
-  tracking_number: string;
-  purchase_date: Date;
-  return_date: Date;
+type ExtendedReceiptType = ReceiptType & {
   edit_image: string;
-}
+};
 
 export const editReceipt = async (
   params: {
     id: string;
-    values: ExtendedReceipt;
+    values: ExtendedReceiptType;
   },
-  receipt: Receipt
+  receipt: ReceiptType
 ) => {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
@@ -63,7 +55,7 @@ export const editReceipt = async (
     }
 
     if (receipt_image_url === "" && receipt_image_key !== "") {
-      await deleteUploadThingImage(receipt_image_key);
+      await deleteUploadThingImage(receipt_image_key as string);
     }
 
     const expired = moment

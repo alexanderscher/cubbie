@@ -1,7 +1,7 @@
 "use client";
+import { ProjectType } from "@/types/ProjectTypes";
+import { ReceiptType } from "@/types/ReceiptTypes";
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { Item, Project } from "@/types/AppTypes";
-import { Receipt } from "@/types/AppTypes";
 
 interface SearchBarContextType {
   searchBarOpen: boolean;
@@ -10,10 +10,10 @@ interface SearchBarContextType {
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
   filteredItems: any[];
   setFilteredItems: React.Dispatch<React.SetStateAction<any[]>>;
-  filteredReceipts: Receipt[];
-  setFilteredReceipts: React.Dispatch<React.SetStateAction<Receipt[]>>;
-  filteredProjects: Project[];
-  setFilteredProjects: React.Dispatch<React.SetStateAction<Project[]>>;
+  filteredReceipts: ReceiptType[];
+  setFilteredReceipts: React.Dispatch<React.SetStateAction<ReceiptType[]>>;
+  filteredProjects: ProjectType[];
+  setFilteredProjects: React.Dispatch<React.SetStateAction<ProjectType[]>>;
 }
 
 export const SearchBarContext = createContext<SearchBarContextType>({
@@ -41,8 +41,8 @@ export const SearchBarContextProvider: React.FC<SearchBarProviderProps> = ({
   const [searchBarOpen, setSearchBarOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [filteredItems, setFilteredItems] = useState<any[]>([]);
-  const [filteredReceipts, setFilteredReceipts] = useState<Receipt[]>([]);
-  const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
+  const [filteredReceipts, setFilteredReceipts] = useState<ReceiptType[]>([]);
+  const [filteredProjects, setFilteredProjects] = useState<ProjectType[]>([]);
 
   return (
     <SearchBarContext.Provider

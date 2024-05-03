@@ -31,50 +31,78 @@ const sendReminder = async (daysUntilDue: number, reminderType: string) => {
         return_date: "desc",
       },
       include: {
-        project: true,
+        project: {
+          include: {
+            projectUsers: true,
+          },
+        },
       },
     });
 
     await Promise.all(
       receipts.map(async (receipt) => {
-        const user = await prisma.user.findUnique({
+        const projectUserPromise = prisma.user.findUnique({
           where: {
             id: receipt.project.userId,
           },
         });
 
-        if (user?.email) {
-          const link = `${domain}/receipt/${receipt.id}`;
-          let emailSubject = "Receipt Reminder";
-          let date = "";
-          if (reminderType === "TODAY_REMINDER") {
-            emailSubject = "Your Receipt is Due Today";
-            date = "today";
-          } else if (reminderType === "1_DAY_REMINDER") {
-            emailSubject = "Your Receipt is Due Tomorrow";
-            date = "tomorrow";
-          } else if (reminderType === "1_WEEK_REMINDER") {
-            emailSubject = "Your Receipt is Due Next Week";
-            date = "in one week";
-          }
-
-          await resend.emails.send({
-            from: "noreply@cubbie.io",
-            to: user.email,
-            subject: emailSubject,
-            html: `<p>Your receipt from <a href="${link}">${receipt.store}</a> is due ${date}.</p>`,
-          });
-
-          await prisma.alert.create({
-            data: {
-              userId: user.id,
-              type: reminderType,
-              receiptId: receipt.id,
-              projectId: receipt.project_id,
-              date: new Date(),
+        const projectUsersPromises = receipt.project.projectUsers.map((pu) =>
+          prisma.user.findUnique({
+            where: {
+              id: pu.userId,
             },
-          });
-        }
+          })
+        );
+
+        const users = await Promise.all([
+          projectUserPromise,
+          ...projectUsersPromises,
+        ]);
+
+        const validUsers = users.filter((user) => user !== null);
+
+        await Promise.all(
+          validUsers.map(async (user) => {
+            if (user.email) {
+              const link = `${domain}/receipt/${receipt.id}`;
+              let emailSubject = "Receipt Reminder";
+              let date = "";
+
+              switch (reminderType) {
+                case "TODAY_REMINDER":
+                  emailSubject = "Your Receipt is Due Today";
+                  date = "today";
+                  break;
+                case "1_DAY_REMINDER":
+                  emailSubject = "Your Receipt is Due Tomorrow";
+                  date = "tomorrow";
+                  break;
+                case "1_WEEK_REMINDER":
+                  emailSubject = "Your Receipt is Due Next Week";
+                  date = "in one week";
+                  break;
+              }
+
+              await resend.emails.send({
+                from: "noreply@cubbie.io",
+                to: user.email,
+                subject: emailSubject,
+                html: `<p>Your receipt from <a href="${link}">${receipt.store}</a> is due ${date}.</p>`,
+              });
+
+              await prisma.alert.create({
+                data: {
+                  userId: user.id,
+                  type: reminderType,
+                  receiptId: receipt.id,
+                  projectId: receipt.project_id,
+                  date: new Date(),
+                },
+              });
+            }
+          })
+        );
       })
     );
     revalidateTag(`alerts`);

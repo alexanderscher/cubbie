@@ -8,13 +8,7 @@ import { Session } from "@/types/Session";
 
 import { Suspense } from "react";
 
-const fetchAlert = async () => {
-  const alerts = await getAlerts();
-  return alerts as Alert[];
-};
-
 export default async function Alerts() {
-  const alerts = await fetchAlert();
   const session = (await auth()) as Session;
 
   return (
@@ -23,7 +17,7 @@ export default async function Alerts() {
         <div className="flex flex-col items-center pb-[400px]">
           <Suspense fallback={<div>Loading</div>}>
             <div className="w-full max-w-[600px]">
-              <AlertComponent alerts={alerts} userId={session.user.id} />
+              <AlertComponent userId={session.user.id} />
             </div>
           </Suspense>
         </div>

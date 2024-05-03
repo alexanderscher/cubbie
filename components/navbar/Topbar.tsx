@@ -1,22 +1,32 @@
 "use client";
 import Image from "next/image";
 import styles from "./navbar.module.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchBarContext } from "@/components/context/SearchBarContext";
 import { LogOutButton } from "@/components/LogOutButton";
 import { Session } from "@/types/Session";
+import { getAlertsNumber } from "@/lib/alertNumber";
 
 interface TopbarProps {
   session: Session;
   children: React.ReactNode;
-  alerts: number;
 }
 
-const Topbar = ({ session, children, alerts }: TopbarProps) => {
+const Topbar = ({ session, children }: TopbarProps) => {
   const [menu, setMenu] = useState(false);
   const { searchBarOpen, setSearchBarOpen } = useSearchBarContext();
+  const [alerts, setAlerts] = useState(0);
 
+  useEffect(() => {
+    const fetchAlert = async () => {
+      const alerts = await getAlertsNumber();
+      return alerts;
+    };
+    fetchAlert().then((alerts) => {
+      setAlerts(alerts);
+    });
+  }, []);
   return (
     <div
       className={`${styles.topbar} p-4 justify-between  bg-emerald-900 text-white`}

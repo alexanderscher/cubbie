@@ -15,6 +15,7 @@ import { useSearchAlertContext } from "@/components/context/SearchFilterAlerts";
 import { useSearchParams } from "next/navigation";
 import { Overlay } from "@/components/overlays/Overlay";
 import PageLoading from "@/components/Loading/PageLoading";
+import { getAlerts } from "@/lib/alerts";
 
 const describeDate = (dateString: string) => {
   const date = parse(dateString, "MM/dd/yy", new Date());
@@ -36,18 +37,24 @@ const describeDate = (dateString: string) => {
 };
 
 interface AlertProps {
-  alerts: Alert[];
   userId: string | undefined;
 }
 
-const AlertComponent = ({ alerts, userId }: AlertProps) => {
+const AlertComponent = ({ userId }: AlertProps) => {
   const { filteredAlertData, initializeAlerts, isAlertLoading } =
     useSearchAlertContext();
+  const [isLoading, setIsLoading] = React.useState(true);
+
   useEffect(() => {
-    if (alerts) {
-      initializeAlerts(alerts);
-    }
-  }, [alerts, initializeAlerts]);
+    const fetchAlert = async () => {
+      const alerts = await getAlerts();
+      if (alerts) {
+        initializeAlerts(alerts);
+        setIsLoading(false);
+      }
+    };
+    fetchAlert();
+  }, [initializeAlerts]);
   const searchParams = useSearchParams();
 
   const sortFieldParam = searchParams.get("sort");
@@ -102,7 +109,7 @@ const AlertComponent = ({ alerts, userId }: AlertProps) => {
     return isReadByUser && <SingleAlert alertObj={alertObj} userId={userId} />;
   });
 
-  if (isAlertLoading) {
+  if (isLoading) {
     return <PageLoading loading={isAlertLoading} />;
   }
 
@@ -113,7 +120,7 @@ const AlertComponent = ({ alerts, userId }: AlertProps) => {
     return (
       <div>
         <AlertHeader />
-        {sortedAndFilteredData.length === 0 && <NoAlerts />}
+        {sortedAndFilteredData.length === 0 && !isLoading && <NoAlerts />}
         <div className="flex flex-col gap-6">
           {sortedAndFilteredData.map((alertObj) => (
             <>
@@ -129,7 +136,7 @@ const AlertComponent = ({ alerts, userId }: AlertProps) => {
     return (
       <div>
         <AlertHeader />
-        {sortedAndFilteredData.length === 0 && <NoAlerts />}
+        {sortedAndFilteredData.length === 0 && !isLoading && <NoAlerts />}
         <div className="flex flex-col gap-6">{unreadAlerts}</div>
       </div>
     );
@@ -138,7 +145,7 @@ const AlertComponent = ({ alerts, userId }: AlertProps) => {
     return (
       <div>
         <AlertHeader />
-        {sortedAndFilteredData.length === 0 && <NoAlerts />}
+        {sortedAndFilteredData.length === 0 && !isLoading && <NoAlerts />}
         <div className="flex flex-col gap-6">{readAlerts}</div>
       </div>
     );

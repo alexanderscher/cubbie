@@ -5,23 +5,35 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSearchBarContext } from "@/components/context/SearchBarContext";
 import { LogOutButton } from "@/components/LogOutButton";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Session } from "@/types/Session";
 import { Overlay } from "@/components/overlays/Overlay";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
+import { getAlertsNumber } from "@/lib/alertNumber";
 
 interface NavbarProps {
   session: Session;
   children: React.ReactNode;
-  alerts: number;
 }
-const Navbar = ({ session, children, alerts }: NavbarProps) => {
+const Navbar = ({ session, children }: NavbarProps) => {
   const pathname = usePathname();
   const { searchBarOpen, setSearchBarOpen } = useSearchBarContext();
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
+  const [alerts, setAlerts] = useState(0);
+
+  useEffect(() => {
+    const fetchAlert = async () => {
+      const alerts = await getAlertsNumber();
+      return alerts;
+    };
+    fetchAlert().then((alerts) => {
+      setAlerts(alerts);
+    });
+  }, []);
 
   return (
     <>

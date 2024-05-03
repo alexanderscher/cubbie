@@ -28,33 +28,9 @@ const ReceiptId = ({ receiptId }: { receiptId: string }) => {
   const [isOptionsOpen, setisOptionsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddOpen, setIsAddOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // Add loading state
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [receipt, setReceipt] = useState<ReceiptType>({
-    card: "",
-    created_at: new Date(),
-    days_until_return: 0,
-    expired: false,
-    id: 0,
-    items: [], // Initialize items as an empty array
-    memo: false,
-    project: {
-      id: 0,
-      name: "",
-      asset_amount: 0,
-      created_at: new Date(),
-      userId: "",
-      projectUserArchive: [],
-    },
-    project_id: 0,
-    purchase_date: new Date(),
-    receipt_image_key: "",
-    receipt_image_url: "",
-    return_date: new Date(),
-    store: "",
-    tracking_number: "",
-    type: "",
-  });
+  const [receipt, setReceipt] = useState<ReceiptType>({} as ReceiptType);
 
   const [filteredItemData, setFilteredItemData] = useState<ReceiptItemType[]>(
     receipt.items
@@ -81,7 +57,7 @@ const ReceiptId = ({ receiptId }: { receiptId: string }) => {
     const fetchReceipt = async () => {
       const receipt = await getReceiptByIdClient(receiptId);
       if (receipt) {
-        setReceipt(receipt);
+        setReceipt(receipt as ReceiptType);
         setFilteredItemData(receipt.items);
       }
       setIsLoading(false);

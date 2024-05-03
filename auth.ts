@@ -6,7 +6,6 @@ import prisma from "@/prisma/client";
 import authConfig from "@/auth.config";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 import { getAccountByUserId } from "./data/account";
-import { getUserByEmail } from "@/lib/userDb";
 import { getUserById } from "@/data/user";
 
 export const {
@@ -104,6 +103,7 @@ export const {
         session.user.name = token.name;
         session.user.email = token.email;
         session.user.isOAuth = token.isOAuth as boolean;
+        session.user.timezone = token.timezone as string;
       }
 
       return session;
@@ -122,6 +122,7 @@ export const {
       token.email = existingUser.email;
       token.role = existingUser.role;
       token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
+      token.timezone = existingUser.alertSettings?.timezone?.value;
 
       return token;
     },

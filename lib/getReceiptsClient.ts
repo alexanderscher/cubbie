@@ -8,6 +8,7 @@ import "moment-timezone";
 export const getReceiptsClient = async () => {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
+  const userTimezone = session.user.timezone || "America/Detroit";
 
   const receipts = await prisma.receipt.findMany({
     where: {
@@ -32,32 +33,16 @@ export const getReceiptsClient = async () => {
     },
   });
 
-  const getUser = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-    include: {
-      alertSettings: {
-        include: {
-          timezone: true,
-        },
-      },
-    },
-  });
-
-  const userTimezone = getUser?.alertSettings?.timezone?.value || "UTC"; // Providing a default value
-
   const currentDateInUserTimezone = moment().tz(userTimezone).startOf("day");
   console.log("currentDateInUserTimezone", currentDateInUserTimezone);
   const updatePromises = receipts.map((receipt) => {
     if (!userTimezone) {
-      // Handle the case where userTimezone is undefined
       console.error("User timezone is undefined.");
       return null;
     }
 
     const receiptReturnDate = moment
-      .tz(receipt.return_date, userTimezone) // Using user's timezone
+      .tz(receipt.return_date, userTimezone)
       .startOf("day");
 
     const isExpired = receiptReturnDate.isBefore(
@@ -115,21 +100,7 @@ export const getReceiptsClient = async () => {
 export const getReceiptByIdClient = async (id: string) => {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
-
-  const getUser = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-    include: {
-      alertSettings: {
-        include: {
-          timezone: true,
-        },
-      },
-    },
-  });
-
-  const userTimezone = getUser?.alertSettings?.timezone?.value || "UTC";
+  const userTimezone = session.user.timezone || "America/Detroit";
 
   const receipt = await prisma.receipt.findUnique({
     where: {
@@ -204,6 +175,5 @@ export const getReceiptByIdClient = async (id: string) => {
     });
   }
 
-  // Return the original receipt if no updates were necessary
   return receipt;
 };

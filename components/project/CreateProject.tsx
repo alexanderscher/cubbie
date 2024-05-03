@@ -1,6 +1,7 @@
 "use client";
 import { createProject } from "@/actions/projects/createProject";
 import RegularButton from "@/components/buttons/RegularButton";
+import SubmitButton from "@/components/buttons/SubmitButton";
 import { FormError } from "@/components/form-error";
 import Loading from "@/components/Loading/Loading";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
@@ -99,13 +100,13 @@ export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
           </div>
 
           <div className="flex justify-end mt-6">
-            <RegularButton
+            <SubmitButton
               type="button"
-              styles="text-emerald-900 border-emerald-900"
+              disabled={!project.name}
               handleClick={handleSubmit}
             >
               <p className="text-xs">Create Project</p>
-            </RegularButton>
+            </SubmitButton>
           </div>
         </div>
 

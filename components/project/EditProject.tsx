@@ -1,6 +1,5 @@
 "use client";
 import { editProject } from "@/actions/projects/editProject";
-import RegularButton from "@/components/buttons/RegularButton";
 import { FormError } from "@/components/form-error";
 import Loading from "@/components/Loading/Loading";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
@@ -8,6 +7,7 @@ import { toast } from "sonner";
 import React, { useState, useTransition } from "react";
 import CurrencyInput from "react-currency-input-field";
 import { ProjectType } from "@/types/ProjectTypes";
+import SubmitButton from "@/components/buttons/SubmitButton";
 
 interface EditProjectProps {
   setEdit: (value: boolean) => void;
@@ -22,6 +22,9 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
   const [error, setError] = useState("");
   const [uploadError, setUploadError] = useState("");
   const [isPending, startTransition] = useTransition();
+  const hasChanges =
+    editProjectObj.name !== project.name ||
+    parseFloat(editProjectObj.asset_amount) !== project.asset_amount;
 
   const handleSubmit = async () => {
     if (editProjectObj.name === "") {
@@ -110,13 +113,13 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
           </div>
 
           <div className="flex justify-end mt-2">
-            <RegularButton
+            <SubmitButton
               type="button"
-              styles=" text-white border-emerald-900"
+              disabled={!hasChanges}
               handleClick={handleSubmit}
             >
-              <p className="text-xs text-emerald-900">Edit Project</p>
-            </RegularButton>
+              <p className="text-xs">Edit Project</p>
+            </SubmitButton>
           </div>
         </div>
 

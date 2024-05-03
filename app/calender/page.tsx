@@ -1,20 +1,17 @@
+import { auth } from "@/auth";
 import Calender from "@/components/calender/Calender";
 import PageWrapper from "@/components/wrapper/PageWrapper";
-import { getReceipts } from "@/lib/receiptsDB";
-import { ReceiptType } from "@/types/ReceiptTypes";
+
+import { Session } from "@/types/Session";
 import React from "react";
 
-const receipt = async () => {
-  const receipts = await getReceipts();
-  return receipts as ReceiptType[];
-};
-
 export default async function CalenderPage() {
-  const receipts = await receipt();
+  const session = (await auth()) as Session;
+
   return (
     <PageWrapper>
       <div className="flex justify-center items-center">
-        <Calender receipts={receipts} />
+        <Calender timezone={session.user.timezone} />
       </div>
     </PageWrapper>
   );

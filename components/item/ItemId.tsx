@@ -21,41 +21,7 @@ interface ItemIDProps {
 const ItemID = ({ itemId }: ItemIDProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
-  const [item, setItem] = useState<ItemType>({
-    barcode: "",
-    character: "",
-    created_at: new Date(),
-    description: "",
-    id: 0,
-    photo_key: "",
-    photo_url: "",
-    price: 0,
-    receipt: {
-      card: "",
-      created_at: new Date(),
-      days_until_return: 0,
-      expired: false,
-      id: 0,
-      memo: false,
-      project: {
-        asset_amount: 0,
-        created_at: new Date(),
-        id: 0,
-        name: "",
-        userId: "",
-      },
-      project_id: 0,
-      purchase_date: new Date(),
-      receipt_image_key: "",
-      receipt_image_url: "",
-      return_date: new Date(),
-      store: "",
-      tracking_number: "",
-      type: "",
-    },
-    receipt_id: 0,
-    returned: false,
-  });
+  const [item, setItem] = useState<ItemType>({} as ItemType);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

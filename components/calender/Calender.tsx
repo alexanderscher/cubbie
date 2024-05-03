@@ -3,12 +3,16 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./calender.module.css";
 import { TooltipComponent } from "@/components/tooltips/ToolTip";
 import { ReceiptType } from "@/types/ReceiptTypes";
 import { useMediaQuery } from "react-responsive";
 import { formatDateToMMDDYY } from "@/utils/Date";
+import { getReceiptsClient } from "@/lib/getReceiptsClient";
+import { BeatLoader } from "react-spinners";
+import moment from "moment";
+import "moment-timezone";
 
 interface Event {
   title: string;
@@ -18,21 +22,38 @@ interface Event {
 }
 
 interface CalenderProps {
-  receipts: ReceiptType[];
+  timezone: string;
 }
 
-const Calender = ({ receipts }: CalenderProps) => {
+const Calender = ({ timezone }: CalenderProps) => {
   const isMobileDeviceQuery = useMediaQuery({ maxWidth: 700 });
   const [isMobileDevice, setIsMobileDevice] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const currentDate = new Date();
-  const sevenDaysLater = new Date();
-  sevenDaysLater.setDate(currentDate.getDate() + 7);
+  const [receipts, setReceipts] = useState<ReceiptType[]>([]);
+  console.log("receipts", receipts);
 
-  const filteredReceipts = receipts.filter((receipt) => {
-    const returnDate = new Date(receipt.return_date);
-    return returnDate >= currentDate && returnDate <= sevenDaysLater;
-  });
+  useEffect(() => {
+    const fetchReceipt = async () => {
+      const receipt = await getReceiptsClient();
+      if (receipt) {
+        setReceipts(receipt as ReceiptType[]);
+      }
+      setIsLoading(false);
+    };
+
+    fetchReceipt();
+  }, []);
+
+  const filteredReceipts = useMemo(() => {
+    const currentDate = moment().tz(timezone);
+    const sevenDaysLater = moment().tz(timezone).add(7, "days");
+
+    return receipts.filter((receipt) => {
+      const returnDate = moment(receipt.return_date).tz(timezone);
+      return returnDate.isBetween(currentDate, sevenDaysLater, undefined, "[]");
+    });
+  }, [receipts, timezone]);
 
   useEffect(() => {
     setIsMobileDevice(isMobileDeviceQuery);
@@ -44,31 +65,30 @@ const Calender = ({ receipts }: CalenderProps) => {
 
   useEffect(() => {
     const fetchEvents = () => {
-      const events = [];
+      const events = receipts
+        .map((receipt) => {
+          const purchaseEvent = {
+            title: `Purchased at ${receipt.store}`,
+            start: moment(receipt.purchase_date).tz(timezone).format(),
+            id: `purchase-${receipt.id}`,
+            className: "fc-event-purchase",
+          };
+          const returnEvent = {
+            title: `Return at ${receipt.store}`,
+            start: moment(receipt.return_date).tz(timezone).format(),
+            id: `return-${receipt.id}`,
+            className: "fc-event-return",
+          };
 
-      for (const receipt of receipts) {
-        const purchaseEvent = {
-          title: `Purchased at ${receipt.store}`,
-          start: receipt.purchase_date,
-          id: `purchase-${receipt.id}`,
-
-          className: "fc-event-purchase",
-        };
-        const returnEvent = {
-          title: `Return at ${receipt.store}`,
-          start: receipt.return_date,
-          id: `return-${receipt.id}`,
-          className: "fc-event-return",
-        };
-
-        events.push(purchaseEvent, returnEvent);
-      }
+          return [purchaseEvent, returnEvent];
+        })
+        .flat();
 
       setAllEvents(events);
     };
 
     fetchEvents();
-  }, [receipts]);
+  }, [receipts, timezone]);
 
   const calendarRef = useRef<any>(null);
 
@@ -85,6 +105,7 @@ const Calender = ({ receipts }: CalenderProps) => {
             {...(isMobileDevice && { height: "100%" })}
             ref={calendarRef}
             plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
+            timeZone={timezone}
             headerToolbar={{
               left: "title",
               right: "today prev,next",
@@ -120,7 +141,12 @@ const Calender = ({ receipts }: CalenderProps) => {
               </div>
             </div>
           ))}
-        {filteredReceipts.length === 0 && (
+        {isLoading && (
+          <div className="w-full flex items-center justify-center mt-10">
+            <BeatLoader loading={isLoading} size={15} color={"rgb(6 78 59)"} />
+          </div>
+        )}
+        {filteredReceipts.length === 0 && !isLoading && (
           <div className="bg-white rounded-lg w-full p-6">
             <div className="flex justify-between">
               <div>

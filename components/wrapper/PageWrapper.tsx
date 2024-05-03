@@ -12,23 +12,16 @@ interface PageWrapperProps {
   children: React.ReactNode;
 }
 
-const fetchAlert = async () => {
-  const alerts = await getAlertsNumber();
-  return alerts;
-};
-
 const PageWrapper = async ({ children }: PageWrapperProps) => {
   const session = (await auth()) as Session;
-  const alerts = await fetchAlert();
-  console.log("alerts", alerts);
 
   return (
     <SearchBarContextProvider>
-      <Topbar session={session} alerts={alerts}>
+      <Topbar session={session}>
         <SearchFetch />
       </Topbar>
       <div className="flex bg-[#e2f1e2]">
-        <Navbar session={session} alerts={alerts}>
+        <Navbar session={session}>
           <SearchFetch />
         </Navbar>
         <div className="page main-content bg-[#e2f1e2] min-h-screen">

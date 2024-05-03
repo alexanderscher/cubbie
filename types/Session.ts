@@ -6,6 +6,7 @@ export interface UserForSession {
   isTwoFactorEnabled: boolean;
   name: string;
   role: string;
+  timezone: string;
 }
 
 export interface Session {

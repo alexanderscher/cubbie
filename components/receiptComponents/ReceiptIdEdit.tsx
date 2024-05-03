@@ -40,32 +40,9 @@ const ReceiptIdEdit = ({ receiptId }: Props) => {
   const [uploadError, setUploadError] = useState("");
   const [isClient, setIsClient] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [receipt, setReceipt] = useState<ExtendedReceiptType>({
-    card: "",
-    created_at: new Date(),
-    days_until_return: 0,
-    expired: false,
-    id: 0,
-    items: [],
-    memo: false,
-    project: {
-      id: 0,
-      name: "",
-      asset_amount: 0,
-      created_at: new Date(),
-      userId: "",
-      projectUserArchive: [],
-    },
-    project_id: 0,
-    purchase_date: new Date(),
-    receipt_image_key: "",
-    receipt_image_url: "",
-    return_date: new Date(),
-    store: "",
-    tracking_number: "",
-    type: "",
-    edit_image: "",
-  });
+  const [receipt, setReceipt] = useState<ExtendedReceiptType>(
+    {} as ExtendedReceiptType
+  );
 
   const [errorM, setErrorM] = useState({
     purchase_date: "",

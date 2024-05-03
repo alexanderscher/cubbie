@@ -27,31 +27,9 @@ interface ProjectIdProps {
   projectId: string;
 }
 
-const defaultProject: ProjectType = {
-  id: 0,
-  name: "",
-  created_at: new Date(),
-  userId: "",
-  receipts: [],
-  asset_amount: 0,
-  projectUsers: [],
-  projectUserArchive: [],
-  user: {
-    id: "",
-    name: "",
-    email: "",
-    emailVerified: undefined,
-    image: "",
-    role: "",
-    password: "",
-    isTwoFactorEnabled: false,
-    phone: "",
-  },
-};
-
 export const ProjectId = ({ sessionUserId, projectId }: ProjectIdProps) => {
   const [isAddOpen, setAddReceiptOpen] = useState(false);
-  const [project, setProject] = useState<ProjectType>(defaultProject);
+  const [project, setProject] = useState<ProjectType>({} as ProjectType);
 
   console.log(project);
   const [isOpen, setIsOpen] = useState(false);

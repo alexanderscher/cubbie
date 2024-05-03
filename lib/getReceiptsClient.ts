@@ -12,9 +12,13 @@ export const getReceiptsClient = async () => {
   const receipts = await prisma.receipt.findMany({
     where: {
       project: {
-        userId: userId,
+        OR: [
+          { userId: userId },
+          { projectUsers: { some: { userId: userId } } },
+        ],
       },
     },
+
     include: {
       items: true,
       project: {
@@ -80,12 +84,21 @@ export const getReceiptsClient = async () => {
   const updatedReceipts = await prisma.receipt.findMany({
     where: {
       project: {
-        userId: userId,
-        projectUserArchive: {
-          none: {
-            userId: userId,
+        AND: [
+          {
+            projectUserArchive: {
+              none: {
+                userId: userId,
+              },
+            },
           },
-        },
+          {
+            OR: [
+              { userId: userId },
+              { projectUsers: { some: { userId: userId } } },
+            ],
+          },
+        ],
       },
     },
     include: {
@@ -116,12 +129,26 @@ export const getReceiptByIdClient = async (id: string) => {
     },
   });
 
-  // const userTimezone = getUser?.alertSettings?.timezone?.value || "UTC"; // Providing a default value
+  const userTimezone = getUser?.alertSettings?.timezone?.value || "UTC";
 
   const receipt = await prisma.receipt.findUnique({
     where: {
       project: {
-        userId: userId,
+        AND: [
+          {
+            projectUserArchive: {
+              none: {
+                userId: userId,
+              },
+            },
+          },
+          {
+            OR: [
+              { userId: userId },
+              { projectUsers: { some: { userId: userId } } },
+            ],
+          },
+        ],
       },
       id: parseInt(id),
     },
@@ -135,35 +162,48 @@ export const getReceiptByIdClient = async (id: string) => {
     },
   });
 
-  // if (!receipt) {
-  //   // Handle the case where receipt is not found
-  //   console.error("Receipt not found.");
-  //   return null;
-  // }
+  if (!receipt) {
+    console.error("Receipt not found.");
+    return null;
+  }
 
-  // const receiptReturnDate = moment
-  //   .tz(receipt.return_date, userTimezone)
-  //   .startOf("day");
+  const receiptReturnDate = moment
+    .tz(receipt.return_date, userTimezone)
+    .startOf("day");
+  const currentDateInUserTimezone = moment.tz(userTimezone).startOf("day");
+  const isExpired = receiptReturnDate.isBefore(
+    currentDateInUserTimezone,
+    "day"
+  );
 
-  // const currentDateInUserTimezone = moment().tz(userTimezone).startOf("day");
+  if (isExpired && !receipt.expired) {
+    return await prisma.receipt.update({
+      where: { id: receipt.id },
+      data: { expired: true },
+      include: {
+        items: true,
+        project: {
+          include: {
+            projectUserArchive: true,
+          },
+        },
+      },
+    });
+  } else if (!isExpired && receipt.expired) {
+    return await prisma.receipt.update({
+      where: { id: receipt.id },
+      data: { expired: false },
+      include: {
+        items: true,
+        project: {
+          include: {
+            projectUserArchive: true,
+          },
+        },
+      },
+    });
+  }
 
-  // const isExpired = receiptReturnDate.isBefore(
-  //   currentDateInUserTimezone,
-  //   "day"
-  // );
-
-  // if (isExpired) {
-  //   await prisma.receipt.update({
-  //     where: { id: receipt.id },
-  //     data: { expired: true },
-  //   });
-  // }
-  // if (!isExpired && receipt.expired) {
-  //   return prisma.receipt.update({
-  //     where: { id: receipt.id },
-  //     data: { expired: false },
-  //   });
-  // }
-
+  // Return the original receipt if no updates were necessary
   return receipt;
 };

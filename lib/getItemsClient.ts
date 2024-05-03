@@ -11,12 +11,21 @@ export const getItemsClient = async () => {
     where: {
       receipt: {
         project: {
-          userId: userId,
-          projectUserArchive: {
-            none: {
-              userId: userId,
+          AND: [
+            {
+              projectUserArchive: {
+                none: {
+                  userId: userId,
+                },
+              },
             },
-          },
+            {
+              OR: [
+                { userId: userId },
+                { projectUsers: { some: { userId: userId } } },
+              ],
+            },
+          ],
         },
       },
     },
@@ -43,7 +52,21 @@ export const getItemsByIdClient = async (id: string) => {
     where: {
       receipt: {
         project: {
-          userId: userId,
+          AND: [
+            {
+              projectUserArchive: {
+                none: {
+                  userId: userId,
+                },
+              },
+            },
+            {
+              OR: [
+                { userId: userId },
+                { projectUsers: { some: { userId: userId } } },
+              ],
+            },
+          ],
         },
       },
       id: parseInt(id),

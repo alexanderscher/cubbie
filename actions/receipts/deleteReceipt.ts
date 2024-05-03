@@ -48,6 +48,11 @@ export const deleteReceipt = async (receiptId: number) => {
         id: receiptId,
       },
     });
+    await prisma.alert.deleteMany({
+      where: {
+        receiptId: receiptId,
+      },
+    });
 
     revalidateTag(`projects_user_${userId}`);
 

@@ -1,4 +1,4 @@
-import { addDays, format, parseISO } from "date-fns";
+import { addDays, format } from "date-fns";
 import moment from "moment";
 
 export function calculateReturnDate(dateString: string, days: number) {
@@ -11,9 +11,12 @@ export function formatDateToMMDDYY(dateInput: Date | string) {
   return moment.utc(dateInput).format("MM/DD/YY");
 }
 
-export const formatDateToYYYYMMDD = (dateInput: Date | string) => {
+export const formatDateToYYYYMMDD = (
+  dateInput: Date | string,
+  timezone = "UTC"
+) => {
   if (!dateInput) return "";
 
-  // Parse the date as UTC and format it
-  return moment.utc(dateInput).format("YYYY-MM-DD");
+  // Use the provided timezone to format the date
+  return moment.tz(dateInput, timezone).format("YYYY-MM-DD");
 };

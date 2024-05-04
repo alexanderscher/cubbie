@@ -44,6 +44,9 @@ export const editReceipt = async (
   const { id } = params;
   const sessionUserId = session?.user?.id as string;
   const timezone = session.user.timezone || "America/Detroit";
+  const getCorrectDateForTimezone = (dateString: Date, timezone: string) => {
+    return moment.tz(dateString, timezone).startOf("day").toISOString();
+  };
 
   if (!sessionUserId) {
     return { error: "Unauthorized" };
@@ -63,6 +66,13 @@ export const editReceipt = async (
 
     const uploadedFileKeys = [];
 
+    console.log(
+      "Before database update",
+      "purchase_date:",
+      getCorrectDateForTimezone(purchase_date, timezone),
+      "return_date:",
+      getCorrectDateForTimezone(return_date, timezone)
+    );
     let receiptFileUrl = "";
     let receiptFileKey = "";
     if (edit_image) {
@@ -99,8 +109,8 @@ export const editReceipt = async (
         receipt_image_key:
           receiptFileUrl === "" ? receipt_image_key : receiptFileKey,
         tracking_number,
-        purchase_date: moment.tz(purchase_date, timezone).toISOString(),
-        return_date: moment.tz(return_date, timezone).toISOString(),
+        purchase_date: getCorrectDateForTimezone(purchase_date, timezone),
+        return_date: moment.tz("2024-05-04T12:00:00", timezone).utc().format(),
         days_until_return: moment
           .tz(return_date, timezone)
           .diff(moment.tz(timezone), "days"),

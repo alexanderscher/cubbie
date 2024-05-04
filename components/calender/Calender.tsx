@@ -55,6 +55,8 @@ const Calender = ({ timezone }: CalenderProps) => {
     });
   }, [receipts, timezone]);
 
+  console.log("filteredReceipts", filteredReceipts);
+
   useEffect(() => {
     setIsMobileDevice(isMobileDeviceQuery);
   }, [isMobileDeviceQuery]);

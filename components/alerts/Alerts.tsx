@@ -17,25 +17,28 @@ import { Overlay } from "@/components/overlays/Overlay";
 import PageLoading from "@/components/Loading/PageLoading";
 import { getAlerts } from "@/lib/alerts";
 
-const describeDate = (dateString: string) => {
-  const date = parse(dateString, "MM/dd/yy", new Date());
+import moment from "moment";
 
-  if (isToday(date)) {
+const describeDate = (dateString: string) => {
+  // Parse the date in UTC mode from the given format
+  const date = moment.utc(dateString, "MM/DD/YY");
+
+  // Compare with the current UTC date
+  if (date.isSame(moment.utc(), "day")) {
     return "Today";
   }
 
-  if (isYesterday(date)) {
+  if (date.isSame(moment.utc().subtract(1, "days"), "day")) {
     return "1 day ago";
   }
 
-  const oneWeekAgo = subDays(new Date(), 7);
-  if (format(date, "MM/dd/yyyy") === format(oneWeekAgo, "MM/dd/yyyy")) {
+  if (date.isSame(moment.utc().subtract(7, "days"), "day")) {
     return "1 week ago";
   }
 
-  return format(date, "MMMM dd, yyyy");
+  // Return the date formatted in UTC
+  return date.format("MMMM DD, YYYY");
 };
-
 interface AlertProps {
   userId: string | undefined;
 }
@@ -254,6 +257,7 @@ const SingleAlert = ({ alertObj, userId }: SingleAlertProps) => {
           }`}
         >
           {describeDate(formatDateToMMDDYY(alertObj.date))}
+          {/* {formatDateToMMDDYY(alertObj.date)} */}
         </div>
       </div>
       <Image

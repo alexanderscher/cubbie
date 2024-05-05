@@ -6,7 +6,6 @@ import prisma from "@/prisma/client";
 import { Session } from "@/types/Session";
 import { ReceiptType } from "@/types/ReceiptTypes";
 import moment from "moment";
-import "moment-timezone";
 
 interface UserReceiptUpdate {
   id: string;
@@ -43,10 +42,6 @@ export const editReceipt = async (
   const session = (await auth()) as Session;
   const { id } = params;
   const sessionUserId = session?.user?.id as string;
-  const timezone = session.user.timezone || "America/Detroit";
-  const getCorrectDateForTimezone = (dateString: Date, timezone: string) => {
-    return moment.tz(dateString, timezone).startOf("day").toISOString();
-  };
 
   if (!sessionUserId) {
     return { error: "Unauthorized" };
@@ -66,13 +61,6 @@ export const editReceipt = async (
 
     const uploadedFileKeys = [];
 
-    console.log(
-      "Before database update",
-      "purchase_date:",
-      getCorrectDateForTimezone(purchase_date, timezone),
-      "return_date:",
-      getCorrectDateForTimezone(return_date, timezone)
-    );
     let receiptFileUrl = "";
     let receiptFileKey = "";
     if (edit_image) {
@@ -92,9 +80,9 @@ export const editReceipt = async (
     }
 
     const expired = moment
-      .tz(return_date, timezone)
+      .utc(return_date)
       .startOf("day")
-      .isBefore(moment.tz(timezone).startOf("day"));
+      .isBefore(moment.utc().startOf("day"));
 
     await prisma.receipt.update({
       where: {
@@ -109,11 +97,12 @@ export const editReceipt = async (
         receipt_image_key:
           receiptFileUrl === "" ? receipt_image_key : receiptFileKey,
         tracking_number,
-        purchase_date: getCorrectDateForTimezone(purchase_date, timezone),
-        return_date: moment.tz("2024-05-04T12:00:00", timezone).utc().format(),
-        days_until_return: moment
-          .tz(return_date, timezone)
-          .diff(moment.tz(timezone), "days"),
+        purchase_date: moment(purchase_date).toISOString(),
+        return_date: moment(return_date).toISOString(),
+        days_until_return: moment(return_date).diff(
+          moment(purchase_date),
+          "days"
+        ),
         expired: expired,
       },
     });
@@ -154,7 +143,7 @@ export const editReceipt = async (
 
     if (receipt) {
       const { project } = receipt;
-      const projectOwner = project.user; // This is the project owner
+      const projectOwner = project.user;
       const projectUsers = project.projectUsers.map((pu) => pu.user);
       const allUsers = [projectOwner, ...projectUsers];
 
@@ -164,21 +153,21 @@ export const editReceipt = async (
           receiptId: receipt.id,
         },
       });
+      const alertsToCreate: any[] = [];
 
-      const alertsToCreate = [];
       for (const user of allUsers) {
-        console.log(user.id, "USERID");
         const { alertSettings } = user as UserReceiptUpdate;
-        if (alertSettings && alertSettings.timezone) {
-          const userTimezone = alertSettings.timezone.value;
-          const today = moment.tz(userTimezone);
-          const returnDate = moment.tz(receipt.return_date, userTimezone);
-          const daysUntilReturn = returnDate.diff(today, "days");
+
+        if (alertSettings) {
+          const today = moment.utc();
+          const returnDate = moment(return_date).toISOString();
+
+          const daysUntilReturn = moment(return_date).diff(today, "days");
 
           if (alertSettings.notifyInOneWeek && daysUntilReturn === 6) {
             alertsToCreate.push({
               userId: user.id,
-              date: returnDate.clone().subtract(7, "days").toDate(),
+              date: returnDate,
               type: "1_WEEK_REMINDER",
               receiptId: receipt.id,
               projectId: project.id,
@@ -187,7 +176,7 @@ export const editReceipt = async (
           if (alertSettings.notifyInOneDay && daysUntilReturn === 1) {
             alertsToCreate.push({
               userId: user.id,
-              date: returnDate.clone().subtract(1, "days").toDate(),
+              date: returnDate,
               type: "1_DAY_REMINDER",
               receiptId: receipt.id,
               projectId: project.id,
@@ -196,7 +185,7 @@ export const editReceipt = async (
           if (alertSettings.notifyToday && daysUntilReturn === 0) {
             alertsToCreate.push({
               userId: user.id,
-              date: today.toDate(),
+              date: returnDate,
               type: "TODAY_REMINDER",
               receiptId: receipt.id,
               projectId: project.id,

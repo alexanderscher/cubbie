@@ -24,7 +24,6 @@ import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { ReceiptItemType, ReceiptType } from "@/types/ReceiptTypes";
 import { getReceiptByIdClient } from "@/lib/getReceiptsClient";
 import { BeatLoader } from "react-spinners";
-import "moment-timezone";
 type ExtendedReceiptType = ReceiptType & {
   edit_image: string;
 };
@@ -363,10 +362,7 @@ const ReceiptIdEdit = ({ receiptId, timezone }: Props) => {
                     <input
                       type="date"
                       style={{ WebkitAppearance: "none" }}
-                      value={formatDateToYYYYMMDD(
-                        values.return_date,
-                        timezone || "America/Detroit"
-                      )}
+                      value={formatDateToYYYYMMDD(values.return_date)}
                       onChange={handleChange("return_date")}
                       className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2 bg-white"
                     />

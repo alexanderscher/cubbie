@@ -12,7 +12,6 @@ import { formatDateToMMDDYY } from "@/utils/Date";
 import { getReceiptsClient } from "@/lib/getReceiptsClient";
 import { BeatLoader } from "react-spinners";
 import moment from "moment";
-import "moment-timezone";
 
 interface Event {
   title: string;
@@ -31,13 +30,23 @@ const Calender = ({ timezone }: CalenderProps) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [receipts, setReceipts] = useState<ReceiptType[]>([]);
+  const [filteredReceipts, setFilteredReceipts] = useState<ReceiptType[]>([]);
+
   console.log("receipts", receipts);
 
   useEffect(() => {
     const fetchReceipt = async () => {
       const receipt = await getReceiptsClient();
       if (receipt) {
-        setReceipts(receipt as ReceiptType[]);
+        const newReceipts = receipt as ReceiptType[];
+        setReceipts(newReceipts);
+
+        const filtered = newReceipts.filter(
+          (r) =>
+            moment.utc(r.return_date).isBefore(moment.utc().add(7, "days")) &&
+            moment.utc(r.return_date).isSameOrAfter(moment.utc(), "day")
+        );
+        setFilteredReceipts(filtered);
       }
       setIsLoading(false);
     };
@@ -45,17 +54,9 @@ const Calender = ({ timezone }: CalenderProps) => {
     fetchReceipt();
   }, []);
 
-  const filteredReceipts = useMemo(() => {
-    const currentDate = moment().tz(timezone);
-    const sevenDaysLater = moment().tz(timezone).add(7, "days");
-
-    return receipts.filter((receipt) => {
-      const returnDate = moment(receipt.return_date).tz(timezone);
-      return returnDate.isBetween(currentDate, sevenDaysLater, undefined, "[]");
-    });
-  }, [receipts, timezone]);
-
-  console.log("filteredReceipts", filteredReceipts);
+  const currentDate = new Date();
+  const sevenDaysLater = new Date();
+  sevenDaysLater.setDate(currentDate.getDate() + 7);
 
   useEffect(() => {
     setIsMobileDevice(isMobileDeviceQuery);
@@ -65,32 +66,35 @@ const Calender = ({ timezone }: CalenderProps) => {
     { title: "", start: "", id: 0 },
   ]);
 
+  console.log(allEvents);
+
   useEffect(() => {
     const fetchEvents = () => {
-      const events = receipts
-        .map((receipt) => {
-          const purchaseEvent = {
-            title: `Purchased at ${receipt.store}`,
-            start: moment(receipt.purchase_date).tz(timezone).format(),
-            id: `purchase-${receipt.id}`,
-            className: "fc-event-purchase",
-          };
-          const returnEvent = {
-            title: `Return at ${receipt.store}`,
-            start: moment(receipt.return_date).tz(timezone).format(),
-            id: `return-${receipt.id}`,
-            className: "fc-event-return",
-          };
+      const events = [];
 
-          return [purchaseEvent, returnEvent];
-        })
-        .flat();
+      for (const receipt of receipts) {
+        const purchaseEvent = {
+          title: `Purchased at ${receipt.store}`,
+          start: receipt.purchase_date,
+          id: `purchase-${receipt.id}`,
+
+          className: "fc-event-purchase",
+        };
+        const returnEvent = {
+          title: `Return at ${receipt.store}`,
+          start: receipt.return_date,
+          id: `return-${receipt.id}`,
+          className: "fc-event-return",
+        };
+
+        events.push(purchaseEvent, returnEvent);
+      }
 
       setAllEvents(events);
     };
 
     fetchEvents();
-  }, [receipts, timezone]);
+  }, [receipts]);
 
   const calendarRef = useRef<any>(null);
 
@@ -107,7 +111,6 @@ const Calender = ({ timezone }: CalenderProps) => {
             {...(isMobileDevice && { height: "100%" })}
             ref={calendarRef}
             plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
-            timeZone={timezone}
             headerToolbar={{
               left: "title",
               right: "today prev,next",
@@ -130,7 +133,8 @@ const Calender = ({ timezone }: CalenderProps) => {
       </div>
       <div className="w-full flex flex-col gap-3">
         <div className="text-emerald-900 text-xl mb-4">Upcoming returns</div>
-        {filteredReceipts.length > 0 &&
+        {filteredReceipts &&
+          filteredReceipts.length > 0 &&
           filteredReceipts.map((receipt) => (
             <div key={receipt.id} className="bg-white rounded-lg w-full p-6">
               <div className="flex justify-between">

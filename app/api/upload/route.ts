@@ -6,6 +6,7 @@ import { Session } from "@/types/Session";
 import { ItemInput } from "@/types/form";
 
 import { calculateReturnDate } from "@/utils/Date";
+import moment from "moment";
 import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
@@ -116,20 +117,15 @@ export async function POST(request: Request) {
 
     const return_date = calculateReturnDate(purchase_date, days_until_return);
 
-    const dateObjectPurchase = new Date(purchase_date);
-    const purchaseDate = dateObjectPurchase.toISOString();
-    const dateObjectReturn = new Date(return_date);
-    const returnDate = dateObjectReturn.toISOString();
-
     const receipt = await prisma.receipt.create({
       data: {
         type,
         store,
         card,
         tracking_number: tracking_number,
-        purchase_date: purchaseDate,
+        purchase_date: moment(purchase_date).toISOString(),
         days_until_return: days_until_return,
-        return_date: returnDate,
+        return_date: moment(return_date).toISOString(),
         receipt_image_url: receiptFileUrl,
         receipt_image_key: receiptFileKey,
         memo,

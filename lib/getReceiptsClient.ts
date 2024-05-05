@@ -8,7 +8,6 @@ import "moment-timezone";
 export const getReceiptsClient = async () => {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
-  const userTimezone = session.user.timezone || "America/Detroit";
 
   const receipts = await prisma.receipt.findMany({
     where: {
@@ -33,22 +32,11 @@ export const getReceiptsClient = async () => {
     },
   });
 
-  const currentDateInUserTimezone = moment().tz(userTimezone).startOf("day");
-  console.log("currentDateInUserTimezone", currentDateInUserTimezone);
   const updatePromises = receipts.map((receipt) => {
-    if (!userTimezone) {
-      console.error("User timezone is undefined.");
-      return null;
-    }
+    const receiptReturnDate = moment.utc(receipt.return_date).startOf("day");
 
-    const receiptReturnDate = moment
-      .tz(receipt.return_date, userTimezone)
-      .startOf("day");
-
-    const isExpired = receiptReturnDate.isBefore(
-      currentDateInUserTimezone,
-      "day"
-    );
+    // Check if the receipt return date is strictly before the start of today in UTC
+    const isExpired = receiptReturnDate.isBefore(moment.utc().startOf("day"));
 
     if (isExpired) {
       return prisma.receipt.update({
@@ -100,7 +88,6 @@ export const getReceiptsClient = async () => {
 export const getReceiptByIdClient = async (id: string) => {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
-  const userTimezone = session.user.timezone || "America/Detroit";
 
   const receipt = await prisma.receipt.findUnique({
     where: {
@@ -138,14 +125,10 @@ export const getReceiptByIdClient = async (id: string) => {
     return null;
   }
 
-  const receiptReturnDate = moment
-    .tz(receipt.return_date, userTimezone)
-    .startOf("day");
-  const currentDateInUserTimezone = moment.tz(userTimezone).startOf("day");
-  const isExpired = receiptReturnDate.isBefore(
-    currentDateInUserTimezone,
-    "day"
-  );
+  const receiptReturnDate = moment.utc(receipt.return_date).startOf("day");
+
+  // Check if the receipt return date is strictly before the start of today in UTC
+  const isExpired = receiptReturnDate.isBefore(moment.utc().startOf("day"));
 
   if (isExpired && !receipt.expired) {
     return await prisma.receipt.update({

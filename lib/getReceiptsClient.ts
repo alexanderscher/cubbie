@@ -33,10 +33,17 @@ export const getReceiptsClient = async () => {
   });
 
   const updatePromises = receipts.map((receipt) => {
-    const receiptReturnDate = moment.utc(receipt.return_date).startOf("day");
+    const receiptReturnDate = moment
+      .utc(receipt.return_date)
+      .tz(session.user.timezone)
+      .startOf("day");
 
-    // Check if the receipt return date is strictly before the start of today in UTC
-    const isExpired = receiptReturnDate.isBefore(moment.utc().startOf("day"));
+    const currentDateInTimezone = moment
+      .utc()
+      .tz(session.user.timezone)
+      .startOf("day");
+
+    const isExpired = receiptReturnDate.isBefore(currentDateInTimezone);
 
     if (isExpired) {
       return prisma.receipt.update({
@@ -125,10 +132,17 @@ export const getReceiptByIdClient = async (id: string) => {
     return null;
   }
 
-  const receiptReturnDate = moment.utc(receipt.return_date).startOf("day");
+  const receiptReturnDate = moment
+    .utc(receipt.return_date)
+    .tz(session.user.timezone)
+    .startOf("day");
 
-  // Check if the receipt return date is strictly before the start of today in UTC
-  const isExpired = receiptReturnDate.isBefore(moment.utc().startOf("day"));
+  const currentDateInTimezone = moment
+    .utc()
+    .tz(session.user.timezone)
+    .startOf("day");
+
+  const isExpired = receiptReturnDate.isBefore(currentDateInTimezone);
 
   if (isExpired && !receipt.expired) {
     return await prisma.receipt.update({

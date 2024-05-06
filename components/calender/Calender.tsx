@@ -12,6 +12,7 @@ import { formatDateToMMDDYY } from "@/utils/Date";
 import { getReceiptsClient } from "@/lib/getReceiptsClient";
 import { BeatLoader } from "react-spinners";
 import moment from "moment";
+import "moment-timezone";
 
 interface Event {
   title: string;
@@ -32,8 +33,6 @@ const Calender = ({ timezone }: CalenderProps) => {
   const [receipts, setReceipts] = useState<ReceiptType[]>([]);
   const [filteredReceipts, setFilteredReceipts] = useState<ReceiptType[]>([]);
 
-  console.log("receipts", receipts);
-
   useEffect(() => {
     const fetchReceipt = async () => {
       const receipt = await getReceiptsClient();
@@ -41,11 +40,17 @@ const Calender = ({ timezone }: CalenderProps) => {
         const newReceipts = receipt as ReceiptType[];
         setReceipts(newReceipts);
 
-        const filtered = newReceipts.filter(
-          (r) =>
-            moment.utc(r.return_date).isBefore(moment.utc().add(7, "days")) &&
-            moment.utc(r.return_date).isSameOrAfter(moment.utc(), "day")
-        );
+        const filtered = newReceipts.filter((r) => {
+          const currentDateInDetroit = moment.utc().tz(timezone).startOf("day");
+          const returnDateUTC = moment.utc(r.return_date);
+
+          return (
+            returnDateUTC.isBefore(
+              currentDateInDetroit.clone().add(7, "days")
+            ) && returnDateUTC.isSameOrAfter(currentDateInDetroit, "day")
+          );
+        });
+
         setFilteredReceipts(filtered);
       }
       setIsLoading(false);
@@ -54,10 +59,6 @@ const Calender = ({ timezone }: CalenderProps) => {
     fetchReceipt();
   }, []);
 
-  const currentDate = new Date();
-  const sevenDaysLater = new Date();
-  sevenDaysLater.setDate(currentDate.getDate() + 7);
-
   useEffect(() => {
     setIsMobileDevice(isMobileDeviceQuery);
   }, [isMobileDeviceQuery]);
@@ -65,8 +66,6 @@ const Calender = ({ timezone }: CalenderProps) => {
   const [allEvents, setAllEvents] = useState<Event[]>([
     { title: "", start: "", id: 0 },
   ]);
-
-  console.log(allEvents);
 
   useEffect(() => {
     const fetchEvents = () => {

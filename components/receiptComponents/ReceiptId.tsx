@@ -158,7 +158,7 @@ const ReceiptId = ({ receiptId }: { receiptId: string }) => {
             onClick={() => setisOptionsOpen(!isOptionsOpen)}
           >
             <Image src="/three-dots.png" alt="" width={20} height={20} />
-            {isOptionsOpen && (
+            {isOptionsOpen && !isLoading && (
               <>
                 <Overlay onClose={() => setIsOpen(false)} />
                 <ReceiptOptionsModal receipt={receipt} />
@@ -215,7 +215,6 @@ const Items = ({
   setIsAddOpen: (value: boolean) => void;
   isLoading: boolean;
 }) => {
-  console.log(filteredItemData);
   const toggleOpenItem = (
     itemId: number | undefined,
     event: React.MouseEvent<HTMLDivElement>

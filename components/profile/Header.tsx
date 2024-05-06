@@ -5,7 +5,7 @@ import Link from "next/link";
 const Header = () => {
   return (
     <div
-      className={`${styles.header}  text-emerald-900 bg-white min-w-[200px] rounded-lg shadow p-6 flex flex-col gap-4 h-screen`}
+      className={`${styles.header}  text-emerald-900 bg-white min-w-[200px] rounded-lg shadow p-8 flex flex-col gap-4 `}
     >
       <h1 className="text-lg">Account</h1>
       <div className="flex flex-col gap-4 text-sm ">

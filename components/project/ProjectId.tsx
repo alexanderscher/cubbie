@@ -31,7 +31,6 @@ export const ProjectId = ({ sessionUserId, projectId }: ProjectIdProps) => {
   const [isAddOpen, setAddReceiptOpen] = useState(false);
   const [project, setProject] = useState<ProjectType>({} as ProjectType);
 
-  console.log(project);
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredReceiptData, setFilteredReceiptData] = useState<ReceiptType[]>(
@@ -192,7 +191,7 @@ export const ProjectId = ({ sessionUserId, projectId }: ProjectIdProps) => {
                   onClick={() => setIsOpen(!isOpen)}
                 >
                   <Image src="/three-dots.png" alt="" width={20} height={20} />
-                  {isOpen && (
+                  {isOpen && !isLoading && (
                     <>
                       <Overlay onClose={() => setIsOpen(false)} />
                       <ProjectOptionsModal

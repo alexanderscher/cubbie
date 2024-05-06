@@ -245,7 +245,7 @@ const ReceiptIdEdit = ({ receiptId, timezone }: Props) => {
 
           <div className={`${styles.receipt} `}>
             <div className={`${styles.receiptLeft}  flex flex-col gap-2 `}>
-              <div className={` rounded  bg-white flex flex-col gap-4 p-8`}>
+              <div className={` rounded-lg  bg-white flex flex-col gap-4 p-8`}>
                 {!values.receipt_image_url && !values.edit_image && (
                   <div className="w-full  overflow-hidden  relative">
                     <FileUploadDropzone

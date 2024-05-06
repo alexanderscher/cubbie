@@ -12,8 +12,9 @@ import RegularButton from "@/components/buttons/RegularButton";
 import { addPhone } from "@/actions/user/addPhone";
 import { toast } from "sonner";
 import Loading from "@/components/Loading/Loading";
-import TimezoneSelect, { ITimezone } from "react-timezone-select";
+import TimezoneSelect from "react-timezone-select";
 import { changeTimezone } from "@/actions/alerts/changeTimezone";
+import { set } from "date-fns";
 
 interface AlertSettingsProps {
   user: UserAlerts;
@@ -38,6 +39,7 @@ const AlertSettings = ({ user }: AlertSettingsProps) => {
         try {
           addPhone(value);
           toast.success("Phone number added successfully");
+          setEditPhone(false);
         } catch (error) {
           toast.error("An error occurred");
         }
@@ -79,23 +81,23 @@ const AlertSettings = ({ user }: AlertSettingsProps) => {
         </div>
       </div>
       <div className="bg-white rounded-lg  flex flex-col ">
-        <div className="flex justify-between items-center p-4">
-          <h1 className="text-xs">Due today alerts</h1>
+        <div className="flex justify-between items-center p-6">
+          <h1 className="text-sm">Due today alerts</h1>
           <ToggleSwitch
             userAlerts={user.alertSettings.notifyToday}
             type="notifyToday"
           />
         </div>
 
-        <div className="flex justify-between items-center border-t-[1px] p-4">
-          <h1 className="text-xs">Due in one day alerts</h1>
+        <div className="flex justify-between items-center border-t-[1px] p-6">
+          <h1 className="text-sm">Due in one day alerts</h1>
           <ToggleSwitch
             userAlerts={user.alertSettings.notifyInOneDay}
             type="notifyInOneDay"
           />
         </div>
-        <div className="flex justify-between items-center border-t-[1px] p-4">
-          <h1 className="text-xs">Due in one week alerts</h1>
+        <div className="flex justify-between items-center border-t-[1px] p-6">
+          <h1 className="text-sm">Due in one week alerts</h1>
           <ToggleSwitch
             userAlerts={user.alertSettings.notifyInOneWeek}
             type="notifyInOneWeek"
@@ -192,9 +194,9 @@ const ToggleSwitch = ({
 };
 
 const formatE164ToReadable = (phoneNumber: string) => {
-  if (!phoneNumber.startsWith("+1") || phoneNumber.length !== 12) {
-    throw new Error("Unsupported phone number format or non-US number.");
-  }
+  // if (!phoneNumber.startsWith("+1") || phoneNumber.length !== 12) {
+  //   throw new Error("Unsupported phone number format or non-US number.");
+  // }
 
   const areaCode = phoneNumber.slice(2, 5);
   const prefix = phoneNumber.slice(5, 8);

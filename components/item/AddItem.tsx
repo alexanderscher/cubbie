@@ -1,5 +1,6 @@
 "use client";
 import RegularButton from "@/components/buttons/RegularButton";
+import SubmitButton from "@/components/buttons/SubmitButton";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import Loading from "@/components/Loading/Loading";
@@ -67,7 +68,7 @@ export const AddItem = ({
     };
   };
   return (
-    <div className="bg-white rounded shadow-xl m-4 max-w-md w-full">
+    <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full">
       <div className="flex justify-between items-center border-b  px-5 py-3  rounded-t-lg border-emerald-900">
         <h3 className="text-md text-emerald-900">Add Item</h3>
         <button
@@ -226,13 +227,13 @@ export const AddItem = ({
         </div>
 
         <div className="flex justify-end mt-6">
-          <RegularButton
+          <SubmitButton
             type="button"
-            styles=" border-emerald-900"
             handleClick={handleSubmit}
+            disabled={!newItem.description}
           >
-            <p className="text-xs text-emerald-900">Add Item</p>
-          </RegularButton>
+            <p className="text-xs">Add item</p>
+          </SubmitButton>
         </div>
       </div>
       {isPending && <Loading loading={isPending} />}

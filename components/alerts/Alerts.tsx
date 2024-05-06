@@ -126,9 +126,9 @@ const AlertComponent = ({ userId }: AlertProps) => {
         {sortedAndFilteredData.length === 0 && !isLoading && <NoAlerts />}
         <div className="flex flex-col gap-6">
           {sortedAndFilteredData.map((alertObj) => (
-            <>
+            <div key={alertObj.id}>
               <SingleAlert alertObj={alertObj} userId={userId} />
-            </>
+            </div>
           ))}
         </div>
       </div>

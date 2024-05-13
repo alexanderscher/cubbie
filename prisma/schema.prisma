@@ -34,6 +34,7 @@ model User {
   alertRead             AlertRead[]
   projectUserArchive    ProjectUserArchive[]
   alertSettings         AlertSettings?
+  returns               Returns[]
 }
 
 model AlertSettings {
@@ -142,6 +143,14 @@ model Items {
   receipt     Receipt  @relation(fields: [receipt_id], references: [id], onDelete: Cascade)
   created_at  DateTime
   returned    Boolean  @default(false)
+}
+
+model Returns {
+  id     Int    @id @default(autoincrement())
+  store  String
+  days   Int
+  userId String
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Account {

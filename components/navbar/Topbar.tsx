@@ -189,7 +189,7 @@ const Topbar = ({ session, children }: TopbarProps) => {
             <Link
               onClick={() => setMenu(false)}
               className="flex justify-between"
-              href="/"
+              href="/alerts"
             >
               <p className="text-white text-3xl">Alerts</p>
 

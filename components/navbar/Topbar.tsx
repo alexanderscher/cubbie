@@ -148,6 +148,24 @@ const Topbar = ({ session, children }: TopbarProps) => {
                 />
               </div>
             </Link>
+            <Link
+              className="flex justify-between"
+              onClick={() => setMenu(false)}
+              href="/items"
+            >
+              <p className="text-white text-3xl">Returns</p>
+
+              <div>
+                <Image
+                  src="/return.png"
+                  alt=""
+                  width={35}
+                  height={35}
+                  className="object-cover "
+                  style={{ objectFit: "cover", objectPosition: "center" }}
+                />
+              </div>
+            </Link>
 
             <Link
               className="flex justify-between"

@@ -107,6 +107,28 @@ const Navbar = ({ session, children }: NavbarProps) => {
             </Link>
           </div>
           <div
+            className={`${styles.linkWrapper} ${
+              pathname === "/returns" || pathname.includes("returns")
+                ? styles.page
+                : ""
+            }`}
+          >
+            <Link
+              href="/returns"
+              className="flex flex-col justify-center items-center gap-2"
+            >
+              <Image
+                src="/return.png"
+                alt=""
+                width={35}
+                height={35}
+                className="object-cover"
+                style={{ objectFit: "cover", objectPosition: "center" }}
+              />
+              <p className="text-xs">Returns</p>
+            </Link>
+          </div>
+          <div
             className={`${styles.linkWrapper} ${searchBarOpen && styles.page}`}
           >
             <button

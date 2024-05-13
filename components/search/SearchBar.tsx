@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";

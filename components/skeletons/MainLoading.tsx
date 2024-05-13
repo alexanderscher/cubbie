@@ -90,6 +90,19 @@ const NavbarSkeleton = () => {
         </div>
         <div className={`${styles.linkWrapper} `}>
           <div className="flex flex-col justify-center items-center gap-2">
+            <Image
+              src="/returns.png"
+              alt=""
+              width={35}
+              height={35}
+              className="object-cover"
+              style={{ objectFit: "cover", objectPosition: "center" }}
+            />
+            <p className="text-xs">Returns</p>
+          </div>
+        </div>
+        <div className={`${styles.linkWrapper} `}>
+          <div className="flex flex-col justify-center items-center gap-2">
             <button className="flex flex-col justify-center items-center gap-2">
               <Image
                 src="/search_w.png"

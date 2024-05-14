@@ -159,7 +159,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
       {isPending && <Loading loading={isPending} />}
       <div className="z-[2000]">
         {deleteOpen && (
-          <ModalOverlay onClose={() => setDeleteOpen(false)}>
+          <ModalOverlay isDelete={true} onClose={() => setDeleteOpen(false)}>
             <DeleteConfirmationModal
               cancelClick={setDeleteOpen}
               deleteClick={deleteMethod}

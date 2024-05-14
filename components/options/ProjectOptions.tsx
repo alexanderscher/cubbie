@@ -229,7 +229,7 @@ export const ProjectOptionsModal = ({
         </ModalOverlay>
       )}
       {isDeleteOpen && (
-        <ModalOverlay onClose={() => setIsDeleteOpen(false)}>
+        <ModalOverlay isDelete={true} onClose={() => setIsDeleteOpen(false)}>
           <DeleteModal setDeleteOpen={setIsDeleteOpen} project={project} />
         </ModalOverlay>
       )}

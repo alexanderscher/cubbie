@@ -233,7 +233,7 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
           </ModalOverlay>
         )}
         {isDeleteOpen && (
-          <ModalOverlay onClose={() => setIsDeleteOpen(false)}>
+          <ModalOverlay isDelete={true} onClose={() => setIsDeleteOpen(false)}>
             <DeleteModal setDeleteOpen={setIsDeleteOpen} receipt={receipt} />
           </ModalOverlay>
         )}
@@ -298,7 +298,7 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
   };
 
   return (
-    <div className="bg-white rounded shadow-xl m-4 max-w-md w-full">
+    <div className="">
       <div className="flex justify-between items-center border-b border-emerald-900 px-5 py-3 rounded-t-lg">
         <h3 className="text-md text-emerald-900">Move project</h3>
         <button

@@ -146,11 +146,12 @@ model Items {
 }
 
 model Returns {
-  id     Int    @id @default(autoincrement())
-  store  String
-  days   Int
-  userId String
-  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id         Int      @id @default(autoincrement())
+  store      String
+  days       Int
+  created_at DateTime
+  userId     String
+  User       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Account {

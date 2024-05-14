@@ -2,6 +2,7 @@
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
 import { Session } from "@/types/Session";
+import { revalidateTag } from "next/cache";
 
 export const createReturnPolicy = async (name: string, days: number) => {
   try {
@@ -19,6 +20,8 @@ export const createReturnPolicy = async (name: string, days: number) => {
         User: { connect: { id: userId } },
       },
     });
+    revalidateTag(`returns_user_${userId}`);
+
     return { item };
   } catch (error) {
     console.error(error);
@@ -44,6 +47,7 @@ export const updatePolicy = async (id: number, name: string, days: number) => {
         created_at: new Date(),
       },
     });
+    revalidateTag(`returns_user_${userId}`);
     return { item };
   } catch (error) {
     console.error(error);
@@ -64,6 +68,7 @@ export const deletePolicy = async (id: number) => {
         id,
       },
     });
+    revalidateTag(`returns_user_${userId}`);
   } catch (error) {
     console.error(error);
     return { error: "An error occurred" };

@@ -30,7 +30,7 @@ const Returns = () => {
           <div className="bg-white w-full p-4 rounded-lg shadow flex justify-between items-start">
             <div className="">
               <p className="text-orange-600 text-md">Store name</p>
-              <p className="text-sm">30 days</p>
+              <p className="text-sm">20 days</p>
             </div>
             <div>
               <Image

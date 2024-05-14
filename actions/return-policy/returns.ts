@@ -15,6 +15,7 @@ export const createReturnPolicy = async (name: string, days: number) => {
       data: {
         store: name,
         days,
+        created_at: new Date(),
         User: { connect: { id: userId } },
       },
     });
@@ -40,6 +41,7 @@ export const updatePolicy = async (id: number, name: string, days: number) => {
       data: {
         store: name,
         days,
+        created_at: new Date(),
       },
     });
     return { item };

@@ -91,7 +91,7 @@ const NavbarSkeleton = () => {
         <div className={`${styles.linkWrapper} `}>
           <div className="flex flex-col justify-center items-center gap-2">
             <Image
-              src="/returns.png"
+              src="/return.png"
               alt=""
               width={35}
               height={35}

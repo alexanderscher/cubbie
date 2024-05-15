@@ -298,7 +298,7 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
   };
 
   return (
-    <div className="">
+    <div className="w-full">
       <div className="flex justify-between items-center border-b border-emerald-900 px-5 py-3 rounded-t-lg">
         <h3 className="text-md text-emerald-900">Move project</h3>
         <button
@@ -394,7 +394,7 @@ const ReceiptDetails = ({ receipt }: { receipt: ReceiptType }) => {
   }, [receipt]);
   return (
     <div
-      className={`shadow rounded-lg bg-white flex flex-col gap-4 p-8 overflow-auto h-[600px]  max-w-[400px] w-3/4 mt-[50px]`}
+      className={`flex flex-col items-center gap-4 p-8 overflow-auto h-[600px]  max-w-[400px] w-full`}
     >
       {!receipt.receipt_image_url && (
         <div className="w-full flex justify-center items-center  ">
@@ -433,7 +433,7 @@ const ReceiptDetails = ({ receipt }: { receipt: ReceiptType }) => {
         altText="Your Image Description"
       />
 
-      <div className="flex flex-col gap-4 text-sm ">
+      <div className="flex flex-col gap-4 text-sm w-full">
         <div className="w-full  border-slate-300 border-b-[1px] pb-2 ">
           <p className="text-slate-400 text-xs">Return Date</p>
           <p className="">{formatDateToMMDDYY(receipt.return_date)}</p>

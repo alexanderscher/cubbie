@@ -7,7 +7,7 @@ interface AddReceiptModalProps {
 
 export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
   return (
-    <div className="">
+    <div className="w-full">
       <div className="flex justify-between items-center border-b  px-5 py-3 rounded-t-lg border-emerald-900">
         <h3 className=" text-emerald-900">Create Receipt Options</h3>
         <button

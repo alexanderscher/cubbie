@@ -311,7 +311,7 @@ const EditPolicy = ({ item, setEditOpen }: EditPolicyProps) => {
     }
   };
   return (
-    <div className="">
+    <div className="w-full">
       <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3  rounded-t-lg">
         <h3 className="text-md text-emerald-900">Edit Return Policy</h3>
         <button

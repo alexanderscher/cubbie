@@ -38,7 +38,7 @@ export const ModalOverlay = ({
         className={
           isDelete
             ? "relative p-8 bg-red-50  w-3/4 m-auto   rounded-lg shadow-md gap-4 max-w-[340px] min-w-[310px] "
-            : "bg-white rounded-lg shadow-xl m-4 max-w-md w-full"
+            : "bg-white rounded-lg shadow-xl m-4 max-w-md w-full flex justify-center"
         }
       >
         {children}

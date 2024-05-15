@@ -68,7 +68,7 @@ export const AddItem = ({
     };
   };
   return (
-    <div className="">
+    <div className="w-full">
       <div className="flex justify-between items-center border-b  px-5 py-3  rounded-t-lg border-emerald-900">
         <h3 className="text-md text-emerald-900">Add Item</h3>
         <button

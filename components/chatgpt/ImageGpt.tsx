@@ -14,6 +14,8 @@ import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import Loading from "@/components/Loading/Loading";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import { ProjectType } from "@/types/ProjectTypes";
+import ManualDate from "@/components/createForm/FormPages/ManualDate";
+import ReturnPolicySelect from "@/components/select/ReturnPolicySelect";
 
 interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
@@ -282,9 +284,11 @@ export default function ImageGpt({
 
   const pathname = usePathname();
 
+  const [isManual, setIsManual] = useState(false);
+
   return (
     <div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
         <h1 className="text-3xl text-orange-600">Analyze Image</h1>
         <ProjectSelectForm
           handleChange={handleChange}
@@ -292,6 +296,7 @@ export default function ImageGpt({
           setFieldValue={setFieldValue}
           values={values}
         />
+
         {validationErrors.folderName && (
           <p className="text-sm text-orange-900">
             {validationErrors.folderName}
@@ -343,6 +348,50 @@ export default function ImageGpt({
               />
             </label>
           </div>
+        </div>
+        <div className="flex flex-col gap-3">
+          <p className={` text-emerald-900 `}>Return Date Policy</p>
+          <div className="w-full flex justify-between gap-2 mb-2">
+            <button
+              type="button"
+              className={
+                isManual
+                  ? "w-full border-[1px] bg  p-2  border-emerald-900 rounded text-sm text-emerald-900"
+                  : "w-full border-[1px] bg-emerald-900  p-2  border-emerald-900 rounded text-sm text-white"
+              }
+              onClick={() => {
+                setIsManual(false);
+              }}
+            >
+              Select Policy
+            </button>
+            <button
+              type="button"
+              className={
+                !isManual
+                  ? "w-full border-[1px] bg  p-2  border-emerald-900 rounded text-sm text-emerald-900"
+                  : "w-full border-[1px] bg-emerald-900  p-2  border-emerald-900 rounded text-sm text-white"
+              }
+              onClick={() => {
+                setIsManual(true);
+              }}
+            >
+              Add Manually
+            </button>
+          </div>
+          {isManual ? (
+            <ManualDate
+              values={values}
+              handleChange={handleChange}
+              // errors={errors}
+              setFieldValue={setFieldValue}
+            />
+          ) : (
+            <ReturnPolicySelect
+              type={values.days_until_return}
+              setFieldValue={setFieldValue}
+            />
+          )}
         </div>
         <TooltipWithHelperIcon
           placement="right-start"

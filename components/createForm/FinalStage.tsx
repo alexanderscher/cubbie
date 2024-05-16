@@ -216,7 +216,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
 
               <div className="w-full">
                 <p className="text-xs text-emerald-900 ">Days until return</p>
-                {/* <input
+                <input
                   className="w-full border-[1px] bg border-emerald-900 p-2 rounded  focus:border-emerald-900 focus:outline-none"
                   name="days_until_return"
                   value={values.days_until_return}
@@ -227,10 +227,6 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
                       isNaN(value) ? "" : value
                     );
                   }}
-                /> */}
-                <ReturnPolicySelect
-                  type={values.days_until_return}
-                  setFieldValue={setFieldValue}
                 />
               </div>
               <div className="w-full  border-emerald-900 border-b-[1px] pb-2 ">

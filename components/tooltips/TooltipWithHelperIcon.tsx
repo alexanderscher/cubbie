@@ -18,7 +18,7 @@ export function TooltipWithHelperIcon({
         unmount: { scale: 0, y: 25 },
       }}
       placement={placement}
-      className="border border-blue-gray-50 bg-white px-4 py-3 shadow-xl shadow-black/10 z-[2001]"
+      className="border border-blue-gray-50 bg-white px-4 py-3 shadow-xl shadow-black/10 z-[30000]"
       content={
         <div className="w-80 ">
           <p className="text-orange-600">{content}</p>

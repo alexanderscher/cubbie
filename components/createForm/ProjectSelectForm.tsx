@@ -33,6 +33,7 @@ const ProjectSelectForm = ({
         borderColor: "rgb(6 78 59)",
       },
       cursor: "pointer",
+      padding: "3px",
     }),
     menu: (provided) => ({
       ...provided,

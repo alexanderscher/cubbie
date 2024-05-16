@@ -25,7 +25,6 @@ export const ProjectSelect = ({
   color,
 }: Props) => {
   const session = useSession();
-  console.log(session);
 
   const customGreenStyles: StylesConfig<Option, false> = {
     control: (provided, state) => ({
@@ -38,6 +37,7 @@ export const ProjectSelect = ({
         borderColor: "rgb(6 78 59)",
       },
       cursor: "pointer",
+      padding: "3px",
     }),
     menu: (provided) => ({
       ...provided,
@@ -73,6 +73,7 @@ export const ProjectSelect = ({
         borderColor: "rgb(6 78 59)",
       },
       cursor: "pointer",
+      padding: "3px ",
       fontSize: "14spx",
     }),
     menu: (provided) => ({

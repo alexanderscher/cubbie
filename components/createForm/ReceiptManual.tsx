@@ -8,7 +8,9 @@ import { convertHeic } from "@/utils/media";
 import Image from "next/image";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import ReturnPolicySelect from "@/components/select/ReturnPolicySelect";
+import ManualDate from "@/components/createForm/FormPages/ManualDate";
 
 interface ReceiptManualProps {
   values: any;
@@ -32,6 +34,8 @@ const ReceiptManual = ({
     setFieldValue("folder", projects[0].id);
   }, [projects, setFieldValue]);
   const pathname = usePathname();
+
+  const [isManual, setIsManual] = useState<boolean>(false);
 
   const onFileUpload = async (file: File) => {
     if (file === null) {
@@ -75,24 +79,23 @@ const ReceiptManual = ({
           <h1 className="text-3xl text-orange-600 mb-4">
             {pathname === "/create/manual" ? "Manual Entry" : "Analyze Text"}
           </h1>
-
-          <div className="w-full">
-            <p className="text-sm text-emerald-900 ">Store name*</p>
-            <input
-              className="w-full border-[1px] bg  p-2  border-emerald-900 rounded  focus:outline-none"
-              name="store"
-              value={values.store}
-              onChange={handleChange("store")}
-            />
-          </div>
-
-          {errors.store && (
-            <p className="text-orange-800 text-sm">{errors.store}</p>
-          )}
         </div>
 
         <div className={styles.receiptContainer}>
           <div className={styles.receiptInputs}>
+            <div className="w-full">
+              <p className="text-sm text-emerald-900 ">Store name*</p>
+              <input
+                className="w-full border-[1px] bg  p-2  border-emerald-900 rounded  focus:outline-none"
+                name="store"
+                value={values.store}
+                onChange={handleChange("store")}
+              />
+            </div>
+
+            {errors.store && (
+              <p className="text-orange-800 text-sm">{errors.store}</p>
+            )}
             <ProjectSelect
               handleChange={handleChange}
               projects={projects}
@@ -131,57 +134,49 @@ const ReceiptManual = ({
                 </div>
               </div>
             )}
-
-            <div className="flex gap-2 w-full">
-              <div className="w-1/2">
-                <p className="text-sm text-emerald-900 ">Purchase Date</p>
-                <div className="flex flex-col gap-2">
-                  <input
-                    className="w-full border-[1px] bg  p-2  border-emerald-900 rounded  focus:outline-none cursor-pointer"
-                    name="purchase_date"
-                    value={values.purchase_date}
-                    onChange={handleChange("purchase_date")}
-                    type="date"
-                    style={{ WebkitAppearance: "none" }}
-                  />
-                  {errors.purchase_date && (
-                    <p className="text-orange-800 text-sm">
-                      {errors.purchase_date}
-                    </p>
-                  )}
-                </div>
-              </div>
-              <div className="w-1/2">
-                <p className="text-sm text-emerald-900 ">Days until return</p>
-
-                <input
-                  className="w-full border-[1px] bg  p-2  border-emerald-900 rounded  focus:outline-none "
-                  value={values.days_until_return}
-                  onChange={(event) => {
-                    const value = parseInt(event.target.value, 10);
-                    setFieldValue(
-                      "days_until_return",
-                      isNaN(value) ? "" : value
-                    );
+            <div className="flex flex-col gap-3">
+              <p className={` text-emerald-900 text-sm`}>Return Date Policy</p>
+              <div className="w-full flex justify-between gap-2 mb-2">
+                <button
+                  type="button"
+                  className={
+                    isManual
+                      ? "w-full border-[1px] bg  p-2  border-emerald-900 rounded text-sm text-emerald-900"
+                      : "w-full border-[1px] bg-emerald-900  p-2  border-emerald-900 rounded text-sm text-white"
+                  }
+                  onClick={() => {
+                    setIsManual(false);
                   }}
+                >
+                  Select Policy
+                </button>
+                <button
+                  type="button"
+                  className={
+                    !isManual
+                      ? "w-full border-[1px] bg  p-2  border-emerald-900 rounded text-sm text-emerald-900"
+                      : "w-full border-[1px] bg-emerald-900  p-2  border-emerald-900 rounded text-sm text-white"
+                  }
+                  onClick={() => {
+                    setIsManual(true);
+                  }}
+                >
+                  Add Manually
+                </button>
+              </div>
+              {isManual ? (
+                <ManualDate
+                  values={values}
+                  handleChange={handleChange}
+                  errors={errors}
+                  setFieldValue={setFieldValue}
                 />
-                {errors.days_until_return && (
-                  <p className="text-orange-800 text-sm">
-                    {errors.days_until_return}
-                  </p>
-                )}
-              </div>
-            </div>
-            <div>
-              <p className="text-emerald-900 text-sm">Return Date</p>
-              <div className="w-full border-[1px] bg  p-2  border-emerald-900 rounded  focus:outline-none ">
-                {formatDateToMMDDYY(
-                  calculateReturnDate(
-                    values.purchase_date,
-                    values.days_until_return
-                  )
-                )}
-              </div>
+              ) : (
+                <ReturnPolicySelect
+                  type={values.days_until_return}
+                  setFieldValue={setFieldValue}
+                />
+              )}
             </div>
           </div>
 

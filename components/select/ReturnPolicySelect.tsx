@@ -26,6 +26,7 @@ const ReturnPolicySelect: React.FC<Props> = ({ type, setFieldValue }) => {
         borderColor: "rgb(6 78 59)",
       },
       cursor: "pointer",
+      padding: "3px ", // Example padding: 8px top and bottom, 12px left and right
     }),
     menu: (provided) => ({
       ...provided,
@@ -47,9 +48,11 @@ const ReturnPolicySelect: React.FC<Props> = ({ type, setFieldValue }) => {
   };
 
   const [options, setOptions] = useState<Option[]>([]);
+  const [isLoading, setIsLoading] = useState(false); // State to track loading
 
   useEffect(() => {
     const fetchPolicy = async () => {
+      setIsLoading(true);
       const policy = await getPolicy();
       if (policy.items) {
         setOptions(
@@ -59,6 +62,7 @@ const ReturnPolicySelect: React.FC<Props> = ({ type, setFieldValue }) => {
           }))
         );
       }
+      setIsLoading(false);
     };
 
     fetchPolicy();
@@ -77,6 +81,7 @@ const ReturnPolicySelect: React.FC<Props> = ({ type, setFieldValue }) => {
         value={options.find((option) => option.value === type)} // 'type' should be a number here
         isClearable={true}
         placeholder="Select return policy"
+        isLoading={isLoading}
         styles={customGreenStyles} // Ensure these styles are defined
       />
     </div>

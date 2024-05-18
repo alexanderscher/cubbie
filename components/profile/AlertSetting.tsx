@@ -135,10 +135,9 @@ const AlertSettings = ({ user }: AlertSettingsProps) => {
         ))}
       {user.phone && !editPhone && (
         <div className="bg-white rounded-lg  flex flex-col p-6 gap-6 justify-between">
-          <div>
-            <p className="text-xs">
-              Phone number: {formatE164ToReadable(user.phone)}
-            </p>
+          <div className="flex flex-col gap-4">
+            <p className="text-xs">Phone number:</p>
+            <p>{formatE164ToReadable(user.phone)}</p>
           </div>
           <RegularButton
             styles="border-emerald-900 "

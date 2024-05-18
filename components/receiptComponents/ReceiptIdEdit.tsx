@@ -178,7 +178,17 @@ const ReceiptIdEdit = ({ receiptId, timezone }: Props) => {
       onSubmit={(values) => {
         startTransition(async () => {
           try {
-            const result = await editReceipt({ id: stringId, values }, receipt);
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const valuesObj = {
+              ...values,
+              timezone: timezone,
+            };
+
+            // Assuming `editReceipt` is a function imported from your server-side code or API
+            const result = await editReceipt(
+              { id: stringId, values: valuesObj } // Corrected here
+            );
+
             if (result?.error) {
               setUploadError(result.error);
             } else {

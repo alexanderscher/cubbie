@@ -157,7 +157,7 @@ const Topbar = ({ session, children }: TopbarProps) => {
 
               <div>
                 <Image
-                  src="/return.png"
+                  src="/store_w.png"
                   alt=""
                   width={35}
                   height={35}

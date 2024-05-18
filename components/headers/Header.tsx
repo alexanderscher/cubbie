@@ -8,6 +8,7 @@ import Link from "next/link";
 import Filters from "@/components/headers/Filters";
 import { Overlay } from "@/components/overlays/Overlay";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
+import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 
 interface HeaderProps {
   type: string;
@@ -22,15 +23,18 @@ const Header = ({ type }: HeaderProps) => {
       <div className={` flex justify-between `}>
         <div className="cursor-pointer relative">
           <div onClick={() => setIsModalVisible(!isModalVisible)}>
-            <div className="flex gap-2 items-center ">
-              <h1 className="text-2xl text-emerald-900">{type}</h1>
-              <Image
-                src="/arrow_grey.png"
-                width={8}
-                height={8}
-                alt="arrow"
-                className="rotate-90"
-              />
+            <div className="flex gap-4 items-center ">
+              <div className=" flex gap-2 items-center">
+                <h1 className="text-2xl text-emerald-900">{type}</h1>
+
+                <Image
+                  src="/arrow_grey.png"
+                  width={8}
+                  height={8}
+                  alt="arrow"
+                  className="rotate-90"
+                />
+              </div>
             </div>
           </div>
 

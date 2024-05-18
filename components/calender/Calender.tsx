@@ -13,6 +13,7 @@ import { getReceiptsClient } from "@/lib/getReceiptsClient";
 import { BeatLoader } from "react-spinners";
 import moment from "moment";
 import "moment-timezone";
+import Link from "next/link";
 
 interface Event {
   title: string;
@@ -138,7 +139,9 @@ const Calender = ({ timezone }: CalenderProps) => {
             <div key={receipt.id} className="bg-white rounded-lg w-full p-6">
               <div className="flex justify-between">
                 <div>
-                  <p className="text-sm  text-orange-600">{receipt.store}</p>
+                  <Link href={`/receipt/${receipt.id}`}>
+                    <p className="text-sm  text-orange-600">{receipt.store}</p>
+                  </Link>
                   <p className="text-sm text-slate-400">
                     {formatDateToMMDDYY(receipt.return_date)}
                   </p>

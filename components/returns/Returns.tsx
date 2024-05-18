@@ -16,6 +16,7 @@ import React, { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { ReturnType } from "@/types/Return";
 import { Return } from "@prisma/client/runtime/library";
+import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 
 interface ReturnsProps {
   returns: ReturnType[];
@@ -28,7 +29,14 @@ const Returns = ({ returns }: ReturnsProps) => {
     <div className="w-full max-w-[760px]">
       <div className="flex flex-col gap-6 pb-8">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl text-emerald-900">Return Policies</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl text-emerald-900">Return Policies</h1>
+            <TooltipWithHelperIcon
+              placement="right-start"
+              content="Keep your return policies here for easy access."
+            />
+          </div>
+
           <RegularButton
             styles="border-emerald-900"
             handleClick={() => setCreateNew(true)}
@@ -38,12 +46,26 @@ const Returns = ({ returns }: ReturnsProps) => {
         </div>
         <SearchBar searchType="Returns" />
       </div>
+      {returns.length === 0 && (
+        <div className="w-full flex justify-center flex-col items-center gap-5 mt-20">
+          <Image
+            src="/store_b.png"
+            alt=""
+            width={50}
+            height={50}
+            className="object-cover "
+            style={{ objectFit: "cover", objectPosition: "center" }}
+          />
+          <h1 className="text-xl">No return policies</h1>
+        </div>
+      )}
       <div className="w-full flex flex-col gap-6">
-        {returns.map((item: any) => (
-          <div key={item.id} className="relative">
-            <Row item={item} />
-          </div>
-        ))}
+        {returns.length > 0 &&
+          returns.map((item: any) => (
+            <div key={item.id} className="relative">
+              <Row item={item} />
+            </div>
+          ))}
       </div>
       {createNew && (
         <ModalOverlay onClose={() => setCreateNew(false)}>
@@ -128,6 +150,7 @@ const AddReturnPolicy = ({ setCreateNew }: AddReturnPolicyProps) => {
       }
     }
   };
+
   return (
     <div className="w-full">
       <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3  rounded-t-lg">

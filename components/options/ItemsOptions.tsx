@@ -97,7 +97,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
             {item.returned ? (
               <div className="flex gap-2">
                 <Image
-                  src={"/undoReturn.png"}
+                  src={"/undostore_w.png"}
                   width={20}
                   height={20}
                   alt=""

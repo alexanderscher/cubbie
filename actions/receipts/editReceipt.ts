@@ -30,22 +30,19 @@ interface UserReceiptUpdate {
 
 type ExtendedReceiptType = ReceiptType & {
   edit_image: string;
+  timezone: string;
 };
-
-export const editReceipt = async (
-  params: {
-    id: string;
-    values: ExtendedReceiptType;
-  },
-  receipt: ReceiptType
-) => {
-  const session = (await auth()) as Session;
-  const { id } = params;
-  const sessionUserId = session?.user?.id as string;
+export const editReceipt = async (params: {
+  id: string;
+  values: ExtendedReceiptType;
+}) => {
+  const session = await auth();
+  const sessionUserId = session?.user?.id;
 
   if (!sessionUserId) {
     return { error: "Unauthorized" };
   }
+
   try {
     const {
       type,
@@ -57,81 +54,60 @@ export const editReceipt = async (
       purchase_date,
       return_date,
       edit_image,
+      timezone, // Now extracting timezone from the values
     } = params.values;
 
-    const uploadedFileKeys = [];
-
-    let receiptFileUrl = "";
-    let receiptFileKey = "";
+    let receiptFileUrl = receipt_image_url;
+    let receiptFileKey = receipt_image_key;
     if (edit_image) {
       const uploadResults = await handleUpload(edit_image);
       if (uploadResults.length > 0) {
         receiptFileUrl = uploadResults[0].url;
         receiptFileKey = uploadResults[0].key;
-        uploadedFileKeys.push(receiptFileKey);
-      }
-      if (receipt_image_key) {
-        await deleteUploadThingImage(receipt_image_key);
+        if (receipt_image_key) {
+          await deleteUploadThingImage(receipt_image_key);
+        }
       }
     }
+    const today = moment.tz(timezone).startOf("day");
+    const returnDate = moment.tz(return_date, timezone).startOf("day");
+    const utcPurchaseDate = moment.utc(purchase_date);
 
-    if (receipt_image_url === "" && receipt_image_key !== "") {
-      await deleteUploadThingImage(receipt_image_key as string);
-    }
+    const daysUntilReturn = returnDate.diff(today, "days");
 
-    const expired = moment
-      .utc(return_date)
-      .startOf("day")
-      .isBefore(moment.utc().startOf("day"));
+    const isExpired = returnDate.isBefore(today);
 
     await prisma.receipt.update({
-      where: {
-        id: parseInt(params.id),
-      },
+      where: { id: parseInt(params.id) },
       data: {
         type,
         store,
         card,
-        receipt_image_url:
-          receiptFileUrl === "" ? receipt_image_url : receiptFileUrl,
-        receipt_image_key:
-          receiptFileUrl === "" ? receipt_image_key : receiptFileKey,
+        receipt_image_url: receiptFileUrl,
+        receipt_image_key: receiptFileKey,
         tracking_number,
-        purchase_date: moment(purchase_date).toISOString(),
-        return_date: moment(return_date).toISOString(),
-        days_until_return: moment(return_date).diff(
-          moment(purchase_date),
-          "days"
-        ),
-        expired: expired,
+        purchase_date: utcPurchaseDate.toISOString(),
+        return_date: returnDate.toISOString(),
+        days_until_return: daysUntilReturn,
+        expired: isExpired,
       },
     });
 
-    const receipt = await prisma.receipt.findUnique({
-      where: {
-        id: parseInt(id),
-      },
+    const receiptWithDetails = await prisma.receipt.findUnique({
+      where: { id: parseInt(params.id) },
       include: {
         project: {
           include: {
             user: {
               include: {
-                alertSettings: {
-                  include: {
-                    timezone: true,
-                  },
-                },
+                alertSettings: true,
               },
             },
             projectUsers: {
               include: {
                 user: {
                   include: {
-                    alertSettings: {
-                      include: {
-                        timezone: true,
-                      },
-                    },
+                    alertSettings: true,
                   },
                 },
               },
@@ -141,71 +117,69 @@ export const editReceipt = async (
       },
     });
 
-    if (receipt) {
-      const { project } = receipt;
-      const projectOwner = project.user;
-      const projectUsers = project.projectUsers.map((pu) => pu.user);
-      const allUsers = [projectOwner, ...projectUsers];
+    if (receiptWithDetails) {
+      const { project } = receiptWithDetails;
+      const allUsers = [
+        project.user,
+        ...project.projectUsers.map((pu) => pu.user),
+      ];
 
+      // Delete existing alerts related to this receipt
       await prisma.alert.deleteMany({
         where: {
           projectId: project.id,
-          receiptId: receipt.id,
+          receiptId: receiptWithDetails.id,
         },
       });
-      const alertsToCreate: any[] = [];
+
+      const alertsToCreate = [];
 
       for (const user of allUsers) {
-        const { alertSettings } = user as UserReceiptUpdate;
+        const today = moment.tz(timezone).startOf("day");
+        const returnDate = moment.tz(return_date, timezone).startOf("day");
 
-        if (alertSettings) {
-          const today = moment.utc();
-          const returnDate = moment(return_date).toISOString();
+        const daysUntilReturn = returnDate.diff(today, "days");
 
-          const daysUntilReturn = moment(return_date).diff(today, "days");
+        console.log(`Today's date (UTC): ${today.format()}`);
+        console.log(`Return date (Local TZ): ${returnDate.format()}`);
+        console.log(`Days until return: ${daysUntilReturn}`);
 
-          if (alertSettings.notifyInOneWeek && daysUntilReturn === 6) {
-            alertsToCreate.push({
-              userId: user.id,
-              date: returnDate,
-              type: "1_WEEK_REMINDER",
-              receiptId: receipt.id,
-              projectId: project.id,
-            });
-          }
-          if (alertSettings.notifyInOneDay && daysUntilReturn === 1) {
-            alertsToCreate.push({
-              userId: user.id,
-              date: returnDate,
-              type: "1_DAY_REMINDER",
-              receiptId: receipt.id,
-              projectId: project.id,
-            });
-          }
-          if (alertSettings.notifyToday && daysUntilReturn === 0) {
-            alertsToCreate.push({
-              userId: user.id,
-              date: returnDate,
-              type: "TODAY_REMINDER",
-              receiptId: receipt.id,
-              projectId: project.id,
-            });
-          }
+        if (user.alertSettings?.notifyInOneWeek && daysUntilReturn === 6) {
+          alertsToCreate.push({
+            userId: user.id,
+            date: returnDate.toISOString(),
+            type: "1_WEEK_REMINDER",
+            receiptId: receiptWithDetails.id,
+            projectId: project.id,
+          });
+        }
+        if (user.alertSettings?.notifyInOneDay && daysUntilReturn === 1) {
+          alertsToCreate.push({
+            userId: user.id,
+            date: returnDate.toISOString(),
+            type: "1_DAY_REMINDER",
+            receiptId: receiptWithDetails.id,
+            projectId: project.id,
+          });
+        }
+        if (user.alertSettings?.notifyToday && daysUntilReturn === 0) {
+          alertsToCreate.push({
+            userId: user.id,
+            date: returnDate.toISOString(),
+            type: "TODAY_REMINDER",
+            receiptId: receiptWithDetails.id,
+            projectId: project.id,
+          });
         }
       }
 
-      console.log(alertsToCreate, "ALERTS TO CREATE");
-
+      // Create new alerts
       await Promise.all(
-        alertsToCreate.map((alert) =>
-          prisma.alert.create({
-            data: alert,
-          })
-        )
+        alertsToCreate.map((alert) => prisma.alert.create({ data: alert }))
       );
     }
   } catch (error) {
-    console.log(error);
-    return { error: "An error occured" };
+    console.error(error);
+    return { error: "An error occurred" };
   }
 };

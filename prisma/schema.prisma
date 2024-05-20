@@ -86,9 +86,6 @@ model Plan {
   name            String
   description     String?
   price           Float
-  includesAI      Boolean        @default(false)
-  includesSMS     Boolean        @default(false)
-  maxParticipants Int            @default(5)
   subscriptions   Subscription[]
 }
 

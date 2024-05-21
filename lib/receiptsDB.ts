@@ -105,76 +105,76 @@ export const getReceipts = async () => {
   )(userId);
 };
 
-export const getReceiptById = async (id: string) => {
-  const session = (await auth()) as Session;
-  const userId = session?.user?.id as string;
-  const dynamicKey = getDynamicCacheKey(userId); // Assuming you have a function to generate dynamic cache keys
+// export const getReceiptById = async (id: string) => {
+//   const session = (await auth()) as Session;
+//   const userId = session?.user?.id as string;
+//   const dynamicKey = getDynamicCacheKey(userId); // Assuming you have a function to generate dynamic cache keys
 
-  return unstable_cache(
-    async () => {
-      const getUser = await prisma.user.findUnique({
-        where: {
-          id: userId,
-        },
-        include: {
-          alertSettings: {
-            include: {
-              timezone: true,
-            },
-          },
-        },
-      });
+//   return unstable_cache(
+//     async () => {
+//       const getUser = await prisma.user.findUnique({
+//         where: {
+//           id: userId,
+//         },
+//         include: {
+//           alertSettings: {
+//             include: {
+//               timezone: true,
+//             },
+//           },
+//         },
+//       });
 
-      const userTimezone = getUser?.alertSettings?.timezone?.value || "UTC"; // Providing a default value
+//       const userTimezone = getUser?.alertSettings?.timezone?.value || "UTC"; // Providing a default value
 
-      const receipt = await prisma.receipt.findUnique({
-        where: {
-          project: {
-            userId: userId,
-          },
-          id: parseInt(id),
-        },
-        include: {
-          items: true,
-          project: true,
-        },
-      });
+//       const receipt = await prisma.receipt.findUnique({
+//         where: {
+//           project: {
+//             userId: userId,
+//           },
+//           id: parseInt(id),
+//         },
+//         include: {
+//           items: true,
+//           project: true,
+//         },
+//       });
 
-      if (!receipt) {
-        // Handle the case where receipt is not found
-        console.error("Receipt not found.");
-        return null;
-      }
+//       if (!receipt) {
+//         // Handle the case where receipt is not found
+//         console.error("Receipt not found.");
+//         return null;
+//       }
 
-      const receiptReturnDate = moment
-        .tz(receipt.return_date, userTimezone)
-        .startOf("day");
+//       const receiptReturnDate = moment
+//         .tz(receipt.return_date, userTimezone)
+//         .startOf("day");
 
-      const currentDateInUserTimezone = moment()
-        .tz(userTimezone)
-        .startOf("day");
+//       const currentDateInUserTimezone = moment()
+//         .tz(userTimezone)
+//         .startOf("day");
 
-      const isExpired = receiptReturnDate.isBefore(
-        currentDateInUserTimezone,
-        "day"
-      );
+//       const isExpired = receiptReturnDate.isBefore(
+//         currentDateInUserTimezone,
+//         "day"
+//       );
 
-      if (isExpired) {
-        await prisma.receipt.update({
-          where: { id: receipt.id },
-          data: { expired: true },
-        });
-      }
-      if (!isExpired && receipt.expired) {
-        return prisma.receipt.update({
-          where: { id: receipt.id },
-          data: { expired: false },
-        });
-      }
+//       if (isExpired) {
+//         await prisma.receipt.update({
+//           where: { id: receipt.id },
+//           data: { expired: true },
+//         });
+//       }
+//       if (!isExpired && receipt.expired) {
+//         return prisma.receipt.update({
+//           where: { id: receipt.id },
+//           data: { expired: false },
+//         });
+//       }
 
-      return receipt;
-    },
-    dynamicKey,
-    { tags: dynamicKey, revalidate: 60 }
-  )();
-};
+//       return receipt;
+//     },
+//     dynamicKey,
+//     { tags: dynamicKey, revalidate: 60 }
+//   )();
+// };

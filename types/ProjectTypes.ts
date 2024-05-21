@@ -47,4 +47,8 @@ export interface User {
   role: string;
   isTwoFactorEnabled: boolean;
   phone?: string | null;
+  stripeCustomerId: string | null;
+  subscriptionDate: Date | null;
+  subscriptionID: string | null;
+  subscriptionType: string | null;
 }

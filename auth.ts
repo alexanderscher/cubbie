@@ -39,14 +39,29 @@ export const {
                 notifyInOneWeek: true,
               },
             });
-            console.log("Created alert settings:", newAlertSettings);
+
+            // Assume 'freePlanId' is the ID of your default free plan
+            const defaultPlanId = 1; // This should match the ID of the free plan in your database
+            const newSubscription = await prisma.subscription.create({
+              data: {
+                userId: user.id,
+                planId: defaultPlanId,
+              },
+            });
+            console.log("Assigned default plan to new user:", newSubscription);
+            const updatedUser = await prisma.user.update({
+              where: { id: user.id },
+              data: { planId: defaultPlanId },
+              include: { plan: true },
+            });
+            console.log("User planId updated:", updatedUser);
           } else {
             console.error("User ID not found for the new user.");
             // Handle the case where user ID is not available
           }
         }
       } catch (error) {
-        console.error("Error creating alert settings:", error);
+        console.error("Error during new user registration:", error);
         // Handle the error appropriately
       }
     },

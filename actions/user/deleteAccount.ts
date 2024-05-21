@@ -21,6 +21,7 @@ export const deleteAccount = async () => {
             items: true,
           },
         },
+        subscriptions: true,
       },
     });
 

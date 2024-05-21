@@ -9,7 +9,8 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 const fetchReceipts = async () => {
-  const receipts = await getReceiptsClient();
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const receipts = await getReceiptsClient(timezone);
   return receipts as ReceiptType[];
 };
 

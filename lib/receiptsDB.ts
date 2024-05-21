@@ -31,78 +31,74 @@ export const getReceipts = async () => {
           created_at: "desc",
         },
       });
+      return receipts;
 
-      const getUser = await prisma.user.findUnique({
-        where: {
-          id: userId,
-        },
-        include: {
-          alertSettings: {
-            include: {
-              timezone: true,
-            },
-          },
-        },
-      });
+      //   const getUser = await prisma.user.findUnique({
+      //     where: {
+      //       id: userId,
+      //     },
+      //     include: {
+      //       alertSettings: true,
+      //     },
+      //   });
 
-      const userTimezone = getUser?.alertSettings?.timezone?.value || "UTC"; // Providing a default value
+      //   const currentDateInUserTimezone = moment()
+      //     .tz(userTimezone)
+      //     .startOf("day");
+      //   console.log("currentDateInUserTimezone", currentDateInUserTimezone);
+      //   const updatePromises = receipts.map((receipt) => {
+      //     if (!userTimezone) {
+      //       // Handle the case where userTimezone is undefined
+      //       console.error("User timezone is undefined.");
+      //       return null;
+      //     }
 
-      const currentDateInUserTimezone = moment()
-        .tz(userTimezone)
-        .startOf("day");
-      console.log("currentDateInUserTimezone", currentDateInUserTimezone);
-      const updatePromises = receipts.map((receipt) => {
-        if (!userTimezone) {
-          // Handle the case where userTimezone is undefined
-          console.error("User timezone is undefined.");
-          return null;
-        }
+      //     const receiptReturnDate = moment
+      //       .tz(receipt.return_date, userTimezone) // Using user's timezone
+      //       .startOf("day");
 
-        const receiptReturnDate = moment
-          .tz(receipt.return_date, userTimezone) // Using user's timezone
-          .startOf("day");
+      //     const isExpired = receiptReturnDate.isBefore(
+      //       currentDateInUserTimezone,
+      //       "day"
+      //     );
 
-        const isExpired = receiptReturnDate.isBefore(
-          currentDateInUserTimezone,
-          "day"
-        );
+      //     if (isExpired) {
+      //       return prisma.receipt.update({
+      //         where: { id: receipt.id },
+      //         data: { expired: true },
+      //       });
+      //     }
 
-        if (isExpired) {
-          return prisma.receipt.update({
-            where: { id: receipt.id },
-            data: { expired: true },
-          });
-        }
+      //     if (!isExpired && receipt.expired) {
+      //       return prisma.receipt.update({
+      //         where: { id: receipt.id },
+      //         data: { expired: false },
+      //       });
+      //     }
+      //   });
 
-        if (!isExpired && receipt.expired) {
-          return prisma.receipt.update({
-            where: { id: receipt.id },
-            data: { expired: false },
-          });
-        }
-      });
-
-      await Promise.all(updatePromises.filter((promise) => promise !== null));
-      const updatedReceipts = await prisma.receipt.findMany({
-        where: {
-          project: {
-            userId: userId,
-            projectUserArchive: {
-              none: {
-                userId: userId,
-              },
-            },
-          },
-        },
-        include: {
-          items: true,
-          project: true,
-        },
-        orderBy: {
-          return_date: "asc",
-        },
-      });
-      return updatedReceipts;
+      //   await Promise.all(updatePromises.filter((promise) => promise !== null));
+      //   const updatedReceipts = await prisma.receipt.findMany({
+      //     where: {
+      //       project: {
+      //         userId: userId,
+      //         projectUserArchive: {
+      //           none: {
+      //             userId: userId,
+      //           },
+      //         },
+      //       },
+      //     },
+      //     include: {
+      //       items: true,
+      //       project: true,
+      //     },
+      //     orderBy: {
+      //       return_date: "asc",
+      //     },
+      //   });
+      //   return updatedReceipts;
+      // },
     },
     dynamicKey,
     { tags: dynamicKey, revalidate: 60 }

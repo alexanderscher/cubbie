@@ -55,7 +55,9 @@ const ReceiptId = ({ receiptId }: { receiptId: string }) => {
 
   useEffect(() => {
     const fetchReceipt = async () => {
-      const receipt = await getReceiptByIdClient(receiptId);
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      const receipt = await getReceiptByIdClient(receiptId, timezone);
       if (receipt) {
         setReceipt(receipt as ReceiptType);
         setFilteredItemData(receipt.items);

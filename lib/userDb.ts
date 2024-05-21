@@ -35,11 +35,7 @@ export const getUserInfo = async () => {
           id: userId,
         },
         include: {
-          alertSettings: {
-            include: {
-              timezone: true,
-            },
-          },
+          alertSettings: true,
         },
       });
 

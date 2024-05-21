@@ -19,10 +19,6 @@ export interface AlertSettings {
   notifyToday: boolean;
   notifyInOneDay: boolean;
   notifyInOneWeek: boolean;
-  timezone: {
-    value: string;
-    label: string;
-  };
 }
 
 export interface LayoutProps {

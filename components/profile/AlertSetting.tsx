@@ -12,26 +12,16 @@ import RegularButton from "@/components/buttons/RegularButton";
 import { addPhone } from "@/actions/user/addPhone";
 import { toast } from "sonner";
 import Loading from "@/components/Loading/Loading";
-import TimezoneSelect from "react-timezone-select";
-import { changeTimezone } from "@/actions/alerts/changeTimezone";
-import { set } from "date-fns";
 
 interface AlertSettingsProps {
   user: UserAlerts;
 }
 
 const AlertSettings = ({ user }: AlertSettingsProps) => {
-  const defaultTimezone = {
-    value: user.alertSettings.timezone.value,
-    label: user.alertSettings.timezone.label,
-  };
-
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState<string | undefined>();
   const [isPending, startTransition] = useTransition();
   const [editPhone, setEditPhone] = useState(false);
-  const [selectedTimezone, setSelectedTimezone] =
-    useState<any>(defaultTimezone);
 
   const submitPhone = async () => {
     if (value) {
@@ -45,19 +35,6 @@ const AlertSettings = ({ user }: AlertSettingsProps) => {
         }
       });
     }
-  };
-
-  const changeTimezoneCall = async () => {
-    startTransition(() => {
-      try {
-        console.log(selectedTimezone);
-        changeTimezone({ selectedTimezone });
-
-        toast.success("Timezone updated successfully");
-      } catch (error) {
-        toast.error("An error occurred");
-      }
-    });
   };
 
   return (
@@ -147,19 +124,6 @@ const AlertSettings = ({ user }: AlertSettingsProps) => {
           </RegularButton>
         </div>
       )}
-      <div className="bg-white rounded-lg  flex flex-col p-6 gap-4 justify-between">
-        <p className="text-xs">Time zone</p>
-        <TimezoneSelect
-          value={selectedTimezone}
-          onChange={setSelectedTimezone}
-        />
-        <RegularButton
-          styles="border-emerald-900 "
-          handleClick={changeTimezoneCall}
-        >
-          <p className="text-emerald-900 text-xs">Edit</p>
-        </RegularButton>
-      </div>
 
       {isOpen && <Menu setIsOpen={setIsOpen} />}
       {isPending && <Loading loading={isPending} />}

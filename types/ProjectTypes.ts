@@ -50,5 +50,5 @@ export interface User {
   subscriptionDate?: Date | null;
   subscriptionID?: string | null;
   subscriptionType?: string | null;
-  planId?: string | null; // Changed type to match Prisma's possible integer reference
+  planId?: number | null; // Changed type to match Prisma's possible integer reference
 }

@@ -1,10 +1,27 @@
+import { getStripeProducts } from "@/actions/stripe/getProducts";
 import { auth } from "@/auth";
-import Account from "@/components/profile/Account";
+import Header from "@/components/profile/Header";
 import { Session } from "@/types/Session";
-import React from "react";
+import styles from "@/components/profile/profile.module.css";
+import { getUserSubscriptionInfo } from "@/lib/userDb";
+import UserPlan from "@/components/billing/UserPlan";
+const getUserSubInfo = async () => {
+  const user = await getUserSubscriptionInfo();
+  return user;
+};
 
 export default async function Profile() {
-  const session = (await auth()) as Session;
+  // const prices = await getStripeProducts();
+  // const session = (await auth()) as Session;
+  // console.log(prices);
+  const user = await getUserSubInfo();
 
-  return <div>{/* <Account session={session} /> */}</div>;
+  return (
+    <div
+      className={`${styles.layout} gap-6 w-full justify-center items center `}
+    >
+      <Header />
+      <UserPlan user={user} />
+    </div>
+  );
 }

@@ -45,3 +45,26 @@ export const getUserInfo = async () => {
     { tags: dynamicKey, revalidate: 60 }
   )(userId);
 };
+
+export const getUserSubscriptionInfo = async () => {
+  const session = (await auth()) as Session;
+  const userId = session?.user?.id as string;
+  const dynamicKey = getDynamicCacheKey(userId);
+  return unstable_cache(
+    async (userId) => {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+        include: {
+          subscriptions: true,
+          plan: true,
+        },
+      });
+
+      return user;
+    },
+    dynamicKey,
+    { tags: dynamicKey, revalidate: 60 }
+  )(userId);
+};

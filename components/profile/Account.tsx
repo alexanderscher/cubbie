@@ -336,7 +336,7 @@ const DeleteModal = ({
 
   if (!projectUsers) {
     return (
-      <div className="shadow rounded-lg bg-red-50 flex flex-col gap-4 p-8 overflow-auto  max-w-[400px] w-3/4 mt-[50px]] items-center">
+      <div className="w-full rounded-lg bg-red-50 flex flex-col gap-4 p-8 overflow-auto  items-center">
         <div className="bg-red-100 rounded-full flex items-center justify-center h-[50px] w-[50px] ">
           <ExclamationTriangleIcon className=" text-red-500 w-3/4 h-1/2" />
         </div>
@@ -365,7 +365,7 @@ const DeleteModal = ({
 
   if (projectUsers) {
     return (
-      <div className="shadow rounded-lg bg-red-50 flex flex-col gap-4 p-8 overflow-auto h-[600px]  max-w-[400px] w-3/4 mt-[50px]] ">
+      <div className="w-full bg-red-50 flex flex-col gap-4 p-8 overflow-auto rounded-lg ">
         <div className="flex-col flex items-center w-full gap-4">
           <div className="bg-red-100 rounded-full flex items-center justify-center h-[50px] w-[50px] ">
             <ExclamationTriangleIcon className=" text-red-500 w-3/4 h-1/2" />

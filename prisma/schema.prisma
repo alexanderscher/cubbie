@@ -36,21 +36,22 @@ model User {
   alertSettings         AlertSettings?
   returns               Returns[]
   subscriptions         Subscription[]
-  stripeCustomerId         String?   @unique
-  subscriptionDate         DateTime?
-  subscriptionID           String?
-  subscriptionType         String?
+  stripeCustomerId      String?                @unique
+  subscriptionDate      DateTime?
+  subscriptionID        String?
+  subscriptionType      String?
+  planId                Int?
+  plan                  Plan?                  @relation(fields: [planId], references: [id])
 }
 
 model AlertSettings {
-  id              String    @id @default(cuid())
-  userId          String    @unique
-  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  notifyToday     Boolean   @default(true)
-  notifyInOneDay  Boolean   @default(true)
-  notifyInOneWeek Boolean   @default(true)
+  id              String  @id @default(cuid())
+  userId          String  @unique
+  user            User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notifyToday     Boolean @default(true)
+  notifyInOneDay  Boolean @default(true)
+  notifyInOneWeek Boolean @default(true)
 }
-
 
 model Project {
   id                 Int                  @id @default(autoincrement())
@@ -67,22 +68,26 @@ model Project {
   subscriptions      Subscription[]
 }
 
+model Plan {
+  id            Int            @id @default(autoincrement())
+  name          String
+  description   String?
+  price         Float
+  maxItems      Int            @default(50)
+  hasAI         Boolean        @default(false)
+  hasAlerts     Boolean        @default(false)
+  subscriptions Subscription[]
+  User          User[]
+}
+
 model Subscription {
   id        Int      @id @default(autoincrement())
   userId    String
   projectId Int?
   project   Project? @relation(fields: [projectId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
-  plan      Plan     @relation(fields: [planId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   planId    Int
-}
-
-model Plan {
-  id              Int            @id @default(autoincrement())
-  name            String
-  description     String?
-  price           Float
-  subscriptions   Subscription[]
+  plan      Plan     @relation(fields: [planId], references: [id])
 }
 
 model ProjectUserArchive {

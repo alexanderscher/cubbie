@@ -36,6 +36,10 @@ model User {
   alertSettings         AlertSettings?
   returns               Returns[]
   subscriptions         Subscription[]
+  stripeCustomerId         String?   @unique
+  subscriptionDate         DateTime?
+  subscriptionID           String?
+  subscriptionType         String?
 }
 
 model AlertSettings {
@@ -45,16 +49,8 @@ model AlertSettings {
   notifyToday     Boolean   @default(true)
   notifyInOneDay  Boolean   @default(true)
   notifyInOneWeek Boolean   @default(true)
-  timezone        Timezone?
 }
 
-model Timezone {
-  id              String        @id @default(cuid())
-  value           String        @default("America/Detroit")
-  label           String        @default("(GMT-4:00) Eastern Time")
-  alertSettingsId String        @unique
-  alertSettings   AlertSettings @relation(fields: [alertSettingsId], references: [id], onDelete: Cascade)
-}
 
 model Project {
   id                 Int                  @id @default(autoincrement())

@@ -35,12 +35,6 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
             notifyToday: true,
             notifyInOneDay: true,
             notifyInOneWeek: true,
-            timezone: {
-              create: {
-                value: "America/Detroit",
-                label: "(GMT-4:00) Eastern Time",
-              },
-            },
           },
         },
       },

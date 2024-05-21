@@ -37,12 +37,6 @@ export const {
                 notifyToday: true,
                 notifyInOneDay: true,
                 notifyInOneWeek: true,
-                timezone: {
-                  create: {
-                    value: "America/Detroit",
-                    label: "(GMT-4:00) Eastern Time",
-                  },
-                },
               },
             });
             console.log("Created alert settings:", newAlertSettings);
@@ -103,7 +97,6 @@ export const {
         session.user.name = token.name;
         session.user.email = token.email;
         session.user.isOAuth = token.isOAuth as boolean;
-        session.user.timezone = token.timezone as string;
       }
 
       return session;
@@ -122,7 +115,6 @@ export const {
       token.email = existingUser.email;
       token.role = existingUser.role;
       token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
-      token.timezone = existingUser.alertSettings?.timezone?.value;
 
       return token;
     },

@@ -30,10 +30,9 @@ type ExtendedReceiptType = ReceiptType & {
 
 interface Props {
   receiptId: string;
-  timezone: string;
 }
 
-const ReceiptIdEdit = ({ receiptId, timezone }: Props) => {
+const ReceiptIdEdit = ({ receiptId }: Props) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -72,7 +71,9 @@ const ReceiptIdEdit = ({ receiptId, timezone }: Props) => {
 
   useEffect(() => {
     const fetchReceipt = async () => {
-      const receipt = await getReceiptByIdClient(receiptId);
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      const receipt = await getReceiptByIdClient(receiptId, timezone);
       if (receipt) {
         setReceipt({ ...receipt, edit_image: "" });
       }

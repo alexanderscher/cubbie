@@ -5,7 +5,7 @@ import moment from "moment";
 import { Session } from "next-auth";
 import "moment-timezone";
 
-export const getReceiptsClient = async () => {
+export const getReceiptsClient = async (timezone: string) => {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
 
@@ -34,14 +34,10 @@ export const getReceiptsClient = async () => {
 
   const updatePromises = receipts.map((receipt) => {
     const receiptReturnDate = moment
-      .utc(receipt.return_date)
-      .tz(session.user.timezone)
+      .tz(receipt.return_date, timezone)
       .startOf("day");
 
-    const currentDateInTimezone = moment
-      .utc()
-      .tz(session.user.timezone)
-      .startOf("day");
+    const currentDateInTimezone = moment.utc().tz(timezone).startOf("day");
 
     const isExpired = receiptReturnDate.isBefore(currentDateInTimezone);
 
@@ -92,7 +88,7 @@ export const getReceiptsClient = async () => {
   return updatedReceipts;
 };
 
-export const getReceiptByIdClient = async (id: string) => {
+export const getReceiptByIdClient = async (id: string, timezone: string) => {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
 
@@ -133,14 +129,10 @@ export const getReceiptByIdClient = async (id: string) => {
   }
 
   const receiptReturnDate = moment
-    .utc(receipt.return_date)
-    .tz(session.user.timezone)
+    .tz(receipt.return_date, timezone)
     .startOf("day");
 
-  const currentDateInTimezone = moment
-    .utc()
-    .tz(session.user.timezone)
-    .startOf("day");
+  const currentDateInTimezone = moment.utc().tz(timezone).startOf("day");
 
   const isExpired = receiptReturnDate.isBefore(currentDateInTimezone);
 

@@ -22,11 +22,7 @@ interface Event {
   id?: string | number;
 }
 
-interface CalenderProps {
-  timezone: string;
-}
-
-const Calender = ({ timezone }: CalenderProps) => {
+const Calender = () => {
   const isMobileDeviceQuery = useMediaQuery({ maxWidth: 700 });
   const [isMobileDevice, setIsMobileDevice] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -36,7 +32,9 @@ const Calender = ({ timezone }: CalenderProps) => {
 
   useEffect(() => {
     const fetchReceipt = async () => {
-      const receipt = await getReceiptsClient();
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      const receipt = await getReceiptsClient(timezone);
       if (receipt) {
         const newReceipts = receipt as ReceiptType[];
         setReceipts(newReceipts);

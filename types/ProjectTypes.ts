@@ -36,19 +36,19 @@ export interface ProjectItemType {
   created_at: Date;
   returned: boolean;
 }
-
 export interface User {
   id: string;
-  name?: string | null | undefined;
+  name?: string | null;
   email?: string | null;
-  emailVerified?: Date | null | undefined; // Adjusted to match User interface
+  emailVerified?: Date | null;
   image?: string | null;
   password?: string | null;
   role: string;
   isTwoFactorEnabled: boolean;
   phone?: string | null;
-  stripeCustomerId: string | null;
-  subscriptionDate: Date | null;
-  subscriptionID: string | null;
-  subscriptionType: string | null;
+  stripeCustomerId?: string | null;
+  subscriptionDate?: Date | null;
+  subscriptionID?: string | null;
+  subscriptionType?: string | null;
+  planId?: string | null; // Changed type to match Prisma's possible integer reference
 }

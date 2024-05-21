@@ -36,10 +36,7 @@ model User {
   alertSettings         AlertSettings?
   returns               Returns[]
   subscriptions         Subscription[]
-  stripeCustomerId         String?   @unique
-  subscriptionDate         DateTime?
-  subscriptionID           String?
-  subscriptionType         String?
+
 }
 
 model AlertSettings {

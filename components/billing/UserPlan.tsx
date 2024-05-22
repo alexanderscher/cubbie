@@ -3,13 +3,23 @@ import Image from "next/image";
 import React from "react";
 import styles from "@/components/profile/profile.module.css";
 import { Menu } from "@/components/profile/Menu";
+import { ProjectType } from "@/types/ProjectTypes";
+import { Plan } from "@prisma/client";
+import { UserType } from "@/types/UserSettingTypes";
 
-interface UserPlanProps {
-  user: any;
-}
+const getTotalNumberOfItems = (user: UserType) => {
+  return user.projects.reduce((total, project) => {
+    const itemsInProject = project.receipts.reduce((sum, receipt) => {
+      return sum + receipt.items.length; // Assuming receipt.items is an array
+    }, 0);
+    return total + itemsInProject;
+  }, 0);
+};
 
-const UserPlan = ({ user }: UserPlanProps) => {
+const UserPlan = ({ user }: { user: UserType }) => {
+  const totalItems = getTotalNumberOfItems(user);
   console.log(user);
+
   const [isOpen, setIsOpen] = React.useState(false);
   return (
     <div className="flex flex-col gap-4 w-full max-w-[600px]">
@@ -33,7 +43,7 @@ const UserPlan = ({ user }: UserPlanProps) => {
       </div>
 
       {isOpen && <Menu setIsOpen={setIsOpen} />}
-      {user.subscriptions.length === 0 && (
+      {user.plan.id === 1 && (
         <div className="bg-white rounded-lg p-6  flex flex-col gap-4">
           <h1>Current Plan</h1>
           <p>Free</p>
@@ -45,10 +55,9 @@ const UserPlan = ({ user }: UserPlanProps) => {
       )}
       <div className="bg-white rounded-lg p-6  flex flex-col gap-4">
         <h1>Usage</h1>
-        <p>Free</p>
+
         <div>
-          <p className="">$0.00 </p>
-          <p className="text-xs">per month</p>
+          <p className="">{totalItems}</p>
         </div>
       </div>
 

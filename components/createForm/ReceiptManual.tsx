@@ -173,6 +173,8 @@ const ReceiptManual = ({
                 />
               ) : (
                 <ReturnPolicySelect
+                  values={values}
+                  handleChange={handleChange}
                   type={values.days_until_return}
                   setFieldValue={setFieldValue}
                 />

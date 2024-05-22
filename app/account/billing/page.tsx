@@ -12,9 +12,6 @@ const getUserSubInfo = async () => {
 };
 
 export default async function Profile() {
-  // const prices = await getStripeProducts();
-  // const session = (await auth()) as Session;
-  // console.log(prices);
   const user = await getUserSubInfo();
 
   return (

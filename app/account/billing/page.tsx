@@ -5,9 +5,10 @@ import { Session } from "@/types/Session";
 import styles from "@/components/profile/profile.module.css";
 import { getUserSubscriptionInfo } from "@/lib/userDb";
 import UserPlan from "@/components/billing/UserPlan";
+import { UserType } from "@/types/UserSettingTypes";
 const getUserSubInfo = async () => {
   const user = await getUserSubscriptionInfo();
-  return user;
+  return user as UserType;
 };
 
 export default async function Profile() {

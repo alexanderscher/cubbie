@@ -59,6 +59,15 @@ export const getUserSubscriptionInfo = async () => {
         include: {
           subscriptions: true,
           plan: true,
+          projects: {
+            include: {
+              receipts: {
+                select: {
+                  items: true,
+                },
+              },
+            },
+          },
         },
       });
 

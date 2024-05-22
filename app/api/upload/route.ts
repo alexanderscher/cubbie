@@ -139,6 +139,7 @@ export async function POST(request: Request) {
     const session = (await auth()) as Session;
     const userId = session?.user?.id as string;
     revalidateTag(`projects_user_${userId}`);
+    revalidateTag(`user_${userId}`);
 
     return new NextResponse(JSON.stringify(receipt), {
       status: 201,

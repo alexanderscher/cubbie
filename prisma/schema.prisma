@@ -40,7 +40,7 @@ model User {
   subscriptionDate      DateTime?
   subscriptionID        String?
   subscriptionType      String?
-  planId                Int?
+  planId                Int
   plan                  Plan?                  @relation(fields: [planId], references: [id])
 }
 

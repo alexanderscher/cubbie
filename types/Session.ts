@@ -6,6 +6,7 @@ export interface UserForSession {
   isTwoFactorEnabled: boolean;
   name: string;
   role: string;
+  planId: number;
 }
 
 export interface Session {

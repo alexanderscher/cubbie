@@ -288,20 +288,16 @@ export default function ImageGpt({
 
   return (
     <div>
-      <div className="flex flex-col gap-6">
-        <h1 className="text-3xl text-orange-600">Analyze Image</h1>
-        <ProjectSelectForm
-          handleChange={handleChange}
-          projects={projects}
-          setFieldValue={setFieldValue}
-          values={values}
-        />
-
-        {validationErrors.folderName && (
-          <p className="text-sm text-orange-900">
-            {validationErrors.folderName}
-          </p>
-        )}
+      <div className="flex flex-col gap-6 ">
+        <div className="flex gap-3 items-center">
+          <h1 className="text-3xl text-orange-600">Analyze Image</h1>
+          <TooltipWithHelperIcon
+            placement="right-start"
+            content='We use AI to analyze the receipt image you upload. Take a
+                picture of the receipt and upload it. Then click the
+                "Analyze Image". This will extract the receipt store, purchase date and receipt item information. Please only upload images of receipts.'
+          />
+        </div>
 
         <div className="flex flex-col gap-3">
           <div className=" flex items-center gap-2 relative">
@@ -349,57 +345,6 @@ export default function ImageGpt({
             </label>
           </div>
         </div>
-        <div className="flex flex-col gap-3">
-          <p className={` text-emerald-900 `}>Return Date Policy</p>
-          <div className="w-full flex justify-between gap-2 mb-2">
-            <button
-              type="button"
-              className={
-                isManual
-                  ? "w-full border-[1px] bg  p-2  border-emerald-900 rounded text-sm text-emerald-900"
-                  : "w-full border-[1px] bg-emerald-900  p-2  border-emerald-900 rounded text-sm text-white"
-              }
-              onClick={() => {
-                setIsManual(false);
-              }}
-            >
-              Select Policy
-            </button>
-            <button
-              type="button"
-              className={
-                !isManual
-                  ? "w-full border-[1px] bg  p-2  border-emerald-900 rounded text-sm text-emerald-900"
-                  : "w-full border-[1px] bg-emerald-900  p-2  border-emerald-900 rounded text-sm text-white"
-              }
-              onClick={() => {
-                setIsManual(true);
-              }}
-            >
-              Add Manually
-            </button>
-          </div>
-          {isManual ? (
-            <ManualDate
-              values={values}
-              handleChange={handleChange}
-              // errors={errors}
-              setFieldValue={setFieldValue}
-            />
-          ) : (
-            <ReturnPolicySelect
-              type={values.days_until_return}
-              setFieldValue={setFieldValue}
-            />
-          )}
-        </div>
-        <TooltipWithHelperIcon
-          placement="right-start"
-          content='We use AI to analyze the receipt image you upload. Take a
-                picture of the receipt and upload it. Then click the
-                "Analyze Image" button to get the receipt information
-                and items. Please only upload images of receipts.'
-        />
 
         <div>
           <div className="flex flex-col gap-5">
@@ -442,7 +387,7 @@ export default function ImageGpt({
               </div>
             )}
 
-            <div className="w-full">
+            <div className="w-full ">
               <RegularButton
                 styles={`${
                   loading
@@ -465,6 +410,65 @@ export default function ImageGpt({
               </RegularButton>
             </div>
           </div>
+        </div>
+        <ProjectSelectForm
+          handleChange={handleChange}
+          projects={projects}
+          setFieldValue={setFieldValue}
+          values={values}
+        />
+
+        {validationErrors.folderName && (
+          <p className="text-sm text-orange-900">
+            {validationErrors.folderName}
+          </p>
+        )}
+
+        <div className="flex flex-col gap-3">
+          <p className={` text-emerald-900 `}>Return Date Policy</p>
+          <div className="w-full flex justify-between gap-2 mb-2">
+            <button
+              type="button"
+              className={
+                isManual
+                  ? "w-full border-[1px] bg  p-2  border-emerald-900 rounded text-sm text-emerald-900"
+                  : "w-full border-[1px] bg-emerald-900  p-2  border-emerald-900 rounded text-sm text-white"
+              }
+              onClick={() => {
+                setIsManual(false);
+              }}
+            >
+              Select Policy
+            </button>
+            <button
+              type="button"
+              className={
+                !isManual
+                  ? "w-full border-[1px] bg  p-2  border-emerald-900 rounded text-sm text-emerald-900"
+                  : "w-full border-[1px] bg-emerald-900  p-2  border-emerald-900 rounded text-sm text-white"
+              }
+              onClick={() => {
+                setIsManual(true);
+              }}
+            >
+              Add Manually
+            </button>
+          </div>
+          {isManual ? (
+            <ManualDate
+              values={values}
+              handleChange={handleChange}
+              // errors={errors}
+              setFieldValue={setFieldValue}
+            />
+          ) : (
+            <ReturnPolicySelect
+              values={values}
+              handleChange={handleChange}
+              type={values.days_until_return}
+              setFieldValue={setFieldValue}
+            />
+          )}
         </div>
 
         {prompt && (

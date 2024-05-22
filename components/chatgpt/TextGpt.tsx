@@ -5,7 +5,6 @@ import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIc
 import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { set } from "date-fns";
 import React, { useState } from "react";
 
 interface Props {

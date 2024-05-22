@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 const DATA = `{
     "receipt": {
       "store": "Macy's FORT COLLINS FOOTHILLS FASHION",
-      "date_purchased": "4/28/2012",
+      "date_purchased": "2024-05-20",
       "total_amount": "118.15",
 
       "items": [

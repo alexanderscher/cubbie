@@ -1,5 +1,6 @@
 import { getPolicy } from "@/lib/getPolicy";
 import { ReturnType } from "@/types/Return";
+import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import React, { useEffect, useState } from "react";
 import ReactSelect, { StylesConfig } from "react-select";
 
@@ -12,9 +13,16 @@ interface Props {
   type: number;
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
   color?: string;
+  values: any;
+  handleChange: any;
 }
 
-const ReturnPolicySelect: React.FC<Props> = ({ type, setFieldValue }) => {
+const ReturnPolicySelect: React.FC<Props> = ({
+  type,
+  setFieldValue,
+  handleChange,
+  values,
+}) => {
   const customGreenStyles: StylesConfig<Option, false> = {
     control: (provided, state) => ({
       ...provided,
@@ -74,16 +82,52 @@ const ReturnPolicySelect: React.FC<Props> = ({ type, setFieldValue }) => {
     }
   };
   return (
-    <div className="w-full">
-      <ReactSelect
-        options={options}
-        onChange={handleSelectChange}
-        value={options.find((option) => option.value === type)} // 'type' should be a number here
-        isClearable={true}
-        placeholder="Select return policy"
-        isLoading={isLoading}
-        styles={customGreenStyles} // Ensure these styles are defined
-      />
+    <div className="flex flex-col gap-3 w-full">
+      <div className="flex gap-2 w-full">
+        <div className="w-1/2">
+          <p className="text-sm text-emerald-900 ">Purchase Date</p>
+          <div className="flex flex-col gap-2">
+            <input
+              className="w-full border-[1px] bg  p-2  border-emerald-900 rounded  focus:outline-none cursor-pointer"
+              name="purchase_date"
+              value={values.purchase_date}
+              onChange={handleChange("purchase_date")}
+              type="date"
+              style={{ WebkitAppearance: "none" }}
+            />
+            {/* {errors.purchase_date && (
+              <p className="text-orange-800 text-sm">{errors.purchase_date}</p>
+            )} */}
+          </div>
+        </div>
+        <div className="w-1/2">
+          <p className="text-sm text-emerald-900 ">Days until return</p>
+
+          <ReactSelect
+            options={options}
+            onChange={handleSelectChange}
+            value={options.find((option) => option.value === type)}
+            isClearable={true}
+            placeholder="Select return policy"
+            isLoading={isLoading}
+            styles={customGreenStyles} // Ensure these styles are defined
+          />
+          {/* {errors.days_until_return && (
+            <p className="text-orange-800 text-sm">
+              {errors.days_until_return}
+            </p>
+          )} */}
+        </div>
+      </div>
+
+      <div>
+        <p className="text-emerald-900 text-sm">Return Date</p>
+        <div className="w-full border-[1px] bg  p-2  border-emerald-900 rounded  focus:outline-none ">
+          {formatDateToMMDDYY(
+            calculateReturnDate(values.purchase_date, values.days_until_return)
+          )}
+        </div>
+      </div>
     </div>
   );
 };

@@ -56,7 +56,7 @@ const ImagePage = ({ projects }: Pages) => {
   const router = useRouter();
 
   return (
-    <div className="flex ">
+    <div className="flex  mb-[200px]">
       <div className="w-full flex flex-col gap-8 ">
         <Formik
           initialValues={{
@@ -65,6 +65,7 @@ const ImagePage = ({ projects }: Pages) => {
           }}
           validationSchema={getValidationSchema(stage)}
           onSubmit={async (values) => {
+            // console.log(values);
             submitDB(values);
           }}
         >

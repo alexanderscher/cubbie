@@ -1,9 +1,8 @@
 "use client";
-import React, { useEffect, useState, useTransition } from "react";
-import { usePathname } from "next/navigation";
-import Image from "next/image";
+import React, { useState, useTransition } from "react";
 import RegularButton from "@/components/buttons/RegularButton";
 import { handlePayment } from "@/actions/stripe/payment";
+import Loading from "@/components/Loading/Loading";
 
 interface priceProps {
   price: any;
@@ -38,7 +37,7 @@ const PricingCard = ({ price, session }: priceProps) => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
 
-  const handleSubscription = () => {
+  const handleSubscription = async () => {
     startTransition(async () => {
       try {
         const stripeUrl = await handlePayment(price.id);
@@ -72,6 +71,7 @@ const PricingCard = ({ price, session }: priceProps) => {
       <SubButton
         userPlanId={session.user.planId}
         pricePlanId={price.product.metadata.planId}
+        handleSubscription={handleSubscription}
       />
 
       {/* {userSub === price.nickname && sessionId ? (
@@ -91,6 +91,7 @@ const PricingCard = ({ price, session }: priceProps) => {
           Subscribe
         </button>
       )} */}
+      {isPending && <Loading loading={isPending} />}
     </div>
   );
 };
@@ -132,12 +133,15 @@ const IndividualPlan = () => {
 const SubButton = ({
   userPlanId,
   pricePlanId,
+  handleSubscription,
 }: {
   userPlanId: number;
   pricePlanId: string;
+  handleSubscription: (pricePlanId: string) => void;
 }) => {
   return (
     <RegularButton
+      handleClick={() => handleSubscription(pricePlanId)}
       styles={
         userPlanId !== parseInt(pricePlanId)
           ? "text-sm border-emerald-900 text-emerald-900"

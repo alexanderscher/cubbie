@@ -14,7 +14,9 @@ export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
   const isApiCronRoute = nextUrl.pathname === "/api/cron";
-
+  if (nextUrl.pathname === "/api/stripe/webhooks") {
+    return;
+  }
   if (isApiCronRoute) {
     return;
   }

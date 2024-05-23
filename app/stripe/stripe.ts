@@ -4,7 +4,7 @@ const stripeSecretKey =
   process.env.NODE_ENV === "production"
     ? process.env.STRIPE_SECRET_KEY_LIVE
     : process.env.STRIPE_SECRET_KEY;
-
+console.log(stripeSecretKey);
 if (!stripeSecretKey) {
   throw new Error(
     "STRIPE_SECRET_KEY or STRIPE_SECRET_KEY_LIVE is not defined in the environment variables."

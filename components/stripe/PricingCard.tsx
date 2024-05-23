@@ -1,7 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import RegularButton from "@/components/buttons/RegularButton";
+import { handlePayment } from "@/actions/stripe/payment";
 
 interface priceProps {
   price: any;
@@ -33,38 +35,31 @@ const PricingCard = ({ price, session }: priceProps) => {
     // }
   };
 
-  const handleSubscription = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    // e.preventDefault();
-    // if (!sessionId) {
-    //   setNoSession(true);
-    // } else {
-    //   const { data } = await axios.post(
-    //     "/api/stripe/payment",
-    //     {
-    //       priceId: price.id,
-    //       subscriptionID: subscriptionID,
-    //     },
-    //     {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //     }
-    //   );
-    //   window.location.assign(data);
-    // }
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState("");
+
+  const handleSubscription = () => {
+    startTransition(async () => {
+      try {
+        const stripeUrl = await handlePayment(price.id);
+        if (stripeUrl) {
+          window.location.assign(stripeUrl);
+        } else {
+          throw new Error("Failed to create payment session");
+        }
+      } catch (error) {
+        setError("Failed to create payment session");
+      }
+    });
   };
 
-  //   if (isLoading) {
-  //     return <Loader />;
-  //   }
-
   return (
-    <div className=" bg-white w-full shadow rounded-lg p-6">
-      <div className="flex gap-1">
+    <div className=" bg-white w-full shadow rounded-lg p-6 flex flex-col gap-3">
+      <div className="flex gap-1 text-emerald-900">
         <h1 className={`text-xl`}>{price.product.name}</h1>
       </div>
 
-      <p className="text-xl text-slate-500">
+      <p className="text-lg text-emerald-900 ">
         {(price.unit_amount / 100).toLocaleString("en-US", {
           style: "currency",
           currency: "USD",
@@ -74,6 +69,10 @@ const PricingCard = ({ price, session }: priceProps) => {
       {price.product.name === "Free Plan" && <FreePlan />}
       {price.product.name === "All Project Plan" && <AllProjectPlan />}
       {price.product.name === "Individual Project Plan" && <IndividualPlan />}
+      <SubButton
+        userPlanId={session.user.planId}
+        pricePlanId={price.product.metadata.planId}
+      />
 
       {/* {userSub === price.nickname && sessionId ? (
         <h1 className="text-xl text-red-300">Current subscription</h1>
@@ -100,7 +99,7 @@ export default PricingCard;
 
 const FreePlan = () => {
   return (
-    <div>
+    <div className="text-orange-400 text-sm">
       <p>Free</p>
       <p>Up to 50 receipt items</p>
       <p>Barcode look up</p>
@@ -110,7 +109,7 @@ const FreePlan = () => {
 
 const AllProjectPlan = () => {
   return (
-    <div>
+    <div className="text-orange-400 text-sm">
       <p>Ulimited items</p>
       <p>Barcode look up</p>
       <p>AI features for all projects </p>
@@ -121,11 +120,31 @@ const AllProjectPlan = () => {
 
 const IndividualPlan = () => {
   return (
-    <div>
+    <div className="text-orange-400 text-sm">
       <p>Up to 200 items</p>
       <p>Barcode look up</p>
       <p>AI features for subscribed project</p>
       <p>Receipt return alerts for subscribed project</p>
     </div>
+  );
+};
+
+const SubButton = ({
+  userPlanId,
+  pricePlanId,
+}: {
+  userPlanId: number;
+  pricePlanId: string;
+}) => {
+  return (
+    <RegularButton
+      styles={
+        userPlanId !== parseInt(pricePlanId)
+          ? "text-sm border-emerald-900 text-emerald-900"
+          : "text-sm border-slate-400 text-slate-400"
+      }
+    >
+      {userPlanId !== parseInt(pricePlanId) ? "Subscribe" : "Current Plan"}
+    </RegularButton>
   );
 };

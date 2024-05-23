@@ -7,6 +7,7 @@ export const handlePayment = async (priceId: string) => {
   const session = (await auth()) as Session;
   const sessionId = session?.user?.id as string;
   const url = "http://localhost:3000";
+
   const stripeSession = await stripe.checkout.sessions.create({
     allow_promotion_codes: true,
     customer: sessionId,
@@ -20,4 +21,6 @@ export const handlePayment = async (priceId: string) => {
     success_url: `${url}/success`,
     cancel_url: `${url}/cancel`,
   });
+
+  return stripeSession.url; // Return the Stripe session URL
 };

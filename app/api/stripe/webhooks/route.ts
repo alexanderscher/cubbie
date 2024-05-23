@@ -1,5 +1,4 @@
 import Stripe from "stripe";
-
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
 import { stripe } from "@/app/stripe/stripe";
@@ -13,9 +12,23 @@ const webhookSecret: string = isProduction
 const today = new Date();
 
 const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
+  if (req.method !== "POST") {
+    return new NextResponse(JSON.stringify({ error: "Method Not Allowed" }), {
+      status: 405,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   try {
     const buf = await req.text();
-    const sig = req.headers.get("stripe-signature")!;
+    const sig = req.headers.get("stripe-signature");
+
+    if (!sig) {
+      return new NextResponse(JSON.stringify({ error: "Missing signature" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
     let event: Stripe.Event;
 
@@ -23,9 +36,7 @@ const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
       event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
-      if (err! instanceof Error) console.log(err);
       console.log(`❌ Error message: ${errorMessage}`);
-
       return new NextResponse(
         JSON.stringify({
           error: {
@@ -39,70 +50,75 @@ const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
     console.log("✅ Success:", event.id);
 
     const subscription = event.data.object as Stripe.Subscription;
-    const planNickname = subscription.items.data[0].plan.nickname;
-
     const subscriptionId = subscription.id;
+    const planId = subscription.items.data[0].plan.product as string;
 
-    switch (event.type) {
-      case "customer.subscription.created":
-        await prisma.user.update({
-          where: {
-            stripeCustomerId: subscription.customer as string,
-          },
-          data: {
-            subscriptionID: subscriptionId,
-            subscriptionType: planNickname,
-            subscriptionDate: today,
-          },
-        });
-        break;
-      case "customer.subscription.updated":
-        await prisma.user.update({
-          where: {
-            stripeCustomerId: subscription.customer as string,
-          },
-          data: {
-            subscriptionID: subscriptionId,
-            subscriptionType: planNickname,
-            subscriptionDate: today,
-          },
-        });
-        break;
-      case "customer.subscription.deleted":
-        const updateed = await prisma.user.update({
-          where: {
-            stripeCustomerId: subscription.customer as string,
-          },
+    // Fetch product to get the planId from metadata
+    const product = await stripe.products.retrieve(planId);
+    const planMetadataId = product.metadata.planId;
 
-          data: {
-            subscriptionType: null,
-            subscriptionDate: null,
-          },
-        });
-        console.log("Updated User (deleted):", updateed);
+    console.log("Subscription ID:", planMetadataId);
 
-        break;
-      default:
-        console.warn(`🤷‍♀️ Unhandled event type: ${event.type}`);
-        break;
+    try {
+      switch (event.type) {
+        case "customer.subscription.created":
+        case "customer.subscription.updated":
+          await prisma.user.update({
+            where: {
+              stripeCustomerId: subscription.customer as string,
+            },
+            data: {
+              subscriptionID: subscriptionId,
+              planId: parseInt(planMetadataId),
+              subscriptionDate: today,
+            },
+            include: { plan: true },
+          });
+          break;
+        // case "customer.subscription.deleted":
+        //   const updated = await prisma.user.update({
+        //     where: {
+        //       stripeCustomerId: subscription.customer as string,
+        //     },
+        //     data: {
+        //       subscriptionID: subscriptionId,
+        //       planId: parseInt(planMetadataId),
+        //       subscriptionDate: null,
+        //     },
+        //     include: { plan: true },
+        //   });
+        //   console.log("Updated User (deleted):", updated);
+        //   break;
+        default:
+          console.warn(`🤷‍♀️ Unhandled event type: ${event.type}`);
+          break;
+      }
+    } catch (dbError) {
+      console.error(`❌ Database error: ${dbError}`);
+      return new NextResponse(
+        JSON.stringify({
+          error: {
+            message: `Database Error: ${dbError}`,
+          },
+        }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
     }
 
     return new NextResponse(JSON.stringify({ received: true }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
-  } catch {
-    const response = new NextResponse(
+  } catch (error) {
+    console.error(`❌ Unexpected error: ${error}`);
+    return new NextResponse(
       JSON.stringify({
         error: {
-          message: `Method Not Allowed`,
+          message: `Unexpected Error`,
         },
       }),
-      { status: 405, headers: { "Content-Type": "application/json" } }
+      { status: 500, headers: { "Content-Type": "application/json" } }
     );
-
-    response.headers.set("Allow", "POST");
-    return response;
   }
 };
 

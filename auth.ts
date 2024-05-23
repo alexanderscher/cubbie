@@ -6,6 +6,8 @@ import authConfig from "@/auth.config";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 import { getAccountByUserId } from "./data/account";
 import { getUserById } from "@/data/user";
+import { stripe } from "@/app/stripe/stripe";
+import { createStripeCustomer } from "@/actions/stripe/createStripeUser";
 
 export const {
   handlers: { GET, POST },
@@ -29,18 +31,17 @@ export const {
         if (isNewUser) {
           console.log("New user signed in", user);
           if (user.id) {
-            // Create alert settings for the new user
+            const defaultPlanId = 1;
+
             const newAlertSettings = await prisma.alertSettings.create({
               data: {
-                userId: user.id, // Associate the alert settings with the user
+                userId: user.id,
                 notifyToday: true,
                 notifyInOneDay: true,
                 notifyInOneWeek: true,
               },
             });
 
-            // Assume 'freePlanId' is the ID of your default free plan
-            const defaultPlanId = 1; // This should match the ID of the free plan in your database
             const newSubscription = await prisma.subscription.create({
               data: {
                 userId: user.id,
@@ -48,6 +49,7 @@ export const {
               },
             });
             console.log("Assigned default plan to new user:", newSubscription);
+
             const updatedUser = await prisma.user.update({
               where: { id: user.id },
               data: { planId: defaultPlanId },
@@ -56,7 +58,6 @@ export const {
             console.log("User planId updated:", updatedUser);
           } else {
             console.error("User ID not found for the new user.");
-            // Handle the case where user ID is not available
           }
         }
       } catch (error) {
@@ -112,6 +113,7 @@ export const {
         session.user.email = token.email;
         session.user.isOAuth = token.isOAuth as boolean;
         session.user.planId = token.planId as number;
+        session.user.stripeCustomerId = token.stripeCustomerId as string;
       }
 
       return session;
@@ -131,6 +133,7 @@ export const {
       token.role = existingUser.role;
       token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
       token.planId = existingUser.planId;
+      token.stripeCustomerId = existingUser.stripeCustomerId;
 
       return token;
     },

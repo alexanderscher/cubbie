@@ -7,6 +7,7 @@ export interface UserForSession {
   name: string;
   role: string;
   planId: number;
+  stripeCustomerId: string;
 }
 
 export interface Session {

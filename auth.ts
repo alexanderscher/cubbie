@@ -6,6 +6,7 @@ import authConfig from "@/auth.config";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 import { getAccountByUserId } from "./data/account";
 import { getUserById } from "@/data/user";
+import { Subscription } from "@prisma/client";
 export const {
   handlers: { GET, POST },
   auth,
@@ -109,8 +110,8 @@ export const {
         session.user.name = token.name;
         session.user.email = token.email;
         session.user.isOAuth = token.isOAuth as boolean;
-        session.user.planId = token.planId as number;
         session.user.stripeCustomerId = token.stripeCustomerId as string;
+        session.user.subscriptions = token.subscriptions as Subscription[];
       }
 
       return session;
@@ -129,7 +130,7 @@ export const {
       token.email = existingUser.email;
       token.role = existingUser.role;
       token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
-      token.planId = existingUser.planId;
+      token.subscriptions = existingUser.subscriptions;
       token.stripeCustomerId = existingUser.stripeCustomerId;
 
       return token;

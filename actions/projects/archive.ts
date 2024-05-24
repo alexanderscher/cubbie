@@ -37,6 +37,8 @@ export const archiveProject = async (projectId: number, action: string) => {
     }
 
     revalidateTag(`project_${projectId}`);
+    revalidateTag(`projects_user_${userId}`);
+
     return { success: true };
   } catch (error) {
     console.error("Failed to modify archive status:", error);

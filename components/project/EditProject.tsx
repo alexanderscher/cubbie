@@ -59,7 +59,7 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full">
+    <div className=" w-full">
       <div className="flex justify-between items-center border-b  px-5 py-3 rounded-t-lg border-emerald-900">
         <h3 className="text-md text-emerald-900">Edit Project</h3>
         <button

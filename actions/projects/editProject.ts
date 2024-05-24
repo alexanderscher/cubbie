@@ -1,5 +1,6 @@
 "use server";
 import { revalidateUsersInProject } from "@/actions/revalidateUsers";
+import { revalidate } from "@/app/api/cron/route";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
 import { Session } from "@/types/Session";
@@ -35,6 +36,7 @@ export const editProject = async (
     });
 
     revalidateTag(`project_${projectId}`);
+    revalidateTag(`projects_user_${userId}`);
 
     return { success: true };
   } catch (error) {

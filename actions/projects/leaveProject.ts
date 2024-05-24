@@ -26,6 +26,7 @@ export const leaveProject = async (projectId: number): Promise<any> => {
     });
 
     revalidateTag(`project_${projectId}`);
+    revalidateTag(`projects_user_${userId}`);
   } catch (error) {
     console.error("Failed to add user to project:", error);
     return { error: "An error occurred while adding the user to the project" };

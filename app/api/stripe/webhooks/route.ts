@@ -108,6 +108,13 @@ const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
           data: subscriptionData,
         });
 
+        await prisma.user.update({
+          where: { id: userId },
+          data: {
+            planId: parseInt(planId),
+          },
+        });
+
         return new NextResponse(JSON.stringify({ received: true }), {
           status: 200,
           headers: { "Content-Type": "application/json" },

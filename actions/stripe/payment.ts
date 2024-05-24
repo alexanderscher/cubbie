@@ -4,6 +4,8 @@ import { stripe } from "@/app/stripe/stripe";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
 import { Session } from "@/types/Session";
+import { Subscription } from "@prisma/client";
+import { revalidateTag } from "next/cache";
 
 export const handlePayment = async (priceId: string, planId: number) => {
   const session = (await auth()) as Session;
@@ -37,6 +39,7 @@ export const handlePayment = async (priceId: string, planId: number) => {
     success_url: `${url}`,
     cancel_url: `${url}`,
   });
+  revalidateTag(`user_${session.user.id}`);
 
   return stripeSession.url;
 };
@@ -79,6 +82,58 @@ export const handlePaymentIndividual = async (
     success_url: `${url}`,
     cancel_url: `${url}`,
   });
+  revalidateTag(`user_${session.user.id}`);
 
   return stripeSession.url;
+};
+
+export const cancelIndividual = async (subscription: Subscription) => {
+  try {
+    const session = (await auth()) as Session;
+
+    if (!session || !session.user) {
+      throw new Error("User not authenticated");
+    }
+
+    // Cancel the subscription in Stripe
+    const sub = await stripe.subscriptions.cancel(
+      subscription.subscriptionID as string
+    );
+
+    // Delete the subscription from the database
+    const deleteSub = await prisma.subscription.delete({
+      where: { id: subscription.id },
+    });
+
+    // Fetch updated user subscriptions after deletion
+    const userSubscriptions = await prisma.subscription.findMany({
+      where: { userId: session.user.id },
+    });
+
+    // If user has no more subscriptions, create a default subscription
+    if (deleteSub && userSubscriptions.length === 0) {
+      const subscriptionData = {
+        planId: 1,
+        subscriptionDate: new Date(),
+        userId: session.user.id,
+      };
+
+      await prisma.subscription.create({
+        data: subscriptionData,
+      });
+
+      await prisma.user.update({
+        where: { id: session.user.id },
+        data: { planId: 1 },
+      });
+    }
+
+    // Revalidate any necessary data
+    revalidateTag(`user_${session.user.id}`);
+
+    return { message: "Subscription canceled successfully", subscription: sub };
+  } catch (error) {
+    console.error("Error canceling subscription:", error);
+    throw new Error(`Subscription cancellation failed: ${error}`);
+  }
 };

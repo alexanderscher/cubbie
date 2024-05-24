@@ -1,5 +1,5 @@
-import { ProjectType } from "@/types/ProjectTypes";
-import { Plan } from "@prisma/client";
+import { ProjectType, ProjectUserArchiveType } from "@/types/ProjectTypes";
+import { Plan, Project, Subscription } from "@prisma/client";
 
 interface Item {
   barcode: string | null;
@@ -27,6 +27,10 @@ export interface ProjectUserType {
   userId: string;
 }
 
+export interface ExtendedSubscription extends Subscription {
+  project: Project;
+}
+
 export interface UserType {
   id: string;
   name?: string | null;
@@ -44,4 +48,15 @@ export interface UserType {
   planId?: number | null; // Changed type to match Prisma's possible integer reference
   projects: ProjectUserType[];
   plan: Plan;
+  subscriptions: ExtendedSubscription[];
+}
+
+export interface SubscriptionProjectType {
+  id: number;
+  name: string;
+  asset_amount: number | null;
+  created_at: Date;
+  userId: string;
+  projectUserArchive: ProjectUserArchiveType[];
+  subscriptions: Subscription[];
 }

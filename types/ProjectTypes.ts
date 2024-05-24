@@ -1,4 +1,6 @@
 import { ReceiptType } from "@/types/ReceiptTypes";
+import { SubscriptionProjectType } from "@/types/UserSettingTypes";
+import { Subscription } from "@prisma/client";
 
 export interface ProjectType {
   asset_amount: number | null;
@@ -10,6 +12,7 @@ export interface ProjectType {
   receipts: ReceiptType[];
   userId: string;
   user: User;
+  subscriptions: Subscription[];
 }
 
 export interface ProjectUserArchiveType {

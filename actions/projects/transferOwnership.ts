@@ -9,6 +9,8 @@ export const changeProjectOwner = async (
   newOwnerId: string
 ): Promise<any> => {
   try {
+    const session = (await auth()) as Session;
+    const userId = session?.user?.id as string;
     // Retrieve the current owner of the project
     const project = await prisma.project.findUnique({
       where: { id: projectId },
@@ -48,6 +50,8 @@ export const changeProjectOwner = async (
       },
     });
     revalidateTag(`project_${projectId}`);
+    revalidateTag(`projects_user_${userId}`);
+
     return { success: true };
   } catch (error) {
     console.error("Failed to change project owner:", error);

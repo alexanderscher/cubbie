@@ -35,6 +35,7 @@ export const removeUserFromProject = async (
       },
     });
     revalidateTag(`project_${projectId}`);
+    revalidateTag(`projects_user_${userId}`);
 
     return projectUser;
   } catch (error) {

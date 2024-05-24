@@ -1,3 +1,5 @@
+import { Subscription } from "@prisma/client";
+
 export interface UserForSession {
   email: string;
   id: string;
@@ -6,8 +8,8 @@ export interface UserForSession {
   isTwoFactorEnabled: boolean;
   name: string;
   role: string;
-  planId: number;
   stripeCustomerId: string;
+  subscriptions: Subscription[];
 }
 
 export interface Session {

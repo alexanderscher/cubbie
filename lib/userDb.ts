@@ -57,7 +57,11 @@ export const getUserSubscriptionInfo = async () => {
           id: userId,
         },
         include: {
-          subscriptions: true,
+          subscriptions: {
+            include: {
+              project: true,
+            },
+          },
           plan: true,
           projects: {
             include: {

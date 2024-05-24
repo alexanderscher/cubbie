@@ -49,6 +49,8 @@ export const getProjectByIdClient = async (id: string) => {
     },
     include: {
       user: true,
+      subscriptions: true,
+
       receipts: {
         include: {
           items: true,

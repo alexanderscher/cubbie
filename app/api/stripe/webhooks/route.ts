@@ -49,66 +49,87 @@ const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
 
     console.log("✅ Success:", event.id);
 
-    const subscription = event.data.object as Stripe.Subscription;
-    const subscriptionId = subscription.id;
-    const planId = subscription.items.data[0].plan.product as string;
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object as Stripe.Checkout.Session;
 
-    // Fetch product to get the planId from metadata
-    const product = await stripe.products.retrieve(planId);
-    const planMetadataId = product.metadata.planId;
+      // Extract metadata
+      const metadata = session.metadata;
+      const userId = metadata?.userId;
+      const planId = metadata?.planId as string;
+      const projectId = metadata?.projectId;
 
-    console.log("Subscription ID:", planMetadataId);
+      console.log("Subscription ID:", session.subscription);
+      console.log("User ID:", userId);
+      console.log("Plan ID:", planId);
+      console.log("Project ID:", projectId);
 
-    try {
-      switch (event.type) {
-        case "customer.subscription.created":
-        case "customer.subscription.updated":
-          await prisma.user.update({
-            where: {
-              stripeCustomerId: subscription.customer as string,
+      if (!userId) {
+        console.error("❌ userId is undefined in the metadata");
+        return new NextResponse(
+          JSON.stringify({
+            error: {
+              message: "userId is undefined in the metadata",
             },
-            data: {
-              subscriptionID: subscriptionId,
-              planId: parseInt(planMetadataId),
-              subscriptionDate: today,
-            },
-            include: { plan: true },
-          });
-          break;
-        // case "customer.subscription.deleted":
-        //   const updated = await prisma.user.update({
-        //     where: {
-        //       stripeCustomerId: subscription.customer as string,
-        //     },
-        //     data: {
-        //       subscriptionID: subscriptionId,
-        //       planId: parseInt(planMetadataId),
-        //       subscriptionDate: null,
-        //     },
-        //     include: { plan: true },
-        //   });
-        //   console.log("Updated User (deleted):", updated);
-        //   break;
-        default:
-          console.warn(`🤷‍♀️ Unhandled event type: ${event.type}`);
-          break;
+          }),
+          { status: 400, headers: { "Content-Type": "application/json" } }
+        );
       }
-    } catch (dbError) {
-      console.error(`❌ Database error: ${dbError}`);
-      return new NextResponse(
-        JSON.stringify({
-          error: {
-            message: `Database Error: ${dbError}`,
-          },
-        }),
-        { status: 500, headers: { "Content-Type": "application/json" } }
-      );
-    }
 
-    return new NextResponse(JSON.stringify({ received: true }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+      try {
+        if (parseInt(planId) === 3) {
+          await prisma.subscription.deleteMany({
+            where: {
+              userId: userId,
+              planId: {
+                not: 3,
+              },
+            },
+          });
+        } else {
+          await prisma.subscription.deleteMany({
+            where: {
+              userId: userId,
+            },
+          });
+        }
+
+        const subscriptionData: any = {
+          subscriptionID: session.subscription as string,
+          planId: parseInt(planId),
+          subscriptionDate: today,
+          userId: userId,
+        };
+
+        if (parseInt(planId) === 3 && projectId) {
+          subscriptionData.projectId = parseInt(projectId);
+        }
+
+        await prisma.subscription.create({
+          data: subscriptionData,
+        });
+
+        return new NextResponse(JSON.stringify({ received: true }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        });
+      } catch (dbError) {
+        console.error(`❌ Database error: ${dbError}`);
+        return new NextResponse(
+          JSON.stringify({
+            error: {
+              message: `Database Error: ${dbError}`,
+            },
+          }),
+          { status: 500, headers: { "Content-Type": "application/json" } }
+        );
+      }
+    } else {
+      console.log(`Unhandled event type: ${event.type}`);
+      return new NextResponse(JSON.stringify({ received: true }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
   } catch (error) {
     console.error(`❌ Unexpected error: ${error}`);
     return new NextResponse(

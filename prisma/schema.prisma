@@ -37,9 +37,6 @@ model User {
   returns               Returns[]
   subscriptions         Subscription[]
   stripeCustomerId      String?                @unique
-  subscriptionDate      DateTime?
-  subscriptionID        String?
-  subscriptionType      String?
   planId                Int?
   plan                  Plan?                  @relation(fields: [planId], references: [id])
 }
@@ -64,8 +61,8 @@ model Project {
   projectUsers       ProjectUser[]
   receipts           Receipt[]
   alert              Alert[]
-  User               User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   subscriptions      Subscription[]
+  User               User                 @relation(fields: [userId], references: [id])
 }
 
 model Plan {
@@ -81,13 +78,15 @@ model Plan {
 }
 
 model Subscription {
-  id        Int      @id @default(autoincrement())
-  userId    String
-  projectId Int?
-  project   Project? @relation(fields: [projectId], references: [id])
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  planId    Int
-  plan      Plan     @relation(fields: [planId], references: [id])
+  id               Int       @id @default(autoincrement())
+  userId           String
+  subscriptionID   String?
+  projectId        Int?
+  project          Project?  @relation(fields: [projectId], references: [id])
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId           Int
+  subscriptionDate DateTime?
+  plan             Plan      @relation(fields: [planId], references: [id])
 }
 
 model ProjectUserArchive {

@@ -6,9 +6,6 @@ import authConfig from "@/auth.config";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 import { getAccountByUserId } from "./data/account";
 import { getUserById } from "@/data/user";
-import { stripe } from "@/app/stripe/stripe";
-import { createStripeCustomer } from "@/actions/stripe/createStripeUser";
-
 export const {
   handlers: { GET, POST },
   auth,

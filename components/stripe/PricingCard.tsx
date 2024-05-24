@@ -1,7 +1,10 @@
 "use client";
 import React, { useState, useTransition } from "react";
 import RegularButton from "@/components/buttons/RegularButton";
-import { handlePayment } from "@/actions/stripe/payment";
+import {
+  handlePayment,
+  handlePaymentIndividual,
+} from "@/actions/stripe/payment";
 import Loading from "@/components/Loading/Loading";
 
 interface priceProps {
@@ -40,11 +43,27 @@ const PricingCard = ({ price, session }: priceProps) => {
   const handleSubscription = async () => {
     startTransition(async () => {
       try {
-        const stripeUrl = await handlePayment(price.id);
-        if (stripeUrl) {
-          window.location.assign(stripeUrl);
+        if (parseInt(price.product.metadata.planId) === 3) {
+          const stripeUrl = await handlePaymentIndividual(
+            price.id,
+            "1",
+            price.product.metadata.planId
+          );
+          if (stripeUrl) {
+            window.location.assign(stripeUrl);
+          } else {
+            throw new Error("Failed to create payment session");
+          }
         } else {
-          throw new Error("Failed to create payment session");
+          const stripeUrl = await handlePayment(
+            price.id,
+            price.product.metadata.planId
+          );
+          if (stripeUrl) {
+            window.location.assign(stripeUrl);
+          } else {
+            throw new Error("Failed to create payment session");
+          }
         }
       } catch (error) {
         setError("Failed to create payment session");

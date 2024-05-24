@@ -17,6 +17,9 @@ export default auth((req) => {
   if (nextUrl.pathname === "/api/stripe/webhooks") {
     return;
   }
+  if (nextUrl.pathname === "/api/seed") {
+    return;
+  }
   if (isApiCronRoute) {
     return;
   }

@@ -20,7 +20,7 @@ const ErrorModal = ({ errorMessage, onClose }: ErrorModalProps) => {
           <ExclamationTriangleIcon className=" text-red-500 w-3/4 h-1/2" />
         </div>
         <h2 className="text-xl font-semibold text-red-500">Upload Error</h2>
-        <div className="mt-3 text-sm text-red-500">
+        <div className="mt-3 text-sm text-red-500 text-center">
           <p>{errorMessage}</p>
         </div>
         <div className="mt-4 flex w-full ">

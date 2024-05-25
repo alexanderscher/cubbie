@@ -61,38 +61,44 @@ const PricingCard = ({ price, session, projects }: priceProps) => {
     });
   };
 
-  return (
-    <div className=" bg-white w-full shadow rounded-lg p-6 flex flex-col gap-3">
-      <div className="flex gap-1 text-emerald-900">
-        <h1 className={`text-xl`}>{price.product.name}</h1>
-      </div>
+  if (
+    price.product.name === "Individual Project Plan" &&
+    session.user.planId === 2
+  ) {
+    return <div></div>;
+  } else
+    return (
+      <div className=" bg-white w-full shadow rounded-lg p-6 flex flex-col gap-3">
+        <div className="flex gap-1 text-emerald-900">
+          <h1 className={`text-xl`}>{price.product.name}</h1>
+        </div>
 
-      <p className="text-lg text-emerald-900 ">
-        {(price.unit_amount / 100).toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        })}{" "}
-        {"/month"}
-      </p>
-      {price.product.name === "Free Plan" && <FreePlan />}
-      {price.product.name === "All Project Plan" && <AllProjectPlan />}
-      {price.product.name === "Individual Project Plan" && (
-        <IndividualPlan
-          projects={projects}
-          setSelectedProject={setSelectedProject}
-          selectedProject={selectedProject}
+        <p className="text-lg text-emerald-900 ">
+          {(price.unit_amount / 100).toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+          })}{" "}
+          {"/month"}
+        </p>
+        {price.product.name === "Free Plan" && <FreePlan />}
+        {price.product.name === "All Project Plan" && <AllProjectPlan />}
+        {price.product.name === "Individual Project Plan" && (
+          <IndividualPlan
+            projects={projects}
+            setSelectedProject={setSelectedProject}
+            selectedProject={selectedProject}
+          />
+        )}
+        <SubButton
+          userPlanId={session.user.planId}
+          pricePlanId={price.product.metadata.planId}
+          handleSubscription={handleSubscription}
         />
-      )}
-      <SubButton
-        userPlanId={session.user.planId}
-        pricePlanId={price.product.metadata.planId}
-        handleSubscription={handleSubscription}
-      />
 
-      {isPending && <Loading loading={isPending} />}
-      {error && <FormError message={error}></FormError>}
-    </div>
-  );
+        {isPending && <Loading loading={isPending} />}
+        {error && <FormError message={error}></FormError>}
+      </div>
+    );
 };
 
 export default PricingCard;

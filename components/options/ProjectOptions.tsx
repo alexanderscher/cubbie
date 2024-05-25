@@ -40,7 +40,6 @@ export const ProjectOptionsModal = ({
   archived,
   session,
 }: OptionsModalProps) => {
-  console.log(project);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [edit, setEdit] = useState(false);
   const [isAddOpen, setAddReceiptOpen] = useState(false);
@@ -62,6 +61,12 @@ export const ProjectOptionsModal = ({
 
   const toggleDeleteModal = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
+
+    if (project.subscription) {
+      toast.error("You cannot delete a subscribed project");
+      return;
+    }
+
     setIsDeleteOpen(!isDeleteOpen);
   };
 

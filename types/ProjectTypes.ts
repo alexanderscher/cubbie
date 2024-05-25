@@ -12,7 +12,7 @@ export interface ProjectType {
   receipts: ReceiptType[];
   userId: string;
   user: User;
-  subscriptions: Subscription[];
+  subscription: Subscription;
 }
 
 export interface ProjectUserArchiveType {

@@ -9,6 +9,7 @@ import { TruncateText } from "@/components/text/Truncate";
 import { getProjectsClient } from "@/lib/getProjectsClient";
 import { ProjectType, ProjectUserArchiveType } from "@/types/ProjectTypes";
 import { ReceiptType } from "@/types/ReceiptTypes";
+import { Session } from "@/types/Session";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
@@ -21,10 +22,10 @@ const fetchProject = async () => {
   return projects as ProjectType[];
 };
 interface Props {
-  sessionUserId: string;
+  session: Session;
 }
 
-const Projects = ({ sessionUserId }: Props) => {
+const Projects = ({ session }: Props) => {
   const { isProjectLoading, filteredProjectData, initializeProjects } =
     useSearchProjectContext();
 
@@ -108,14 +109,14 @@ const Projects = ({ sessionUserId }: Props) => {
       return !(
         project.projectUserArchive?.some(
           (entry: ProjectUserArchiveType) =>
-            entry.userId === sessionUserId?.toString()
+            entry.userId === session.user.id.toString()
         ) || false
       );
     })
     .map((project) => {
       return (
         <Project
-          sessionUserId={sessionUserId}
+          session={session}
           archived={false}
           project={project}
           key={project.id}
@@ -130,14 +131,14 @@ const Projects = ({ sessionUserId }: Props) => {
       return (
         project.projectUserArchive?.some(
           (entry: ProjectUserArchiveType) =>
-            entry.userId === sessionUserId?.toString()
+            entry.userId === session.user.id.toString()
         ) || false
       );
     })
     .map((project) => {
       return (
         <Project
-          sessionUserId={sessionUserId}
+          session={session}
           archived={true}
           project={project}
           key={project.id}
@@ -185,7 +186,7 @@ interface ProjectProps {
   isOpen: boolean;
   onToggleOpen: (event: React.MouseEvent<HTMLDivElement>) => void;
   archived: boolean;
-  sessionUserId: string;
+  session: Session;
   setOpenProjectId: (value: number | null) => void;
 }
 
@@ -194,7 +195,7 @@ const Project = ({
   isOpen,
   onToggleOpen,
   archived,
-  sessionUserId,
+  session,
   setOpenProjectId,
 }: ProjectProps) => {
   return (
@@ -258,7 +259,7 @@ const Project = ({
             isOpen={isOpen}
             project={project}
             archived={archived}
-            sessionUserId={sessionUserId}
+            session={session}
           />
         </>
       )}

@@ -10,6 +10,7 @@ export interface UserForSession {
   role: string;
   stripeCustomerId: string;
   subscriptions: Subscription[];
+  planId: number;
 }
 
 export interface Session {

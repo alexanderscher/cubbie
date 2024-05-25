@@ -61,7 +61,7 @@ model Project {
   projectUsers       ProjectUser[]
   receipts           Receipt[]
   alert              Alert[]
-  subscriptions      Subscription[]
+  subscription       Subscription?
   User               User                 @relation(fields: [userId], references: [id])
 }
 
@@ -81,7 +81,7 @@ model Subscription {
   id               Int       @id @default(autoincrement())
   userId           String
   subscriptionID   String?
-  projectId        Int?
+  projectId        Int?      @unique
   project          Project?  @relation(fields: [projectId], references: [id])
   user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   planId           Int

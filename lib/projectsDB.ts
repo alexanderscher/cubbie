@@ -27,7 +27,7 @@ export const getProjects = async () => {
             },
           },
           user: true,
-          subscriptions: true,
+          subscription: true,
           projectUsers: {
             include: {
               user: true,

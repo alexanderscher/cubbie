@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useState, useTransition } from "react";
+import React, { use, useEffect, useState, useTransition } from "react";
 import styles from "@/components/profile/profile.module.css";
 import { Menu } from "@/components/profile/Menu";
 import { Line } from "rc-progress";
@@ -21,7 +21,13 @@ const getTotalNumberOfItems = (user: UserType) => {
 };
 
 const UserPlan = ({ user }: { user: UserType }) => {
-  const totalItems = getTotalNumberOfItems(user);
+  const [totalItems, setTotalItems] = useState(0);
+
+  useEffect(() => {
+    if (user.projects.length > 0) {
+      setTotalItems(getTotalNumberOfItems(user));
+    }
+  }, [user]);
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
 
@@ -108,14 +114,62 @@ const UserPlan = ({ user }: { user: UserType }) => {
             <div className="flex justify-between items-center">
               <p className="text-emerald-900">Current Plans</p>
               <RegularButton
-                styles="border-orange-400 bg-orange-400 text-white"
+                styles="border-emerald-900 bg-emerald-900 text-white"
                 href={"/manage-plan"}
               >
-                <p className="text-xs">Change plans</p>
+                <p className="text-xs">Change or add plans</p>
               </RegularButton>
             </div>
+            {user.subscriptions?.map((sub) => (
+              <>
+                <div className="bg-orange-50 rounded-lg p-6  flex flex-col gap-4 text-emerald-900">
+                  <h1 className="text-orange-400">{sub.project.name}</h1>
+
+                  <div>
+                    <p className="">$0.00 </p>
+                    <p className="text-xs">per month</p>
+                  </div>
+
+                  <div className="mb-3 flex flex-col gap-2">
+                    <h1>Usage</h1>
+
+                    <div className="">
+                      <div className="flex justify-between items-center">
+                        <p className="text-sm ">Total receipt items</p>
+                        <p className="text-xs"> {totalItems} / 50</p>
+                      </div>
+
+                      <Line
+                        percent={(totalItems / 50) * 100}
+                        strokeColor="#FB923C"
+                      />
+                    </div>
+                    {totalItems == 50 && (
+                      <div className="flex flex-col gap-3">
+                        <p className="text-sm text-orange-400">
+                          You&apos;ve reached plan limits. Please take advantage
+                          of the plan upgrade{" "}
+                        </p>
+                        <RegularButton
+                          styles="border-orange-400 bg-orange-400 text-white"
+                          href={"/manage-plan"}
+                        >
+                          <p className="text-xs">Upgrade plan</p>
+                        </RegularButton>
+                      </div>
+                    )}
+                  </div>
+                  <RegularButton
+                    styles="border-emerald-900 bg-orange-50 text-emerald-900 w-1/4 min-w-[120px]"
+                    handleClick={() => cancelSubscription(sub)}
+                  >
+                    <p className="text-xs">Cancel plan</p>
+                  </RegularButton>
+                </div>
+              </>
+            ))}
           </div>
-          {user.subscriptions?.map((sub) => (
+          {/* {user.subscriptions?.map((sub) => (
             <>
               <div className="bg-white rounded-lg p-6  flex flex-col gap-4 text-emerald-900">
                 <h1>{sub.project.name}</h1>
@@ -162,7 +216,7 @@ const UserPlan = ({ user }: { user: UserType }) => {
                 </RegularButton>
               </div>
             </>
-          ))}
+          ))} */}
         </div>
       )}
       {isPending && <Loading loading={isPending} />}

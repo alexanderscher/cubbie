@@ -84,7 +84,7 @@ const PricingCard = ({ price, session, projects }: priceProps) => {
         />
       )}
       <SubButton
-        userPlanId={session.user.subscriptions}
+        userPlanId={session.user.planId}
         pricePlanId={price.product.metadata.planId}
         handleSubscription={handleSubscription}
       />
@@ -149,11 +149,11 @@ const SubButton = ({
   pricePlanId,
   handleSubscription,
 }: {
-  userPlanId: Subscription[];
+  userPlanId: number;
   pricePlanId: string;
   handleSubscription: (pricePlanId: string) => void;
 }) => {
-  if (userPlanId[0].planId === 3) {
+  if (userPlanId === 3) {
     return (
       <RegularButton
         handleClick={() => handleSubscription(pricePlanId)}
@@ -167,14 +167,12 @@ const SubButton = ({
       <RegularButton
         handleClick={() => handleSubscription(pricePlanId)}
         styles={
-          userPlanId[0].planId !== parseInt(pricePlanId)
+          userPlanId !== parseInt(pricePlanId)
             ? "text-sm border-orange-400 bg-orange-400 text-white"
             : "text-sm border-slate-400 text-slate-400"
         }
       >
-        {userPlanId[0].planId !== parseInt(pricePlanId)
-          ? "Subscribe"
-          : "Current Plan"}
+        {userPlanId !== parseInt(pricePlanId) ? "Subscribe" : "Current Plan"}
       </RegularButton>
     );
   }
@@ -292,7 +290,7 @@ export const ProjectSelect = ({
 
           return (
             project &&
-            project.subscriptions.length === 0 &&
+            !project.subscription &&
             !project.projectUserArchive?.some(
               (entry: ProjectUserArchiveType) =>
                 entry.userId === session.data?.user.id

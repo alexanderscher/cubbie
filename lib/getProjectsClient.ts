@@ -23,6 +23,7 @@ export const getProjectsClient = async () => {
           },
         },
       },
+      subscription: true,
       projectUsers: {
         include: {
           user: true,
@@ -49,7 +50,7 @@ export const getProjectByIdClient = async (id: string) => {
     },
     include: {
       user: true,
-      subscriptions: true,
+      subscription: true,
 
       receipts: {
         include: {

@@ -40,14 +40,6 @@ export const {
               },
             });
 
-            const newSubscription = await prisma.subscription.create({
-              data: {
-                userId: user.id,
-                planId: defaultPlanId,
-              },
-            });
-            console.log("Assigned default plan to new user:", newSubscription);
-
             const updatedUser = await prisma.user.update({
               where: { id: user.id },
               data: { planId: defaultPlanId },
@@ -112,6 +104,7 @@ export const {
         session.user.isOAuth = token.isOAuth as boolean;
         session.user.stripeCustomerId = token.stripeCustomerId as string;
         session.user.subscriptions = token.subscriptions as Subscription[];
+        session.user.planId = token.planId as number;
       }
 
       return session;
@@ -132,6 +125,7 @@ export const {
       token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
       token.subscriptions = existingUser.subscriptions;
       token.stripeCustomerId = existingUser.stripeCustomerId;
+      token.planId = existingUser.planId;
 
       return token;
     },

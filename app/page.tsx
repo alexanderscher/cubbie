@@ -16,7 +16,7 @@ export default async function Home() {
           <Suspense fallback={<div>Loading</div>}>
             <div className="w-full max-w-[1090px]">
               <Header type="Projects" />
-              <Projects sessionUserId={session.user.id} />
+              <Projects session={session} />
             </div>
           </Suspense>
         </div>

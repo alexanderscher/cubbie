@@ -40,6 +40,7 @@ export const handlePayment = async (priceId: string, planId: number) => {
     cancel_url: `${url}`,
   });
   revalidateTag(`user_${session.user.id}`);
+  revalidateTag(`user_${session.user.id}`);
 
   return stripeSession.url;
 };
@@ -83,6 +84,7 @@ export const handlePaymentIndividual = async (
     cancel_url: `${url}`,
   });
   revalidateTag(`user_${session.user.id}`);
+  revalidateTag(`projects_user_${session.user.id}`);
 
   return stripeSession.url;
 };
@@ -112,16 +114,6 @@ export const cancelIndividual = async (subscription: Subscription) => {
 
     // If user has no more subscriptions, create a default subscription
     if (deleteSub && userSubscriptions.length === 0) {
-      const subscriptionData = {
-        planId: 1,
-        subscriptionDate: new Date(),
-        userId: session.user.id,
-      };
-
-      await prisma.subscription.create({
-        data: subscriptionData,
-      });
-
       await prisma.user.update({
         where: { id: session.user.id },
         data: { planId: 1 },
@@ -130,6 +122,7 @@ export const cancelIndividual = async (subscription: Subscription) => {
 
     // Revalidate any necessary data
     revalidateTag(`user_${session.user.id}`);
+    revalidateTag(`projects_user_${session.user.id}`);
 
     return { message: "Subscription canceled successfully", subscription: sub };
   } catch (error) {

@@ -22,12 +22,14 @@ import { useRouter } from "next/navigation";
 import { changeProjectOwner } from "@/actions/projects/transferOwnership";
 import { ProjectItemType, ProjectType } from "@/types/ProjectTypes";
 import { ReceiptType } from "@/types/ReceiptTypes";
+import Link from "next/link";
+import { Session } from "@/types/Session";
 
 interface OptionsModalProps {
   isOpen: boolean;
   project: ProjectType;
   archived: boolean;
-  sessionUserId: string | undefined;
+  session: Session;
 }
 
 const white = "bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2";
@@ -36,8 +38,9 @@ const green = "bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2";
 export const ProjectOptionsModal = ({
   project,
   archived,
-  sessionUserId,
+  session,
 }: OptionsModalProps) => {
+  console.log(project);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [edit, setEdit] = useState(false);
   const [isAddOpen, setAddReceiptOpen] = useState(false);
@@ -197,7 +200,7 @@ export const ProjectOptionsModal = ({
                 </div>
               </div>
             )}
-            {project.userId === sessionUserId && (
+            {project.userId === session.user.id && (
               <div className={`${color} cursor-pointer`}>
                 <div
                   className="flex gap-2 cursor-pointer"
@@ -210,6 +213,37 @@ export const ProjectOptionsModal = ({
                     alt=""
                   ></Image>
                   <p>Delete project</p>
+                </div>
+              </div>
+            )}
+            {(project.subscription || session.user.planId === 2) && (
+              <div className={`bg-[#d2edd2]  rounded-lg w-full p-2`}>
+                <div className="flex gap-2 ">
+                  <Image
+                    src={"/checkmark.png"}
+                    width={20}
+                    height={20}
+                    alt=""
+                  ></Image>
+                  <p>Subscribed</p>
+                </div>
+              </div>
+            )}
+
+            {!project.subscription && session.user.planId !== 2 && (
+              <div
+                className={`bg-orange-100 hover:bg-orange-200  rounded-lg w-full p-2`}
+              >
+                <div className="flex gap-2 cursor-pointer">
+                  <Image
+                    src={"/plus.png"}
+                    width={20}
+                    height={20}
+                    alt=""
+                  ></Image>
+                  <Link href={"/manage-plan"}>
+                    <p>Subscribe</p>
+                  </Link>
                 </div>
               </div>
             )}
@@ -254,7 +288,7 @@ export const ProjectOptionsModal = ({
           <Members
             project={project}
             setMembersOpen={setMembersOpen}
-            sessionUserId={sessionUserId}
+            sessionUserId={session.user.id}
             setAddUserOpen={setAddUserOpen}
           />
         </ModalOverlay>

@@ -2,6 +2,7 @@ import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
 import { stripe } from "@/app/stripe/stripe";
+import { revalidateTag } from "next/cache";
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -114,6 +115,8 @@ const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
             planId: parseInt(planId),
           },
         });
+        revalidateTag(`user_${userId}`);
+        revalidateTag(`projects_user_${userId}`);
 
         return new NextResponse(JSON.stringify({ received: true }), {
           status: 200,

@@ -7,6 +7,7 @@ export type ExtendedUser = DefaultSession["user"] & {
   isOAuth: boolean;
   stripeCustomerId: string;
   subscriptions: Subscription[];
+  planId: number;
 };
 
 declare module "next-auth" {

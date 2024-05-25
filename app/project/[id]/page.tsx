@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { ProjectId } from "@/components/project/ProjectId";
 import PageWrapper from "@/components/wrapper/PageWrapper";
 import { getProjectById } from "@/lib/projectsDB";
-import { Session } from "next-auth";
+import { Session } from "@/types/Session";
 
 export default async function ProjectID({
   params,
@@ -14,7 +14,7 @@ export default async function ProjectID({
   return (
     <PageWrapper>
       <div className="w-full flex justify-center ">
-        <ProjectId projectId={params.id} sessionUserId={session.user.id} />
+        <ProjectId projectId={params.id} session={session} />
       </div>
     </PageWrapper>
   );

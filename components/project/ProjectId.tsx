@@ -21,13 +21,14 @@ import {
   ProjectUserArchiveType,
 } from "@/types/ProjectTypes";
 import { ReceiptType } from "@/types/ReceiptTypes";
+import { Session } from "@/types/Session";
 
 interface ProjectIdProps {
-  sessionUserId: string | undefined;
+  session: Session;
   projectId: string;
 }
 
-export const ProjectId = ({ sessionUserId, projectId }: ProjectIdProps) => {
+export const ProjectId = ({ session, projectId }: ProjectIdProps) => {
   const [isAddOpen, setAddReceiptOpen] = useState(false);
   const [project, setProject] = useState<ProjectType>({} as ProjectType);
 
@@ -198,7 +199,7 @@ export const ProjectId = ({ sessionUserId, projectId }: ProjectIdProps) => {
                         archived={isArchived}
                         isOpen={isOpen}
                         project={project}
-                        sessionUserId={sessionUserId}
+                        session={session}
                       />
                     </>
                   )}

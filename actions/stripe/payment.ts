@@ -40,9 +40,53 @@ export const handlePayment = async (priceId: string, planId: number) => {
     cancel_url: `${url}`,
   });
   revalidateTag(`user_${session.user.id}`);
-  revalidateTag(`user_${session.user.id}`);
+  revalidateTag(`projects_user_${session.user.id}`);
 
   return stripeSession.url;
+};
+
+export const freePlan = async () => {
+  try {
+    const session = (await auth()) as Session;
+    let customerId = session?.user?.stripeCustomerId;
+
+    if (!customerId) {
+      const customer = await createStripeCustomer(session.user);
+      customerId = customer.id;
+
+      await prisma.user.update({
+        where: { id: session.user.id },
+        data: { stripeCustomerId: customerId },
+      });
+    }
+
+    const subscriptions = await prisma.subscription.findMany({
+      where: { userId: session.user.id },
+    });
+
+    for (const subscription of subscriptions) {
+      if (subscription.subscriptionID) {
+        await stripe.subscriptions.cancel(subscription.subscriptionID);
+      }
+    }
+
+    await prisma.subscription.deleteMany({
+      where: {
+        userId: session.user.id,
+      },
+    });
+
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: {
+        planId: 1,
+      },
+    });
+
+    revalidateTag(`user_${session.user.id}`);
+  } catch (error) {
+    console.error("Error updating user to free plan:", error);
+  }
 };
 
 export const handlePaymentIndividual = async (
@@ -98,9 +142,15 @@ export const cancelIndividual = async (subscription: Subscription) => {
     }
 
     // Cancel the subscription in Stripe
-    const sub = await stripe.subscriptions.cancel(
-      subscription.subscriptionID as string
-    );
+    const subs = await prisma.subscription.findMany({
+      where: { userId: session.user.id },
+    });
+
+    for (const subscription of subs) {
+      if (subscription.subscriptionID) {
+        await stripe.subscriptions.cancel(subscription.subscriptionID);
+      }
+    }
 
     // Delete the subscription from the database
     const deleteSub = await prisma.subscription.delete({
@@ -124,7 +174,7 @@ export const cancelIndividual = async (subscription: Subscription) => {
     revalidateTag(`user_${session.user.id}`);
     revalidateTag(`projects_user_${session.user.id}`);
 
-    return { message: "Subscription canceled successfully", subscription: sub };
+    return { message: "Subscription canceled successfully" };
   } catch (error) {
     console.error("Error canceling subscription:", error);
     throw new Error(`Subscription cancellation failed: ${error}`);

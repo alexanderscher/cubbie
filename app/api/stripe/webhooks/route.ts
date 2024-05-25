@@ -77,7 +77,17 @@ const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
       }
 
       try {
+        const subs = await prisma.subscription.findMany({
+          where: { userId },
+        });
+
         if (parseInt(planId) === 3) {
+          for (const subscription of subs) {
+            if (subscription.planId !== 3 && subscription.subscriptionID) {
+              await stripe.subscriptions.cancel(subscription.subscriptionID);
+            }
+          }
+
           await prisma.subscription.deleteMany({
             where: {
               userId: userId,
@@ -87,6 +97,12 @@ const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
             },
           });
         } else {
+          for (const subscription of subs) {
+            if (subscription.subscriptionID) {
+              await stripe.subscriptions.cancel(subscription.subscriptionID);
+            }
+          }
+
           await prisma.subscription.deleteMany({
             where: {
               userId: userId,

@@ -6,11 +6,14 @@ import { FormError } from "@/components/form-error";
 import React, { useState, useTransition } from "react";
 import RegularButton from "@/components/buttons/RegularButton";
 import {
+  freePlan,
   handlePayment,
   handlePaymentIndividual,
 } from "@/actions/stripe/payment";
 import Loading from "@/components/Loading/Loading";
 import { Subscription } from "@prisma/client";
+import ErrorModal from "@/components/error/ErrorModal";
+import { set } from "zod";
 
 interface priceProps {
   price: any;
@@ -20,14 +23,17 @@ interface priceProps {
 
 const PricingCard = ({ price, session, projects }: priceProps) => {
   const [selectedProject, setSelectedProject] = useState("");
-
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
+  const [errorModal, setErrorModal] = useState(false);
 
   const handleSubscription = async () => {
     startTransition(async () => {
       try {
-        if (parseInt(price.product.metadata.planId) === 3) {
+        if (
+          parseInt(price.product.metadata.planId) === 3 &&
+          session.user.planId !== 2
+        ) {
           if (selectedProject === "") {
             setError("Please select a project");
             return;
@@ -42,6 +48,18 @@ const PricingCard = ({ price, session, projects }: priceProps) => {
             window.location.assign(stripeUrl);
           } else {
             throw new Error("Failed to create payment session");
+          }
+        } else if (
+          parseInt(price.product.metadata.planId) === 3 &&
+          session.user.planId === 2
+        ) {
+          setErrorModal(true);
+        } else if (parseInt(price.product.metadata.planId) === 1) {
+          setError("");
+          try {
+            const unsubscribe = await freePlan();
+          } catch (e) {
+            setError("Failed to subscribe to free plan");
           }
         } else {
           setError("");
@@ -61,44 +79,44 @@ const PricingCard = ({ price, session, projects }: priceProps) => {
     });
   };
 
-  if (
-    price.product.name === "Individual Project Plan" &&
-    session.user.planId === 2
-  ) {
-    return <div></div>;
-  } else
-    return (
-      <div className=" bg-white w-full shadow rounded-lg p-6 flex flex-col gap-3">
-        <div className="flex gap-1 text-emerald-900">
-          <h1 className={`text-xl`}>{price.product.name}</h1>
-        </div>
-
-        <p className="text-lg text-emerald-900 ">
-          {(price.unit_amount / 100).toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-          })}{" "}
-          {"/month"}
-        </p>
-        {price.product.name === "Free Plan" && <FreePlan />}
-        {price.product.name === "All Project Plan" && <AllProjectPlan />}
-        {price.product.name === "Individual Project Plan" && (
-          <IndividualPlan
-            projects={projects}
-            setSelectedProject={setSelectedProject}
-            selectedProject={selectedProject}
-          />
-        )}
-        <SubButton
-          userPlanId={session.user.planId}
-          pricePlanId={price.product.metadata.planId}
-          handleSubscription={handleSubscription}
-        />
-
-        {isPending && <Loading loading={isPending} />}
-        {error && <FormError message={error}></FormError>}
+  return (
+    <div className=" bg-white w-full shadow rounded-lg p-6 flex flex-col gap-3">
+      <div className="flex gap-1 text-emerald-900">
+        <h1 className={`text-xl`}>{price.product.name}</h1>
       </div>
-    );
+
+      <p className="text-lg text-emerald-900 ">
+        {(price.unit_amount / 100).toLocaleString("en-US", {
+          style: "currency",
+          currency: "USD",
+        })}{" "}
+        {"/month"}
+      </p>
+      {price.product.name === "Free Plan" && <FreePlan />}
+      {price.product.name === "All Project Plan" && <AllProjectPlan />}
+      {price.product.name === "Individual Project Plan" && (
+        <IndividualPlan
+          projects={projects}
+          setSelectedProject={setSelectedProject}
+          selectedProject={selectedProject}
+        />
+      )}
+      <SubButton
+        userPlanId={session.user.planId}
+        pricePlanId={price.product.metadata.planId}
+        handleSubscription={handleSubscription}
+      />
+
+      {isPending && <Loading loading={isPending} />}
+      {error && <FormError message={error}></FormError>}
+      {errorModal && (
+        <ErrorModal
+          errorMessage="You are already subscribed to the All Project Plan. Please to subscribe to the Free Plan to access this plan."
+          onClose={() => setErrorModal(false)}
+        />
+      )}
+    </div>
+  );
 };
 
 export default PricingCard;
@@ -171,7 +189,11 @@ const SubButton = ({
   } else {
     return (
       <RegularButton
-        handleClick={() => handleSubscription(pricePlanId)}
+        handleClick={() => {
+          if (userPlanId !== parseInt(pricePlanId)) {
+            handleSubscription(pricePlanId);
+          }
+        }}
         styles={
           userPlanId !== parseInt(pricePlanId)
             ? "text-sm border-orange-400 bg-orange-400 text-white"

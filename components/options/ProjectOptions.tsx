@@ -24,6 +24,7 @@ import { ProjectItemType, ProjectType } from "@/types/ProjectTypes";
 import { ReceiptType } from "@/types/ReceiptTypes";
 import Link from "next/link";
 import { Session } from "@/types/Session";
+import ErrorModal from "@/components/error/ErrorModal";
 
 interface OptionsModalProps {
   isOpen: boolean;
@@ -48,6 +49,7 @@ export const ProjectOptionsModal = ({
   const [color, setColor] = useState(white);
   const [isMemebersOpen, setMembersOpen] = useState(false);
   const [isDetailsOpen, setDetailsOpen] = useState(false);
+  const [isDeleteError, setDeleteError] = useState(false);
 
   const pathname = usePathname();
 
@@ -63,7 +65,7 @@ export const ProjectOptionsModal = ({
     e.preventDefault();
 
     if (project.subscription) {
-      toast.error("You cannot delete a subscribed project");
+      setDeleteError(true);
       return;
     }
 
@@ -295,6 +297,14 @@ export const ProjectOptionsModal = ({
             setMembersOpen={setMembersOpen}
             sessionUserId={session.user.id}
             setAddUserOpen={setAddUserOpen}
+          />
+        </ModalOverlay>
+      )}
+      {isDeleteError && (
+        <ModalOverlay onClose={() => setAddUserOpen(false)}>
+          <ErrorModal
+            errorMessage="You are subscribed to this project. Please unsubscribe before deleting the project."
+            onClose={() => setDeleteError(false)}
           />
         </ModalOverlay>
       )}

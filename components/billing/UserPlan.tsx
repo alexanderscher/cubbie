@@ -67,7 +67,7 @@ const UserPlan = ({ user }: { user: UserType }) => {
       {user.plan.id === 1 && (
         <>
           <div className="bg-white rounded-lg p-6  flex flex-col gap-4 text-emerald-900">
-            <h1>Current Plan</h1>
+            <h1 className="text-slate-400">Current Plan</h1>
             <p>Free</p>
             <div>
               <p className="">$0.00 </p>
@@ -82,6 +82,50 @@ const UserPlan = ({ user }: { user: UserType }) => {
           </div>
           <div className="bg-white rounded-lg p-6  flex flex-col gap-4 text-emerald-900">
             <h1>Usage</h1>
+
+            <div className="">
+              <div className="flex justify-between items-center">
+                <p className="text-sm ">Total receipt items</p>
+                <p className="text-xs"> {totalItems} / 50</p>
+              </div>
+
+              <Line percent={(totalItems / 50) * 100} strokeColor="#FB923C" />
+            </div>
+            {totalItems == 50 && (
+              <div className="flex flex-col gap-3">
+                <p className="text-sm text-orange-400">
+                  You&apos;ve reached plan limits. Please take advantage of the
+                  plan upgrade{" "}
+                </p>
+                <RegularButton
+                  styles="border-orange-400 bg-orange-400 text-white"
+                  href={"/manage-plan"}
+                >
+                  <p className="text-xs">Upgrade plan</p>
+                </RegularButton>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+      {user.plan.id === 2 && (
+        <>
+          <div className="bg-white rounded-lg p-6  flex flex-col gap-4 text-emerald-900">
+            <h1 className="text-slate-400">Current Plan</h1>
+            <p>All project plan</p>
+            <div>
+              <p className="">$0.00 </p>
+              <p className="text-xs">per month</p>
+            </div>
+            <RegularButton
+              styles="border-orange-400 bg-orange-400 text-white"
+              href={"/manage-plan"}
+            >
+              <p className="text-xs">Manage plan</p>
+            </RegularButton>
+          </div>
+          <div className="bg-white rounded-lg p-6  flex flex-col gap-4 text-emerald-900">
+            <h1 className="text-slate-400">Usage</h1>
 
             <div className="">
               <div className="flex justify-between items-center">

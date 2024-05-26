@@ -14,6 +14,7 @@ import Loading from "@/components/Loading/Loading";
 import { Subscription } from "@prisma/client";
 import ErrorModal from "@/components/error/ErrorModal";
 import { set } from "zod";
+import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 
 interface priceProps {
   price: any;
@@ -26,8 +27,10 @@ const PricingCard = ({ price, session, projects }: priceProps) => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
   const [errorModal, setErrorModal] = useState(false);
+  const [cancelPrompt, setCancelPrompt] = useState(false);
 
   const handleSubscription = async () => {
+    setCancelPrompt(false);
     startTransition(async () => {
       try {
         if (
@@ -105,6 +108,7 @@ const PricingCard = ({ price, session, projects }: priceProps) => {
         userPlanId={session.user.planId}
         pricePlanId={price.product.metadata.planId}
         handleSubscription={handleSubscription}
+        setCancelPrompt={setCancelPrompt}
       />
 
       {isPending && <Loading loading={isPending} />}
@@ -114,6 +118,22 @@ const PricingCard = ({ price, session, projects }: priceProps) => {
           errorMessage="You are already subscribed to the All Project Plan. Please to subscribe to the Free Plan to access this plan."
           onClose={() => setErrorModal(false)}
         />
+      )}
+      {cancelPrompt && (
+        <ModalOverlay onClose={() => setCancelPrompt(false)}>
+          <div className="w-full flex flex-col justify-center items-center">
+            <div className="p-6">
+              <h1> Are you sure you want to downgrade to the free plan?</h1>
+
+              <RegularButton
+                handleClick={() => handleSubscription()}
+                styles={"text-sm border-orange-400 bg-orange-400 text-white"}
+              >
+                Confirm
+              </RegularButton>
+            </div>
+          </div>
+        </ModalOverlay>
       )}
     </div>
   );
@@ -172,15 +192,35 @@ const SubButton = ({
   userPlanId,
   pricePlanId,
   handleSubscription,
+  setCancelPrompt,
 }: {
   userPlanId: number;
   pricePlanId: string;
-  handleSubscription: (pricePlanId: string) => void;
+  handleSubscription: () => void;
+  setCancelPrompt?: (value: boolean) => void;
 }) => {
-  if (userPlanId === 3) {
+  console.log(userPlanId, pricePlanId);
+  if (parseInt(pricePlanId) === 1 && setCancelPrompt) {
     return (
       <RegularButton
-        handleClick={() => handleSubscription(pricePlanId)}
+        handleClick={() => {
+          if (userPlanId !== parseInt(pricePlanId)) {
+            setCancelPrompt(true);
+          }
+        }}
+        styles={
+          userPlanId !== parseInt(pricePlanId)
+            ? "text-sm border-orange-400 bg-orange-400 text-white"
+            : "text-sm border-slate-400 text-slate-400"
+        }
+      >
+        {userPlanId !== parseInt(pricePlanId) ? "Downgrade" : "Current Plan"}
+      </RegularButton>
+    );
+  } else if (userPlanId === 3) {
+    return (
+      <RegularButton
+        handleClick={() => handleSubscription()}
         styles={"text-sm border-orange-400 bg-orange-400 text-white"}
       >
         {"Subscribe"}
@@ -191,7 +231,7 @@ const SubButton = ({
       <RegularButton
         handleClick={() => {
           if (userPlanId !== parseInt(pricePlanId)) {
-            handleSubscription(pricePlanId);
+            handleSubscription();
           }
         }}
         styles={

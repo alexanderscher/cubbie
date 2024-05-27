@@ -7,7 +7,6 @@ import { Line } from "rc-progress";
 
 import { UserType } from "@/types/UserSettingTypes";
 import RegularButton from "@/components/buttons/RegularButton";
-import { Subscription } from "@prisma/client";
 import Loading from "@/components/Loading/Loading";
 
 const getTotalNumberOfItems = (user: UserType) => {

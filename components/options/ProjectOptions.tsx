@@ -64,11 +64,6 @@ export const ProjectOptionsModal = ({
   const toggleDeleteModal = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
 
-    if (project.subscription) {
-      setDeleteError(true);
-      return;
-    }
-
     setIsDeleteOpen(!isDeleteOpen);
   };
 

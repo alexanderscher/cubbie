@@ -17,6 +17,7 @@ interface priceProps {
 }
 
 const PricingCard = ({ price, session, projects }: priceProps) => {
+  console.log(session.user);
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
   const [errorModal, setErrorModal] = useState(false);

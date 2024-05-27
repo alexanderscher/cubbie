@@ -103,7 +103,7 @@ export const {
         session.user.email = token.email;
         session.user.isOAuth = token.isOAuth as boolean;
         session.user.stripeCustomerId = token.stripeCustomerId as string;
-        session.user.subscriptions = token.subscriptions as Subscription[];
+        session.user.subscription = token.subscriptions as Subscription;
         session.user.planId = token.planId as number;
       }
 
@@ -123,7 +123,7 @@ export const {
       token.email = existingUser.email;
       token.role = existingUser.role;
       token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
-      token.subscriptions = existingUser.subscriptions;
+      token.subscription = existingUser.subscription;
       token.stripeCustomerId = existingUser.stripeCustomerId;
       token.planId = existingUser.planId;
 

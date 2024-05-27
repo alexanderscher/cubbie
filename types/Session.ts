@@ -9,7 +9,7 @@ export interface UserForSession {
   name: string;
   role: string;
   stripeCustomerId: string;
-  subscriptions: Subscription[];
+  subscription: Subscription;
   planId: number;
 }
 

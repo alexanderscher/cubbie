@@ -4,14 +4,6 @@ import prisma from "@/prisma/client";
 import { stripe } from "@/app/stripe/stripe";
 import { revalidateTag } from "next/cache";
 
-const isProduction = process.env.NODE_ENV === "production";
-
-const webhookSecret: string = isProduction
-  ? process.env.STRIPE_WEBHOOK_SECRET_PRODUCTION!
-  : process.env.STRIPE_WEBHOOK_SECRET!;
-
-const today = new Date();
-
 const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
   if (req.method !== "POST") {
     return new NextResponse(JSON.stringify({ error: "Method Not Allowed" }), {
@@ -20,152 +12,104 @@ const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
     });
   }
 
+  const buf = await req.text();
+  const sig = req.headers.get("stripe-signature");
+  if (!sig) {
+    return new NextResponse(JSON.stringify({ error: "Missing signature" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  let event: Stripe.Event;
   try {
-    const buf = await req.text();
-    const sig = req.headers.get("stripe-signature");
+    event = stripe.webhooks.constructEvent(
+      buf,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    );
+  } catch (err) {
+    return new NextResponse(
+      JSON.stringify({ error: { message: `Webhook Error: ${err}` } }),
+      { status: 400, headers: { "Content-Type": "application/json" } }
+    );
+  }
 
-    if (!sig) {
-      return new NextResponse(JSON.stringify({ error: "Missing signature" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object as Stripe.Checkout.Session;
+    const metadata = session.metadata;
+    const userId = metadata?.userId;
 
-    let event: Stripe.Event;
-
-    try {
-      event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Unknown error";
-      console.log(`❌ Error message: ${errorMessage}`);
+    if (!userId) {
       return new NextResponse(
         JSON.stringify({
-          error: {
-            message: `Webhook Error: ${errorMessage}`,
-          },
+          error: { message: "User ID is undefined in the metadata" },
         }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
       );
     }
 
-    console.log("✅ Success:", event.id);
+    let planId = metadata?.planId ? parseInt(metadata.planId) : null;
+    if (!planId) {
+      return new NextResponse(
+        JSON.stringify({
+          error: { message: "Plan ID is undefined in the metadata" },
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
 
-    if (event.type === "checkout.session.completed") {
-      const session = event.data.object as Stripe.Checkout.Session;
+    await prisma.$transaction(async (prisma) => {
+      const existingSubscriptions = await prisma.subscription.findMany({
+        where: { userId },
+      });
 
-      // Extract metadata
-      const metadata = session.metadata;
-      const userId = metadata?.userId;
-      const planId = metadata?.planId as string;
-      const projectId = metadata?.projectId;
-
-      console.log("Subscription ID:", session.subscription);
-      console.log("User ID:", userId);
-      console.log("Plan ID:", planId);
-      console.log("Project ID:", projectId);
-
-      if (!userId) {
-        console.error("❌ userId is undefined in the metadata");
-        return new NextResponse(
-          JSON.stringify({
-            error: {
-              message: "userId is undefined in the metadata",
-            },
-          }),
-          { status: 400, headers: { "Content-Type": "application/json" } }
-        );
+      // Cancel and delete existing subscriptions not matching the new plan ID
+      for (const subscription of existingSubscriptions) {
+        if (subscription.subscriptionID) {
+          await stripe.subscriptions.cancel(subscription.subscriptionID);
+          await prisma.subscription.delete({ where: { id: subscription.id } });
+        }
       }
 
-      try {
-        const subs = await prisma.subscription.findMany({
-          where: { userId },
-        });
-
-        if (parseInt(planId) === 3) {
-          for (const subscription of subs) {
-            if (subscription.planId !== 3 && subscription.subscriptionID) {
-              await stripe.subscriptions.cancel(subscription.subscriptionID);
-            }
-          }
-
-          await prisma.subscription.deleteMany({
-            where: {
-              userId: userId,
-              planId: {
-                not: 3,
-              },
-            },
-          });
-        } else {
-          for (const subscription of subs) {
-            if (subscription.subscriptionID) {
-              await stripe.subscriptions.cancel(subscription.subscriptionID);
-            }
-          }
-
-          await prisma.subscription.deleteMany({
-            where: {
-              userId: userId,
-            },
-          });
-        }
-
-        const subscriptionData: any = {
-          subscriptionID: session.subscription as string,
-          planId: parseInt(planId),
-          subscriptionDate: today,
-          userId: userId,
-        };
-
-        if (parseInt(planId) === 3 && projectId) {
-          subscriptionData.projectId = parseInt(projectId);
-        }
-
+      // Verify no active subscriptions exist before creating a new one
+      const activeSubscriptions = await prisma.subscription.findMany({
+        where: { userId },
+      });
+      if (activeSubscriptions.length === 0) {
         await prisma.subscription.create({
-          data: subscriptionData,
+          data: {
+            subscriptionID: session.subscription as string,
+            planId,
+            subscriptionDate: new Date(),
+            userId,
+          },
         });
 
         await prisma.user.update({
           where: { id: userId },
-          data: {
-            planId: parseInt(planId),
-          },
+          data: { planId },
         });
         revalidateTag(`user_${userId}`);
-        revalidateTag(`projects_user_${userId}`);
-
-        return new NextResponse(JSON.stringify({ received: true }), {
-          status: 200,
-          headers: { "Content-Type": "application/json" },
-        });
-      } catch (dbError) {
-        console.error(`❌ Database error: ${dbError}`);
-        return new NextResponse(
-          JSON.stringify({
-            error: {
-              message: `Database Error: ${dbError}`,
-            },
-          }),
-          { status: 500, headers: { "Content-Type": "application/json" } }
-        );
       }
-    } else {
-      console.log(`Unhandled event type: ${event.type}`);
-      return new NextResponse(JSON.stringify({ received: true }), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-  } catch (error) {
-    console.error(`❌ Unexpected error: ${error}`);
-    return new NextResponse(
-      JSON.stringify({
-        error: {
-          message: `Unexpected Error`,
-        },
-      }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
-    );
+    });
+
+    return new NextResponse(JSON.stringify({ received: true }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } else {
+    console.log(`Unhandled event type: ${event.type}`);
+    return new NextResponse(JSON.stringify({ received: true }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 };
 

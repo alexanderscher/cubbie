@@ -5,15 +5,9 @@ import { ProjectType, ProjectUserArchiveType } from "@/types/ProjectTypes";
 import { FormError } from "@/components/form-error";
 import React, { useState, useTransition } from "react";
 import RegularButton from "@/components/buttons/RegularButton";
-import {
-  freePlan,
-  handlePayment,
-  handlePaymentIndividual,
-} from "@/actions/stripe/payment";
+import { freePlan, handlePayment } from "@/actions/stripe/payment";
 import Loading from "@/components/Loading/Loading";
-import { Subscription } from "@prisma/client";
 import ErrorModal from "@/components/error/ErrorModal";
-import { set } from "zod";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 
 interface priceProps {
@@ -23,7 +17,6 @@ interface priceProps {
 }
 
 const PricingCard = ({ price, session, projects }: priceProps) => {
-  const [selectedProject, setSelectedProject] = useState("");
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
   const [errorModal, setErrorModal] = useState(false);
@@ -33,31 +26,7 @@ const PricingCard = ({ price, session, projects }: priceProps) => {
     setCancelPrompt(false);
     startTransition(async () => {
       try {
-        if (
-          parseInt(price.product.metadata.planId) === 3 &&
-          session.user.planId !== 2
-        ) {
-          if (selectedProject === "") {
-            setError("Please select a project");
-            return;
-          }
-          setError("");
-          const stripeUrl = await handlePaymentIndividual(
-            price.id,
-            selectedProject,
-            price.product.metadata.planId
-          );
-          if (stripeUrl) {
-            window.location.assign(stripeUrl);
-          } else {
-            throw new Error("Failed to create payment session");
-          }
-        } else if (
-          parseInt(price.product.metadata.planId) === 3 &&
-          session.user.planId === 2
-        ) {
-          setErrorModal(true);
-        } else if (parseInt(price.product.metadata.planId) === 1) {
+        if (parseInt(price.product.metadata.planId) === 1) {
           setError("");
           try {
             const unsubscribe = await freePlan();
@@ -96,14 +65,9 @@ const PricingCard = ({ price, session, projects }: priceProps) => {
         {"/month"}
       </p>
       {price.product.name === "Free Plan" && <FreePlan />}
-      {price.product.name === "All Project Plan" && <AllProjectPlan />}
-      {price.product.name === "Individual Project Plan" && (
-        <IndividualPlan
-          projects={projects}
-          setSelectedProject={setSelectedProject}
-          selectedProject={selectedProject}
-        />
-      )}
+      {price.product.name === "Advanced Project Plan" && <AllProjectPlan />}
+      {price.product.name === "Limited Project Plan" && <LimitedProjectPlan />}
+
       <SubButton
         userPlanId={session.user.planId}
         pricePlanId={price.product.metadata.planId}
@@ -115,15 +79,16 @@ const PricingCard = ({ price, session, projects }: priceProps) => {
       {error && <FormError message={error}></FormError>}
       {errorModal && (
         <ErrorModal
-          errorMessage="You are already subscribed to the All Project Plan. Please to subscribe to the Free Plan to access this plan."
+          errorMessage="You are currently subscribed to the All Project Plan. Please switch to the Free Plan before subscribing to a different plan."
           onClose={() => setErrorModal(false)}
         />
       )}
       {cancelPrompt && (
         <ModalOverlay onClose={() => setCancelPrompt(false)}>
           <div className="w-full flex flex-col justify-center items-center">
-            <div className="p-6">
+            <div className="p-8">
               <h1> Are you sure you want to downgrade to the free plan?</h1>
+              <h1>{session.subscriptions}</h1>
 
               <RegularButton
                 handleClick={() => handleSubscription()}
@@ -145,8 +110,21 @@ const FreePlan = () => {
   return (
     <div className="text-slate-400 text-sm">
       <p>Free</p>
-      <p>Up to 50 receipt items</p>
+      <p>Up to 20 receipt items per prioject</p>
       <p>Barcode look up</p>
+      <p>Limited AI features for all projects</p>
+    </div>
+  );
+};
+
+const LimitedProjectPlan = () => {
+  return (
+    <div className="text-slate-400 text-sm">
+      <p>Up to 50 receipt items per project</p>
+      <p>Up to 5 users per project</p>
+      <p>Barcode look up</p>
+      <p>Limited AI features for all projects </p>
+      <p>Receipt return alerts</p>
     </div>
   );
 };
@@ -154,36 +132,11 @@ const FreePlan = () => {
 const AllProjectPlan = () => {
   return (
     <div className="text-slate-400 text-sm">
-      <p>Ulimited items</p>
+      <p>Ulimited receipt items per project</p>
+      <p>Unlimited users per project</p>
       <p>Barcode look up</p>
-      <p>AI features for all projects </p>
+      <p>Unlimited AI features for all projects </p>
       <p>Receipt return alerts</p>
-    </div>
-  );
-};
-
-const IndividualPlan = ({
-  setSelectedProject,
-  selectedProject,
-  projects,
-}: {
-  setSelectedProject: (value: string) => void;
-  selectedProject: string;
-  projects: ProjectType[];
-}) => {
-  return (
-    <div className="text-slate-400 text-sm">
-      <p>Up to 200 items</p>
-      <p>Barcode look up</p>
-      <p>AI features for subscribed project</p>
-      <p>Receipt return alerts for subscribed project</p>
-      <div className="mt-4 mb-4">
-        <ProjectSelect
-          projects={projects}
-          setSelectedProject={setSelectedProject}
-          selectedProject={selectedProject}
-        />
-      </div>
     </div>
   );
 };
@@ -215,15 +168,6 @@ const SubButton = ({
         }
       >
         {userPlanId !== parseInt(pricePlanId) ? "Downgrade" : "Current Plan"}
-      </RegularButton>
-    );
-  } else if (userPlanId === 3) {
-    return (
-      <RegularButton
-        handleClick={() => handleSubscription()}
-        styles={"text-sm border-orange-400 bg-orange-400 text-white"}
-      >
-        {"Subscribe"}
       </RegularButton>
     );
   } else {

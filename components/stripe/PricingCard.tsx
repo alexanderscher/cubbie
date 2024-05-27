@@ -302,7 +302,6 @@ export const ProjectSelect = ({
 
           return (
             project &&
-            !project.subscription &&
             !project.projectUserArchive?.some(
               (entry: ProjectUserArchiveType) =>
                 entry.userId === session.data?.user.id

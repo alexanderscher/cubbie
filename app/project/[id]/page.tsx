@@ -1,7 +1,6 @@
 import { auth } from "@/auth";
 import { ProjectId } from "@/components/project/ProjectId";
 import PageWrapper from "@/components/wrapper/PageWrapper";
-import { getProjectById } from "@/lib/projectsDB";
 import { Session } from "@/types/Session";
 
 export default async function ProjectID({

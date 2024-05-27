@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
 import { stripe } from "@/app/stripe/stripe";
 import { revalidateTag } from "next/cache";
+import { auth } from "@/auth";
+import { Session } from "@/types/Session";
 
 const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
   if (req.method !== "POST") {
@@ -36,9 +38,10 @@ const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
   }
 
   if (event.type === "checkout.session.completed") {
-    const session = event.data.object as Stripe.Checkout.Session;
-    const metadata = session.metadata;
+    const stripesession = event.data.object as Stripe.Checkout.Session;
+    const metadata = stripesession.metadata;
     const userId = metadata?.userId;
+    const subscriptionId = metadata?.subscriptionId;
 
     if (!userId) {
       return new NextResponse(
@@ -66,38 +69,40 @@ const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
     }
 
     await prisma.$transaction(async (prisma) => {
-      const existingSubscriptions = await prisma.subscription.findMany({
-        where: { userId },
-      });
+      // Only attempt to find and cancel an existing subscription if subscriptionId is not null
+      if (subscriptionId) {
+        const existingSubscription = await prisma.subscription.findUnique({
+          where: { subscriptionID: subscriptionId },
+        });
 
-      // Cancel and delete existing subscriptions not matching the new plan ID
-      for (const subscription of existingSubscriptions) {
-        if (subscription.subscriptionID) {
-          await stripe.subscriptions.cancel(subscription.subscriptionID);
-          await prisma.subscription.delete({ where: { id: subscription.id } });
+        if (existingSubscription && existingSubscription.subscriptionID) {
+          await stripe.subscriptions.cancel(
+            existingSubscription.subscriptionID
+          );
+          await prisma.subscription.delete({
+            where: { id: existingSubscription.id },
+          });
         }
       }
 
-      // Verify no active subscriptions exist before creating a new one
-      const activeSubscriptions = await prisma.subscription.findMany({
-        where: { userId },
+      // Create the new subscription
+      await prisma.subscription.create({
+        data: {
+          subscriptionID: stripesession.subscription as string,
+          planId,
+          subscriptionDate: new Date(),
+          userId,
+        },
       });
-      if (activeSubscriptions.length === 0) {
-        await prisma.subscription.create({
-          data: {
-            subscriptionID: session.subscription as string,
-            planId,
-            subscriptionDate: new Date(),
-            userId,
-          },
-        });
 
-        await prisma.user.update({
-          where: { id: userId },
-          data: { planId },
-        });
-        revalidateTag(`user_${userId}`);
-      }
+      // Update the user's plan
+      await prisma.user.update({
+        where: { id: userId },
+        data: { planId },
+      });
+
+      // Revalidate user-specific data if needed
+      revalidateTag(`user_${userId}`);
     });
 
     return new NextResponse(JSON.stringify({ received: true }), {

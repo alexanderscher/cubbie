@@ -35,7 +35,7 @@ model User {
   projectUserArchive    ProjectUserArchive[]
   alertSettings         AlertSettings?
   returns               Returns[]
-  subscriptions         Subscription[]
+  subscription          Subscription?
   stripeCustomerId      String?                @unique
   planId                Int?
   plan                  Plan?                  @relation(fields: [planId], references: [id])
@@ -75,8 +75,8 @@ model Plan {
 
 model Subscription {
   id               Int       @id @default(autoincrement())
-  userId           String
-  subscriptionID   String?
+  userId           String    @unique
+  subscriptionID   String?   @unique
   user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   planId           Int
   subscriptionDate DateTime?

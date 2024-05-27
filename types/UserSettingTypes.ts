@@ -48,7 +48,7 @@ export interface UserType {
   planId?: number | null; // Changed type to match Prisma's possible integer reference
   projects: ProjectUserType[];
   plan: Plan;
-  subscriptions: ExtendedSubscription[];
+  subscription: ExtendedSubscription;
 }
 
 export interface SubscriptionProjectType {

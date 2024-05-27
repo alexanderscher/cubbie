@@ -6,7 +6,7 @@ export type ExtendedUser = DefaultSession["user"] & {
   isTwoFactorEnabled: boolean;
   isOAuth: boolean;
   stripeCustomerId: string;
-  subscriptions: Subscription[];
+  subscription: Subscription;
   planId: number;
 };
 

@@ -60,8 +60,7 @@ export const freePlan = async () => {
       });
     }
 
-    // Ensure there is a way to handle if subscription data is not readily available in session
-    const subscriptionId = session.user?.subscription?.subscriptionID; // Adjusted for potential nulls
+    const subscriptionId = session.user?.subscription?.subscriptionID;
 
     if (!subscriptionId) {
       console.log("No subscription found.");
@@ -99,6 +98,8 @@ export const freePlan = async () => {
 
     // Optional: Tag revalidation if necessary
     revalidateTag(`user_${session.user.id}`);
+
+    return true;
   } catch (error) {
     console.error("Error updating user to free plan:", error);
   }

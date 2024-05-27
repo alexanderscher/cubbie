@@ -103,7 +103,7 @@ export const {
         session.user.email = token.email;
         session.user.isOAuth = token.isOAuth as boolean;
         session.user.stripeCustomerId = token.stripeCustomerId as string;
-        session.user.subscription = token.subscriptions as Subscription;
+        session.user.subscription = token.subscription as Subscription;
         session.user.planId = token.planId as number;
       }
 

@@ -9,6 +9,7 @@ import { freePlan, handlePayment } from "@/actions/stripe/payment";
 import Loading from "@/components/Loading/Loading";
 import ErrorModal from "@/components/error/ErrorModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
+import { useRouter } from "next/navigation";
 
 interface priceProps {
   price: any;
@@ -22,6 +23,7 @@ const PricingCard = ({ price, session, projects }: priceProps) => {
   const [error, setError] = useState("");
   const [errorModal, setErrorModal] = useState(false);
   const [cancelPrompt, setCancelPrompt] = useState(false);
+  const router = useRouter();
 
   const handleSubscription = async () => {
     setCancelPrompt(false);
@@ -31,6 +33,11 @@ const PricingCard = ({ price, session, projects }: priceProps) => {
           setError("");
           try {
             const unsubscribe = await freePlan();
+            if (unsubscribe) {
+              router.push("subscription/cancel");
+            } else {
+              throw new Error("Failed to unsubscribe from free plan");
+            }
           } catch (e) {
             setError("Failed to subscribe to free plan");
           }
@@ -89,7 +96,7 @@ const PricingCard = ({ price, session, projects }: priceProps) => {
           <div className="w-full flex flex-col justify-center items-center">
             <div className="p-8">
               <h1> Are you sure you want to downgrade to the free plan?</h1>
-              <h1>{session.subscriptions}</h1>
+              <h1>{session.subscription}</h1>
 
               <RegularButton
                 handleClick={() => handleSubscription()}

@@ -17,7 +17,6 @@ export const deleteProject = async (projectId: number) => {
     }
     const project = await prisma.project.findFirst({
       where: { id: projectId, userId },
-      include: { subscription: true },
     });
 
     if (!project) {

@@ -58,5 +58,4 @@ export interface SubscriptionProjectType {
   created_at: Date;
   userId: string;
   projectUserArchive: ProjectUserArchiveType[];
-  subscriptions: Subscription[];
 }

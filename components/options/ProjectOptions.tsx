@@ -223,37 +223,6 @@ export const ProjectOptionsModal = ({
                 </div>
               </div>
             )}
-            {(project.subscription || session.user.planId === 2) && (
-              <div className={`bg-[#d2edd2]  rounded-lg w-full p-2`}>
-                <div className="flex gap-2 ">
-                  <Image
-                    src={"/checkmark.png"}
-                    width={20}
-                    height={20}
-                    alt=""
-                  ></Image>
-                  <p>Subscribed</p>
-                </div>
-              </div>
-            )}
-
-            {!project.subscription && session.user.planId !== 2 && (
-              <div
-                className={`bg-orange-100 hover:bg-orange-200  rounded-lg w-full p-2`}
-              >
-                <div className="flex gap-2 cursor-pointer">
-                  <Image
-                    src={"/plus.png"}
-                    width={20}
-                    height={20}
-                    alt=""
-                  ></Image>
-                  <Link href={"/manage-plan"}>
-                    <p>Subscribe</p>
-                  </Link>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -297,14 +266,6 @@ export const ProjectOptionsModal = ({
             setMembersOpen={setMembersOpen}
             sessionUserId={session.user.id}
             setAddUserOpen={setAddUserOpen}
-          />
-        </ModalOverlay>
-      )}
-      {isDeleteError && (
-        <ModalOverlay onClose={() => setAddUserOpen(false)}>
-          <ErrorModal
-            errorMessage="You are subscribed to this project. Please unsubscribe before deleting the project."
-            onClose={() => setDeleteError(false)}
           />
         </ModalOverlay>
       )}

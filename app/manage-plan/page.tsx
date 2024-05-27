@@ -10,8 +10,8 @@ import React from "react";
 const ManagePlan = async () => {
   const prices = await getStripeProducts();
   const projects = (await getProjects()) as ProjectType[];
-  console.log(projects);
   const session = (await auth()) as Session;
+  console.log(prices);
 
   return (
     <PageWrapper>

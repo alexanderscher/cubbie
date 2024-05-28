@@ -81,6 +81,7 @@ model Subscription {
   planId           Int
   subscriptionDate DateTime?
   plan             Plan      @relation(fields: [planId], references: [id])
+  nonce            String?
 }
 
 model ProjectUserArchive {

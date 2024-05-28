@@ -4,8 +4,8 @@ import { stripe } from "@/app/stripe/stripe";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
 import { Session } from "@/types/Session";
-import { Subscription } from "@prisma/client";
 import { revalidateTag } from "next/cache";
+const crypto = require("crypto");
 
 export const handlePayment = async (priceId: string, planId: number) => {
   const session = (await auth()) as Session;
@@ -62,32 +62,32 @@ export const freePlan = async () => {
 
     const subscriptionId = session.user?.subscription?.subscriptionID;
 
-    if (!subscriptionId) {
-      console.log("No subscription found.");
-      return;
-    }
-
-    const subscription = await prisma.subscription.findUnique({
-      where: { subscriptionID: subscriptionId },
-    });
-
-    if (subscription && subscription.subscriptionID) {
-      console.log(
-        `Attempting to cancel subscription with ID: ${subscription.subscriptionID}`
-      );
-      const canceledSubscription = await stripe.subscriptions.cancel(
-        subscription.subscriptionID
-      );
-      console.log(
-        `Successfully cancelled subscription with ID: ${canceledSubscription.id}`
-      );
-
-      // Consider whether you want to delete or update the subscription record to reflect cancellation
-      await prisma.subscription.delete({
-        where: { id: subscription.id },
+    if (subscriptionId) {
+      const subscription = await prisma.subscription.findUnique({
+        where: { subscriptionID: subscriptionId },
       });
+
+      if (subscription && subscription.subscriptionID) {
+        console.log(
+          `Attempting to cancel subscription with ID: ${subscription.subscriptionID}`
+        );
+        const canceledSubscription = await stripe.subscriptions.cancel(
+          subscription.subscriptionID
+        );
+        console.log(
+          `Successfully cancelled subscription with ID: ${canceledSubscription.id}`
+        );
+
+        // Update the subscription record to reflect cancellation instead of deleting it
+        await prisma.subscription.update({
+          where: { subscriptionID: subscriptionId },
+          data: { subscriptionID: null }, // Set subscriptionID to null or adjust status accordingly
+        });
+      } else {
+        console.log("No active subscription found or already cancelled.");
+      }
     } else {
-      console.log("No active subscription found or already cancelled.");
+      console.log("No subscription found.");
     }
 
     // Update user to a free plan
@@ -102,5 +102,6 @@ export const freePlan = async () => {
     return true;
   } catch (error) {
     console.error("Error updating user to free plan:", error);
+    return false;
   }
 };

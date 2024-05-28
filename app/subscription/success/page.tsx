@@ -1,20 +1,10 @@
-"use client";
+import StripeRedirectSuccess from "@/components/redirects/StripeRedirectSuccess";
 import PageWrapper from "@/components/wrapper/PageWrapper";
-import { getSession } from "next-auth/react";
-import { useEffect } from "react";
 
 const PostStripeRedirectPage = () => {
-  useEffect(() => {
-    getSession().then((session) => {
-      console.log("Session refreshed", session);
-    });
-  }, []);
-
   return (
     <PageWrapper>
-      <div className="flex flex-col items-center pb-[400px]">
-        Payment processed! Your details have been updated.
-      </div>
+      <StripeRedirectSuccess />
     </PageWrapper>
   );
 };

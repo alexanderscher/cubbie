@@ -76,7 +76,26 @@ const UserPlan = ({ user }: { user: UserType }) => {
             <h1 className="text-slate-400">Current Plan</h1>
             <p>All project plan</p>
             <div>
-              <p className="">$0.00 </p>
+              <p className="">$2.00 </p>
+              <p className="text-xs">per month</p>
+            </div>
+            <RegularButton
+              styles="border-orange-400 bg-orange-400 text-white"
+              href={"/manage-plan"}
+            >
+              <p className="text-xs">Manage plan</p>
+            </RegularButton>
+          </div>
+        </>
+      )}
+
+      {user.plan.id === 3 && (
+        <>
+          <div className="bg-white rounded-lg p-6  flex flex-col gap-4 text-emerald-900">
+            <h1 className="text-slate-400">Current Plan</h1>
+            <p>Limited project plan</p>
+            <div>
+              <p className="">$1.00 </p>
               <p className="text-xs">per month</p>
             </div>
             <RegularButton

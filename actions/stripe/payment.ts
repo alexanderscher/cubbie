@@ -5,7 +5,6 @@ import { auth } from "@/auth";
 import prisma from "@/prisma/client";
 import { Session } from "@/types/Session";
 import { revalidateTag } from "next/cache";
-const crypto = require("crypto");
 
 export const handlePayment = async (priceId: string, planId: number) => {
   const session = (await auth()) as Session;
@@ -78,10 +77,9 @@ export const freePlan = async () => {
           `Successfully cancelled subscription with ID: ${canceledSubscription.id}`
         );
 
-        // Update the subscription record to reflect cancellation instead of deleting it
         await prisma.subscription.update({
           where: { subscriptionID: subscriptionId },
-          data: { subscriptionID: null }, // Set subscriptionID to null or adjust status accordingly
+          data: { subscriptionID: null },
         });
       } else {
         console.log("No active subscription found or already cancelled.");
@@ -90,11 +88,35 @@ export const freePlan = async () => {
       console.log("No subscription found.");
     }
 
-    // Update user to a free plan
+    const userId = session.user.id;
+
     await prisma.user.update({
-      where: { id: session.user.id },
-      data: { planId: 1 }, // Assuming '1' signifies the free plan
+      where: { id: userId },
+      data: { planId: 1 },
     });
+    const existingUserPlanUsage = await prisma.userPlanUsage.findUnique({
+      where: { userId },
+    });
+
+    if (existingUserPlanUsage) {
+      await prisma.userPlanUsage.update({
+        where: { userId },
+        data: {
+          planId: 1,
+          apiCalls: 0, // Resetting the API call count to zero
+          lastReset: new Date(), // Optionally update the last reset time to now
+        },
+      });
+    } else {
+      await prisma.userPlanUsage.create({
+        data: {
+          userId,
+          planId: 1,
+          apiCalls: 0, // Assuming starting from zero
+          lastReset: new Date(), // Assuming it resets now
+        },
+      });
+    }
 
     // Optional: Tag revalidation if necessary
     revalidateTag(`user_${session.user.id}`);

@@ -39,6 +39,27 @@ model User {
   stripeCustomerId      String?                @unique
   planId                Int?
   plan                  Plan?                  @relation(fields: [planId], references: [id])
+  userPlanUsageId       Int?
+  userPlanUsage         UserPlanUsage?
+}
+
+model Plan {
+  id            Int            @id @default(autoincrement())
+  name          String
+  description   String?
+  price         Float
+  max_api_calls Int            @default(0)
+  subscriptions Subscription[]
+  User          User[]
+}
+
+model UserPlanUsage {
+  id        Int      @id @default(autoincrement())
+  userId    String   @unique
+  planId    Int
+  apiCalls  Int      @default(0)
+  lastReset DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model AlertSettings {
@@ -64,15 +85,6 @@ model Project {
   User               User                 @relation(fields: [userId], references: [id])
 }
 
-model Plan {
-  id            Int            @id @default(autoincrement())
-  name          String
-  description   String?
-  price         Float
-  subscriptions Subscription[]
-  User          User[]
-}
-
 model Subscription {
   id               Int       @id @default(autoincrement())
   userId           String    @unique
@@ -81,7 +93,6 @@ model Subscription {
   planId           Int
   subscriptionDate DateTime?
   plan             Plan      @relation(fields: [planId], references: [id])
-  nonce            String?
 }
 
 model ProjectUserArchive {

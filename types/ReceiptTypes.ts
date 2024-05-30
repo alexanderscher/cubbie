@@ -1,8 +1,4 @@
-import {
-  ProjectUserArchiveType,
-  ProjectUserType,
-  User,
-} from "@/types/ProjectTypes";
+import { ProjectUserArchiveType } from "@/types/ProjectTypes";
 
 export interface ReceiptType {
   created_at: Date;

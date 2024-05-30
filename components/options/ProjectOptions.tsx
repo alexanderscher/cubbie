@@ -20,7 +20,11 @@ import { sendInvite } from "@/actions/email/sendInvite";
 import { leaveProject } from "@/actions/projects/leaveProject";
 import { useRouter } from "next/navigation";
 import { changeProjectOwner } from "@/actions/projects/transferOwnership";
-import { ProjectItemType, ProjectType } from "@/types/ProjectTypes";
+import {
+  ProjectItemType,
+  ProjectReceiptType,
+  ProjectType,
+} from "@/types/ProjectTypes";
 import { ReceiptType } from "@/types/ReceiptTypes";
 import Link from "next/link";
 import { Session } from "@/types/Session";
@@ -697,7 +701,7 @@ const ProjectDetails = ({
 
   useEffect(() => {
     const totalAmount = project.receipts.reduce(
-      (totalAcc: number, receipt: ReceiptType) => {
+      (totalAcc: number, receipt: ProjectReceiptType) => {
         const receiptTotal = receipt.items.reduce(
           (itemAcc: number, item: ProjectItemType) => {
             return itemAcc + item.price;

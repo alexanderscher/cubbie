@@ -1,4 +1,5 @@
 import { ReceiptItemType, ReceiptProjectType } from "@/types/ReceiptTypes";
+import { Project } from "@prisma/client";
 import { User } from "next-auth";
 
 export interface ProjectType {
@@ -28,7 +29,7 @@ export interface ProjectUserType {
 export interface ProjectItemType {
   id: number;
   description: string;
-  photo_url: string | null;
+  photo_url: string | null; // Allow null for optional properties
   photo_key: string | null;
   price: number;
   barcode: string | null;
@@ -45,7 +46,7 @@ export interface ProjectReceiptType {
   id: number;
   items: ReceiptItemType[];
   memo: boolean;
-  // project: ReceiptProjectType;
+  project: Project;
   project_id: number;
   purchase_date: Date;
   receipt_image_key?: string | null;

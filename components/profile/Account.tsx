@@ -46,7 +46,7 @@ const Account = ({ session, projects }: AccountProps) => {
   const [deletePrompt, setDeletePrompt] = useState(false);
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-[600px]">
+    <div className="flex flex-col gap-4 w-full max-w-[800px]">
       <div className="bg-white rounded-lg p-8  flex flex-col gap-4">
         <div className="flex justify-between">
           <p className="text-emerald-900">User Profile</p>

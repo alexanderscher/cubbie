@@ -14,11 +14,11 @@ export default async function Alerts() {
   const user = await getUser();
 
   return (
-    <div
-      className={`${styles.layout} gap-6 w-full justify-center items center `}
-    >
+    <div className={`${styles.layout} gap-6 w-full justify-start `}>
       <Header />
-      <AlertSettings user={user} />
+      <div className="flex justify-center w-full">
+        <AlertSettings user={user} />
+      </div>
     </div>
   );
 }

@@ -1,5 +1,5 @@
-import { ReceiptItemType, ReceiptProjectType } from "@/types/ReceiptTypes";
-import { Project } from "@prisma/client";
+import { ReceiptProjectType } from "@/types/ReceiptTypes";
+import { Items, Project } from "@prisma/client";
 import { User } from "next-auth";
 
 export interface ProjectType {
@@ -44,7 +44,7 @@ export interface ProjectReceiptType {
   days_until_return: number;
   expired: boolean;
   id: number;
-  items: ReceiptItemType[];
+  items: Items[];
   memo: boolean;
   project: Project;
   project_id: number;

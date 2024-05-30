@@ -20,24 +20,24 @@ const DeleteConfirmationModal = ({
   type,
 }: DeleteModalProps) => {
   return (
-    <div className=" flex flex-col items-center gap-4">
+    <div className=" flex flex-col items-center gap-4 text-center">
       <div className="bg-red-100 rounded-full flex items-center justify-center h-[50px] w-[50px]">
-        <ExclamationTriangleIcon className=" text-red-500 w-3/4 h-1/2" />
+        <ExclamationTriangleIcon className=" text-red-400 w-3/4 h-1/2" />
       </div>
 
-      <h1 className="text-xl text-center">Delete {type} </h1>
-      <p className="text-sm text-center">{message}</p>
+      <h1 className="text-xl text-center text-red-400">Delete {type} </h1>
+      <p className="text-sm text-cente text-red-400">{message}</p>
 
-      <div className="mt-4 flex justify-between w-full">
+      <div className="mt-4 flex justify-between w-full gap-3">
         <RegularButton
           handleClick={() => cancelClick(false)}
-          styles="bg-red-50 text-red-500 text-base font-medium rounded-full w-auto border-[1px] border-red-500 text-xs bg-red-50"
+          styles="text-red-400 text-red-400 text-base font-medium rounded-full w-auto border-[1px] border-red-500 text-xs bg-red-50 w-full"
         >
           No, Keep it.
         </RegularButton>
         <RegularButton
           handleClick={deleteClick}
-          styles="bg-red-500 text-white text-base font-medium rounded-full w-auto border-[1px] border-red-500 text-xs"
+          styles="bg-red-400 text-white text-base font-medium rounded-full w-auto border-[1px] border-red-400 text-xs w-full"
         >
           Yes, Delete!
         </RegularButton>

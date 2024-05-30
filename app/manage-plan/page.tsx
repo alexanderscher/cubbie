@@ -9,7 +9,6 @@ import React from "react";
 
 const ManagePlan = async () => {
   const prices = await getStripeProducts();
-  const projects = (await getProjects()) as ProjectType[];
   const session = (await auth()) as Session;
   console.log(prices);
 
@@ -27,12 +26,7 @@ const ManagePlan = async () => {
           <div className="flex flex-col  gap-6 mb-[200px]">
             {prices &&
               prices.map((price: any) => (
-                <PricingCard
-                  price={price}
-                  key={price.id}
-                  session={session}
-                  projects={projects}
-                />
+                <PricingCard price={price} key={price.id} session={session} />
               ))}
           </div>
         </div>

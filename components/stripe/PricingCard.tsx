@@ -10,14 +10,14 @@ import Loading from "@/components/Loading/Loading";
 import ErrorModal from "@/components/error/ErrorModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { useRouter } from "next/navigation";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
 interface priceProps {
   price: any;
   session: any;
-  projects: ProjectType[];
 }
 
-const PricingCard = ({ price, session, projects }: priceProps) => {
+const PricingCard = ({ price, session }: priceProps) => {
   console.log(session.user);
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
@@ -93,14 +93,22 @@ const PricingCard = ({ price, session, projects }: priceProps) => {
       )}
       {cancelPrompt && (
         <ModalOverlay onClose={() => setCancelPrompt(false)}>
-          <div className="w-full flex flex-col justify-center items-center">
-            <div className="p-8">
-              <h1> Are you sure you want to downgrade to the free plan?</h1>
+          <div className="bg-white p-20 rounded-xl shadow max-w-lg mx-auto text-center">
+            <div className="flex flex-col justify-center items-center gap-3">
+              <div className="bg-orange-100 rounded-full flex items-center justify-center h-[50px] w-[50px]">
+                <ExclamationTriangleIcon className=" text-orange-400 w-3/4 h-1/2" />
+              </div>
+              <h1 className="text-orange-400">
+                {" "}
+                Are you sure you want to downgrade to the free plan?
+              </h1>
               <h1>{session.subscription}</h1>
 
               <RegularButton
                 handleClick={() => handleSubscription()}
-                styles={"text-sm border-orange-400 bg-orange-400 text-white"}
+                styles={
+                  "text-sm border-orange-400 bg-orange-400 text-white w-full"
+                }
               >
                 Confirm
               </RegularButton>
@@ -120,7 +128,8 @@ const FreePlan = () => {
       <p>Free</p>
       <p>Up to 20 receipt items per prioject</p>
       <p>Barcode look up</p>
-      <p>Limited AI features for all projects</p>
+      <p>Start with ten free AI features for all projects</p>
+      <p>Two users per project</p>
     </div>
   );
 };
@@ -131,8 +140,8 @@ const LimitedProjectPlan = () => {
       <p>Up to 50 receipt items per project</p>
       <p>Up to 5 users per project</p>
       <p>Barcode look up</p>
-      <p>Limited AI features for all projects </p>
-      <p>Receipt return alerts</p>
+      <p>Up to ten AI features per week for all projects </p>
+      <p>Return alerts</p>
     </div>
   );
 };
@@ -144,7 +153,7 @@ const AllProjectPlan = () => {
       <p>Unlimited users per project</p>
       <p>Barcode look up</p>
       <p>Unlimited AI features for all projects </p>
-      <p>Receipt return alerts</p>
+      <p>Return alerts</p>
     </div>
   );
 };

@@ -45,6 +45,15 @@ export const {
               data: { planId: defaultPlanId },
               include: { plan: true },
             });
+
+            await prisma.userPlanUsage.create({
+              data: {
+                userId: user.id,
+                planId: defaultPlanId,
+                apiCalls: 0, // Assuming starting from zero
+                lastReset: new Date(), // Assuming it resets now
+              },
+            });
             console.log("User planId updated:", updatedUser);
           } else {
             console.error("User ID not found for the new user.");

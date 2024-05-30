@@ -33,7 +33,7 @@ const Returns = ({ returns }: ReturnsProps) => {
             <h1 className="text-2xl text-emerald-900">Return Policies</h1>
             <TooltipWithHelperIcon
               placement="right-start"
-              content="Keep your return policies here for easy access."
+              content="Keep your return policies here for easy access. You can use them when creating a receipt for a return date."
             />
           </div>
 

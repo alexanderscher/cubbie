@@ -16,11 +16,12 @@ export default async function Profile() {
   const projects = await fetchProject();
 
   return (
-    <div
-      className={`${styles.layout} gap-6 w-full justify-center h-full mb-[200px]`}
-    >
+    <div className={`${styles.layout} gap-6 w-full justify-start `}>
       <Header />
-      <Account session={session} projects={projects} />
+
+      <div className="flex justify-center w-full">
+        <Account session={session} projects={projects} />
+      </div>
     </div>
   );
 }

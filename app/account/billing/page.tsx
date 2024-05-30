@@ -15,11 +15,11 @@ export default async function Profile() {
   const user = await getUserSubInfo();
 
   return (
-    <div
-      className={`${styles.layout} gap-6 w-full justify-center items center `}
-    >
+    <div className={`${styles.layout} gap-6 w-full justify-start`}>
       <Header />
-      <UserPlan user={user} />
+      <div className="flex justify-center w-full">
+        <UserPlan user={user} />
+      </div>
     </div>
   );
 }

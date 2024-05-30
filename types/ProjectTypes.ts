@@ -1,4 +1,4 @@
-import { ReceiptItemType } from "@/types/ReceiptTypes";
+import { ReceiptItemType, ReceiptProjectType } from "@/types/ReceiptTypes";
 import { User } from "next-auth";
 
 export interface ProjectType {
@@ -28,7 +28,7 @@ export interface ProjectUserType {
 export interface ProjectItemType {
   id: number;
   description: string;
-  photo_url: string | null; // Allow null for optional properties
+  photo_url: string | null;
   photo_key: string | null;
   price: number;
   barcode: string | null;

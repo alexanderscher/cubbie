@@ -270,7 +270,7 @@ interface DeleteModalProps {
 }
 
 interface CheckedUser {
-  userId: string;
+  userId: string | undefined;
   projectId: number | null;
 }
 const DeleteModal = ({
@@ -286,7 +286,10 @@ const DeleteModal = ({
     projectId: null,
   });
 
-  const handleCheckboxChange = (userId: string, projectId: number) => {
+  const handleCheckboxChange = (
+    userId: string | undefined,
+    projectId: number
+  ) => {
     if (checkedUser.userId === userId) {
       setCheckedUser({
         userId: "",
@@ -316,6 +319,9 @@ const DeleteModal = ({
     startTransition(() => {
       try {
         if (!checkedUser.projectId) {
+          return;
+        }
+        if (!checkedUser.userId) {
           return;
         }
         changeProjectOwner(checkedUser.projectId, checkedUser.userId);
@@ -386,27 +392,28 @@ const DeleteModal = ({
                 >
                   <p> {project.name}</p>
                   <div className="">
-                    {project.projectUsers.map((user: ProjectUserType) => (
-                      <div
-                        key={user.user.id}
-                        className="p-2 bg-red-300 rounded-lg flex justify-between items-center gap-2"
-                      >
-                        <p className="text-xs">{user.user.name}</p>
-                        <label>
-                          <input
-                            type="checkbox"
-                            checked={
-                              checkedUser.userId === user.user.id &&
-                              checkedUser.projectId === project.id
-                            }
-                            onChange={() =>
-                              handleCheckboxChange(user.user.id, project.id)
-                            }
-                            value={user.user.id}
-                          />
-                        </label>
-                      </div>
-                    ))}
+                    {project.projectUsers &&
+                      project.projectUsers.map((user: ProjectUserType) => (
+                        <div
+                          key={user.user.id}
+                          className="p-2 bg-red-300 rounded-lg flex justify-between items-center gap-2"
+                        >
+                          <p className="text-xs">{user.user.name}</p>
+                          <label>
+                            <input
+                              type="checkbox"
+                              checked={
+                                checkedUser.userId === user.user.id &&
+                                checkedUser.projectId === project.id
+                              }
+                              onChange={() =>
+                                handleCheckboxChange(user.user.id, project.id)
+                              }
+                              value={user.user.id}
+                            />
+                          </label>
+                        </div>
+                      ))}
                   </div>
                   <RegularButton
                     styles={

@@ -1,17 +1,36 @@
 "use client";
+import { subscriptionCheck } from "@/actions/stripe/subcriptionCheck";
+import Loading from "@/components/Loading/Loading";
 import { getSession } from "next-auth/react";
-import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const StripeRedirectSuccess = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
   useEffect(() => {
-    getSession().then((session) => {
-      console.log("Session refreshed", session);
-    });
-  }, []);
+    const checkSub = async () => {
+      setIsLoading(true);
+      const check = await subscriptionCheck();
+
+      if (check) {
+        getSession().then((session) => {
+          console.log("Session refreshed", session);
+        });
+        router.push(`/subscription/success/${check.subscriptionId}`);
+      }
+      setIsLoading(false);
+    };
+    checkSub();
+  }, [router]);
 
   return (
     <div className="flex flex-col items-center pb-[400px]">
-      Payment processed! Your details have been updated.
+      {isLoading && (
+        <div>
+          <Loading loading={isLoading} />
+        </div>
+      )}
     </div>
   );
 };

@@ -10,7 +10,7 @@ export const handlePayment = async (priceId: string, planId: number) => {
   const session = (await auth()) as Session;
   const subscriptionId = session.user?.subscription?.subscriptionID;
   let customerId = session?.user?.stripeCustomerId;
-  const url = "http://localhost:3000/subscriptions";
+  const url = "http://localhost:3000/subscription";
 
   if (!customerId) {
     const customer = await createStripeCustomer(session.user);
@@ -38,8 +38,9 @@ export const handlePayment = async (priceId: string, planId: number) => {
     },
     mode: "subscription",
     success_url: `${url}/success`,
-    cancel_url: `${url}/cancel`,
+    cancel_url: `${url}/manage-plan`,
   });
+
   revalidateTag(`user_${session.user.id}`);
 
   return stripeSession.url;

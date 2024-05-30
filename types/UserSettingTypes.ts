@@ -27,10 +27,6 @@ export interface ProjectUserType {
   userId: string;
 }
 
-export interface ExtendedSubscription extends Subscription {
-  project: Project;
-}
-
 export interface UserType {
   id: string;
   name?: string | null;
@@ -45,10 +41,10 @@ export interface UserType {
   subscriptionDate?: Date | null;
   subscriptionID?: string | null;
   subscriptionType?: string | null;
-  planId?: number | null; // Changed type to match Prisma's possible integer reference
+  planId?: number | null;
   projects: ProjectUserType[];
   plan: Plan;
-  subscription: ExtendedSubscription;
+  subscription: Subscription;
 }
 
 export interface SubscriptionProjectType {

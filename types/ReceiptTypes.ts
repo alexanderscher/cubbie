@@ -1,13 +1,14 @@
 import { ProjectUserArchiveType } from "@/types/ProjectTypes";
+import { Items, Project } from "@prisma/client";
 
 export interface ReceiptType {
   created_at: Date;
   days_until_return: number;
   expired: boolean;
   id: number;
-  items: ReceiptItemType[];
+  items: Items[];
   memo: boolean;
-  project: ReceiptProjectType;
+  project: Project;
   project_id: number;
   purchase_date: Date;
   receipt_image_key?: string | null;

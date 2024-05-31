@@ -49,7 +49,7 @@ const Account = ({ session, projects }: AccountProps) => {
     <div className="flex flex-col gap-4 w-full max-w-[800px]">
       <div className="bg-white rounded-lg p-8  flex flex-col gap-4">
         <div className="flex justify-between">
-          <p className="text-emerald-900">User Profile</p>
+          <p className="text-emerald-900 text-xl">User Profile</p>
           <div className={styles.button}>
             <Image
               src={"/dashboard_b.png"}
@@ -71,7 +71,7 @@ const Account = ({ session, projects }: AccountProps) => {
         {!session.user.isOAuth && <Password />}
         <div className="bg-white rounded-lg shadow  w-full  p-8 flex flex-col justify-center gap-4">
           <div className="flex items-center gap-1">
-            <h1 className="text-emerald-900">Delete my account</h1>
+            <h1 className="text-emerald-900 text-lg">Delete my account</h1>
             <TooltipWithHelperIcon
               content="Once deleted, you will lose all your data linked to your account. If
             you are a project owner, please transfer your projects to another
@@ -87,7 +87,7 @@ const Account = ({ session, projects }: AccountProps) => {
             
             "
           >
-            <p className="text-xs">Delete my account</p>
+            <p className="text-sm">Delete my account</p>
           </RegularButton>
         </div>
       </div>
@@ -151,7 +151,7 @@ const PersonalInformation = ({ session }: Props) => {
       >
         {({ handleSubmit, values, handleChange }) => (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
-            <h1 className="text-emerald-900">Personal Information</h1>
+            <h1 className="text-emerald-900 text-lg">Personal Information</h1>
 
             <FormikInput
               name={"Name"}
@@ -173,7 +173,7 @@ const PersonalInformation = ({ session }: Props) => {
             
             "
             >
-              <p className="text-xs">Save Changes</p>
+              <p className="text-sm">Save Changes</p>
             </RegularButton>
             <FormError message={error} />
             <FormSuccess message={success} />
@@ -251,7 +251,7 @@ const Password = () => {
             
             "
               >
-                <p className="text-xs">Save Changes</p>
+                <p className="text-sm">Save Changes</p>
               </RegularButton>
               <FormError message={error} />
               <FormSuccess message={success} />
@@ -346,7 +346,7 @@ const DeleteModal = ({
         <div className="bg-red-100 rounded-full flex items-center justify-center h-[50px] w-[50px] ">
           <ExclamationTriangleIcon className=" text-red-500 w-3/4 h-1/2" />
         </div>
-        <p className="text-sm text-center text-red-400">
+        <p className=" text-center text-red-400">
           Are you sure you want to delete your account? Once deleted, you will
           loose all your data.
         </p>
@@ -355,13 +355,13 @@ const DeleteModal = ({
             styles="bg-red-50 border-red-400 text-red-400  w-full"
             handleClick={() => setDeletePrompt(false)}
           >
-            <p className="text-xs">Cancel</p>
+            <p className="text-sm">Cancel</p>
           </RegularButton>
           <RegularButton
             styles="bg-red-400 t border-red-400 t text-white  w-full"
             handleClick={deleteAccountCall}
           >
-            <p className="text-xs">Delete account</p>
+            <p className="text-sm">Delete account</p>
           </RegularButton>
         </div>
         {isPending && <Loading loading={isPending} />}
@@ -376,7 +376,7 @@ const DeleteModal = ({
           <div className="bg-red-100 rounded-full flex items-center justify-center h-[50px] w-[50px] ">
             <ExclamationTriangleIcon className=" text-red-500 w-3/4 h-1/2" />
           </div>
-          <p className="text-sm text-center">
+          <p className=" text-center">
             Caution: You are the owner of the following projects, which also
             include other users. If you proceed with deletion, please ensure
             ownership is transferred to another user. Otherwise, the projects
@@ -398,7 +398,7 @@ const DeleteModal = ({
                           key={user.user.id}
                           className="p-2 bg-red-300 rounded-lg flex justify-between items-center gap-2"
                         >
-                          <p className="text-xs">{user.user.name}</p>
+                          <p className="text-sm">{user.user.name}</p>
                           <label>
                             <input
                               type="checkbox"
@@ -428,8 +428,8 @@ const DeleteModal = ({
                     <p
                       className={
                         checkedUser.projectId === project.id
-                          ? "text-white text-xs"
-                          : "text-red-400 text-xs"
+                          ? "text-white text-sm"
+                          : "text-red-400 text-sm"
                       }
                     >
                       Transfer
@@ -444,13 +444,13 @@ const DeleteModal = ({
             styles="bg-red-50 border-red-400 text-red-400  w-full"
             handleClick={() => setDeletePrompt(false)}
           >
-            <p className="text-xs">Cancel</p>
+            <p className="text-sm">Cancel</p>
           </RegularButton>
           <RegularButton
             styles="bg-red-400 t border-red-400 t text-white  w-full"
             handleClick={deleteAccountCall}
           >
-            <p className="text-xs">Delete account</p>
+            <p className="text-sm">Delete account</p>
           </RegularButton>
         </div>
 

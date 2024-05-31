@@ -468,7 +468,7 @@ const ReceiptItems = ({
                       objectPosition: "center",
                     }}
                   />
-                  <p className="text-xs text-emerald-900 text-center">
+                  <p className="text-xs text-emerald-900 text-center pl-2 pr-2">
                     Upload photo or drag and drop
                   </p>
                 </div>

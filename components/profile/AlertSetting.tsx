@@ -41,8 +41,8 @@ const AlertSettings = ({ user }: AlertSettingsProps) => {
     <div className="flex flex-col gap-4 w-full max-w-[800px]">
       <div className="bg-white rounded-lg p-6  flex flex-col gap-4">
         <div className="flex justify-between">
-          <p className="text-emerald-900">Alert Settings</p>
-          <div className="">
+          <p className="text-xl">Alert Settings</p>
+          <div className={styles.button}>
             <Image
               src={"/dashboard_b.png"}
               alt="user image"
@@ -59,7 +59,7 @@ const AlertSettings = ({ user }: AlertSettingsProps) => {
       </div>
       <div className="bg-white rounded-lg  flex flex-col ">
         <div className="flex justify-between items-center p-6">
-          <h1 className="text-sm">Due today alerts</h1>
+          <h1 className="">Due today alerts</h1>
           <ToggleSwitch
             userAlerts={user.alertSettings.notifyToday}
             type="notifyToday"
@@ -67,14 +67,14 @@ const AlertSettings = ({ user }: AlertSettingsProps) => {
         </div>
 
         <div className="flex justify-between items-center border-t-[1px] p-6">
-          <h1 className="text-sm">Due in one day alerts</h1>
+          <h1 className="">Due in one day alerts</h1>
           <ToggleSwitch
             userAlerts={user.alertSettings.notifyInOneDay}
             type="notifyInOneDay"
           />
         </div>
         <div className="flex justify-between items-center border-t-[1px] p-6">
-          <h1 className="text-sm">Due in one week alerts</h1>
+          <h1 className="">Due in one week alerts</h1>
           <ToggleSwitch
             userAlerts={user.alertSettings.notifyInOneWeek}
             type="notifyInOneWeek"

@@ -63,8 +63,8 @@ const Topbar = ({ session, children }: TopbarProps) => {
             <Image
               src="/hamburger.png"
               alt=""
-              width={30}
-              height={30}
+              width={26}
+              height={26}
               className="object-cover"
               style={{
                 objectFit: "cover",
@@ -76,8 +76,8 @@ const Topbar = ({ session, children }: TopbarProps) => {
             <Image
               src="/hamburger.png"
               alt=""
-              width={30}
-              height={30}
+              width={26}
+              height={26}
               className="object-cover"
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
@@ -231,7 +231,7 @@ const Topbar = ({ session, children }: TopbarProps) => {
             </Link>
           </div>
 
-          <div className="mt-4">{session && <LogOutButton />}</div>
+          <div className="mt-10">{session && <LogOutButton />}</div>
         </div>
       )}
     </div>

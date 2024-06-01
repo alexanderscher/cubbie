@@ -60,7 +60,7 @@ const PricingCard = ({ price, session }: priceProps) => {
   };
 
   return (
-    <div className=" bg-white w-full shadow rounded-lg p-6 flex flex-col gap-3">
+    <div className=" bg-white w-full shadow rounded-lg p-8 flex flex-col gap-3">
       <div className="flex gap-1 text-emerald-900">
         <h1 className={`text-xl`}>{price.product.name}</h1>
       </div>
@@ -96,9 +96,9 @@ const PricingCard = ({ price, session }: priceProps) => {
           <div className="bg-white p-20 rounded-xl shadow max-w-lg mx-auto text-center">
             <div className="flex flex-col justify-center items-center gap-3">
               <div className="bg-orange-100 rounded-full flex items-center justify-center h-[50px] w-[50px]">
-                <ExclamationTriangleIcon className=" text-orange-400 w-3/4 h-1/2" />
+                <ExclamationTriangleIcon className=" text-orange-600 w-3/4 h-1/2" />
               </div>
-              <h1 className="text-orange-400">
+              <h1 className="text-orange-600">
                 {" "}
                 Are you sure you want to downgrade to the free plan?
               </h1>
@@ -107,7 +107,7 @@ const PricingCard = ({ price, session }: priceProps) => {
               <RegularButton
                 handleClick={() => handleSubscription()}
                 styles={
-                  "text-sm border-orange-400 bg-orange-400 text-white w-full"
+                  "text-sm border-orange-600 bg-orange-600 text-white w-full"
                 }
               >
                 Confirm
@@ -180,7 +180,7 @@ const SubButton = ({
         }}
         styles={
           userPlanId !== parseInt(pricePlanId)
-            ? "text-sm border-orange-400 bg-orange-400 text-white"
+            ? "text-sm border-orange-600 bg-orange-600 text-white"
             : "text-sm border-slate-400 text-slate-400"
         }
       >
@@ -197,7 +197,7 @@ const SubButton = ({
         }}
         styles={
           userPlanId !== parseInt(pricePlanId)
-            ? "text-sm border-orange-400 bg-orange-400 text-white"
+            ? "text-sm border-orange-600 bg-orange-600 text-white"
             : "text-sm border-slate-400 text-slate-400"
         }
       >

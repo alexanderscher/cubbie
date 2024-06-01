@@ -84,7 +84,7 @@ const PlanCard = ({ planId }: { planId: number | null | undefined }) => {
       <div className="bg-white rounded-lg p-6  flex flex-col gap-4 ">
         <div className="flex flex-col gap-3">
           <h1 className=" text-lg">Current Plan</h1>
-          <p className="text-lg text-orange-400">
+          <p className="text-lg text-orange-600">
             {planId === 1
               ? "Free"
               : planId === 2
@@ -100,7 +100,7 @@ const PlanCard = ({ planId }: { planId: number | null | undefined }) => {
           <p className="">per month</p>
         </div>
         <RegularButton
-          styles="border-orange-400 bg-orange-400 text-white"
+          styles="border-orange-600 bg-orange-600 text-white"
           href={"/manage-plan"}
         >
           <p className="text-sm">Manage plan</p>

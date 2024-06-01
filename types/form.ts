@@ -1,4 +1,5 @@
 import { ProjectType } from "@/types/ProjectTypes";
+import { Session } from "@/types/Session";
 
 export interface Photo {
   key: string;
@@ -31,4 +32,5 @@ export interface ReceiptInput {
 
 export interface Pages {
   projects: ProjectType[];
+  session: Session;
 }

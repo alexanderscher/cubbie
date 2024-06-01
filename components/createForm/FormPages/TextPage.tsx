@@ -26,7 +26,7 @@ const getValidationSchema = (stage: ReceiptOnlineStage) => {
   }
 };
 
-const TextPage = ({ projects }: Pages) => {
+const TextPage = ({ projects, session }: Pages) => {
   const [stage, setStage] = useState<ReceiptOnlineStage>(
     ReceiptOnlineStage.ONLINE_RECEIPT
   );
@@ -231,6 +231,7 @@ const TextPage = ({ projects }: Pages) => {
                             setFieldValue={setFieldValue}
                             values={values}
                             setStage={setStage}
+                            session={session}
                           />
 
                           <BottomBar>

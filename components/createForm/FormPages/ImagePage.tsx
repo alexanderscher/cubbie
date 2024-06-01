@@ -21,7 +21,7 @@ const getValidationSchema = (stage: ReceiptStoreStage) => {
   }
 };
 
-const ImagePage = ({ projects }: Pages) => {
+const ImagePage = ({ projects, session }: Pages) => {
   const [stage, setStage] = useState<ReceiptStoreStage>(
     ReceiptStoreStage.IN_STORE_GPT
   );
@@ -93,6 +93,7 @@ const ImagePage = ({ projects }: Pages) => {
                             setStage={setStage}
                             validateForm={validateForm}
                             projects={projects}
+                            session={session}
                           />
 
                           <BottomBar>

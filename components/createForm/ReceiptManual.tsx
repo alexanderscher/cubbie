@@ -3,7 +3,6 @@ import ProjectSelect from "@/components/createForm/ProjectSelectForm";
 import styles from "@/app/create/upload.module.css";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ProjectType } from "@/types/ProjectTypes";
-import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import { convertHeic } from "@/utils/media";
 import Image from "next/image";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
@@ -11,6 +10,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import ReturnPolicySelect from "@/components/select/ReturnPolicySelect";
 import ManualDate from "@/components/createForm/FormPages/ManualDate";
+import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 
 interface ReceiptManualProps {
   values: any;
@@ -34,6 +34,7 @@ const ReceiptManual = ({
     setFieldValue("folder", projects[0].id);
   }, [projects, setFieldValue]);
   const pathname = usePathname();
+  const [help, setHelp] = useState(false);
 
   const [isManual, setIsManual] = useState<boolean>(false);
 
@@ -75,10 +76,29 @@ const ReceiptManual = ({
   return (
     <div className="flex flex-col gap-10  w-full justify-center items-center mt-10">
       <div className=" max-w-[600px] w-full">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-3xl text-orange-600 mb-4">
-            {pathname === "/create/manual" ? "Manual Entry" : "Analyze Text"}
-          </h1>
+        <div className="flex justify-between">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-3xl text-orange-600 mb-4">
+              {pathname === "/create/manual" ? "Manual Entry" : "Analyze Text"}
+            </h1>
+            {pathname == "/create/manual" && help && (
+              <p className="text-xs text-orange-600">
+                Fill out the receipt details. Fields marked with * are required.
+                When done, press items to add items.
+              </p>
+            )}
+            {pathname == "/create/text" && help && (
+              <p className="text-xs text-orange-600">
+                Fill out the receipt details. Fields marked with * are required.
+                When done, press items to add analyze text from an email
+                receipt.
+              </p>
+            )}
+          </div>
+
+          <p className="text-xs text-orange-600" onClick={() => setHelp(!help)}>
+            Help
+          </p>
         </div>
 
         <div className={styles.receiptContainer}>
@@ -134,52 +154,64 @@ const ReceiptManual = ({
                 </div>
               </div>
             )}
-            <div className="flex flex-col gap-3">
-              <p className={` text-emerald-900 text-sm`}>Return Date Policy</p>
-              <div className="w-full flex justify-between gap-2 mb-2">
-                <button
-                  type="button"
-                  className={
-                    isManual
-                      ? "w-full border-[1px] bg  p-2  border-emerald-900 rounded text-sm text-emerald-900"
-                      : "w-full border-[1px] bg-emerald-900  p-2  border-emerald-900 rounded text-sm text-white"
-                  }
-                  onClick={() => {
-                    setIsManual(false);
-                  }}
-                >
-                  Select Policy
-                </button>
-                <button
-                  type="button"
-                  className={
-                    !isManual
-                      ? "w-full border-[1px] bg  p-2  border-emerald-900 rounded text-sm text-emerald-900"
-                      : "w-full border-[1px] bg-emerald-900  p-2  border-emerald-900 rounded text-sm text-white"
-                  }
-                  onClick={() => {
-                    setIsManual(true);
-                  }}
-                >
-                  Add Manually
-                </button>
-              </div>
-              {isManual ? (
-                <ManualDate
-                  values={values}
-                  handleChange={handleChange}
-                  errors={errors}
-                  setFieldValue={setFieldValue}
-                />
-              ) : (
-                <ReturnPolicySelect
-                  values={values}
-                  handleChange={handleChange}
-                  type={values.days_until_return}
-                  setFieldValue={setFieldValue}
-                />
-              )}
+          </div>
+          <div className="flex flex-col gap-3">
+            <div className="flex gap-2 items-center">
+              <p className={` text-emerald-900 `}>Return Date Policy</p>
+
+              <TooltipWithHelperIcon
+                placement="right-start"
+                content="Number of days until return. You can manually enter one or choose from your return store policy list."
+              />
             </div>
+            {help && (
+              <p className="text-xs text-orange-600">
+                Select or input a return date policy for the receipt.
+              </p>
+            )}
+            <div className="w-full flex justify-between gap-2 mb-2">
+              <button
+                type="button"
+                className={
+                  isManual
+                    ? "w-full border-[1px] bg  p-2  border-emerald-900 rounded text-sm text-emerald-900"
+                    : "w-full border-[1px] bg-emerald-900  p-2  border-emerald-900 rounded text-sm text-white"
+                }
+                onClick={() => {
+                  setIsManual(false);
+                }}
+              >
+                Select Policy
+              </button>
+              <button
+                type="button"
+                className={
+                  !isManual
+                    ? "w-full border-[1px] bg  p-2  border-emerald-900 rounded text-sm text-emerald-900"
+                    : "w-full border-[1px] bg-emerald-900  p-2  border-emerald-900 rounded text-sm text-white"
+                }
+                onClick={() => {
+                  setIsManual(true);
+                }}
+              >
+                Add Manually
+              </button>
+            </div>
+            {isManual ? (
+              <ManualDate
+                values={values}
+                handleChange={handleChange}
+                errors={errors}
+                setFieldValue={setFieldValue}
+              />
+            ) : (
+              <ReturnPolicySelect
+                values={values}
+                handleChange={handleChange}
+                type={values.days_until_return}
+                setFieldValue={setFieldValue}
+              />
+            )}
           </div>
 
           <div className={`w-full relative`}>

@@ -52,7 +52,11 @@ export const AlertHeader = ({ planId }: AlertHeaderProps) => {
               "bg-white rounded-lg shadow-xl m-4 max-w-md w-full flex justify-center"
             }
           >
-            <SubscribeModal />
+            <SubscribeModal
+              message="Subscribe to receive alerts about upcoming returns. Alerts will be
+            displayed here and also emailed to you one week, one day, and on the
+            actual day of your return"
+            />
           </div>
         </div>
       )}

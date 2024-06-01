@@ -13,6 +13,7 @@ import BottomBar from "@/components/createForm/BottomBar";
 import { Pages } from "@/types/form";
 import { toast } from "sonner";
 import ErrorModal from "@/components/modals/ErrorModal";
+import { ProjectType } from "@/types/ProjectTypes";
 
 const getValidationSchema = (stage: ReceiptOnlineStage) => {
   switch (stage) {
@@ -25,7 +26,7 @@ const getValidationSchema = (stage: ReceiptOnlineStage) => {
   }
 };
 
-const ManualPage = ({ projects }: Pages) => {
+const ManualPage = ({ projects }: { projects: ProjectType[] }) => {
   const [stage, setStage] = useState<ReceiptOnlineStage>(
     ReceiptOnlineStage.ONLINE_RECEIPT
   );

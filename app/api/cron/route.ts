@@ -71,7 +71,7 @@ const sendReminder = async (daysUntilDue: number, reminderType: string) => {
         // Process each valid user
         await Promise.all(
           validUsers.map(async (user) => {
-            if (user.email) {
+            if (user && user.email) {
               const link = `${domain}/receipt/${receipt.id}`;
               let emailSubject = "Receipt Reminder";
               let date = "";

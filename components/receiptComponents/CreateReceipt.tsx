@@ -25,7 +25,7 @@ export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
               <p className="text-emerald-900">Analyze Receipt Image</p>
             </Link>
             <TooltipWithHelperIcon
-              iconColor="text-emerald-900"
+              iconColor="text-orange-600"
               content="  Take a photo of your receipt and upload it. We use AI to extract
               and fill in the details of your receipt and item information. This
               process works best with physical receipts or memo receipts."
@@ -39,7 +39,7 @@ export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
               <p className="text-emerald-900">Analyze Receipt Text</p>
             </Link>
             <TooltipWithHelperIcon
-              iconColor="text-emerald-900"
+              iconColor="text-orange-600"
               content="Enter your receipt details first, then copy and paste the item
               information from your online receipt email. We use AI to
               accurately populate the item details."

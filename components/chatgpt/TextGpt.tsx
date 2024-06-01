@@ -1,9 +1,11 @@
 import RegularButton from "@/components/buttons/RegularButton";
 import { FormError } from "@/components/form-error";
 import Loading from "@/components/Loading/Loading";
+import SubscribeModal from "@/components/modals/SubscribeModal";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
+import { Session } from "@/types/Session";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import React, { useState } from "react";
 
@@ -11,9 +13,10 @@ interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
   values: ReceiptInput;
   setStage: (stage: any) => void;
+  session: Session;
 }
 
-const TextGpt = ({ setFieldValue, values, setStage }: Props) => {
+const TextGpt = ({ setFieldValue, values, setStage, session }: Props) => {
   const [inputText, setInputText] = useState("");
   const [noText, setNoText] = useState(false);
   const [help, setHelp] = useState(false);
@@ -72,7 +75,13 @@ const TextGpt = ({ setFieldValue, values, setStage }: Props) => {
     setLoading(false);
   };
 
+  const [subscribeModal, setSubscribeModal] = useState(false);
+
   const handleSubmit = async () => {
+    if (session.user.planId === 1) {
+      setSubscribeModal(true);
+      return;
+    }
     if (inputText === "") {
       setNoText(true);
       setPrompt(false);
@@ -174,6 +183,12 @@ const TextGpt = ({ setFieldValue, values, setStage }: Props) => {
         ></FormError>
       )}
       {loading && <Loading loading={loading} />}
+      {subscribeModal && (
+        <SubscribeModal
+          message="You have reached the limit of receipts you can analyze. Please upgrade to a premium plan to continue."
+          onClose={() => setSubscribeModal(false)}
+        />
+      )}
     </div>
   );
 };

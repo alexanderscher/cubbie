@@ -6,7 +6,6 @@ import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 const domain = getBaseUrl();
-
 const sendReminder = async (daysUntilDue: number, reminderType: string) => {
   try {
     const today = moment.utc().startOf("day");
@@ -41,30 +40,38 @@ const sendReminder = async (daysUntilDue: number, reminderType: string) => {
 
     await Promise.all(
       receipts.map(async (receipt) => {
-        const projectUserPromise = prisma.user.findUnique({
+        // Fetch the project owner with planId to check if they are eligible
+        const projectOwner = await prisma.user.findUnique({
           where: {
             id: receipt.project.userId,
           },
+          select: { id: true, email: true, planId: true }, // Include planId to check
         });
 
-        const projectUsersPromises = receipt.project.projectUsers.map((pu) =>
-          prisma.user.findUnique({
-            where: {
-              id: pu.userId,
-            },
-          })
+        // If the project owner's planId is 1, do not proceed with sending emails or alerts
+        if (projectOwner?.planId === 1) {
+          return;
+        }
+
+        // Fetch other project users without checking planId
+        const projectUsers = await Promise.all(
+          receipt.project.projectUsers.map((pu) =>
+            prisma.user.findUnique({
+              where: {
+                id: pu.userId,
+              },
+              select: { id: true, email: true }, // Fetch only necessary fields
+            })
+          )
         );
 
-        const users = await Promise.all([
-          projectUserPromise,
-          ...projectUsersPromises,
-        ]);
+        // Filter out null results
+        const validUsers = projectUsers.filter((user) => user !== null);
 
-        const validUsers = users.filter((user) => user !== null);
-
+        // Process each valid user
         await Promise.all(
           validUsers.map(async (user) => {
-            if (user?.email) {
+            if (user.email) {
               const link = `${domain}/receipt/${receipt.id}`;
               let emailSubject = "Receipt Reminder";
               let date = "";
@@ -105,11 +112,11 @@ const sendReminder = async (daysUntilDue: number, reminderType: string) => {
         );
       })
     );
-    revalidateTag(`alerts`);
   } catch (error) {
     console.error("Failed to send reminders:", error);
   }
 };
+
 export const revalidate = 0;
 
 export async function GET(request: NextRequest) {

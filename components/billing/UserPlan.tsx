@@ -35,7 +35,7 @@ const UserPlan = ({ user }: { user: UserType }) => {
     <div className="flex flex-col gap-4 w-full max-w-[800px]">
       <div className="bg-white rounded-lg p-6  flex flex-col gap-4">
         <div className="flex justify-between">
-          <p className="text-xl">Plans & Billing</p>
+          <p className="text-lg">Plan & Billing</p>
           <div className={styles.button}>
             <Image
               src={"/dashboard_b.png"}
@@ -64,35 +64,43 @@ const UserPlan = ({ user }: { user: UserType }) => {
 export default UserPlan;
 
 const PlanCard = ({ planId }: { planId: number | null | undefined }) => {
-  const [planName, setPlanName] = useState("");
-  const [planPrice, setPlanPrice] = useState("");
+  // const [planName, setPlanName] = useState("");
+  // const [planPrice, setPlanPrice] = useState("");
 
-  useEffect(() => {
-    if (planId === 1) {
-      setPlanName("Free");
-      setPlanPrice("$0.00");
-    } else if (planId === 2) {
-      setPlanName("All project plan");
-      setPlanPrice("$2.00");
-    } else if (planId === 3) {
-      setPlanName("Limited project plan");
-      setPlanPrice("$1.00");
-    }
-  }, [planId]);
+  // useEffect(() => {
+  //   if (planId === 1) {
+  //     setPlanName("Free");
+  //     setPlanPrice("$0.00");
+  //   } else if (planId === 2) {
+  //     setPlanName("All project plan");
+  //     setPlanPrice("$2.00");
+  //   } else if (planId === 3) {
+  //     setPlanName("Limited project plan");
+  //     setPlanPrice("$1.00");
+  //   }
+  // }, [planId]);
   return (
     <>
       <div className="bg-white rounded-lg p-6  flex flex-col gap-4 ">
         <div className="flex flex-col gap-3">
-          <h1 className=" text-xl">Current Plan</h1>
-          <p className="text-xl text-orange-400">All project plan</p>
+          <h1 className=" text-lg">Current Plan</h1>
+          <p className="text-lg text-orange-400">
+            {planId === 1
+              ? "Free"
+              : planId === 2
+              ? "All project plan"
+              : "Limited project plan"}
+          </p>
         </div>
 
         <div className="text-lg">
-          <p className="">$2.00 </p>
+          <p className="">
+            {planId === 1 ? "Free" : planId === 2 ? "$2.00" : "$1.00"}
+          </p>
           <p className="">per month</p>
         </div>
         <RegularButton
-          styles="border-emerald-900 bg-emerald-900 text-white"
+          styles="border-orange-400 bg-orange-400 text-white"
           href={"/manage-plan"}
         >
           <p className="text-sm">Manage plan</p>

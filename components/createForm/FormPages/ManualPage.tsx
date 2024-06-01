@@ -9,9 +9,10 @@ import FinalStage from "@/components/createForm/FinalStage";
 import { ITEMS_SCHEMA, RECEIPT_SCHEMA } from "@/utils/receiptValidation";
 import Loading from "@/components/Loading/Loading";
 import BottomBar from "@/components/createForm/BottomBar";
-import ErrorModal from "@/components/error/ErrorModal";
+
 import { Pages } from "@/types/form";
 import { toast } from "sonner";
+import ErrorModal from "@/components/modals/ErrorModal";
 
 const getValidationSchema = (stage: ReceiptOnlineStage) => {
   switch (stage) {

@@ -11,7 +11,7 @@ import { ITEMS_SCHEMA, RECEIPT_SCHEMA } from "@/utils/receiptValidation";
 import Loading from "@/components/Loading/Loading";
 import BottomBar from "@/components/createForm/BottomBar";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
-import ErrorModal from "@/components/error/ErrorModal";
+import ErrorModal from "@/components/modals/ErrorModal";
 import { Pages } from "@/types/form";
 import { toast } from "sonner";
 

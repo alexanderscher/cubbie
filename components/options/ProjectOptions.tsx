@@ -28,7 +28,7 @@ import {
 import { ReceiptType } from "@/types/ReceiptTypes";
 import Link from "next/link";
 import { Session } from "@/types/Session";
-import ErrorModal from "@/components/error/ErrorModal";
+import ErrorModal from "@/components/modals/ErrorModal";
 
 interface OptionsModalProps {
   isOpen: boolean;

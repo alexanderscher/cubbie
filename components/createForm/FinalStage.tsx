@@ -11,7 +11,7 @@ import styles from "./form.module.css";
 import * as Yup from "yup";
 import Image from "next/image";
 import React, { useState } from "react";
-import ErrorModal from "@/components/error/ErrorModal";
+import ErrorModal from "@/components/modals/ErrorModal";
 import BottomBar from "@/components/createForm/BottomBar";
 import { formatCurrency } from "@/utils/formatCurrency";
 import ImageModal from "@/components/images/ImageModal";

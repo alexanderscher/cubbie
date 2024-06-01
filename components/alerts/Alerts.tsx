@@ -18,6 +18,7 @@ import { getAlerts } from "@/lib/alerts";
 
 import moment from "moment";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
+import { AlertHeader } from "@/components/alerts/AlertHeader";
 
 const describeDate = (dateString: string) => {
   // Parse the date in UTC mode from the given format
@@ -157,26 +158,6 @@ const AlertComponent = ({ userId }: AlertProps) => {
 
 export default AlertComponent;
 
-const AlertHeader = () => {
-  return (
-    <div className="flex flex-col gap-6 pb-8">
-      <div className={` flex justify-between `}>
-        <div className="cursor-pointer relative">
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl text-emerald-900">Alerts</h1>
-            <TooltipWithHelperIcon
-              placement="right-start"
-              content="Reminders for expiring receipts: We will notify you one week before, one day before, and on the day of expiration."
-            />
-          </div>
-        </div>
-      </div>
-      <SearchBar searchType="Alerts" />
-      <Filters />
-    </div>
-  );
-};
-
 interface SingleAlertProps {
   alertObj: Alert;
   userId: string | undefined;
@@ -184,7 +165,7 @@ interface SingleAlertProps {
 
 const SingleAlert = ({ alertObj, userId }: SingleAlertProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  console.log("alertObj", alertObj);
+
   const isReadByUser = alertObj.readBy.some((entry) => entry.userId === userId);
   return (
     <div

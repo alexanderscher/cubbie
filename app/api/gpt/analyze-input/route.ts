@@ -1,3 +1,6 @@
+import { auth } from "@/auth";
+import prisma from "@/prisma/client";
+import { Session } from "next-auth";
 import { NextResponse } from "next/server";
 
 const DATA = [
@@ -9,6 +12,17 @@ const DATA = [
 ];
 
 export async function POST(request: Request) {
+  const session = (await auth()) as Session;
+  await prisma.userPlanUsage.update({
+    where: {
+      userId: session.user.id,
+    },
+    data: {
+      apiCalls: {
+        increment: 1,
+      },
+    },
+  });
   return new NextResponse(JSON.stringify(DATA), {
     headers: {
       "Content-Type": "application/json",

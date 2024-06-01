@@ -47,9 +47,9 @@ const Account = ({ session, projects }: AccountProps) => {
 
   return (
     <div className="flex flex-col gap-4 w-full max-w-[800px]">
-      <div className="bg-white rounded-lg p-8  flex flex-col gap-4">
+      <div className="bg-white rounded-lg p-6  flex flex-col gap-4">
         <div className="flex justify-between">
-          <p className="text-emerald-900 text-xl">User Profile</p>
+          <p className="text-emerald-900 text-lg">User Profile</p>
           <div className={styles.button}>
             <Image
               src={"/dashboard_b.png"}

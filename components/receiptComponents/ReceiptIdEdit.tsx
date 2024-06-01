@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import React, { ChangeEvent, useEffect, useState, useTransition } from "react";
 import { EDIT_RECEIPT_SCHEMA } from "@/utils/editValidation";
 import Loading from "@/components/Loading/Loading";
-import ErrorModal from "@/components/error/ErrorModal";
+import ErrorModal from "@/components/modals/ErrorModal";
 import HeaderNav from "@/components/navbar/HeaderNav";
 import ImageModal from "@/components/images/ImageModal";
 import Item from "@/components/Item";

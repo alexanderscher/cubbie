@@ -11,6 +11,9 @@ import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
+  const session = (await auth()) as Session;
+  const userId = session?.user?.id as string;
+
   const uploadedFileKeys = [];
 
   try {
@@ -136,8 +139,7 @@ export async function POST(request: Request) {
         },
       },
     });
-    const session = (await auth()) as Session;
-    const userId = session?.user?.id as string;
+
     revalidateTag(`projects_user_${userId}`);
     revalidateTag(`user_${userId}`);
 

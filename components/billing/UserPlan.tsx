@@ -95,7 +95,7 @@ const PlanCard = ({ planId }: { planId: number | null | undefined }) => {
 
         <div className="text-lg">
           <p className="">
-            {planId === 1 ? "Free" : planId === 2 ? "$2.00" : "$1.00"}
+            {planId === 1 ? "$0.00" : planId === 2 ? "$2.00" : "$1.00"}
           </p>
           <p className="">per month</p>
         </div>

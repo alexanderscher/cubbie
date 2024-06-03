@@ -5,7 +5,7 @@ import Loading from "@/components/Loading/Loading";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import { EditProject } from "@/components/project/EditProject";
 import Image from "next/image";
-import React, { use, useEffect, useState, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import { usePathname } from "next/navigation";
@@ -25,10 +25,7 @@ import {
   ProjectReceiptType,
   ProjectType,
 } from "@/types/ProjectTypes";
-import { ReceiptType } from "@/types/ReceiptTypes";
-import Link from "next/link";
 import { Session } from "@/types/Session";
-import ErrorModal from "@/components/modals/ErrorModal";
 
 interface OptionsModalProps {
   isOpen: boolean;
@@ -328,7 +325,7 @@ const Members = ({
   setAddUserOpen: (value: boolean) => void;
 }) => {
   return (
-    <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full rounded-t-md">
+    <div className=" w-full " onClick={(e) => e.stopPropagation()}>
       {sessionUserId && sessionUserId === project.user?.id && (
         <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3 ">
           <button
@@ -626,7 +623,7 @@ const AddUser = ({
       // validationSchema={getValidationSchema(stage)}
     >
       {({ handleChange, handleSubmit, values }) => (
-        <div className="bg-white rounded-lg shadow-xl m-4 max-w-md w-full rounded-t-md">
+        <div className="w-full" onClick={(e) => e.stopPropagation()}>
           <form onSubmit={handleSubmit}>
             <div className="flex justify-between items-center border-b border-emerald-900 px-6 py-3 ">
               <button
@@ -718,7 +715,7 @@ const ProjectDetails = ({
   }, [project]);
 
   return (
-    <div className="">
+    <div className="w-full" onClick={(e) => e.stopPropagation()}>
       <div className="flex justify-between items-center border-b  px-5 py-3 rounded-t-lg border-emerald-900">
         <h3 className=" text-emerald-900">Project Details</h3>
         <button

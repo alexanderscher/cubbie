@@ -128,7 +128,6 @@ const FreePlan = () => {
       <p>Free</p>
       <p>Up to 20 receipt items per prioject</p>
       <p>Barcode look up</p>
-      <p>Start with ten free AI features for all projects</p>
       <p>Two users per project</p>
     </div>
   );

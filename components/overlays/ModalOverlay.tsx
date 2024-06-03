@@ -19,6 +19,7 @@ export const ModalOverlay = ({
       document.body.style.overflow = originalOverflow;
     };
   }, []);
+
   const handleOverlayClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {

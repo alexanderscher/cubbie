@@ -11,6 +11,9 @@ export const addUserToProject = async (
 ): Promise<any> => {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
+
+  // check for plan, check how many users are already in thje project, throw error
+
   try {
     const project = await prisma.project.findUnique({
       where: { id: projectId },

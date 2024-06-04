@@ -44,13 +44,14 @@ model User {
 }
 
 model Plan {
-  id            Int            @id @default(autoincrement())
-  name          String
-  description   String?
-  price         Float
-  max_api_calls Int            @default(0)
-  subscriptions Subscription[]
-  User          User[]
+  id                Int            @id @default(autoincrement())
+  name              String
+  price             Float
+  max_api_calls     Int            @default(0)
+  max_project_users Int            @default(0)
+  max_items         Int            @default(0)
+  subscriptions     Subscription[]
+  User              User[]
 }
 
 model UserPlanUsage {

@@ -574,7 +574,8 @@ export default function ImageGpt({
         {loading && <Loading loading={loading} />}
         {subscribeModal && (
           <SubscribeModal
-            message="You have reached the limit of receipts you can analyze. Please upgrade to a premium plan to continue."
+            // message="You have reached the limit of receipts you can analyze. Please upgrade to a premium plan to continue."
+            message="Please upgrade plans to analyze receipts by photo"
             onClose={() => setSubscribeModal(false)}
           />
         )}

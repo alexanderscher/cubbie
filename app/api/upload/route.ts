@@ -14,6 +14,23 @@ export async function POST(request: Request) {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
 
+  const numberOfItems = 10;
+  // get number of receipt items
+  // check for free plan and limited plan
+
+  if (session?.user?.planId === 1 && numberOfItems > 5) {
+    return new NextResponse(
+      JSON.stringify({
+        error:
+          "Upgrade Error: You have reached the limit of items you can add. Please upgrade your plan to add more items.",
+      }),
+      {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+
   const uploadedFileKeys = [];
 
   try {

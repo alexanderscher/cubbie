@@ -41,7 +41,7 @@ const AlertSettings = ({ user }: AlertSettingsProps) => {
     <div className="flex flex-col gap-4 w-full max-w-[800px]">
       <div className="bg-white rounded-lg p-6  flex flex-col gap-4">
         <div className="flex justify-between">
-          <p className="text-lg">Alert Settings</p>
+          <p className="text-lg text-emerald-900">Alert Settings</p>
           <div className={styles.button}>
             <Image
               src={"/dashboard_b.png"}

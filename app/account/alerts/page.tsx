@@ -7,6 +7,7 @@ import { getUserInfo } from "@/lib/userDb";
 import { Session } from "@/types/Session";
 import { auth } from "@/auth";
 import RegularButton from "@/components/buttons/RegularButton";
+import { SubscribeForAlerts } from "@/components/profile/SubscribeForAlerts";
 
 const getUser = async () => {
   const user = await getUserInfo();
@@ -24,25 +25,9 @@ export default async function Alerts() {
         {session.user.planId !== 1 ? (
           <AlertSettings user={user} />
         ) : (
-          <SubscribeToAlerts />
+          <SubscribeForAlerts />
         )}
       </div>
     </div>
   );
 }
-
-const SubscribeToAlerts = () => {
-  return (
-    <div className="flex flex-col gap-4 w-full max-w-[800px]">
-      <div className="bg-white rounded-lg  flex flex-col p-6">
-        <h1>Subscribe to get alerts</h1>
-        <RegularButton
-          href="/manage-plan"
-          styles="bg-orange-600 border-orange-600"
-        >
-          <p className="text-sm text-white"> View plans</p>
-        </RegularButton>
-      </div>
-    </div>
-  );
-};

@@ -49,7 +49,7 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
             setUploadError(result.error);
           } else {
             setEdit(false);
-            toast.success("Your operation was successful!");
+            toast.success("Project edited successfully");
           }
         } catch (e) {
           toast.error("An error occurred. Please try again.");

@@ -37,7 +37,7 @@ export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
             setUploadError(result.error);
             toast.error("An error occurred. Please try again.");
           } else {
-            toast.success("Your operation was successful!");
+            toast.success("Project created successfully");
             setProject({
               name: "",
               asset_amount: "",

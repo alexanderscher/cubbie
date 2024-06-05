@@ -143,7 +143,7 @@ const ItemIdEdit = ({ itemId }: ItemIdEditProps) => {
               toast.error("An error occurred. Please try again.");
             } else {
               router.push(`/item/${itemId}`);
-              toast.success("Your operation was successful!");
+              toast.success("Item updated successfully.");
             }
           } catch (e) {
             toast.error("An error occurred. Please try again.");

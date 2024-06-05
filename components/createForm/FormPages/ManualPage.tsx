@@ -9,8 +9,6 @@ import FinalStage from "@/components/createForm/FinalStage";
 import { ITEMS_SCHEMA, RECEIPT_SCHEMA } from "@/utils/receiptValidation";
 import Loading from "@/components/Loading/Loading";
 import BottomBar from "@/components/createForm/BottomBar";
-
-import { Pages } from "@/types/form";
 import { toast } from "sonner";
 import ErrorModal from "@/components/modals/ErrorModal";
 import { ProjectType } from "@/types/ProjectTypes";
@@ -63,7 +61,7 @@ const ManualPage = ({ projects }: { projects: ProjectType[] }) => {
 
     if (response.ok) {
       router.push("/");
-      toast.success("Your operation was successful!");
+      toast.success("Receipt uploaded successfully");
     } else {
       toast.error("An error occurred. Please try again.");
     }

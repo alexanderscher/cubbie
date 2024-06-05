@@ -72,7 +72,7 @@ export const ProjectOptionsModal = ({
     startTransition(async () => {
       try {
         await archiveProject(projectId, archive);
-        toast.success("Your operation was successful!");
+        toast.success("Project archived successfully");
       } catch (e) {
         toast.error("An error occurred. Please try again.");
       }
@@ -292,7 +292,7 @@ const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
           toast.error("An error occurred. Please try again.");
         } else {
           setDeleteOpen(false);
-          toast.success("Your operation was successful!");
+          toast.success("Project deleted successfully.");
           router.push("/");
         }
       } catch (e) {
@@ -607,7 +607,7 @@ const AddUser = ({
 
               setInvalidEmailFormat(false);
             } else {
-              toast.success("Your operation was successful!");
+              toast.success("User added successfully");
 
               setInvalidEmailFormat(false);
               setUploadError("");

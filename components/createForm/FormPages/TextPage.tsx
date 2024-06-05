@@ -63,7 +63,7 @@ const TextPage = ({ projects, session }: Pages) => {
 
     if (response.ok) {
       router.push("/");
-      toast.success("Your operation was successful!");
+      toast.success("Receipt uploaded successfully");
     } else {
       toast.error("An error occurred. Please try again.");
     }

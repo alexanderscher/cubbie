@@ -14,11 +14,31 @@ export async function POST(request: Request) {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
 
-  const numberOfItems = 10;
-  // get number of receipt items
-  // check for free plan and limited plan
+  const receipts = await prisma.receipt.findMany({
+    select: {
+      items: true, // Select only the items array for each receipt
+    },
+  });
 
-  if (session?.user?.planId === 1 && numberOfItems > 5) {
+  const numberOfItems = receipts.reduce(
+    (sum, receipt) => sum + receipt.items.length,
+    0
+  );
+
+  if (session?.user?.planId === 1 && numberOfItems > 50) {
+    return new NextResponse(
+      JSON.stringify({
+        error:
+          "Upgrade Error: You have reached the limit of items you can add. Please upgrade your plan to add more items.",
+      }),
+      {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+
+  if (session?.user?.planId === 3 && numberOfItems > 100) {
     return new NextResponse(
       JSON.stringify({
         error:

@@ -48,6 +48,35 @@ export const addUserToProject = async (
       return { error: "You are already the owner of this project" };
     }
 
+    if (session?.user?.planId === 1) {
+      const usersInProject = await prisma.projectUser.findMany({
+        where: {
+          projectId: projectId,
+        },
+      });
+
+      if (usersInProject.length >= 1) {
+        return {
+          error:
+            "Upgrade Error: You have reached the limit of users you can add. Please upgrade your plan to add more users.",
+        };
+      }
+    }
+    if (session?.user?.planId === 3) {
+      const usersInProject = await prisma.projectUser.findMany({
+        where: {
+          projectId: projectId,
+        },
+      });
+
+      if (usersInProject.length >= 5) {
+        return {
+          error:
+            "Upgrade Error: You have reached the limit of users you can add. Please upgrade your plan to add more users.",
+        };
+      }
+    }
+
     const projectUser = await prisma.projectUser.create({
       data: {
         userId: user.id,

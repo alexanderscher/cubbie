@@ -194,7 +194,7 @@ const ReceiptIdEdit = ({ receiptId }: Props) => {
               setUploadError(result.error);
             } else {
               router.push(`/receipt/${receiptId}`);
-              toast.success("Your operation was successful!");
+              toast.success("Receipt edited successfully.");
             }
           } catch (e) {
             toast.error("An error occurred. Please try again.");

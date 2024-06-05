@@ -284,7 +284,6 @@ const AlertOptionsModal = ({ alertObj, userId }: SingleAlertProps) => {
                 startTransition(() => {
                   try {
                     unmarkAsRead({ alertID: alertObj.id });
-                    toast.success("Your operation was successful!");
                   } catch (e) {
                     toast.error("An error occurred. Please try again.");
                   }

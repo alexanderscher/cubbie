@@ -137,7 +137,7 @@ const AddReturnPolicy = ({ setCreateNew }: AddReturnPolicyProps) => {
             setError(result.error);
             toast.error("An error occurred. Please try again.");
           } else {
-            toast.success("Your operation was successful!");
+            toast.success("Return policy created successfully");
             setReturnPolicy({
               store: "",
               days: 0,
@@ -240,7 +240,7 @@ export const ReturnOptionsModal = ({ item }: OptionsModalProps) => {
         if (result?.error) {
           toast.error("An error occurred. Please try again.");
         } else {
-          toast.success("Your operation was successful!");
+          toast.success("Policy deleted successfully");
         }
       } catch (error) {
         toast.error("An error occurred. Please try again.");
@@ -320,7 +320,7 @@ const EditPolicy = ({ item, setEditOpen }: EditPolicyProps) => {
             setError(result.error);
             toast.error("An error occurred. Please try again.");
           } else {
-            toast.success("Your operation was successful!");
+            toast.success("Policy updated successfully");
             setReturnPolicy({
               store: "",
               days: 0,

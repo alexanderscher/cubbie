@@ -42,7 +42,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
           toast.error("An error occurred. Please try again.");
         } else {
           setDeleteOpen(false);
-          toast.success("Your operation was successful!");
+          toast.success("Item deleted successfully");
         }
       } catch (error) {
         toast.error("An error occurred. Please try again.");
@@ -107,7 +107,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
                     startTransition(async () => {
                       try {
                         await unreturn(item.id);
-                        toast.success("Your operation was successful!");
+                        toast.success("Item has been marked as not returned.");
                       } catch (e) {
                         toast.error("An error occurred. Please try again.");
                       }
@@ -129,7 +129,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
                   onClick={async () => {
                     startTransition(async () => {
                       try {
-                        toast.success("Your operation was successful!");
+                        toast.success("Item has been marked as returned.");
                         await markAsReturned(item.id);
                       } catch (e) {
                         toast.error("An error occurred. Please try again.");

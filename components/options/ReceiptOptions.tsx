@@ -82,7 +82,7 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
             setError({ ...error, result: result.error });
           } else {
             setIsAddOpen(false);
-            toast.success("Your operation was successful!");
+            toast.success("Item added successfully");
 
             setNewItem({
               description: "",
@@ -288,7 +288,7 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
             toast.error("An error occurred. Please try again.");
           } else {
             setIsOpen(false);
-            toast.success("Your operation was successful!");
+            toast.success("Receipt moved successfully");
           }
         } catch (e) {
           toast.error("An error occurred. Please try again.");
@@ -359,7 +359,7 @@ const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
           toast.error("An error occurred. Please try again.");
         } else {
           setDeleteOpen(false);
-          toast.success("Your operation was successful!");
+          toast.success("Receipt deleted successfully");
         }
       } catch (e) {
         toast.error("An error occurred. Please try again.");

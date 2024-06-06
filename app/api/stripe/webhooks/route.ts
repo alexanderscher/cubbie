@@ -3,8 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
 import { stripe } from "@/app/stripe/stripe";
 import { revalidateTag } from "next/cache";
-import { auth } from "@/auth";
-import { Session } from "@/types/Session";
 
 const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
   if (req.method !== "POST") {
@@ -42,6 +40,8 @@ const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
     const metadata = stripesession.metadata;
     const userId = metadata?.userId;
     const subscriptionId = metadata?.subscriptionId;
+
+    console.log("USER ID", userId);
 
     if (!userId) {
       return new NextResponse(

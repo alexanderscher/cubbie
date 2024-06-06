@@ -396,6 +396,12 @@ const ReceiptItems = ({
     setFieldValue("items", updatedItems);
   };
 
+  const duplicateItem = () => {
+    const updatedItems = [...items];
+    updatedItems.push(items[index]);
+    setFieldValue("items", updatedItems);
+  };
+
   const onFileUpload = async (file: File) => {
     if (!file.type.match("image.*")) {
       alert("Please upload an image file");
@@ -578,14 +584,25 @@ const ReceiptItems = ({
               )}
             </div>
           </div>
-          <div className="w-full flex justify-end mt-2">
-            <RegularButton
-              small
-              styles="bg-emerald-900 border-emerald-900  w-full"
-              handleClick={() => removeItem(index)}
-            >
-              <p className="text-xs text-white">Delete</p>
-            </RegularButton>
+          <div className="w-full">
+            <div className="w-full flex justify-end mt-2">
+              <RegularButton
+                small
+                styles="bg-emerald-900 border-emerald-900  w-full"
+                handleClick={() => duplicateItem()}
+              >
+                <p className="text-xs text-white">Duplicate</p>
+              </RegularButton>
+            </div>
+            <div className="w-full flex justify-end mt-2">
+              <RegularButton
+                small
+                styles="bg-emerald-900 border-emerald-900  w-full"
+                handleClick={() => removeItem(index)}
+              >
+                <p className="text-xs text-white">Delete</p>
+              </RegularButton>
+            </div>
           </div>
         </div>
       </div>

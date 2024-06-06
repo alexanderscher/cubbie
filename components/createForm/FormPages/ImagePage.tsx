@@ -11,6 +11,8 @@ import Loading from "@/components/Loading/Loading";
 import BottomBar from "@/components/createForm/BottomBar";
 import { Pages } from "@/types/form";
 import { toast } from "sonner";
+import { ModalOverlay } from "@/components/overlays/ModalOverlay";
+import { DiscardModal } from "@/components/modals/DiscardModal";
 
 const getValidationSchema = (stage: ReceiptStoreStage) => {
   switch (stage) {
@@ -27,6 +29,7 @@ const ImagePage = ({ projects, session }: Pages) => {
   );
   const [loading, setLoading] = useState(false);
   const [uploadError, setUploadError] = useState("");
+  const [discardModal, setDiscardModal] = useState(false);
 
   const submitDB = async (values: any) => {
     setLoading(true);
@@ -101,7 +104,7 @@ const ImagePage = ({ projects, session }: Pages) => {
                               <RegularButton
                                 styles="bg-white border-emerald-900"
                                 handleClick={async () => {
-                                  router.push("/");
+                                  setDiscardModal(true);
                                 }}
                               >
                                 <p className="text-emerald-900  text-xs">
@@ -144,7 +147,14 @@ const ImagePage = ({ projects, session }: Pages) => {
           )}
         </Formik>
       </div>
-
+      {discardModal && (
+        <ModalOverlay onClose={() => setDiscardModal(false)}>
+          <DiscardModal
+            setDiscardModal={setDiscardModal}
+            leavePage={() => router.push("/")}
+          />
+        </ModalOverlay>
+      )}
       {loading && <Loading loading={loading} />}
     </div>
   );

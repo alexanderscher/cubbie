@@ -14,6 +14,8 @@ import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
 import ErrorModal from "@/components/modals/ErrorModal";
 import { Pages } from "@/types/form";
 import { toast } from "sonner";
+import { ModalOverlay } from "@/components/overlays/ModalOverlay";
+import { DiscardModal } from "@/components/modals/DiscardModal";
 
 const getValidationSchema = (stage: ReceiptOnlineStage) => {
   switch (stage) {
@@ -42,6 +44,7 @@ const TextPage = ({ projects, session }: Pages) => {
     days_until_return: "",
     purchase_date: "",
   });
+  const [discardModal, setDiscardModal] = useState(false);
 
   const submitDB = async (values: any) => {
     setLoading(true);
@@ -119,7 +122,7 @@ const TextPage = ({ projects, session }: Pages) => {
                             <RegularButton
                               styles="bg-white border-emerald-900"
                               handleClick={async () => {
-                                router.push("/");
+                                setDiscardModal(true);
                               }}
                             >
                               <p className="text-emerald-900  text-xs">
@@ -302,7 +305,14 @@ const TextPage = ({ projects, session }: Pages) => {
           }
         />
       )}
-
+      {discardModal && (
+        <ModalOverlay onClose={() => setDiscardModal(false)}>
+          <DiscardModal
+            setDiscardModal={setDiscardModal}
+            leavePage={() => router.push("/")}
+          />
+        </ModalOverlay>
+      )}
       {loading && <Loading loading={loading} />}
     </div>
   );

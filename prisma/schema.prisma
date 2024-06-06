@@ -41,6 +41,8 @@ model User {
   plan                  Plan?                  @relation(fields: [planId], references: [id])
   userPlanUsageId       Int?
   userPlanUsage         UserPlanUsage?
+  hasUsedTrialLimited   Boolean                @default(false)
+  hasUsedTrialAdvanced  Boolean                @default(false)
 }
 
 model Plan {

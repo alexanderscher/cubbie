@@ -12,6 +12,8 @@ import BottomBar from "@/components/createForm/BottomBar";
 import { toast } from "sonner";
 import ErrorModal from "@/components/modals/ErrorModal";
 import { ProjectType } from "@/types/ProjectTypes";
+import { ModalOverlay } from "@/components/overlays/ModalOverlay";
+import { DiscardModal } from "@/components/modals/DiscardModal";
 
 const getValidationSchema = (stage: ReceiptOnlineStage) => {
   switch (stage) {
@@ -40,6 +42,7 @@ const ManualPage = ({ projects }: { projects: ProjectType[] }) => {
     days_until_return: "",
     purchase_date: "",
   });
+  const [discardModal, setDiscardModal] = useState(false);
 
   const submitDB = async (values: any) => {
     setLoading(true);
@@ -118,7 +121,7 @@ const ManualPage = ({ projects }: { projects: ProjectType[] }) => {
                             <RegularButton
                               styles="bg-white border-emerald-900"
                               handleClick={async () => {
-                                router.push("/");
+                                setDiscardModal(true);
                               }}
                             >
                               <p className="text-emerald-900  text-xs">
@@ -206,6 +209,14 @@ const ManualPage = ({ projects }: { projects: ProjectType[] }) => {
       )}
 
       {loading && <Loading loading={loading} />}
+      {discardModal && (
+        <ModalOverlay onClose={() => setDiscardModal(false)}>
+          <DiscardModal
+            setDiscardModal={setDiscardModal}
+            leavePage={() => router.push("/")}
+          />
+        </ModalOverlay>
+      )}
     </div>
   );
 };

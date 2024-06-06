@@ -273,12 +273,20 @@ export default function ImageGpt({
       return;
     }
 
-    if (values.receiptImage && values.items.length > 0) {
+    if (values.receiptImage && values.items.length > 0 && prompt === false) {
       setPrompt(true);
       return;
     }
 
-    if (values.items.length === 0 && image) {
+    if (prompt === true) {
+      setLoading(true);
+      if (values.memo) {
+        MemoGptCall();
+      } else {
+        OnlineGptCall();
+      }
+      return;
+    } else if (values.items.length === 0 && image) {
       setLoading(true);
       if (values.memo) {
         MemoGptCall();
@@ -449,7 +457,10 @@ export default function ImageGpt({
             <div className="flex flex-col gap-5">
               {help && (
                 <p className="text-xs text-orange-600">
-                  Upload a photo of the receipt and press Analyze Image.
+                  Upload a photo of the receipt and press Analyze Image. We do
+                  not support pdfs. Images accepted are .jpg, .jpeg, .png, .gif,
+                  .bmp, .tiff, .heic. Please ensure the image is clear and that
+                  there is no handwriting on the receipt.
                 </p>
               )}
               <FileUploadDropzone
@@ -531,9 +542,7 @@ export default function ImageGpt({
                 <RegularButton
                   styles="bg-orange-50 border-orange-600 text-orange-600  w-full"
                   handleClick={() => {
-                    pathname === "/create/memo"
-                      ? MemoGptCall()
-                      : OnlineGptCall();
+                    handleSubmit();
                     setPrompt(false); // Close modal after action
                   }}
                 >

@@ -1,39 +1,38 @@
 import { incrementApiCall } from "@/actions/rateLimit/gpt";
 import { auth } from "@/auth";
-import prisma from "@/prisma/client";
 import { Session } from "next-auth";
 import { NextResponse } from "next/server";
 
-const DATA = `{
-    "receipt": {
-      "store": "Macy's FORT COLLINS FOOTHILLS FASHION",
-      "date_purchased": "2024-05-20",
-      "total_amount": "118.15",
+// const DATA = `{
+//     "receipt": {
+//       "store": "Macy's FORT COLLINS FOOTHILLS FASHION",
+//       "date_purchased": "2024-05-20",
+//       "total_amount": "118.15",
 
-      "items": [
-        {
-          "description": "Sperry Topslider",
-          "price": "56.24",
-          "barcode": ""
-        },
-        {
-          "description": "Ralph Lauren Dress Shirt",
-          "price": "29.99",
-          "barcode": "092464695070"
-        },
-        {
-          "description": "Dress Shirts",
-          "price": "23.63",
-          "barcode": "735897672372"
-        },
-        {
-          "description": "Mens Polo",
-          "price": "39.99",
-          "barcode": ""
-        }
-      ]
-    }
-  }`;
+//       "items": [
+//         {
+//           "description": "Sperry Topslider",
+//           "price": "56.24",
+//           "barcode": ""
+//         },
+//         {
+//           "description": "Ralph Lauren Dress Shirt",
+//           "price": "29.99",
+//           "barcode": "092464695070"
+//         },
+//         {
+//           "description": "Dress Shirts",
+//           "price": "23.63",
+//           "barcode": "735897672372"
+//         },
+//         {
+//           "description": "Mens Polo",
+//           "price": "39.99",
+//           "barcode": ""
+//         }
+//       ]
+//     }
+//   }`;
 
 export async function POST(request: Request) {
   const session = (await auth()) as Session;
@@ -59,14 +58,14 @@ export async function POST(request: Request) {
     const api_key = process.env.OPENAI_API_KEY;
 
     const payload = {
-      model: "gpt-4o", // Updated model name to GPT-4o
+      model: "gpt-4-vision-preview",
       messages: [
         {
           role: "user",
           content: [
             {
               type: "text",
-              text: 'Extract data from an image of a receipt and format the response in JSON without explanations. Focus on bold text for item names. Include the store name, purchase date, total amount, and each item\'s description, price, and barcode (noted as a long number typically found under the item name). Format the response as follows: {"receipt":{"store":"","date_purchased":"","total_amount":"","items":[{"description":"","price":"","barcode":""}]}} Please do not start the object with ```json. If this does not look like a receipt, please type: "This is not a receipt."',
+              text: 'Extract data from an image of a receipt and format the response in JSON without explanations. Focus on bold text for item names. Include the store name, purchase date, total amount, and each item\'s description, price, and barcode (noted as a long number typically found under the item name). Ensure that duplicate items are included in the items list if they appear multiple times on the receipt. Please return purchase date as YYYY-MM-DD Format the response as follows: {"receipt":{"store":"","date_purchased":"","total_amount":"","items":[{"description":"","price":"","barcode":""}]}} Please do not start the object with ```json. If this does not look like a receipt, please type: "This is not a receipt."',
             },
             {
               type: "image_url",
@@ -95,7 +94,7 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    console.error(error);
+    console.error("error", error);
     return new NextResponse(
       JSON.stringify({ error: "Internal Server Error" }),
       {

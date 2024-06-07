@@ -30,6 +30,8 @@ const ManualPage = ({ projects }: { projects: ProjectType[] }) => {
   const [stage, setStage] = useState<ReceiptOnlineStage>(
     ReceiptOnlineStage.ONLINE_RECEIPT
   );
+  const [projectPlanId, setProjectPlanId] = useState<Number | null>(0);
+
   const [loading, setLoading] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [errors, setErrors] = useState({
@@ -115,6 +117,7 @@ const ManualPage = ({ projects }: { projects: ProjectType[] }) => {
                           handleChange={handleChange}
                           errors={errors}
                           projects={projects}
+                          setProjectPlanId={setProjectPlanId}
                         />
                         <BottomBar>
                           <div className="flex justify-between w-full">

@@ -2,18 +2,24 @@ import { getStripeProducts } from "@/actions/stripe/getProducts";
 import { auth } from "@/auth";
 import PricingCard from "@/components/stripe/PricingCard";
 import PageWrapper from "@/components/wrapper/PageWrapper";
+import { getUserInfo } from "@/lib/userDb";
 import { Session } from "@/types/Session";
+import { User } from "@prisma/client";
 import React from "react";
+
+const getUser = async () => {
+  const user = await getUserInfo();
+  return user;
+};
 
 const ManagePlan = async () => {
   const prices = await getStripeProducts();
   const session = (await auth()) as Session;
+  const user = (await getUser()) as User;
 
   return (
     <PageWrapper>
       <div className="flex flex-col items-center">
-        {/* <Suspense fallback={<div>Loading...</div>}> */}
-
         <div className="w-full max-w-[750px] mb-[200px]">
           <div className="w-full flex items-start">
             <h1 className="text-2xl  text-center my-8 text-emerald-900">
@@ -23,7 +29,12 @@ const ManagePlan = async () => {
           <div className="flex flex-col  gap-6 ">
             {prices &&
               prices.map((price: any) => (
-                <PricingCard price={price} key={price.id} session={session} />
+                <PricingCard
+                  price={price}
+                  key={price.id}
+                  session={session}
+                  user={user}
+                />
               ))}
           </div>
           <div className="mt-20">
@@ -61,6 +72,21 @@ const ManagePlan = async () => {
                 </p>
               </div>
               <div className="bg-white w-full shadow rounded-lg p-8 flex flex-col gap-3">
+                <h1>Invitations</h1>
+                <p>
+                  If you are subscribed to a plan, you can invite other users to
+                  join your project, allowing them to access the benefits of
+                  your subscription. Similarly, if someone else has a
+                  subscription, they can invite you to their project. To send or
+                  accept an invitation, navigate to the ‘Project Settings’ page
+                  and use the ‘Invite Members’ option.
+                </p>
+                <p>
+                  Invitations are managed through your project dashboard. An
+                  email will be sent to the invited user’s registered email.
+                </p>
+              </div>
+              <div className="bg-white w-full shadow rounded-lg p-8 flex flex-col gap-3">
                 <h1>Cancellation</h1>
                 <p>
                   If you no longer wish to use a paid Cubbie plan, you have a
@@ -77,7 +103,7 @@ const ManagePlan = async () => {
                   To permanently delete your account and remove all the data, go
                   to the Manage Account settings section below. Once your
                   account is deleted, you will instantly lose access to your
-                  account and the data cannot be recovered. I
+                  account and the data cannot be recovered.
                 </p>
               </div>
             </div>

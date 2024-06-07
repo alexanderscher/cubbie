@@ -14,9 +14,16 @@ interface Props {
   values: ReceiptInput;
   setStage: (stage: any) => void;
   session: Session;
+  projectPlanId: number | null;
 }
 
-const TextGpt = ({ setFieldValue, values, setStage, session }: Props) => {
+const TextGpt = ({
+  setFieldValue,
+  values,
+  setStage,
+  session,
+  projectPlanId,
+}: Props) => {
   const [inputText, setInputText] = useState("");
   const [noText, setNoText] = useState(false);
   const [help, setHelp] = useState(false);
@@ -78,7 +85,10 @@ const TextGpt = ({ setFieldValue, values, setStage, session }: Props) => {
   const [subscribeModal, setSubscribeModal] = useState(false);
 
   const handleSubmit = async () => {
-    if (session.user.planId === 1) {
+    if (
+      (session.user.planId === 1 || session.user.planId === null) &&
+      (projectPlanId === 1 || projectPlanId === null)
+    ) {
       setSubscribeModal(true);
       return;
     }

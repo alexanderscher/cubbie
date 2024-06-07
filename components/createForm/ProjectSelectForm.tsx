@@ -6,6 +6,7 @@ import ReactSelect, { StylesConfig } from "react-select";
 interface Option {
   value: string;
   label: string;
+  planId: number | null;
 }
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
   projects: ProjectType[];
   setFieldValue: (field: string, value: any) => void;
   values: any;
+  setProjectPlanId: (value: number | null) => void;
   // errors: any;
 }
 
@@ -21,6 +23,7 @@ const ProjectSelectForm = ({
   projects,
   setFieldValue,
   values,
+  setProjectPlanId,
 }: Props) => {
   const customStyles: StylesConfig<Option, false> = {
     control: (provided, state) => ({
@@ -57,12 +60,15 @@ const ProjectSelectForm = ({
   const options: Option[] = projects.map((project) => ({
     value: project.id.toString(),
     label: project.name,
+    planId: project.user.planId,
   }));
 
   const handleSelectChange = (selectedOption: Option | null) => {
     if (selectedOption) {
+      console.log(selectedOption);
       handleChange("folder")(selectedOption.value);
       setFieldValue("folderName", selectedOption.label);
+      setProjectPlanId(selectedOption.planId);
     } else {
       setFieldValue("folderName", "");
     }
@@ -74,14 +80,16 @@ const ProjectSelectForm = ({
       const initialOption = {
         value: initialProject.id.toString(),
         label: initialProject.name,
+        planId: initialProject.user.planId,
       };
 
       handleChange("folder")(initialOption.value);
       setFieldValue("folderName", initialOption.label);
+      setProjectPlanId(initialOption.planId);
     } else {
       setFieldValue("folderName", "");
     }
-  }, [projects, handleChange, setFieldValue]);
+  }, [projects, handleChange, setFieldValue, setProjectPlanId]);
 
   return (
     <div className="w-full">

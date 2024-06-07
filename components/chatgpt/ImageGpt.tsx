@@ -8,7 +8,7 @@ import { ReceiptInput } from "@/types/form";
 import { convertHeic } from "@/utils/media";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useState, useRef, use } from "react";
+import { useState } from "react";
 import { FormError } from "@/components/form-error";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import Loading from "@/components/Loading/Loading";
@@ -49,6 +49,7 @@ export default function ImageGpt({
   const [validationErrors, setValidationErrors] = useState({
     folderName: "",
   });
+  const [projectPlanId, setProjectPlanId] = useState<number | null>(0);
 
   const OnlineGptCall = async () => {
     const res = await fetch("/api/gpt/analyze-image", {
@@ -257,8 +258,12 @@ export default function ImageGpt({
   const [subscribeModal, setSubscribeModal] = useState(false);
 
   const handleSubmit = async () => {
+    console.log(projectPlanId);
     const error = await validateForm();
-    if (session.user.planId === 1) {
+    if (
+      (session.user.planId === 1 || session.user.planId === null) &&
+      (projectPlanId === 1 || projectPlanId === null)
+    ) {
       setSubscribeModal(true);
       return;
     }
@@ -333,6 +338,7 @@ export default function ImageGpt({
             projects={projects}
             setFieldValue={setFieldValue}
             values={values}
+            setProjectPlanId={setProjectPlanId}
           />
 
           {validationErrors.folderName && (

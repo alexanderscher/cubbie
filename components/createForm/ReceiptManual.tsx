@@ -20,6 +20,7 @@ interface ReceiptManualProps {
   online?: boolean;
   setStage?: (stage: ReceiptStoreStage) => void;
   projects: ProjectType[];
+  setProjectPlanId: (value: number | null) => void;
 }
 
 const ReceiptManual = ({
@@ -29,6 +30,7 @@ const ReceiptManual = ({
   errors,
   online = false,
   projects,
+  setProjectPlanId,
 }: ReceiptManualProps) => {
   useEffect(() => {
     setFieldValue("folder", projects[0].id);
@@ -116,11 +118,13 @@ const ReceiptManual = ({
             {errors.store && (
               <p className="text-orange-800 text-sm">{errors.store}</p>
             )}
+
             <ProjectSelect
               handleChange={handleChange}
               projects={projects}
               setFieldValue={setFieldValue}
               values={values}
+              setProjectPlanId={setProjectPlanId}
               // errors={errors}
             />
 

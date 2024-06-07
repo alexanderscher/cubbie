@@ -6,11 +6,12 @@ import prisma from "@/prisma/client";
 import { Session } from "@/types/Session";
 import { revalidateTag } from "next/cache";
 
-export const handlePayment = async (priceId: string, planId: number) => {
+export const handlePayment = async (priceId: string, planId: string) => {
   const session = (await auth()) as Session;
   const subscriptionId = session.user?.subscription?.subscriptionID;
   let customerId = session?.user?.stripeCustomerId;
   const url = "http://localhost:3000/subscription";
+  const home = "http://localhost:3000/";
 
   if (!customerId) {
     const customer = await createStripeCustomer(session.user);
@@ -22,28 +23,67 @@ export const handlePayment = async (priceId: string, planId: number) => {
     });
   }
 
-  const stripeSession = await stripe.checkout.sessions.create({
-    allow_promotion_codes: true,
-    customer: customerId,
-    line_items: [
-      {
-        price: priceId,
-        quantity: 1,
-      },
-    ],
-    metadata: {
-      userId: session.user.id,
-      planId: planId,
-      subscriptionId: subscriptionId,
-    },
-    mode: "subscription",
-    success_url: `${url}/success`,
-    cancel_url: `${url}/manage-plan`,
+  const hasFreeTrial = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { hasUsedTrialLimited: true, hasUsedTrialAdvanced: true },
   });
 
-  revalidateTag(`user_${session.user.id}`);
+  if (
+    (planId === "2" &&
+      hasFreeTrial &&
+      hasFreeTrial.hasUsedTrialAdvanced === false) ||
+    (planId === "3" &&
+      hasFreeTrial &&
+      hasFreeTrial.hasUsedTrialLimited === false)
+  ) {
+    const stripeSession = await stripe.checkout.sessions.create({
+      allow_promotion_codes: true,
+      customer: customerId,
+      subscription_data: {
+        trial_period_days: 14,
+      },
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1,
+        },
+      ],
+      metadata: {
+        userId: session.user.id,
+        planId: planId,
+        subscriptionId: subscriptionId,
+      },
+      mode: "subscription",
+      success_url: `${url}/success`,
+      cancel_url: `${home}/manage-plan`,
+    });
+    revalidateTag(`user_${session.user.id}`);
+    console.log(stripeSession.url);
 
-  return stripeSession.url;
+    return stripeSession.url;
+  } else {
+    const stripeSession = await stripe.checkout.sessions.create({
+      allow_promotion_codes: true,
+      customer: customerId,
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1,
+        },
+      ],
+      metadata: {
+        userId: session.user.id,
+        planId: planId,
+        subscriptionId: subscriptionId,
+      },
+      mode: "subscription",
+      success_url: `${url}/success`,
+      cancel_url: `${home}/manage-plan`,
+    });
+    revalidateTag(`user_${session.user.id}`);
+
+    return stripeSession.url;
+  }
 };
 
 export const freePlan = async () => {

@@ -18,7 +18,6 @@ interface priceProps {
 }
 
 const PricingCard = ({ price, session }: priceProps) => {
-  console.log(session.user);
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
   const [errorModal, setErrorModal] = useState(false);
@@ -168,7 +167,6 @@ const SubButton = ({
   handleSubscription: () => void;
   setCancelPrompt?: (value: boolean) => void;
 }) => {
-  console.log(userPlanId, pricePlanId);
   if (parseInt(pricePlanId) === 1 && setCancelPrompt) {
     return (
       <RegularButton
@@ -178,12 +176,14 @@ const SubButton = ({
           }
         }}
         styles={
-          userPlanId !== parseInt(pricePlanId)
+          userPlanId === parseInt(pricePlanId) || userPlanId !== null
             ? "text-sm border-orange-600 bg-orange-600 text-white"
             : "text-sm border-slate-400 text-slate-400"
         }
       >
-        {userPlanId !== parseInt(pricePlanId) ? "Downgrade" : "Current Plan"}
+        {userPlanId === parseInt(pricePlanId) || userPlanId !== null
+          ? "Downgrade"
+          : "Current Plan"}
       </RegularButton>
     );
   } else {

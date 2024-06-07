@@ -64,28 +64,13 @@ const UserPlan = ({ user }: { user: UserType }) => {
 export default UserPlan;
 
 const PlanCard = ({ planId }: { planId: number | null | undefined }) => {
-  // const [planName, setPlanName] = useState("");
-  // const [planPrice, setPlanPrice] = useState("");
-
-  // useEffect(() => {
-  //   if (planId === 1) {
-  //     setPlanName("Free");
-  //     setPlanPrice("$0.00");
-  //   } else if (planId === 2) {
-  //     setPlanName("All project plan");
-  //     setPlanPrice("$2.00");
-  //   } else if (planId === 3) {
-  //     setPlanName("Limited project plan");
-  //     setPlanPrice("$1.00");
-  //   }
-  // }, [planId]);
   return (
     <>
       <div className="bg-white rounded-lg p-6  flex flex-col gap-4 ">
         <div className="flex flex-col gap-3">
           <h1 className=" text-lg">Current Plan</h1>
           <p className="text-lg text-orange-600">
-            {planId === 1
+            {planId === 1 || planId === null
               ? "Free"
               : planId === 2
               ? "All project plan"
@@ -95,7 +80,11 @@ const PlanCard = ({ planId }: { planId: number | null | undefined }) => {
 
         <div className="text-lg">
           <p className="">
-            {planId === 1 ? "$0.00" : planId === 2 ? "$2.00" : "$1.00"}
+            {planId === 1 || planId === null
+              ? "$0.00"
+              : planId === 2
+              ? "$2.00"
+              : "$1.00"}
           </p>
           <p className="">per month</p>
         </div>

@@ -6,6 +6,25 @@ import prisma from "@/prisma/client";
 import { Session } from "@/types/Session";
 import { revalidateTag } from "next/cache";
 
+async function checkSubscriptionForMetadata(
+  customerId: string,
+  key: string,
+  value: any
+) {
+  const subscriptions = await stripe.subscriptions.list({
+    customer: customerId,
+    status: "all", // Adjust according to the status you're interested in
+    limit: 100, // Adjust or handle pagination if more than 100
+  });
+
+  // Filter subscriptions to find any with specific metadata key-value pair
+  const matchingSubscriptions = subscriptions.data.filter(
+    (subscription) => subscription.metadata[key] === value.toString()
+  );
+
+  return matchingSubscriptions.length > 0;
+}
+
 export const handlePayment = async (priceId: string, planId: string) => {
   const session = (await auth()) as Session;
   const subscriptionId = session.user?.subscription?.subscriptionID;
@@ -23,24 +42,39 @@ export const handlePayment = async (priceId: string, planId: string) => {
     });
   }
 
-  const hasFreeTrial = await prisma.user.findUnique({
+  const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: { hasUsedTrialLimited: true, hasUsedTrialAdvanced: true },
+    select: {
+      hasUsedTrialLimited: true,
+      hasUsedTrialAdvanced: true,
+      email: true,
+    },
   });
 
+  // Check if user object is not null and email is not null
+  if (!user || !user.email) {
+    console.error(
+      "User or email is null, cannot proceed with creating Stripe session."
+    );
+    return "Error: User information is incomplete."; // Modify this based on your error handling needs
+  }
+
+  const hasPlanId = await checkSubscriptionForMetadata(
+    customerId,
+    "planId",
+    "2"
+  );
+
   if (
-    (planId === "2" &&
-      hasFreeTrial &&
-      hasFreeTrial.hasUsedTrialAdvanced === false) ||
-    (planId === "3" &&
-      hasFreeTrial &&
-      hasFreeTrial.hasUsedTrialLimited === false)
+    !hasPlanId &&
+    ((planId === "2" && !user.hasUsedTrialAdvanced) ||
+      (planId === "3" && !user.hasUsedTrialLimited))
   ) {
     const stripeSession = await stripe.checkout.sessions.create({
       allow_promotion_codes: true,
       customer: customerId,
       subscription_data: {
-        trial_period_days: 14,
+        trial_period_days: 1,
       },
       line_items: [
         {

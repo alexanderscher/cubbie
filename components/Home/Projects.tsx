@@ -250,6 +250,9 @@ const Project = ({
           <p className="text-sm">
             Created on {formatDateToMMDDYY(project.created_at)}
           </p>
+          {session.user.email !== project.user.email && (
+            <p className="text-sm">{project.user.email}</p>
+          )}
         </div>
       </Link>
       {isOpen && (

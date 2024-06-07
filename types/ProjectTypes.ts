@@ -1,6 +1,5 @@
 import { ReceiptProjectType } from "@/types/ReceiptTypes";
-import { Items, Project } from "@prisma/client";
-import { User } from "next-auth";
+import { Items, Project, User } from "@prisma/client";
 
 export interface ProjectType {
   asset_amount: number | null;

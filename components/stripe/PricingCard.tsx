@@ -11,13 +11,15 @@ import ErrorModal from "@/components/modals/ErrorModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { useRouter } from "next/navigation";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { User } from "@prisma/client";
 
 interface priceProps {
   price: any;
   session: any;
+  user: User;
 }
 
-const PricingCard = ({ price, session }: priceProps) => {
+const PricingCard = ({ price, session, user }: priceProps) => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
   const [errorModal, setErrorModal] = useState(false);
@@ -80,6 +82,7 @@ const PricingCard = ({ price, session }: priceProps) => {
         pricePlanId={price.product.metadata.planId}
         handleSubscription={handleSubscription}
         setCancelPrompt={setCancelPrompt}
+        user={user}
       />
 
       {isPending && <Loading loading={isPending} />}
@@ -161,11 +164,13 @@ const SubButton = ({
   pricePlanId,
   handleSubscription,
   setCancelPrompt,
+  user,
 }: {
   userPlanId: number;
   pricePlanId: string;
   handleSubscription: () => void;
   setCancelPrompt?: (value: boolean) => void;
+  user: User;
 }) => {
   if (parseInt(pricePlanId) === 1 && setCancelPrompt) {
     return (
@@ -176,17 +181,19 @@ const SubButton = ({
           }
         }}
         styles={
-          userPlanId === parseInt(pricePlanId) || userPlanId !== null
-            ? "text-sm border-orange-600 bg-orange-600 text-white"
-            : "text-sm border-slate-400 text-slate-400"
+          userPlanId === parseInt(pricePlanId) || userPlanId === null
+            ? " text-sm border-slate-400 text-slate-400"
+            : "text-sm border-orange-600 bg-orange-600 text-white"
         }
       >
-        {userPlanId === parseInt(pricePlanId) || userPlanId !== null
-          ? "Downgrade"
-          : "Current Plan"}
+        {userPlanId === parseInt(pricePlanId) || userPlanId === null
+          ? "Current Plan"
+          : "Downgrade"}
       </RegularButton>
     );
-  } else {
+  } else if (parseInt(pricePlanId) === 2) {
+    const hasUsedTrialAdvanced = user.hasUsedTrialAdvanced;
+
     return (
       <RegularButton
         handleClick={() => {
@@ -200,7 +207,34 @@ const SubButton = ({
             : "text-sm border-slate-400 text-slate-400"
         }
       >
-        {userPlanId !== parseInt(pricePlanId) ? "Subscribe" : "Current Plan"}
+        {userPlanId !== parseInt(pricePlanId)
+          ? hasUsedTrialAdvanced
+            ? "Subscribe"
+            : "14 day free trial"
+          : "Current Plan"}
+      </RegularButton>
+    );
+  } else if (parseInt(pricePlanId) === 3) {
+    const hasUsedTrialLimited = user.hasUsedTrialLimited;
+
+    return (
+      <RegularButton
+        handleClick={() => {
+          if (userPlanId !== parseInt(pricePlanId)) {
+            handleSubscription();
+          }
+        }}
+        styles={
+          userPlanId !== parseInt(pricePlanId)
+            ? "text-sm border-orange-600 bg-orange-600 text-white"
+            : "text-sm border-slate-400 text-slate-400"
+        }
+      >
+        {userPlanId !== parseInt(pricePlanId)
+          ? hasUsedTrialLimited
+            ? "Subscribe"
+            : "14 day free trial"
+          : "Current Plan"}
       </RegularButton>
     );
   }

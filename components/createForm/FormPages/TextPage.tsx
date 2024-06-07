@@ -45,6 +45,7 @@ const TextPage = ({ projects, session }: Pages) => {
     purchase_date: "",
   });
   const [discardModal, setDiscardModal] = useState(false);
+  const [projectPlanId, setProjectPlanId] = useState<number | null>(0);
 
   const submitDB = async (values: any) => {
     setLoading(true);
@@ -116,6 +117,7 @@ const TextPage = ({ projects, session }: Pages) => {
                           handleChange={handleChange}
                           errors={errors}
                           projects={projects}
+                          setProjectPlanId={setProjectPlanId}
                         />
                         <BottomBar>
                           <div className="flex justify-between w-full">
@@ -235,6 +237,7 @@ const TextPage = ({ projects, session }: Pages) => {
                             values={values}
                             setStage={setStage}
                             session={session}
+                            projectPlanId={projectPlanId}
                           />
 
                           <BottomBar>

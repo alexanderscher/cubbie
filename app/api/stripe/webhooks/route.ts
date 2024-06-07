@@ -96,10 +96,17 @@ const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
       });
 
       // Update the user's plan
-      await prisma.user.update({
-        where: { id: userId },
-        data: { planId },
-      });
+      if (planId === 2) {
+        await prisma.user.update({
+          where: { id: userId },
+          data: { planId, hasUsedTrialAdvanced: true },
+        });
+      } else if (planId === 3) {
+        await prisma.user.update({
+          where: { id: userId },
+          data: { planId, hasUsedTrialLimited: true },
+        });
+      }
 
       // Update the UserPlanUsage record
       const existingUserPlanUsage = await prisma.userPlanUsage.findUnique({

@@ -19,7 +19,6 @@ const StripeRedirectSuccess = () => {
         });
         router.push(`/subscription/success/${check.subscriptionId}`);
       }
-      setIsLoading(false);
     };
     checkSub();
   }, [router]);

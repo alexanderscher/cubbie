@@ -6,24 +6,24 @@ import prisma from "@/prisma/client";
 import { Session } from "@/types/Session";
 import { revalidateTag } from "next/cache";
 
-async function checkSubscriptionForMetadata(
-  customerId: string,
-  key: string,
-  value: any
-) {
+async function checkSubscriptionForMetadata(customerId: string, value: string) {
   const subscriptions = await stripe.subscriptions.list({
     customer: customerId,
     status: "all", // Adjust according to the status you're interested in
     limit: 100, // Adjust or handle pagination if more than 100
   });
 
-  // Filter subscriptions to find any with specific metadata key-value pair
-  const matchingSubscriptions = subscriptions.data.filter(
-    (subscription) => subscription.metadata[key] === value.toString()
-  );
+  const userSubscriptions = subscriptions.data.map((sub: any) => {
+    return sub.plan.metadata.planId;
+  });
 
-  return matchingSubscriptions.length > 0;
+  if (userSubscriptions.includes(value as string)) {
+    console.log("User already has a subscription with the same plan ID.");
+    return true;
+  }
 }
+
+// prevent users from abusing free trial
 
 export const handlePayment = async (priceId: string, planId: string) => {
   const session = (await auth()) as Session;
@@ -59,16 +59,10 @@ export const handlePayment = async (priceId: string, planId: string) => {
     return "Error: User information is incomplete."; // Modify this based on your error handling needs
   }
 
-  const hasPlanId = await checkSubscriptionForMetadata(
-    customerId,
-    "planId",
-    "2"
-  );
-
+  const hasPlanId = await checkSubscriptionForMetadata(customerId, planId);
   if (
-    !hasPlanId &&
-    ((planId === "2" && !user.hasUsedTrialAdvanced) ||
-      (planId === "3" && !user.hasUsedTrialLimited))
+    (planId === "2" && !user.hasUsedTrialAdvanced && !hasPlanId) ||
+    (planId === "3" && !user.hasUsedTrialLimited && !hasPlanId)
   ) {
     const stripeSession = await stripe.checkout.sessions.create({
       allow_promotion_codes: true,

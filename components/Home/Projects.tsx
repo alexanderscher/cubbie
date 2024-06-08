@@ -198,6 +198,7 @@ const Project = ({
   session,
   setOpenProjectId,
 }: ProjectProps) => {
+  const [hovered, setHovered] = useState(false);
   return (
     <div className="box xs:pb-6 pb-4 relative" key={project.id}>
       <Link href={`/project/${project.id}`}>
@@ -211,6 +212,22 @@ const Project = ({
               className="object-cover "
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
+            <div>
+              {session.user.email !== project.user.email && (
+                <div
+                  className="absolute top-2 left-2 cursor-pointer"
+                  onMouseEnter={() => setHovered(true)}
+                  onMouseLeave={() => setHovered(false)}
+                >
+                  <div className="border border-orange-600 bg-orange-600 rounded-full w-6 h-6 flex items-center justify-center shadow-md">
+                    <p className="text-white text-xs">
+                      {project.user.email[0].toLocaleUpperCase()}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
             <div
               onClick={onToggleOpen}
               className="absolute top-0 right-2 cursor-pointer"
@@ -219,6 +236,12 @@ const Project = ({
             </div>
           </div>
         </div>
+        {hovered && (
+          <div className="absolute top-8 left-2  bg-orange-100 p-4 rounded-lg">
+            <p className="text-sm">Project owner</p>
+            <p className="text-sm text-orange-600">{project.user.email}</p>
+          </div>
+        )}
 
         <div className="p-3 flex flex-col gap-2">
           <TruncateText
@@ -250,9 +273,6 @@ const Project = ({
           <p className="text-sm">
             Created on {formatDateToMMDDYY(project.created_at)}
           </p>
-          {session.user.email !== project.user.email && (
-            <p className="text-sm">{project.user.email}</p>
-          )}
         </div>
       </Link>
       {isOpen && (

@@ -57,11 +57,19 @@ const ProjectSelectForm = ({
     }),
   };
 
-  const options: Option[] = projects.map((project) => ({
-    value: project.id.toString(),
-    label: project.name,
-    planId: project.user.planId,
-  }));
+  const options = projects.map((project) => {
+    const { id, name, user } = project;
+    // Check if planId is not '1' or null
+    const isSpecialPlan = user.planId !== 1 && user.planId !== null;
+    // Append '*' to label if conditions are met
+    const label = isSpecialPlan ? `${name} *` : name;
+
+    return {
+      value: id.toString(),
+      label: label,
+      planId: user.planId, // assuming this is needed elsewhere, though it's not used directly in ReactSelect
+    };
+  });
 
   const handleSelectChange = (selectedOption: Option | null) => {
     if (selectedOption) {

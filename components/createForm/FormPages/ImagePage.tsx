@@ -59,7 +59,7 @@ const ImagePage = ({ projects, session }: Pages) => {
   const router = useRouter();
 
   return (
-    <div className="flex  mb-[200px]">
+    <div className="flex  mb-[400px]">
       <div className="w-full flex flex-col gap-8 ">
         <Formik
           initialValues={{

@@ -18,7 +18,7 @@ export const DiscardModal = ({
         <div className="bg-red-100 rounded-full flex items-center justify-center h-[50px] w-[50px]">
           <ExclamationTriangleIcon className=" text-red-500 w-3/4 h-1/2" />
         </div>
-        <h2 className="text-xl font-semibold text-red-500">
+        <h2 className="text-xl text-center text-red-500">
           Warning: Unsaved Changes
         </h2>
         <div className="mt-3 text-sm text-red-500 text-center">

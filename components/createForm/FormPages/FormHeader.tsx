@@ -26,7 +26,7 @@ const FormHeader = ({ children }: FormHeaderProps) => {
   return (
     <div>
       <div className="border-b-[1px] border-emerald-900 flex justify-between pb-4">
-        <h1 className="text-emerald-900 text-2xl">Create Receipt</h1>
+        <h1 className="text-emerald-900 text-xl">Create Receipt</h1>
         <button
           onClick={() => setOptions(true)}
           className="bg outline outline-1 outline-emerald-900 rounded-full py-2 px-4 text-xs text-emerald-900 flex justify-between items-center gap-2"

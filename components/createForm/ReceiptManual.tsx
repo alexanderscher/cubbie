@@ -76,7 +76,7 @@ const ReceiptManual = ({
   };
 
   return (
-    <div className="flex flex-col gap-10  w-full justify-center items-center mt-10">
+    <div className="flex flex-col gap-10  w-full justify-center items-center mt-10 mb-[300px]">
       <div className=" max-w-[600px] w-full">
         <div className="flex justify-between">
           <div className="flex flex-col gap-2">

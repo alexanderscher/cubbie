@@ -44,6 +44,7 @@ export const ProjectId = ({ session, projectId }: ProjectIdProps) => {
   useEffect(() => {
     const fetchProject = async () => {
       const data = await getProjectByIdClient(projectId);
+      console.log("data", data);
       if (data) {
         setProject(data);
         setIsLoading(false);
@@ -146,6 +147,7 @@ export const ProjectId = ({ session, projectId }: ProjectIdProps) => {
       filterReceipts(searchTerm);
     }
   }, [project, searchTerm, sortedAndFilteredData]);
+
   return (
     <div className="flex flex-col  w-full h-full max-w-[1090px]">
       <div className="flex justify-between items-center gap-4 border-b-[1px] border-emerald-900 pb-4">
@@ -171,9 +173,17 @@ export const ProjectId = ({ session, projectId }: ProjectIdProps) => {
                   text={project.name}
                   styles={"text-2xl text-orange-600 "}
                 />
-                <p className="text-sm">
-                  Created on {formatDateToMMDDYY(project.created_at)}
-                </p>
+                {!isLoading && (
+                  <p className="text-sm text-emerald-900">
+                    Created on {formatDateToMMDDYY(project.created_at)}
+                  </p>
+                )}
+
+                {!isLoading && project.user.email !== session.user.email && (
+                  <p className="text-sm text-emerald-900">
+                    {project.user.email}
+                  </p>
+                )}
               </div>
               <div className="flex gap-2">
                 {/* <RegularButton

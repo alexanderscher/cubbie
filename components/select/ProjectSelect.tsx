@@ -115,7 +115,7 @@ export const ProjectSelect = ({
       <p
         className={`${
           color === "green" ? "text-emerald-900" : " text-slate- 400"
-        } text-sm`}
+        } text-xl`}
       >
         Project Folder
       </p>

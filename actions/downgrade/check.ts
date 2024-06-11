@@ -2,34 +2,36 @@
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
 import { Session } from "@/types/Session";
-import { Project } from "@prisma/client";
+import { Items, Project } from "@prisma/client";
 
 export const checkDowngrade = async (
   currentPlanId: number,
   priceId: number
 ) => {
-  const users = await projectUsers();
-  const items = await receiptItems();
-
   const message = {
     users: [] as Project[],
-    items: 0,
+    items: [] as Project[],
   };
 
   if (currentPlanId === 2 && priceId === 3) {
+    const users = await projectUsers(2);
+    const items = await receiptItems(50);
     if (users.length > 0) {
       message.users = users;
     }
-    if (items > 5) {
+    if (items.length > 0) {
       message.items = items;
     }
     return message;
   }
 
   if (priceId === 1) {
+    const users = await projectUsers(5);
+    const items = await receiptItems(20);
     if (users.length > 0) {
       message.users = users;
-    } else if (items > 5) {
+    }
+    if (items.length > 0) {
       message.items = items;
     }
     return message;
@@ -38,7 +40,7 @@ export const checkDowngrade = async (
   return message;
 };
 
-const projectUsers = async () => {
+const projectUsers = async (limit: number) => {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
   const projects = await prisma.project.findMany({
@@ -51,29 +53,39 @@ const projectUsers = async () => {
   });
 
   const projectsWithUsers = projects.filter(
-    (project) => project.projectUsers.length > 0
+    (project) => project.projectUsers.length > limit
   );
 
   return projectsWithUsers;
 };
 
-const receiptItems = async () => {
+const receiptItems = async (limit: number) => {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
-  const receipts = await prisma.receipt.findMany({
+  const projects = await prisma.project.findMany({
     where: {
-      project: {
-        userId: userId,
-      },
+      userId: userId,
     },
     include: {
-      items: true,
+      receipts: {
+        include: {
+          items: true,
+        },
+      },
     },
   });
 
-  const numberOfItems = receipts.reduce(
-    (sum, receipt) => sum + receipt.items.length,
-    0
-  );
-  return numberOfItems;
+  interface Receipt {
+    items: Items[];
+  }
+
+  const sumItems = (sum: number, receipt: Receipt): number =>
+    sum + receipt.items.length;
+
+  const filteredProjects = projects.filter((project) => {
+    const numberOfItems = project.receipts.reduce(sumItems, 0);
+    return numberOfItems > limit;
+  });
+
+  return filteredProjects;
 };

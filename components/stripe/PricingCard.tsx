@@ -83,6 +83,8 @@ const PricingCard = ({ price, session, user }: priceProps) => {
         handleSubscription={handleSubscription}
         setCancelPrompt={setCancelPrompt}
         user={user}
+        isPending={isPending}
+        startTransition={startTransition}
       />
 
       {isPending && <Loading loading={isPending} />}
@@ -155,7 +157,7 @@ const AllProjectPlan = () => {
 };
 
 interface CheckType {
-  items: number;
+  items: Project[];
   users: Project[];
 }
 
@@ -165,40 +167,48 @@ const SubButton = ({
   handleSubscription,
   setCancelPrompt,
   user,
+  isPending,
+  startTransition,
 }: {
   userPlanId: number;
   pricePlanId: string;
   handleSubscription: () => void;
   setCancelPrompt?: (value: boolean) => void;
   user: User;
+  isPending: boolean;
+  startTransition: any;
 }) => {
   const [errorModal, setErrorModal] = useState(false);
-  const [checkRes, setCheckRes] = useState<CheckType>({ items: 0, users: [] });
+  const [checkRes, setCheckRes] = useState<CheckType>({ items: [], users: [] });
 
-  const handleClicker = async () => {
-    if (userPlanId !== parseInt(pricePlanId)) {
-      const check = await checkDowngrade(userPlanId, parseInt(pricePlanId));
-      if (check.items === 0 && check.users.length === 0) {
-        handleSubscription();
-      } else {
-        setCheckRes(check);
-        setErrorModal(true);
-      }
-    }
-  };
-
-  const handleClickerFree = async () => {
-    if (setCancelPrompt) {
+  const handleClicker = () => {
+    startTransition(async () => {
       if (userPlanId !== parseInt(pricePlanId)) {
         const check = await checkDowngrade(userPlanId, parseInt(pricePlanId));
-
-        if (check.items === 0 && check.users.length === 0) {
-          setCancelPrompt(true);
+        if (check.items.length === 0 && check.users.length === 0) {
+          handleSubscription();
         } else {
           setCheckRes(check);
           setErrorModal(true);
         }
       }
+    });
+  };
+
+  const handleClickerFree = () => {
+    if (setCancelPrompt) {
+      startTransition(async () => {
+        if (userPlanId !== parseInt(pricePlanId)) {
+          const check = await checkDowngrade(userPlanId, parseInt(pricePlanId));
+
+          if (check.items.length === 0 && check.users.length === 0) {
+            setCancelPrompt(true);
+          } else {
+            setCheckRes(check);
+            setErrorModal(true);
+          }
+        }
+      });
     }
   };
   const hasUsedTrialAdvanced = user.hasUsedTrialAdvanced;
@@ -246,14 +256,51 @@ const SubButton = ({
 
 const DowngradeErrorModal = ({ checkRes }: { checkRes: CheckType }) => {
   return (
-    <div>
-      <h2 className="text-xl font-semibold text-red-500">Upload Error</h2>
-      <p>{checkRes.items}</p>
-      {checkRes.users.map((project) => (
-        <div key={project.id}>
-          <p>{project.name}</p>
-        </div>
-      ))}
+    <div className="p-8 text-center flex flex-col gap-6 items-center bg-white rounded-lg shadow-lg">
+      <div className="bg-red-100 p-2 rounded-full flex items-center justify-center h-12 w-12">
+        <ExclamationTriangleIcon className="text-red-500 w-6 h-6" />
+      </div>
+      <h2 className="text-xl font-bold text-red-500">
+        Unable to Downgrade Subscription
+      </h2>
+      <p className="text-sm text-red-500">
+        Some projects exceed the limits allowed by the lower subscription tier.
+        Please adjust the following before proceeding:
+      </p>
+
+      <section className="bg-red-100 w-full rounded-lg p-3">
+        <h3 className="text-red-500">Projects Over Item Limit</h3>
+        {checkRes.items.map((project) => (
+          <div key={project.id} className="text-sm ">
+            <p className="text-red-400">
+              {project.name} -{" "}
+              <a
+                href={`/project/${project.id}`}
+                className="text-red-400 hover:text-red-700"
+              >
+                Edit Items
+              </a>
+            </p>
+          </div>
+        ))}
+      </section>
+
+      <section className="bg-red-100 w-full rounded-lg p-3">
+        <h3 className="text-red-500">Projects Over User Limit</h3>
+        {checkRes.users.map((project) => (
+          <div key={project.id} className="text-sm ">
+            <p className="text-red-400">
+              {project.name} -{" "}
+              <a
+                href={`/project/${project.id}`}
+                className="text-red-400 hover:text-red-700"
+              >
+                Manage Users
+              </a>
+            </p>
+          </div>
+        ))}
+      </section>
     </div>
   );
 };

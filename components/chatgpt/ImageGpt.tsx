@@ -86,6 +86,7 @@ export default function ImageGpt({
     setFieldValue("purchase_date", jsonObject.receipt.date_purchased);
     setFieldValue("store", jsonObject.receipt.store);
 
+    // no gpt test
     // const jsonObject = JSON.parse(data);
     // setFieldValue("amount", jsonObject.receipt.total_amount);
     // setFieldValue("purchase_date", jsonObject.receipt.date_purchased);
@@ -130,27 +131,29 @@ export default function ImageGpt({
 
     const data = await res.json();
 
-    // if (data.choices[0].message.content === "This is not a receipt.") {
-    //   setNoreceipt(true);
-    //   setNoImage(false);
-    //   setPrompt(false);
-    //   setLoading(false);
-    //   return;
-    // }
+    if (data.choices[0].message.content === "This is not a receipt.") {
+      setNoReceipt(true);
+      setNoImage(false);
+      setPrompt(false);
+      setLoading(false);
+      return;
+    }
 
     // console.log(data.choices[0].message.content);
 
-    // const jsonObject = JSON.parse(data.choices[0].message.content);
-    // setFieldValue("items", jsonObject.receipt.items);
-    // setFieldValue("amount", jsonObject.receipt.total_amount);
-    // setFieldValue("purchase_date", jsonObject.receipt.date_purchased);
-    // setFieldValue("store", jsonObject.receipt.store);
-
-    const jsonObject = JSON.parse(data);
+    const jsonObject = JSON.parse(data.choices[0].message.content);
+    setFieldValue("items", jsonObject.receipt.items);
     setFieldValue("amount", jsonObject.receipt.total_amount);
     setFieldValue("purchase_date", jsonObject.receipt.date_purchased);
     setFieldValue("store", jsonObject.receipt.store);
-    setFieldValue("receiptImage", image);
+
+    // test gpt without api
+    // const jsonObject = JSON.parse(data);
+    // setFieldValue("amount", jsonObject.receipt.total_amount);
+    // setFieldValue("purchase_date", jsonObject.receipt.date_purchased);
+    // setFieldValue("store", jsonObject.receipt.store);
+    // setFieldValue("receiptImage", image);
+
     const itemsWithAllProperties = jsonObject.receipt.items.map(
       (item: any) => ({
         description: item.description || "",

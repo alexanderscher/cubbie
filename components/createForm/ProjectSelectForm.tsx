@@ -15,7 +15,6 @@ interface Props {
   setFieldValue: (field: string, value: any) => void;
   values: any;
   setProjectPlanId: (value: number | null) => void;
-  // errors: any;
 }
 
 const ProjectSelectForm = ({
@@ -83,21 +82,17 @@ const ProjectSelectForm = ({
   };
 
   useEffect(() => {
-    if (projects.length > 0) {
-      const initialProject = projects[0];
-      const initialOption = {
-        value: initialProject.id.toString(),
-        label: initialProject.name,
-        planId: initialProject.user.planId,
-      };
-
-      handleChange("folder")(initialOption.value);
-      setFieldValue("folderName", initialOption.label);
-      setProjectPlanId(initialOption.planId);
-    } else {
-      setFieldValue("folderName", "");
+    if (projects.length > 0 && options.length > 0) {
+      const initialOption = options.find(
+        (option) => option.value === projects[0].id.toString()
+      );
+      if (initialOption) {
+        handleChange("folder")(initialOption.value);
+        setFieldValue("folderName", initialOption.label);
+        setProjectPlanId(initialOption.planId);
+      }
     }
-  }, [projects, handleChange, setFieldValue, setProjectPlanId]);
+  }, [projects, options, handleChange, setFieldValue, setProjectPlanId]);
 
   return (
     <div className="w-full">
@@ -105,7 +100,7 @@ const ProjectSelectForm = ({
       <ReactSelect
         options={options}
         onChange={handleSelectChange}
-        value={options.find((option) => option.label === values.folderName)}
+        value={options.find((option) => option.value === values.folder)}
         isClearable={true}
         styles={customStyles}
       />

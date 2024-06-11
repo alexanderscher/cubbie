@@ -2,6 +2,7 @@
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
 import { Session } from "@/types/Session";
+import { Project } from "@prisma/client";
 
 export const checkDowngrade = async (
   currentPlanId: number,
@@ -11,7 +12,7 @@ export const checkDowngrade = async (
   const items = await receiptItems();
 
   const message = {
-    users: [] as any[],
+    users: [] as Project[],
     items: 0,
   };
 

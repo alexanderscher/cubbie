@@ -11,7 +11,7 @@ import ErrorModal from "@/components/modals/ErrorModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { useRouter } from "next/navigation";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { User } from "@prisma/client";
+import { Project, User } from "@prisma/client";
 import { checkDowngrade } from "@/actions/downgrade/check";
 
 interface priceProps {
@@ -23,7 +23,6 @@ interface priceProps {
 const PricingCard = ({ price, session, user }: priceProps) => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
-  const [errorModal, setErrorModal] = useState(false);
   const [cancelPrompt, setCancelPrompt] = useState(false);
   const router = useRouter();
 
@@ -84,8 +83,6 @@ const PricingCard = ({ price, session, user }: priceProps) => {
         handleSubscription={handleSubscription}
         setCancelPrompt={setCancelPrompt}
         user={user}
-        setErrorModal={setErrorModal}
-        errorModal={errorModal}
       />
 
       {isPending && <Loading loading={isPending} />}
@@ -157,39 +154,78 @@ const AllProjectPlan = () => {
   );
 };
 
+interface CheckType {
+  items: number;
+  users: Project[];
+}
+
 const SubButton = ({
   userPlanId,
   pricePlanId,
   handleSubscription,
   setCancelPrompt,
   user,
-  setErrorModal,
-  errorModal,
 }: {
   userPlanId: number;
   pricePlanId: string;
   handleSubscription: () => void;
   setCancelPrompt?: (value: boolean) => void;
   user: User;
-  setErrorModal: (value: boolean) => void;
-  errorModal: boolean;
 }) => {
-  if (parseInt(pricePlanId) === 1 && setCancelPrompt) {
-    return (
-      <RegularButton
-        handleClick={async () => {
-          if (userPlanId !== parseInt(pricePlanId)) {
-            const check = await checkDowngrade(
-              userPlanId,
-              parseInt(pricePlanId)
-            );
+  const [errorModal, setErrorModal] = useState(false);
+  const [checkRes, setCheckRes] = useState<CheckType>({ items: 0, users: [] });
 
-            if (check.items === 0 && check.users.length === 0) {
-              setCancelPrompt(true);
-            } else {
-              setErrorModal(true);
-            }
-          }
+  const handleClicker = async () => {
+    if (userPlanId !== parseInt(pricePlanId)) {
+      const check = await checkDowngrade(userPlanId, parseInt(pricePlanId));
+      if (check.items === 0 && check.users.length === 0) {
+        handleSubscription();
+      } else {
+        setCheckRes(check);
+        setErrorModal(true);
+      }
+    }
+  };
+
+  const handleClickerFree = async () => {
+    if (setCancelPrompt) {
+      if (userPlanId !== parseInt(pricePlanId)) {
+        const check = await checkDowngrade(userPlanId, parseInt(pricePlanId));
+
+        if (check.items === 0 && check.users.length === 0) {
+          setCancelPrompt(true);
+        } else {
+          setCheckRes(check);
+          setErrorModal(true);
+        }
+      }
+    }
+  };
+  const hasUsedTrialAdvanced = user.hasUsedTrialAdvanced;
+  const hasUsedTrialLimited = user.hasUsedTrialLimited;
+
+  const getButtonText = (userPlanId: number | null) => {
+    const planIdNum = parseInt(pricePlanId);
+    const userPlanIdNum = userPlanId ? userPlanId : null;
+
+    if (planIdNum === userPlanIdNum || userPlanId === null) {
+      return "Current Plan";
+    } else if (planIdNum === 1) {
+      return "Downgrade";
+    } else if (planIdNum === 2) {
+      return hasUsedTrialAdvanced ? "Subscribe" : "14 day free trial";
+    } else if (planIdNum === 3) {
+      return hasUsedTrialLimited ? "Subscribe" : "14 day free trial";
+    } else {
+      return "Subscribe";
+    }
+  };
+
+  return (
+    <>
+      <RegularButton
+        handleClick={() => {
+          parseInt(pricePlanId) === 1 ? handleClickerFree() : handleClicker();
         }}
         styles={
           userPlanId === parseInt(pricePlanId) || userPlanId === null
@@ -197,83 +233,27 @@ const SubButton = ({
             : "text-sm border-orange-600 bg-orange-600 text-white"
         }
       >
-        {userPlanId === parseInt(pricePlanId) || userPlanId === null
-          ? "Current Plan"
-          : "Downgrade"}
+        {getButtonText(userPlanId)}
       </RegularButton>
-    );
-  } else if (parseInt(pricePlanId) === 2) {
-    const hasUsedTrialAdvanced = user.hasUsedTrialAdvanced;
-
-    return (
-      <RegularButton
-        handleClick={async () => {
-          if (userPlanId !== parseInt(pricePlanId)) {
-            const check = await checkDowngrade(
-              userPlanId,
-              parseInt(pricePlanId)
-            );
-            if (check.items === 0 && check.users.length === 0) {
-              handleSubscription();
-            } else {
-              setErrorModal(true);
-            }
-          }
-        }}
-        styles={
-          userPlanId !== parseInt(pricePlanId)
-            ? "text-sm border-orange-600 bg-orange-600 text-white"
-            : "text-sm border-slate-400 text-slate-400"
-        }
-      >
-        {userPlanId !== parseInt(pricePlanId)
-          ? hasUsedTrialAdvanced
-            ? "Subscribe"
-            : "14 day free trial"
-          : "Current Plan"}
-      </RegularButton>
-    );
-  } else if (parseInt(pricePlanId) === 3) {
-    const hasUsedTrialLimited = user.hasUsedTrialLimited;
-
-    return (
-      <RegularButton
-        handleClick={async () => {
-          if (userPlanId !== parseInt(pricePlanId)) {
-            const check = await checkDowngrade(
-              userPlanId,
-              parseInt(pricePlanId)
-            );
-            if (check.items === 0 && check.users.length === 0) {
-              handleSubscription();
-            } else {
-              setErrorModal(true);
-            }
-          }
-        }}
-        styles={
-          userPlanId !== parseInt(pricePlanId)
-            ? "text-sm border-orange-600 bg-orange-600 text-white"
-            : "text-sm border-slate-400 text-slate-400"
-        }
-      >
-        {userPlanId !== parseInt(pricePlanId)
-          ? hasUsedTrialLimited
-            ? "Subscribe"
-            : "14 day free trial"
-          : "Current Plan"}
-      </RegularButton>
-    );
-  }
+      {errorModal && (
+        <ModalOverlay onClose={() => setErrorModal(false)}>
+          <DowngradeErrorModal checkRes={checkRes} />
+        </ModalOverlay>
+      )}
+    </>
+  );
 };
 
-const DowngradeErrorModal = ({}) => {
+const DowngradeErrorModal = ({ checkRes }: { checkRes: CheckType }) => {
   return (
-    <div
-      className="fixed inset-0 bg-black bg-opacity-10 z-[2000] flex justify-center items-center"
-      onClick={(e) => e.preventDefault()}
-    >
+    <div>
       <h2 className="text-xl font-semibold text-red-500">Upload Error</h2>
+      <p>{checkRes.items}</p>
+      {checkRes.users.map((project) => (
+        <div key={project.id}>
+          <p>{project.name}</p>
+        </div>
+      ))}
     </div>
   );
 };

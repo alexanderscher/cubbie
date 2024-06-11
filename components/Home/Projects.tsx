@@ -213,13 +213,18 @@ const Project = ({
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
             <div>
-              {session.user.email !== project.user.email && (
-                <div
-                  className="absolute top-2 left-2 cursor-pointer"
-                  onMouseEnter={() => setHovered(true)}
-                  onMouseLeave={() => setHovered(false)}
-                >
+              {session.user.email === project.user.email && (
+                <div className="absolute top-2 left-2 cursor-pointer">
                   <div className="border border-orange-600 bg-orange-600 rounded-full w-6 h-6 flex items-center justify-center shadow-md">
+                    <p className="text-white text-xs">
+                      {project.user.email[0].toLocaleUpperCase()}
+                    </p>
+                  </div>
+                </div>
+              )}
+              {session.user.email !== project.user.email && (
+                <div className="absolute top-2 left-2 cursor-pointer">
+                  <div className="border border-emerald-900 bg-emerald-900 rounded-full w-6 h-6 flex items-center justify-center shadow-md">
                     <p className="text-white text-xs">
                       {project.user.email[0].toLocaleUpperCase()}
                     </p>

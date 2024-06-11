@@ -1,5 +1,5 @@
 "use server";
-import { revalidateUsersInProject } from "@/actions/revalidateUsers";
+import { sendProjectInvite } from "@/actions/email/sendProjectInvite";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
 import { Session } from "@/types/Session";
@@ -11,8 +11,6 @@ export const addUserToProject = async (
 ): Promise<any> => {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
-
-  // check for plan, check how many users are already in thje project, throw error
 
   try {
     const project = await prisma.project.findUnique({
@@ -83,6 +81,7 @@ export const addUserToProject = async (
         projectId: projectId,
       },
     });
+    sendProjectInvite(email, project);
     revalidateTag(`project_${projectId}`);
     revalidateTag(`projects_user_${userId}`);
 

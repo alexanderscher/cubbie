@@ -1,5 +1,4 @@
 "use client";
-import ProjectSelect from "@/components/createForm/ProjectSelectForm";
 import styles from "@/app/create/upload.module.css";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ProjectType } from "@/types/ProjectTypes";
@@ -11,6 +10,7 @@ import { useEffect, useState } from "react";
 import ReturnPolicySelect from "@/components/select/ReturnPolicySelect";
 import ManualDate from "@/components/createForm/FormPages/ManualDate";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
+import ProjectSelectForm from "@/components/createForm/ProjectSelectForm";
 
 interface ReceiptManualProps {
   values: any;
@@ -119,13 +119,12 @@ const ReceiptManual = ({
               <p className="text-orange-800 text-sm">{errors.store}</p>
             )}
 
-            <ProjectSelect
+            <ProjectSelectForm
               handleChange={handleChange}
               projects={projects}
               setFieldValue={setFieldValue}
               values={values}
               setProjectPlanId={setProjectPlanId}
-              // errors={errors}
             />
 
             <div className="w-full">

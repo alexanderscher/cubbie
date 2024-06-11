@@ -1,5 +1,4 @@
 "use server";
-
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
 import { Session } from "@/types/Session";
@@ -8,24 +7,34 @@ export const checkDowngrade = async (
   currentPlanId: number,
   priceId: number
 ) => {
-  console.log("currentPlanId", currentPlanId);
+  const users = await projectUsers();
+  const items = await receiptItems();
+
+  const message = {
+    users: [] as any[],
+    items: 0,
+  };
+
   if (currentPlanId === 2 && priceId === 3) {
-    if ((await projectUsers()).length > 0) {
-      return "You have more than 5 users in a project";
-    } else if ((await receiptItems()) > 5) {
-      return "You have more than 100 items in your receipts";
+    if (users.length > 0) {
+      message.users = users;
     }
-    return null;
+    if (items > 5) {
+      message.items = items;
+    }
+    return message;
   }
 
   if (priceId === 1) {
-    if ((await projectUsers()).length > 0) {
-      return "You have more than 5 users in a project Freeeeee";
-    } else if ((await receiptItems()) > 5) {
-      return "You have more than 100 items in your receipts Freeeeee";
+    if (users.length > 0) {
+      message.users = users;
+    } else if (items > 5) {
+      message.items = items;
     }
-    return null;
+    return message;
   }
+
+  return message;
 };
 
 const projectUsers = async () => {
@@ -41,7 +50,7 @@ const projectUsers = async () => {
   });
 
   const projectsWithUsers = projects.filter(
-    (project) => project.projectUsers.length > 1
+    (project) => project.projectUsers.length > 0
   );
 
   return projectsWithUsers;

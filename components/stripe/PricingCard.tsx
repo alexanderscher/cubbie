@@ -12,6 +12,7 @@ import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { useRouter } from "next/navigation";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { User } from "@prisma/client";
+import { checkDowngrade } from "@/actions/downgrade/check";
 
 interface priceProps {
   price: any;
@@ -175,9 +176,16 @@ const SubButton = ({
   if (parseInt(pricePlanId) === 1 && setCancelPrompt) {
     return (
       <RegularButton
-        handleClick={() => {
+        handleClick={async () => {
           if (userPlanId !== parseInt(pricePlanId)) {
-            setCancelPrompt(true);
+            const check = await checkDowngrade(
+              userPlanId,
+              parseInt(pricePlanId)
+            );
+
+            if (check === null) {
+              setCancelPrompt(true);
+            }
           }
         }}
         styles={
@@ -219,9 +227,16 @@ const SubButton = ({
 
     return (
       <RegularButton
-        handleClick={() => {
+        handleClick={async () => {
           if (userPlanId !== parseInt(pricePlanId)) {
-            handleSubscription();
+            const check = await checkDowngrade(
+              userPlanId,
+              parseInt(pricePlanId)
+            );
+            console.log(check);
+            if (check === null) {
+              handleSubscription();
+            }
           }
         }}
         styles={

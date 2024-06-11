@@ -84,16 +84,13 @@ const PricingCard = ({ price, session, user }: priceProps) => {
         handleSubscription={handleSubscription}
         setCancelPrompt={setCancelPrompt}
         user={user}
+        setErrorModal={setErrorModal}
+        errorModal={errorModal}
       />
 
       {isPending && <Loading loading={isPending} />}
       {error && <FormError message={error}></FormError>}
-      {errorModal && (
-        <ErrorModal
-          errorMessage="You are currently subscribed to the All Project Plan. Please switch to the Free Plan before subscribing to a different plan."
-          onClose={() => setErrorModal(false)}
-        />
-      )}
+
       {cancelPrompt && (
         <ModalOverlay onClose={() => setCancelPrompt(false)}>
           <div className="bg-white p-20 rounded-xl shadow max-w-lg mx-auto text-center">
@@ -166,12 +163,16 @@ const SubButton = ({
   handleSubscription,
   setCancelPrompt,
   user,
+  setErrorModal,
+  errorModal,
 }: {
   userPlanId: number;
   pricePlanId: string;
   handleSubscription: () => void;
   setCancelPrompt?: (value: boolean) => void;
   user: User;
+  setErrorModal: (value: boolean) => void;
+  errorModal: boolean;
 }) => {
   if (parseInt(pricePlanId) === 1 && setCancelPrompt) {
     return (
@@ -183,8 +184,10 @@ const SubButton = ({
               parseInt(pricePlanId)
             );
 
-            if (check === null) {
+            if (check.items === 0 && check.users.length === 0) {
               setCancelPrompt(true);
+            } else {
+              setErrorModal(true);
             }
           }
         }}
@@ -204,9 +207,17 @@ const SubButton = ({
 
     return (
       <RegularButton
-        handleClick={() => {
+        handleClick={async () => {
           if (userPlanId !== parseInt(pricePlanId)) {
-            handleSubscription();
+            const check = await checkDowngrade(
+              userPlanId,
+              parseInt(pricePlanId)
+            );
+            if (check.items === 0 && check.users.length === 0) {
+              handleSubscription();
+            } else {
+              setErrorModal(true);
+            }
           }
         }}
         styles={
@@ -233,9 +244,10 @@ const SubButton = ({
               userPlanId,
               parseInt(pricePlanId)
             );
-            console.log(check);
-            if (check === null) {
+            if (check.items === 0 && check.users.length === 0) {
               handleSubscription();
+            } else {
+              setErrorModal(true);
             }
           }
         }}
@@ -255,132 +267,13 @@ const SubButton = ({
   }
 };
 
-interface Option {
-  value: string;
-  label: string;
-}
-
-interface Props {
-  projects: ProjectType[];
-  setSelectedProject: (value: string) => void;
-  selectedProject: string;
-}
-
-export const ProjectSelect = ({
-  projects,
-  setSelectedProject,
-  selectedProject,
-}: Props) => {
-  const session = useSession();
-
-  const customGreenStyles: StylesConfig<Option, false> = {
-    control: (provided, state) => ({
-      ...provided,
-      backgroundColor: "#FFFFFF",
-      borderColor: "rgb(6 78 59)",
-      borderWidth: "1px",
-      boxShadow: state.isFocused ? "0 0 0px .08px rgb(6 78 59)" : "none",
-      "&:hover": {
-        borderColor: "rgb(6 78 59)",
-      },
-      cursor: "pointer",
-      padding: "3px",
-    }),
-    menu: (provided) => ({
-      ...provided,
-      backgroundColor: "#FFFFFF",
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      backgroundColor: state.isFocused ? "#F1F5F9" : "#FFFFFF",
-      color: "#000",
-      "&:active": {
-        backgroundColor: "#F1F5F9",
-      },
-      cursor: "pointer",
-    }),
-    placeholder: (provided) => ({
-      ...provided,
-      color: "#a0aec0",
-      fontSize: "14px",
-    }),
-    singleValue: (provided) => ({
-      ...provided,
-      fontSize: "14px",
-    }),
-  };
-  const customStyles: StylesConfig<Option, false> = {
-    control: (provided, state) => ({
-      ...provided,
-      backgroundColor: "#FFFFFF",
-      borderColor: "rgb(148 163 184)",
-      borderWidth: "1px",
-      boxShadow: state.isFocused ? "0 0 0px .08px rgb(6 78 59)" : "none",
-      "&:hover": {
-        borderColor: "rgb(6 78 59)",
-      },
-      cursor: "pointer",
-      padding: "3px ",
-      fontSize: "14spx",
-    }),
-    menu: (provided) => ({
-      ...provided,
-      backgroundColor: "#FFFFFF",
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      backgroundColor: state.isFocused ? "#F1F5F9" : "#FFFFFF",
-      color: "#000",
-      "&:active": {
-        backgroundColor: "#F1F5F9",
-      },
-      cursor: "pointer",
-    }),
-    placeholder: (provided) => ({
-      ...provided,
-      color: "#a0aec0",
-    }),
-    singleValue: (provided) => ({
-      ...provided,
-      fontSize: "14px",
-    }),
-  };
-
-  const handleSelectChange = (selectedOption: Option | null) => {
-    if (selectedOption) {
-      setSelectedProject(selectedOption.value);
-    }
-  };
-
-  const projectOptions: Option[] = projects.map((project) => ({
-    value: project.id.toString(),
-    label: project.name,
-  }));
-
+const DowngradeErrorModal = ({}) => {
   return (
-    <div className="w-full ">
-      <ReactSelect
-        options={projectOptions.filter((option) => {
-          const project = projects.find(
-            (project) => project.id.toString() === option.value
-          );
-
-          return (
-            project &&
-            !project.projectUserArchive?.some(
-              (entry: ProjectUserArchiveType) =>
-                entry.userId === session.data?.user.id
-            )
-          );
-        })}
-        onChange={handleSelectChange}
-        value={projectOptions.find(
-          (option) => option.value === selectedProject
-        )}
-        isClearable={true}
-        placeholder="Select a project to subscribe to"
-        styles={customStyles}
-      />
+    <div
+      className="fixed inset-0 bg-black bg-opacity-10 z-[2000] flex justify-center items-center"
+      onClick={(e) => e.preventDefault()}
+    >
+      <h2 className="text-xl font-semibold text-red-500">Upload Error</h2>
     </div>
   );
 };

@@ -101,7 +101,7 @@ const ProjectSelectForm = ({
 
   return (
     <div className="w-full">
-      <p className="text-emerald-900">Project folder*</p>
+      <p className="text-emerald-900 text-sm">Project folder*</p>
       <ReactSelect
         options={options}
         onChange={handleSelectChange}

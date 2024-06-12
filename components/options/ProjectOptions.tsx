@@ -26,6 +26,7 @@ import {
   ProjectType,
 } from "@/types/ProjectTypes";
 import { Session } from "@/types/Session";
+import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 
 interface OptionsModalProps {
   isOpen: boolean;
@@ -42,6 +43,8 @@ export const ProjectOptionsModal = ({
   archived,
   session,
 }: OptionsModalProps) => {
+  const { fetchProjects } = useSearchProjectContext();
+
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [edit, setEdit] = useState(false);
   const [isAddOpen, setAddReceiptOpen] = useState(false);
@@ -50,7 +53,6 @@ export const ProjectOptionsModal = ({
   const [color, setColor] = useState(white);
   const [isMemebersOpen, setMembersOpen] = useState(false);
   const [isDetailsOpen, setDetailsOpen] = useState(false);
-  const [isDeleteError, setDeleteError] = useState(false);
 
   const pathname = usePathname();
 
@@ -73,6 +75,7 @@ export const ProjectOptionsModal = ({
       try {
         await archiveProject(projectId, archive);
         toast.success("Project archived successfully");
+        fetchProjects();
       } catch (e) {
         toast.error("An error occurred. Please try again.");
       }
@@ -236,7 +239,11 @@ export const ProjectOptionsModal = ({
       )}
       {isDeleteOpen && (
         <ModalOverlay isDelete={true} onClose={() => setIsDeleteOpen(false)}>
-          <DeleteModal setDeleteOpen={setIsDeleteOpen} project={project} />
+          <DeleteModal
+            setDeleteOpen={setIsDeleteOpen}
+            project={project}
+            fetchProjects={fetchProjects}
+          />
         </ModalOverlay>
       )}
       {isAddOpen && (
@@ -272,9 +279,14 @@ export const ProjectOptionsModal = ({
 interface DeleteModalProps {
   setDeleteOpen: (value: boolean) => void;
   project: ProjectType;
+  fetchProjects: () => void;
 }
 
-const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
+const DeleteModal = ({
+  project,
+  setDeleteOpen,
+  fetchProjects,
+}: DeleteModalProps) => {
   const [uploadError, setUploadError] = useState("");
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -293,7 +305,7 @@ const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
         } else {
           setDeleteOpen(false);
           toast.success("Project deleted successfully.");
-          router.push("/");
+          fetchProjects();
         }
       } catch (e) {
         toast.error("An error occurred. Please try again.");

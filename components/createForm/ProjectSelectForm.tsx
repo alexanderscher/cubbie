@@ -1,6 +1,6 @@
 "use client";
 import { ProjectType } from "@/types/ProjectTypes";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ReactSelect, { StylesConfig } from "react-select";
 
 interface Option {
@@ -24,6 +24,8 @@ const ProjectSelectForm = ({
   values,
   setProjectPlanId,
 }: Props) => {
+  const [options, setOptions] = useState<Option[]>([]);
+
   const customStyles: StylesConfig<Option, false> = {
     control: (provided, state) => ({
       ...provided,
@@ -56,34 +58,22 @@ const ProjectSelectForm = ({
     }),
   };
 
-  const options = projects.map((project) => {
-    const { id, name, user } = project;
-    // Check if planId is not '1' or null
-    const isSpecialPlan = user.planId !== 1 && user.planId !== null;
-    // Append '*' to label if conditions are met
-    const label = isSpecialPlan ? `${name} *` : name;
-
-    return {
-      value: id.toString(),
-      label: label,
-      planId: user.planId, // assuming this is needed elsewhere, though it's not used directly in ReactSelect
-    };
-  });
-
-  const handleSelectChange = (selectedOption: Option | null) => {
-    if (selectedOption) {
-      console.log(selectedOption);
-      handleChange("folder")(selectedOption.value);
-      setFieldValue("folderName", selectedOption.label);
-      setProjectPlanId(selectedOption.planId);
-    } else {
-      setFieldValue("folderName", "");
-    }
-  };
-
   useEffect(() => {
-    if (projects.length > 0 && options.length > 0) {
-      const initialOption = options.find(
+    if (projects.length > 0) {
+      const newOptions = projects.map((project) => {
+        const { id, name, user } = project;
+        const isSpecialPlan = user.planId !== 1 && user.planId !== null;
+        const label = isSpecialPlan ? `${name} *` : name;
+
+        return {
+          value: id.toString(),
+          label: label,
+          planId: user.planId,
+        };
+      });
+      setOptions(newOptions);
+
+      const initialOption = newOptions.find(
         (option) => option.value === projects[0].id.toString()
       );
       if (initialOption) {
@@ -92,7 +82,17 @@ const ProjectSelectForm = ({
         setProjectPlanId(initialOption.planId);
       }
     }
-  }, [projects, options, handleChange, setFieldValue, setProjectPlanId]);
+  }, [projects, handleChange, setFieldValue, setProjectPlanId]);
+
+  const handleSelectChange = (selectedOption: Option | null) => {
+    if (selectedOption) {
+      handleChange("folder")(selectedOption.value);
+      setFieldValue("folderName", selectedOption.label);
+      setProjectPlanId(selectedOption.planId);
+    } else {
+      setFieldValue("folderName", "");
+    }
+  };
 
   return (
     <div className="w-full">
@@ -104,9 +104,6 @@ const ProjectSelectForm = ({
         isClearable={true}
         styles={customStyles}
       />
-      {/* {errors.folderName && (
-        <p className="text-orange-800 text-sm">{errors.folderName}</p>
-      )} */}
     </div>
   );
 };

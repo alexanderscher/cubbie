@@ -139,7 +139,7 @@ export default function ImageGpt({
       return;
     }
 
-    // console.log(data.choices[0].message.content);
+    console.log(data.choices[0].message.content);
 
     const jsonObject = JSON.parse(data.choices[0].message.content);
     setFieldValue("items", jsonObject.receipt.items);
@@ -261,7 +261,6 @@ export default function ImageGpt({
   const [subscribeModal, setSubscribeModal] = useState(false);
 
   const handleSubmit = async () => {
-    console.log(projectPlanId);
     const error = await validateForm();
     if (
       (session.user.planId === 1 || session.user.planId === null) &&
@@ -276,7 +275,6 @@ export default function ImageGpt({
       return;
     }
     if (!image) {
-      console.log("no image");
       setNoImage(true);
       return;
     }
@@ -397,8 +395,8 @@ export default function ImageGpt({
               <ManualDate
                 values={values}
                 handleChange={handleChange}
-                // errors={errors}
                 setFieldValue={setFieldValue}
+                comingfrom="gpt"
               />
             ) : (
               <ReturnPolicySelect
@@ -406,6 +404,7 @@ export default function ImageGpt({
                 handleChange={handleChange}
                 type={values.days_until_return}
                 setFieldValue={setFieldValue}
+                comingfrom="gpt"
               />
             )}
           </div>

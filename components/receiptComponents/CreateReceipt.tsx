@@ -18,7 +18,11 @@ export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
   const router = useRouter();
 
   const pushToPath = () => {
-    router.push(selectedPage);
+    if (selectedPage === pathname) {
+      window.location.reload();
+    } else {
+      router.push(selectedPage);
+    }
   };
 
   return (

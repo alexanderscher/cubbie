@@ -2,6 +2,7 @@
 import { createProject } from "@/actions/projects/createProject";
 import RegularButton from "@/components/buttons/RegularButton";
 import SubmitButton from "@/components/buttons/SubmitButton";
+import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 import { FormError } from "@/components/form-error";
 import Loading from "@/components/Loading/Loading";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
@@ -15,6 +16,8 @@ interface AddProjectModalProps {
 }
 
 export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
+  const { fetchProjects } = useSearchProjectContext();
+
   const [project, setProject] = useState({
     name: "",
     asset_amount: "",
@@ -43,6 +46,7 @@ export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
               asset_amount: "",
             });
             setAddProjectOpen(false);
+            fetchProjects();
           }
         });
       } catch (e) {

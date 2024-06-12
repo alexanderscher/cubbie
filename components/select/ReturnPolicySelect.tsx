@@ -15,6 +15,7 @@ interface Props {
   color?: string;
   values: any;
   handleChange: any;
+  comingfrom?: string;
 }
 
 const ReturnPolicySelect: React.FC<Props> = ({
@@ -22,6 +23,7 @@ const ReturnPolicySelect: React.FC<Props> = ({
   setFieldValue,
   handleChange,
   values,
+  comingfrom,
 }) => {
   const customGreenStyles: StylesConfig<Option, false> = {
     control: (provided, state) => ({
@@ -66,7 +68,7 @@ const ReturnPolicySelect: React.FC<Props> = ({
         setOptions(
           policy.items.map((item) => ({
             value: item.days,
-            label: item.store,
+            label: `${item.store} - ${item.days} days`,
           }))
         );
       }
@@ -84,23 +86,26 @@ const ReturnPolicySelect: React.FC<Props> = ({
   return (
     <div className="flex flex-col gap-3 w-full">
       <div className="flex gap-2 w-full">
-        <div className="w-1/2">
-          <p className="text-sm text-emerald-900 ">Purchase Date</p>
-          <div className="flex flex-col gap-2">
-            <input
-              className="w-full border-[1px] bg  p-2  border-emerald-900 rounded  focus:outline-none cursor-pointer"
-              name="purchase_date"
-              value={values.purchase_date}
-              onChange={handleChange("purchase_date")}
-              type="date"
-              style={{ WebkitAppearance: "none" }}
-            />
-            {/* {errors.purchase_date && (
+        {comingfrom !== "gpt" && (
+          <div className="w-1/2">
+            <p className="text-sm text-emerald-900 ">Purchase Date</p>
+            <div className="flex flex-col gap-2">
+              <input
+                className="w-full border-[1px] bg  p-2  border-emerald-900 rounded  focus:outline-none cursor-pointer"
+                name="purchase_date"
+                value={values.purchase_date}
+                onChange={handleChange("purchase_date")}
+                type="date"
+                style={{ WebkitAppearance: "none" }}
+              />
+              {/* {errors.purchase_date && (
               <p className="text-orange-800 text-sm">{errors.purchase_date}</p>
             )} */}
+            </div>
           </div>
-        </div>
-        <div className="w-1/2">
+        )}
+
+        <div className={comingfrom === "gpt" ? "w-full" : "w-1/2"}>
           <p className="text-sm text-emerald-900 ">Days until return</p>
 
           <ReactSelect
@@ -119,15 +124,19 @@ const ReturnPolicySelect: React.FC<Props> = ({
           )} */}
         </div>
       </div>
-
-      <div>
-        <p className="text-emerald-900 text-sm">Return Date</p>
-        <div className="w-full border-[1px] bg  p-2  border-emerald-900 rounded  focus:outline-none ">
-          {formatDateToMMDDYY(
-            calculateReturnDate(values.purchase_date, values.days_until_return)
-          )}
+      {comingfrom !== "gpt" && (
+        <div>
+          <p className="text-emerald-900 text-sm">Return Date</p>
+          <div className="w-full border-[1px] bg  p-2  border-emerald-900 rounded  focus:outline-none ">
+            {formatDateToMMDDYY(
+              calculateReturnDate(
+                values.purchase_date,
+                values.days_until_return
+              )
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

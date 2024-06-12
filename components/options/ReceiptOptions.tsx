@@ -181,7 +181,7 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
             </div>
           </div>
           {/* )} */}
-          <div className={color}>
+          {/* <div className={color}>
             <div
               className="flex gap-2"
               onClick={(e) => {
@@ -192,7 +192,7 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
               <Image src={"/move.png"} width={20} height={20} alt=""></Image>
               <p>Move</p>
             </div>
-          </div>
+          </div> */}
           <div className={color}>
             <Link href={`/receipt/${receipt.id}/edit`}>
               <div className="flex gap-2">
@@ -215,11 +215,11 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
             </div>
           </div>
         </div>
-        {isOpen && (
+        {/* {isOpen && (
           <ModalOverlay onClose={() => setIsOpen(false)}>
             <MoveModal setIsOpen={setIsOpen} receipt={receipt} />
           </ModalOverlay>
-        )}
+        )} */}
         {isAddOpen && (
           <ModalOverlay onClose={() => setIsAddOpen(false)}>
             <AddItem
@@ -257,7 +257,6 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
   const [error, setError] = useState("");
   const [selectedProject, setSelectedProject] = useState("");
   const [isPending, startTransition] = useTransition();
-  console.log(project);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -327,7 +326,7 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
             </div>
           </div>
 
-          <div className="flex justify-end mt-6">
+          {/* <div className="flex justify-end mt-6">
             <RegularButton
               type="button"
               styles=" text-white border-emerald-900"
@@ -335,7 +334,7 @@ const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
             >
               <p className="text-xs text-emerald-900">Move</p>
             </RegularButton>
-          </div>
+          </div> */}
         </div>
       </div>
       {isPending && <Loading loading={isPending} />}

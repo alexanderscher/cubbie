@@ -4,7 +4,6 @@ import { revalidateUsersInProject } from "@/actions/revalidateUsers";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
 import { Session } from "@/types/Session";
-
 import { revalidateTag } from "next/cache";
 
 export const moveReceipt = async (params: {

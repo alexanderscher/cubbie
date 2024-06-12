@@ -17,23 +17,12 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 
-const fetchProject = async () => {
-  const projects = await getProjectsClient();
-  return projects as ProjectType[];
-};
 interface Props {
   session: Session;
 }
 
 const Projects = ({ session }: Props) => {
-  const { isProjectLoading, filteredProjectData, initializeProjects } =
-    useSearchProjectContext();
-
-  useEffect(() => {
-    fetchProject().then((data) => {
-      initializeProjects(data);
-    });
-  }, [, initializeProjects]);
+  const { isProjectLoading, filteredProjectData } = useSearchProjectContext();
 
   const [openProjectId, setOpenProjectId] = useState(null as number | null);
   const [addProjectOpen, setAddProjectOpen] = useState(false);

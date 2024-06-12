@@ -8,7 +8,8 @@ import Link from "next/link";
 import Filters from "@/components/headers/Filters";
 import { Overlay } from "@/components/overlays/Overlay";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
-import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
+import RegularButton from "@/components/buttons/RegularButton";
+import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 
 interface HeaderProps {
   type: string;
@@ -18,12 +19,13 @@ const Header = ({ type }: HeaderProps) => {
   const [addProjectOpen, setAddProjectOpen] = useState(false);
   const [addReceiptOpen, setAddReceiptOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const { fetchProjects } = useSearchProjectContext();
   return (
     <div className="flex flex-col gap-6 pb-8">
       <div className={` flex justify-between `}>
-        <div className="cursor-pointer relative">
+        <div className="cursor-pointer relative w-full">
           <div onClick={() => setIsModalVisible(!isModalVisible)}>
-            <div className="flex gap-4 items-center ">
+            <div className="flex gap-4 items-center justify-between w-full ">
               <div className=" flex gap-2 items-center">
                 <h1 className="text-2xl text-emerald-900">{type}</h1>
 
@@ -155,6 +157,9 @@ const Header = ({ type }: HeaderProps) => {
             </>
           )}
         </div>
+        <RegularButton styles="border-emerald-900" handleClick={fetchProjects}>
+          <p className="text-emerald-900 text-xs">Refresh</p>
+        </RegularButton>
 
         {addProjectOpen && (
           <ModalOverlay onClose={() => setAddProjectOpen(false)}>

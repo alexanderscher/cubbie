@@ -27,11 +27,32 @@ export const editProject = async (
       }
     }
 
-    await prisma.project.update({
+    const project = await prisma.project.findFirst({
       where: {
-        userId,
-        id: projectId,
+        AND: [
+          { id: projectId },
+          {
+            OR: [
+              { userId: userId },
+              {
+                projectUsers: {
+                  some: { userId: userId },
+                },
+              },
+            ],
+          },
+        ],
       },
+    });
+
+    if (!project) {
+      throw new Error(
+        "No project found or you do not have permission to update this project."
+      );
+    }
+
+    const updatedProject = await prisma.project.update({
+      where: { id: projectId },
       data: { name, asset_amount: parseFloat(new_asset_amount) },
     });
 

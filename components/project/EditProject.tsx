@@ -8,6 +8,7 @@ import React, { useState, useTransition } from "react";
 import CurrencyInput from "react-currency-input-field";
 import { ProjectType } from "@/types/ProjectTypes";
 import SubmitButton from "@/components/buttons/SubmitButton";
+import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 
 interface EditProjectProps {
   setEdit: (value: boolean) => void;
@@ -15,6 +16,8 @@ interface EditProjectProps {
 }
 
 export const EditProject = ({ setEdit, project }: EditProjectProps) => {
+  const { fetchProjects } = useSearchProjectContext();
+
   const [editProjectObj, setProject] = useState({
     name: project.name,
     asset_amount: project.asset_amount ? project.asset_amount.toString() : "",
@@ -49,6 +52,8 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
             setUploadError(result.error);
           } else {
             setEdit(false);
+            fetchProjects();
+
             toast.success("Project edited successfully");
           }
         } catch (e) {

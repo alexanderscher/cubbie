@@ -26,7 +26,7 @@ interface SearchProjectContextType {
   setProjectRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   fetchProjectById: () => Promise<void>;
   project: ProjectType;
-  reloadProject: () => void;
+  reloadProjects: () => void;
 }
 
 const fetchProjectData = async () => {
@@ -101,7 +101,7 @@ export const SearchProjectProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [pathname]);
 
-  const reloadProject = () => {
+  const reloadProjects = () => {
     if (pathname === "/") {
       fetchProjects();
     } else {
@@ -131,7 +131,7 @@ export const SearchProjectProvider: React.FC<{ children: ReactNode }> = ({
         setProjectRefresh,
         fetchProjectById,
         project,
-        reloadProject,
+        reloadProjects,
       }}
     >
       {children}

@@ -43,7 +43,7 @@ export const ProjectOptionsModal = ({
   archived,
   session,
 }: OptionsModalProps) => {
-  const { reloadProject } = useSearchProjectContext();
+  const { reloadProjects } = useSearchProjectContext();
 
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [edit, setEdit] = useState(false);
@@ -75,7 +75,7 @@ export const ProjectOptionsModal = ({
       try {
         await archiveProject(projectId, archive);
         toast.success("Project archived successfully");
-        reloadProject();
+        reloadProjects();
       } catch (e) {
         toast.error("An error occurred. Please try again.");
       }
@@ -278,7 +278,7 @@ interface DeleteModalProps {
 }
 
 const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
-  const { reloadProject } = useSearchProjectContext();
+  const { reloadProjects } = useSearchProjectContext();
 
   const [uploadError, setUploadError] = useState("");
   const [isPending, startTransition] = useTransition();
@@ -297,7 +297,7 @@ const DeleteModal = ({ project, setDeleteOpen }: DeleteModalProps) => {
         } else {
           setDeleteOpen(false);
           toast.success("Project deleted successfully.");
-          reloadProject();
+          reloadProjects();
         }
       } catch (e) {
         toast.error("An error occurred. Please try again.");

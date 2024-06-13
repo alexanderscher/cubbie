@@ -1,7 +1,7 @@
 "use client";
 import styles from "@/app/receipt/receiptID.module.css";
 import Image from "next/image";
-import React, { useEffect, useMemo, useState, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import HeaderNav from "@/components/navbar/HeaderNav";
 import { AddItem } from "@/components/item/AddItem";
 import * as Yup from "yup";
@@ -14,23 +14,22 @@ import { TruncateText } from "@/components/text/Truncate";
 import { useSearchParams } from "next/navigation";
 import { NoItems } from "@/components/item/NoItems";
 import Item from "@/components/Item";
-import { getReceiptByIdClient } from "@/lib/getReceiptsClient";
 import PageLoading from "@/components/Loading/PageLoading";
 import { ReceiptItemType, ReceiptType } from "@/types/ReceiptTypes";
+import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
 
 const itemSchema = Yup.object({
   description: Yup.string().required("Description is required"),
   price: Yup.string().required("Price is required"),
 });
 
-const ReceiptId = ({ receiptId }: { receiptId: string }) => {
+const ReceiptId = () => {
+  const { receipt, fetchReceiptById, isReceiptLoading } =
+    useSearchReceiptContext();
   const [isOpen, setIsOpen] = useState(false);
   const [isOptionsOpen, setisOptionsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddOpen, setIsAddOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const [receipt, setReceipt] = useState<ReceiptType>({} as ReceiptType);
 
   const [filteredItemData, setFilteredItemData] = useState<ReceiptItemType[]>(
     receipt.items
@@ -54,19 +53,8 @@ const ReceiptId = ({ receiptId }: { receiptId: string }) => {
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    const fetchReceipt = async () => {
-      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-      const receipt = await getReceiptByIdClient(receiptId, timezone);
-      if (receipt) {
-        setReceipt(receipt as ReceiptType);
-        setFilteredItemData(receipt.items);
-      }
-      setIsLoading(false);
-    };
-
-    fetchReceipt();
-  }, [receiptId]);
+    fetchReceiptById();
+  }, [fetchReceiptById]);
 
   const handleSubmit = async () => {
     try {
@@ -136,11 +124,9 @@ const ReceiptId = ({ receiptId }: { receiptId: string }) => {
     }
   }, [receipt, searchTerm]);
 
-  isLoading && <PageLoading loading={isLoading} />;
-
   return (
     <div className="flex flex-col gap-8 w-full h-full max-w-[1090px] ">
-      {!isLoading && <HeaderNav receipt={receipt} />}
+      {!isReceiptLoading && <HeaderNav receipt={receipt} />}
 
       {receipt.expired && (
         <div className="bg-destructive/15 p-3 rounded-lg flex items-center gap-x-2 text-sm text-destructive bg-red-100 text-red-500 shadow">
@@ -160,7 +146,7 @@ const ReceiptId = ({ receiptId }: { receiptId: string }) => {
             onClick={() => setisOptionsOpen(!isOptionsOpen)}
           >
             <Image src="/three-dots.png" alt="" width={20} height={20} />
-            {isOptionsOpen && !isLoading && (
+            {isOptionsOpen && !isReceiptLoading && (
               <>
                 <Overlay onClose={() => setIsOpen(false)} />
                 <ReceiptOptionsModal receipt={receipt} />
@@ -173,7 +159,9 @@ const ReceiptId = ({ receiptId }: { receiptId: string }) => {
       <div className="w-full">
         <input
           className="searchBar border-[1px] border-emerald-900 placeholder:text-emerald-900 placeholder:text-xs flex items-center text-sm text-emerald-900 p-3"
-          placeholder={!isLoading ? `Search items from ${receipt.store}` : ""}
+          placeholder={
+            !isReceiptLoading ? `Search items from ${receipt.store}` : ""
+          }
           value={searchTerm}
           onChange={handleChange}
         />
@@ -191,13 +179,14 @@ const ReceiptId = ({ receiptId }: { receiptId: string }) => {
           />
         </ModalOverlay>
       )}
-      {isLoading && <PageLoading loading={isLoading} />}
-      {filteredItemData && (
+      {isReceiptLoading && <PageLoading loading={isReceiptLoading} />}
+
+      {filteredItemData && !isReceiptLoading && (
         <Items
           filteredItemData={filteredItemData}
           receipt={receipt}
           setIsAddOpen={setIsAddOpen}
-          isLoading={isLoading}
+          isReceiptLoading={isReceiptLoading}
         />
       )}
     </div>
@@ -210,12 +199,12 @@ const Items = ({
   filteredItemData,
   receipt,
   setIsAddOpen,
-  isLoading,
+  isReceiptLoading,
 }: {
   filteredItemData: ReceiptItemType[];
   receipt: ReceiptType;
   setIsAddOpen: (value: boolean) => void;
-  isLoading: boolean;
+  isReceiptLoading: boolean;
 }) => {
   const toggleOpenItem = (
     itemId: number | undefined,
@@ -252,7 +241,7 @@ const Items = ({
       status === "returned" ? item.returned : !item.returned
     );
 
-    if (filteredData.length === 0 && !isLoading) {
+    if (filteredData.length === 0 && !isReceiptLoading) {
       return (
         <NoItems
           setAddReceiptOpen={setAddReceiptOpen}
@@ -276,7 +265,7 @@ const Items = ({
     );
   }
 
-  if (filteredData.length === 0 && !isLoading) {
+  if (filteredData.length === 0 && !isReceiptLoading) {
     return (
       <NoItems
         setAddReceiptOpen={setIsAddOpen}

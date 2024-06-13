@@ -21,7 +21,7 @@ const white = "bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2";
 const green = "bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2";
 
 export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
-  const { fetchItems } = useSearchItemContext();
+  const { reloadItems } = useSearchItemContext();
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const pathname = usePathname();
@@ -45,7 +45,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
         } else {
           setDeleteOpen(false);
           toast.success("Item deleted successfully");
-          fetchItems();
+          reloadItems();
         }
       } catch (error) {
         toast.error("An error occurred. Please try again.");
@@ -111,7 +111,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
                       try {
                         await unreturn(item.id);
                         toast.success("Item has been marked as not returned.");
-                        fetchItems();
+                        reloadItems();
                       } catch (e) {
                         toast.error("An error occurred. Please try again.");
                       }
@@ -135,7 +135,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
                       try {
                         toast.success("Item has been marked as returned.");
                         await markAsReturned(item.id);
-                        fetchItems();
+                        reloadItems();
                       } catch (e) {
                         toast.error("An error occurred. Please try again.");
                       }

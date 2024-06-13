@@ -8,7 +8,11 @@ import React, {
   useEffect,
 } from "react";
 import { ProjectType } from "@/types/ProjectTypes";
-import { getProjectsClient } from "@/lib/getProjectsClient";
+import {
+  getProjectByIdClient,
+  getProjectsClient,
+} from "@/lib/getProjectsClient";
+import { usePathname } from "next/navigation";
 
 interface SearchProjectContextType {
   projects: ProjectType[];
@@ -20,11 +24,19 @@ interface SearchProjectContextType {
   setisProjectLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isProjectRefresh: boolean;
   setProjectRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  fetchProjectById: () => Promise<void>;
+  project: ProjectType;
+  reloadProject: () => void;
 }
 
 const fetchProjectData = async () => {
   const projects = await getProjectsClient();
   return projects as ProjectType[];
+};
+
+const fetchProjcectById = async (id: string) => {
+  const project = await getProjectByIdClient(id);
+  return project as ProjectType;
 };
 
 export const SearchProjectContext = createContext<SearchProjectContextType>(
@@ -36,12 +48,14 @@ export const useSearchProjectContext = () => useContext(SearchProjectContext);
 export const SearchProjectProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const pathname = usePathname();
   const [projects, setProjects] = useState<ProjectType[]>([]);
   const [filteredProjectData, setFilteredProjectData] = useState<ProjectType[]>(
     []
   );
   const [isProjectLoading, setisProjectLoading] = useState(true);
   const [isProjectRefresh, setProjectRefresh] = useState(false);
+  const [project, setProject] = useState<ProjectType>({} as ProjectType);
 
   const initializeProjects = useCallback((data: ProjectType[]) => {
     setProjects(data);
@@ -75,9 +89,33 @@ export const SearchProjectProvider: React.FC<{ children: ReactNode }> = ({
     [projects]
   );
 
+  const fetchProjectById = useCallback(async () => {
+    setisProjectLoading(true);
+    try {
+      const project = await fetchProjcectById(pathname.split("/project/")[1]);
+      setProject(project);
+    } catch (error) {
+      console.error("Failed to fetch projects:", error);
+    } finally {
+      setisProjectLoading(false);
+    }
+  }, [pathname]);
+
+  const reloadProject = () => {
+    if (pathname === "/") {
+      fetchProjects();
+    } else {
+      fetchProjectById();
+    }
+  };
+
   useEffect(() => {
-    fetchProjects();
-  }, [fetchProjects]);
+    if (pathname === "/") {
+      fetchProjects();
+    } else {
+      fetchProjectById();
+    }
+  }, [fetchProjects, fetchProjectById, pathname]);
 
   return (
     <SearchProjectContext.Provider
@@ -91,89 +129,12 @@ export const SearchProjectProvider: React.FC<{ children: ReactNode }> = ({
         setisProjectLoading,
         isProjectRefresh,
         setProjectRefresh,
+        fetchProjectById,
+        project,
+        reloadProject,
       }}
     >
       {children}
     </SearchProjectContext.Provider>
   );
 };
-
-// "use client";
-// import React, {
-//   createContext,
-//   useContext,
-//   useState,
-//   useEffect,
-//   ReactNode,
-//   useCallback,
-// } from "react";
-// import { usePathname } from "next/navigation";
-// import { ProjectType } from "@/types/ProjectTypes";
-
-// interface SearchProjectContextType {
-//   projects: ProjectType[];
-//   filteredProjectData: ProjectType[];
-//   initializeProjects: (data: ProjectType[]) => void; // Initializes projects data
-//   filterProjects: (searchTerm: string) => void; // Filters projects based on a search term
-//   isProjectLoading: boolean; // Indicates if the project data is currently loading
-//   setisProjectLoading: React.Dispatch<React.SetStateAction<boolean>>;
-//   isProjectRefresh: boolean; // Optional: Tracks if the projects data needs refreshing
-//   setProjectRefresh: React.Dispatch<React.SetStateAction<boolean>>;
-// }
-
-// export const SearchProjectContext = createContext<SearchProjectContextType>(
-//   {} as SearchProjectContextType
-// );
-
-// export const useSearchProjectContext = () => useContext(SearchProjectContext);
-
-// export const SearchProjectProvider: React.FC<{ children: ReactNode }> = ({
-//   children,
-// }) => {
-//   const [projects, setProjects] = useState<ProjectType[]>([]);
-//   const [filteredProjectData, setFilteredProjectData] = useState<ProjectType[]>(
-//     []
-//   );
-//   const [isProjectLoading, setisProjectLoading] = useState(true);
-//   const [isProjectRefresh, setProjectRefresh] = useState(false);
-//   const pathname = usePathname();
-
-//   const initializeProjects = useCallback((data: ProjectType[]) => {
-//     setProjects(data);
-//     setFilteredProjectData(data);
-//     setisProjectLoading(false);
-//   }, []);
-
-//   const filterProjects = (searchTerm: string) => {
-//     if (!searchTerm) {
-//       setFilteredProjectData(projects);
-//     } else {
-//       const filtered = projects.filter((project) =>
-//         project.name.toLowerCase().includes(searchTerm.toLowerCase())
-//       );
-
-//       setFilteredProjectData(filtered);
-//     }
-//   };
-
-//   useEffect(() => {
-//     setFilteredProjectData(projects);
-//   }, [pathname, projects]);
-
-//   return (
-//     <SearchProjectContext.Provider
-//       value={{
-//         projects,
-//         filteredProjectData,
-//         initializeProjects,
-//         filterProjects,
-//         isProjectLoading,
-//         setisProjectLoading,
-//         isProjectRefresh,
-//         setProjectRefresh,
-//       }}
-//     >
-//       {children}
-//     </SearchProjectContext.Provider>
-//   );
-// };

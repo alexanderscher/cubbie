@@ -28,7 +28,7 @@ const green =
   "bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2 cursor-pointer";
 
 export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
-  const { fetchReceipts } = useSearchReceiptContext();
+  const { reloadReceipts } = useSearchReceiptContext();
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   // const [isOpen, setIsOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -75,6 +75,7 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
 
           if (result?.error) {
             setError({ ...error, result: result.error });
+            console.log("error", error);
           } else {
             setIsAddOpen(false);
             toast.success("Item added successfully");
@@ -92,7 +93,7 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
               price: "",
               result: "",
             });
-            fetchReceipts();
+            reloadReceipts();
           }
         } catch (e) {
           toast.error("An error occurred. Please try again.");
@@ -230,11 +231,7 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
         )}
         {isDeleteOpen && (
           <ModalOverlay isDelete={true} onClose={() => setIsDeleteOpen(false)}>
-            <DeleteModal
-              setDeleteOpen={setIsDeleteOpen}
-              receipt={receipt}
-              fetchReceipts={fetchReceipts}
-            />
+            <DeleteModal setDeleteOpen={setIsDeleteOpen} receipt={receipt} />
           </ModalOverlay>
         )}
         {isDetailsOpen && (
@@ -250,15 +247,11 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
 interface DeleteModalProps {
   setDeleteOpen: (value: boolean) => void;
   receipt: ReceiptType;
-  fetchReceipts: () => void;
 }
 
-const DeleteModal = ({
-  receipt,
-  setDeleteOpen,
-  fetchReceipts,
-}: DeleteModalProps) => {
+const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
   const [isPending, startTransition] = useTransition();
+  const { reloadReceipts } = useSearchReceiptContext();
 
   const deleteMethod = async () => {
     startTransition(async () => {
@@ -269,7 +262,7 @@ const DeleteModal = ({
         } else {
           setDeleteOpen(false);
           toast.success("Receipt deleted successfully");
-          fetchReceipts();
+          reloadReceipts();
         }
       } catch (e) {
         toast.error("An error occurred. Please try again.");

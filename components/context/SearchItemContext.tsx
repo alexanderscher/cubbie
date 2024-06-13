@@ -8,7 +8,11 @@ import React, {
   useCallback,
 } from "react";
 import { ItemType } from "@/types/ItemsTypes";
-import { getItemsClient } from "@/lib/getItemsClient";
+import { getItemsByIdClient, getItemsClient } from "@/lib/getItemsClient";
+import { usePathname } from "next/navigation";
+import { set } from "zod";
+import path from "path";
+import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
 
 interface SearchItemContextType {
   items: ItemType[];
@@ -20,6 +24,9 @@ interface SearchItemContextType {
   isItemRefresh: boolean;
   setItemRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   fetchItems: () => void;
+  fetchItemById: () => void;
+  reloadItems: () => void;
+  item: ItemType;
 }
 
 export const SearchItemContext = createContext<SearchItemContextType>(
@@ -30,15 +37,22 @@ const fetchItemData = async () => {
   const items = await getItemsClient();
   return items as ItemType[];
 };
+
+const fetchItemByIdData = async (id: string) => {
+  const item = await getItemsByIdClient(id);
+  return item as ItemType;
+};
 export const useSearchItemContext = () => useContext(SearchItemContext);
 
 export const SearchItemProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const pathname = usePathname();
   const [items, setItems] = useState<ItemType[]>([]);
   const [filteredItemData, setFilteredItemData] = useState<ItemType[]>([]);
   const [isItemLoading, setisItemLoading] = useState(true);
   const [isItemRefresh, setItemRefresh] = useState(false);
+  const [item, setItem] = useState<ItemType>({} as ItemType);
 
   const initializeItems = useCallback((data: ItemType[]) => {
     setItems(data);
@@ -70,6 +84,30 @@ export const SearchItemProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [initializeItems]);
 
+  const fetchItemById = useCallback(async () => {
+    setisItemLoading(true);
+    try {
+      const item = await fetchItemByIdData(pathname.split("/item/")[1]);
+      setItem(item);
+    } catch (error) {
+      console.error("Failed to fetch item:", error);
+    } finally {
+      setisItemLoading(false);
+    }
+  }, [pathname]);
+
+  const { reloadReceipts } = useSearchReceiptContext();
+
+  const reloadItems = () => {
+    if (pathname === "/items") {
+      fetchItems();
+    } else if (pathname.startsWith("/item/")) {
+      fetchItemById();
+    } else if (pathname.startsWith("/receipt/")) {
+      reloadReceipts();
+    }
+  };
+
   useEffect(() => {
     fetchItems();
   }, [fetchItems]);
@@ -86,6 +124,9 @@ export const SearchItemProvider: React.FC<{ children: ReactNode }> = ({
         isItemRefresh,
         setItemRefresh,
         fetchItems,
+        fetchItemById,
+        reloadItems,
+        item,
       }}
     >
       {children}

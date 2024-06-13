@@ -17,7 +17,7 @@ interface EditProjectProps {
 }
 
 export const EditProject = ({ setEdit, project }: EditProjectProps) => {
-  const { reload } = useSearchProjectContext();
+  const { reloadProjects } = useSearchProjectContext();
 
   const pathname = usePathname();
 
@@ -55,7 +55,7 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
             setUploadError(result.error);
           } else {
             setEdit(false);
-            reload();
+            reloadProjects();
 
             toast.success("Project edited successfully");
           }

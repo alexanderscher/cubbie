@@ -116,13 +116,13 @@ export const SearchReceiptProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [fetchReceipts, fetchReceiptById, pathname]);
 
-  const { reloadProject } = useSearchProjectContext();
+  const { reloadProjects } = useSearchProjectContext();
 
   const reloadReceipts = () => {
     if (pathname === "/receipts") {
       fetchReceipts();
     } else if (pathname.startsWith("/project/")) {
-      reloadProject();
+      reloadProjects();
     } else if (pathname.startsWith("/receipt/")) {
       fetchReceiptById();
     }

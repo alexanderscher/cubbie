@@ -1,6 +1,7 @@
 "use client";
 import { deleteItem } from "@/actions/items/deleteItem";
 import { markAsReturned, unreturn } from "@/actions/return";
+import { useSearchItemContext } from "@/components/context/SearchItemContext";
 import Loading from "@/components/Loading/Loading";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
@@ -20,6 +21,7 @@ const white = "bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2";
 const green = "bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2";
 
 export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
+  const { fetchItems } = useSearchItemContext();
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const pathname = usePathname();
@@ -43,6 +45,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
         } else {
           setDeleteOpen(false);
           toast.success("Item deleted successfully");
+          fetchItems();
         }
       } catch (error) {
         toast.error("An error occurred. Please try again.");
@@ -97,7 +100,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
             {item.returned ? (
               <div className="flex gap-2">
                 <Image
-                  src={"/undostore_w.png"}
+                  src={"/undoReturn.png"}
                   width={20}
                   height={20}
                   alt=""
@@ -108,6 +111,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
                       try {
                         await unreturn(item.id);
                         toast.success("Item has been marked as not returned.");
+                        fetchItems();
                       } catch (e) {
                         toast.error("An error occurred. Please try again.");
                       }
@@ -131,6 +135,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
                       try {
                         toast.success("Item has been marked as returned.");
                         await markAsReturned(item.id);
+                        fetchItems();
                       } catch (e) {
                         toast.error("An error occurred. Please try again.");
                       }

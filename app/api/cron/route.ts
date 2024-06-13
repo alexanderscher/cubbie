@@ -49,7 +49,7 @@ const sendReminder = async (daysUntilDue: number, reminderType: string) => {
         });
 
         // If the project owner's planId is 1, do not proceed with sending emails or alerts
-        if (projectOwner?.planId === 1) {
+        if (projectOwner?.planId === 1 || projectOwner?.planId === null) {
           return;
         }
 
@@ -65,10 +65,8 @@ const sendReminder = async (daysUntilDue: number, reminderType: string) => {
           )
         );
 
-        // Filter out null results
         const validUsers = projectUsers.filter((user) => user !== null);
 
-        // Process each valid user
         await Promise.all(
           validUsers.map(async (user) => {
             if (user && user.email) {

@@ -1,20 +1,14 @@
 "use client";
 import { addItem } from "@/actions/items/addItem";
 import { deleteReceipt } from "@/actions/receipts/deleteReceipt";
-import { moveReceipt } from "@/actions/receipts/moveReceipt";
-import RegularButton from "@/components/buttons/RegularButton";
+// import { moveReceipt } from "@/actions/receipts/moveReceipt";
+import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
 import ImageModal from "@/components/images/ImageModal";
 import { AddItem } from "@/components/item/AddItem";
-import Loading from "@/components/Loading/Loading";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
-import ProjectSelect from "@/components/select/ProjectSelect";
-import { getProjects } from "@/lib/projectsDB";
-import {
-  ReceiptItemType,
-  ReceiptProjectType,
-  ReceiptType,
-} from "@/types/ReceiptTypes";
+
+import { ReceiptItemType, ReceiptType } from "@/types/ReceiptTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
@@ -34,8 +28,9 @@ const green =
   "bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2 cursor-pointer";
 
 export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
+  const { fetchReceipts } = useSearchReceiptContext();
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const pathname = usePathname();
   const [color, setColor] = useState(white);
@@ -97,6 +92,7 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
               price: "",
               result: "",
             });
+            fetchReceipts();
           }
         } catch (e) {
           toast.error("An error occurred. Please try again.");
@@ -234,7 +230,11 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
         )}
         {isDeleteOpen && (
           <ModalOverlay isDelete={true} onClose={() => setIsDeleteOpen(false)}>
-            <DeleteModal setDeleteOpen={setIsDeleteOpen} receipt={receipt} />
+            <DeleteModal
+              setDeleteOpen={setIsDeleteOpen}
+              receipt={receipt}
+              fetchReceipts={fetchReceipts}
+            />
           </ModalOverlay>
         )}
         {isDetailsOpen && (
@@ -247,107 +247,17 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
   );
 };
 
-interface AddItemModalProps {
-  setIsOpen: (value: boolean) => void;
-  receipt: ReceiptType;
-}
-
-const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
-  const [project, setProject] = useState<ReceiptProjectType[]>([]);
-  const [error, setError] = useState("");
-  const [selectedProject, setSelectedProject] = useState("");
-  const [isPending, startTransition] = useTransition();
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      const data = await getProjects();
-      setProject(data as ReceiptProjectType[]);
-    };
-    fetchProjects();
-  }, []);
-
-  const handleSubmit = async () => {
-    if (selectedProject === receipt.project_id.toString()) {
-      setError("Receipt is already in this project");
-      return;
-    }
-    if (selectedProject === "") {
-      setError("Please select a project");
-      return;
-    }
-
-    if (selectedProject !== "") {
-      startTransition(async () => {
-        try {
-          const result = await moveReceipt({
-            id: receipt.id,
-            projectId: parseInt(selectedProject),
-          });
-          if (result?.error) {
-            toast.error("An error occurred. Please try again.");
-          } else {
-            setIsOpen(false);
-            toast.success("Receipt moved successfully");
-          }
-        } catch (e) {
-          toast.error("An error occurred. Please try again.");
-        }
-      });
-    }
-  };
-
-  return (
-    <div className="w-full">
-      <div className="flex justify-between items-center border-b border-emerald-900 px-5 py-3 rounded-t-lg">
-        <h3 className="text-md text-emerald-900">Move project</h3>
-        <button
-          type="button"
-          className="emerald-900"
-          onClick={() => setIsOpen(false)}
-        >
-          <span className="text-2xl">&times;</span>
-        </button>
-      </div>
-      <div className="p-6 flex flex-col gap-4">
-        <div className="flex flex-col gap-4">
-          <div className="space-y-4">
-            <div className="flex flex-col gap-2">
-              {project && (
-                <ProjectSelect
-                  projects={project}
-                  handleChange={setSelectedProject}
-                  values={selectedProject}
-                  errors={error}
-                  color="green"
-                ></ProjectSelect>
-              )}
-
-              {error && <p className="text-orange-900 text-xs">{error}</p>}
-            </div>
-          </div>
-
-          {/* <div className="flex justify-end mt-6">
-            <RegularButton
-              type="button"
-              styles=" text-white border-emerald-900"
-              handleClick={handleSubmit}
-            >
-              <p className="text-xs text-emerald-900">Move</p>
-            </RegularButton>
-          </div> */}
-        </div>
-      </div>
-      {isPending && <Loading loading={isPending} />}
-    </div>
-  );
-};
-
 interface DeleteModalProps {
   setDeleteOpen: (value: boolean) => void;
   receipt: ReceiptType;
+  fetchReceipts: () => void;
 }
 
-const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
+const DeleteModal = ({
+  receipt,
+  setDeleteOpen,
+  fetchReceipts,
+}: DeleteModalProps) => {
   const [isPending, startTransition] = useTransition();
 
   const deleteMethod = async () => {
@@ -359,6 +269,7 @@ const DeleteModal = ({ receipt, setDeleteOpen }: DeleteModalProps) => {
         } else {
           setDeleteOpen(false);
           toast.success("Receipt deleted successfully");
+          fetchReceipts();
         }
       } catch (e) {
         toast.error("An error occurred. Please try again.");
@@ -487,3 +398,98 @@ const ReceiptDetails = ({ receipt }: { receipt: ReceiptType }) => {
     </div>
   );
 };
+
+// interface AddItemModalProps {
+//   setIsOpen: (value: boolean) => void;
+//   receipt: ReceiptType;
+// }
+
+// const MoveModal = ({ setIsOpen, receipt }: AddItemModalProps) => {
+//   const [project, setProject] = useState<ReceiptProjectType[]>([]);
+//   const [error, setError] = useState("");
+//   const [selectedProject, setSelectedProject] = useState("");
+//   const [isPending, startTransition] = useTransition();
+
+//   useEffect(() => {
+//     const fetchProjects = async () => {
+//       const data = await getProjects();
+//       setProject(data as ReceiptProjectType[]);
+//     };
+//     fetchProjects();
+//   }, []);
+
+//   const handleSubmit = async () => {
+//     if (selectedProject === receipt.project_id.toString()) {
+//       setError("Receipt is already in this project");
+//       return;
+//     }
+//     if (selectedProject === "") {
+//       setError("Please select a project");
+//       return;
+//     }
+
+//     if (selectedProject !== "") {
+//       startTransition(async () => {
+//         try {
+//           const result = await moveReceipt({
+//             id: receipt.id,
+//             projectId: parseInt(selectedProject),
+//           });
+//           if (result?.error) {
+//             toast.error("An error occurred. Please try again.");
+//           } else {
+//             setIsOpen(false);
+//             toast.success("Receipt moved successfully");
+//           }
+//         } catch (e) {
+//           toast.error("An error occurred. Please try again.");
+//         }
+//       });
+//     }
+//   };
+
+//   return (
+//     <div className="w-full">
+//       <div className="flex justify-between items-center border-b border-emerald-900 px-5 py-3 rounded-t-lg">
+//         <h3 className="text-md text-emerald-900">Move project</h3>
+//         <button
+//           type="button"
+//           className="emerald-900"
+//           onClick={() => setIsOpen(false)}
+//         >
+//           <span className="text-2xl">&times;</span>
+//         </button>
+//       </div>
+//       <div className="p-6 flex flex-col gap-4">
+//         <div className="flex flex-col gap-4">
+//           <div className="space-y-4">
+//             <div className="flex flex-col gap-2">
+//               {project && (
+//                 <ProjectSelect
+//                   projects={project}
+//                   handleChange={setSelectedProject}
+//                   values={selectedProject}
+//                   errors={error}
+//                   color="green"
+//                 ></ProjectSelect>
+//               )}
+
+//               {error && <p className="text-orange-900 text-xs">{error}</p>}
+//             </div>
+//           </div>
+
+//           {/* <div className="flex justify-end mt-6">
+//             <RegularButton
+//               type="button"
+//               styles=" text-white border-emerald-900"
+//               handleClick={handleSubmit}
+//             >
+//               <p className="text-xs text-emerald-900">Move</p>
+//             </RegularButton>
+//           </div> */}
+//         </div>
+//       </div>
+//       {isPending && <Loading loading={isPending} />}
+//     </div>
+//   );
+// };

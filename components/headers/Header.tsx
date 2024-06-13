@@ -10,6 +10,8 @@ import { Overlay } from "@/components/overlays/Overlay";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import RegularButton from "@/components/buttons/RegularButton";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
+import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
+import { useSearchItemContext } from "@/components/context/SearchItemContext";
 
 interface HeaderProps {
   type: string;
@@ -20,6 +22,8 @@ const Header = ({ type }: HeaderProps) => {
   const [addReceiptOpen, setAddReceiptOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { fetchProjects } = useSearchProjectContext();
+  const { fetchReceipts } = useSearchReceiptContext();
+  const { fetchItems } = useSearchItemContext();
   return (
     <div className="flex flex-col gap-6 pb-8">
       <div className={` flex justify-between `}>
@@ -157,7 +161,23 @@ const Header = ({ type }: HeaderProps) => {
             </>
           )}
         </div>
-        <RegularButton styles="border-emerald-900" handleClick={fetchProjects}>
+        <RegularButton
+          styles="border-emerald-900"
+          handleClick={() => {
+            switch (type) {
+              case "Projects":
+                fetchProjects();
+                break;
+              case "Receipts":
+                fetchReceipts();
+                break;
+              case "Items":
+                fetchItems();
+              default:
+                break;
+            }
+          }}
+        >
           <p className="text-emerald-900 text-xs">Refresh</p>
         </RegularButton>
 

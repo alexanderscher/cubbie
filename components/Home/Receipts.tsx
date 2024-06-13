@@ -8,24 +8,16 @@ import { ReceiptItemType, ReceiptType } from "@/types/ReceiptTypes";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
-const fetchReceipts = async () => {
-  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const receipts = await getReceiptsClient(timezone);
-  return receipts as ReceiptType[];
-};
-
 const Receipts = () => {
-  const { filteredReceiptData, isReceiptLoading, initializeReceipts } =
+  const { filteredReceiptData, isReceiptLoading, fetchReceipts } =
     useSearchReceiptContext();
   const searchParams = useSearchParams();
   const [openReceiptId, setOpenReceiptId] = useState(null as number | null);
   const [addReceiptOpen, setAddReceiptOpen] = useState(false);
 
   useEffect(() => {
-    fetchReceipts().then((data) => {
-      initializeReceipts(data);
-    });
-  }, [initializeReceipts]);
+    fetchReceipts();
+  }, [fetchReceipts]);
 
   const toggleOpenReceipt = (
     receiptId: number | undefined,

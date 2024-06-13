@@ -12,7 +12,7 @@ export default async function Alerts() {
 
   return (
     <PageWrapper>
-      {session.user.planId !== 1 && (
+      {session.user.planId !== 1 && session.user.planId !== null && (
         <SearchAlertProvider>
           <div className="flex flex-col items-center pb-[400px]">
             <Suspense fallback={<div>Loading</div>}>

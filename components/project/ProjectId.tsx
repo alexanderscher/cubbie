@@ -13,24 +13,21 @@ import { useSearchParams } from "next/navigation";
 import { Overlay } from "@/components/overlays/Overlay";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { TruncateText } from "@/components/text/Truncate";
-import { getProjectByIdClient } from "@/lib/getProjectsClient";
 import PageLoading from "@/components/Loading/PageLoading";
-import {
-  ProjectItemType,
-  ProjectType,
-  ProjectUserArchiveType,
-} from "@/types/ProjectTypes";
+import { ProjectItemType, ProjectUserArchiveType } from "@/types/ProjectTypes";
 import { ReceiptType } from "@/types/ReceiptTypes";
 import { Session } from "@/types/Session";
+import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 
 interface ProjectIdProps {
   session: Session;
-  projectId: string;
 }
 
-export const ProjectId = ({ session, projectId }: ProjectIdProps) => {
+export const ProjectId = ({ session }: ProjectIdProps) => {
+  const { isProjectLoading, project, fetchProjectById } =
+    useSearchProjectContext();
+
   const [isAddOpen, setAddReceiptOpen] = useState(false);
-  const [project, setProject] = useState<ProjectType>({} as ProjectType);
 
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -39,20 +36,13 @@ export const ProjectId = ({ session, projectId }: ProjectIdProps) => {
   );
   const [isArchived, setIsArchived] = useState(false);
   const [openReceiptId, setOpenReceiptId] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const fetchProject = async () => {
-      const data = await getProjectByIdClient(projectId);
-      console.log("data", data);
-      if (data) {
-        setProject(data);
-        setIsLoading(false);
-      }
-      setIsLoading(false);
+      await fetchProjectById();
     };
     fetchProject();
-  }, [projectId]);
+  }, [fetchProjectById]);
 
   useEffect(() => {
     if (project.id) {
@@ -173,17 +163,18 @@ export const ProjectId = ({ session, projectId }: ProjectIdProps) => {
                   text={project.name}
                   styles={"text-2xl text-orange-600 "}
                 />
-                {!isLoading && (
+                {!isProjectLoading && (
                   <p className="text-sm text-emerald-900">
                     Created on {formatDateToMMDDYY(project.created_at)}
                   </p>
                 )}
 
-                {!isLoading && project.user.email !== session.user.email && (
-                  <p className="text-sm text-emerald-900">
-                    {project.user.email}
-                  </p>
-                )}
+                {!isProjectLoading &&
+                  project.user.email !== session.user.email && (
+                    <p className="text-sm text-emerald-900">
+                      {project.user.email}
+                    </p>
+                  )}
               </div>
               <div className="flex gap-2">
                 {/* <RegularButton
@@ -202,7 +193,7 @@ export const ProjectId = ({ session, projectId }: ProjectIdProps) => {
                   onClick={() => setIsOpen(!isOpen)}
                 >
                   <Image src="/three-dots.png" alt="" width={20} height={20} />
-                  {isOpen && !isLoading && (
+                  {isOpen && !isProjectLoading && (
                     <>
                       <Overlay onClose={() => setIsOpen(false)} />
                       <ProjectOptionsModal
@@ -228,15 +219,15 @@ export const ProjectId = ({ session, projectId }: ProjectIdProps) => {
           <input
             className="searchBar border-[1px] border-emerald-900 placeholder:text-emerald-900 placeholder:text-xs flex items-center text-sm text-emerald-900 p-3"
             placeholder={
-              !isLoading ? `Search receipts from ${project.name}` : ""
+              !isProjectLoading ? `Search receipts from ${project.name}` : ""
             }
             value={searchTerm}
             onChange={handleChange}
           />
         </div>
         <Filters />
-        {isLoading && <PageLoading loading={isLoading} />}
-        {!isLoading && (
+        {isProjectLoading && <PageLoading loading={isProjectLoading} />}
+        {!isProjectLoading && (
           <>
             {searchParams.get("expired") === "all" ||
             !searchParams.get("expired") ? (

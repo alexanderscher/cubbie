@@ -10,36 +10,26 @@ import { formatDateToMMDDYY } from "@/utils/Date";
 import { ItemOptionsModal } from "@/components/options/ItemsOptions";
 import { Overlay } from "@/components/overlays/Overlay";
 import { TruncateText } from "@/components/text/Truncate";
-import { getItemsByIdClient } from "@/lib/getItemsClient";
 import { BeatLoader } from "react-spinners";
-import { ItemType } from "@/types/ItemsTypes";
+import { useSearchItemContext } from "@/components/context/SearchItemContext";
 
 interface ItemIDProps {
   itemId: string;
 }
 
 const ItemID = ({ itemId }: ItemIDProps) => {
+  const { item, fetchItemById, isItemLoading } = useSearchItemContext();
   const [isOpen, setIsOpen] = useState(false);
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
-  const [item, setItem] = useState<ItemType>({} as ItemType);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const getitem = async () => {
-      const item = await getItemsByIdClient(itemId);
-      if (item) {
-        setItem(item);
-      }
-      setIsLoading(false);
-    };
+    fetchItemById();
+  }, [fetchItemById]);
 
-    getitem();
-  }, [itemId]);
-
-  if (isLoading)
+  if (isItemLoading)
     return (
       <div className="h-[90vh] w-full flex items-center justify-center">
-        <BeatLoader loading={isLoading} size={15} color={"rgb(6 78 59)"} />
+        <BeatLoader loading={isItemLoading} size={15} color={"rgb(6 78 59)"} />
       </div>
     );
 

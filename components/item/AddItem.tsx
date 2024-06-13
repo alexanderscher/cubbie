@@ -1,6 +1,9 @@
 "use client";
-import RegularButton from "@/components/buttons/RegularButton";
 import SubmitButton from "@/components/buttons/SubmitButton";
+import {
+  SearchReceiptContext,
+  useSearchReceiptContext,
+} from "@/components/context/SearchReceiptContext";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import Loading from "@/components/Loading/Loading";

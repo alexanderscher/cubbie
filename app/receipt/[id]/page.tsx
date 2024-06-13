@@ -1,14 +1,16 @@
+import { SearchItemProvider } from "@/components/context/SearchItemContext";
+import { SearchReceiptProvider } from "@/components/context/SearchReceiptContext";
 import ReceiptId from "@/components/receiptComponents/ReceiptId";
 import React from "react";
 
-export default async function ReceiptIdPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function ReceiptIdPage({}) {
   return (
-    <div className="w-full flex justify-center ">
-      <ReceiptId receiptId={params.id} />
-    </div>
+    <SearchReceiptProvider>
+      <SearchItemProvider>
+        <div className="w-full flex justify-center ">
+          <ReceiptId />
+        </div>
+      </SearchItemProvider>
+    </SearchReceiptProvider>
   );
 }

@@ -9,6 +9,7 @@ import CurrencyInput from "react-currency-input-field";
 import { ProjectType } from "@/types/ProjectTypes";
 import SubmitButton from "@/components/buttons/SubmitButton";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
+import { usePathname } from "next/navigation";
 
 interface EditProjectProps {
   setEdit: (value: boolean) => void;
@@ -16,7 +17,9 @@ interface EditProjectProps {
 }
 
 export const EditProject = ({ setEdit, project }: EditProjectProps) => {
-  const { fetchProjects } = useSearchProjectContext();
+  const { reload } = useSearchProjectContext();
+
+  const pathname = usePathname();
 
   const [editProjectObj, setProject] = useState({
     name: project.name,
@@ -52,7 +55,7 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
             setUploadError(result.error);
           } else {
             setEdit(false);
-            fetchProjects();
+            reload();
 
             toast.success("Project edited successfully");
           }

@@ -1,3 +1,4 @@
+import { SearchItemProvider } from "@/components/context/SearchItemContext";
 import ItemID from "@/components/item/ItemId";
 
 export default async function ItemIdPage({
@@ -5,5 +6,9 @@ export default async function ItemIdPage({
 }: {
   params: { id: string };
 }) {
-  return <ItemID itemId={params.id} />;
+  return (
+    <SearchItemProvider>
+      <ItemID itemId={params.id} />;
+    </SearchItemProvider>
+  );
 }

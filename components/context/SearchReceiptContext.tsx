@@ -9,7 +9,14 @@ import React, {
 } from "react";
 import { usePathname } from "next/navigation";
 import { ReceiptType } from "@/types/ReceiptTypes";
-import { getReceiptsClient } from "@/lib/getReceiptsClient";
+import {
+  getReceiptByIdClient,
+  getReceiptsClient,
+} from "@/lib/getReceiptsClient";
+import {
+  SearchProjectProvider,
+  useSearchProjectContext,
+} from "@/components/context/SearchProjectContext";
 
 interface SearchReceiptContextType {
   receipts: ReceiptType[];
@@ -21,6 +28,9 @@ interface SearchReceiptContextType {
   setisReceiptLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isReceiptRefresh: boolean;
   setReceiptRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  reloadReceipts: () => void;
+  fetchReceiptById: () => Promise<void>;
+  receipt: ReceiptType;
 }
 
 export const SearchReceiptContext = createContext<SearchReceiptContextType>(
@@ -35,6 +45,13 @@ const fetchReceiptData = async () => {
   return receipts as ReceiptType[];
 };
 
+const fetchReceiptDataById = async (id: string) => {
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  const receipt = await getReceiptByIdClient(id, timezone);
+  return receipt as ReceiptType;
+};
+
 export const SearchReceiptProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
@@ -44,6 +61,7 @@ export const SearchReceiptProvider: React.FC<{ children: ReactNode }> = ({
   );
   const [isReceiptLoading, setisReceiptLoading] = useState(true);
   const [isReceiptRefresh, setReceiptRefresh] = useState(false);
+  const [receipt, setReceipt] = useState<ReceiptType>({} as ReceiptType);
   const pathname = usePathname();
 
   const initializeReceipts = useCallback((data: ReceiptType[]) => {
@@ -76,13 +94,39 @@ export const SearchReceiptProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [initializeReceipts]);
 
-  useEffect(() => {
-    fetchReceipts();
-  }, [fetchReceipts]);
+  const fetchReceiptById = useCallback(async () => {
+    setisReceiptLoading(true);
+    try {
+      const receipt = await fetchReceiptDataById(
+        pathname.split("/receipt/")[1]
+      );
+      setReceipt(receipt);
+    } catch (error) {
+      console.error("Failed to fetch receipt:", error);
+    } finally {
+      setisReceiptLoading(false);
+    }
+  }, [pathname]);
 
   useEffect(() => {
-    setFilteredReceiptData(receipts);
-  }, [pathname, receipts]);
+    if (pathname.includes("/receipt/")) {
+      fetchReceiptById();
+    } else {
+      fetchReceipts();
+    }
+  }, [fetchReceipts, fetchReceiptById, pathname]);
+
+  const { reloadProject } = useSearchProjectContext();
+
+  const reloadReceipts = () => {
+    if (pathname === "/receipts") {
+      fetchReceipts();
+    } else if (pathname.startsWith("/project/")) {
+      reloadProject();
+    } else if (pathname.startsWith("/receipt/")) {
+      fetchReceiptById();
+    }
+  };
 
   return (
     <SearchReceiptContext.Provider
@@ -96,6 +140,9 @@ export const SearchReceiptProvider: React.FC<{ children: ReactNode }> = ({
         setisReceiptLoading,
         isReceiptRefresh,
         setReceiptRefresh,
+        reloadReceipts,
+        fetchReceiptById,
+        receipt,
       }}
     >
       {children}

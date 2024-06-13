@@ -7,24 +7,29 @@ import React, {
   ReactNode,
   useCallback,
 } from "react";
-import { usePathname } from "next/navigation";
 import { ItemType } from "@/types/ItemsTypes";
+import { getItemsClient } from "@/lib/getItemsClient";
 
 interface SearchItemContextType {
   items: ItemType[];
-  filteredItemData: ItemType[]; // Stores the currently displayed list, which may be filtered
-  initializeItems: (data: ItemType[]) => void; // Initializes items data
-  filterItems: (searchTerm: string) => void; // Filters items based on a search term
-  isItemLoading: boolean; // Indicates if the item data is currently loading
+  filteredItemData: ItemType[];
+  initializeItems: (data: ItemType[]) => void;
+  filterItems: (searchTerm: string) => void;
+  isItemLoading: boolean;
   setisItemLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  isItemRefresh: boolean; // Optional: Tracks if the items data needs refreshing
+  isItemRefresh: boolean;
   setItemRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  fetchItems: () => void;
 }
 
 export const SearchItemContext = createContext<SearchItemContextType>(
   {} as SearchItemContextType
 );
 
+const fetchItemData = async () => {
+  const items = await getItemsClient();
+  return items as ItemType[];
+};
 export const useSearchItemContext = () => useContext(SearchItemContext);
 
 export const SearchItemProvider: React.FC<{ children: ReactNode }> = ({
@@ -34,7 +39,6 @@ export const SearchItemProvider: React.FC<{ children: ReactNode }> = ({
   const [filteredItemData, setFilteredItemData] = useState<ItemType[]>([]);
   const [isItemLoading, setisItemLoading] = useState(true);
   const [isItemRefresh, setItemRefresh] = useState(false);
-  const pathname = usePathname();
 
   const initializeItems = useCallback((data: ItemType[]) => {
     setItems(data);
@@ -54,9 +58,21 @@ export const SearchItemProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const fetchItems = useCallback(async () => {
+    setisItemLoading(true);
+    try {
+      const items = await fetchItemData();
+      initializeItems(items);
+    } catch (error) {
+      console.error("Failed to fetch items:", error);
+    } finally {
+      setisItemLoading(false);
+    }
+  }, [initializeItems]);
+
   useEffect(() => {
-    setFilteredItemData(items);
-  }, [pathname, items]);
+    fetchItems();
+  }, [fetchItems]);
 
   return (
     <SearchItemContext.Provider
@@ -69,6 +85,7 @@ export const SearchItemProvider: React.FC<{ children: ReactNode }> = ({
         setisItemLoading,
         isItemRefresh,
         setItemRefresh,
+        fetchItems,
       }}
     >
       {children}

@@ -3,7 +3,6 @@ import { deleteUploadThingImage } from "@/actions/uploadthing/deletePhoto";
 import { handleUpload } from "@/actions/uploadthing/uploadPhoto";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
-import { Session } from "@/types/Session";
 import { ReceiptType } from "@/types/ReceiptTypes";
 import moment from "moment";
 
@@ -174,9 +173,9 @@ export const editReceipt = async (params: {
       }
 
       // Create new alerts
-      await Promise.all(
-        alertsToCreate.map((alert) => prisma.alert.create({ data: alert }))
-      );
+      // await Promise.all(
+      //   alertsToCreate.map((alert) => prisma.alert.create({ data: alert }))
+      // );
     }
   } catch (error) {
     console.error(error);

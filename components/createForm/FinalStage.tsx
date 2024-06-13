@@ -23,7 +23,6 @@ import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import { convertHeic } from "@/utils/media";
 import { AddItem } from "@/components/item/AddItem";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
-import ReturnPolicySelect from "@/components/select/ReturnPolicySelect";
 
 interface FinalStageProps {
   values: any;

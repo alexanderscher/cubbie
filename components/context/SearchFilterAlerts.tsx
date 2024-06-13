@@ -9,17 +9,24 @@ import React, {
 } from "react";
 import { usePathname } from "next/navigation";
 import { Alert } from "@/types/AppTypes";
+import { getAlerts } from "@/lib/alerts";
 
 interface SearchAlertContextType {
   alerts: Alert[];
-  filteredAlertData: Alert[]; // Stores the currently displayed list, which may be filtered
-  initializeAlerts: (data: Alert[]) => void; // Initializes alerts data
-  filterAlerts: (searchTerm: string) => void; // Filters alerts based on a search term
-  isAlertLoading: boolean; // Indicates if the item data is currently loading
+  filteredAlertData: Alert[];
+  initializeAlerts: (data: Alert[]) => void;
+  filterAlerts: (searchTerm: string) => void;
+  isAlertLoading: boolean;
   setisAlertLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  isAlertRefresh: boolean; // Optional: Tracks if the alerts data needs refreshing
+  isAlertRefresh: boolean;
   setAlertRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  fetchAlerts: () => void;
 }
+
+const getAlertData = async () => {
+  const alerts = await getAlerts();
+  return alerts as Alert[];
+};
 
 export const SearchAlertContext = createContext<SearchAlertContextType>(
   {} as SearchAlertContextType
@@ -55,9 +62,21 @@ export const SearchAlertProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const fetchAlerts = useCallback(async () => {
+    setisAlertLoading(true);
+    try {
+      const alerts = await getAlertData();
+      initializeAlerts(alerts);
+    } catch (error) {
+      console.error("Failed to fetch alerts:", error);
+    } finally {
+      setisAlertLoading(false);
+    }
+  }, [initializeAlerts]);
+
   useEffect(() => {
-    setFilteredAlertData(alerts);
-  }, [pathname, alerts]);
+    fetchAlerts();
+  }, [fetchAlerts]);
 
   return (
     <SearchAlertContext.Provider
@@ -70,6 +89,7 @@ export const SearchAlertProvider: React.FC<{ children: ReactNode }> = ({
         setisAlertLoading,
         isAlertRefresh,
         setAlertRefresh,
+        fetchAlerts,
       }}
     >
       {children}

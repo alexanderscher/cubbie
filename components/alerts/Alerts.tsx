@@ -15,16 +15,12 @@ import { useSearchParams } from "next/navigation";
 import { Overlay } from "@/components/overlays/Overlay";
 import PageLoading from "@/components/Loading/PageLoading";
 import { getAlerts } from "@/lib/alerts";
-
 import moment from "moment";
-import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import { AlertHeader } from "@/components/alerts/AlertHeader";
 
 const describeDate = (dateString: string) => {
-  // Parse the date in UTC mode from the given format
   const date = moment.utc(dateString, "MM/DD/YY");
 
-  // Compare with the current UTC date
   if (date.isSame(moment.utc(), "day")) {
     return "Today";
   }
@@ -37,7 +33,6 @@ const describeDate = (dateString: string) => {
     return "1 week ago";
   }
 
-  // Return the date formatted in UTC
   return date.format("MMMM DD, YYYY");
 };
 interface AlertProps {
@@ -45,20 +40,13 @@ interface AlertProps {
 }
 
 const AlertComponent = ({ userId }: AlertProps) => {
-  const { filteredAlertData, initializeAlerts, isAlertLoading } =
+  const { filteredAlertData, isAlertLoading, fetchAlerts } =
     useSearchAlertContext();
-  const [isLoading, setIsLoading] = React.useState(true);
 
   useEffect(() => {
-    const fetchAlert = async () => {
-      const alerts = await getAlerts();
-      if (alerts) {
-        initializeAlerts(alerts);
-        setIsLoading(false);
-      }
-    };
-    fetchAlert();
-  }, [initializeAlerts]);
+    fetchAlerts();
+  }, [fetchAlerts]);
+
   const searchParams = useSearchParams();
 
   const sortFieldParam = searchParams.get("sort");
@@ -102,7 +90,15 @@ const AlertComponent = ({ userId }: AlertProps) => {
       (entry) => entry.userId === userId?.toString()
     );
 
-    return !isReadByUser && <SingleAlert alertObj={alertObj} userId={userId} />;
+    return (
+      !isReadByUser && (
+        <SingleAlert
+          alertObj={alertObj}
+          userId={userId}
+          fetchAlerts={fetchAlerts}
+        />
+      )
+    );
   });
 
   const readAlerts = filteredAlertData.map((alertObj) => {
@@ -110,10 +106,18 @@ const AlertComponent = ({ userId }: AlertProps) => {
       (entry) => entry.userId === userId
     );
 
-    return isReadByUser && <SingleAlert alertObj={alertObj} userId={userId} />;
+    return (
+      isReadByUser && (
+        <SingleAlert
+          alertObj={alertObj}
+          userId={userId}
+          fetchAlerts={fetchAlerts}
+        />
+      )
+    );
   });
 
-  if (isLoading) {
+  if (isAlertLoading) {
     return <PageLoading loading={isAlertLoading} />;
   }
 
@@ -124,11 +128,15 @@ const AlertComponent = ({ userId }: AlertProps) => {
     return (
       <div>
         <AlertHeader />
-        {sortedAndFilteredData.length === 0 && !isLoading && <NoAlerts />}
+        {sortedAndFilteredData.length === 0 && !isAlertLoading && <NoAlerts />}
         <div className="flex flex-col gap-6">
           {sortedAndFilteredData.map((alertObj) => (
             <div key={alertObj.id}>
-              <SingleAlert alertObj={alertObj} userId={userId} />
+              <SingleAlert
+                alertObj={alertObj}
+                userId={userId}
+                fetchAlerts={fetchAlerts}
+              />
             </div>
           ))}
         </div>
@@ -140,7 +148,7 @@ const AlertComponent = ({ userId }: AlertProps) => {
     return (
       <div>
         <AlertHeader />
-        {sortedAndFilteredData.length === 0 && !isLoading && <NoAlerts />}
+        {sortedAndFilteredData.length === 0 && !isAlertLoading && <NoAlerts />}
         <div className="flex flex-col gap-6">{unreadAlerts}</div>
       </div>
     );
@@ -149,7 +157,7 @@ const AlertComponent = ({ userId }: AlertProps) => {
     return (
       <div>
         <AlertHeader />
-        {sortedAndFilteredData.length === 0 && !isLoading && <NoAlerts />}
+        {sortedAndFilteredData.length === 0 && !isAlertLoading && <NoAlerts />}
         <div className="flex flex-col gap-6">{readAlerts}</div>
       </div>
     );
@@ -161,9 +169,10 @@ export default AlertComponent;
 interface SingleAlertProps {
   alertObj: Alert;
   userId: string | undefined;
+  fetchAlerts: () => void;
 }
 
-const SingleAlert = ({ alertObj, userId }: SingleAlertProps) => {
+const SingleAlert = ({ alertObj, userId, fetchAlerts }: SingleAlertProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const isReadByUser = alertObj.readBy.some((entry) => entry.userId === userId);
@@ -175,7 +184,11 @@ const SingleAlert = ({ alertObj, userId }: SingleAlertProps) => {
       {isOpen && (
         <>
           <Overlay onClose={() => setIsOpen(false)} />
-          <AlertOptionsModal alertObj={alertObj} userId={userId} />
+          <AlertOptionsModal
+            alertObj={alertObj}
+            userId={userId}
+            fetchAlerts={fetchAlerts}
+          />
         </>
       )}
 
@@ -262,7 +275,11 @@ const SingleAlert = ({ alertObj, userId }: SingleAlertProps) => {
   );
 };
 
-const AlertOptionsModal = ({ alertObj, userId }: SingleAlertProps) => {
+const AlertOptionsModal = ({
+  alertObj,
+  userId,
+  fetchAlerts,
+}: SingleAlertProps) => {
   const [isPending, startTransition] = useTransition();
   const isReadByUser = alertObj.readBy.some((entry) => entry.userId === userId);
   return (
@@ -284,6 +301,7 @@ const AlertOptionsModal = ({ alertObj, userId }: SingleAlertProps) => {
                 startTransition(() => {
                   try {
                     unmarkAsRead({ alertID: alertObj.id });
+                    fetchAlerts();
                   } catch (e) {
                     toast.error("An error occurred. Please try again.");
                   }
@@ -307,6 +325,7 @@ const AlertOptionsModal = ({ alertObj, userId }: SingleAlertProps) => {
                 startTransition(() => {
                   try {
                     markAsRead({ alertID: alertObj.id });
+                    fetchAlerts();
                   } catch (e) {
                     toast.error("An error occurred. Please try again.");
                   }
@@ -332,6 +351,7 @@ const AlertOptionsModal = ({ alertObj, userId }: SingleAlertProps) => {
               startTransition(() => {
                 try {
                   deleteAlert({ alertID: alertObj.id });
+                  fetchAlerts();
                 } catch (e) {
                   toast.error("An error occurred. Please try again.");
                 }

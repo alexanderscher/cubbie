@@ -8,20 +8,13 @@ import { NoItems } from "@/components/item/NoItems";
 import { getItemsClient } from "@/lib/getItemsClient";
 import { ItemType } from "@/types/ItemsTypes";
 
-const fetchItems = async () => {
-  const items = await getItemsClient();
-  return items as ItemType[];
-};
-
 const Items = () => {
-  const { filteredItemData, isItemLoading, initializeItems } =
+  const { filteredItemData, isItemLoading, initializeItems, fetchItems } =
     useSearchItemContext();
 
   useEffect(() => {
-    fetchItems().then((data) => {
-      initializeItems(data);
-    });
-  }, [initializeItems]);
+    fetchItems();
+  }, [fetchItems]);
 
   const searchParams = useSearchParams();
   const [addReceiptOpen, setAddReceiptOpen] = useState(false);

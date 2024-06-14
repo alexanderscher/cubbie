@@ -1,5 +1,6 @@
 "use client";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
+import { SelectedBar } from "@/components/Home/SelectedBar";
 import PageLoading from "@/components/Loading/PageLoading";
 import { NoReceipts } from "@/components/receiptComponents/NoReceipts";
 import Receipt from "@/components/receiptComponents/Receipt";
@@ -8,12 +9,22 @@ import { ReceiptItemType, ReceiptType } from "@/types/ReceiptTypes";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
+interface CheckedReceipts {
+  receipt_id: number;
+  checked: boolean;
+}
 const Receipts = () => {
-  const { filteredReceiptData, isReceiptLoading, fetchReceipts } =
-    useSearchReceiptContext();
+  const {
+    filteredReceiptData,
+    isReceiptLoading,
+    fetchReceipts,
+    selectReceiptTrigger,
+  } = useSearchReceiptContext();
   const searchParams = useSearchParams();
   const [openReceiptId, setOpenReceiptId] = useState(null as number | null);
   const [addReceiptOpen, setAddReceiptOpen] = useState(false);
+  const [checkedReceipts, setCheckedReceipts] = useState<CheckedReceipts[]>([]);
+  const [isSelectedOpen, setIsSelectedOpen] = useState(false);
 
   useEffect(() => {
     fetchReceipts();
@@ -93,16 +104,32 @@ const Receipts = () => {
       );
     } else {
       return (
-        <div className="boxes">
-          {activeReceipts.map((receipt) => (
-            <Receipt
-              key={receipt.id}
-              receipt={receipt}
-              onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
-              isOpen={openReceiptId === receipt.id}
-              setOpenReceiptId={setOpenReceiptId}
-            />
-          ))}
+        <div className="flex flex-col gap-6">
+          <SelectedBar
+            selectTrigger={selectReceiptTrigger}
+            checkedItems={checkedReceipts}
+            setIsSelectedOpen={setIsSelectedOpen}
+            isSelectedOpen={isSelectedOpen}
+          >
+            <div></div>
+            {/* <SelectedProjectOptions
+              checkedProjects={checkedProjects}
+              setCheckedProjects={setCheckedProjects}
+            /> */}
+          </SelectedBar>
+          <div className="boxes">
+            {activeReceipts.map((receipt) => (
+              <Receipt
+                key={receipt.id}
+                receipt={receipt}
+                onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
+                isOpen={openReceiptId === receipt.id}
+                setOpenReceiptId={setOpenReceiptId}
+                setCheckedReceipts={setCheckedReceipts}
+                checkedReceipts={checkedReceipts}
+              />
+            ))}
+          </div>
         </div>
       );
     }
@@ -119,16 +146,32 @@ const Receipts = () => {
       );
     } else {
       return (
-        <div className="boxes">
-          {expiredReceipts.map((receipt) => (
-            <Receipt
-              key={receipt.id}
-              receipt={receipt}
-              onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
-              isOpen={openReceiptId === receipt.id}
-              setOpenReceiptId={setOpenReceiptId}
-            />
-          ))}
+        <div className="flex flex-col gap-6">
+          <SelectedBar
+            selectTrigger={selectReceiptTrigger}
+            checkedItems={checkedReceipts}
+            setIsSelectedOpen={setIsSelectedOpen}
+            isSelectedOpen={isSelectedOpen}
+          >
+            <div></div>
+            {/* <SelectedProjectOptions
+              checkedProjects={checkedProjects}
+              setCheckedProjects={setCheckedProjects}
+            /> */}
+          </SelectedBar>
+          <div className="boxes">
+            {expiredReceipts.map((receipt) => (
+              <Receipt
+                key={receipt.id}
+                receipt={receipt}
+                onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
+                isOpen={openReceiptId === receipt.id}
+                setOpenReceiptId={setOpenReceiptId}
+                setCheckedReceipts={setCheckedReceipts}
+                checkedReceipts={checkedReceipts}
+              />
+            ))}
+          </div>
         </div>
       );
     }
@@ -142,16 +185,32 @@ const Receipts = () => {
       );
     } else {
       return (
-        <div className="boxes">
-          {sortedAndFilteredData.map((receipt) => (
-            <Receipt
-              key={receipt.id}
-              receipt={receipt}
-              onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
-              isOpen={openReceiptId === receipt.id}
-              setOpenReceiptId={setOpenReceiptId}
-            />
-          ))}
+        <div className="flex flex-col gap-6">
+          <SelectedBar
+            selectTrigger={selectReceiptTrigger}
+            checkedItems={checkedReceipts}
+            setIsSelectedOpen={setIsSelectedOpen}
+            isSelectedOpen={isSelectedOpen}
+          >
+            <div></div>
+            {/* <SelectedProjectOptions
+              checkedProjects={checkedProjects}
+              setCheckedProjects={setCheckedProjects}
+            /> */}
+          </SelectedBar>
+          <div className="boxes">
+            {sortedAndFilteredData.map((receipt) => (
+              <Receipt
+                key={receipt.id}
+                receipt={receipt}
+                onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
+                isOpen={openReceiptId === receipt.id}
+                setOpenReceiptId={setOpenReceiptId}
+                setCheckedReceipts={setCheckedReceipts}
+                checkedReceipts={checkedReceipts}
+              />
+            ))}
+          </div>
         </div>
       );
     }

@@ -7,6 +7,7 @@ import {
   deleteProjects,
 } from "@/actions/selectedProjects/selected";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
+import { SelectedBar } from "@/components/Home/SelectedBar";
 import Loading from "@/components/Loading/Loading";
 import PageLoading from "@/components/Loading/PageLoading";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
@@ -37,7 +38,7 @@ interface CheckedProjects {
 }
 
 const Projects = ({ session }: Props) => {
-  const { isProjectLoading, filteredProjectData, selectTrigger } =
+  const { isProjectLoading, filteredProjectData, selectProjectTrigger } =
     useSearchProjectContext();
 
   const [openProjectId, setOpenProjectId] = useState(null as number | null);
@@ -165,12 +166,16 @@ const Projects = ({ session }: Props) => {
     return (
       <div className="flex flex-col gap-6">
         <SelectedBar
-          selectTrigger={selectTrigger}
-          checkedProjects={checkedProjects}
+          selectTrigger={selectProjectTrigger}
+          checkedItems={checkedProjects}
           setIsSelectedOpen={setIsSelectedOpen}
           isSelectedOpen={isSelectedOpen}
-          setCheckedProjects={setCheckedProjects}
-        />
+        >
+          <SelectedProjectOptions
+            checkedProjects={checkedProjects}
+            setCheckedProjects={setCheckedProjects}
+          />
+        </SelectedBar>
 
         {currentProjects.length > 0 ? (
           <div className="boxes">{currentProjects}</div>
@@ -187,13 +192,18 @@ const Projects = ({ session }: Props) => {
     return (
       <div className="flex flex-col gap-6">
         <SelectedBar
-          selectTrigger={selectTrigger}
-          checkedProjects={checkedProjects}
+          selectTrigger={selectProjectTrigger}
+          checkedItems={checkedProjects}
           setIsSelectedOpen={setIsSelectedOpen}
           isSelectedOpen={isSelectedOpen}
-          setCheckedProjects={setCheckedProjects}
-          archive={true}
-        />
+        >
+          <SelectedProjectOptions
+            checkedProjects={checkedProjects}
+            setCheckedProjects={setCheckedProjects}
+            archive={true}
+          />
+        </SelectedBar>
+
         {archiveProjects.length > 0 ? (
           <div className="boxes">{archiveProjects}</div>
         ) : (
@@ -230,7 +240,7 @@ const Project = ({
   setCheckedProjects,
   checkedProjects,
 }: ProjectProps) => {
-  const { selectTrigger } = useSearchProjectContext();
+  const { selectProjectTrigger } = useSearchProjectContext();
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
@@ -255,26 +265,28 @@ const Project = ({
             style={{ objectFit: "cover", objectPosition: "center" }}
           />
 
-          {session.user.email !== project.user.email && !selectTrigger && (
-            <div className="absolute top-2 left-2  flex gap-2 ">
-              <div className="border border-emerald-900 bg-emerald-900 rounded-full w-6 h-6 flex items-center justify-center shadow-md">
-                <p className="text-white text-xs">
-                  {project.user.email[0].toLocaleUpperCase()}
-                </p>
+          {session.user.email !== project.user.email &&
+            !selectProjectTrigger && (
+              <div className="absolute top-2 left-2  flex gap-2 ">
+                <div className="border border-emerald-900 bg-emerald-900 rounded-full w-6 h-6 flex items-center justify-center shadow-md">
+                  <p className="text-white text-xs">
+                    {project.user.email[0].toLocaleUpperCase()}
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
-          {session.user.email === project.user.email && !selectTrigger && (
-            <div className="absolute top-2 left-2 ">
-              <div className="border border-orange-600 bg-orange-600 rounded-full w-6 h-6 flex items-center justify-center shadow-md">
-                <p className="text-white text-xs">
-                  {project.user.email[0].toLocaleUpperCase()}
-                </p>
+            )}
+          {session.user.email === project.user.email &&
+            !selectProjectTrigger && (
+              <div className="absolute top-2 left-2 ">
+                <div className="border border-orange-600 bg-orange-600 rounded-full w-6 h-6 flex items-center justify-center shadow-md">
+                  <p className="text-white text-xs">
+                    {project.user.email[0].toLocaleUpperCase()}
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {selectTrigger && (
+          {selectProjectTrigger && (
             <div
               className="absolute top-2 left-1 cursor-pointer flex gap-2 "
               onClick={(e: React.MouseEvent<HTMLDivElement>) => {
@@ -570,7 +582,7 @@ const SelectedProjectOptions = ({
         >
           <DeleteConfirmationModal
             cancelClick={setDeleteAllConfirm}
-            deleteClick={deleteAll}
+            deleteClick={deleteSelected}
             isPending={isPending}
             type="Selected Projects"
             message={`Are you sure you want to delete the selected projects?`}
@@ -589,50 +601,5 @@ const SelectedProjectOptions = ({
         </ModalOverlay>
       )}
     </div>
-  );
-};
-
-interface SelectedBarProps {
-  selectTrigger: boolean;
-  checkedProjects: CheckedProjects[];
-  setIsSelectedOpen: (value: boolean) => void;
-  isSelectedOpen: boolean;
-  setCheckedProjects: (value: any) => void;
-  archive?: boolean;
-}
-
-const SelectedBar = ({
-  selectTrigger,
-  checkedProjects,
-  setIsSelectedOpen,
-  isSelectedOpen,
-  setCheckedProjects,
-  archive,
-}: SelectedBarProps) => {
-  return (
-    <>
-      {selectTrigger && (
-        <div className="bg-slate-50 p-4 rounded-lg flex justify-between items-center shadow relative">
-          <p className="text-sm">{checkedProjects.length} selected</p>
-
-          <div
-            className="cursor-pointer"
-            onClick={() => setIsSelectedOpen(!isSelectedOpen)}
-          >
-            <Image src="/three-dots.png" alt="" width={20} height={20} />
-          </div>
-          {isSelectedOpen && (
-            <>
-              <Overlay onClose={() => setIsSelectedOpen(false)} />
-              <SelectedProjectOptions
-                archive={archive}
-                checkedProjects={checkedProjects}
-                setCheckedProjects={setCheckedProjects}
-              />
-            </>
-          )}
-        </div>
-      )}
-    </>
   );
 };

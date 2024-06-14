@@ -1,4 +1,5 @@
 "use client";
+import { deleteProjects } from "@/actions/selectedProjects/selected";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 import PageLoading from "@/components/Loading/PageLoading";
 import { ProjectOptionsModal } from "@/components/options/ProjectOptions";
@@ -166,7 +167,6 @@ const Projects = ({ session }: Props) => {
                 <Overlay onClose={() => setIsSelectedOpen(false)} />
                 <SelectedProjectOptions
                   checkedProjects={checkedProjects}
-                  isSelectedOpen={isSelectedOpen}
                   session={session}
                 />
               </>
@@ -225,7 +225,6 @@ const Project = ({
   checkedProjects,
 }: ProjectProps) => {
   const { selectTrigger } = useSearchProjectContext();
-  console.log("Checked Projects", checkedProjects);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
@@ -275,7 +274,6 @@ const Project = ({
                 className="absolute top-2 left-1 cursor-pointer flex gap-2 "
                 onClick={(e: React.MouseEvent<HTMLDivElement>) => {
                   e.stopPropagation();
-                  console.log("Div clicked");
                 }}
               >
                 <TailwindCheckbox
@@ -385,15 +383,26 @@ const NoProjects = ({ setAddProjectOpen, addProjectOpen }: NoProjectsProps) => {
 
 interface SelectedProjectOptionsProps {
   checkedProjects: CheckedProjects[];
-  isSelectedOpen: boolean;
   session: Session;
 }
 
 const SelectedProjectOptions = ({
   checkedProjects,
-  isSelectedOpen,
   session,
 }: SelectedProjectOptionsProps) => {
+  const projectIds = checkedProjects.map((project) => project.project_id);
+  const { reloadProjects } = useSearchProjectContext();
+
+  const deleteSelected = async () => {
+    try {
+      await deleteProjects(projectIds);
+
+      reloadProjects();
+    } catch (error) {
+      console.error("Error deleting project:", error);
+    }
+  };
+
   return (
     <div
       className={`absolute  shadow-lg -right-2 top-10 rounded-lg w-[202px] z-[2000] bg-white`}
@@ -406,10 +415,7 @@ const SelectedProjectOptions = ({
         <div
           className={`bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer`}
         >
-          <div
-            className="flex gap-2 cursor-pointer"
-            // onClick={toggleDeleteModal}
-          >
+          <div className="flex gap-2 cursor-pointer" onClick={deleteSelected}>
             <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
             <p className="text-sm">Delete All</p>
           </div>
@@ -417,10 +423,7 @@ const SelectedProjectOptions = ({
         <div
           className={`bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer`}
         >
-          <div
-            className="flex gap-2 cursor-pointer"
-            // onClick={toggleDeleteModal}
-          >
+          <div className="flex gap-2 cursor-pointer" onClick={deleteSelected}>
             <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
             <p className="text-sm">Delete selected</p>
           </div>

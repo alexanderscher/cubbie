@@ -4,7 +4,7 @@ import prisma from "@/prisma/client";
 import { Session } from "@/types/Session";
 import { revalidateTag } from "next/cache";
 
-export const archiveProject = async (projectId: number, action: string) => {
+export const archiveProject = async (projectId: number) => {
   try {
     const session = (await auth()) as Session;
     const userId = session?.user?.id as string;

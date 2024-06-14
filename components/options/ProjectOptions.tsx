@@ -73,7 +73,7 @@ export const ProjectOptionsModal = ({
   const setArchive = async (projectId: number, archive: string) => {
     startTransition(async () => {
       try {
-        await archiveProject(projectId, archive);
+        await archiveProject(projectId);
         toast.success("Project archived successfully");
         reloadProjects();
       } catch (e) {

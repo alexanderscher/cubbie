@@ -27,8 +27,8 @@ interface SearchProjectContextType {
   fetchProjectById: () => Promise<void>;
   project: ProjectType;
   reloadProjects: () => void;
-  selectTrigger: boolean;
-  setSelectTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+  selectProjectTrigger: boolean;
+  setSelectProjectTrigger: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const fetchProjectData = async () => {
@@ -58,7 +58,7 @@ export const SearchProjectProvider: React.FC<{ children: ReactNode }> = ({
   const [isProjectLoading, setisProjectLoading] = useState(true);
   const [isProjectRefresh, setProjectRefresh] = useState(false);
   const [project, setProject] = useState<ProjectType>({} as ProjectType);
-  const [selectTrigger, setSelectTrigger] = useState(false);
+  const [selectProjectTrigger, setSelectProjectTrigger] = useState(false);
 
   const initializeProjects = useCallback((data: ProjectType[]) => {
     setProjects(data);
@@ -135,8 +135,8 @@ export const SearchProjectProvider: React.FC<{ children: ReactNode }> = ({
         fetchProjectById,
         project,
         reloadProjects,
-        selectTrigger,
-        setSelectTrigger,
+        selectProjectTrigger,
+        setSelectProjectTrigger,
       }}
     >
       {children}

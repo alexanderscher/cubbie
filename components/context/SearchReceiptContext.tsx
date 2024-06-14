@@ -31,6 +31,8 @@ interface SearchReceiptContextType {
   reloadReceipts: () => void;
   fetchReceiptById: () => Promise<void>;
   receipt: ReceiptType;
+  selectReceiptTrigger: boolean;
+  setSelectReceiptTrigger: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const SearchReceiptContext = createContext<SearchReceiptContextType>(
@@ -62,6 +64,8 @@ export const SearchReceiptProvider: React.FC<{ children: ReactNode }> = ({
   const [isReceiptLoading, setisReceiptLoading] = useState(true);
   const [isReceiptRefresh, setReceiptRefresh] = useState(false);
   const [receipt, setReceipt] = useState<ReceiptType>({} as ReceiptType);
+  const [selectReceiptTrigger, setSelectReceiptTrigger] = useState(false);
+
   const pathname = usePathname();
 
   const initializeReceipts = useCallback((data: ReceiptType[]) => {
@@ -143,6 +147,8 @@ export const SearchReceiptProvider: React.FC<{ children: ReactNode }> = ({
         reloadReceipts,
         fetchReceiptById,
         receipt,
+        selectReceiptTrigger,
+        setSelectReceiptTrigger,
       }}
     >
       {children}

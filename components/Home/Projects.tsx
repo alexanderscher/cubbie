@@ -6,7 +6,7 @@ import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { Overlay } from "@/components/overlays/Overlay";
 import { CreateProject } from "@/components/project/CreateProject";
 import { TruncateText } from "@/components/text/Truncate";
-import { getProjectsClient } from "@/lib/getProjectsClient";
+import TailwindCheckbox from "@/components/ui/TailwindCheckbox";
 import { ProjectType, ProjectUserArchiveType } from "@/types/ProjectTypes";
 import { ReceiptType } from "@/types/ReceiptTypes";
 import { Session } from "@/types/Session";
@@ -15,17 +15,26 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 interface Props {
   session: Session;
 }
 
+interface CheckedProjects {
+  project_id: number;
+  checked: boolean;
+}
+
 const Projects = ({ session }: Props) => {
-  const { isProjectLoading, filteredProjectData } = useSearchProjectContext();
+  const { isProjectLoading, filteredProjectData, selectTrigger } =
+    useSearchProjectContext();
 
   const [openProjectId, setOpenProjectId] = useState(null as number | null);
   const [addProjectOpen, setAddProjectOpen] = useState(false);
+
+  const [checkedProjects, setCheckedProjects] = useState<CheckedProjects[]>([]);
+  const [isSelectedOpen, setIsSelectedOpen] = useState(false);
 
   const toggleOpenProject = (
     projectId: number | undefined,
@@ -105,6 +114,7 @@ const Projects = ({ session }: Props) => {
     .map((project) => {
       return (
         <Project
+          setCheckedProjects={setCheckedProjects}
           session={session}
           archived={false}
           project={project}
@@ -112,6 +122,7 @@ const Projects = ({ session }: Props) => {
           isOpen={openProjectId === project.id}
           onToggleOpen={(e) => toggleOpenProject(project.id, e)}
           setOpenProjectId={setOpenProjectId}
+          checkedProjects={checkedProjects}
         />
       );
     });
@@ -127,6 +138,8 @@ const Projects = ({ session }: Props) => {
     .map((project) => {
       return (
         <Project
+          setCheckedProjects={setCheckedProjects}
+          checkedProjects={checkedProjects}
           session={session}
           archived={true}
           project={project}
@@ -140,7 +153,27 @@ const Projects = ({ session }: Props) => {
 
   if (searchParams.get("archive") === "false" || !searchParams.get("archive")) {
     return (
-      <>
+      <div className="flex flex-col gap-6">
+        {selectTrigger && (
+          <div className="bg-slate-50 p-4 rounded-lg flex justify-between items-center shadow relative">
+            <p>{checkedProjects.length} selected</p>
+
+            <div onClick={() => setIsSelectedOpen(!isSelectedOpen)}>
+              <Image src="/three-dots.png" alt="" width={20} height={20} />
+            </div>
+            {isSelectedOpen && (
+              <>
+                <Overlay onClose={() => setIsSelectedOpen(false)} />
+                <SelectedProjectOptions
+                  checkedProjects={checkedProjects}
+                  isSelectedOpen={isSelectedOpen}
+                  session={session}
+                />
+              </>
+            )}
+          </div>
+        )}
+
         {currentProjects.length > 0 ? (
           <div className="boxes">{currentProjects}</div>
         ) : (
@@ -149,7 +182,7 @@ const Projects = ({ session }: Props) => {
             addProjectOpen={addProjectOpen}
           />
         )}
-      </>
+      </div>
     );
   }
   if (searchParams.get("archive") === "true") {
@@ -177,6 +210,8 @@ interface ProjectProps {
   archived: boolean;
   session: Session;
   setOpenProjectId: (value: number | null) => void;
+  setCheckedProjects: (value: any) => void;
+  checkedProjects?: any;
 }
 
 const Project = ({
@@ -186,8 +221,22 @@ const Project = ({
   archived,
   session,
   setOpenProjectId,
+  setCheckedProjects,
+  checkedProjects,
 }: ProjectProps) => {
-  const [hovered, setHovered] = useState(false);
+  const { selectTrigger } = useSearchProjectContext();
+  console.log("Checked Projects", checkedProjects);
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.stopPropagation();
+    const projectId = project.id;
+
+    setCheckedProjects((prev: CheckedProjects[]) =>
+      event.target.checked
+        ? [...prev, { project_id: projectId, checked: true }]
+        : prev.filter((entry) => entry.project_id !== projectId)
+    );
+  };
   return (
     <div className="box xs:pb-6 pb-4 relative" key={project.id}>
       <Link href={`/project/${project.id}`}>
@@ -201,41 +250,55 @@ const Project = ({
               className="object-cover "
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
-            <div>
-              {session.user.email === project.user.email && (
-                <div className="absolute top-2 left-2 cursor-pointer">
-                  <div className="border border-orange-600 bg-orange-600 rounded-full w-6 h-6 flex items-center justify-center shadow-md">
-                    <p className="text-white text-xs">
-                      {project.user.email[0].toLocaleUpperCase()}
-                    </p>
-                  </div>
+
+            {session.user.email !== project.user.email && !selectTrigger && (
+              <div className="absolute top-2 left-2 cursor-pointer flex gap-2 ">
+                <div className="border border-emerald-900 bg-emerald-900 rounded-full w-6 h-6 flex items-center justify-center shadow-md">
+                  <p className="text-white text-xs">
+                    {project.user.email[0].toLocaleUpperCase()}
+                  </p>
                 </div>
-              )}
-              {session.user.email !== project.user.email && (
-                <div className="absolute top-2 left-2 cursor-pointer">
-                  <div className="border border-emerald-900 bg-emerald-900 rounded-full w-6 h-6 flex items-center justify-center shadow-md">
-                    <p className="text-white text-xs">
-                      {project.user.email[0].toLocaleUpperCase()}
-                    </p>
-                  </div>
+              </div>
+            )}
+            {session.user.email === project.user.email && !selectTrigger && (
+              <div className="absolute top-2 left-2 cursor-pointer">
+                <div className="border border-orange-600 bg-orange-600 rounded-full w-6 h-6 flex items-center justify-center shadow-md">
+                  <p className="text-white text-xs">
+                    {project.user.email[0].toLocaleUpperCase()}
+                  </p>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
+
+            {selectTrigger && (
+              <div
+                className="absolute top-2 left-1 cursor-pointer flex gap-2 "
+                onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+                  e.stopPropagation();
+                  console.log("Div clicked");
+                }}
+              >
+                <TailwindCheckbox
+                  checked={
+                    checkedProjects &&
+                    checkedProjects.some(
+                      (entry: CheckedProjects) =>
+                        entry.project_id === project.id
+                    )
+                  }
+                  onChange={(e) => handleCheckboxChange(e)}
+                />
+              </div>
+            )}
 
             <div
               onClick={onToggleOpen}
-              className="absolute top-0 right-2 cursor-pointer"
+              className="absolute top-2 right-2 cursor-pointer "
             >
               <Image src="/three-dots.png" alt="" width={20} height={20} />
             </div>
           </div>
         </div>
-        {hovered && (
-          <div className="absolute top-8 left-2  bg-orange-100 p-4 rounded-lg">
-            <p className="text-sm">Project owner</p>
-            <p className="text-sm text-orange-600">{project.user.email}</p>
-          </div>
-        )}
 
         <div className="p-3 flex flex-col gap-2">
           <TruncateText
@@ -314,6 +377,75 @@ const NoProjects = ({ setAddProjectOpen, addProjectOpen }: NoProjectsProps) => {
               <CreateProject setAddProjectOpen={setAddProjectOpen} />
             </ModalOverlay>
           )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface SelectedProjectOptionsProps {
+  checkedProjects: CheckedProjects[];
+  isSelectedOpen: boolean;
+  session: Session;
+}
+
+const SelectedProjectOptions = ({
+  checkedProjects,
+  isSelectedOpen,
+  session,
+}: SelectedProjectOptionsProps) => {
+  return (
+    <div
+      className={`absolute  shadow-lg -right-2 top-10 rounded-lg w-[202px] z-[2000] bg-white`}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
+      <div className="p-4 rounded text-sm flex flex-col gap-2">
+        <div
+          className={`bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer`}
+        >
+          <div
+            className="flex gap-2 cursor-pointer"
+            // onClick={toggleDeleteModal}
+          >
+            <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
+            <p className="text-sm">Delete All</p>
+          </div>
+        </div>
+        <div
+          className={`bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer`}
+        >
+          <div
+            className="flex gap-2 cursor-pointer"
+            // onClick={toggleDeleteModal}
+          >
+            <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
+            <p className="text-sm">Delete selected</p>
+          </div>
+        </div>
+        <div
+          className={`bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer`}
+        >
+          <div
+            className="flex gap-2 cursor-pointer"
+            // onClick={toggleDeleteModal}
+          >
+            <Image src={"/archive.png"} width={20} height={20} alt=""></Image>
+            <p className="text-sm">Archive all</p>
+          </div>
+        </div>
+        <div
+          className={`bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer`}
+        >
+          <div
+            className="flex gap-2 cursor-pointer"
+            // onClick={toggleDeleteModal}
+          >
+            <Image src={"/archive.png"} width={20} height={20} alt=""></Image>
+            <p className="text-sm">Archive selected</p>
+          </div>
         </div>
       </div>
     </div>

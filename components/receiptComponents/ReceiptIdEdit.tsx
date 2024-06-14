@@ -18,12 +18,12 @@ import { formatDateToYYYYMMDD } from "@/utils/Date";
 import PurchaseTypeSelect from "@/components/select/PurchaseTypeSelect";
 import { AddItem } from "@/components/item/AddItem";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
-import * as Yup from "yup";
 import { toast } from "sonner";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { ReceiptItemType, ReceiptType } from "@/types/ReceiptTypes";
 import { getReceiptByIdClient } from "@/lib/getReceiptsClient";
 import { BeatLoader } from "react-spinners";
+import { CheckedItems } from "@/types/SelectType";
 type ExtendedReceiptType = ReceiptType & {
   edit_image: string;
 };
@@ -43,6 +43,7 @@ const ReceiptIdEdit = ({ receiptId }: Props) => {
   const [receipt, setReceipt] = useState<ExtendedReceiptType>(
     {} as ExtendedReceiptType
   );
+  const [checkedItems, setCheckedItems] = useState<CheckedItems[]>([]);
 
   const [errorM, setErrorM] = useState({
     purchase_date: "",
@@ -424,6 +425,8 @@ const ReceiptIdEdit = ({ receiptId }: Props) => {
                           isOpen={openItemId === item.id}
                           onToggleOpen={(e) => toggleOpenItem(item.id, e)}
                           setOpenItemId={setOpenItemId}
+                          checkedItems={checkedItems}
+                          setCheckedItems={setCheckedItems}
                         />
                       )
                     )}

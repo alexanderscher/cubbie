@@ -18,6 +18,7 @@ import { ProjectItemType, ProjectUserArchiveType } from "@/types/ProjectTypes";
 import { ReceiptType } from "@/types/ReceiptTypes";
 import { Session } from "@/types/Session";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
+import { CheckedReceipts } from "@/types/SelectType";
 
 interface ProjectIdProps {
   session: Session;
@@ -36,6 +37,7 @@ export const ProjectId = ({ session }: ProjectIdProps) => {
   );
   const [isArchived, setIsArchived] = useState(false);
   const [openReceiptId, setOpenReceiptId] = useState<number | null>(null);
+  const [checkedReceipts, setCheckedReceipts] = useState<CheckedReceipts[]>([]);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -245,6 +247,8 @@ export const ProjectId = ({ session }: ProjectIdProps) => {
                       onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
                       isOpen={openReceiptId === receipt.id}
                       setOpenReceiptId={setOpenReceiptId}
+                      checkedReceipts={checkedReceipts}
+                      setCheckedReceipts={setCheckedReceipts}
                     />
                   ))}
                 </div>
@@ -270,6 +274,8 @@ export const ProjectId = ({ session }: ProjectIdProps) => {
                         onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
                         isOpen={openReceiptId === receipt.id}
                         setOpenReceiptId={setOpenReceiptId}
+                        checkedReceipts={checkedReceipts}
+                        setCheckedReceipts={setCheckedReceipts}
                       />
                     ))}
                 </div>
@@ -295,6 +301,8 @@ export const ProjectId = ({ session }: ProjectIdProps) => {
                         onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
                         isOpen={openReceiptId === receipt.id}
                         setOpenReceiptId={setOpenReceiptId}
+                        checkedReceipts={checkedReceipts}
+                        setCheckedReceipts={setCheckedReceipts}
                       />
                     ))}
                 </div>

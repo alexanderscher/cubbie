@@ -20,7 +20,8 @@ const Filters = () => {
   const [openStatusModal, setOpenStatusModal] = React.useState(false);
   const [openItemExpiredModal, setOpenItemExpiredModal] = React.useState(false);
   const { filteredItemData } = useSearchItemContext();
-  const { filteredProjectData } = useSearchProjectContext();
+  const { filteredProjectData, setSelectTrigger, selectTrigger } =
+    useSearchProjectContext();
   const { filteredReceiptData } = useSearchReceiptContext();
   const { filteredAlertData } = useSearchAlertContext();
   const searchParams = useSearchParams();
@@ -90,50 +91,61 @@ const Filters = () => {
   return (
     <div className="">
       {pathname === "/" && filteredProjectData.length > 0 && (
-        <div className="flex gap-2">
-          <div className="relative">
-            <FilterButton
-              setOpenModal={setOpenModal}
-              openModal={openModal}
-              label={
-                searchParams.get("archive") === "false" ||
-                !searchParams.get("archive")
-                  ? "Currect projects"
-                  : "Archived projects"
-              }
-            />
-            {openModal && (
-              <>
-                <FilterProjectOptions
-                  router={router}
-                  pathname={pathname}
-                  onClose={() => setOpenModal(false)}
-                  createQueryString={createQueryString}
-                  searchParams={searchParams}
-                />
-                <Overlay onClose={() => setOpenModal(false)} />
-              </>
-            )}
+        <div className="flex justify-between flex-wrap gap-2 ">
+          <div className="flex gap-2 flex-wrap">
+            <div className="relative">
+              <FilterButton
+                setOpenModal={setOpenModal}
+                openModal={openModal}
+                label={
+                  searchParams.get("archive") === "false" ||
+                  !searchParams.get("archive")
+                    ? "Currect projects"
+                    : "Archived projects"
+                }
+              />
+              {openModal && (
+                <>
+                  <FilterProjectOptions
+                    router={router}
+                    pathname={pathname}
+                    onClose={() => setOpenModal(false)}
+                    createQueryString={createQueryString}
+                    searchParams={searchParams}
+                  />
+                  <Overlay onClose={() => setOpenModal(false)} />
+                </>
+              )}
+            </div>
+
+            <div className="relative">
+              <SortButton
+                openModal={openSortModal}
+                setOpenModal={setOpenSortModal}
+                label={"Sort by"}
+              />
+              {openSortModal && (
+                <>
+                  <SortProjectOptions
+                    router={router}
+                    pathname={pathname}
+                    onClose={() => setOpenSortModal(false)}
+                    createQueryString={createQueryString}
+                    searchParams={searchParams}
+                  />
+                  <Overlay onClose={() => setOpenSortModal(false)} />
+                </>
+              )}
+            </div>
           </div>
 
-          <div className="relative">
-            <SortButton
-              openModal={openSortModal}
-              setOpenModal={setOpenSortModal}
-              label={"Sort by"}
-            />
-            {openSortModal && (
-              <>
-                <SortProjectOptions
-                  router={router}
-                  pathname={pathname}
-                  onClose={() => setOpenSortModal(false)}
-                  createQueryString={createQueryString}
-                  searchParams={searchParams}
-                />
-                <Overlay onClose={() => setOpenSortModal(false)} />
-              </>
-            )}
+          <div>
+            <RegularButton
+              styles="border-emerald-900"
+              handleClick={() => setSelectTrigger(!selectTrigger)}
+            >
+              <p className="text-xs text-emerald-900">Select</p>
+            </RegularButton>
           </div>
         </div>
       )}

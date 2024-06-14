@@ -1,7 +1,15 @@
 "use client";
-import { deleteProjects } from "@/actions/selectedProjects/selected";
+import {
+  archiveAll,
+  archiveProjects,
+  checkProject,
+  deleteAll,
+  deleteProjects,
+} from "@/actions/selectedProjects/selected";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
+import Loading from "@/components/Loading/Loading";
 import PageLoading from "@/components/Loading/PageLoading";
+import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import { ProjectOptionsModal } from "@/components/options/ProjectOptions";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { Overlay } from "@/components/overlays/Overlay";
@@ -16,7 +24,8 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useTransition } from "react";
+import { toast } from "sonner";
 
 interface Props {
   session: Session;
@@ -155,24 +164,13 @@ const Projects = ({ session }: Props) => {
   if (searchParams.get("archive") === "false" || !searchParams.get("archive")) {
     return (
       <div className="flex flex-col gap-6">
-        {selectTrigger && (
-          <div className="bg-slate-50 p-4 rounded-lg flex justify-between items-center shadow relative">
-            <p>{checkedProjects.length} selected</p>
-
-            <div onClick={() => setIsSelectedOpen(!isSelectedOpen)}>
-              <Image src="/three-dots.png" alt="" width={20} height={20} />
-            </div>
-            {isSelectedOpen && (
-              <>
-                <Overlay onClose={() => setIsSelectedOpen(false)} />
-                <SelectedProjectOptions
-                  checkedProjects={checkedProjects}
-                  session={session}
-                />
-              </>
-            )}
-          </div>
-        )}
+        <SelectedBar
+          selectTrigger={selectTrigger}
+          checkedProjects={checkedProjects}
+          setIsSelectedOpen={setIsSelectedOpen}
+          isSelectedOpen={isSelectedOpen}
+          setCheckedProjects={setCheckedProjects}
+        />
 
         {currentProjects.length > 0 ? (
           <div className="boxes">{currentProjects}</div>
@@ -187,7 +185,15 @@ const Projects = ({ session }: Props) => {
   }
   if (searchParams.get("archive") === "true") {
     return (
-      <>
+      <div className="flex flex-col gap-6">
+        <SelectedBar
+          selectTrigger={selectTrigger}
+          checkedProjects={checkedProjects}
+          setIsSelectedOpen={setIsSelectedOpen}
+          isSelectedOpen={isSelectedOpen}
+          setCheckedProjects={setCheckedProjects}
+          archive={true}
+        />
         {archiveProjects.length > 0 ? (
           <div className="boxes">{archiveProjects}</div>
         ) : (
@@ -196,7 +202,7 @@ const Projects = ({ session }: Props) => {
             addProjectOpen={addProjectOpen}
           />
         )}
-      </>
+      </div>
     );
   }
 };
@@ -238,66 +244,64 @@ const Project = ({
   };
   return (
     <div className="box xs:pb-6 pb-4 relative" key={project.id}>
-      <Link href={`/project/${project.id}`}>
-        <div className="w-full  overflow-hidden relative flex justify-center items-center bg-slate-100  rounded-t-lg h-[90px]">
-          <div className="w-full h-full flex justify-center items-center ">
-            <Image
-              src="/folder.png"
-              alt=""
-              width={40}
-              height={40}
-              className="object-cover "
-              style={{ objectFit: "cover", objectPosition: "center" }}
-            />
+      <div className="w-full  overflow-hidden relative flex justify-center items-center bg-slate-100  rounded-t-lg h-[90px]">
+        <div className="w-full h-full flex justify-center items-center ">
+          <Image
+            src="/folder.png"
+            alt=""
+            width={40}
+            height={40}
+            className="object-cover "
+            style={{ objectFit: "cover", objectPosition: "center" }}
+          />
 
-            {session.user.email !== project.user.email && !selectTrigger && (
-              <div className="absolute top-2 left-2 cursor-pointer flex gap-2 ">
-                <div className="border border-emerald-900 bg-emerald-900 rounded-full w-6 h-6 flex items-center justify-center shadow-md">
-                  <p className="text-white text-xs">
-                    {project.user.email[0].toLocaleUpperCase()}
-                  </p>
-                </div>
+          {session.user.email !== project.user.email && !selectTrigger && (
+            <div className="absolute top-2 left-2  flex gap-2 ">
+              <div className="border border-emerald-900 bg-emerald-900 rounded-full w-6 h-6 flex items-center justify-center shadow-md">
+                <p className="text-white text-xs">
+                  {project.user.email[0].toLocaleUpperCase()}
+                </p>
               </div>
-            )}
-            {session.user.email === project.user.email && !selectTrigger && (
-              <div className="absolute top-2 left-2 cursor-pointer">
-                <div className="border border-orange-600 bg-orange-600 rounded-full w-6 h-6 flex items-center justify-center shadow-md">
-                  <p className="text-white text-xs">
-                    {project.user.email[0].toLocaleUpperCase()}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {selectTrigger && (
-              <div
-                className="absolute top-2 left-1 cursor-pointer flex gap-2 "
-                onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-                  e.stopPropagation();
-                }}
-              >
-                <TailwindCheckbox
-                  checked={
-                    checkedProjects &&
-                    checkedProjects.some(
-                      (entry: CheckedProjects) =>
-                        entry.project_id === project.id
-                    )
-                  }
-                  onChange={(e) => handleCheckboxChange(e)}
-                />
-              </div>
-            )}
-
-            <div
-              onClick={onToggleOpen}
-              className="absolute top-2 right-2 cursor-pointer "
-            >
-              <Image src="/three-dots.png" alt="" width={20} height={20} />
             </div>
+          )}
+          {session.user.email === project.user.email && !selectTrigger && (
+            <div className="absolute top-2 left-2 ">
+              <div className="border border-orange-600 bg-orange-600 rounded-full w-6 h-6 flex items-center justify-center shadow-md">
+                <p className="text-white text-xs">
+                  {project.user.email[0].toLocaleUpperCase()}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {selectTrigger && (
+            <div
+              className="absolute top-2 left-1 cursor-pointer flex gap-2 "
+              onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+                e.stopPropagation();
+              }}
+            >
+              <TailwindCheckbox
+                checked={
+                  checkedProjects &&
+                  checkedProjects.some(
+                    (entry: CheckedProjects) => entry.project_id === project.id
+                  )
+                }
+                onChange={(e) => handleCheckboxChange(e)}
+              />
+            </div>
+          )}
+
+          <div
+            onClick={onToggleOpen}
+            className="absolute top-2 right-2 cursor-pointer "
+          >
+            <Image src="/three-dots.png" alt="" width={20} height={20} />
           </div>
         </div>
-
+      </div>
+      <Link href={`/project/${project.id}`}>
         <div className="p-3 flex flex-col gap-2">
           <TruncateText
             text={project.name}
@@ -330,6 +334,7 @@ const Project = ({
           </p>
         </div>
       </Link>
+
       {isOpen && (
         <>
           <Overlay onClose={() => setOpenProjectId(null)} />
@@ -383,29 +388,98 @@ const NoProjects = ({ setAddProjectOpen, addProjectOpen }: NoProjectsProps) => {
 
 interface SelectedProjectOptionsProps {
   checkedProjects: CheckedProjects[];
-  session: Session;
+  setCheckedProjects: (value: any) => void;
+  archive?: boolean;
+}
+
+interface NotOwner {
+  id: number;
+  name: string;
 }
 
 const SelectedProjectOptions = ({
   checkedProjects,
-  session,
+  setCheckedProjects,
+  archive,
 }: SelectedProjectOptionsProps) => {
   const projectIds = checkedProjects.map((project) => project.project_id);
   const { reloadProjects } = useSearchProjectContext();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [notOwner, setNotOwner] = useState<NotOwner[]>([]);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const [deleteAllConfirm, setDeleteAllConfirm] = useState(false);
 
-  const deleteSelected = async () => {
-    try {
-      await deleteProjects(projectIds);
+  const deleteSelected = () => {
+    startTransition(async () => {
+      setDeleteConfirm(false);
+      try {
+        const check = (await checkProject(projectIds)) as [];
+        setNotOwner(check);
+        if (check.length === 0) {
+          await deleteProjects(projectIds);
+          toast.success("Projects deleted successfully");
+          setCheckedProjects([]);
+          reloadProjects();
+        } else {
+          setDeleteModalOpen(true);
+        }
+      } catch (error) {
+        console.error("Error deleting project:", error);
+      }
+    });
+  };
 
-      reloadProjects();
-    } catch (error) {
-      console.error("Error deleting project:", error);
-    }
+  const deleteAllProjects = () => {
+    startTransition(async () => {
+      try {
+        await deleteAll();
+        setCheckedProjects([]);
+        reloadProjects();
+        toast.success("Projects deleted successfully");
+      } catch (error) {
+        console.error("Error deleting projects:", error);
+      }
+    });
+  };
+
+  const archiveSelected = () => {
+    startTransition(async () => {
+      try {
+        await archiveProjects(projectIds);
+        setCheckedProjects([]);
+        reloadProjects();
+        {
+          archive
+            ? toast.success("Projects removed from archive")
+            : toast.success("Projects archived successfully");
+        }
+      } catch (error) {
+        console.error("Error archiving project:", error);
+      }
+    });
+  };
+
+  const archiveAllProjects = () => {
+    startTransition(async () => {
+      try {
+        await archiveAll();
+        setCheckedProjects([]);
+        reloadProjects();
+        {
+          archive
+            ? toast.success("Projects removed from archive")
+            : toast.success("Projects archived successfully");
+        }
+      } catch (error) {
+        console.error("Error archiving projects:", error);
+      }
+    });
   };
 
   return (
     <div
-      className={`absolute  shadow-lg -right-2 top-10 rounded-lg w-[202px] z-[2000] bg-white`}
+      className={`absolute  shadow-lg -right-2 top-10 rounded-lg  z-[2000] bg-white`}
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -415,7 +489,12 @@ const SelectedProjectOptions = ({
         <div
           className={`bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer`}
         >
-          <div className="flex gap-2 cursor-pointer" onClick={deleteSelected}>
+          <div
+            className="flex gap-2 cursor-pointer"
+            onClick={() => {
+              setDeleteAllConfirm(true);
+            }}
+          >
             <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
             <p className="text-sm">Delete All</p>
           </div>
@@ -423,7 +502,16 @@ const SelectedProjectOptions = ({
         <div
           className={`bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer`}
         >
-          <div className="flex gap-2 cursor-pointer" onClick={deleteSelected}>
+          <div
+            className="flex gap-2 cursor-pointer"
+            onClick={() => {
+              if (checkedProjects.length > 0) {
+                setDeleteConfirm(true);
+              } else {
+                toast.error("No projects selected");
+              }
+            }}
+          >
             <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
             <p className="text-sm">Delete selected</p>
           </div>
@@ -433,10 +521,12 @@ const SelectedProjectOptions = ({
         >
           <div
             className="flex gap-2 cursor-pointer"
-            // onClick={toggleDeleteModal}
+            onClick={archiveAllProjects}
           >
             <Image src={"/archive.png"} width={20} height={20} alt=""></Image>
-            <p className="text-sm">Archive all</p>
+            <p className="text-sm">
+              {archive ? "Unarchive all" : "Archive all"}
+            </p>
           </div>
         </div>
         <div
@@ -444,13 +534,105 @@ const SelectedProjectOptions = ({
         >
           <div
             className="flex gap-2 cursor-pointer"
-            // onClick={toggleDeleteModal}
+            onClick={() => {
+              if (checkedProjects.length > 0) {
+                archiveSelected();
+              } else {
+                toast.error("No projects selected");
+              }
+            }}
           >
             <Image src={"/archive.png"} width={20} height={20} alt=""></Image>
-            <p className="text-sm">Archive selected</p>
+            <p className="text-sm">
+              {archive ? "Unarchive selected" : "Archive selected"}
+            </p>
           </div>
         </div>
       </div>
+      {isPending && <Loading loading={isPending} />}
+      {deleteModalOpen && (
+        <ModalOverlay onClose={() => setDeleteModalOpen(false)}>
+          <div className="p-8">
+            <p>
+              Cannot delete projects you are not the owner of. Please unselect
+              these projects to continue.
+            </p>
+            {notOwner.map((project) => (
+              <div key={project.id}>{project.name}</div>
+            ))}
+          </div>
+        </ModalOverlay>
+      )}
+      {deleteConfirm && (
+        <ModalOverlay
+          isDelete={true}
+          onClose={() => setDeleteAllConfirm(false)}
+        >
+          <DeleteConfirmationModal
+            cancelClick={setDeleteAllConfirm}
+            deleteClick={deleteAll}
+            isPending={isPending}
+            type="Selected Projects"
+            message={`Are you sure you want to delete the selected projects?`}
+          />
+        </ModalOverlay>
+      )}
+      {deleteAllConfirm && (
+        <ModalOverlay isDelete={true} onClose={() => setDeleteConfirm(false)}>
+          <DeleteConfirmationModal
+            cancelClick={setDeleteConfirm}
+            deleteClick={deleteAllProjects}
+            isPending={isPending}
+            type="All projects"
+            message={`Are you sure you want to delete the all your projects? Note: only projects where you are the owner will be deleted.`}
+          />
+        </ModalOverlay>
+      )}
     </div>
+  );
+};
+
+interface SelectedBarProps {
+  selectTrigger: boolean;
+  checkedProjects: CheckedProjects[];
+  setIsSelectedOpen: (value: boolean) => void;
+  isSelectedOpen: boolean;
+  setCheckedProjects: (value: any) => void;
+  archive?: boolean;
+}
+
+const SelectedBar = ({
+  selectTrigger,
+  checkedProjects,
+  setIsSelectedOpen,
+  isSelectedOpen,
+  setCheckedProjects,
+  archive,
+}: SelectedBarProps) => {
+  return (
+    <>
+      {selectTrigger && (
+        <div className="bg-slate-50 p-4 rounded-lg flex justify-between items-center shadow relative">
+          <p className="text-sm">{checkedProjects.length} selected</p>
+
+          <div
+            className="cursor-pointer"
+            onClick={() => setIsSelectedOpen(!isSelectedOpen)}
+          >
+            <Image src="/three-dots.png" alt="" width={20} height={20} />
+          </div>
+          {isSelectedOpen && (
+            <>
+              <Overlay onClose={() => setIsSelectedOpen(false)} />
+              <SelectedProjectOptions
+                archive={archive}
+                checkedProjects={checkedProjects}
+                setCheckedProjects={setCheckedProjects}
+              />
+            </>
+          )}
+        </div>
+      )}
+    </>
   );
 };

@@ -48,13 +48,13 @@ const Header = ({ type }: HeaderProps) => {
             <>
               <Overlay onClose={() => setIsModalVisible(false)} />
               <div
-                className="absolute bg-[#97cb97] rounded shadow p-3 -bottom-[120px] z-[2000] w-[180px]"
+                className="absolute bg-[#97cb97] rounded-lg shadow p-3 -bottom-[120px] z-[2000] w-[180px]"
                 onClick={(e) => e.preventDefault()}
               >
                 {type === "Projects" && (
                   <div className="flex flex-col gap-2 text-sm">
                     <Link
-                      className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
+                      className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded-lg p-2"
                       href="/receipts"
                     >
                       <div className="flex items-center gap-3">
@@ -70,7 +70,7 @@ const Header = ({ type }: HeaderProps) => {
                       </div>
                     </Link>
                     <Link
-                      className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
+                      className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded-lg p-2"
                       href="/items"
                     >
                       <div className="flex items-center gap-2">
@@ -91,7 +91,7 @@ const Header = ({ type }: HeaderProps) => {
                 {type === "Receipts" && (
                   <div className="flex flex-col gap-2 text-sm">
                     <Link
-                      className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
+                      className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded-lg p-2"
                       href="/"
                     >
                       <div className="flex items-center gap-2">
@@ -105,7 +105,7 @@ const Header = ({ type }: HeaderProps) => {
                       </div>
                     </Link>
                     <Link
-                      className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
+                      className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded-lg p-2"
                       href="/items"
                     >
                       <div className="flex items-center gap-2">
@@ -126,7 +126,7 @@ const Header = ({ type }: HeaderProps) => {
                 {type === "Items" && (
                   <div className="flex flex-col gap-2 text-sm">
                     <Link
-                      className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
+                      className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded-lg p-2"
                       href="/"
                     >
                       <div className="flex items-center gap-2">
@@ -140,7 +140,7 @@ const Header = ({ type }: HeaderProps) => {
                       </div>
                     </Link>
                     <Link
-                      className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2"
+                      className="bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded-lg p-2"
                       href="/receipts"
                     >
                       <div className="flex items-center gap-3">

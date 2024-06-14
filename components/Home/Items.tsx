@@ -5,11 +5,12 @@ import Item from "@/components/Item";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
 import PageLoading from "@/components/Loading/PageLoading";
 import { NoItems } from "@/components/item/NoItems";
-import { getItemsClient } from "@/lib/getItemsClient";
 import { ItemType } from "@/types/ItemsTypes";
+import { SelectedBar } from "@/components/Home/SelectedBar";
+import { CheckedItems } from "@/types/SelectType";
 
 const Items = () => {
-  const { filteredItemData, isItemLoading, initializeItems, fetchItems } =
+  const { filteredItemData, isItemLoading, selectItemTrigger, fetchItems } =
     useSearchItemContext();
 
   useEffect(() => {
@@ -18,7 +19,8 @@ const Items = () => {
 
   const searchParams = useSearchParams();
   const [addReceiptOpen, setAddReceiptOpen] = useState(false);
-
+  const [isSelectedOpen, setIsSelectedOpen] = useState(false);
+  const [checkedItems, setCheckedItems] = useState<CheckedItems[]>([]);
   const [openItemId, setOpenItemId] = useState(null as number | null);
 
   const toggleOpenItem = (
@@ -122,16 +124,32 @@ const Items = () => {
     }
 
     return (
-      <div className="boxes pb-20">
-        {filteredData.map((item) => (
-          <Item
-            setOpenItemId={setOpenItemId}
-            key={item.id}
-            item={item}
-            isOpen={openItemId === item.id}
-            onToggleOpen={(e) => toggleOpenItem(item.id, e)}
-          />
-        ))}
+      <div className="flex flex-col gap-6">
+        <SelectedBar
+          selectTrigger={selectItemTrigger}
+          checkedItems={checkedItems}
+          setIsSelectedOpen={setIsSelectedOpen}
+          isSelectedOpen={isSelectedOpen}
+        >
+          <div></div>
+          {/* <SelectedProjectOptions
+              checkedProjects={checkedProjects}
+              setCheckedProjects={setCheckedProjects}
+            /> */}
+        </SelectedBar>
+        <div className="boxes pb-20">
+          {filteredData.map((item) => (
+            <Item
+              setOpenItemId={setOpenItemId}
+              key={item.id}
+              item={item}
+              isOpen={openItemId === item.id}
+              onToggleOpen={(e) => toggleOpenItem(item.id, e)}
+              setCheckedItems={setCheckedItems}
+              checkedItems={checkedItems}
+            />
+          ))}
+        </div>
       </div>
     );
   }
@@ -146,16 +164,32 @@ const Items = () => {
   }
 
   return (
-    <div className="boxes pb-20">
-      {filteredData.map((item) => (
-        <Item
-          setOpenItemId={setOpenItemId}
-          key={item.id}
-          item={item}
-          isOpen={openItemId === item.id}
-          onToggleOpen={(e) => toggleOpenItem(item.id, e)}
-        />
-      ))}
+    <div className="flex flex-col gap-6">
+      <SelectedBar
+        selectTrigger={selectItemTrigger}
+        checkedItems={checkedItems}
+        setIsSelectedOpen={setIsSelectedOpen}
+        isSelectedOpen={isSelectedOpen}
+      >
+        <div></div>
+        {/* <SelectedProjectOptions
+              checkedProjects={checkedProjects}
+              setCheckedProjects={setCheckedProjects}
+            /> */}
+      </SelectedBar>
+      <div className="boxes pb-20">
+        {filteredData.map((item) => (
+          <Item
+            setOpenItemId={setOpenItemId}
+            key={item.id}
+            item={item}
+            isOpen={openItemId === item.id}
+            onToggleOpen={(e) => toggleOpenItem(item.id, e)}
+            setCheckedItems={setCheckedItems}
+            checkedItems={checkedItems}
+          />
+        ))}
+      </div>
     </div>
   );
 };

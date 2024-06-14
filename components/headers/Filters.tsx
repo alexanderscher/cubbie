@@ -19,7 +19,8 @@ const Filters = () => {
   const [openSortModal, setOpenSortModal] = React.useState(false);
   const [openStatusModal, setOpenStatusModal] = React.useState(false);
   const [openItemExpiredModal, setOpenItemExpiredModal] = React.useState(false);
-  const { filteredItemData } = useSearchItemContext();
+  const { filteredItemData, setSelectItemTrigger, selectItemTrigger } =
+    useSearchItemContext();
   const { filteredProjectData, setSelectProjectTrigger, selectProjectTrigger } =
     useSearchProjectContext();
   const { filteredReceiptData, setSelectReceiptTrigger, selectReceiptTrigger } =
@@ -239,66 +240,76 @@ const Filters = () => {
         </div>
       )}
       {pathname === "/items" && filteredItemData.length > 0 && (
-        <div className="flex gap-2">
-          <div className="relative">
-            <FilterButton
-              setOpenModal={setOpenModal}
-              openModal={openModal}
-              label={determineLabel(searchParams.get("status"))}
-            />
+        <div className="flex gap-2 flex-wrap justify-between  gap-y-3 jus">
+          <div className="flex gap-2">
+            <div className="relative">
+              <FilterButton
+                setOpenModal={setOpenModal}
+                openModal={openModal}
+                label={determineLabel(searchParams.get("status"))}
+              />
 
-            {openModal && pathname === "/items" && (
-              <>
-                <FilterItemsOptions
-                  router={router}
-                  pathname={pathname}
-                  onClose={() => setOpenModal(false)}
-                  createQueryString={createQueryString}
-                  searchParams={searchParams}
-                />
-                <Overlay onClose={() => setOpenModal(false)} />
-              </>
-            )}
+              {openModal && pathname === "/items" && (
+                <>
+                  <FilterItemsOptions
+                    router={router}
+                    pathname={pathname}
+                    onClose={() => setOpenModal(false)}
+                    createQueryString={createQueryString}
+                    searchParams={searchParams}
+                  />
+                  <Overlay onClose={() => setOpenModal(false)} />
+                </>
+              )}
+            </div>
+            <div className="relative">
+              <FilterButton
+                setOpenModal={setOpenItemExpiredModal}
+                openModal={openItemExpiredModal}
+                label={determineItemExpiredLabel(searchParams.get("type"))}
+              />
+
+              {openItemExpiredModal && pathname === "/items" && (
+                <>
+                  <FilterItemsExpiredOptions
+                    router={router}
+                    pathname={pathname}
+                    onClose={() => setOpenItemExpiredModal(false)}
+                    createQueryString={createQueryString}
+                    searchParams={searchParams}
+                  />
+                  <Overlay onClose={() => setOpenItemExpiredModal(false)} />
+                </>
+              )}
+            </div>
+
+            <div className="relative">
+              <SortButton
+                openModal={openSortModal}
+                setOpenModal={setOpenSortModal}
+                label={"Sort by"}
+              />
+              {openSortModal && pathname === "/items" && (
+                <>
+                  <SortItemsOptions
+                    router={router}
+                    pathname={pathname}
+                    onClose={() => setOpenSortModal(false)}
+                    createQueryString={createQueryString}
+                    searchParams={searchParams}
+                  />
+                  <Overlay onClose={() => setOpenSortModal(false)} />
+                </>
+              )}
+            </div>
           </div>
-          <div className="relative">
-            <FilterButton
-              setOpenModal={setOpenItemExpiredModal}
-              openModal={openItemExpiredModal}
-              label={determineItemExpiredLabel(searchParams.get("type"))}
-            />
-
-            {openItemExpiredModal && pathname === "/items" && (
-              <>
-                <FilterItemsExpiredOptions
-                  router={router}
-                  pathname={pathname}
-                  onClose={() => setOpenItemExpiredModal(false)}
-                  createQueryString={createQueryString}
-                  searchParams={searchParams}
-                />
-                <Overlay onClose={() => setOpenItemExpiredModal(false)} />
-              </>
-            )}
-          </div>
-
-          <div className="relative">
-            <SortButton
-              openModal={openSortModal}
-              setOpenModal={setOpenSortModal}
-              label={"Sort by"}
-            />
-            {openSortModal && pathname === "/items" && (
-              <>
-                <SortItemsOptions
-                  router={router}
-                  pathname={pathname}
-                  onClose={() => setOpenSortModal(false)}
-                  createQueryString={createQueryString}
-                  searchParams={searchParams}
-                />
-                <Overlay onClose={() => setOpenSortModal(false)} />
-              </>
-            )}
+          <div>
+            <RegularButton
+              styles="border-orange-600"
+              handleClick={() => setSelectItemTrigger(!selectItemTrigger)}
+            >
+              <p className="text-xs text-orange-600">Select</p>
+            </RegularButton>
           </div>
         </div>
       )}

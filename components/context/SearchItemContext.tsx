@@ -10,8 +10,6 @@ import React, {
 import { ItemType } from "@/types/ItemsTypes";
 import { getItemsByIdClient, getItemsClient } from "@/lib/getItemsClient";
 import { usePathname } from "next/navigation";
-import { set } from "zod";
-import path from "path";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
 
 interface SearchItemContextType {
@@ -27,6 +25,8 @@ interface SearchItemContextType {
   fetchItemById: () => void;
   reloadItems: () => void;
   item: ItemType;
+  setSelectItemTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+  selectItemTrigger: boolean;
 }
 
 export const SearchItemContext = createContext<SearchItemContextType>(
@@ -53,6 +53,7 @@ export const SearchItemProvider: React.FC<{ children: ReactNode }> = ({
   const [isItemLoading, setisItemLoading] = useState(true);
   const [isItemRefresh, setItemRefresh] = useState(false);
   const [item, setItem] = useState<ItemType>({} as ItemType);
+  const [selectItemTrigger, setSelectItemTrigger] = useState(false);
 
   const initializeItems = useCallback((data: ItemType[]) => {
     setItems(data);
@@ -127,6 +128,8 @@ export const SearchItemProvider: React.FC<{ children: ReactNode }> = ({
         fetchItemById,
         reloadItems,
         item,
+        setSelectItemTrigger,
+        selectItemTrigger,
       }}
     >
       {children}

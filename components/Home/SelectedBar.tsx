@@ -1,19 +1,14 @@
 import { Overlay } from "@/components/overlays/Overlay";
+import {
+  CheckedItems,
+  CheckedProjects,
+  CheckedReceipts,
+} from "@/types/SelectType";
 import Image from "next/image";
-
-interface CheckedProjects {
-  project_id: number;
-  checked: boolean;
-}
-
-interface CheckedReceipts {
-  receipt_id: number;
-  checked: boolean;
-}
 
 interface SelectedBarProps {
   selectTrigger: boolean;
-  checkedItems: CheckedProjects[] | CheckedReceipts[];
+  checkedItems: CheckedProjects[] | CheckedReceipts[] | CheckedItems[];
   setIsSelectedOpen: (value: boolean) => void;
   isSelectedOpen: boolean;
   children: React.ReactNode;

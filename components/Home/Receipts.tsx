@@ -6,13 +6,10 @@ import { NoReceipts } from "@/components/receiptComponents/NoReceipts";
 import Receipt from "@/components/receiptComponents/Receipt";
 import { getReceiptsClient } from "@/lib/getReceiptsClient";
 import { ReceiptItemType, ReceiptType } from "@/types/ReceiptTypes";
+import { CheckedReceipts } from "@/types/SelectType";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
-interface CheckedReceipts {
-  receipt_id: number;
-  checked: boolean;
-}
 const Receipts = () => {
   const {
     filteredReceiptData,

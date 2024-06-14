@@ -19,6 +19,7 @@ import { TruncateText } from "@/components/text/Truncate";
 import TailwindCheckbox from "@/components/ui/TailwindCheckbox";
 import { ProjectType, ProjectUserArchiveType } from "@/types/ProjectTypes";
 import { ReceiptType } from "@/types/ReceiptTypes";
+import { CheckedProjects } from "@/types/SelectType";
 import { Session } from "@/types/Session";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import { formatCurrency } from "@/utils/formatCurrency";
@@ -30,11 +31,6 @@ import { toast } from "sonner";
 
 interface Props {
   session: Session;
-}
-
-interface CheckedProjects {
-  project_id: number;
-  checked: boolean;
 }
 
 const Projects = ({ session }: Props) => {

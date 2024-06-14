@@ -17,6 +17,7 @@ import Item from "@/components/Item";
 import PageLoading from "@/components/Loading/PageLoading";
 import { ReceiptItemType, ReceiptType } from "@/types/ReceiptTypes";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
+import { CheckedItems } from "@/types/SelectType";
 
 const itemSchema = Yup.object({
   description: Yup.string().required("Description is required"),
@@ -30,7 +31,6 @@ const ReceiptId = () => {
   const [isOptionsOpen, setisOptionsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddOpen, setIsAddOpen] = useState(false);
-
   const [filteredItemData, setFilteredItemData] = useState<ReceiptItemType[]>(
     receipt.items
   );
@@ -221,6 +221,7 @@ const Items = ({
   };
   const searchParams = useSearchParams();
   const [addReceiptOpen, setAddReceiptOpen] = useState(false);
+  const [checkedItems, setCheckedItems] = useState<CheckedItems[]>([]);
 
   const [openItemId, setOpenItemId] = useState(null as number | null);
 
@@ -259,6 +260,8 @@ const Items = ({
             item={item}
             isOpen={openItemId === item.id}
             onToggleOpen={(e) => toggleOpenItem(item.id, e)}
+            checkedItems={checkedItems}
+            setCheckedItems={setCheckedItems}
           />
         ))}
       </div>
@@ -283,6 +286,8 @@ const Items = ({
           item={item}
           isOpen={openItemId === item.id}
           onToggleOpen={(e) => toggleOpenItem(item.id, e)}
+          checkedItems={checkedItems}
+          setCheckedItems={setCheckedItems}
         />
       ))}
     </div>

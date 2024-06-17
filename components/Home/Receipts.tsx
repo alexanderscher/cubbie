@@ -7,6 +7,7 @@ import Receipt from "@/components/receiptComponents/Receipt";
 import { getReceiptsClient } from "@/lib/getReceiptsClient";
 import { ReceiptItemType, ReceiptType } from "@/types/ReceiptTypes";
 import { CheckedReceipts } from "@/types/SelectType";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -108,11 +109,7 @@ const Receipts = () => {
             setIsSelectedOpen={setIsSelectedOpen}
             isSelectedOpen={isSelectedOpen}
           >
-            <div></div>
-            {/* <SelectedProjectOptions
-              checkedProjects={checkedProjects}
-              setCheckedProjects={setCheckedProjects}
-            /> */}
+            <SelectedReceiptOptions />
           </SelectedBar>
           <div className="boxes">
             {activeReceipts.map((receipt) => (
@@ -150,11 +147,7 @@ const Receipts = () => {
             setIsSelectedOpen={setIsSelectedOpen}
             isSelectedOpen={isSelectedOpen}
           >
-            <div></div>
-            {/* <SelectedProjectOptions
-              checkedProjects={checkedProjects}
-              setCheckedProjects={setCheckedProjects}
-            /> */}
+            <SelectedReceiptOptions />
           </SelectedBar>
           <div className="boxes">
             {expiredReceipts.map((receipt) => (
@@ -189,11 +182,7 @@ const Receipts = () => {
             setIsSelectedOpen={setIsSelectedOpen}
             isSelectedOpen={isSelectedOpen}
           >
-            <div></div>
-            {/* <SelectedProjectOptions
-              checkedProjects={checkedProjects}
-              setCheckedProjects={setCheckedProjects}
-            /> */}
+            <SelectedReceiptOptions />
           </SelectedBar>
           <div className="boxes">
             {sortedAndFilteredData.map((receipt) => (
@@ -215,3 +204,42 @@ const Receipts = () => {
 };
 
 export default Receipts;
+
+const SelectedReceiptOptions = () => {
+  return (
+    <div
+      className={`absolute  shadow-lg -right-2 top-10 rounded-lg  z-[2000] w-[200px] bg-white`}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
+      <div className="p-4 rounded text-sm flex flex-col gap-2">
+        <div className="bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer">
+          <div
+            className="flex gap-2 cursor-pointer"
+            onClick={(e) => {
+              e.preventDefault();
+              // setIsDeleteOpen(true);
+            }}
+          >
+            <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
+            <p>Delete Selected</p>
+          </div>
+        </div>
+        <div className="bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer">
+          <div
+            className="flex gap-2 cursor-pointer"
+            onClick={(e) => {
+              e.preventDefault();
+              // setIsDeleteOpen(true);
+            }}
+          >
+            <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
+            <p>Delete All</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

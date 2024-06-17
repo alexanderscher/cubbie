@@ -572,12 +572,9 @@ const SelectedProjectOptions = ({
         </ModalOverlay>
       )}
       {deleteConfirm && (
-        <ModalOverlay
-          isDelete={true}
-          onClose={() => setDeleteAllConfirm(false)}
-        >
+        <ModalOverlay isDelete={true} onClose={() => setDeleteConfirm(false)}>
           <DeleteConfirmationModal
-            cancelClick={setDeleteAllConfirm}
+            cancelClick={setDeleteConfirm}
             deleteClick={deleteSelected}
             isPending={isPending}
             type="Selected Projects"
@@ -586,9 +583,12 @@ const SelectedProjectOptions = ({
         </ModalOverlay>
       )}
       {deleteAllConfirm && (
-        <ModalOverlay isDelete={true} onClose={() => setDeleteConfirm(false)}>
+        <ModalOverlay
+          isDelete={true}
+          onClose={() => setDeleteAllConfirm(false)}
+        >
           <DeleteConfirmationModal
-            cancelClick={setDeleteConfirm}
+            cancelClick={setDeleteAllConfirm}
             deleteClick={deleteAllProjects}
             isPending={isPending}
             type="All projects"

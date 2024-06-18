@@ -203,6 +203,7 @@ const ItemIdEdit = ({ itemId }: ItemIdEditProps) => {
                 )}
               </div>
             </div>
+            <h1 className="text-orange-600 text-2xl">Edit Item</h1>
 
             <div className="bg-white -white p-10 rounded-lg">
               <div className="flex flex-col gap-4">
@@ -368,23 +369,10 @@ const ItemIdEdit = ({ itemId }: ItemIdEditProps) => {
                     className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg-white  rounded p-2"
                   />
                 </div>
-                {/* <div className="w-full ">
-                  <p className="text-emerald-900 text-xs">Product ID</p>
-                  <input
-                    value={values.product_id}
-                    onChange={handleChange("product_id")}
-                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none bg-white  rounded p-2"
-                  />
-                </div> */}
               </div>
             </div>
           </div>
-          {/* {uploadError && (
-            <ErrorModal
-              errorMessage={uploadError}
-              onClose={() => setUploadError("")}
-            />
-          )} */}
+
           {isPending && <Loading loading={isPending} />}
         </div>
       )}

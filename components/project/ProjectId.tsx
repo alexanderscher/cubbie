@@ -19,6 +19,9 @@ import { ReceiptType } from "@/types/ReceiptTypes";
 import { Session } from "@/types/Session";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 import { CheckedReceipts } from "@/types/SelectType";
+import { SelectedBar } from "@/components/Home/SelectedBar";
+import { SelectedReceiptOptions } from "@/components/selected/SelectedReceiptOptions";
+import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
 
 interface ProjectIdProps {
   session: Session;
@@ -27,8 +30,9 @@ interface ProjectIdProps {
 export const ProjectId = ({ session }: ProjectIdProps) => {
   const { isProjectLoading, project, fetchProjectById } =
     useSearchProjectContext();
-
+  const { selectReceiptTrigger } = useSearchReceiptContext();
   const [isAddOpen, setAddReceiptOpen] = useState(false);
+  const [isSelectedOpen, setIsSelectedOpen] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -239,18 +243,31 @@ export const ProjectId = ({ session }: ProjectIdProps) => {
                   addReceiptOpen={isAddOpen}
                 />
               ) : (
-                <div className="boxes">
-                  {filteredReceiptData.map((receipt: ReceiptType) => (
-                    <Receipt
-                      key={receipt.id}
-                      receipt={receipt}
-                      onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
-                      isOpen={openReceiptId === receipt.id}
-                      setOpenReceiptId={setOpenReceiptId}
+                <div className="flex flex-col gap-6">
+                  <SelectedBar
+                    selectTrigger={selectReceiptTrigger}
+                    checkedItems={checkedReceipts}
+                    setIsSelectedOpen={setIsSelectedOpen}
+                    isSelectedOpen={isSelectedOpen}
+                  >
+                    <SelectedReceiptOptions
                       checkedReceipts={checkedReceipts}
                       setCheckedReceipts={setCheckedReceipts}
                     />
-                  ))}
+                  </SelectedBar>
+                  <div className="boxes">
+                    {filteredReceiptData.map((receipt: ReceiptType) => (
+                      <Receipt
+                        key={receipt.id}
+                        receipt={receipt}
+                        onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
+                        isOpen={openReceiptId === receipt.id}
+                        setOpenReceiptId={setOpenReceiptId}
+                        checkedReceipts={checkedReceipts}
+                        setCheckedReceipts={setCheckedReceipts}
+                      />
+                    ))}
+                  </div>
                 </div>
               )
             ) : null}
@@ -264,20 +281,33 @@ export const ProjectId = ({ session }: ProjectIdProps) => {
                   addReceiptOpen={isAddOpen}
                 />
               ) : (
-                <div className="boxes">
-                  {filteredReceiptData
-                    .filter((receipt: ReceiptType) => !receipt.expired)
-                    .map((receipt: ReceiptType) => (
-                      <Receipt
-                        key={receipt.id}
-                        receipt={receipt}
-                        onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
-                        isOpen={openReceiptId === receipt.id}
-                        setOpenReceiptId={setOpenReceiptId}
-                        checkedReceipts={checkedReceipts}
-                        setCheckedReceipts={setCheckedReceipts}
-                      />
-                    ))}
+                <div className="flex flex-col gap-6">
+                  <SelectedBar
+                    selectTrigger={selectReceiptTrigger}
+                    checkedItems={checkedReceipts}
+                    setIsSelectedOpen={setIsSelectedOpen}
+                    isSelectedOpen={isSelectedOpen}
+                  >
+                    <SelectedReceiptOptions
+                      checkedReceipts={checkedReceipts}
+                      setCheckedReceipts={setCheckedReceipts}
+                    />
+                  </SelectedBar>
+                  <div className="boxes">
+                    {filteredReceiptData
+                      .filter((receipt: ReceiptType) => !receipt.expired)
+                      .map((receipt: ReceiptType) => (
+                        <Receipt
+                          key={receipt.id}
+                          receipt={receipt}
+                          onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
+                          isOpen={openReceiptId === receipt.id}
+                          setOpenReceiptId={setOpenReceiptId}
+                          checkedReceipts={checkedReceipts}
+                          setCheckedReceipts={setCheckedReceipts}
+                        />
+                      ))}
+                  </div>
                 </div>
               )
             ) : null}
@@ -291,20 +321,33 @@ export const ProjectId = ({ session }: ProjectIdProps) => {
                   addReceiptOpen={isAddOpen}
                 />
               ) : (
-                <div className="boxes">
-                  {filteredReceiptData
-                    .filter((receipt: ReceiptType) => receipt.expired)
-                    .map((receipt: ReceiptType) => (
-                      <Receipt
-                        key={receipt.id}
-                        receipt={receipt}
-                        onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
-                        isOpen={openReceiptId === receipt.id}
-                        setOpenReceiptId={setOpenReceiptId}
-                        checkedReceipts={checkedReceipts}
-                        setCheckedReceipts={setCheckedReceipts}
-                      />
-                    ))}
+                <div className="flex flex-col gap-6">
+                  <SelectedBar
+                    selectTrigger={selectReceiptTrigger}
+                    checkedItems={checkedReceipts}
+                    setIsSelectedOpen={setIsSelectedOpen}
+                    isSelectedOpen={isSelectedOpen}
+                  >
+                    <SelectedReceiptOptions
+                      checkedReceipts={checkedReceipts}
+                      setCheckedReceipts={setCheckedReceipts}
+                    />
+                  </SelectedBar>
+                  <div className="boxes">
+                    {filteredReceiptData
+                      .filter((receipt: ReceiptType) => receipt.expired)
+                      .map((receipt: ReceiptType) => (
+                        <Receipt
+                          key={receipt.id}
+                          receipt={receipt}
+                          onToggleOpen={(e) => toggleOpenReceipt(receipt.id, e)}
+                          isOpen={openReceiptId === receipt.id}
+                          setOpenReceiptId={setOpenReceiptId}
+                          checkedReceipts={checkedReceipts}
+                          setCheckedReceipts={setCheckedReceipts}
+                        />
+                      ))}
+                  </div>
                 </div>
               )
             ) : null}

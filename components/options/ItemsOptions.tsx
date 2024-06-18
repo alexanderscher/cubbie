@@ -1,6 +1,6 @@
 "use client";
 import { deleteItem } from "@/actions/items/deleteItem";
-import { markAsReturned, unreturn } from "@/actions/return";
+import { markAsReturned, unreturn } from "@/actions/items/return";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
 import Loading from "@/components/Loading/Loading";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
@@ -38,7 +38,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
   const deleteMethod = () => {
     startTransition(async () => {
       try {
-        const result = await deleteItem(item.id, item.receipt);
+        const result = await deleteItem(item.id);
 
         if (result?.error) {
           toast.error("An error occurred. Please try again.");

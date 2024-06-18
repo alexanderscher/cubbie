@@ -7,7 +7,7 @@ import { Session } from "@/types/Session";
 import { ItemReceiptType } from "@/types/ItemsTypes";
 import { revalidateTag } from "next/cache";
 
-export const deleteItem = async (id: number, receipt: ItemReceiptType) => {
+export const deleteItem = async (id: number) => {
   try {
     const session = (await auth()) as Session;
     const userId = session?.user?.id as string;
@@ -33,9 +33,9 @@ export const deleteItem = async (id: number, receipt: ItemReceiptType) => {
       },
     });
     revalidateTag(`projects_user_${userId}`);
-    if (receipt?.project_id) {
-      revalidateUsersInProject(receipt?.project_id);
-    }
+    // if (receipt?.project_id) {
+    //   revalidateUsersInProject(receipt?.project_id);
+    // }
   } catch (error) {
     console.error(error);
     return { error: "An error occurred" };

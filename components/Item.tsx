@@ -237,30 +237,3 @@ const Item = ({
 };
 
 export default Item;
-
-const SelectedItemOptions = () => {
-  return (
-    <div
-      className={`absolute  shadow-lg -right-2 top-10 rounded-lg  z-[2000] w-[200px] bg-white`}
-      onClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-    >
-      <div className="p-4 rounded text-sm flex flex-col gap-2">
-        <div className="bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer">
-          <div
-            className="flex gap-2 cursor-pointer"
-            onClick={(e) => {
-              e.preventDefault();
-              // setIsDeleteOpen(true);
-            }}
-          >
-            <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
-            <p>Delete</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};

@@ -4,7 +4,6 @@ import { SelectedBar } from "@/components/Home/SelectedBar";
 import PageLoading from "@/components/Loading/PageLoading";
 import { NoReceipts } from "@/components/receiptComponents/NoReceipts";
 import Receipt from "@/components/receiptComponents/Receipt";
-import { getReceiptsClient } from "@/lib/getReceiptsClient";
 import { ReceiptItemType, ReceiptType } from "@/types/ReceiptTypes";
 import { CheckedReceipts } from "@/types/SelectType";
 import Image from "next/image";
@@ -109,7 +108,10 @@ const Receipts = () => {
             setIsSelectedOpen={setIsSelectedOpen}
             isSelectedOpen={isSelectedOpen}
           >
-            <SelectedReceiptOptions />
+            <SelectedReceiptOptions
+              checkedReceipts={checkedReceipts}
+              setCheckedReceipts={setCheckedReceipts}
+            />
           </SelectedBar>
           <div className="boxes">
             {activeReceipts.map((receipt) => (
@@ -147,7 +149,10 @@ const Receipts = () => {
             setIsSelectedOpen={setIsSelectedOpen}
             isSelectedOpen={isSelectedOpen}
           >
-            <SelectedReceiptOptions />
+            <SelectedReceiptOptions
+              checkedReceipts={checkedReceipts}
+              setCheckedReceipts={setCheckedReceipts}
+            />
           </SelectedBar>
           <div className="boxes">
             {expiredReceipts.map((receipt) => (
@@ -182,7 +187,10 @@ const Receipts = () => {
             setIsSelectedOpen={setIsSelectedOpen}
             isSelectedOpen={isSelectedOpen}
           >
-            <SelectedReceiptOptions />
+            <SelectedReceiptOptions
+              checkedReceipts={checkedReceipts}
+              setCheckedReceipts={setCheckedReceipts}
+            />
           </SelectedBar>
           <div className="boxes">
             {sortedAndFilteredData.map((receipt) => (
@@ -205,7 +213,16 @@ const Receipts = () => {
 
 export default Receipts;
 
-const SelectedReceiptOptions = () => {
+interface SelectedReceiptsOptionsProps {
+  checkedReceipts: CheckedReceipts[];
+  setCheckedReceipts: (value: any) => void;
+  archive?: boolean;
+}
+
+const SelectedReceiptOptions = ({
+  checkedReceipts,
+  setCheckedReceipts,
+}: SelectedReceiptsOptionsProps) => {
   return (
     <div
       className={`absolute  shadow-lg -right-2 top-10 rounded-lg  z-[2000] w-[200px] bg-white`}

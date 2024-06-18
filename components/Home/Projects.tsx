@@ -5,7 +5,7 @@ import {
   checkProject,
   deleteAll,
   deleteProjects,
-} from "@/actions/selectedProjects/selected";
+} from "@/actions/select/selectedProjects";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 import { SelectedBar } from "@/components/Home/SelectedBar";
 import Loading from "@/components/Loading/Loading";

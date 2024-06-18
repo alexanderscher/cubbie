@@ -433,7 +433,7 @@ const SelectedProjectOptions = ({
           setDeleteModalOpen(true);
         }
       } catch (error) {
-        console.error("Error deleting project:", error);
+        toast.error("Error deleting projects");
       }
     });
   };
@@ -446,7 +446,7 @@ const SelectedProjectOptions = ({
         reloadProjects();
         toast.success("Projects deleted successfully");
       } catch (error) {
-        console.error("Error deleting projects:", error);
+        toast.error("Error deleting projects");
       }
     });
   };
@@ -463,7 +463,7 @@ const SelectedProjectOptions = ({
             : toast.success("Projects archived successfully");
         }
       } catch (error) {
-        console.error("Error archiving project:", error);
+        toast.error("Error archiving projects");
       }
     });
   };
@@ -480,7 +480,7 @@ const SelectedProjectOptions = ({
             : toast.success("Projects archived successfully");
         }
       } catch (error) {
-        console.error("Error archiving projects:", error);
+        toast.error("Error archiving projects");
       }
     });
   };
@@ -496,41 +496,35 @@ const SelectedProjectOptions = ({
       <div className="p-4 rounded text-sm flex flex-col gap-2">
         <div
           className={`bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer`}
+          onClick={() => {
+            setDeleteAllConfirm(true);
+          }}
         >
-          <div
-            className="flex gap-2 cursor-pointer"
-            onClick={() => {
-              setDeleteAllConfirm(true);
-            }}
-          >
+          <div className="flex gap-2 cursor-pointer">
             <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
             <p className="text-sm">Delete All</p>
           </div>
         </div>
         <div
           className={`bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer`}
+          onClick={() => {
+            if (checkedProjects.length > 0) {
+              setDeleteConfirm(true);
+            } else {
+              toast.error("No projects selected");
+            }
+          }}
         >
-          <div
-            className="flex gap-2 cursor-pointer"
-            onClick={() => {
-              if (checkedProjects.length > 0) {
-                setDeleteConfirm(true);
-              } else {
-                toast.error("No projects selected");
-              }
-            }}
-          >
+          <div className="flex gap-2 cursor-pointer">
             <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
             <p className="text-sm">Delete selected</p>
           </div>
         </div>
         <div
           className={`bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer`}
+          onClick={archiveAllProjects}
         >
-          <div
-            className="flex gap-2 cursor-pointer"
-            onClick={archiveAllProjects}
-          >
+          <div className="flex gap-2 cursor-pointer">
             <Image src={"/archive.png"} width={20} height={20} alt=""></Image>
             <p className="text-sm">
               {archive ? "Unarchive all" : "Archive all"}
@@ -539,17 +533,15 @@ const SelectedProjectOptions = ({
         </div>
         <div
           className={`bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer`}
+          onClick={() => {
+            if (checkedProjects.length > 0) {
+              archiveSelected();
+            } else {
+              toast.error("No projects selected");
+            }
+          }}
         >
-          <div
-            className="flex gap-2 cursor-pointer"
-            onClick={() => {
-              if (checkedProjects.length > 0) {
-                archiveSelected();
-              } else {
-                toast.error("No projects selected");
-              }
-            }}
-          >
+          <div className="flex gap-2 cursor-pointer">
             <Image src={"/archive.png"} width={20} height={20} alt=""></Image>
             <p className="text-sm">
               {archive ? "Unarchive selected" : "Archive selected"}

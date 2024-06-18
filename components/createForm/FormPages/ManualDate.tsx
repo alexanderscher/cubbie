@@ -13,7 +13,6 @@ interface ManualDateProps {
 const ManualDate = ({
   values,
   handleChange,
-  errors,
   setFieldValue,
   comingfrom,
 }: ManualDateProps) => {

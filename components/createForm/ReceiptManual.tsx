@@ -32,9 +32,6 @@ const ReceiptManual = ({
   projects,
   setProjectPlanId,
 }: ReceiptManualProps) => {
-  useEffect(() => {
-    setFieldValue("folder", projects[0].id);
-  }, [projects, setFieldValue]);
   const pathname = usePathname();
   const [help, setHelp] = useState(false);
 

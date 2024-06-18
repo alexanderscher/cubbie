@@ -212,206 +212,212 @@ const ReceiptIdEdit = ({ receiptId }: Props) => {
         dirty,
         setFieldValue,
       }) => (
-        <div className="flex flex-col gap-8  w-full h-full pb-[200px] max-w-[1260px]">
-          <HeaderNav receipt={receipt} />
-          <div className="flex justify-between items-center w-full">
-            <div className="flex gap-2">
-              {dirty ? (
-                <div className="flex gap-2">
+        <div className="w-full flex justify-center items-center">
+          <div className="flex flex-col gap-6  max-w-[700px] w-full ">
+            <HeaderNav receipt={receipt} />
+            <div className="flex justify-between items-center w-full">
+              <div className="flex gap-2">
+                {dirty ? (
+                  <div className="flex gap-2">
+                    <RegularButton
+                      styles="bg  border-emerald-900"
+                      href={`/receipt/${receiptId}`}
+                    >
+                      <p className="text-emerald-900 text-xs">Discard</p>
+                    </RegularButton>
+                    <RegularButton
+                      styles="bg-emerald-900  border-emerald-900"
+                      handleClick={async () => {
+                        const error = await validateForm();
+                        if (error) {
+                          setErrorM({
+                            store: (error.store as string) || "",
+                            purchase_date:
+                              (error.purchase_date as string) || "",
+                            return_date: (error.return_date as string) || "",
+                            tracking_number: error.tracking_number || "",
+                          });
+                        }
+                        if (Object.keys(error).length === 0) {
+                          handleSubmit();
+                        }
+                      }}
+                    >
+                      <p className="text-white text-xs">Save</p>
+                    </RegularButton>
+                  </div>
+                ) : (
                   <RegularButton
-                    styles="bg  border-emerald-900"
+                    styles="bg border-emerald-900"
                     href={`/receipt/${receiptId}`}
                   >
-                    <p className="text-emerald-900 text-xs">Discard</p>
+                    <p className="text-emerald-900 text-xs">Cancel</p>
                   </RegularButton>
-                  <RegularButton
-                    styles="bg-emerald-900  border-emerald-900"
-                    handleClick={async () => {
-                      const error = await validateForm();
-                      if (error) {
-                        setErrorM({
-                          store: (error.store as string) || "",
-                          purchase_date: (error.purchase_date as string) || "",
-                          return_date: (error.return_date as string) || "",
-                          tracking_number: error.tracking_number || "",
-                        });
-                      }
-                      if (Object.keys(error).length === 0) {
-                        handleSubmit();
-                      }
-                    }}
-                  >
-                    <p className="text-white text-xs">Save</p>
-                  </RegularButton>
-                </div>
-              ) : (
-                <RegularButton
-                  styles="bg border-emerald-900"
-                  href={`/receipt/${receiptId}`}
-                >
-                  <p className="text-emerald-900 text-xs">Cancel</p>
-                </RegularButton>
-              )}
+                )}
+              </div>
             </div>
-          </div>
+            <h1 className="text-orange-600 text-2xl">Edit Receipt</h1>
 
-          <div className={`${styles.receipt} `}>
-            <div className={`${styles.receiptLeft}  flex flex-col gap-2 `}>
-              <div className={` rounded-lg  bg-white flex flex-col gap-4 p-8`}>
-                {!values.receipt_image_url && !values.edit_image && (
-                  <div className="w-full  overflow-hidden  relative">
-                    <FileUploadDropzone
-                      onFileUpload={(e) => onFileUpload(e, setFieldValue)}
-                      button={
-                        <div className="w-full h-[150px] soverflow-hidden  border-[1px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded  relative flex flex-col items-center justify-center cursor-pointer gap-5">
-                          <Image
-                            src="/image_b.png"
-                            alt=""
-                            width={40}
-                            height={40}
-                            className="object-cover "
-                            style={{
-                              objectFit: "cover",
-                              objectPosition: "center",
-                            }}
-                          />
-                          <p className="text-xs text-emerald-900">
-                            Upload photo or drag and drop
-                          </p>
-                        </div>
-                      }
+            {/* <div className={`${styles.receipt} `}>
+              <div className={`${styles.receiptLeft}  flex flex-col gap-2 `}> */}
+            <div
+              className={` rounded-lg  bg-white flex flex-col gap-4 p-8 w-full`}
+            >
+              {!values.receipt_image_url && !values.edit_image && (
+                <div className="w-full  overflow-hidden  relative">
+                  <FileUploadDropzone
+                    onFileUpload={(e) => onFileUpload(e, setFieldValue)}
+                    button={
+                      <div className="w-full h-[150px] soverflow-hidden  border-[1px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded  relative flex flex-col items-center justify-center cursor-pointer gap-5">
+                        <Image
+                          src="/image_b.png"
+                          alt=""
+                          width={40}
+                          height={40}
+                          className="object-cover "
+                          style={{
+                            objectFit: "cover",
+                            objectPosition: "center",
+                          }}
+                        />
+                        <p className="text-xs text-emerald-900">
+                          Upload photo or drag and drop
+                        </p>
+                      </div>
+                    }
+                  />
+                </div>
+              )}
+              {values.edit_image && (
+                <div className="w-full flex justify-center items-center relative group">
+                  <div className="relative  w-[200px] max-h-[400px] rounded overflow-hidden">
+                    <Image
+                      src={values.edit_image}
+                      width={300}
+                      height={300}
+                      alt="Receipt Image"
+                      className="object-contain  w-full cursor-pointer hover:opacity-80 transition-all duration-300 ease-in-out"
+                      layout="intrinsic"
+                      onClick={() => setIsOpen(true)}
                     />
-                  </div>
-                )}
-                {values.edit_image && (
-                  <div className="w-full flex justify-center items-center relative group">
-                    <div className="relative  w-[200px] max-h-[400px] rounded overflow-hidden">
-                      <Image
-                        src={values.edit_image}
-                        width={300}
-                        height={300}
-                        alt="Receipt Image"
-                        className="object-contain  w-full cursor-pointer hover:opacity-80 transition-all duration-300 ease-in-out"
-                        layout="intrinsic"
-                        onClick={() => setIsOpen(true)}
-                      />
-                      <ImageModal
-                        isOpen={isOpen}
-                        setIsOpen={setIsOpen}
-                        imageUrl={values.edit_image}
-                        altText="Your Image Description"
-                        setFieldValue={setFieldValue}
-                        handleFileChange={onFileUpload}
-                        changeField="edit_image"
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {values.receipt_image_url && (
-                  <div className="w-full flex justify-center items-center relative">
-                    <div className="relative  w-[200px] max-h-[400px] rounded overflow-hidden hover:opacity-80 transition-all duration-300 ease-in-out">
-                      <Image
-                        src={values.receipt_image_url}
-                        width={300}
-                        height={300}
-                        alt="Receipt Image"
-                        className="object-contain rpunded-md w-full cursor-pointer"
-                        layout="intrinsic"
-                        onClick={() => setIsOpen(true)}
-                      />
-                    </div>
                     <ImageModal
                       isOpen={isOpen}
                       setIsOpen={setIsOpen}
-                      imageUrl={values.receipt_image_url}
+                      imageUrl={values.edit_image}
                       altText="Your Image Description"
                       setFieldValue={setFieldValue}
-                      handleFileChange={handleFileChange}
-                      changeField="receipt_image_url"
+                      handleFileChange={onFileUpload}
+                      changeField="edit_image"
                     />
                   </div>
-                )}
+                </div>
+              )}
 
-                <div className="flex flex-col gap-4 text-sm">
-                  <div className="w-full">
-                    <p className="text-emerald-900 text-xs">Store Name</p>
-                    <input
-                      value={values.store}
-                      onChange={handleChange("store")}
-                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2"
+              {values.receipt_image_url && (
+                <div className="w-full flex justify-center items-center relative">
+                  <div className="relative  w-[200px] max-h-[400px] rounded overflow-hidden hover:opacity-80 transition-all duration-300 ease-in-out">
+                    <Image
+                      src={values.receipt_image_url}
+                      width={300}
+                      height={300}
+                      alt="Receipt Image"
+                      className="object-contain rpunded-md w-full cursor-pointer"
+                      layout="intrinsic"
+                      onClick={() => setIsOpen(true)}
                     />
-                    {errorM.store && (
-                      <p className="text-orange-900 text-xs mt-2">
-                        {errorM.store}
-                      </p>
-                    )}
                   </div>
-                  <PurchaseTypeSelect
-                    type={values.type}
+                  <ImageModal
+                    isOpen={isOpen}
+                    setIsOpen={setIsOpen}
+                    imageUrl={values.receipt_image_url}
+                    altText="Your Image Description"
                     setFieldValue={setFieldValue}
-                    color="white"
+                    handleFileChange={handleFileChange}
+                    changeField="receipt_image_url"
                   />
+                </div>
+              )}
 
-                  <div className="w-full ">
-                    <p className="text-emerald-900 text-xs">Purcahse Date</p>
-                    <input
-                      type="date"
-                      style={{ WebkitAppearance: "none" }}
-                      value={formatDateToYYYYMMDD(values.purchase_date)}
-                      onChange={handleChange("purchase_date")}
-                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2 bg-white"
-                    />
-                    {errorM.purchase_date && (
-                      <p className="text-orange-900 text-xs mt-2">
-                        {errorM.purchase_date}
-                      </p>
-                    )}
-                  </div>
+              <div className="flex flex-col gap-4 text-sm">
+                <div className="w-full">
+                  <p className="text-emerald-900 text-xs">Store Name</p>
+                  <input
+                    value={values.store}
+                    onChange={handleChange("store")}
+                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2"
+                  />
+                  {errorM.store && (
+                    <p className="text-orange-900 text-xs mt-2">
+                      {errorM.store}
+                    </p>
+                  )}
+                </div>
+                <PurchaseTypeSelect
+                  type={values.type}
+                  setFieldValue={setFieldValue}
+                  color="white"
+                />
 
-                  <div className="w-full">
-                    <p className="text-emerald-900 text-xs">Return Date</p>
-                    <input
-                      type="date"
-                      style={{ WebkitAppearance: "none" }}
-                      value={formatDateToYYYYMMDD(values.return_date)}
-                      onChange={handleChange("return_date")}
-                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2 bg-white"
-                    />
-                    {errorM.return_date && (
-                      <p className="text-orange-900 text-xs mt-2">
-                        {errorM.return_date}
-                      </p>
-                    )}
-                  </div>
+                <div className="w-full ">
+                  <p className="text-emerald-900 text-xs">Purcahse Date</p>
+                  <input
+                    type="date"
+                    style={{ WebkitAppearance: "none" }}
+                    value={formatDateToYYYYMMDD(values.purchase_date)}
+                    onChange={handleChange("purchase_date")}
+                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2 bg-white"
+                  />
+                  {errorM.purchase_date && (
+                    <p className="text-orange-900 text-xs mt-2">
+                      {errorM.purchase_date}
+                    </p>
+                  )}
+                </div>
 
-                  <div className="w-full">
-                    <p className="text-emerald-900 text-xs">Card Used</p>
-                    <input
-                      value={values.card || ""}
-                      onChange={handleChange("card")}
-                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2"
-                    />
-                  </div>
+                <div className="w-full">
+                  <p className="text-emerald-900 text-xs">Return Date</p>
+                  <input
+                    type="date"
+                    style={{ WebkitAppearance: "none" }}
+                    value={formatDateToYYYYMMDD(values.return_date)}
+                    onChange={handleChange("return_date")}
+                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2 bg-white"
+                  />
+                  {errorM.return_date && (
+                    <p className="text-orange-900 text-xs mt-2">
+                      {errorM.return_date}
+                    </p>
+                  )}
+                </div>
 
-                  <div className="w-full">
-                    <p className="text-emerald-900 text-xs">Tracking Link</p>
-                    <input
-                      value={values.tracking_number || ""}
-                      onChange={handleChange("tracking_number")}
-                      className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2"
-                    />
-                    {errorM.tracking_number && (
-                      <p className="text-orange-900 text-xs mt-2">
-                        {errorM.tracking_number}
-                      </p>
-                    )}
-                  </div>
+                <div className="w-full">
+                  <p className="text-emerald-900 text-xs">Card Used</p>
+                  <input
+                    value={values.card || ""}
+                    onChange={handleChange("card")}
+                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2"
+                  />
+                </div>
+
+                <div className="w-full">
+                  <p className="text-emerald-900 text-xs">Tracking Link</p>
+                  <input
+                    value={values.tracking_number || ""}
+                    onChange={handleChange("tracking_number")}
+                    className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2"
+                  />
+                  {errorM.tracking_number && (
+                    <p className="text-orange-900 text-xs mt-2">
+                      {errorM.tracking_number}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
+            {/* </div>
+            </div> */}
 
-            {receipt.items.length > 0 && (
+            {/* {receipt.items.length > 0 && (
               <div
                 className={`flex flex-col gap-2 pb-[200px] ${styles.boxContainer}`}
               >
@@ -457,7 +463,7 @@ const ReceiptIdEdit = ({ receiptId }: Props) => {
                   Add Item
                 </RegularButton>
               </div>
-            )}
+            )} */}
           </div>
           {uploadError && (
             <ErrorModal

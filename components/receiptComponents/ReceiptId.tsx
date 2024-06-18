@@ -18,6 +18,9 @@ import PageLoading from "@/components/Loading/PageLoading";
 import { ReceiptItemType, ReceiptType } from "@/types/ReceiptTypes";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
 import { CheckedItems } from "@/types/SelectType";
+import { SelectedBar } from "@/components/Home/SelectedBar";
+import { SelectedItemOptions } from "@/components/selected/SelectedItemOptions";
+import { useSearchItemContext } from "@/components/context/SearchItemContext";
 
 const itemSchema = Yup.object({
   description: Yup.string().required("Description is required"),
@@ -27,6 +30,7 @@ const itemSchema = Yup.object({
 const ReceiptId = () => {
   const { receipt, fetchReceiptById, isReceiptLoading } =
     useSearchReceiptContext();
+
   const [isOpen, setIsOpen] = useState(false);
   const [isOptionsOpen, setisOptionsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -206,6 +210,8 @@ const Items = ({
   setIsAddOpen: (value: boolean) => void;
   isReceiptLoading: boolean;
 }) => {
+  const { selectItemTrigger } = useSearchItemContext();
+
   const toggleOpenItem = (
     itemId: number | undefined,
     event: React.MouseEvent<HTMLDivElement>
@@ -222,6 +228,7 @@ const Items = ({
   const searchParams = useSearchParams();
   const [addReceiptOpen, setAddReceiptOpen] = useState(false);
   const [checkedItems, setCheckedItems] = useState<CheckedItems[]>([]);
+  const [isSelectedOpen, setIsSelectedOpen] = useState(false);
 
   const [openItemId, setOpenItemId] = useState(null as number | null);
 
@@ -252,18 +259,31 @@ const Items = ({
     }
 
     return (
-      <div className="boxes pb-20">
-        {filteredData.map((item: ReceiptItemType) => (
-          <Item
-            setOpenItemId={setOpenItemId}
-            key={item.id}
-            item={item}
-            isOpen={openItemId === item.id}
-            onToggleOpen={(e) => toggleOpenItem(item.id, e)}
-            checkedItems={checkedItems}
+      <div className="flex flex-col gap-6">
+        <SelectedBar
+          selectTrigger={selectItemTrigger}
+          checkedItems={checkedItems}
+          setIsSelectedOpen={setIsSelectedOpen}
+          isSelectedOpen={isSelectedOpen}
+        >
+          <SelectedItemOptions
             setCheckedItems={setCheckedItems}
+            checkedItems={checkedItems}
           />
-        ))}
+        </SelectedBar>
+        <div className="boxes pb-20">
+          {filteredData.map((item) => (
+            <Item
+              setOpenItemId={setOpenItemId}
+              key={item.id}
+              item={item}
+              isOpen={openItemId === item.id}
+              onToggleOpen={(e) => toggleOpenItem(item.id, e)}
+              setCheckedItems={setCheckedItems}
+              checkedItems={checkedItems}
+            />
+          ))}
+        </div>
       </div>
     );
   }
@@ -278,18 +298,31 @@ const Items = ({
   }
 
   return (
-    <div className="boxes pb-20">
-      {filteredData.map((item: ReceiptItemType) => (
-        <Item
-          setOpenItemId={setOpenItemId}
-          key={item.id}
-          item={item}
-          isOpen={openItemId === item.id}
-          onToggleOpen={(e) => toggleOpenItem(item.id, e)}
-          checkedItems={checkedItems}
+    <div className="flex flex-col gap-6">
+      <SelectedBar
+        selectTrigger={selectItemTrigger}
+        checkedItems={checkedItems}
+        setIsSelectedOpen={setIsSelectedOpen}
+        isSelectedOpen={isSelectedOpen}
+      >
+        <SelectedItemOptions
           setCheckedItems={setCheckedItems}
+          checkedItems={checkedItems}
         />
-      ))}
+      </SelectedBar>
+      <div className="boxes pb-20">
+        {filteredData.map((item) => (
+          <Item
+            setOpenItemId={setOpenItemId}
+            key={item.id}
+            item={item}
+            isOpen={openItemId === item.id}
+            onToggleOpen={(e) => toggleOpenItem(item.id, e)}
+            setCheckedItems={setCheckedItems}
+            checkedItems={checkedItems}
+          />
+        ))}
+      </div>
     </div>
   );
 };

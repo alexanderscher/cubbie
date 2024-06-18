@@ -357,143 +357,164 @@ const Filters = () => {
         </div>
       )}
       {pathname.includes("project") && (
-        <div className="flex gap-2 flex-wrap gap-y-3">
-          <div className="relative">
-            <FilterButton
-              setOpenModal={setOpenModal}
-              openModal={openModal}
-              label={determineStoreTypeLabel(searchParams.get("storeType"))}
-            />
-            {openModal && (
-              <>
-                <FilterReceiptOptions
-                  router={router}
-                  pathname={pathname}
-                  onClose={() => setOpenModal(false)}
-                  createQueryString={createQueryString}
-                  searchParams={searchParams}
-                />
-                <Overlay onClose={() => setOpenModal(false)} />
-              </>
-            )}
-          </div>
-          <div className="relative">
-            <SortButton
-              openModal={openSortModal}
-              setOpenModal={setOpenSortModal}
-              label={"All Purchases"}
-            />
-            {openSortModal && (
-              <>
-                <SortReceiptOptions
-                  router={router}
-                  pathname={pathname}
-                  onClose={() => setOpenSortModal(false)}
-                  createQueryString={createQueryString}
-                  searchParams={searchParams}
-                />
-                <Overlay onClose={() => setOpenSortModal(false)} />
-              </>
-            )}
-          </div>
-          <div className="relative">
-            <RegularButton
-              styles="border-emerald-900 text-emerald-900 flex justify-between items-center gap-2"
-              handleClick={() => {
-                setOpenStatusModal(!openStatusModal);
-              }}
-            >
-              <p className="text-xs">
-                {searchParams.get("expired") === "false"
-                  ? "All active receipts"
-                  : searchParams.get("expired") === "true"
-                  ? "Expired receipts"
-                  : "All receipts"}
-              </p>
-              <Image
-                src="/arrow_grey.png"
-                width={8}
-                height={8}
-                alt="arrow"
-                className="rotate-90"
+        <div className="flex justify-between flex-wrap gap-y-3">
+          <div className="flex gap-2 flex-wrap gap-y-3">
+            <div className="relative">
+              <FilterButton
+                setOpenModal={setOpenModal}
+                openModal={openModal}
+                label={determineStoreTypeLabel(searchParams.get("storeType"))}
               />
-            </RegularButton>
-            {openStatusModal && (
-              <>
-                <StatusReceiptOptions
-                  router={router}
-                  pathname={pathname}
-                  onClose={() => setOpenStatusModal(false)}
-                  createQueryString={createQueryString}
-                  searchParams={searchParams}
+              {openModal && (
+                <>
+                  <FilterReceiptOptions
+                    router={router}
+                    pathname={pathname}
+                    onClose={() => setOpenModal(false)}
+                    createQueryString={createQueryString}
+                    searchParams={searchParams}
+                  />
+                  <Overlay onClose={() => setOpenModal(false)} />
+                </>
+              )}
+            </div>
+            <div className="relative">
+              <SortButton
+                openModal={openSortModal}
+                setOpenModal={setOpenSortModal}
+                label={"All Purchases"}
+              />
+              {openSortModal && (
+                <>
+                  <SortReceiptOptions
+                    router={router}
+                    pathname={pathname}
+                    onClose={() => setOpenSortModal(false)}
+                    createQueryString={createQueryString}
+                    searchParams={searchParams}
+                  />
+                  <Overlay onClose={() => setOpenSortModal(false)} />
+                </>
+              )}
+            </div>
+            <div className="relative">
+              <RegularButton
+                styles="border-emerald-900 text-emerald-900 flex justify-between items-center gap-2"
+                handleClick={() => {
+                  setOpenStatusModal(!openStatusModal);
+                }}
+              >
+                <p className="text-xs">
+                  {searchParams.get("expired") === "false"
+                    ? "All active receipts"
+                    : searchParams.get("expired") === "true"
+                    ? "Expired receipts"
+                    : "All receipts"}
+                </p>
+                <Image
+                  src="/arrow_grey.png"
+                  width={8}
+                  height={8}
+                  alt="arrow"
+                  className="rotate-90"
                 />
-                <Overlay onClose={() => setOpenStatusModal(false)} />
-              </>
-            )}
+              </RegularButton>
+              {openStatusModal && (
+                <>
+                  <StatusReceiptOptions
+                    router={router}
+                    pathname={pathname}
+                    onClose={() => setOpenStatusModal(false)}
+                    createQueryString={createQueryString}
+                    searchParams={searchParams}
+                  />
+                  <Overlay onClose={() => setOpenStatusModal(false)} />
+                </>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <RegularButton
+              styles="border-orange-600"
+              handleClick={() => setSelectReceiptTrigger(!selectReceiptTrigger)}
+            >
+              <p className="text-xs text-orange-600">Select</p>
+            </RegularButton>
           </div>
         </div>
       )}
       {pathname.startsWith("/receipt/") && (
-        <div className="flex gap-2 flex-wrap gap-y-3	">
-          <div className="relative">
-            <FilterButton
-              setOpenModal={setOpenModal}
-              openModal={openModal}
-              label={determineLabel(searchParams.get("status"))}
-            />
+        <div className="flex justify-between flex-wrap gap-y-3">
+          <div className="flex gap-2 flex-wrap gap-y-3">
+            <div className="relative">
+              <FilterButton
+                setOpenModal={setOpenModal}
+                openModal={openModal}
+                label={determineLabel(searchParams.get("status"))}
+              />
 
-            {openModal && pathname.startsWith("/receipt/") && (
-              <>
-                <FilterItemsOptions
-                  router={router}
-                  pathname={pathname}
-                  onClose={() => setOpenModal(false)}
-                  createQueryString={createQueryString}
-                  searchParams={searchParams}
-                />
-                <Overlay onClose={() => setOpenModal(false)} />
-              </>
-            )}
+              {openModal && pathname.startsWith("/receipt/") && (
+                <>
+                  <FilterItemsOptions
+                    router={router}
+                    pathname={pathname}
+                    onClose={() => setOpenModal(false)}
+                    createQueryString={createQueryString}
+                    searchParams={searchParams}
+                  />
+                  <Overlay onClose={() => setOpenModal(false)} />
+                </>
+              )}
+            </div>
+            <div className="relative">
+              <FilterButton
+                setOpenModal={setOpenItemExpiredModal}
+                openModal={openItemExpiredModal}
+                label={determineItemExpiredLabel(searchParams.get("type"))}
+              />
+
+              {openItemExpiredModal && pathname.startsWith("/receipt/") && (
+                <>
+                  <FilterItemsExpiredOptions
+                    router={router}
+                    pathname={pathname}
+                    onClose={() => setOpenItemExpiredModal(false)}
+                    createQueryString={createQueryString}
+                    searchParams={searchParams}
+                  />
+                  <Overlay onClose={() => setOpenItemExpiredModal(false)} />
+                </>
+              )}
+            </div>
+
+            <div className="relative">
+              <SortButton
+                openModal={openSortModal}
+                setOpenModal={setOpenSortModal}
+                label={"Sort by"}
+              />
+              {openSortModal && pathname.startsWith("/receipt/") && (
+                <>
+                  <SortReceiptItemsOptions
+                    router={router}
+                    pathname={pathname}
+                    onClose={() => setOpenSortModal(false)}
+                    createQueryString={createQueryString}
+                    searchParams={searchParams}
+                  />
+                  <Overlay onClose={() => setOpenSortModal(false)} />
+                </>
+              )}
+            </div>
           </div>
-          <div className="relative">
-            <FilterButton
-              setOpenModal={setOpenItemExpiredModal}
-              openModal={openItemExpiredModal}
-              label={determineItemExpiredLabel(searchParams.get("type"))}
-            />
-
-            {openItemExpiredModal && pathname.startsWith("/receipt/") && (
-              <>
-                <FilterItemsExpiredOptions
-                  router={router}
-                  pathname={pathname}
-                  onClose={() => setOpenItemExpiredModal(false)}
-                  createQueryString={createQueryString}
-                  searchParams={searchParams}
-                />
-                <Overlay onClose={() => setOpenItemExpiredModal(false)} />
-              </>
-            )}
-          </div>
-
-          <div className="relative">
-            <SortButton
-              openModal={openSortModal}
-              setOpenModal={setOpenSortModal}
-              label={"Sort by"}
-            />
-            {openSortModal && pathname.startsWith("/receipt/") && (
-              <>
-                <SortReceiptItemsOptions
-                  router={router}
-                  pathname={pathname}
-                  onClose={() => setOpenSortModal(false)}
-                  createQueryString={createQueryString}
-                  searchParams={searchParams}
-                />
-                <Overlay onClose={() => setOpenSortModal(false)} />
-              </>
-            )}
+          <div>
+            <RegularButton
+              styles="border-orange-600"
+              handleClick={() => setSelectItemTrigger(!selectItemTrigger)}
+            >
+              <p className="text-xs text-orange-600">Select</p>
+            </RegularButton>
           </div>
         </div>
       )}

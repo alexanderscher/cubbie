@@ -235,7 +235,6 @@ const SelectedReceiptOptions = ({
   const [isPending, startTransition] = useTransition();
   const [deleteAllConfirm, setDeleteAllConfirm] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
-  console.log(deleteAllConfirm);
   const deleteSelected = () => {
     startTransition(async () => {
       try {

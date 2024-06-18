@@ -1,5 +1,4 @@
 "use client";
-import Filters from "@/components/headers/Filters";
 import { Alert } from "@/types/AppTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
 import Image from "next/image";
@@ -9,12 +8,10 @@ import { markAsRead, unmarkAsRead } from "@/actions/alerts/read";
 import { toast } from "sonner";
 import { deleteAlert } from "@/actions/alerts/deleteAlert";
 import Loading from "@/components/Loading/Loading";
-import SearchBar from "@/components/search/SearchBar";
 import { useSearchAlertContext } from "@/components/context/SearchFilterAlerts";
 import { useSearchParams } from "next/navigation";
 import { Overlay } from "@/components/overlays/Overlay";
 import PageLoading from "@/components/Loading/PageLoading";
-import { getAlerts } from "@/lib/alerts";
 import moment from "moment";
 import { AlertHeader } from "@/components/alerts/AlertHeader";
 

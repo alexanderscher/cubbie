@@ -7,7 +7,7 @@ import React, { useState, useTransition } from "react";
 import RegularButton from "@/components/buttons/RegularButton";
 import { freePlan, handlePayment } from "@/actions/stripe/payment";
 import Loading from "@/components/Loading/Loading";
-import ErrorModal from "@/components/modals/ErrorModal";
+import ErrorModal from "@/components/Modals/ErrorModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { useRouter } from "next/navigation";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";

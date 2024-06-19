@@ -12,7 +12,7 @@ import BottomBar from "@/components/createForm/BottomBar";
 import { Pages } from "@/types/form";
 import { toast } from "sonner";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
-import { DiscardModal } from "@/components/modals/DiscardModal";
+import { DiscardModal } from "@/components/Modals/DiscardModal";
 
 const getValidationSchema = (stage: ReceiptStoreStage) => {
   switch (stage) {

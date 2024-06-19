@@ -1,4 +1,4 @@
-import Receipts from "@/components/Home/Receipts";
+import Receipts from "@/components/home-components/Receipts";
 import { SearchReceiptProvider } from "@/components/context/SearchReceiptContext";
 import Header from "@/components/headers/Header";
 import PageWrapper from "@/components/wrapper/PageWrapper";

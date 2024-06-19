@@ -18,7 +18,7 @@ import ImageModal from "@/components/images/ImageModal";
 import CurrencyInput from "react-currency-input-field";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
 import { usePathname, useRouter } from "next/navigation";
-import PurchaseTypeSelect from "@/components/select/PurchaseTypeSelect";
+import PurchaseTypeSelect from "@/components/selects/PurchaseTypeSelect";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import { convertHeic } from "@/utils/media";
 import { AddItem } from "@/components/item/AddItem";

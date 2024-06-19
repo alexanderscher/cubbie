@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { DEFAULT_INPUT_VALUES, ReceiptOnlineStage } from "@/constants/form";
 import FinalStage from "@/components/createForm/FinalStage";
 import { ITEMS_SCHEMA, RECEIPT_SCHEMA } from "@/utils/receiptValidation";
-import Loading from "@/components/Loading/Loading";
+import Loading from "@/components/loading-components/Loading";
 import BottomBar from "@/components/createForm/BottomBar";
 import { toast } from "sonner";
 import ErrorModal from "@/components/modals/ErrorModal";

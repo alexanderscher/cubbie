@@ -1,7 +1,7 @@
 "use client";
 import { editProject } from "@/actions/projects/editProject";
 import { FormError } from "@/components/form-error";
-import Loading from "@/components/Loading/Loading";
+import Loading from "@/components/loading-components/Loading";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import { toast } from "sonner";
 import React, { useState, useTransition } from "react";

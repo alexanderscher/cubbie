@@ -1,5 +1,5 @@
 import Header from "@/components/headers/Header";
-import Items from "@/components/home/Items";
+import Items from "@/components/home-components/Items";
 import { SearchItemProvider } from "@/components/context/SearchItemContext";
 import { Suspense } from "react";
 import PageWrapper from "@/components/wrapper/PageWrapper";

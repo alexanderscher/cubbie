@@ -19,7 +19,7 @@ import { ReceiptType } from "@/types/ReceiptTypes";
 import { Session } from "@/types/Session";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 import { CheckedReceipts } from "@/types/SelectType";
-import { SelectedBar } from "@/components/home/SelectedBar";
+import { SelectedBar } from "@/components/home-components/SelectedBar";
 import { SelectedReceiptOptions } from "@/components/selected/SelectedReceiptOptions";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
 

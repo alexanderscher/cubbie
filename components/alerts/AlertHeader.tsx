@@ -1,7 +1,5 @@
 "use client";
-import Filters from "@/components/headers/Filters";
 import SubscribeModal from "@/components/modals/SubscribeModal";
-import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import SearchBar from "@/components/search/SearchBar";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import { useRouter } from "next/navigation";

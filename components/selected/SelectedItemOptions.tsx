@@ -6,7 +6,7 @@ import {
   unreturnSelectedItems,
 } from "@/actions/select/selectedItems";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
-import Loading from "@/components/Loading/Loading";
+import Loading from "@/components/loading-components/Loading";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { CheckedItems } from "@/types/SelectType";

@@ -7,9 +7,9 @@ import {
   deleteProjects,
 } from "@/actions/select/selectedProjects";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
-import { SelectedBar } from "@/components/Home/SelectedBar";
-import Loading from "@/components/Loading/Loading";
-import PageLoading from "@/components/Loading/PageLoading";
+import { SelectedBar } from "@/components/home-components/SelectedBar";
+import Loading from "@/components/loading-components/Loading";
+import PageLoading from "@/components/loading-components/PageLoading";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import { ProjectOptionsModal } from "@/components/options/ProjectOptions";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";

@@ -23,7 +23,6 @@ const ItemID = ({ itemId }: ItemIDProps) => {
   const { item, fetchItemById, isItemLoading } = useSearchItemContext();
   const [isOpen, setIsOpen] = useState(false);
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
-  const [edit, setEdit] = useState(false);
 
   useEffect(() => {
     fetchItemById();
@@ -53,13 +52,6 @@ const ItemID = ({ itemId }: ItemIDProps) => {
               styles={"text-2xl text-orange-600 "}
             />
             <div className="flex gap-2">
-              <RegularButton
-                styles="bg border-emerald-900"
-                // href={`/item/${itemId}/edit`}
-                handleClick={() => setEdit(true)}
-              >
-                <p className="text-emerald-900 text-xs">Edit</p>
-              </RegularButton>
               <div
                 className={`relative hover:border-[1px] hover:border-emerald-900 px-4 py-1 rounded-full cursor-pointer flex items-center ${
                   isOpen &&
@@ -155,11 +147,6 @@ const ItemID = ({ itemId }: ItemIDProps) => {
             <p>{item.character ? item.character : "None"}</p>
           </div>
         </div>
-        {edit && (
-          <ModalOverlay onClose={() => setEdit(false)}>
-            <EditItem itemId={itemId} setEdit={setEdit} />
-          </ModalOverlay>
-        )}
       </div>
     </div>
   );

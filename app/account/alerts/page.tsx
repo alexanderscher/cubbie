@@ -6,7 +6,6 @@ import AlertSettings from "@/components/profile/AlertSetting";
 import { getUserInfo } from "@/lib/userDb";
 import { Session } from "@/types/Session";
 import { auth } from "@/auth";
-import RegularButton from "@/components/buttons/RegularButton";
 import { SubscribeForAlerts } from "@/components/profile/SubscribeForAlerts";
 
 const getUser = async () => {

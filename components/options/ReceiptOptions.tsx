@@ -1,12 +1,12 @@
 "use client";
 import { addItem } from "@/actions/items/addItem";
 import { deleteReceipt } from "@/actions/receipts/deleteReceipt";
-// import { moveReceipt } from "@/actions/receipts/moveReceipt";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
 import ImageModal from "@/components/images/ImageModal";
 import { AddItem } from "@/components/item/AddItem";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
+import EditReceipt from "@/components/receiptComponents/EditReceipt";
 
 import { ReceiptItemType, ReceiptType } from "@/types/ReceiptTypes";
 import { formatDateToMMDDYY } from "@/utils/Date";
@@ -25,12 +25,12 @@ interface OptionsModalProps {
 const white =
   "bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer";
 const green =
-  "bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2 cursor-pointer";
+  "bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded-lg p-2 cursor-pointer";
 
 export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
   const { reloadReceipts } = useSearchReceiptContext();
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  // const [isOpen, setIsOpen] = useState(false);
+  const [edit, setEdit] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const pathname = usePathname();
   const [color, setColor] = useState(white);
@@ -177,26 +177,12 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
               <p>Add item</p>
             </div>
           </div>
-          {/* )} */}
-          {/* <div className={color}>
-            <div
-              className="flex gap-2"
-              onClick={(e) => {
-                e.preventDefault();
-                setIsOpen(true);
-              }}
-            >
-              <Image src={"/move.png"} width={20} height={20} alt=""></Image>
-              <p>Move</p>
+
+          <div className={color} onClick={() => setEdit(true)}>
+            <div className="flex gap-2">
+              <Image src={"/edit.png"} width={20} height={20} alt=""></Image>
+              <p>Edit</p>
             </div>
-          </div> */}
-          <div className={color}>
-            <Link href={`/receipt/${receipt.id}/edit`}>
-              <div className="flex gap-2">
-                <Image src={"/edit.png"} width={20} height={20} alt=""></Image>
-                <p>Edit</p>
-              </div>
-            </Link>
           </div>
 
           <div className={color}>
@@ -212,11 +198,7 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
             </div>
           </div>
         </div>
-        {/* {isOpen && (
-          <ModalOverlay onClose={() => setIsOpen(false)}>
-            <MoveModal setIsOpen={setIsOpen} receipt={receipt} />
-          </ModalOverlay>
-        )} */}
+
         {isAddOpen && (
           <ModalOverlay onClose={() => setIsAddOpen(false)}>
             <AddItem
@@ -237,6 +219,11 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
         {isDetailsOpen && (
           <ModalOverlay onClose={() => setDetailsOpen(false)}>
             <ReceiptDetails receipt={receipt} />
+          </ModalOverlay>
+        )}
+        {edit && (
+          <ModalOverlay onClose={() => setEdit(false)}>
+            <EditReceipt receiptId={receipt.id.toString()} setEdit={setEdit} />
           </ModalOverlay>
         )}
       </div>

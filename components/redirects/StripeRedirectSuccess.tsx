@@ -1,6 +1,6 @@
 "use client";
 import { subscriptionCheck } from "@/actions/stripe/subcriptionCheck";
-import Loading from "@/components/loading/Loading";
+import Loading from "@/components/loading-components/Loading";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

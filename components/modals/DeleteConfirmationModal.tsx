@@ -1,4 +1,4 @@
-import Loading from "@/components/loading/Loading";
+import Loading from "@/components/loading-components/Loading";
 import React from "react";
 import RegularButton from "../buttons/RegularButton";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";

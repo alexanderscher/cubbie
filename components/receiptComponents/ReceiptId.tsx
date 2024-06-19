@@ -14,7 +14,7 @@ import { TruncateText } from "@/components/text/Truncate";
 import { useSearchParams } from "next/navigation";
 import { NoItems } from "@/components/item/NoItems";
 import Item from "@/components/item/Item";
-import PageLoading from "@/components/loading/PageLoading";
+import PageLoading from "@/components/loading-components/PageLoading";
 import { ReceiptItemType, ReceiptType } from "@/types/ReceiptTypes";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
 import { CheckedItems } from "@/types/SelectType";

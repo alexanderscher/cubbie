@@ -13,7 +13,7 @@ import { useSearchParams } from "next/navigation";
 import { Overlay } from "@/components/overlays/Overlay";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { TruncateText } from "@/components/text/Truncate";
-import PageLoading from "@/components/loading/PageLoading";
+import PageLoading from "@/components/loading-components/PageLoading";
 import { ProjectItemType, ProjectUserArchiveType } from "@/types/ProjectTypes";
 import { ReceiptType } from "@/types/ReceiptTypes";
 import { Session } from "@/types/Session";

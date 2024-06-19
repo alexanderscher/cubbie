@@ -3,7 +3,7 @@ import { useSearchAlertContext } from "@/components/context/SearchFilterAlerts";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
-import PageLoading from "@/components/loading/PageLoading";
+import PageLoading from "@/components/loading-components/PageLoading";
 import { Overlay } from "@/components/overlays/Overlay";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";

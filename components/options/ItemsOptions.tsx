@@ -2,6 +2,7 @@
 import { deleteItem } from "@/actions/items/deleteItem";
 import { markAsReturned, unreturn } from "@/actions/items/return";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
+import EditItem from "@/components/item/EditItem";
 import Loading from "@/components/Loading/Loading";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
@@ -26,6 +27,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
   const [isPending, startTransition] = useTransition();
   const pathname = usePathname();
   const [color, setColor] = useState(white);
+  const [edit, setEdit] = useState(false);
 
   useEffect(() => {
     if (!pathname.startsWith("/item/")) {
@@ -82,18 +84,18 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
           )}
           {!pathname.startsWith("/item/") && (
             <div className="bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2">
-              <Link href={`/item/${item.id}/edit`}>
-                <div className="flex gap-2">
-                  <Image
-                    src={"/edit.png"}
-                    width={20}
-                    height={20}
-                    alt=""
-                  ></Image>
-                  <p>Edit</p>
-                </div>
-              </Link>
+              {/* <Link href={`/item/${item.id}/edit`}> */}
+              <div className="flex gap-2" onClick={() => setEdit(true)}>
+                <Image src={"/edit.png"} width={20} height={20} alt=""></Image>
+                <p>Edit</p>
+              </div>
+              {/* </Link> */}
             </div>
+          )}
+          {edit && (
+            <ModalOverlay onClose={() => setEdit(false)}>
+              <EditItem itemId={item.id.toString()} setEdit={setEdit} />
+            </ModalOverlay>
           )}
 
           <div className={color}>

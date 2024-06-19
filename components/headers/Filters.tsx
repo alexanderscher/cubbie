@@ -3,10 +3,11 @@ import { useSearchAlertContext } from "@/components/context/SearchFilterAlerts";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
+import PageLoading from "@/components/Loading/PageLoading";
 import { Overlay } from "@/components/overlays/Overlay";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useTransition } from "react";
 const clicked =
   "w-full border-[1px] p-2 border-emerald-900 text-white rounded-lg bg-emerald-900 text";
 const notClicked =
@@ -636,28 +637,28 @@ interface FilterOptionsProps {
   router: any;
 }
 
-const FilterProjectOptions = ({
-  pathname,
-  searchParams,
-  router,
-}: FilterOptionsProps) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const handleArchiveClick = async (isArchived: string) => {
-    setIsLoading(true);
+const FilterProjectOptions = ({ pathname }: FilterOptionsProps) => {
+  const { setisProjectLoading, isProjectLoading } = useSearchProjectContext();
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const handleArchiveClick = (isArchived: string) => {
+    setisProjectLoading(true);
 
     const queryParams = new URLSearchParams(window.location.search);
     queryParams.set("archive", isArchived);
 
-    try {
-      await router.push(`${pathname}?${queryParams.toString()}`);
-    } finally {
-      setIsLoading(false);
-    }
+    startTransition(() => {
+      router.push(`${pathname}?${queryParams.toString()}`);
+      setisProjectLoading(false); // This will run after the transition is complete
+    });
   };
 
   const handleModalContentClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => e.stopPropagation();
+
   return (
     <Wrapper handleModalContentClick={handleModalContentClick}>
       <button
@@ -667,22 +668,22 @@ const FilterProjectOptions = ({
             ? clicked
             : notClicked
         }`}
-        onClick={() => {
-          handleArchiveClick("false");
-        }}
+        onClick={() => handleArchiveClick("false")}
       >
-        <p className="text-xs"> {isLoading ? "Loading" : "Current Projects"}</p>
+        <p className="text-xs">
+          {isProjectLoading || isPending ? "Loading" : "Current Projects"}
+        </p>
       </button>
 
       <button
         className={`${
           searchParams.get("archive") === "true" ? clicked : notClicked
         }`}
-        onClick={() => {
-          handleArchiveClick("true");
-        }}
+        onClick={() => handleArchiveClick("true")}
       >
-        <p className="text-xs">{isLoading ? "Loading" : "Archived Projects"}</p>
+        <p className="text-xs">
+          {isProjectLoading || isPending ? "Loading" : "Archived Projects"}
+        </p>
       </button>
     </Wrapper>
   );
@@ -694,24 +695,31 @@ const SortProjectOptions = ({
 
   router,
 }: FilterOptionsProps) => {
+  const { setisProjectLoading } = useSearchProjectContext();
+  const [isPending, startTransition] = useTransition();
+
   const handleSortClick = (name: string) => {
-    const queryParams = new URLSearchParams(window.location.search);
+    setisProjectLoading(true);
+    startTransition(() => {
+      const queryParams = new URLSearchParams(window.location.search);
 
-    const currentSort = queryParams.get("sort");
-    const currentDirection = currentSort?.includes("-") ? "desc" : "asc";
+      const currentSort = queryParams.get("sort");
+      const currentDirection = currentSort?.includes("-") ? "desc" : "asc";
 
-    let newDirection;
-    if (currentSort === name && currentDirection === "asc") {
-      newDirection = "desc";
-    } else {
-      newDirection = "asc";
-    }
+      let newDirection;
+      if (currentSort === name && currentDirection === "asc") {
+        newDirection = "desc";
+      } else {
+        newDirection = "asc";
+      }
 
-    const newSortValue = newDirection === "asc" ? name : `-${name}`;
+      const newSortValue = newDirection === "asc" ? name : `-${name}`;
 
-    queryParams.set("sort", newSortValue);
+      queryParams.set("sort", newSortValue);
 
-    router.push(`${pathname}?${queryParams.toString()}`);
+      router.push(`${pathname}?${queryParams.toString()}`);
+      setisProjectLoading(false);
+    });
   };
 
   const handleModalContentClick = (
@@ -779,8 +787,15 @@ const FilterReceiptOptions = ({
 
   router,
 }: FilterOptionsProps) => {
+  const { setisReceiptLoading } = useSearchReceiptContext();
+  const [isPending, startTransition] = useTransition();
+
   const handleStoreClick = (name: string) => {
-    router.push(pathname + "?" + createQueryString("storeType", name));
+    setisReceiptLoading(true);
+    startTransition(() => {
+      router.push(pathname + "?" + createQueryString("storeType", name));
+      setisReceiptLoading(false);
+    });
   };
 
   const handleModalContentClick = (
@@ -831,24 +846,32 @@ const SortReceiptOptions = ({
   onClose,
   router,
 }: FilterOptionsProps) => {
+  const { setisReceiptLoading } = useSearchReceiptContext();
+  const [isPending, startTransition] = useTransition();
+
   const handleSortClick = (name: string) => {
-    const queryParams = new URLSearchParams(window.location.search);
+    setisReceiptLoading(true);
 
-    const currentSort = queryParams.get("sort");
-    const currentDirection = currentSort?.includes("-") ? "desc" : "asc";
+    startTransition(() => {
+      const queryParams = new URLSearchParams(window.location.search);
 
-    let newDirection;
-    if (currentSort === name && currentDirection === "asc") {
-      newDirection = "desc";
-    } else {
-      newDirection = "asc";
-    }
+      const currentSort = queryParams.get("sort");
+      const currentDirection = currentSort?.includes("-") ? "desc" : "asc";
 
-    const newSortValue = newDirection === "asc" ? name : `-${name}`;
+      let newDirection;
+      if (currentSort === name && currentDirection === "asc") {
+        newDirection = "desc";
+      } else {
+        newDirection = "asc";
+      }
 
-    queryParams.set("sort", newSortValue);
+      const newSortValue = newDirection === "asc" ? name : `-${name}`;
 
-    router.push(`${pathname}?${queryParams.toString()}`);
+      queryParams.set("sort", newSortValue);
+
+      router.push(`${pathname}?${queryParams.toString()}`);
+      setisReceiptLoading(false);
+    });
   };
 
   const handleModalContentClick = (
@@ -951,8 +974,15 @@ const StatusReceiptOptions = ({
 
   router,
 }: FilterOptionsProps) => {
+  const { setisReceiptLoading } = useSearchReceiptContext();
+  const [isPending, startTransition] = useTransition();
+
   const handleExpiredlick = (name: string) => {
-    router.push(pathname + "?" + createQueryString("expired", name));
+    setisReceiptLoading(true);
+    startTransition(() => {
+      router.push(pathname + "?" + createQueryString("expired", name));
+      setisReceiptLoading(false);
+    });
   };
 
   const handleModalContentClick = (
@@ -1003,8 +1033,14 @@ const FilterItemsOptions = ({
   createQueryString,
   router,
 }: FilterOptionsProps) => {
+  const { setisItemLoading } = useSearchItemContext();
+  const [isPending, startTransition] = useTransition();
   const handleTypeClick = (name: string) => {
-    router.push(pathname + "?" + createQueryString("status", name));
+    setisItemLoading(true);
+    startTransition(() => {
+      router.push(pathname + "?" + createQueryString("status", name));
+      setisItemLoading(false);
+    });
   };
 
   const handleModalContentClick = (
@@ -1059,8 +1095,14 @@ const FilterItemsExpiredOptions = ({
   createQueryString,
   router,
 }: FilterOptionsProps) => {
+  const { setisItemLoading } = useSearchItemContext();
+  const [isPending, startTransition] = useTransition();
   const handleTypeClick = (name: string) => {
-    router.push(pathname + "?" + createQueryString("type", name));
+    setisItemLoading(true);
+    startTransition(() => {
+      router.push(pathname + "?" + createQueryString("type", name));
+      setisItemLoading(false);
+    });
   };
 
   const handleModalContentClick = (
@@ -1109,24 +1151,32 @@ const SortReceiptItemsOptions = ({
   searchParams,
   router,
 }: FilterOptionsProps) => {
+  const { setisItemLoading } = useSearchItemContext();
+  const [isPending, startTransition] = useTransition();
+
   const handleSortClick = (name: string) => {
-    const queryParams = new URLSearchParams(window.location.search);
+    setisItemLoading(true);
 
-    const currentSort = queryParams.get("sort");
-    const currentDirection = currentSort?.includes("-") ? "desc" : "asc";
+    startTransition(() => {
+      const queryParams = new URLSearchParams(window.location.search);
 
-    let newDirection;
-    if (currentSort === name && currentDirection === "asc") {
-      newDirection = "desc";
-    } else {
-      newDirection = "asc";
-    }
+      const currentSort = queryParams.get("sort");
+      const currentDirection = currentSort?.includes("-") ? "desc" : "asc";
 
-    const newSortValue = newDirection === "asc" ? name : `-${name}`;
+      let newDirection;
+      if (currentSort === name && currentDirection === "asc") {
+        newDirection = "desc";
+      } else {
+        newDirection = "asc";
+      }
 
-    queryParams.set("sort", newSortValue);
+      const newSortValue = newDirection === "asc" ? name : `-${name}`;
 
-    router.push(`${pathname}?${queryParams.toString()}`);
+      queryParams.set("sort", newSortValue);
+
+      router.push(`${pathname}?${queryParams.toString()}`);
+      setisItemLoading(false);
+    });
   };
 
   const handleModalContentClick = (
@@ -1162,24 +1212,32 @@ const SortItemsOptions = ({
   searchParams,
   router,
 }: FilterOptionsProps) => {
+  const { setisItemLoading } = useSearchItemContext();
+  const [isPending, startTransition] = useTransition();
+
   const handleSortClick = (name: string) => {
-    const queryParams = new URLSearchParams(window.location.search);
+    setisItemLoading(true);
 
-    const currentSort = queryParams.get("sort");
-    const currentDirection = currentSort?.includes("-") ? "desc" : "asc";
+    startTransition(() => {
+      const queryParams = new URLSearchParams(window.location.search);
 
-    let newDirection;
-    if (currentSort === name && currentDirection === "asc") {
-      newDirection = "desc";
-    } else {
-      newDirection = "asc";
-    }
+      const currentSort = queryParams.get("sort");
+      const currentDirection = currentSort?.includes("-") ? "desc" : "asc";
 
-    const newSortValue = newDirection === "asc" ? name : `-${name}`;
+      let newDirection;
+      if (currentSort === name && currentDirection === "asc") {
+        newDirection = "desc";
+      } else {
+        newDirection = "asc";
+      }
 
-    queryParams.set("sort", newSortValue);
+      const newSortValue = newDirection === "asc" ? name : `-${name}`;
 
-    router.push(`${pathname}?${queryParams.toString()}`);
+      queryParams.set("sort", newSortValue);
+
+      router.push(`${pathname}?${queryParams.toString()}`);
+      setisItemLoading(false);
+    });
   };
 
   const handleModalContentClick = (

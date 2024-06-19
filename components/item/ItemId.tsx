@@ -12,6 +12,8 @@ import { Overlay } from "@/components/overlays/Overlay";
 import { TruncateText } from "@/components/text/Truncate";
 import { BeatLoader } from "react-spinners";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
+import { ModalOverlay } from "@/components/overlays/ModalOverlay";
+import EditItem from "@/components/item/EditItem";
 
 interface ItemIDProps {
   itemId: string;
@@ -21,6 +23,7 @@ const ItemID = ({ itemId }: ItemIDProps) => {
   const { item, fetchItemById, isItemLoading } = useSearchItemContext();
   const [isOpen, setIsOpen] = useState(false);
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
+  const [edit, setEdit] = useState(false);
 
   useEffect(() => {
     fetchItemById();
@@ -52,7 +55,8 @@ const ItemID = ({ itemId }: ItemIDProps) => {
             <div className="flex gap-2">
               <RegularButton
                 styles="bg border-emerald-900"
-                href={`/item/${itemId}/edit`}
+                // href={`/item/${itemId}/edit`}
+                handleClick={() => setEdit(true)}
               >
                 <p className="text-emerald-900 text-xs">Edit</p>
               </RegularButton>
@@ -151,6 +155,11 @@ const ItemID = ({ itemId }: ItemIDProps) => {
             <p>{item.character ? item.character : "None"}</p>
           </div>
         </div>
+        {edit && (
+          <ModalOverlay onClose={() => setEdit(false)}>
+            <EditItem itemId={itemId} setEdit={setEdit} />
+          </ModalOverlay>
+        )}
       </div>
     </div>
   );

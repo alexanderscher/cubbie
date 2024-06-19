@@ -6,7 +6,7 @@ import { Menu } from "@/components/profile/Menu";
 
 import { UserType } from "@/types/UserSettingTypes";
 import RegularButton from "@/components/buttons/RegularButton";
-import Loading from "@/components/Loading/Loading";
+import Loading from "@/components/loading/Loading";
 
 const getTotalNumberOfItems = (user: UserType) => {
   return user.projects.reduce((total, project) => {

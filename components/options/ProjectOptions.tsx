@@ -1,8 +1,8 @@
 "use client";
 import { archiveProject } from "@/actions/projects/archive";
 import { deleteProject } from "@/actions/projects/deleteProject";
-import Loading from "@/components/Loading/Loading";
-import DeleteConfirmationModal from "@/components/Modals/DeleteConfirmationModal";
+import Loading from "@/components/loading/Loading";
+import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import { EditProject } from "@/components/project/EditProject";
 import Image from "next/image";
 import React, { useEffect, useState, useTransition } from "react";

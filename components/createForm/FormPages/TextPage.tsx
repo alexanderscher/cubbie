@@ -8,14 +8,14 @@ import { useRouter } from "next/navigation";
 import { DEFAULT_INPUT_VALUES, ReceiptOnlineStage } from "@/constants/form";
 import FinalStage from "@/components/createForm/FinalStage";
 import { ITEMS_SCHEMA, RECEIPT_SCHEMA } from "@/utils/receiptValidation";
-import Loading from "@/components/Loading/Loading";
+import Loading from "@/components/loading/Loading";
 import BottomBar from "@/components/createForm/BottomBar";
 import { calculateReturnDate, formatDateToMMDDYY } from "@/utils/Date";
-import ErrorModal from "@/components/Modals/ErrorModal";
+import ErrorModal from "@/components/modals/ErrorModal";
 import { Pages } from "@/types/form";
 import { toast } from "sonner";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
-import { DiscardModal } from "@/components/Modals/DiscardModal";
+import { DiscardModal } from "@/components/modals/DiscardModal";
 
 const getValidationSchema = (stage: ReceiptOnlineStage) => {
   switch (stage) {

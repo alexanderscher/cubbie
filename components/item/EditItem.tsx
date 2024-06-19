@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Formik } from "formik";
 import { EDIT_ITEM_SCHEMA } from "@/utils/editValidation";
 import CurrencyInput from "react-currency-input-field";
-import Loading from "@/components/Loading/Loading";
+import Loading from "@/components/loading/Loading";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
 import ImageModal from "@/components/images/ImageModal";
 import { convertHeic } from "@/utils/media";
@@ -15,7 +15,7 @@ import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import { toast } from "sonner";
 import { ItemType } from "@/types/ItemsTypes";
 import { getItemsByIdClient } from "@/lib/getItemsClient";
-import PageLoading from "@/components/Loading/PageLoading";
+import PageLoading from "@/components/loading/PageLoading";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
 
 interface ItemIdEditProps {

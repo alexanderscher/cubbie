@@ -6,8 +6,8 @@ import {
   unreturnSelectedItems,
 } from "@/actions/select/selectedItems";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
-import Loading from "@/components/Loading/Loading";
-import DeleteConfirmationModal from "@/components/Modals/DeleteConfirmationModal";
+import Loading from "@/components/loading/Loading";
+import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { CheckedItems } from "@/types/SelectType";
 import Image from "next/image";

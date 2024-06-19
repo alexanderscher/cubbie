@@ -4,7 +4,7 @@ import RegularButton from "@/components/buttons/RegularButton";
 import SubmitButton from "@/components/buttons/SubmitButton";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 import { FormError } from "@/components/form-error";
-import Loading from "@/components/Loading/Loading";
+import Loading from "@/components/loading/Loading";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 
 import { useState, useTransition } from "react";

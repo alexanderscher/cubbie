@@ -36,7 +36,7 @@ interface OptionsModalProps {
 }
 
 const white = "bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2";
-const green = "bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded p-2";
+const green = "bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded-lg p-2";
 
 export const ProjectOptionsModal = ({
   project,

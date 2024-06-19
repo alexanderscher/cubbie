@@ -551,7 +551,7 @@ export default function ImageGpt({
                   styles="bg-orange-50 border-orange-600 text-orange-600  w-full"
                   handleClick={() => {
                     handleSubmit();
-                    setPrompt(false); // Close modal after action
+                    setPrompt(false);
                   }}
                 >
                   <p className="text-xs">Yes, anaylze.</p>

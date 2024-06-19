@@ -10,7 +10,7 @@ import { useSearchProjectContext } from "@/components/context/SearchProjectConte
 import { SelectedBar } from "@/components/Home/SelectedBar";
 import Loading from "@/components/Loading/Loading";
 import PageLoading from "@/components/Loading/PageLoading";
-import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
+import DeleteConfirmationModal from "@/components/Modals/DeleteConfirmationModal";
 import { ProjectOptionsModal } from "@/components/options/ProjectOptions";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { Overlay } from "@/components/overlays/Overlay";

@@ -10,10 +10,10 @@ import { ITEMS_SCHEMA, RECEIPT_SCHEMA } from "@/utils/receiptValidation";
 import Loading from "@/components/Loading/Loading";
 import BottomBar from "@/components/createForm/BottomBar";
 import { toast } from "sonner";
-import ErrorModal from "@/components/modals/ErrorModal";
+import ErrorModal from "@/components/Modals/ErrorModal";
 import { ProjectType } from "@/types/ProjectTypes";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
-import { DiscardModal } from "@/components/modals/DiscardModal";
+import { DiscardModal } from "@/components/Modals/DiscardModal";
 
 const getValidationSchema = (stage: ReceiptOnlineStage) => {
   switch (stage) {

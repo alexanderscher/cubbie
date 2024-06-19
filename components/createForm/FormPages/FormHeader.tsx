@@ -3,7 +3,7 @@ import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { CreateReceipt } from "@/components/receiptComponents/CreateReceipt";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface FormHeaderProps {
   children: React.ReactNode;

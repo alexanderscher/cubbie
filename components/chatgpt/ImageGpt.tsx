@@ -15,9 +15,9 @@ import Loading from "@/components/Loading/Loading";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import { ProjectType } from "@/types/ProjectTypes";
 import ManualDate from "@/components/createForm/FormPages/ManualDate";
-import ReturnPolicySelect from "@/components/select/ReturnPolicySelect";
+import ReturnPolicySelect from "@/components/selects/ReturnPolicySelect";
 import { Session } from "@/types/Session";
-import SubscribeModal from "@/components/modals/SubscribeModal";
+import SubscribeModal from "@/components/Modals/SubscribeModal";
 
 interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;

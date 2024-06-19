@@ -1,5 +1,5 @@
 "use client";
-import { DiscardModal } from "@/components/modals/DiscardModal";
+import { DiscardModal } from "@/components/Modals/DiscardModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import Link from "next/link";

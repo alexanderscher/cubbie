@@ -4,7 +4,7 @@ import { markAsReturned, unreturn } from "@/actions/items/return";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
 import EditItem from "@/components/item/EditItem";
 import Loading from "@/components/Loading/Loading";
-import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
+import DeleteConfirmationModal from "@/components/Modals/DeleteConfirmationModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { TruncateText } from "@/components/text/Truncate";
 import { ItemType } from "@/types/ItemsTypes";

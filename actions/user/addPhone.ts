@@ -1,5 +1,4 @@
 "use server";
-import { deleteUploadThingImage } from "@/actions/uploadthing/deletePhoto";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
 import { Session } from "@/types/Session";

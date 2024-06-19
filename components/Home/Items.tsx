@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import Item from "@/components/Item";
+import Item from "@/components/item/Item";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
 import PageLoading from "@/components/Loading/PageLoading";
 import { NoItems } from "@/components/item/NoItems";

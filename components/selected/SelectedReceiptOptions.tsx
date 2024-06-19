@@ -4,7 +4,7 @@ import {
 } from "@/actions/select/selectedReceipts";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
 import Loading from "@/components/Loading/Loading";
-import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
+import DeleteConfirmationModal from "@/components/Modals/DeleteConfirmationModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { CheckedReceipts } from "@/types/SelectType";
 import Image from "next/image";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
-import { SelectedBar } from "@/components/home/SelectedBar";
+import { SelectedBar } from "@/components/home-components/SelectedBar";
 import PageLoading from "@/components/loading-components/PageLoading";
 
 import { NoReceipts } from "@/components/receiptComponents/NoReceipts";

@@ -6,7 +6,7 @@ import { useSearchItemContext } from "@/components/context/SearchItemContext";
 import PageLoading from "@/components/loading-components/PageLoading";
 import { NoItems } from "@/components/item/NoItems";
 import { ItemType } from "@/types/ItemsTypes";
-import { SelectedBar } from "@/components/home/SelectedBar";
+import { SelectedBar } from "@/components/home-components/SelectedBar";
 import { CheckedItems } from "@/types/SelectType";
 import { SelectedItemOptions } from "@/components/selected/SelectedItemOptions";
 

@@ -18,7 +18,7 @@ import PageLoading from "@/components/loading-components/PageLoading";
 import { ReceiptItemType, ReceiptType } from "@/types/ReceiptTypes";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
 import { CheckedItems } from "@/types/SelectType";
-import { SelectedBar } from "@/components/home/SelectedBar";
+import { SelectedBar } from "@/components/home-components/SelectedBar";
 import { SelectedItemOptions } from "@/components/selected/SelectedItemOptions";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
 

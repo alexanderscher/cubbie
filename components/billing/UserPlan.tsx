@@ -1,13 +1,12 @@
 "use client";
 import Image from "next/image";
-import React, { use, useEffect, useState, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import styles from "@/components/profile/profile.module.css";
 import { Menu } from "@/components/profile/Menu";
-import { Line } from "rc-progress";
 
 import { UserType } from "@/types/UserSettingTypes";
 import RegularButton from "@/components/buttons/RegularButton";
-import Loading from "@/components/Loading/Loading";
+import Loading from "@/components/loading-components/Loading";
 
 const getTotalNumberOfItems = (user: UserType) => {
   return user.projects.reduce((total, project) => {

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import RegularButton from "@/components/buttons/RegularButton";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import HeaderItemNav from "@/components/navbar/HeaderItemNav";
@@ -12,14 +11,8 @@ import { Overlay } from "@/components/overlays/Overlay";
 import { TruncateText } from "@/components/text/Truncate";
 import { BeatLoader } from "react-spinners";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
-import { ModalOverlay } from "@/components/overlays/ModalOverlay";
-import EditItem from "@/components/item/EditItem";
 
-interface ItemIDProps {
-  itemId: string;
-}
-
-const ItemID = ({ itemId }: ItemIDProps) => {
+const ItemID = () => {
   const { item, fetchItemById, isItemLoading } = useSearchItemContext();
   const [isOpen, setIsOpen] = useState(false);
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);

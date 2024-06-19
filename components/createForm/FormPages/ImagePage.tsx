@@ -7,12 +7,12 @@ import { useRouter } from "next/navigation";
 import { DEFAULT_INPUT_VALUES, ReceiptStoreStage } from "@/constants/form";
 import FinalStage from "@/components/createForm/FinalStage";
 import { GPT_IMAGE_SCHEMA } from "@/utils/receiptValidation";
-import Loading from "@/components/Loading/Loading";
+import Loading from "@/components/loading/Loading";
 import BottomBar from "@/components/createForm/BottomBar";
 import { Pages } from "@/types/form";
 import { toast } from "sonner";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
-import { DiscardModal } from "@/components/Modals/DiscardModal";
+import { DiscardModal } from "@/components/modals/DiscardModal";
 
 const getValidationSchema = (stage: ReceiptStoreStage) => {
   switch (stage) {

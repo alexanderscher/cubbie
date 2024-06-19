@@ -11,7 +11,7 @@ import PhoneInput from "react-phone-number-input";
 import RegularButton from "@/components/buttons/RegularButton";
 import { addPhone } from "@/actions/user/addPhone";
 import { toast } from "sonner";
-import Loading from "@/components/Loading/Loading";
+import Loading from "@/components/loading/Loading";
 
 interface AlertSettingsProps {
   user: UserAlerts;

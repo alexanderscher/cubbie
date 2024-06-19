@@ -7,11 +7,11 @@ import React, { useEffect, useMemo, useTransition } from "react";
 import { markAsRead, unmarkAsRead } from "@/actions/alerts/read";
 import { toast } from "sonner";
 import { deleteAlert } from "@/actions/alerts/deleteAlert";
-import Loading from "@/components/Loading/Loading";
+import Loading from "@/components/loading/Loading";
 import { useSearchAlertContext } from "@/components/context/SearchFilterAlerts";
 import { useSearchParams } from "next/navigation";
 import { Overlay } from "@/components/overlays/Overlay";
-import PageLoading from "@/components/Loading/PageLoading";
+import PageLoading from "@/components/loading/PageLoading";
 import moment from "moment";
 import { AlertHeader } from "@/components/alerts/AlertHeader";
 

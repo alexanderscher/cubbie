@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import Projects from "@/components/Home/Projects";
+import Projects from "@/components/home/Projects";
 import { SearchProjectProvider } from "@/components/context/SearchProjectContext";
 import Header from "@/components/headers/Header";
 import PageWrapper from "@/components/wrapper/PageWrapper";

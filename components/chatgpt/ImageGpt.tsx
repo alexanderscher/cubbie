@@ -11,13 +11,13 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { FormError } from "@/components/form-error";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import Loading from "@/components/Loading/Loading";
+import Loading from "@/components/loading/Loading";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import { ProjectType } from "@/types/ProjectTypes";
 import ManualDate from "@/components/createForm/FormPages/ManualDate";
 import ReturnPolicySelect from "@/components/selects/ReturnPolicySelect";
 import { Session } from "@/types/Session";
-import SubscribeModal from "@/components/Modals/SubscribeModal";
+import SubscribeModal from "@/components/modals/SubscribeModal";
 
 interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;

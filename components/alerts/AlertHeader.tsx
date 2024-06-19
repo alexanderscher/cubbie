@@ -1,5 +1,5 @@
 "use client";
-import SubscribeModal from "@/components/Modals/SubscribeModal";
+import SubscribeModal from "@/components/modals/SubscribeModal";
 import SearchBar from "@/components/search/SearchBar";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import { useRouter } from "next/navigation";

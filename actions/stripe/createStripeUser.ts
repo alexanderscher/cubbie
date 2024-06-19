@@ -1,6 +1,5 @@
 "use server";
 import { stripe } from "@/app/stripe/stripe";
-import prisma from "@/prisma/client";
 
 export const createStripeCustomer = async (user: any) => {
   const email = user.email.toLowerCase();

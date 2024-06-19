@@ -13,12 +13,12 @@ import Filters from "@/components/headers/Filters";
 import { TruncateText } from "@/components/text/Truncate";
 import { useSearchParams } from "next/navigation";
 import { NoItems } from "@/components/item/NoItems";
-import Item from "@/components/Item";
-import PageLoading from "@/components/Loading/PageLoading";
+import Item from "@/components/item/Item";
+import PageLoading from "@/components/loading-components/PageLoading";
 import { ReceiptItemType, ReceiptType } from "@/types/ReceiptTypes";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
 import { CheckedItems } from "@/types/SelectType";
-import { SelectedBar } from "@/components/Home/SelectedBar";
+import { SelectedBar } from "@/components/home-components/SelectedBar";
 import { SelectedItemOptions } from "@/components/selected/SelectedItemOptions";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
 

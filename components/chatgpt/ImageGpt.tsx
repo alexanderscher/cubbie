@@ -11,11 +11,11 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { FormError } from "@/components/form-error";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import Loading from "@/components/Loading/Loading";
+import Loading from "@/components/loading-components/Loading";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import { ProjectType } from "@/types/ProjectTypes";
 import ManualDate from "@/components/createForm/FormPages/ManualDate";
-import ReturnPolicySelect from "@/components/select/ReturnPolicySelect";
+import ReturnPolicySelect from "@/components/selects/ReturnPolicySelect";
 import { Session } from "@/types/Session";
 import SubscribeModal from "@/components/modals/SubscribeModal";
 
@@ -551,7 +551,7 @@ export default function ImageGpt({
                   styles="bg-orange-50 border-orange-600 text-orange-600  w-full"
                   handleClick={() => {
                     handleSubmit();
-                    setPrompt(false); // Close modal after action
+                    setPrompt(false);
                   }}
                 >
                   <p className="text-xs">Yes, anaylze.</p>

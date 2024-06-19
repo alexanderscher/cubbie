@@ -13,13 +13,13 @@ import { useSearchParams } from "next/navigation";
 import { Overlay } from "@/components/overlays/Overlay";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { TruncateText } from "@/components/text/Truncate";
-import PageLoading from "@/components/Loading/PageLoading";
+import PageLoading from "@/components/loading-components/PageLoading";
 import { ProjectItemType, ProjectUserArchiveType } from "@/types/ProjectTypes";
 import { ReceiptType } from "@/types/ReceiptTypes";
 import { Session } from "@/types/Session";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 import { CheckedReceipts } from "@/types/SelectType";
-import { SelectedBar } from "@/components/Home/SelectedBar";
+import { SelectedBar } from "@/components/home-components/SelectedBar";
 import { SelectedReceiptOptions } from "@/components/selected/SelectedReceiptOptions";
 import { useSearchReceiptContext } from "@/components/context/SearchReceiptContext";
 

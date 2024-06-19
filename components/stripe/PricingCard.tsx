@@ -6,7 +6,7 @@ import { FormError } from "@/components/form-error";
 import React, { useState, useTransition } from "react";
 import RegularButton from "@/components/buttons/RegularButton";
 import { freePlan, handlePayment } from "@/actions/stripe/payment";
-import Loading from "@/components/Loading/Loading";
+import Loading from "@/components/loading-components/Loading";
 import ErrorModal from "@/components/modals/ErrorModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { useRouter } from "next/navigation";

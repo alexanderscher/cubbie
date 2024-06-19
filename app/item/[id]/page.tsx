@@ -8,7 +8,7 @@ export default async function ItemIdPage({
 }) {
   return (
     <SearchItemProvider>
-      <ItemID itemId={params.id} />
+      <ItemID />
     </SearchItemProvider>
   );
 }

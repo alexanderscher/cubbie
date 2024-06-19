@@ -6,7 +6,7 @@ import {
 } from "@/components/context/SearchReceiptContext";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
-import Loading from "@/components/Loading/Loading";
+import Loading from "@/components/loading-components/Loading";
 import { convertHeic } from "@/utils/media";
 import Image from "next/image";
 import { useState } from "react";

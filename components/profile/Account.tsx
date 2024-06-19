@@ -22,7 +22,7 @@ import Image from "next/image";
 import { Menu } from "@/components/profile/Menu";
 import { toast } from "sonner";
 import { deleteAccount } from "@/actions/user/deleteAccount";
-import Loading from "@/components/loading/Loading";
+import Loading from "@/components/loading-components/Loading";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";

@@ -1,6 +1,6 @@
 import RegularButton from "@/components/buttons/RegularButton";
 import { FormError } from "@/components/form-error";
-import Loading from "@/components/loading/Loading";
+import Loading from "@/components/loading-components/Loading";
 import SubscribeModal from "@/components/modals/SubscribeModal";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import { ReceiptStoreStage } from "@/constants/form";

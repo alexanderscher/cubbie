@@ -3,7 +3,7 @@ import { Formik } from "formik";
 import Image from "next/image";
 import React, { ChangeEvent, useEffect, useState, useTransition } from "react";
 import { EDIT_RECEIPT_SCHEMA } from "@/utils/editValidation";
-import Loading from "@/components/loading/Loading";
+import Loading from "@/components/loading-components/Loading";
 import ErrorModal from "@/components/modals/ErrorModal";
 import ImageModal from "@/components/images/ImageModal";
 import { convertHeic } from "@/utils/media";

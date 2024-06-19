@@ -7,7 +7,7 @@ import {
 import RegularButton from "@/components/buttons/RegularButton";
 import SubmitButton from "@/components/buttons/SubmitButton";
 import { FormError } from "@/components/form-error";
-import Loading from "@/components/loading/Loading";
+import Loading from "@/components/loading-components/Loading";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import SearchBar from "@/components/search/SearchBar";
 import { Overlay } from "@/components/overlays/Overlay";

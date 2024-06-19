@@ -11,7 +11,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { FormError } from "@/components/form-error";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import Loading from "@/components/loading/Loading";
+import Loading from "@/components/loading-components/Loading";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import { ProjectType } from "@/types/ProjectTypes";
 import ManualDate from "@/components/createForm/FormPages/ManualDate";

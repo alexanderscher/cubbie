@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Item from "@/components/item/Item";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
-import PageLoading from "@/components/loading/PageLoading";
+import PageLoading from "@/components/loading-components/PageLoading";
 import { NoItems } from "@/components/item/NoItems";
 import { ItemType } from "@/types/ItemsTypes";
 import { SelectedBar } from "@/components/home/SelectedBar";

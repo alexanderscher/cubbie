@@ -3,7 +3,7 @@ import { deleteItem } from "@/actions/items/deleteItem";
 import { markAsReturned, unreturn } from "@/actions/items/return";
 import { useSearchItemContext } from "@/components/context/SearchItemContext";
 import EditItem from "@/components/item/EditItem";
-import Loading from "@/components/loading/Loading";
+import Loading from "@/components/loading-components/Loading";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { TruncateText } from "@/components/text/Truncate";

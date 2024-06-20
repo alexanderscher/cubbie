@@ -29,8 +29,9 @@ export const handlePayment = async (priceId: string, planId: string) => {
   const session = (await auth()) as Session;
   const subscriptionId = session.user?.subscription?.subscriptionID;
   let customerId = session?.user?.stripeCustomerId;
-  const url = "http://localhost:3000/subscription";
-  const home = "http://localhost:3000/";
+
+  const url = `${process.env.NEXT_PUBLIC_URL}/subscription`;
+  const home = process.env.NEXT_PUBLIC_URL;
 
   if (!customerId) {
     const customer = await createStripeCustomer(session.user);

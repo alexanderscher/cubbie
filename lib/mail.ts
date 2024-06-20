@@ -1,9 +1,7 @@
-import { getBaseUrl } from "@/utils/baseUrl";
 import { Resend } from "resend";
 
 export const resend = new Resend(process.env.RESEND_API_KEY);
-
-const domain = getBaseUrl();
+const url = process.env.NEXT_PUBLIC_URL;
 
 export const sendTwoFactorTokenEmail = async (email: string, token: string) => {
   await resend.emails.send({
@@ -15,7 +13,7 @@ export const sendTwoFactorTokenEmail = async (email: string, token: string) => {
 };
 
 export const sendPasswordResetEmail = async (email: string, token: string) => {
-  const resetLink = `${domain}/auth/new-password?token=${token}`;
+  const resetLink = `${url}/auth/new-password?token=${token}`;
 
   await resend.emails.send({
     from: "noreply@cubbie.io",
@@ -26,7 +24,7 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
 };
 
 export const sendVerificationEmail = async (email: string, token: string) => {
-  const confirmLink = `${domain}/auth/new-verification?token=${token}`;
+  const confirmLink = `${url}/auth/new-verification?token=${token}`;
 
   await resend.emails.send({
     from: "noreply@cubbie.io",

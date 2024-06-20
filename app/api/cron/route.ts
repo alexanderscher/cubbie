@@ -1,11 +1,9 @@
 import { resend } from "@/lib/mail";
 import prisma from "@/prisma/client";
-import { getBaseUrl } from "@/utils/baseUrl";
 import moment from "moment";
-import { revalidateTag } from "next/cache";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+const url = process.env.NEXT_PUBLIC_URL;
 
-const domain = getBaseUrl();
 const sendReminder = async (daysUntilDue: number, reminderType: string) => {
   try {
     const today = moment.utc().startOf("day");
@@ -70,7 +68,7 @@ const sendReminder = async (daysUntilDue: number, reminderType: string) => {
         await Promise.all(
           validUsers.map(async (user) => {
             if (user && user.email) {
-              const link = `${domain}/receipt/${receipt.id}`;
+              const link = `${url}/receipt/${receipt.id}`;
               let emailSubject = "Receipt Reminder";
               let date = "";
 

@@ -54,8 +54,15 @@
   background-color: rgba(85, 162, 116, 0.5);
 }
 
+.search {
+  display: block;
+}
+
 @media (max-width: 650px) {
   .navbarFixed {
+    display: none;
+  }
+  .search {
     display: none;
   }
 

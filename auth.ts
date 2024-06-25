@@ -7,6 +7,7 @@ import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation
 import { getAccountByUserId } from "./data/account";
 import { getUserById } from "@/data/user";
 import { Subscription } from "@prisma/client";
+import { retrieveCustomerAndSubscriptionsByEmail } from "@/actions/stripe/getStripeUser";
 export const {
   handlers: { GET, POST },
   auth,
@@ -54,7 +55,36 @@ export const {
                 lastReset: new Date(), // Assuming it resets now
               },
             });
-            console.log("User planId updated:", updatedUser);
+            if (user.email) {
+              const existingStripe =
+                await retrieveCustomerAndSubscriptionsByEmail(user.email);
+              if (existingStripe) {
+                const updateData: any = {};
+
+                if (existingStripe.customer) {
+                  updateData.stripeCustomerId = existingStripe.customer;
+                }
+
+                if (
+                  existingStripe.subscriptions.includes("Limited Project Plan")
+                ) {
+                  updateData.hasUsedTrialLimited = true;
+                }
+
+                if (
+                  existingStripe.subscriptions.includes("Advanced Project Plan")
+                ) {
+                  updateData.hasUsedTrialAdvanced = true;
+                }
+
+                if (Object.keys(updateData).length > 0) {
+                  await prisma.user.update({
+                    where: { id: user.id },
+                    data: updateData,
+                  });
+                }
+              }
+            }
           } else {
             console.error("User ID not found for the new user.");
           }

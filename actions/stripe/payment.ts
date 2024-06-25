@@ -118,16 +118,6 @@ export const handlePayment = async (priceId: string, planId: string) => {
 export const freePlan = async () => {
   try {
     const session = (await auth()) as Session;
-    let customerId = session?.user?.stripeCustomerId;
-
-    if (!customerId) {
-      const customer = await createStripeCustomer(session.user);
-      customerId = customer.id;
-      await prisma.user.update({
-        where: { id: session.user.id },
-        data: { stripeCustomerId: customerId },
-      });
-    }
 
     const subscriptionId = session.user?.subscription?.subscriptionID;
 

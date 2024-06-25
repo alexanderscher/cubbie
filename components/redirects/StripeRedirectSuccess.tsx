@@ -10,14 +10,21 @@ const StripeRedirectSuccess = () => {
   const router = useRouter();
   useEffect(() => {
     const checkSub = async () => {
-      setIsLoading(true);
-      const check = await subscriptionCheck();
-
-      if (check) {
-        getSession().then((session) => {
-          console.log("Session refreshed", session);
-        });
-        router.push(`/subscription/success/${check.subscriptionId}`);
+      try {
+        const check = await subscriptionCheck();
+        if (check && check.subscriptionId) {
+          await getSession().then((session) => {
+            console.log("Session refreshed", session);
+          });
+          router.push(`/subscription/success/${check.subscriptionId}`);
+        } else {
+          // Handle no subscription found
+          console.log("No active subscription found.");
+        }
+      } catch (error) {
+        console.error("Failed to check subscription:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     checkSub();

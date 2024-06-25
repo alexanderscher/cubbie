@@ -5,9 +5,14 @@ import Header from "@/components/headers/Header";
 import PageWrapper from "@/components/wrapper/PageWrapper";
 import { Session } from "@/types/Session";
 import { Suspense } from "react";
+import { retrieveCustomerAndSubscriptionsByEmail } from "@/actions/stripe/getStripeUser";
 
 export default async function Home() {
   const session = (await auth()) as Session;
+
+  const stripe = await retrieveCustomerAndSubscriptionsByEmail(
+    "alexcscher@gmail.com"
+  );
 
   return (
     <PageWrapper>

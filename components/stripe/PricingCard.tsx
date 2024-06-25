@@ -35,7 +35,7 @@ const PricingCard = ({ price, session, user }: priceProps) => {
           try {
             const unsubscribe = await freePlan();
             if (unsubscribe) {
-              router.push("subscription/cancel");
+              router.push("/subscription/cancel");
             } else {
               throw new Error("Failed to unsubscribe from free plan");
             }

@@ -196,7 +196,7 @@ const TextGpt = ({
       {subscribeModal && (
         <SubscribeModal
           // message="You have reached the limit of receipts you can analyze. Please upgrade to a premium plan to continue."
-          message="Please upgrade plans to analyze receipts by photo"
+          message="Please upgrade plans to analyze receipts by text"
           onClose={() => setSubscribeModal(false)}
         />
       )}

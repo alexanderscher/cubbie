@@ -8,18 +8,11 @@ import {
   DEFAULT_LOGIN_REDIRECT,
   publicRoutes,
 } from "@/routes";
-import { Session } from "@/types/Session";
 
 const { auth } = NextAuth(authConfig);
 
 export default auth(async (req) => {
   const { nextUrl } = req;
-  const secret = process.env.AUTH_SECRET as string;
-  // const token = await getToken({
-  //   req,
-  //   secret,
-  //   salt: "authjs.session-token",
-  // });
 
   const isLoggedIn = !!req.auth;
   const isApiCronRoute = nextUrl.pathname === "/api/cron";

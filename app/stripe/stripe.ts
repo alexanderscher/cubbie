@@ -1,7 +1,6 @@
 import Stripe from "stripe";
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
-console.log("Stripe Secret Key:", process.env.STRIPE_SECRET_KEY);
 
 if (!stripeSecretKey) {
   throw new Error(

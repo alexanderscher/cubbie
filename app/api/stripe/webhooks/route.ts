@@ -142,6 +142,27 @@ const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
+  } else if (event.type === "customer.subscription.deleted") {
+    const subscription = event.data.object as Stripe.Subscription;
+    const userId = subscription.metadata.userId;
+
+    if (userId) {
+      await prisma.subscription.delete({
+        where: { subscriptionID: subscription.id },
+      });
+
+      await prisma.user.update({
+        where: { id: userId },
+        data: { planId: 1 },
+      });
+
+      revalidateTag(`user_${userId}`);
+    }
+
+    return new NextResponse(JSON.stringify({ received: true }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
   } else {
     console.log(`Unhandled event type: ${event.type}`);
     return new NextResponse(JSON.stringify({ received: true }), {

@@ -2,8 +2,6 @@
 import RegularButton from "@/components/buttons/RegularButton";
 import { Subscription } from "@prisma/client";
 import { CheckIcon, ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { Session } from "next-auth";
-import React, { use, useEffect, useState } from "react";
 
 interface SuccessRedirectProps {
   subscription?: Subscription;

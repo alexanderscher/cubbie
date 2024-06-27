@@ -219,6 +219,7 @@ const SubButton = ({
     const userPlanIdNum = userPlanId ? userPlanId : null;
 
     if (planIdNum === userPlanIdNum || userPlanId === null) {
+      console.log(planIdNum);
       return "Current Plan";
     } else if (planIdNum === 1) {
       return "Downgrade";

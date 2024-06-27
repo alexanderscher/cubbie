@@ -147,16 +147,17 @@ const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
     const userId = subscription.metadata.userId;
 
     if (userId) {
-      await prisma.subscription.delete({
+      await prisma.subscription.update({
         where: { subscriptionID: subscription.id },
+        data: { subscriptionID: null },
       });
-
       await prisma.user.update({
         where: { id: userId },
         data: { planId: 1 },
       });
 
-      revalidateTag(`user_${userId}`);
+      // Optional: Invalidate cache or revalidate tag if needed
+      // revalidateTag(`user_${userId}`);
     }
 
     return new NextResponse(JSON.stringify({ received: true }), {

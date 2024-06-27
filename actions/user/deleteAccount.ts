@@ -48,11 +48,11 @@ export const deleteAccount = async () => {
       where: { userId },
     });
 
-    // if (subscription && subscription.subscriptionID) {
-    //   await stripe.subscriptions.cancel(subscription.subscriptionID);
-    // } else {
-    //   console.log("No subscription found for the user.");
-    // }
+    if (subscription && subscription.subscriptionID) {
+      await stripe.subscriptions.cancel(subscription.subscriptionID);
+    } else {
+      console.log("No subscription found for the user.");
+    }
 
     await prisma.user.delete({
       where: { id: userId },

@@ -44,21 +44,15 @@ export const deleteAccount = async () => {
       })
     );
 
-    const subs = await prisma.subscription.findMany({
+    const subscription = await prisma.subscription.findUnique({
       where: { userId },
     });
 
-    for (const subscription of subs) {
-      if (subscription.subscriptionID) {
-        await stripe.subscriptions.cancel(subscription.subscriptionID);
-      }
-    }
-
-    await prisma.subscription.deleteMany({
-      where: {
-        userId: userId,
-      },
-    });
+    // if (subscription && subscription.subscriptionID) {
+    //   await stripe.subscriptions.cancel(subscription.subscriptionID);
+    // } else {
+    //   console.log("No subscription found for the user.");
+    // }
 
     await prisma.user.delete({
       where: { id: userId },

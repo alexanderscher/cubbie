@@ -29,9 +29,8 @@ export const {
       try {
         if (isNewUser) {
           console.log("New user signed in", user);
-          if (user.id) {
-            const defaultPlanId = 1;
 
+          if (user.id) {
             const newAlertSettings = await prisma.alertSettings.create({
               data: {
                 userId: user.id,
@@ -41,20 +40,26 @@ export const {
               },
             });
 
+            console.log("Alert settings created", newAlertSettings);
+
             const updatedUser = await prisma.user.update({
               where: { id: user.id },
-              data: { planId: defaultPlanId },
+              data: { planId: 1 },
               include: { plan: true },
             });
 
-            await prisma.userPlanUsage.create({
+            console.log("Updated user with planId", updatedUser);
+
+            const userPlanUsage = await prisma.userPlanUsage.create({
               data: {
                 userId: user.id,
-                planId: defaultPlanId,
+                planId: 1,
                 apiCalls: 0, // Assuming starting from zero
                 lastReset: new Date(), // Assuming it resets now
               },
             });
+            console.log("User plan usage created", userPlanUsage);
+
             if (user.email) {
               const existingStripe =
                 await retrieveCustomerAndSubscriptionsByEmail(user.email);

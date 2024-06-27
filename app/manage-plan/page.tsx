@@ -16,6 +16,7 @@ const ManagePlan = async () => {
   const prices = await getStripeProducts();
   const session = (await auth()) as Session;
   const user = (await getUser()) as User;
+  console.log(user);
 
   return (
     <PageWrapper>

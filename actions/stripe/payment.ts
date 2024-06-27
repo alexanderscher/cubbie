@@ -43,6 +43,40 @@ export const handlePayment = async (priceId: string, planId: string) => {
     });
   }
 
+  // Retrieve user details from session
+  const currentPlanId = session.user.planId;
+
+  if (subscriptionId && currentPlanId === 2 && planId === "3") {
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+
+    const updatedSubscription = await stripe.subscriptions.update(
+      subscriptionId,
+      {
+        items: [
+          {
+            id: subscription.items.data[0].id,
+            price: priceId,
+          },
+        ],
+        proration_behavior: "create_prorations",
+      }
+    );
+
+    console.log(
+      "Successfully downgraded subscription:",
+      updatedSubscription.id
+    );
+
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: { planId: parseInt(planId) },
+    });
+
+    revalidateTag(`user_${session.user.id}`);
+    return `${url}/success`;
+  }
+
+  // Handle new subscription or upgrade path
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
     select: {
@@ -52,15 +86,15 @@ export const handlePayment = async (priceId: string, planId: string) => {
     },
   });
 
-  // Check if user object is not null and email is not null
   if (!user || !user.email) {
     console.error(
       "User or email is null, cannot proceed with creating Stripe session."
     );
-    return "Error: User information is incomplete."; // Modify this based on your error handling needs
+    return "Error: User information is incomplete.";
   }
 
   const hasPlanId = await checkSubscriptionForMetadata(customerId, planId);
+
   if (
     (planId === "2" && !user.hasUsedTrialAdvanced && !hasPlanId) ||
     (planId === "3" && !user.hasUsedTrialLimited && !hasPlanId)
@@ -69,7 +103,7 @@ export const handlePayment = async (priceId: string, planId: string) => {
       allow_promotion_codes: true,
       customer: customerId,
       subscription_data: {
-        trial_period_days: 1,
+        trial_period_days: 14,
       },
       line_items: [
         {
@@ -127,20 +161,34 @@ export const freePlan = async () => {
       });
 
       if (subscription && subscription.subscriptionID) {
-        console.log(
-          `Attempting to cancel subscription with ID: ${subscription.subscriptionID}`
-        );
-        const canceledSubscription = await stripe.subscriptions.cancel(
+        const stripeSubscription = await stripe.subscriptions.retrieve(
           subscription.subscriptionID
         );
-        console.log(
-          `Successfully cancelled subscription with ID: ${canceledSubscription.id}`
-        );
 
-        await prisma.subscription.update({
-          where: { subscriptionID: subscriptionId },
-          data: { subscriptionID: null },
-        });
+        if (stripeSubscription.status === "trialing") {
+          console.log(
+            `Attempting to cancel subscription in trial period with ID: ${subscription.subscriptionID}`
+          );
+          const canceledSubscription = await stripe.subscriptions.cancel(
+            subscription.subscriptionID
+          );
+          console.log(
+            `Successfully cancelled trial subscription with ID: ${canceledSubscription.id}`
+          );
+        } else {
+          console.log(
+            `Attempting to schedule cancellation of subscription with ID: ${subscription.subscriptionID}`
+          );
+          const canceledSubscription = await stripe.subscriptions.update(
+            subscription.subscriptionID,
+            { cancel_at_period_end: true }
+          );
+          console.log(
+            `Successfully scheduled cancellation of subscription with ID: ${canceledSubscription.id}`
+          );
+        }
+
+        // Do not update subscription in the database immediately
       } else {
         console.log("No active subscription found or already cancelled.");
       }
@@ -154,6 +202,7 @@ export const freePlan = async () => {
       where: { id: userId },
       data: { planId: 1 },
     });
+
     const existingUserPlanUsage = await prisma.userPlanUsage.findUnique({
       where: { userId },
     });

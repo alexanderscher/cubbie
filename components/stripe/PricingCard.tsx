@@ -99,7 +99,9 @@ const PricingCard = ({ price, session, user }: priceProps) => {
               </div>
               <h1 className="text-orange-600">
                 {" "}
-                Are you sure you want to downgrade to the free plan?
+                Are you sure you want to downgrade to the free plan? You will
+                have access to your current plan until the end of the billing
+                cycle.
               </h1>
               <h1>{session.subscription}</h1>
 

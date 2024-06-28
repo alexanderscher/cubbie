@@ -1,3 +1,4 @@
+import { incrementApiCall } from "@/actions/rateLimit/gpt";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
 import { Session } from "next-auth";
@@ -13,6 +14,35 @@ const DATA = [
 
 export async function POST(request: Request) {
   const session = (await auth()) as Session;
+
+  const apiCalls = await incrementApiCall();
+
+  if (session.user.planId === 3 && apiCalls && apiCalls > 20) {
+    return new NextResponse(
+      JSON.stringify({
+        error: "You have reached the limit of 20 API calls per week.",
+      }),
+      {
+        status: 429,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
+  if (session.user.planId === 2 && apiCalls && apiCalls > 50) {
+    return new NextResponse(
+      JSON.stringify({
+        error: "You have reached the limit of 50 API calls per week.",
+      }),
+      {
+        status: 429,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
   await prisma.userPlanUsage.update({
     where: {
       userId: session.user.id,

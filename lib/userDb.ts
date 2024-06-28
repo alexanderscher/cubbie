@@ -58,6 +58,7 @@ export const getUserSubscriptionInfo = async () => {
         },
         include: {
           plan: true,
+          userPlanUsage: true,
           subscription: true,
           projects: {
             include: {

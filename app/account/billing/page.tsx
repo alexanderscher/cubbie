@@ -10,7 +10,6 @@ const getUserSubInfo = async () => {
 
 export default async function Profile() {
   const user = await getUserSubInfo();
-  console.log(user);
 
   return (
     <div className={`${styles.layout} gap-6 w-full justify-start`}>

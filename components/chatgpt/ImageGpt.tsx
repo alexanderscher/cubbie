@@ -86,7 +86,7 @@ export default function ImageGpt({
     setFieldValue("purchase_date", jsonObject.receipt.date_purchased);
     setFieldValue("store", jsonObject.receipt.store);
 
-    // no gpt test
+    // test gpt without api
     // const jsonObject = JSON.parse(data);
     // setFieldValue("amount", jsonObject.receipt.total_amount);
     // setFieldValue("purchase_date", jsonObject.receipt.date_purchased);
@@ -221,42 +221,6 @@ export default function ImageGpt({
       console.error("Error converting file to base64:", error);
     };
   };
-
-  // const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
-  //   if (event.target.files === null) {
-  //     return;
-  //   }
-
-  //   let file = event.target.files[0];
-
-  //   if (!file.type.match("image.*")) {
-  //     alert("File is not an image.");
-  //     setInvalidImage(true);
-  //     return;
-  //   }
-  //   if (file.type === "image/heic" || file.name.endsWith(".heic")) {
-  //     try {
-  //       file = await convertHeic(file);
-  //     } catch (error) {
-  //       console.error("Error converting HEIC file:", error);
-  //       alert("Error converting HEIC file.");
-  //       return;
-  //     }
-  //   }
-
-  //   try {
-  //     const dataUrl = await readFileAsDataURL(file);
-  //     setImage(dataUrl);
-  //     setNoImage(false);
-  //     setInvalidImage(false);
-  //     setFieldValue("receiptImage", dataUrl);
-  //   } catch (error) {
-  //     console.error("Error handling file:", error);
-  //     alert("Error processing file.");
-  //   }
-
-  //   [setFieldValue];
-  // };
 
   const [subscribeModal, setSubscribeModal] = useState(false);
 

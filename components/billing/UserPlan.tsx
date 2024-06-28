@@ -95,7 +95,7 @@ const Usage = ({ user }: { user: UserType }) => {
         <div className="bg-white rounded-lg p-6  flex flex-col gap-4 ">
           <h1 className=" text-lg text-emerald-900">Plan Usage</h1>
           {user.projects.map((project) => (
-            <div className="bg-orange-100 rounded-lg p-4">
+            <div key={project.id} className="bg-orange-100 rounded-lg p-4">
               <p className="text-orange-600">
                 <Link href={`/project/${project.id}`}>{project.name}</Link>
               </p>
@@ -128,7 +128,7 @@ const Usage = ({ user }: { user: UserType }) => {
 
         <p>Reset on {addDaysToDate(user.userPlanUsage.lastReset, 7)}</p>
         {user.projects.map((project) => (
-          <div className="bg-orange-100 rounded-lg p-4">
+          <div key={project.id} className="bg-orange-100 rounded-lg p-4">
             <p className="text-orange-600">
               <Link href={`/project/${project.id}`}>{project.name}</Link>
             </p>

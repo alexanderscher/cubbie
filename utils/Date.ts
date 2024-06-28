@@ -29,3 +29,15 @@ export const formatDateToYYYYMMDD = (dateInput: Date | string) => {
   // Parse the date as UTC and format it
   return moment.utc(dateInput).format("YYYY-MM-DD");
 };
+
+export const addDaysToDate = (dateString: Date, days: number) => {
+  // Parse the given UTC date string
+  const date = new Date(dateString);
+
+  // Add the specified number of days
+  date.setUTCDate(date.getUTCDate() + days);
+
+  // Format the new date back to a string in UTC format
+  const newDateString = date.toISOString();
+  return formatDateToMMDDYY(newDateString);
+};

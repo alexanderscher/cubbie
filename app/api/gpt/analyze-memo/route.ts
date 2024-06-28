@@ -1,13 +1,41 @@
+import { incrementApiCall } from "@/actions/rateLimit/gpt";
+import { auth } from "@/auth";
+import { Session } from "next-auth";
 import { NextResponse } from "next/server";
 
 // const DATA = `{"receipt":{"store":"Caron Callahan","date_purchased":"10 JAN 2024","total_amount":"1302","items":[{"description":"AUGIE JACKET","price":"294","product_id":"SS24-C5063"},{"description":"CARISI PANT","price":"206.5","product_id":"H24-CC3098"},{"description":"CARISI PANT","price":"231","product_id":"H24-CC3098"},{"description":"DEXTER PANT","price":"276.5","product_id":"FW23-CC3086"},{"description":"FLETCHER SWEATER","price":"294","product_id":"FW23-CC9052-5"}]}}`;
 
 export async function POST(request: Request) {
-  // return new NextResponse(JSON.stringify(DATA), {
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  // });
+  const session = (await auth()) as Session;
+  const apiCalls = await incrementApiCall();
+
+  if (session.user.planId === 3 && apiCalls && apiCalls > 20) {
+    return new NextResponse(
+      JSON.stringify({
+        error: "You have reached the limit of 20 API calls per week.",
+      }),
+      {
+        status: 429,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
+  if (session.user.planId === 2 && apiCalls && apiCalls > 50) {
+    return new NextResponse(
+      JSON.stringify({
+        error: "You have reached the limit of 50 API calls per week.",
+      }),
+      {
+        status: 429,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
+
   try {
     const json = await request.json();
     const image = json.image;

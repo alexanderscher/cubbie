@@ -29,6 +29,7 @@ export const handlePayment = async (priceId: string, planId: string) => {
   const session = (await auth()) as Session;
   const subscriptionId = session.user?.subscription?.subscriptionID;
   let customerId = session?.user?.stripeCustomerId;
+  const userId = session.user.id;
 
   const url = `${process.env.NEXT_PUBLIC_URL}/subscription`;
   const home = process.env.NEXT_PUBLIC_URL;
@@ -61,6 +62,31 @@ export const handlePayment = async (priceId: string, planId: string) => {
         proration_behavior: "create_prorations",
       }
     );
+    if (userId) {
+      await prisma.subscription.update({
+        where: { subscriptionID: subscription.id },
+        data: { planId: 3 },
+      });
+      await prisma.user.update({
+        where: { id: userId },
+        data: { planId: 3 },
+      });
+      const existingUserPlanUsage = await prisma.userPlanUsage.findUnique({
+        where: { userId },
+      });
+
+      if (existingUserPlanUsage) {
+        await prisma.userPlanUsage.update({
+          where: { userId },
+          data: {
+            planId: 3,
+            lastReset: new Date(), // Optionally update the last reset time to now
+          },
+        });
+      }
+
+      revalidateTag(`user_${userId}`);
+    }
 
     console.log(
       "Successfully downgraded subscription:",
@@ -200,38 +226,6 @@ export const freePlan = async () => {
       console.log("No subscription found.");
     }
 
-    const userId = session.user.id;
-
-    await prisma.user.update({
-      where: { id: userId },
-      data: { planId: 1 },
-    });
-
-    const existingUserPlanUsage = await prisma.userPlanUsage.findUnique({
-      where: { userId },
-    });
-
-    if (existingUserPlanUsage) {
-      await prisma.userPlanUsage.update({
-        where: { userId },
-        data: {
-          planId: 1,
-          apiCalls: 0, // Resetting the API call count to zero
-          lastReset: new Date(), // Optionally update the last reset time to now
-        },
-      });
-    } else {
-      await prisma.userPlanUsage.create({
-        data: {
-          userId,
-          planId: 1,
-          apiCalls: 0, // Assuming starting from zero
-          lastReset: new Date(), // Assuming it resets now
-        },
-      });
-    }
-
-    // Optional: Tag revalidation if necessary
     revalidateTag(`user_${session.user.id}`);
 
     return true;
@@ -240,76 +234,3 @@ export const freePlan = async () => {
     return false;
   }
 };
-
-// export const freePlan = async () => {
-//   try {
-//     const session = (await auth()) as Session;
-
-//     const subscriptionId = session.user?.subscription?.subscriptionID;
-
-//     if (subscriptionId) {
-//       const subscription = await prisma.subscription.findUnique({
-//         where: { subscriptionID: subscriptionId },
-//       });
-
-//       if (subscription && subscription.subscriptionID) {
-//         console.log(
-//           Attempting to cancel subscription with ID: ${subscription.subscriptionID}
-//         );
-//         const canceledSubscription = await stripe.subscriptions.cancel(
-//           subscription.subscriptionID
-//         );
-//         console.log(
-//           Successfully cancelled subscription with ID: ${canceledSubscription.id}
-//         );
-
-//         await prisma.subscription.update({
-//           where: { subscriptionID: subscriptionId },
-//           data: { subscriptionID: null },
-//         });
-//       } else {
-//         console.log("No active subscription found or already cancelled.");
-//       }
-//     } else {
-//       console.log("No subscription found.");
-//     }
-
-//     const userId = session.user.id;
-
-//     await prisma.user.update({
-//       where: { id: userId },
-//       data: { planId: 1 },
-//     });
-//     const existingUserPlanUsage = await prisma.userPlanUsage.findUnique({
-//       where: { userId },
-//     });
-
-//     if (existingUserPlanUsage) {
-//       await prisma.userPlanUsage.update({
-//         where: { userId },
-//         data: {
-//           planId: 1,
-//           apiCalls: 0, // Resetting the API call count to zero
-//           lastReset: new Date(), // Optionally update the last reset time to now
-//         },
-//       });
-//     } else {
-//       await prisma.userPlanUsage.create({
-//         data: {
-//           userId,
-//           planId: 1,
-//           apiCalls: 0, // Assuming starting from zero
-//           lastReset: new Date(), // Assuming it resets now
-//         },
-//       });
-//     }
-
-//     // Optional: Tag revalidation if necessary
-//     revalidateTag(user_${session.user.id});
-
-//     return true;
-//   } catch (error) {
-//     console.error("Error updating user to free plan:", error);
-//     return false;
-//   }
-// };

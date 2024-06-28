@@ -127,7 +127,7 @@ const FreePlan = () => {
   return (
     <div className="text-slate-400 text-sm">
       <p>Free</p>
-      <p>Up to 20 receipt items per prioject</p>
+      <p>Up to 20 receipt items per project</p>
       <p>Barcode look up</p>
       <p>Two users per project</p>
     </div>
@@ -140,7 +140,7 @@ const LimitedProjectPlan = () => {
       <p>Up to 50 receipt items per project</p>
       <p>Up to 5 users per project</p>
       <p>Barcode look up</p>
-      <p>Up to ten AI features per week for all projects </p>
+      <p>Up to 20 AI features per week for all projects </p>
       <p>Return alerts</p>
     </div>
   );
@@ -152,7 +152,7 @@ const AllProjectPlan = () => {
       <p>Ulimited receipt items per project</p>
       <p>Unlimited users per project</p>
       <p>Barcode look up</p>
-      <p>Unlimited AI features for all projects </p>
+      <p>Up to 50 AI features per week for all projects </p>
       <p>Return alerts</p>
     </div>
   );

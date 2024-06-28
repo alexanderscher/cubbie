@@ -118,7 +118,6 @@ const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
           where: { userId },
           data: {
             planId,
-            apiCalls: 0, // Resetting the API call count to zero
             lastReset: new Date(), // Optionally update the last reset time to now
           },
         });
@@ -155,9 +154,22 @@ const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
         where: { id: userId },
         data: { planId: 1 },
       });
+      const existingUserPlanUsage = await prisma.userPlanUsage.findUnique({
+        where: { userId },
+      });
 
-      // Optional: Invalidate cache or revalidate tag if needed
-      // revalidateTag(`user_${userId}`);
+      if (existingUserPlanUsage) {
+        await prisma.userPlanUsage.update({
+          where: { userId },
+          data: {
+            planId: 1,
+            apiCalls: 0,
+            lastReset: new Date(), // Optionally update the last reset time to now
+          },
+        });
+      }
+
+      revalidateTag(`user_${userId}`);
     }
 
     return new NextResponse(JSON.stringify({ received: true }), {

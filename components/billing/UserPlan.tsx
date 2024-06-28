@@ -7,6 +7,8 @@ import { Menu } from "@/components/profile/Menu";
 import { UserType } from "@/types/UserSettingTypes";
 import RegularButton from "@/components/buttons/RegularButton";
 import Loading from "@/components/loading-components/Loading";
+import { addDaysToDate } from "@/utils/Date";
+import Link from "next/link";
 
 const getTotalNumberOfItems = (user: UserType) => {
   return user.projects.reduce((total, project) => {
@@ -18,17 +20,6 @@ const getTotalNumberOfItems = (user: UserType) => {
 };
 
 const UserPlan = ({ user }: { user: UserType }) => {
-  console.log(user);
-  const [totalItems, setTotalItems] = useState(0);
-
-  useEffect(() => {
-    if (user.projects.length > 0) {
-      setTotalItems(getTotalNumberOfItems(user));
-    }
-  }, [user]);
-  const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState("");
-
   const [isOpen, setIsOpen] = React.useState(false);
   return (
     <div className="flex flex-col gap-4 w-full max-w-[800px]">
@@ -52,8 +43,7 @@ const UserPlan = ({ user }: { user: UserType }) => {
       </div>
 
       <PlanCard planId={user.planId} />
-
-      {isPending && <Loading loading={isPending} />}
+      <Usage user={user} />
 
       {isOpen && <Menu setIsOpen={setIsOpen} />}
     </div>
@@ -67,7 +57,7 @@ const PlanCard = ({ planId }: { planId: number | null | undefined }) => {
     <>
       <div className="bg-white rounded-lg p-6  flex flex-col gap-4 ">
         <div className="flex flex-col gap-3">
-          <h1 className=" text-lg">Current Plan</h1>
+          <h1 className=" text-lg text-emerald-900">Current Plan</h1>
           <p className="text-lg text-orange-600">
             {planId === 1 || planId === null
               ? "Free"
@@ -96,4 +86,76 @@ const PlanCard = ({ planId }: { planId: number | null | undefined }) => {
       </div>
     </>
   );
+};
+
+const Usage = ({ user }: { user: UserType }) => {
+  if (user.planId === 1 || user.planId === null) {
+    if (user.projects.length > 0) {
+      return (
+        <div className="bg-white rounded-lg p-6  flex flex-col gap-4 ">
+          <h1 className=" text-lg text-emerald-900">Plan Usage</h1>
+          {user.projects.map((project) => (
+            <div className="bg-orange-100 rounded-lg p-4">
+              <p className="text-orange-600">
+                <Link href={`/project/${project.id}`}>{project.name}</Link>
+              </p>
+
+              <div className="flex gap-2">
+                <p>Receipt items:</p>
+                <p>
+                  {project.receipts.reduce(
+                    (total, receipt) => total + receipt.items.length,
+                    0
+                  )}
+                  /20
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+  } else if (user.planId === 3) {
+    return (
+      <div className="bg-white rounded-lg p-6  flex flex-col gap-4 ">
+        <h1 className=" text-lg text-emerald-900">Plan Usage</h1>
+        {user.planId === 3 && (
+          <div>
+            <p>AI usage:</p>
+            <p> {user.userPlanUsage.apiCalls}/20</p>
+          </div>
+        )}
+
+        <p>Reset on {addDaysToDate(user.userPlanUsage.lastReset, 7)}</p>
+        {user.projects.map((project) => (
+          <div className="bg-orange-100 rounded-lg p-4">
+            <p className="text-orange-600">
+              <Link href={`/project/${project.id}`}>{project.name}</Link>
+            </p>
+
+            <div className="flex gap-2">
+              <p>Receipt items:</p>
+              <p>
+                {" "}
+                {project.receipts.reduce(
+                  (total, receipt) => total + receipt.items.length,
+                  0
+                )}
+                /50
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  } else if (user.planId === 2) {
+    return (
+      <div className="bg-white rounded-lg p-6  flex flex-col gap-4 ">
+        <h1 className=" text-lg text-emerald-900">Plan Usage</h1>
+        {user.planId === 2 && <p> {user.userPlanUsage.apiCalls}/50</p>}
+
+        <p>Reset on {addDaysToDate(user.userPlanUsage.lastReset, 7)}</p>
+      </div>
+    );
+  }
 };

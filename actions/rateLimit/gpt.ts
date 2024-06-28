@@ -18,7 +18,7 @@ export async function incrementApiCall() {
   }
 
   const now = new Date(new Date().toISOString());
-  const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // One week ago, in UTC
+  const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
   if (usage.lastReset < oneWeekAgo) {
     await prisma.userPlanUsage.update({
@@ -31,7 +31,7 @@ export async function incrementApiCall() {
       },
     });
   } else {
-    await prisma.userPlanUsage.update({
+    const increment = await prisma.userPlanUsage.update({
       where: {
         userId: session.user.id,
       },
@@ -41,6 +41,8 @@ export async function incrementApiCall() {
         },
       },
     });
+
+    console.log("Incremented API calls for the user.", increment);
   }
 
   return usage.apiCalls;

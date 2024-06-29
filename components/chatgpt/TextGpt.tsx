@@ -59,6 +59,7 @@ const TextGpt = ({
 
     const data = await response.json();
 
+    // no gpt dummy data
     const itemsWithAllProperties = data.map((item: any) => ({
       description: item.description || "",
       photo: item.photo || "",

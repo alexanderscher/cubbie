@@ -43,6 +43,7 @@ model User {
   userPlanUsage         UserPlanUsage?
   hasUsedTrialLimited   Boolean                @default(false)
   hasUsedTrialAdvanced  Boolean                @default(false)
+  ApiRequestLog         ApiRequestLog[]
 }
 
 model Plan {
@@ -54,6 +55,28 @@ model Plan {
   max_items         Int            @default(0)
   subscriptions     Subscription[]
   User              User[]
+}
+
+model ApiRequestLog {
+  id           Int      @id @default(autoincrement())
+  userId       String
+  projectId    Int
+  planId       Int
+  request      Json
+  endpointUsed String
+  timestamp    DateTime @default(now())
+  user         User?    @relation(fields: [userId], references: [id])
+  project      Project? @relation(fields: [projectId], references: [id])
+}
+
+model Subscription {
+  id               Int       @id @default(autoincrement())
+  userId           String    @unique
+  subscriptionID   String?   @unique
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId           Int
+  subscriptionDate DateTime?
+  plan             Plan      @relation(fields: [planId], references: [id])
 }
 
 model UserPlanUsage {
@@ -86,16 +109,7 @@ model Project {
   receipts           Receipt[]
   alert              Alert[]
   User               User                 @relation(fields: [userId], references: [id])
-}
-
-model Subscription {
-  id               Int       @id @default(autoincrement())
-  userId           String    @unique
-  subscriptionID   String?   @unique
-  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  planId           Int
-  subscriptionDate DateTime?
-  plan             Plan      @relation(fields: [planId], references: [id])
+  ApiRequestLog      ApiRequestLog[]
 }
 
 model ProjectUserArchive {

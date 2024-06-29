@@ -2,7 +2,6 @@ import { incrementApiCall } from "@/actions/rateLimit/gpt";
 import { auth } from "@/auth";
 import { Session } from "next-auth";
 import { NextResponse } from "next/server";
-import prisma from "@/prisma/client";
 
 // const DATA = `{
 //     "receipt": {
@@ -40,23 +39,10 @@ export async function POST(request: Request) {
 
   const apiCalls = await incrementApiCall();
 
-  if (session.user.planId === 3 && apiCalls && apiCalls > 20) {
+  if (apiCalls?.auth === false) {
     return new NextResponse(
       JSON.stringify({
-        error: "You have reached the limit of 20 API calls per week.",
-      }),
-      {
-        status: 429,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-  }
-  if (session.user.planId === 2 && apiCalls && apiCalls > 50) {
-    return new NextResponse(
-      JSON.stringify({
-        error: "You have reached the limit of 50 API calls per week.",
+        error: apiCalls.message,
       }),
       {
         status: 429,
@@ -101,18 +87,6 @@ export async function POST(request: Request) {
     });
 
     const data = await response.json();
-    // if (data) {
-    //   prisma.userPlanUsage.update({
-    //     where: {
-    //       userId: session.user.id,
-    //     },
-    //     data: {
-    //       apiCalls: {
-    //         increment: 1,
-    //       },
-    //     },
-    //   });
-    // }
 
     return new NextResponse(JSON.stringify(data), {
       status: response.status,
@@ -123,7 +97,10 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("error", error);
     return new NextResponse(
-      JSON.stringify({ error: "Internal Server Error" }),
+      JSON.stringify({
+        error:
+          "There was an error anazlying your image. Please contact support if this issue persists.",
+      }),
       {
         status: 500,
         headers: {

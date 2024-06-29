@@ -58,7 +58,7 @@ const PlanCard = ({ planId }: { planId: number | null | undefined }) => {
       <div className="bg-white rounded-lg p-6  flex flex-col gap-4 ">
         <div className="flex flex-col gap-3">
           <h1 className=" text-lg text-emerald-900">Current Plan</h1>
-          <p className="text-lg text-orange-600">
+          <p className=" text-slate-400">
             {planId === 1 || planId === null
               ? "Free"
               : planId === 2
@@ -67,7 +67,7 @@ const PlanCard = ({ planId }: { planId: number | null | undefined }) => {
           </p>
         </div>
 
-        <div className="text-lg">
+        <div className=" text-slate-400">
           <p className="">
             {planId === 1 || planId === null
               ? "$0.00"
@@ -117,32 +117,40 @@ const Usage = ({ user }: { user: UserType }) => {
     }
   } else if (user.planId === 3) {
     return (
-      <div className="bg-white rounded-lg p-6  flex flex-col gap-4 ">
+      <div className="bg-white rounded-lg p-6  flex flex-col gap-4">
         <h1 className=" text-lg text-emerald-900">Plan Usage</h1>
         {user.planId === 3 && (
           <div>
-            <p>AI usage:</p>
-            <p> {user.userPlanUsage.apiCalls}/20</p>
+            <p className="text-slate-400">AI usage:</p>
+            <p className="text-slate-400"> {user.userPlanUsage.apiCalls}/20</p>
+            {/* {user.userPlanUsage.apiCalls >= 20 && (
+              <p className="text-red-600 text-sm">Limit reached</p>
+            )} */}
           </div>
         )}
 
-        <p>Reset on {addDaysToDate(user.userPlanUsage.lastReset, 7)}</p>
+        <p className="text-slate-400">
+          Reset on {addDaysToDate(user.userPlanUsage.lastReset, 7)}
+        </p>
         {user.projects.map((project) => (
-          <div key={project.id} className="bg-orange-100 rounded-lg p-4">
+          <div
+            key={project.id}
+            className="bg-orange-100 rounded-lg p-4 text-sm"
+          >
             <p className="text-orange-600">
               <Link href={`/project/${project.id}`}>{project.name}</Link>
             </p>
 
             <div className="flex gap-2">
-              <p>Receipt items:</p>
-              <p>
-                {" "}
+              <p className="text-slate-400">Receipt items:</p>
+              <p className="text-slate-400">
                 {project.receipts.reduce(
                   (total, receipt) => total + receipt.items.length,
                   0
                 )}
                 /50
               </p>
+              {}
             </div>
           </div>
         ))}
@@ -153,6 +161,9 @@ const Usage = ({ user }: { user: UserType }) => {
       <div className="bg-white rounded-lg p-6  flex flex-col gap-4 ">
         <h1 className=" text-lg text-emerald-900">Plan Usage</h1>
         {user.planId === 2 && <p> {user.userPlanUsage.apiCalls}/50</p>}
+        {user.userPlanUsage.apiCalls >= 50 && (
+          <p className="text-red-600 text-sm">Limit reached</p>
+        )}
 
         <p>Reset on {addDaysToDate(user.userPlanUsage.lastReset, 7)}</p>
       </div>

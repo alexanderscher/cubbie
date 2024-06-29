@@ -168,6 +168,7 @@ const TextPage = ({ projects, session }: Pages) => {
                                     setErrors((prevErrors) => ({
                                       ...prevErrors,
                                       folderName: "",
+
                                       store: "",
                                       amount: "",
                                       tracking_number: "",

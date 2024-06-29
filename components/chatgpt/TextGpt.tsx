@@ -30,13 +30,13 @@ const TextGpt = ({
   const [prompt, setPrompt] = useState(false);
   const [loading, setLoading] = useState(false);
   const [promptError, setPromptError] = useState(false);
-  const [apiError, setApiError] = useState(false);
+  const [apiError, setApiError] = useState("");
 
   const run = async () => {
     setPrompt(false);
     setNoText(false);
     setPromptError(false);
-    setApiError(false);
+    setApiError("");
     setLoading(true);
 
     const response = await fetch("/api/gpt/analyze-input", {
@@ -48,9 +48,11 @@ const TextGpt = ({
     });
 
     if (!response.ok) {
-      setApiError(true);
+      const errorData = await response.json();
+      console.log(errorData);
+      setApiError(errorData.error);
+
       setLoading(false);
-      console.error("Failed to fetch data");
 
       return;
     }
@@ -187,11 +189,7 @@ const TextGpt = ({
         ></FormError>
       )}
 
-      {apiError && (
-        <FormError
-          message={"There was an error analyzing the text. Please try again."}
-        ></FormError>
-      )}
+      {apiError && <FormError message={apiError}></FormError>}
       {loading && <Loading loading={loading} />}
       {subscribeModal && (
         <SubscribeModal

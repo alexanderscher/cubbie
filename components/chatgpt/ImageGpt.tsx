@@ -45,7 +45,7 @@ export default function ImageGpt({
   const [loading, setLoading] = useState(false);
   const [noReceipt, setNoReceipt] = useState(false);
   const [invalidImage, setInvalidImage] = useState(false);
-  const [apiError, setApiError] = useState(false);
+  const [apiError, setApiError] = useState("");
   const [validationErrors, setValidationErrors] = useState({
     folderName: "",
   });
@@ -63,7 +63,8 @@ export default function ImageGpt({
     });
 
     if (!res.ok) {
-      setApiError(true);
+      const errorMessage = await res.json();
+      setApiError(errorMessage.error);
       setLoading(false);
       console.error("Failed to fetch data");
 
@@ -108,7 +109,7 @@ export default function ImageGpt({
     setPrompt(false);
     setLoading(false);
     setNoReceipt(false);
-    setApiError(false);
+    setApiError("");
   };
 
   const MemoGptCall = async () => {
@@ -123,7 +124,8 @@ export default function ImageGpt({
     });
 
     if (!res.ok) {
-      setApiError(true);
+      const errorMessage = await res.json();
+      setApiError(errorMessage.error);
       setLoading(false);
 
       return;
@@ -171,7 +173,7 @@ export default function ImageGpt({
     setPrompt(false);
     setLoading(false);
     setNoReceipt(false);
-    setApiError(false);
+    setApiError("");
   };
 
   const readFileAsDataURL = (file: File): Promise<string> => {
@@ -547,11 +549,7 @@ export default function ImageGpt({
         {invalidImage && (
           <FormError message={" Please upload a valid image file."}></FormError>
         )}
-        {apiError && (
-          <p className="text-sm text-center text-orange-800">
-            There was an error analyzing the image. Please try again.
-          </p>
-        )}
+        {apiError && <FormError message={apiError}></FormError>}
         {loading && <Loading loading={loading} />}
         {subscribeModal && (
           <SubscribeModal

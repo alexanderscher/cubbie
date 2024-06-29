@@ -444,11 +444,13 @@ const LeaveProject = ({
 }) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const { reloadProjects } = useSearchProjectContext();
 
   const leave = async () => {
     startTransition(() => {
       try {
         leaveProject(projectId);
+        reloadProjects();
         router.push("/");
       } catch (e) {
         toast.error(
@@ -490,12 +492,14 @@ const MembersOptionModal = ({
   projectId: number;
 }) => {
   const [isPending, startTransition] = useTransition();
+  const { reloadProjects } = useSearchProjectContext();
 
   const removeUser = async () => {
     startTransition(() => {
       try {
         removeUserFromProject(user.user.id, projectId);
         toast.success("User removed from project");
+        reloadProjects();
       } catch (e) {
         toast.error(
           "An error occurred while removing the user from the project"
@@ -509,6 +513,7 @@ const MembersOptionModal = ({
       try {
         changeProjectOwner(projectId, user.user.id);
         toast.success("User is now the owner of the project");
+        reloadProjects();
       } catch (e) {
         toast.error("An error occurred while making the user the owner");
       }
@@ -567,6 +572,7 @@ const AddUser = ({
   const [invalidEmailFormat, setInvalidEmailFormat] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [uploadError, setUploadError] = useState("");
+  const { reloadProjects } = useSearchProjectContext();
 
   const emailValidation = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -618,6 +624,7 @@ const AddUser = ({
               console.log("email sent");
               setAddUserOpen(false);
               setMembersOpen(true);
+              reloadProjects();
             }
           });
         } catch (e) {

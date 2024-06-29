@@ -68,3 +68,50 @@ export async function incrementApiCall() {
     revalidateTag(`user_${session.user.id}`);
   }
 }
+
+// export const canMakeRequest = async (userId: string, projectId: number) => {
+//   // Calculate the date 7 days ago
+//   const sevenDaysAgo = new Date();
+//   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+//   // Count API requests in the last 7 days for the given user and project
+//   const requestCount = await prisma.apiRequestLog.count({
+//     where: {
+//       userId: userId,
+//       projectId: projectId,
+//       timestamp: {
+//         gte: sevenDaysAgo,
+//       },
+//     },
+//   });
+
+//   // Check if the request count is within the limit
+//   if (requestCount >= 20) {
+//     // Check when the last request was made to determine block period
+//     const lastRequest = await prisma.apiRequestLog.findFirst({
+//       where: {
+//         OR: [{ userId: userId }, { projectId: projectId }],
+//       },
+//       orderBy: {
+//         timestamp: "desc",
+//       },
+//     });
+
+//     if (lastRequest) {
+//       const lastRequestDate = lastRequest.timestamp;
+//       lastRequestDate.setDate(lastRequestDate.getDate() + 7);
+//       const currentDate = new Date();
+
+//       if (currentDate <= lastRequestDate) {
+//         // Still within the block period
+//         return false;
+//       }
+//     }
+
+//     // If more than 7 days have passed since the last request in the 7-day window, allow new requests
+//     return true;
+//   }
+
+//   // Allow request if under limit
+//   return true;
+// };

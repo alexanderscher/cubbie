@@ -1,7 +1,9 @@
 "use server";
+import { revalidate } from "@/app/api/cron/route";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
 import { Session } from "@/types/Session";
+import { revalidateTag } from "next/cache";
 
 export async function incrementApiCall() {
   const session = (await auth()) as Session;
@@ -17,6 +19,8 @@ export async function incrementApiCall() {
     return;
   }
 
+  const apiCalls = usage.apiCalls;
+
   const now = new Date(new Date().toISOString());
   const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
@@ -31,19 +35,36 @@ export async function incrementApiCall() {
       },
     });
   } else {
-    const increment = await prisma.userPlanUsage.update({
-      where: {
-        userId: session.user.id,
-      },
-      data: {
-        apiCalls: {
-          increment: 1,
+    if (session.user.planId === 1 || session.user.planId === null)
+      return {
+        auth: false,
+        message: "Please upgrade to analyze receipts with AI",
+      };
+    if (session.user.planId === 3 && apiCalls && apiCalls >= 20) {
+      return {
+        auth: false,
+        message: "You have reached the limit of 20 API calls per week.",
+      };
+    }
+    if (session.user.planId === 2 && apiCalls && apiCalls >= 50) {
+      return {
+        auth: false,
+        message: "You have reached the limit of 50 API calls per week.",
+      };
+    } else {
+      const increment = await prisma.userPlanUsage.update({
+        where: {
+          userId: session.user.id,
         },
-      },
-    });
+        data: {
+          apiCalls: {
+            increment: 1,
+          },
+        },
+      });
+      return { auth: true };
+    }
 
-    console.log("Incremented API calls for the user.", increment);
+    revalidateTag(`user_${session.user.id}`);
   }
-
-  return usage.apiCalls;
 }

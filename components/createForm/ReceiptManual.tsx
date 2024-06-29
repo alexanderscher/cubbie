@@ -123,6 +123,9 @@ const ReceiptManual = ({
               values={values}
               setProjectPlanId={setProjectPlanId}
             />
+            {errors.folderName && (
+              <p className="text-orange-800 text-sm">{errors.folderName}</p>
+            )}
 
             <div className="w-full">
               <p className="text-sm text-emerald-900 ">Card</p>

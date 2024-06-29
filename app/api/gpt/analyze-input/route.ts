@@ -17,10 +17,10 @@ export async function POST(request: Request) {
 
   const apiCalls = await incrementApiCall();
 
-  if (session.user.planId === 3 && apiCalls && apiCalls > 20) {
+  if (apiCalls?.auth === false) {
     return new NextResponse(
       JSON.stringify({
-        error: "You have reached the limit of 20 API calls per week.",
+        error: apiCalls.message,
       }),
       {
         status: 429,
@@ -30,29 +30,7 @@ export async function POST(request: Request) {
       }
     );
   }
-  if (session.user.planId === 2 && apiCalls && apiCalls > 50) {
-    return new NextResponse(
-      JSON.stringify({
-        error: "You have reached the limit of 50 API calls per week.",
-      }),
-      {
-        status: 429,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-  }
-  await prisma.userPlanUsage.update({
-    where: {
-      userId: session.user.id,
-    },
-    data: {
-      apiCalls: {
-        increment: 1,
-      },
-    },
-  });
+
   return new NextResponse(JSON.stringify(DATA), {
     headers: {
       "Content-Type": "application/json",

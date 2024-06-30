@@ -20,12 +20,9 @@ const getTotalNumberOfItems = (user: UserType) => {
   }, 0);
 };
 
-const apiUsage = (user: UserType) => {
-  const usage = getApiUsage(user.id);
-};
-
 const UserPlan = ({ user }: { user: UserType }) => {
   const [isOpen, setIsOpen] = React.useState(false);
+
   return (
     <div className="flex flex-col gap-4 w-full max-w-[800px]">
       <div className="bg-white rounded-lg p-6  flex flex-col gap-4">

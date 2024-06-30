@@ -10,7 +10,7 @@ const getUserSubInfo = async () => {
   const user = await getUserSubscriptionInfo();
   return user as UserType;
 };
-const apiUsage = async (id: string, planId: string) => {
+const apiUsage = async (id: string, planId: number) => {
   const usage = await getApiUsage(id, planId);
   return usage;
 };

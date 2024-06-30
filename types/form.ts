@@ -26,8 +26,9 @@ export interface ReceiptInput {
   receiptImage?: string;
   items: ItemInput[];
   memo?: boolean;
-  folder?: number;
-  folderName?: string;
+  folder: number;
+  folderName: string;
+  folderUserId: string;
 }
 
 export interface Pages {

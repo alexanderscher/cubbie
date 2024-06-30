@@ -3,7 +3,6 @@ import * as Yup from "yup";
 
 export const RECEIPT_SCHEMA = Yup.object({
   store: Yup.string().required("Store is required"),
-
   purchase_date: Yup.date().required("Purchase date is required"),
   days_until_return: Yup.string().required("Days until return is required"),
   folderName: Yup.string().required("Project folder is required"),

@@ -9,6 +9,7 @@ import RegularButton from "@/components/buttons/RegularButton";
 import Loading from "@/components/loading-components/Loading";
 import { addDaysToDate } from "@/utils/Date";
 import Link from "next/link";
+import { getApiUsage } from "@/actions/rateLimit/gpt";
 
 const getTotalNumberOfItems = (user: UserType) => {
   return user.projects.reduce((total, project) => {
@@ -17,6 +18,10 @@ const getTotalNumberOfItems = (user: UserType) => {
     }, 0);
     return total + itemsInProject;
   }, 0);
+};
+
+const apiUsage = (user: UserType) => {
+  const usage = getApiUsage(user.id);
 };
 
 const UserPlan = ({ user }: { user: UserType }) => {

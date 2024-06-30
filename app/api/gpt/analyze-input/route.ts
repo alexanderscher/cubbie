@@ -1,6 +1,5 @@
-import { incrementApiCall } from "@/actions/rateLimit/gpt";
+import { canMakeRequest } from "@/actions/rateLimit/gpt";
 import { auth } from "@/auth";
-import prisma from "@/prisma/client";
 import { Session } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -14,32 +13,34 @@ const DATA = [
 
 export async function POST(request: Request) {
   const session = (await auth()) as Session;
+  const userId = session?.user?.id as string;
+  const planId = session.user.planId;
+  const body = await request.json();
 
-  const apiCalls = await incrementApiCall();
-  if (apiCalls?.auth === false) {
+  const { projectId, projectOwner } = body;
+
+  const apiCalls = await canMakeRequest(
+    userId,
+    parseInt(projectId),
+    planId,
+    request,
+    "analyze-input",
+    projectOwner
+  );
+
+  if (!apiCalls) {
     return new NextResponse(
       JSON.stringify({
-        error: apiCalls.message,
+        error: "There was an error with the API call. Please try again.",
       }),
       {
-        status: 429,
+        status: 500,
         headers: {
           "Content-Type": "application/json",
         },
       }
     );
   }
-
-  await prisma.userPlanUsage.update({
-    where: {
-      userId: session.user.id,
-    },
-    data: {
-      apiCalls: {
-        increment: 1,
-      },
-    },
-  });
   return new NextResponse(JSON.stringify(DATA), {
     headers: {
       "Content-Type": "application/json",

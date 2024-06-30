@@ -14,6 +14,7 @@ export const DEFAULT_INPUT_VALUES: ReceiptInput = {
   items: [],
   folder: 0,
   folderName: "",
+  folderUserId: "",
   memo: false,
 };
 

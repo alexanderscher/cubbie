@@ -7,6 +7,7 @@ interface Option {
   value: string;
   label: string;
   planId: number | null;
+  userId: string;
 }
 
 interface Props {
@@ -25,6 +26,7 @@ const ProjectSelectForm = ({
   setProjectPlanId,
 }: Props) => {
   const [options, setOptions] = useState<Option[]>([]);
+  console.log(options);
 
   const customStyles: StylesConfig<Option, false> = {
     control: (provided, state) => ({
@@ -69,6 +71,7 @@ const ProjectSelectForm = ({
           value: id.toString(),
           label: label,
           planId: user.planId,
+          userId: project.userId,
         };
       });
       setOptions(newOptions);
@@ -78,7 +81,10 @@ const ProjectSelectForm = ({
       );
       if (initialOption) {
         handleChange("folder")(initialOption.value);
+
         setFieldValue("folderName", initialOption.label);
+        setFieldValue("folderUserId", initialOption.userId);
+
         setProjectPlanId(initialOption.planId);
       }
     }
@@ -89,6 +95,7 @@ const ProjectSelectForm = ({
       handleChange("folder")(selectedOption.value);
       setFieldValue("folderName", selectedOption.label);
       setProjectPlanId(selectedOption.planId);
+      setFieldValue("folderUserId", selectedOption.userId);
     } else {
       setFieldValue("folderName", "");
     }

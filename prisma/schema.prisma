@@ -61,6 +61,7 @@ model ApiRequestLog {
   id           Int      @id @default(autoincrement())
   userId       String
   projectId    Int
+  projectOwner String
   planId       Int
   request      Json
   endpointUsed String

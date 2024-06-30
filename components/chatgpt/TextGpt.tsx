@@ -1,3 +1,4 @@
+"use client";
 import RegularButton from "@/components/buttons/RegularButton";
 import { FormError } from "@/components/form-error";
 import Loading from "@/components/loading-components/Loading";
@@ -31,6 +32,7 @@ const TextGpt = ({
   const [loading, setLoading] = useState(false);
   const [promptError, setPromptError] = useState(false);
   const [apiError, setApiError] = useState("");
+  console.log(values);
 
   const run = async () => {
     setPrompt(false);
@@ -39,20 +41,22 @@ const TextGpt = ({
     setApiError("");
     setLoading(true);
 
-    const response = await fetch("/api/gpt/analyze-input", {
+    const response = await fetch(`/api/gpt/analyze-input`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ text: inputText }),
+      body: JSON.stringify({
+        projectOwner: values.folderUserId,
+        projectId: values.folder,
+      }),
     });
 
     if (!response.ok) {
+      setLoading(false);
       const errorData = await response.json();
       console.log(errorData);
       setApiError(errorData.error);
-
-      setLoading(false);
 
       return;
     }

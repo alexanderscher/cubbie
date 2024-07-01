@@ -11,6 +11,12 @@ const DATA = [
   },
 ];
 
+type ApiCallType = {
+  // Define the properties of the API call result
+  // For example:
+  success: boolean;
+  message: string;
+};
 export async function POST(request: Request) {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
@@ -28,10 +34,23 @@ export async function POST(request: Request) {
     projectOwner
   );
 
-  if (!apiCalls) {
+  if (apiCalls.status === "500") {
     return new NextResponse(
       JSON.stringify({
-        error: "There was an error with the API call. Please try again.",
+        error: apiCalls.message,
+      }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
+  if (apiCalls.status === "429") {
+    return new NextResponse(
+      JSON.stringify({
+        error: apiCalls.message,
       }),
       {
         status: 500,

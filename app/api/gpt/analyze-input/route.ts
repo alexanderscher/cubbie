@@ -11,12 +11,6 @@ const DATA = [
   },
 ];
 
-type ApiCallType = {
-  // Define the properties of the API call result
-  // For example:
-  success: boolean;
-  message: string;
-};
 export async function POST(request: Request) {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;

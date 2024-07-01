@@ -61,7 +61,6 @@ model ApiRequestLog {
   projectId    Int
   projectOwner String
   planId       Int
-  request      Json
   endpointUsed String
   timestamp    DateTime @default(now())
   user         User?    @relation(fields: [userId], references: [id])

@@ -18,12 +18,12 @@ export async function POST(request: Request) {
   const body = await request.json();
 
   const { projectId, projectOwner } = body;
+  const requestPayload = {};
 
   const apiCalls = await canMakeRequest(
     userId,
     parseInt(projectId),
     planId,
-    request,
     "analyze-input",
     projectOwner
   );

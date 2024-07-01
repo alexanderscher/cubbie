@@ -10,7 +10,6 @@ export const canMakeRequest = async (
   userId: string,
   projectId: number,
   planId: number,
-  request: any,
   endpointUsed: string,
   projectUserId: string
 ): Promise<ApiCallType> => {
@@ -41,7 +40,6 @@ export const canMakeRequest = async (
           userId: userId,
           projectId: projectId,
           planId: planId,
-          request: JSON.stringify(request), // Serialize the request object
           endpointUsed: endpointUsed,
           timestamp: new Date(), // Current date and time
           projectOwner: projectUserId,
@@ -101,7 +99,6 @@ export const canMakeRequest = async (
         userId: userId,
         projectId: projectId,
         planId: planId,
-        request: JSON.stringify(request), // Serialize the request object
         endpointUsed: endpointUsed,
         timestamp: new Date(), // Current date and time
         projectOwner: projectUserId,

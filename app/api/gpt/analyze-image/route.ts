@@ -46,7 +46,6 @@ export async function POST(request: Request) {
     userId,
     parseInt(projectId),
     planId,
-    request,
     "analyze-input",
     projectOwner
   );

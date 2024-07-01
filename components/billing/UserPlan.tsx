@@ -1,24 +1,15 @@
 "use client";
 import Image from "next/image";
-import React, { useEffect, useState, useTransition } from "react";
+import React, { use, useEffect, useState, useTransition } from "react";
 import styles from "@/components/profile/profile.module.css";
 import { Menu } from "@/components/profile/Menu";
 
 import { UserType } from "@/types/UserSettingTypes";
 import RegularButton from "@/components/buttons/RegularButton";
-import Loading from "@/components/loading-components/Loading";
-import { addDaysToDate } from "@/utils/Date";
 import Link from "next/link";
 import { getApiUsage } from "@/actions/rateLimit/gpt";
-
-const getTotalNumberOfItems = (user: UserType) => {
-  return user.projects.reduce((total, project) => {
-    const itemsInProject = project.receipts.reduce((sum, receipt) => {
-      return sum + receipt.items.length; // Assuming receipt.items is an array
-    }, 0);
-    return total + itemsInProject;
-  }, 0);
-};
+import { BeatLoader } from "react-spinners";
+import { addDaysToDate, formatDateToMMDDYY } from "@/utils/Date";
 
 const UserPlan = ({ user }: { user: UserType }) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -90,7 +81,35 @@ const PlanCard = ({ planId }: { planId: number | null | undefined }) => {
   );
 };
 
+interface UsageType {
+  used: number;
+  limit: number;
+  resetDate: Date;
+}
+
 const Usage = ({ user }: { user: UserType }) => {
+  const [usage, setUsage] = useState({} as UsageType);
+  const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    const apiUsage = () => {
+      startTransition(async () => {
+        if (user.planId && user.planId !== 1 && user.planId !== null) {
+          const usage = await getApiUsage(user.id, user.planId);
+          setUsage(usage);
+        }
+      });
+    };
+    if (user.planId && user.planId !== 1 && user.planId !== null) apiUsage();
+  }, [user]);
+
+  if (isPending) {
+    return (
+      <div className="bg-white rounded-lg p-6  flex flex-col gap-4  justify-center items-center">
+        <BeatLoader loading={isPending} size={15} color={"rgb(6 78 59)"} />
+      </div>
+    );
+  }
   if (user.planId === 1 || user.planId === null) {
     if (user.projects.length > 0) {
       return (
@@ -109,9 +128,12 @@ const Usage = ({ user }: { user: UserType }) => {
                     (total, receipt) => total + receipt.items.length,
                     0
                   )}
-                  /20
+                  /{usage.limit}
                 </p>
               </div>
+              <p className="text-slate-400">
+                Resets on {formatDateToMMDDYY(usage.resetDate)}
+              </p>
             </div>
           ))}
         </div>
@@ -124,16 +146,13 @@ const Usage = ({ user }: { user: UserType }) => {
         {user.planId === 3 && (
           <div>
             <p className="text-slate-400">AI usage:</p>
-            <p className="text-slate-400"> {user.userPlanUsage.apiCalls}/20</p>
-            {/* {user.userPlanUsage.apiCalls >= 20 && (
-              <p className="text-red-600 text-sm">Limit reached</p>
-            )} */}
+            <p className="text-slate-400"> {usage.used}/20</p>
           </div>
         )}
-
         <p className="text-slate-400">
-          Reset on {addDaysToDate(user.userPlanUsage.lastReset, 7)}
+          Resets on {formatDateToMMDDYY(usage.resetDate)}
         </p>
+
         {user.projects.map((project) => (
           <div
             key={project.id}
@@ -152,7 +171,6 @@ const Usage = ({ user }: { user: UserType }) => {
                 )}
                 /50
               </p>
-              {}
             </div>
           </div>
         ))}
@@ -162,12 +180,11 @@ const Usage = ({ user }: { user: UserType }) => {
     return (
       <div className="bg-white rounded-lg p-6  flex flex-col gap-4 ">
         <h1 className=" text-lg text-emerald-900">Plan Usage</h1>
-        {user.planId === 2 && <p> {user.userPlanUsage.apiCalls}/50</p>}
-        {user.userPlanUsage.apiCalls >= 50 && (
-          <p className="text-red-600 text-sm">Limit reached</p>
+        {user.planId === 2 && (
+          <p>
+            {usage.used}/{usage.limit}
+          </p>
         )}
-
-        <p>Reset on {addDaysToDate(user.userPlanUsage.lastReset, 7)}</p>
       </div>
     );
   }

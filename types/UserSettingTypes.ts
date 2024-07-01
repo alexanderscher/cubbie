@@ -45,7 +45,6 @@ export interface UserType {
   projects: ProjectUserType[];
   plan: Plan;
   subscription: Subscription;
-  userPlanUsage: UserPlanUsage;
 }
 
 export interface SubscriptionProjectType {

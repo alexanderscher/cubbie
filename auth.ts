@@ -50,16 +50,6 @@ export const {
 
             console.log("Updated user with planId", updatedUser);
 
-            const userPlanUsage = await prisma.userPlanUsage.create({
-              data: {
-                userId: user.id,
-                planId: 1,
-                apiCalls: 0, // Assuming starting from zero
-                lastReset: new Date(), // Assuming it resets now
-              },
-            });
-            console.log("User plan usage created", userPlanUsage);
-
             if (user.email) {
               const existingStripe =
                 await retrieveCustomerAndSubscriptionsByEmail(user.email);

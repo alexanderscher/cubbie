@@ -1,4 +1,4 @@
-import { incrementApiCall } from "@/actions/rateLimit/gpt";
+import { canMakeRequest } from "@/actions/rateLimit/gpt";
 import { auth } from "@/auth";
 import { Session } from "next-auth";
 import { NextResponse } from "next/server";
@@ -7,22 +7,47 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   const session = (await auth()) as Session;
-  const apiCalls = await incrementApiCall();
+  const userId = session?.user?.id as string;
+  const planId = session.user.planId;
+  const body = await request.json();
 
-  if (apiCalls?.auth === false) {
+  const { projectId, projectOwner } = body;
+
+  const apiCalls = await canMakeRequest(
+    userId,
+    parseInt(projectId),
+    planId,
+    request,
+    "analyze-input",
+    projectOwner
+  );
+
+  if (apiCalls.status === "500") {
     return new NextResponse(
       JSON.stringify({
         error: apiCalls.message,
       }),
       {
-        status: 429,
+        status: 500,
         headers: {
           "Content-Type": "application/json",
         },
       }
     );
   }
-
+  if (apiCalls.status === "429") {
+    return new NextResponse(
+      JSON.stringify({
+        error: apiCalls.message,
+      }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
   try {
     const json = await request.json();
     const image = json.image;

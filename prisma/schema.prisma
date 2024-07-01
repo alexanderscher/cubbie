@@ -39,8 +39,6 @@ model User {
   stripeCustomerId      String?                @unique
   planId                Int?
   plan                  Plan?                  @relation(fields: [planId], references: [id])
-  userPlanUsageId       Int?
-  userPlanUsage         UserPlanUsage?
   hasUsedTrialLimited   Boolean                @default(false)
   hasUsedTrialAdvanced  Boolean                @default(false)
   ApiRequestLog         ApiRequestLog[]
@@ -80,14 +78,7 @@ model Subscription {
   plan             Plan      @relation(fields: [planId], references: [id])
 }
 
-model UserPlanUsage {
-  id        Int      @id @default(autoincrement())
-  userId    String   @unique
-  planId    Int
-  apiCalls  Int      @default(0)
-  lastReset DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
+
 
 model AlertSettings {
   id              String  @id @default(cuid())

@@ -108,31 +108,6 @@ const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
         });
       }
 
-      // Update the UserPlanUsage record
-      const existingUserPlanUsage = await prisma.userPlanUsage.findUnique({
-        where: { userId },
-      });
-
-      if (existingUserPlanUsage) {
-        await prisma.userPlanUsage.update({
-          where: { userId },
-          data: {
-            planId,
-            lastReset: new Date(), // Optionally update the last reset time to now
-          },
-        });
-      } else {
-        // Optionally handle the scenario where no existing UserPlanUsage is found
-        await prisma.userPlanUsage.create({
-          data: {
-            userId,
-            planId,
-            apiCalls: 0, // Assuming starting from zero
-            lastReset: new Date(), // Assuming it resets now
-          },
-        });
-      }
-
       // Revalidate user-specific data if needed
       revalidateTag(`user_${userId}`);
     });
@@ -154,20 +129,6 @@ const webhookHandler = async (req: NextRequest): Promise<NextResponse> => {
         where: { id: userId },
         data: { planId: 1 },
       });
-      const existingUserPlanUsage = await prisma.userPlanUsage.findUnique({
-        where: { userId },
-      });
-
-      if (existingUserPlanUsage) {
-        await prisma.userPlanUsage.update({
-          where: { userId },
-          data: {
-            planId: 1,
-            apiCalls: 0,
-            lastReset: new Date(), // Optionally update the last reset time to now
-          },
-        });
-      }
 
       revalidateTag(`user_${userId}`);
     }

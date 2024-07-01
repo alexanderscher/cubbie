@@ -71,19 +71,6 @@ export const handlePayment = async (priceId: string, planId: string) => {
         where: { id: userId },
         data: { planId: 3 },
       });
-      const existingUserPlanUsage = await prisma.userPlanUsage.findUnique({
-        where: { userId },
-      });
-
-      if (existingUserPlanUsage) {
-        await prisma.userPlanUsage.update({
-          where: { userId },
-          data: {
-            planId: 3,
-            lastReset: new Date(), // Optionally update the last reset time to now
-          },
-        });
-      }
 
       revalidateTag(`user_${userId}`);
     }

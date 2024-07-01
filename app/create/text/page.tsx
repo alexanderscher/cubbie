@@ -15,8 +15,6 @@ const UploadText = async () => {
   const projects = await fetchProject();
   const session = (await auth()) as Session;
 
-  console.log(projects);
-
   return (
     <FormHeader>
       <TextPage projects={projects} session={session} />

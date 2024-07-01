@@ -1,71 +1,10 @@
 "use server";
-import { auth } from "@/auth";
 import prisma from "@/prisma/client";
-import { Session } from "@/types/Session";
-import { revalidateTag } from "next/cache";
 
-// export async function incrementApiCall() {
-//   const session = (await auth()) as Session;
-
-//   const usage = await prisma.userPlanUsage.findUnique({
-//     where: {
-//       userId: session.user.id,
-//     },
-//   });
-
-//   if (!usage) {
-//     console.error("No usage data found for the user.");
-//     return;
-//   }
-
-//   const apiCalls = usage.apiCalls;
-
-//   const now = new Date(new Date().toISOString());
-//   const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-
-//   if (usage.lastReset < oneWeekAgo) {
-//     await prisma.userPlanUsage.update({
-//       where: {
-//         userId: session.user.id,
-//       },
-//       data: {
-//         apiCalls: 1, // Reset and increment
-//         lastReset: now, // Update last reset time, in UTC
-//       },
-//     });
-//   } else {
-//     if (session.user.planId === 1 || session.user.planId === null)
-//       return {
-//         auth: false,
-//         message: "Please upgrade to analyze receipts with AI",
-//       };
-//     if (session.user.planId === 3 && apiCalls && apiCalls >= 20) {
-//       return {
-//         auth: false,
-//         message: "You have reached the limit of 20 API calls per week.",
-//       };
-//     }
-//     if (session.user.planId === 2 && apiCalls && apiCalls >= 50) {
-//       return {
-//         auth: false,
-//         message: "You have reached the limit of 50 API calls per week.",
-//       };
-//     } else {
-//       const increment = await prisma.userPlanUsage.update({
-//         where: {
-//           userId: session.user.id,
-//         },
-//         data: {
-//           apiCalls: {
-//             increment: 1,
-//           },
-//         },
-//       });
-//       return { auth: true };
-//     }
-//   }
-//   revalidateTag(`user_${session.user.id}`);
-// }
+type ApiCallType = {
+  status: string;
+  message: string;
+};
 
 export const canMakeRequest = async (
   userId: string,
@@ -74,19 +13,15 @@ export const canMakeRequest = async (
   request: any,
   endpointUsed: string,
   projectUserId: string
-) => {
+): Promise<ApiCallType> => {
   try {
-    console.log("Function started: canMakeRequest");
+    let limit = 0;
 
-    // Log input parameters
-    console.log("Input Parameters:", {
-      userId,
-      projectId,
-      planId,
-      request,
-      endpointUsed,
-    });
-
+    if (planId == 2) {
+      limit = 50;
+    } else if (planId == 3) {
+      limit = 20;
+    }
     // Find the first request ever for the given user and project
     const firstRequest = await prisma.apiRequestLog.findFirst({
       where: {
@@ -113,7 +48,7 @@ export const canMakeRequest = async (
         },
       });
       console.log("First request logged.");
-      return true;
+      return { status: "200", message: "Request logged successfully." };
     }
 
     const firstRequestDate = new Date(firstRequest.timestamp);
@@ -154,7 +89,10 @@ export const canMakeRequest = async (
     // Check if the request count is within the limit
     if (requestCount >= 20) {
       console.log("Request limit reached.");
-      return false;
+      return {
+        status: "429",
+        message: `You have reached the limit of ${limit} API calls per week.`,
+      };
     }
 
     // Log the successful request
@@ -171,10 +109,13 @@ export const canMakeRequest = async (
     });
 
     console.log("Request logged successfully.");
-    return true;
+    return { status: "200", message: "Request logged successfully." };
   } catch (error) {
     console.error("Error in canMakeRequest:", error);
-    return false;
+    return {
+      status: "500",
+      message: "There was an error with the API call. Please try again.",
+    };
   }
 };
 

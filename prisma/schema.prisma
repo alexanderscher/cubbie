@@ -78,8 +78,6 @@ model Subscription {
   plan             Plan      @relation(fields: [planId], references: [id])
 }
 
-
-
 model AlertSettings {
   id              String  @id @default(cuid())
   userId          String  @unique

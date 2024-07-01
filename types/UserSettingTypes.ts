@@ -1,5 +1,5 @@
 import { ProjectType, ProjectUserArchiveType } from "@/types/ProjectTypes";
-import { Plan, Project, Subscription, UserPlanUsage } from "@prisma/client";
+import { Plan, Project, Subscription } from "@prisma/client";
 
 interface Item {
   barcode: string | null;

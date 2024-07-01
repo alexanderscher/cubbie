@@ -59,6 +59,8 @@ export default function ImageGpt({
       },
       body: JSON.stringify({
         image: image,
+        projectOwner: values.folderUserId,
+        projectId: values.folder,
       }),
     });
 
@@ -120,6 +122,8 @@ export default function ImageGpt({
       },
       body: JSON.stringify({
         image: image,
+        projectOwner: values.folderUserId,
+        projectId: values.folder,
       }),
     });
 

@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   const planId = session.user.planId;
   const body = await request.json();
 
-  const { projectId, projectOwner } = body;
+  const { projectId, projectOwner, image } = body;
 
   const apiCalls = await canMakeRequest(
     userId,
@@ -48,8 +48,6 @@ export async function POST(request: Request) {
     );
   }
   try {
-    const json = await request.json();
-    const image = json.image;
     const api_key = process.env.OPENAI_API_KEY;
 
     const payload = {

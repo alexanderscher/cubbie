@@ -40,12 +40,11 @@ export default function ImageGpt({
   session,
 }: Props) {
   const [image, setImage] = useState<string>("");
-  const [noImage, setNoImage] = useState(false);
+
   const [prompt, setPrompt] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [noReceipt, setNoReceipt] = useState(false);
-  const [invalidImage, setInvalidImage] = useState(false);
-  const [apiError, setApiError] = useState("");
+  const [errors, setErrors] = useState("");
+
   const [validationErrors, setValidationErrors] = useState({
     folderName: "",
   });
@@ -66,7 +65,7 @@ export default function ImageGpt({
 
     if (!res.ok) {
       const errorMessage = await res.json();
-      setApiError(errorMessage.error);
+      setErrors(errorMessage.error);
       setLoading(false);
       console.error("Failed to fetch data");
 
@@ -75,9 +74,12 @@ export default function ImageGpt({
 
     const data = await res.json();
 
-    if (data.choices[0].message.content === "This is not a receipt.") {
-      setNoReceipt(true);
-      setNoImage(false);
+    if (
+      data.choices[0].message.content === "{'error':'This is not a receipt.'}"
+    ) {
+      setErrors(
+        "The image you uploaded cannot be analyzed. Please ensure you upload a valid receipt, or try uploading a higher-quality image for better recognition."
+      );
       setPrompt(false);
       setLoading(false);
       return;
@@ -107,11 +109,9 @@ export default function ImageGpt({
     );
     setFieldValue("items", itemsWithAllProperties);
     setStage(ReceiptStoreStage.PREVIEW);
-    setNoImage(false);
+    setErrors("");
     setPrompt(false);
     setLoading(false);
-    setNoReceipt(false);
-    setApiError("");
   };
 
   const MemoGptCall = async () => {
@@ -129,7 +129,7 @@ export default function ImageGpt({
 
     if (!res.ok) {
       const errorMessage = await res.json();
-      setApiError(errorMessage.error);
+      setErrors(errorMessage.error);
       setLoading(false);
 
       return;
@@ -137,9 +137,13 @@ export default function ImageGpt({
 
     const data = await res.json();
 
-    if (data.choices[0].message.content === "This is not a receipt.") {
-      setNoReceipt(true);
-      setNoImage(false);
+    if (
+      data.choices[0].message.content === "{'error':'This is not a receipt.'}"
+    ) {
+      setErrors(
+        "The image you uploaded cannot be analyzed. Please ensure you upload a valid receipt, or try uploading a higher-quality image for better recognition."
+      );
+
       setPrompt(false);
       setLoading(false);
       return;
@@ -173,11 +177,9 @@ export default function ImageGpt({
     setFieldValue("items", itemsWithAllProperties);
     setStage(ReceiptStoreStage.PREVIEW);
 
-    setNoImage(false);
+    setErrors("");
     setPrompt(false);
     setLoading(false);
-    setNoReceipt(false);
-    setApiError("");
   };
 
   const readFileAsDataURL = (file: File): Promise<string> => {
@@ -194,7 +196,7 @@ export default function ImageGpt({
       return;
     }
     if (!file.type.match("image.*")) {
-      alert("Please upload an image file");
+      setErrors("Please upload an image file");
       return;
     }
     if (file.type === "image/heic" || file.name.endsWith(".heic")) {
@@ -214,8 +216,7 @@ export default function ImageGpt({
         try {
           const dataUrl = await readFileAsDataURL(file);
           setImage(dataUrl);
-          setNoImage(false);
-          setInvalidImage(false);
+          setErrors("");
           setFieldValue("receiptImage", dataUrl);
         } catch (error) {
           console.error("Error handling file:", error);
@@ -245,7 +246,7 @@ export default function ImageGpt({
       return;
     }
     if (!image) {
-      setNoImage(true);
+      setErrors("Please upload an image to analyze.");
       return;
     }
 
@@ -536,12 +537,10 @@ export default function ImageGpt({
             </div>
           </div>
         )}
-        {noReceipt && (
-          <p className="text-sm text-center text-orange-800">
-            The image you&apos;ve uploaded doesn&apos;t seem to be a receipt.
-            Please ensure you upload a valid receipt, or try uploading a
-            higher-quality image for better recognition.
-          </p>
+        {/* {noReceipt && (
+          <FormError
+            message={`The image you uploaded cannot be analyzed. Please ensure you upload a valid receipt, or try uploading a higher-quality image for better recognition.`}
+          ></FormError>
         )}
         {noImage && (
           <FormError
@@ -551,7 +550,7 @@ export default function ImageGpt({
           ></FormError>
         )}
         {invalidImage && (
-          <FormError message={" Please upload a valid image file."}></FormError>
+          <FormError message={"Please upload a valid image file."}></FormError>
         )}
         {apiError && <FormError message={apiError}></FormError>}
         {loading && <Loading loading={loading} />}
@@ -561,7 +560,8 @@ export default function ImageGpt({
             message="Please upgrade plans to analyze receipts by photo"
             onClose={() => setSubscribeModal(false)}
           />
-        )}
+        )} */}
+        {<FormError message={errors}></FormError>}
       </div>
     </div>
   );

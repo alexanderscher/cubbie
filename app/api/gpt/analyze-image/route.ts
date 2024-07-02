@@ -38,15 +38,15 @@ export async function POST(request: Request) {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
   const planId = session.user.planId;
-  const body = await request.json();
+  const json = await request.json();
 
-  const { projectId, projectOwner } = body;
+  const { projectId, projectOwner, image } = json;
 
   const apiCalls = await canMakeRequest(
     userId,
     parseInt(projectId),
     planId,
-    "analyze-input",
+    "analyze-memo",
     projectOwner
   );
 
@@ -77,8 +77,6 @@ export async function POST(request: Request) {
     );
   }
   try {
-    const json = await request.json();
-    const image = json.image;
     const api_key = process.env.OPENAI_API_KEY;
 
     const payload = {

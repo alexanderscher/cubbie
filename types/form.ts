@@ -30,6 +30,7 @@ export interface ReceiptInput {
   folderName: string;
   folderUserId: string;
   pdfText: string;
+  gptImage: string;
 }
 
 export interface Pages {

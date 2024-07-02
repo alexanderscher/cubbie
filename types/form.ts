@@ -17,6 +17,7 @@ export interface ItemInput {
 
 export interface ReceiptInput {
   type: string;
+  receiptType: string;
   store: string;
   card?: string;
   tracking_number?: string;
@@ -25,7 +26,6 @@ export interface ReceiptInput {
   return_date: string;
   receiptImage?: string;
   items: ItemInput[];
-  memo?: boolean;
   folder: number;
   folderName: string;
   folderUserId: string;

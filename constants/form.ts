@@ -4,6 +4,7 @@ const TODAY = new Date().toISOString().split("T")[0];
 
 export const DEFAULT_INPUT_VALUES: ReceiptInput = {
   type: "",
+  receiptType: "paper",
   store: "",
   card: "",
   tracking_number: "",
@@ -15,7 +16,6 @@ export const DEFAULT_INPUT_VALUES: ReceiptInput = {
   folder: 0,
   folderName: "",
   folderUserId: "",
-  memo: false,
 };
 
 export enum ReceiptStoreStage {

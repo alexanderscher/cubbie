@@ -26,19 +26,19 @@ const TextGpt = ({
   projectPlanId,
 }: Props) => {
   const [inputText, setInputText] = useState("");
-  const [noText, setNoText] = useState(false);
-  const [help, setHelp] = useState(false);
+
   const [prompt, setPrompt] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [promptError, setPromptError] = useState(false);
-  const [apiError, setApiError] = useState("");
-  console.log(values);
+
+  //   const [noText, setNoText] = useState(false);
+  // const [promptError, setPromptError] = useState(false);
+  // const [apiError, setApiError] = useState("");
+  const [error, setError] = useState("");
 
   const run = async () => {
     setPrompt(false);
-    setNoText(false);
-    setPromptError(false);
-    setApiError("");
+
+    setError("");
     setLoading(true);
 
     const response = await fetch(`/api/gpt/analyze-input`, {
@@ -56,7 +56,7 @@ const TextGpt = ({
       setLoading(false);
       const errorData = await response.json();
       console.log(errorData);
-      setApiError(errorData.error);
+      setError(errorData.error);
 
       return;
     }
@@ -64,27 +64,29 @@ const TextGpt = ({
     const data = await response.json();
 
     // no gpt dummy data
-    const itemsWithAllProperties = data.map((item: any) => ({
-      description: item.description || "",
-      photo: item.photo || "",
-      price: item.price || 0,
-      barcode: "",
-      character: "",
-    }));
+    // const itemsWithAllProperties = data.map((item: any) => ({
+    //   description: item.description || "",
+    //   photo: item.photo || "",
+    //   price: item.price || 0,
+    //   barcode: "",
+    //   character: "",
+    // }));
 
-    setFieldValue("items", itemsWithAllProperties);
+    // setFieldValue("items", itemsWithAllProperties);
     setStage(ReceiptStoreStage.PREVIEW);
 
-    // const items = JSON.parse(data.choices[0].message.content);
-    // if (items.error) {
-    //   setLoading(false);
-    //   setPromptError(true);
-    //   setPrompt(false);
+    const items = JSON.parse(data.choices[0].message.content);
+    if (items.error) {
+      setLoading(false);
+      setError(
+        "The text you&apos;ve submitted doesn&apos;t seem to be from a receipt. Please ensure you submit text from a valid receipt, or try providing a more specific part of the receipt for better recognition."
+      );
+      setPrompt(false);
 
-    //   return;
-    // }
-    // setFieldValue("items", items.items);
-    // setPrompt(false);
+      return;
+    }
+    setFieldValue("items", items.items);
+    setPrompt(false);
 
     setLoading(false);
   };
@@ -100,13 +102,15 @@ const TextGpt = ({
       return;
     }
     if (inputText === "") {
-      setNoText(true);
+      setError(
+        "Input cannot be empty. If you have a receipt, copy and paste the items from the receipt."
+      );
       setPrompt(false);
       return;
     }
     if (values.items.length > 0) {
       setPrompt(true);
-      setNoText(false);
+      setError("");
       return;
     }
 
@@ -179,7 +183,7 @@ const TextGpt = ({
           </div>
         </div>
       )}
-      {promptError && (
+      {/* {promptError && (
         <FormError
           message={
             "The text you&apos;ve submitted doesn&apos;t seem to be from a receipt. Please ensure you submit text from a valid receipt, or try providing a more specific part of the receipt for better recognition."
@@ -194,7 +198,8 @@ const TextGpt = ({
         ></FormError>
       )}
 
-      {apiError && <FormError message={apiError}></FormError>}
+      {apiError && <FormError message={apiError}></FormError>} */}
+      {error && <FormError message={error} />}
       {loading && <Loading loading={loading} />}
       {subscribeModal && (
         <SubscribeModal

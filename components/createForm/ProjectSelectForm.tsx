@@ -26,7 +26,6 @@ const ProjectSelectForm = ({
   setProjectPlanId,
 }: Props) => {
   const [options, setOptions] = useState<Option[]>([]);
-  console.log(options);
 
   const customStyles: StylesConfig<Option, false> = {
     control: (provided, state) => ({

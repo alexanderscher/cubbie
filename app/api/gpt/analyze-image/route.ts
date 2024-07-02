@@ -69,7 +69,7 @@ export async function POST(request: Request) {
         error: apiCalls.message,
       }),
       {
-        status: 500,
+        status: 429,
         headers: {
           "Content-Type": "application/json",
         },

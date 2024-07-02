@@ -4,20 +4,20 @@ import ProjectSelectForm from "@/components/createForm/ProjectSelectForm";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ReceiptInput } from "@/types/form";
-
+import pdfToText from "react-pdftotext";
 import { convertHeic } from "@/utils/media";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { FormError } from "@/components/form-error";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import Loading from "@/components/loading-components/Loading";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import { ProjectType } from "@/types/ProjectTypes";
 import ManualDate from "@/components/createForm/FormPages/ManualDate";
 import ReturnPolicySelect from "@/components/selects/ReturnPolicySelect";
 import { Session } from "@/types/Session";
 import SubscribeModal from "@/components/modals/SubscribeModal";
+import { set } from "zod";
 
 interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
@@ -39,17 +39,13 @@ export default function ImageGpt({
   projects,
   session,
 }: Props) {
-  const [image, setImage] = useState<string>("");
-
   const [prompt, setPrompt] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState("");
-
   const [validationErrors, setValidationErrors] = useState({
     folderName: "",
   });
   const [projectPlanId, setProjectPlanId] = useState<number | null>(0);
-
   const OnlineGptCall = async () => {
     const res = await fetch("/api/gpt/analyze-image", {
       method: "POST",
@@ -57,7 +53,7 @@ export default function ImageGpt({
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        image: image,
+        image: values.gptImage,
         projectOwner: values.folderUserId,
         projectId: values.folder,
       }),
@@ -121,7 +117,7 @@ export default function ImageGpt({
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        image: image,
+        image: values.gptImage,
         projectOwner: values.folderUserId,
         projectId: values.folder,
       }),
@@ -148,8 +144,6 @@ export default function ImageGpt({
       setLoading(false);
       return;
     }
-
-    console.log(data.choices[0].message.content);
 
     const jsonObject = JSON.parse(data.choices[0].message.content);
     setFieldValue("items", jsonObject.receipt.items);
@@ -182,6 +176,86 @@ export default function ImageGpt({
     setLoading(false);
   };
 
+  const TextGptCall = async () => {
+    setPrompt(false);
+    setErrors("");
+    setLoading(true);
+
+    const response = await fetch(`/api/gpt/analyze-input`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        projectOwner: values.folderUserId,
+        projectId: values.folder,
+        text: values.pdfText,
+      }),
+    });
+
+    if (!response.ok) {
+      setLoading(false);
+      const errorData = await response.json();
+      console.log(errorData);
+      setErrors(errorData.error);
+
+      return;
+    }
+
+    const data = await response.json();
+
+    // no gpt dummy data
+    // const itemsWithAllProperties = data.map((item: any) => ({
+    //   description: item.description || "",
+    //   photo: item.photo || "",
+    //   price: item.price || 0,
+    //   barcode: "",
+    //   character: "",
+    // }));
+
+    // setFieldValue("items", itemsWithAllProperties);
+    setStage(ReceiptStoreStage.PREVIEW);
+
+    const items = JSON.parse(data.choices[0].message.content);
+    if (items.error) {
+      setLoading(false);
+      setErrors(
+        "The text you've submitted doesn't seem to be from a receipt. Please ensure you submit text from a valid receipt, or try providing a more specific part of the receipt for better recognition."
+      );
+      setPrompt(false);
+
+      return;
+    }
+    setFieldValue("items", items.items);
+    setPrompt(false);
+
+    setLoading(false);
+  };
+
+  const extractTextFromPDF = async (file: File) => {
+    if (file) {
+      try {
+        setLoading(true);
+        console.log("Starting PDF text extraction");
+        const text = await pdfToText(file);
+
+        if (text) {
+          setFieldValue("pdfText", text);
+          setErrors("");
+        } else {
+          throw new Error("Extracted text is undefined or empty.");
+        }
+      } catch (error) {
+        setErrors(
+          "Failed to extract text from pdf. If you are uploading an image, please select the paper or memo receipt type."
+        );
+      }
+    } else {
+      setErrors("No file selected");
+      console.error("No file selected");
+    }
+    setLoading(false);
+  };
   const readFileAsDataURL = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -215,7 +289,7 @@ export default function ImageGpt({
       if (typeof reader.result === "string") {
         try {
           const dataUrl = await readFileAsDataURL(file);
-          setImage(dataUrl);
+          setFieldValue("gptImage", dataUrl);
           setErrors("");
           setFieldValue("receiptImage", dataUrl);
         } catch (error) {
@@ -245,7 +319,7 @@ export default function ImageGpt({
       setValidationErrors(error);
       return;
     }
-    if (!image) {
+    if (!values.gptImage) {
       setErrors("Please upload an image to analyze.");
       return;
     }
@@ -263,7 +337,7 @@ export default function ImageGpt({
         OnlineGptCall();
       }
       return;
-    } else if (values.items.length === 0 && image) {
+    } else if (values.items.length === 0 && values.gptImage) {
       setLoading(true);
       if (values.receiptType === "memo") {
         MemoGptCall();
@@ -276,7 +350,39 @@ export default function ImageGpt({
     setPrompt(true);
   };
 
-  const pathname = usePathname();
+  const handleSubmitPDF = async () => {
+    if (
+      (session.user.planId === 1 || session.user.planId === null) &&
+      (projectPlanId === 1 || projectPlanId === null)
+    ) {
+      setSubscribeModal(true);
+      return;
+    }
+
+    if (!values.pdfText && values.receiptType === "pdf") {
+      setErrors("Please upload a pdf to analyze.");
+      return;
+    }
+
+    if (values.items.length > 0 && prompt === false) {
+      setPrompt(true);
+      return;
+    }
+
+    if (prompt === true) {
+      setLoading(true);
+      TextGptCall();
+
+      return;
+    } else if (values.items.length === 0 && values.pdfText) {
+      setLoading(true);
+      TextGptCall();
+
+      return;
+    }
+
+    setPrompt(true);
+  };
 
   const [isManual, setIsManual] = useState(false);
   const [help, setHelp] = useState(false);
@@ -393,11 +499,11 @@ export default function ImageGpt({
             {help && (
               <p className="text-xs text-orange-600">
                 This will help analyze the image. If you skip this, the analysis
-                might be wrong
+                might be wrong.
               </p>
             )}
 
-            <div className="flex gap-4 items-center">
+            <div className="flex gap-2 items-center">
               <label
                 className={`flex gap-2 justify-center items-center px-4 py-2 rounded cursor-pointer ${
                   values.receiptType === "paper"
@@ -453,16 +559,25 @@ export default function ImageGpt({
           </div>
           <div>
             <div className="flex flex-col gap-5">
-              {help && (
+              {help && values.receiptType !== "pdf" && (
                 <p className="text-xs text-orange-600">
-                  Upload a photo of the receipt and press Analyze Image. We do
-                  not support pdfs. Images accepted are .jpg, .jpeg, .png, .gif,
-                  .bmp, .tiff, .heic. Please ensure the image is clear and that
-                  there is no handwriting on the receipt.
+                  Upload a photo of the receipt and press Analyze. Images
+                  accepted are .jpg, .jpeg, .png, .gif, .bmp, .tiff, .heic.
+                  Please ensure the image is clear and that there is no
+                  handwriting on the receipt.
+                </p>
+              )}
+              {help && values.receiptType === "pdf" && (
+                <p className="text-xs text-orange-600">
+                  Upload a pdf of the receipt and press Analyze.
                 </p>
               )}
               <FileUploadDropzone
-                onFileUpload={onFileUpload}
+                onFileUpload={
+                  values.receiptType === "pdf"
+                    ? extractTextFromPDF
+                    : onFileUpload
+                }
                 button={
                   <div className="w-full h-[150px] soverflow-hidden  border-[1.5px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-lg  relative flex flex-col items-center justify-center cursor-pointer gap-5">
                     <Image
@@ -477,27 +592,50 @@ export default function ImageGpt({
                       }}
                     />
                     <p className="text-xs text-emerald-900">
-                      Upload photo or drag and drop
+                      {values.receiptType === "pdf"
+                        ? "Upload pdf or drag and drop"
+                        : "Upload photo or drag and drop here"}
                     </p>
                   </div>
                 }
               />
 
-              {image && (
+              {values.gptImage && values.receiptType !== "pdf" && (
                 <div className="relative w-24 h-24 ">
                   <div className="w-24 h-24 overflow-hidden flex items-center justify-center rounded-lg border-[1px] border-emerald-900">
                     <button
                       type="button"
                       onClick={() => {
-                        setFieldValue("receiptImage", ""), setImage("");
+                        setFieldValue("receiptImage", ""),
+                          setFieldValue("gptImage", "");
                       }}
                       className="absolute -top-2  -right-2 m-1  bg-emerald-900 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
                     >
                       X
                     </button>
-                    <Image width={150} height={150} src={image} alt="" />
+                    <Image
+                      width={150}
+                      height={150}
+                      src={values.gptImage}
+                      alt=""
+                    />
                   </div>
                 </div>
+              )}
+              {values.receiptType === "pdf" && values.pdfText && (
+                <p className="text-xs text-orange-600">
+                  Please remove all unnecessary text from the pdf text before
+                  analyzing. Store name, date of purchase and all items should
+                  be in the text. Item desciption/name, price and barcode should
+                  be in the tex if available.
+                </p>
+              )}
+              {values.receiptType === "pdf" && (
+                <textarea
+                  className="bg border-emerald-900 border-[1px] p-2 rounded text-sm w-full h-[200px] resize-none"
+                  value={values.pdfText}
+                  onChange={(e) => setFieldValue("pdfText", e.target.value)}
+                ></textarea>
               )}
 
               <div className="w-full ">
@@ -508,7 +646,13 @@ export default function ImageGpt({
                       : "border-emerald-900 bg"
                   }  w-full mt-2`}
                   handleClick={() => {
-                    handleSubmit();
+                    if (values.receiptType === "pdf") {
+                      handleSubmitPDF();
+                    } else {
+                      handleSubmit();
+                    }
+
+                    setPrompt(false);
                   }}
                 >
                   <p
@@ -518,7 +662,7 @@ export default function ImageGpt({
                         : "text-emerald-900 text-sm p-1"
                     }
                   >
-                    {loading ? "Analyzing..." : "Analyze Image"}
+                    {loading ? "Analyzing..." : "Analyze"}
                   </p>
                 </RegularButton>
               </div>
@@ -540,7 +684,12 @@ export default function ImageGpt({
                 <RegularButton
                   styles="bg-orange-50 border-orange-600 text-orange-600  w-full"
                   handleClick={() => {
-                    handleSubmit();
+                    if (values.receiptType === "pdf") {
+                      handleSubmitPDF();
+                    } else {
+                      handleSubmit();
+                    }
+
                     setPrompt(false);
                   }}
                 >
@@ -556,31 +705,14 @@ export default function ImageGpt({
             </div>
           </div>
         )}
-        {/* {noReceipt && (
-          <FormError
-            message={`The image you uploaded cannot be analyzed. Please ensure you upload a valid receipt, or try uploading a higher-quality image for better recognition.`}
-          ></FormError>
-        )}
-        {noImage && (
-          <FormError
-            message={
-              "Please upload an image to analyze. If you have a receipt, take a picture of the receipt and upload it."
-            }
-          ></FormError>
-        )}
-        {invalidImage && (
-          <FormError message={"Please upload a valid image file."}></FormError>
-        )}
-        {apiError && <FormError message={apiError}></FormError>}
-        {loading && <Loading loading={loading} />}
+
+        {errors && <FormError message={errors}></FormError>}
         {subscribeModal && (
           <SubscribeModal
-            // message="You have reached the limit of receipts you can analyze. Please upgrade to a premium plan to continue."
             message="Please upgrade plans to analyze receipts by photo"
             onClose={() => setSubscribeModal(false)}
           />
-        )} */}
-        {<FormError message={errors}></FormError>}
+        )}
       </div>
     </div>
   );

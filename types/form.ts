@@ -29,6 +29,7 @@ export interface ReceiptInput {
   folder: number;
   folderName: string;
   folderUserId: string;
+  pdfText: string;
 }
 
 export interface Pages {

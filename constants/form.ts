@@ -16,6 +16,8 @@ export const DEFAULT_INPUT_VALUES: ReceiptInput = {
   folder: 0,
   folderName: "",
   folderUserId: "",
+  pdfText: "",
+  gptImage: "",
 };
 
 export enum ReceiptStoreStage {

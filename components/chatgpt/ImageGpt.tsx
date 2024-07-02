@@ -257,7 +257,7 @@ export default function ImageGpt({
 
     if (prompt === true) {
       setLoading(true);
-      if (values.memo) {
+      if (values.receiptType === "memo") {
         MemoGptCall();
       } else {
         OnlineGptCall();
@@ -265,7 +265,7 @@ export default function ImageGpt({
       return;
     } else if (values.items.length === 0 && image) {
       setLoading(true);
-      if (values.memo) {
+      if (values.receiptType === "memo") {
         MemoGptCall();
       } else {
         OnlineGptCall();
@@ -381,7 +381,9 @@ export default function ImageGpt({
           </div>
           <div className="flex flex-col gap-3">
             <div className=" flex items-center gap-2 relative">
-              <p className="text-emerald-900">Is this a memo?*</p>
+              <p className="text-emerald-900">
+                What kind of a receipt is this?
+              </p>
 
               <TooltipWithHelperIcon
                 content="Selecting the type of receipt you upload enables us to
@@ -398,36 +400,53 @@ export default function ImageGpt({
             <div className="flex gap-4 items-center">
               <label
                 className={`flex gap-2 justify-center items-center px-4 py-2 rounded cursor-pointer ${
-                  values.memo === true
+                  values.receiptType === "paper"
                     ? "bg-emerald-900 text-white border-[1px] border-emerald-900 text-sm w-1/2"
                     : "bg text-emerald-900 border-[1px] border-emerald-900 text-sm w-1/2"
                 }`}
               >
-                <p className="">Yes</p>
+                <p className="">Paper</p>
                 <input
                   className="opacity-0 absolute"
-                  name="memo"
+                  name="paper"
                   type="radio"
-                  value="true"
-                  checked={values.memo === true}
-                  onChange={() => setFieldValue("memo", true)}
+                  value="paper"
+                  checked={values.receiptType === "paper"}
+                  onChange={() => setFieldValue("receiptType", "paper")}
                 />
               </label>
               <label
                 className={`flex gap-2 justify-center items-center px-4 py-2 rounded cursor-pointer ${
-                  values.memo === false
+                  values.receiptType === "memo"
                     ? "bg-emerald-900 text-white border-emerald-900 text-sm w-1/2"
                     : "bg text-emerald-900 border-[1px] border-emerald-900 text-sm w-1/2"
                 }`}
               >
-                <span className="">No</span>
+                <span className="">Memo</span>
                 <input
                   className="opacity-0 absolute"
                   name="memo"
                   type="radio"
-                  value="false"
-                  checked={values.memo === false}
-                  onChange={() => setFieldValue("memo", false)}
+                  value="memo"
+                  checked={values.receiptType === "memo"}
+                  onChange={() => setFieldValue("receiptType", "memo")}
+                />
+              </label>
+              <label
+                className={`flex gap-2 justify-center items-center px-4 py-2 rounded cursor-pointer ${
+                  values.receiptType === "pdf"
+                    ? "bg-emerald-900 text-white border-emerald-900 text-sm w-1/2"
+                    : "bg text-emerald-900 border-[1px] border-emerald-900 text-sm w-1/2"
+                }`}
+              >
+                <span className="">PDF</span>
+                <input
+                  className="opacity-0 absolute"
+                  name="pdf"
+                  type="radio"
+                  value="pdf"
+                  checked={values.receiptType === "pdf"}
+                  onChange={() => setFieldValue("receiptType", "pdf")}
                 />
               </label>
             </div>

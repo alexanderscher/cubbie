@@ -18,6 +18,7 @@ import ReturnPolicySelect from "@/components/selects/ReturnPolicySelect";
 import { Session } from "@/types/Session";
 import SubscribeModal from "@/components/modals/SubscribeModal";
 import { set } from "zod";
+import Loading from "@/components/loading-components/Loading";
 
 interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
@@ -324,8 +325,9 @@ export default function ImageGpt({
       return;
     }
 
-    if (values.receiptImage && values.items.length > 0 && prompt === false) {
+    if (values.items.length > 0) {
       setPrompt(true);
+      console.log(values.items.length);
       return;
     }
 
@@ -364,8 +366,9 @@ export default function ImageGpt({
       return;
     }
 
-    if (values.items.length > 0 && prompt === false) {
+    if (values.items.length > 0) {
       setPrompt(true);
+      console.log(values.items.length);
       return;
     }
 
@@ -493,7 +496,7 @@ export default function ImageGpt({
 
               <TooltipWithHelperIcon
                 content="Selecting the type of receipt you upload enables us to
-                  accurately analyze and process it."
+                  accurately analyze and process it. Paper receipts are physical receipts you get from a store. PDF receipts are digital receipts you get from online purchases or memos."
               />
             </div>
             {help && (
@@ -521,7 +524,7 @@ export default function ImageGpt({
                   onChange={() => setFieldValue("receiptType", "paper")}
                 />
               </label>
-              <label
+              {/* <label
                 className={`flex gap-2 justify-center items-center px-4 py-2 rounded cursor-pointer ${
                   values.receiptType === "memo"
                     ? "bg-emerald-900 text-white border-emerald-900 text-sm w-1/2"
@@ -537,7 +540,7 @@ export default function ImageGpt({
                   checked={values.receiptType === "memo"}
                   onChange={() => setFieldValue("receiptType", "memo")}
                 />
-              </label>
+              </label> */}
               <label
                 className={`flex gap-2 justify-center items-center px-4 py-2 rounded cursor-pointer ${
                   values.receiptType === "pdf"
@@ -669,7 +672,7 @@ export default function ImageGpt({
             </div>
           </div>
         </div>
-
+        {prompt && <div>hello</div>}
         {prompt && (
           <div className="fixed inset-0 bg-black bg-opacity-10 z-[2000] flex justify-center items-center ">
             <div className="p-10 flex flex-col gap-4 mt-10 bg-orange-50 rounded-lg shadow-md items-center justify-center text-emerald-900 max-w-lg w-[400px]">
@@ -707,6 +710,8 @@ export default function ImageGpt({
         )}
 
         {errors && <FormError message={errors}></FormError>}
+        {loading && <Loading loading={loading} />}
+
         {subscribeModal && (
           <SubscribeModal
             message="Please upgrade plans to analyze receipts by photo"

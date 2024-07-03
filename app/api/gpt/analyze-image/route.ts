@@ -34,13 +34,82 @@ import { NextResponse } from "next/server";
 //     }
 //   }`;
 
+const PROMPT = `
+Objective: Extract data from an image of a receipt, focusing on the most prominently displayed text for item names, regardless of whether it is bolded.
+
+Instructions:
+
+1. Store Name:
+    - Identify the store name from the image of the receipt.
+    - The store name is usually at the top of the receipt.
+
+2. Date of Purchase:
+    - Identify the date of purchase from the receipt.
+    - The date should be formatted in YYYY-MM-DD.
+    - Examples:
+        - '2024-02-07' for '7 February 2024'.
+        - '2024-02-07' for 'Feb 7, 2024'.
+
+3. Total Amount:
+    - Identify the total amount from the receipt.
+    - Convert the amount to a numeric value, removing any currency symbols or textual descriptions.
+    - Examples:
+        - 'USD 294.00' or '$294' should be converted to 294.
+
+4. Item Details:
+   - Extract details of each item listed on the receipt.
+   - Include the description, price, and barcode for each item.
+   - If the title explicitly states 'UPC', classify the number following it as a 'barcode'.
+   - If a barcode is present, include it; otherwise, omit it.
+   - Examples:
+        - Description: "Item description here"
+        - Price: "numeric value here"
+        - Barcode: "123456789012" (if applicable)
+
+5. Handling Multiple Items:
+   - Ensure that duplicate items are explicitly included if they appear multiple times on the receipt.
+
+6. Format Numerical Values:
+   - Convert 'price' and 'total amount' to numeric values, removing any currency symbols or accompanying text.
+   - Examples:
+        - 'USD 294.00' or '$294' should be converted to 294.
+   - If you cannot read the price, input it as 0.
+
+7. JSON Formatting:
+   - Format the extracted data into a JSON structure as follows:
+     {
+       "receipt": {
+         "store": "Store Name Here",
+         "date_purchased": "YYYY-MM-DD",
+         "total_amount": "Total Amount Here",
+         "items": [
+           {
+             "description": "Item description here",
+             "price": "numeric value here",
+             "barcode": "if applicable"
+           }
+         ]
+       }
+     }
+   - **Please do not start the object with \`\`\`json**
+
+8. Error Handling:
+   - If the content does not resemble a receipt, respond with an error in JSON format:
+     {"error": "This is not a receipt."}
+
+Edge Case Considerations:
+- Handle different layouts and formats of receipts, including digital and physical copies.
+- Adjust for any visible special characters or formatting issues.
+- If a product description or price is missing, ensure fields are still present in the JSON but left empty or filled with a default value (e.g., null or 0).
+`;
+
 export async function POST(request: Request) {
   const session = (await auth()) as Session;
   const userId = session?.user?.id as string;
   const planId = session.user.planId;
   const json = await request.json();
 
-  const { projectId, projectOwner, image } = json;
+  const { projectId, projectOwner, input } = json;
 
   const apiCalls = await canMakeRequest(
     userId,
@@ -87,11 +156,11 @@ export async function POST(request: Request) {
           content: [
             {
               type: "text",
-              text: 'Extract data from an image of a receipt, focusing on the most prominently displayed text for item names, regardless of whether it is bolded. Include the store name, purchase date in YYYY-MM-DD format, total amount, and each item\'s description, price, and barcode (noted as a long number typically found under or beside the item name). Ensure that duplicate items are explicitly included if they appear multiple times on the receipt.  If you cannot read the price, input it as 0. Remove any currency symbols or textual descriptions of the prices, converting them to plain numbers (e.g., \'USD 294.00\' or \'$294\' becomes 294) {"receipt":{"store":"","date_purchased":"","total_amount":"","items":[{"description":"","price":"","barcode":""}]}} Please do not start the object with ```json. If the content does not resemble a receipt,respond with: {\'error\':\'This is not a receipt.\'}. Please handle different layouts and formats of receipts, including digital and physical copies, and adjust for any visible special characters or formatting issues.',
+              text: PROMPT,
             },
             {
               type: "image_url",
-              image_url: image,
+              image_url: input,
             },
           ],
         },
@@ -108,7 +177,50 @@ export async function POST(request: Request) {
       body: JSON.stringify(payload),
     });
 
-    const data = await response.json();
+    if (!response.ok) {
+      console.error("OpenAI API Error:", response.statusText);
+      let errorMsg = `OpenAI API error: ${response.status}`;
+
+      // Attempt to parse error response from OpenAI
+      try {
+        const errorData = await response.json();
+        errorMsg += ` - ${errorData.error.message}`;
+      } catch (parseError) {
+        console.error("Failed to parse error response:", parseError);
+      }
+
+      return new NextResponse(JSON.stringify({ error: errorMsg }), {
+        status: response.status,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
+
+    let data;
+
+    try {
+      const responseBody = await response.text();
+      const cleanedResponse = responseBody
+        .trim()
+        .replace(/```json\s*|\s*```/g, "");
+      data = JSON.parse(cleanedResponse);
+    } catch (e) {
+      console.error("Failed to parse JSON response:", e);
+      return new NextResponse(
+        JSON.stringify({
+          error: "Failed to parse JSON response from OpenAI API.",
+        }),
+        {
+          status: 500,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
+
+    console.log("Response from OpenAI:", data);
 
     return new NextResponse(JSON.stringify(data), {
       status: response.status,
@@ -117,12 +229,9 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    console.error("error", error);
+    console.error("Error:", error);
     return new NextResponse(
-      JSON.stringify({
-        error:
-          "There was an error anazlying your image. Please contact support if this issue persists.",
-      }),
+      JSON.stringify({ error: "Internal Server Error" }),
       {
         status: 500,
         headers: {
@@ -132,3 +241,28 @@ export async function POST(request: Request) {
     );
   }
 }
+
+//   const data = await response.json();
+
+//   return new NextResponse(JSON.stringify(data), {
+//     status: response.status,
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   });
+// } catch (error) {
+//   console.error("error", error);
+//   return new NextResponse(
+//     JSON.stringify({
+//       error:
+//         "There was an error anazlying your image. Please contact support if this issue persists.",
+//     }),
+//     {
+//       status: 500,
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     }
+//   );
+// }
+// }

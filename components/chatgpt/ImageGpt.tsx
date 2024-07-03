@@ -7,7 +7,6 @@ import { ReceiptInput } from "@/types/form";
 import pdfToText from "react-pdftotext";
 import { convertHeic } from "@/utils/media";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { FormError } from "@/components/form-error";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
@@ -17,7 +16,6 @@ import ManualDate from "@/components/createForm/FormPages/ManualDate";
 import ReturnPolicySelect from "@/components/selects/ReturnPolicySelect";
 import { Session } from "@/types/Session";
 import SubscribeModal from "@/components/modals/SubscribeModal";
-import { set } from "zod";
 import Loading from "@/components/loading-components/Loading";
 
 interface Props {
@@ -47,190 +45,105 @@ export default function ImageGpt({
     folderName: "",
   });
   const [projectPlanId, setProjectPlanId] = useState<number | null>(0);
-  const OnlineGptCall = async () => {
-    const res = await fetch("/api/gpt/analyze-image", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        image: values.gptImage,
-        projectOwner: values.folderUserId,
-        projectId: values.folder,
-      }),
-    });
 
-    if (!res.ok) {
-      const errorMessage = await res.json();
-      setErrors(errorMessage.error);
-      setLoading(false);
-      console.error("Failed to fetch data");
-
-      return;
-    }
-
-    const data = await res.json();
-
-    if (
-      data.choices[0].message.content === "{'error':'This is not a receipt.'}"
-    ) {
-      setErrors(
-        "The image you uploaded cannot be analyzed. Please ensure you upload a valid receipt, or try uploading a higher-quality image for better recognition."
-      );
-      setPrompt(false);
-      setLoading(false);
-      return;
-    }
-
-    const jsonObject = JSON.parse(data.choices[0].message.content);
-    setFieldValue("items", jsonObject.receipt.items);
-    setFieldValue("amount", jsonObject.receipt.total_amount);
-    setFieldValue("purchase_date", jsonObject.receipt.date_purchased);
-    setFieldValue("store", jsonObject.receipt.store);
-
-    // test gpt without api
-    // const jsonObject = JSON.parse(data);
-    // setFieldValue("amount", jsonObject.receipt.total_amount);
-    // setFieldValue("purchase_date", jsonObject.receipt.date_purchased);
-    // setFieldValue("store", jsonObject.receipt.store);
-    // setFieldValue("receiptImage", image);
-
-    const itemsWithAllProperties = jsonObject.receipt.items.map(
-      (item: any) => ({
-        description: item.description || "",
-        photo: item.photo || "",
-        price: item.price || 0,
-        barcode: item.barcode || "",
-        character: "",
-      })
-    );
-    setFieldValue("items", itemsWithAllProperties);
-    setStage(ReceiptStoreStage.PREVIEW);
-    setErrors("");
+  const GptCall = async () => {
     setPrompt(false);
-    setLoading(false);
-  };
+    let route = "";
 
-  const MemoGptCall = async () => {
-    const res = await fetch("/api/gpt/analyze-memo", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        image: values.gptImage,
-        projectOwner: values.folderUserId,
-        projectId: values.folder,
-      }),
-    });
-
-    if (!res.ok) {
-      const errorMessage = await res.json();
-      setErrors(errorMessage.error);
-      setLoading(false);
-
-      return;
+    if (values.receiptType === "pdf") {
+      route = "analyze-input";
+    } else if (values.receiptType === "paper") {
+      route = "analyze-image";
     }
 
-    const data = await res.json();
+    try {
+      const res = await fetch(`/api/gpt/${route}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          input:
+            values.receiptType === "paper" ? values.gptImage : values.pdfText,
+          projectOwner: values.folderUserId,
+          projectId: values.folder,
+        }),
+      });
 
-    if (
-      data.choices[0].message.content === "{'error':'This is not a receipt.'}"
-    ) {
-      setErrors(
-        "The image you uploaded cannot be analyzed. Please ensure you upload a valid receipt, or try uploading a higher-quality image for better recognition."
-      );
+      if (!res.ok) {
+        const errorMessage = await res.text();
+        try {
+          const errorJson = JSON.parse(errorMessage);
+          setErrors(errorJson.error || "Unknown error occurred");
+        } catch {
+          setErrors(errorMessage);
+        }
+        setLoading(false);
+        return;
+      }
 
-      setPrompt(false);
+      const responseData = await res.text();
+      let data;
+      try {
+        data = JSON.parse(responseData);
+      } catch (e) {
+        console.error("Failed to parse JSON response:", e);
+        setErrors(
+          "Failed to parse the response. The server's response was not in a valid JSON format."
+        );
+        setLoading(false);
+        return;
+      }
+
+      const messageContent = data.choices[0]?.message?.content?.trim();
+      if (!messageContent) {
+        setErrors("The response did not contain a valid message content.");
+        setLoading(false);
+        return;
+      }
+      console.log("Message content:", messageContent);
+
+      let parsedContent;
+      try {
+        parsedContent = JSON.parse(messageContent);
+      } catch (e) {
+        console.error("Failed to parse message content:", e);
+        setErrors("Failed to parse content from the analysis.");
+        setLoading(false);
+        return;
+      }
+
+      if (
+        parsedContent.error &&
+        parsedContent.error === "This is not a receipt."
+      ) {
+        const errorMessage =
+          values.receiptType === "pdf"
+            ? "The PDF you uploaded cannot be analyzed. Please ensure you upload a valid receipt, or try uploading a higher-quality image for better recognition."
+            : "The image you uploaded cannot be analyzed. Please ensure you upload a valid receipt, or try uploading a higher-quality image for better recognition.";
+        setErrors(errorMessage);
+        setLoading(false);
+        return;
+      }
+
+      // Check if parsedContent has the expected structure
+      if (parsedContent.receipt && parsedContent.receipt.items) {
+        setFieldValue("items", parsedContent.receipt.items);
+        setFieldValue("amount", parsedContent.receipt.total_amount);
+        setFieldValue("purchase_date", parsedContent.receipt.date_purchased);
+        setFieldValue("store", parsedContent.receipt.store);
+      } else {
+        setErrors(
+          "Parsed content does not have the expected receipt structure."
+        );
+      }
+
       setLoading(false);
-      return;
-    }
-
-    const jsonObject = JSON.parse(data.choices[0].message.content);
-    setFieldValue("items", jsonObject.receipt.items);
-    setFieldValue("amount", jsonObject.receipt.total_amount);
-    setFieldValue("purchase_date", jsonObject.receipt.date_purchased);
-    setFieldValue("store", jsonObject.receipt.store);
-
-    // test gpt without api
-    // const jsonObject = JSON.parse(data);
-    // setFieldValue("amount", jsonObject.receipt.total_amount);
-    // setFieldValue("purchase_date", jsonObject.receipt.date_purchased);
-    // setFieldValue("store", jsonObject.receipt.store);
-    // setFieldValue("receiptImage", image);
-
-    const itemsWithAllProperties = jsonObject.receipt.items.map(
-      (item: any) => ({
-        description: item.description || "",
-        photo: item.photo || "",
-        price: item.price || 0,
-        barcode: item.barcode || "",
-
-        character: "",
-      })
-    );
-    setFieldValue("items", itemsWithAllProperties);
-    setStage(ReceiptStoreStage.PREVIEW);
-
-    setErrors("");
-    setPrompt(false);
-    setLoading(false);
-  };
-
-  const TextGptCall = async () => {
-    setPrompt(false);
-    setErrors("");
-    setLoading(true);
-
-    const response = await fetch(`/api/gpt/analyze-input`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        projectOwner: values.folderUserId,
-        projectId: values.folder,
-        text: values.pdfText,
-      }),
-    });
-
-    if (!response.ok) {
+    } catch (error: any) {
+      console.error("Error during GptCall:", error);
+      setErrors(error.message);
       setLoading(false);
-      const errorData = await response.json();
-      console.log(errorData);
-      setErrors(errorData.error);
-
-      return;
     }
-
-    const data = await response.json();
-
-    // no gpt dummy data
-    // const itemsWithAllProperties = data.map((item: any) => ({
-    //   description: item.description || "",
-    //   photo: item.photo || "",
-    //   price: item.price || 0,
-    //   barcode: "",
-    //   character: "",
-    // }));
-
-    // setFieldValue("items", itemsWithAllProperties);
-    setStage(ReceiptStoreStage.PREVIEW);
-
-    const items = JSON.parse(data.choices[0].message.content);
-    if (items.error) {
-      setLoading(false);
-      setErrors(
-        "The text you've submitted doesn't seem to be from a receipt. Please ensure you submit text from a valid receipt, or try providing a more specific part of the receipt for better recognition."
-      );
-      setPrompt(false);
-
-      return;
-    }
-    setFieldValue("items", items.items);
-    setPrompt(false);
-
-    setLoading(false);
   };
 
   const extractTextFromPDF = async (file: File) => {
@@ -307,84 +220,98 @@ export default function ImageGpt({
   const [subscribeModal, setSubscribeModal] = useState(false);
 
   const handleSubmit = async () => {
-    const error = await validateForm();
-    if (
-      (session.user.planId === 1 || session.user.planId === null) &&
-      (projectPlanId === 1 || projectPlanId === null)
-    ) {
-      setSubscribeModal(true);
-      return;
-    }
-
-    if (Object.keys(error).length > 0) {
-      setValidationErrors(error);
-      return;
-    }
-    if (!values.gptImage) {
-      setErrors("Please upload an image to analyze.");
-      return;
-    }
-
-    if (values.items.length > 0) {
-      setPrompt(true);
-      console.log(values.items.length);
-      return;
-    }
-
-    if (prompt === true) {
-      setLoading(true);
-      if (values.receiptType === "memo") {
-        MemoGptCall();
-      } else {
-        OnlineGptCall();
+    try {
+      const error = await validateForm();
+      if (
+        (session.user.planId === 1 || session.user.planId === null) &&
+        (projectPlanId === 1 || projectPlanId === null)
+      ) {
+        setSubscribeModal(true);
+        return;
       }
-      return;
-    } else if (values.items.length === 0 && values.gptImage) {
-      setLoading(true);
-      if (values.receiptType === "memo") {
-        MemoGptCall();
-      } else {
-        OnlineGptCall();
-      }
-      return;
-    }
 
-    setPrompt(true);
+      if (Object.keys(error).length > 0) {
+        setValidationErrors(error);
+        return;
+      }
+      if (!values.gptImage) {
+        setErrors("Please upload an image to analyze.");
+        return;
+      }
+
+      if (values.items.length > 0 && !prompt) {
+        setPrompt(true);
+        return;
+      }
+
+      if (prompt === true || (values.items.length === 0 && values.gptImage)) {
+        setLoading(true);
+        try {
+          await GptCall();
+        } catch (error) {
+          console.error("Error during GptCall:", error);
+          setErrors(
+            "An error occurred while processing your request. Please try again."
+          );
+          return;
+        } finally {
+          setLoading(false);
+          setStage(ReceiptStoreStage.PREVIEW);
+        }
+        return;
+      }
+    } catch (error) {
+      console.error("Error in handleSubmit:", error);
+      setErrors("An unexpected error occurred. Please try again.");
+    }
   };
 
   const handleSubmitPDF = async () => {
-    if (
-      (session.user.planId === 1 || session.user.planId === null) &&
-      (projectPlanId === 1 || projectPlanId === null)
-    ) {
-      setSubscribeModal(true);
-      return;
+    try {
+      if (
+        (session.user.planId === 1 || session.user.planId === null) &&
+        (projectPlanId === 1 || projectPlanId === null)
+      ) {
+        setSubscribeModal(true);
+        return;
+      }
+
+      if (!values.pdfText && values.receiptType === "pdf") {
+        setErrors("Please upload a pdf to analyze.");
+        return;
+      }
+
+      if (values.items.length > 0 && !prompt) {
+        setPrompt(true);
+        console.log(
+          "Prompt set to true because items.length > 0 and prompt was false"
+        );
+        return;
+      }
+
+      if (prompt === true || (values.items.length === 0 && values.pdfText)) {
+        setLoading(true);
+        try {
+          console.log("Calling GptCall...");
+          await GptCall();
+          console.log("GptCall completed successfully.");
+        } catch (error) {
+          console.error("Error during GptCall:", error);
+          setErrors(
+            "An error occurred while processing your request. Please try again."
+          );
+          setLoading(false); // Ensure loading state is reset
+          return; // Return immediately to stop further execution
+        }
+        setLoading(false);
+        setStage(ReceiptStoreStage.PREVIEW);
+        setFieldValue("receiptImage", "");
+        return;
+      }
+    } catch (error) {
+      console.error("Error in handleSubmitPDF:", error);
+      setErrors("An unexpected error occurred. Please try again.");
     }
-
-    if (!values.pdfText && values.receiptType === "pdf") {
-      setErrors("Please upload a pdf to analyze.");
-      return;
-    }
-
-    if (values.items.length > 0) {
-      setPrompt(true);
-      console.log(values.items.length);
-      return;
-    }
-
-    if (prompt === true) {
-      setLoading(true);
-      TextGptCall();
-
-      return;
-    } else if (values.items.length === 0 && values.pdfText) {
-      setLoading(true);
-      TextGptCall();
-
-      return;
-    }
-
-    setPrompt(true);
   };
 
   const [isManual, setIsManual] = useState(false);
@@ -654,8 +581,6 @@ export default function ImageGpt({
                     } else {
                       handleSubmit();
                     }
-
-                    setPrompt(false);
                   }}
                 >
                   <p
@@ -672,7 +597,6 @@ export default function ImageGpt({
             </div>
           </div>
         </div>
-        {prompt && <div>hello</div>}
         {prompt && (
           <div className="fixed inset-0 bg-black bg-opacity-10 z-[2000] flex justify-center items-center ">
             <div className="p-10 flex flex-col gap-4 mt-10 bg-orange-50 rounded-lg shadow-md items-center justify-center text-emerald-900 max-w-lg w-[400px]">
@@ -692,8 +616,6 @@ export default function ImageGpt({
                     } else {
                       handleSubmit();
                     }
-
-                    setPrompt(false);
                   }}
                 >
                   <p className="text-xs">Yes, anaylze.</p>

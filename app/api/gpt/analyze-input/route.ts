@@ -78,6 +78,7 @@ Instructions:
     - Identify the store name from the input text.
     - The store name will be at the start of the text.
     - Examples:
+        - 'Amazon' in 'From Amazon'
         - 'Amazon' in 'Amazon Order Confirmation'.
         - 'Amazon' in 'Amazon Customer Service'.
         - 'Amazon' in 'Thank you for shopping at Amazon'.
@@ -86,6 +87,7 @@ Instructions:
     - Identify the date of purchase from the input text.
     - The date could be in various formats, such as '7 February 2024', 'Feb 7, 2024', etc.
     - Examples:
+        - '7 February 2024' in 'Date: 7 February 2024'.
         - '7 February 2024' in '7 February 2024 - Order Confirmation'.
         - '7 February 2024' in 'Order Confirmation - 7 February 2024'.
         - 'Wed, Feb 7, 2024 at 10:24 AM'.
@@ -106,19 +108,22 @@ Instructions:
 5. JSON Formatting:
    - Format the extracted data into a JSON structure as follows:
      {
-       "store": "Store Name Here",
-       "date_purchased": "Date of Purchase Here",
-       "total_amount": "Total Amount Here",
-       "items": [
-         {
-           "description": "Item description here",
-           "price": "numeric value here",
-           "product_id": "if applicable",
-           "barcode": "if applicable"
-         }
-       ]
+       "receipt": {
+         "store": "Store Name Here",
+         "date_purchased": "YYYY-MM-DD",
+         "total_amount": "Total Amount Here",
+         "items": [
+           {
+             "description": "Item description here",
+             "price": "numeric value here",
+             "barcode": "if applicable"
+           }
+         ]
+       }
      }
    - Include 'barcode' only if identified; otherwise, include 'product_id'.
+   - **Please do not start the object with \`\`\`json**
+
 
 6. Error Handling:
    - If the input text does not resemble a receipt or is unrelated to inventory items, return an error in JSON format:
@@ -134,7 +139,7 @@ export async function POST(request: Request) {
   const planId = session.user.planId;
   const body = await request.json();
 
-  const { projectId, projectOwner, text } = body;
+  const { projectId, projectOwner, input } = body;
 
   const apiCalls = await canMakeRequest(
     userId,
@@ -198,7 +203,7 @@ export async function POST(request: Request) {
         },
         {
           role: "user",
-          content: `Here is the text: ${text}`,
+          content: `Here is the text: ${input}`,
         },
       ],
       max_tokens: 300,
@@ -216,11 +221,37 @@ export async function POST(request: Request) {
     });
 
     if (!response.ok) {
-      console.error("Fetch response was not ok:", response.statusText);
+      console.error("OpenAI API Error:", response.statusText);
+      let errorMsg = `OpenAI API error: ${response.status}`;
+
+      // Attempt to parse error response from OpenAI
+      try {
+        const errorData = await response.json();
+        errorMsg += ` - ${errorData.error.message}`;
+      } catch (parseError) {
+        console.error("Failed to parse error response:", parseError);
+      }
+
+      return new NextResponse(JSON.stringify({ error: errorMsg }), {
+        status: response.status,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
+
+    let data;
+
+    try {
+      data = await response.json();
+    } catch (e) {
+      console.error("Failed to parse JSON response:", e);
       return new NextResponse(
-        JSON.stringify({ error: "Failed to fetch from OpenAI API." }),
+        JSON.stringify({
+          error: "Failed to parse JSON response from OpenAI API.",
+        }),
         {
-          status: response.status,
+          status: 500,
           headers: {
             "Content-Type": "application/json",
           },
@@ -228,7 +259,6 @@ export async function POST(request: Request) {
       );
     }
 
-    const data = await response.json();
     console.log("Response from OpenAI:", data);
 
     return new NextResponse(JSON.stringify(data), {

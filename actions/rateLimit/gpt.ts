@@ -1,18 +1,11 @@
 "use server";
 import prisma from "@/prisma/client";
 
-type ApiCallType = {
-  status: string;
-  message: string;
-};
-
 export const canMakeRequest = async (
   userId: string,
   projectId: number,
-  planId: number,
-  endpointUsed: string,
-  projectUserId: string
-): Promise<ApiCallType> => {
+  planId: number
+): Promise<{ status: string; message: string }> => {
   try {
     let limit = 0;
 
@@ -21,7 +14,7 @@ export const canMakeRequest = async (
     } else if (planId == 3) {
       limit = 20;
     }
-    // Find the first request ever for the given user and project
+
     const firstRequest = await prisma.apiRequestLog.findFirst({
       where: {
         OR: [{ userId: userId }, { projectId: projectId }],
@@ -31,48 +24,22 @@ export const canMakeRequest = async (
       },
     });
 
-    console.log("First request found:", firstRequest);
-
     if (!firstRequest) {
-      // If there is no request logged, log the first request and allow the request
-      await prisma.apiRequestLog.create({
-        data: {
-          userId: userId,
-          projectId: projectId,
-          planId: planId,
-          endpointUsed: endpointUsed,
-          timestamp: new Date(), // Current date and time
-          projectOwner: projectUserId,
-        },
-      });
-      console.log("First request logged.");
       return { status: "200", message: "Request logged successfully." };
     }
 
     const firstRequestDate = new Date(firstRequest.timestamp);
-
-    // Get the current date and time
     const currentDate = new Date();
-
-    // Define the number of milliseconds in a day
     const msInDay = 1000 * 60 * 60 * 24;
-
-    // Calculate the number of days since the first request
     const daysSinceFirstRequest = Math.floor(
       (currentDate.getTime() - firstRequestDate.getTime()) / msInDay
     );
 
-    // Create a new Date object starting from the first request date
     const startOfCurrentPeriod = new Date(firstRequestDate);
-
-    // Calculate the start of the current 7-day period
     startOfCurrentPeriod.setUTCDate(
       firstRequestDate.getUTCDate() + Math.floor(daysSinceFirstRequest / 7) * 7
     );
 
-    console.log("Start of current period:", startOfCurrentPeriod);
-
-    // Count API requests in the current 7-day period for the given user and project
     const requestCount = await prisma.apiRequestLog.count({
       where: {
         OR: [{ userId: userId }, { projectId: projectId }],
@@ -82,31 +49,14 @@ export const canMakeRequest = async (
       },
     });
 
-    console.log("Request count in current period:", requestCount);
-
-    // Check if the request count is within the limit
-    if (requestCount >= 20) {
-      console.log("Request limit reached.");
+    if (requestCount >= limit) {
       return {
         status: "429",
         message: `You have reached the limit of ${limit} API calls per week.`,
       };
     }
 
-    // Log the successful request
-    await prisma.apiRequestLog.create({
-      data: {
-        userId: userId,
-        projectId: projectId,
-        planId: planId,
-        endpointUsed: endpointUsed,
-        timestamp: new Date(), // Current date and time
-        projectOwner: projectUserId,
-      },
-    });
-
-    console.log("Request logged successfully.");
-    return { status: "200", message: "Request logged successfully." };
+    return { status: "200", message: "Request allowed." };
   } catch (error) {
     console.error("Error in canMakeRequest:", error);
     return {
@@ -116,9 +66,27 @@ export const canMakeRequest = async (
   }
 };
 
-export const getApiUsage = async (userId: string, planId: number) => {
-  // Find the first request ever for the given user and project
+export const appendApiUsage = async (
+  userId: string,
+  projectId: string,
+  planId: number,
+  endpointUsed: string,
+  projectUserId: string
+) => {
+  await prisma.apiRequestLog.create({
+    data: {
+      userId: userId,
+      projectId: parseInt(projectId),
+      planId: planId,
+      endpointUsed: endpointUsed,
+      timestamp: new Date(),
+      projectOwner: projectUserId,
+    },
+  });
+  console.log("First request logged.");
+};
 
+export const getApiUsage = async (userId: string, planId: number) => {
   let limit = 0;
 
   if (planId == 2) {

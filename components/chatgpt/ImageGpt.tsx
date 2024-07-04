@@ -473,7 +473,7 @@ export default function ImageGpt({
                   accepted are .jpg, .jpeg, .png, .gif, .bmp, .tiff, .heic.
                   Please ensure the image is clear and that there is no
                   handwriting on the receipt. Please note that uploading images
-                  that aren't receipts will be counted as API usage.
+                  that aren&apos;t receipts will be counted as API usage.
                 </p>
               )}
               {help && values.receiptType === "pdf" && (

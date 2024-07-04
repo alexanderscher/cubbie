@@ -40,6 +40,7 @@ export default function ImageGpt({
 }: Props) {
   const [prompt, setPrompt] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [errors, setErrors] = useState("");
   const [validationErrors, setValidationErrors] = useState({
     folderName: "",
@@ -78,7 +79,7 @@ export default function ImageGpt({
         } catch {
           setErrors(errorMessage);
         }
-        setLoading(false);
+        setIsAnalyzing(false);
         return;
       }
 
@@ -91,14 +92,14 @@ export default function ImageGpt({
         setErrors(
           "Failed to parse the response. The server's response was not in a valid JSON format."
         );
-        setLoading(false);
+        setIsAnalyzing(false);
         return;
       }
 
       const messageContent = data.choices[0]?.message?.content?.trim();
       if (!messageContent) {
         setErrors("The response did not contain a valid message content.");
-        setLoading(false);
+        setIsAnalyzing(false);
         return;
       }
       console.log("Message content:", messageContent);
@@ -109,7 +110,7 @@ export default function ImageGpt({
       } catch (e) {
         console.error("Failed to parse message content:", e);
         setErrors("Failed to parse content from the analysis.");
-        setLoading(false);
+        setIsAnalyzing(false);
         return;
       }
 
@@ -122,7 +123,7 @@ export default function ImageGpt({
             ? "The PDF you uploaded cannot be analyzed. Please ensure you upload a valid receipt, or try uploading a higher-quality image for better recognition."
             : "The image you uploaded cannot be analyzed. Please ensure you upload a valid receipt, or try uploading a higher-quality image for better recognition.";
         setErrors(errorMessage);
-        setLoading(false);
+        setIsAnalyzing(false);
         return;
       }
 
@@ -138,11 +139,11 @@ export default function ImageGpt({
         );
       }
 
-      setLoading(false);
+      setIsAnalyzing(false);
     } catch (error: any) {
       console.error("Error during GptCall:", error);
       setErrors(error.message);
-      setLoading(false);
+      setIsAnalyzing(false);
     }
   };
 
@@ -290,7 +291,7 @@ export default function ImageGpt({
       }
 
       if (prompt === true || (values.items.length === 0 && values.pdfText)) {
-        setLoading(true);
+        setIsAnalyzing(true);
         try {
           console.log("Calling GptCall...");
           await GptCall();
@@ -300,10 +301,10 @@ export default function ImageGpt({
           setErrors(
             "An error occurred while processing your request. Please try again."
           );
-          setLoading(false); // Ensure loading state is reset
+          setIsAnalyzing(false); // Ensure loading state is reset
           return; // Return immediately to stop further execution
         }
-        setLoading(false);
+        setIsAnalyzing(false);
         setStage(ReceiptStoreStage.PREVIEW);
         setFieldValue("receiptImage", "");
         return;
@@ -322,46 +323,50 @@ export default function ImageGpt({
       <div className="flex flex-col gap-6 ">
         <div className="flex justify-between">
           <div className="flex gap-3 items-center">
-            <h1 className="text-3xl text-orange-600">Analyze Image</h1>
+            <h1 className="text-3xl text-orange-600">Analyze</h1>
             <TooltipWithHelperIcon
               placement="right-start"
-              content='We use AI to analyze the receipt image you upload. Take a
-                picture of the receipt and upload it. Then click the
-                "Analyze Image". This will extract the receipt store, purchase date and receipt item information. Please only upload images of receipts.'
+              content='Upload a receipt image or PDF, then click "Analyze Image". Our AI will extract the store, purchase date, and item details. Please upload only receipt images or PDFs.'
             />
           </div>
-          <p className="text-xs text-orange-600" onClick={() => setHelp(!help)}>
-            Help
-          </p>
+          <div
+            className="text-sm text-white border-[1px] border-emerald-900 rounded-full w-6 h-6 flex items-center justify-center cursor-pointer bg-emerald-900"
+            onClick={() => setHelp(!help)}
+          >
+            ?
+          </div>
         </div>
 
         <div className="flex flex-col gap-8">
-          {help && (
-            <p className="text-xs text-orange-600">
-              Choose the project to save the receipt to.
-            </p>
-          )}
-          <ProjectSelectForm
-            handleChange={handleChange}
-            projects={projects}
-            setFieldValue={setFieldValue}
-            values={values}
-            setProjectPlanId={setProjectPlanId}
-          />
+          <div className="flex flex-col gap-3">
+            <p className="text-emerald-900 text-sm">Project folder*</p>
+            {help && (
+              <p className="text-xs text-orange-600">
+                Choose the project to save the receipt to.
+              </p>
+            )}
+            <ProjectSelectForm
+              handleChange={handleChange}
+              projects={projects}
+              setFieldValue={setFieldValue}
+              values={values}
+              setProjectPlanId={setProjectPlanId}
+            />
 
-          {validationErrors.folderName && (
-            <p className="text-sm text-orange-900">
-              {validationErrors.folderName}
-            </p>
-          )}
+            {validationErrors.folderName && (
+              <p className="text-sm text-orange-900">
+                {validationErrors.folderName}
+              </p>
+            )}
+          </div>
 
           <div className="flex flex-col gap-3">
             <div className="flex gap-2 items-center">
-              <p className={` text-emerald-900 `}>Return Date Policy</p>
+              <p className={` text-emerald-900 text-sm`}>Return Date Policy</p>
 
               <TooltipWithHelperIcon
                 placement="right-start"
-                content="Number of days until return. You can manually enter one or choose from your return store policy list"
+                content="Number of days until return. You can manually enter one or choose from your return store policy list. Creat a new poilcy by clicking on the 'Returns' tab in the navigation bar."
               />
             </div>
             {help && (
@@ -417,7 +422,7 @@ export default function ImageGpt({
           </div>
           <div className="flex flex-col gap-3">
             <div className=" flex items-center gap-2 relative">
-              <p className="text-emerald-900">
+              <p className="text-emerald-900 text-sm">
                 What kind of a receipt is this?
               </p>
 
@@ -560,7 +565,7 @@ export default function ImageGpt({
                   be in the tex if available.
                 </p>
               )}
-              {values.receiptType === "pdf" && (
+              {values.receiptType === "pdf" && values.pdfText && (
                 <textarea
                   className="bg border-emerald-900 border-[1px] p-2 rounded text-sm w-full h-[200px] resize-none"
                   value={values.pdfText}
@@ -571,7 +576,7 @@ export default function ImageGpt({
               <div className="w-full ">
                 <RegularButton
                   styles={`${
-                    loading
+                    isAnalyzing
                       ? "border-emerald-900 bg-emerald-900"
                       : "border-emerald-900 bg"
                   }  w-full mt-2`}
@@ -585,12 +590,12 @@ export default function ImageGpt({
                 >
                   <p
                     className={
-                      loading
+                      isAnalyzing
                         ? "text-white text-sm p-1"
                         : "text-emerald-900 text-sm p-1"
                     }
                   >
-                    {loading ? "Analyzing..." : "Analyze"}
+                    {isAnalyzing ? "Analyzing..." : "Analyze"}
                   </p>
                 </RegularButton>
               </div>

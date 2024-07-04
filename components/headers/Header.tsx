@@ -161,9 +161,10 @@ const Header = ({ type }: HeaderProps) => {
             </>
           )}
         </div>
-        <RegularButton
-          styles="border-emerald-900"
-          handleClick={() => {
+
+        <div
+          className="text-sm border-[1px] border-emerald-900 rounded-full w-8 h-8 flex items-center justify-center cursor-pointer bg"
+          onClick={() => {
             switch (type) {
               case "Projects":
                 fetchProjects();
@@ -178,8 +179,13 @@ const Header = ({ type }: HeaderProps) => {
             }
           }}
         >
-          <p className="text-emerald-900 text-xs">Refresh</p>
-        </RegularButton>
+          <Image
+            src="/refresh.png"
+            width={20}
+            height={20}
+            alt="refresh"
+          ></Image>
+        </div>
 
         {addProjectOpen && (
           <ModalOverlay onClose={() => setAddProjectOpen(false)}>

@@ -116,13 +116,21 @@ const ReceiptManual = ({
               <p className="text-orange-800 text-sm">{errors.store}</p>
             )}
 
-            <ProjectSelectForm
-              handleChange={handleChange}
-              projects={projects}
-              setFieldValue={setFieldValue}
-              values={values}
-              setProjectPlanId={setProjectPlanId}
-            />
+            <div className="flex flex-col ">
+              <p className="text-emerald-900 text-sm">Project folder*</p>
+              {help && (
+                <p className="text-xs text-orange-600">
+                  Choose the project to save the receipt to.
+                </p>
+              )}
+              <ProjectSelectForm
+                handleChange={handleChange}
+                projects={projects}
+                setFieldValue={setFieldValue}
+                values={values}
+                setProjectPlanId={setProjectPlanId}
+              />
+            </div>
             {errors.folderName && (
               <p className="text-orange-800 text-sm">{errors.folderName}</p>
             )}
@@ -160,7 +168,7 @@ const ReceiptManual = ({
           </div>
           <div className="flex flex-col gap-3">
             <div className="flex gap-2 items-center">
-              <p className={` text-emerald-900 `}>Return Date Policy</p>
+              <p className={` text-emerald-900 text-sm`}>Return Date Policy</p>
 
               <TooltipWithHelperIcon
                 placement="right-start"

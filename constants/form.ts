@@ -13,7 +13,7 @@ export const DEFAULT_INPUT_VALUES: ReceiptInput = {
   return_date: "",
   receiptImage: "",
   items: [],
-  folder: 0,
+  folder: "",
   folderName: "",
   folderUserId: "",
   pdfText: "",

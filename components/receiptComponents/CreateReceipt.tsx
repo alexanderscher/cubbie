@@ -48,7 +48,7 @@ export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
               }}
             >
               <div className="flex gap-3 justify-center items-center">
-                <p className="text-emerald-900">Analyze Receipt Image</p>
+                <p className="text-emerald-900">Analyze Receipt</p>
                 <TooltipWithHelperIcon
                   iconColor="text-orange-600"
                   content="Enter your receipt details first, then copy and paste the item
@@ -62,43 +62,7 @@ export const CreateReceipt = ({ setAddReceiptOpen }: AddReceiptModalProps) => {
             <Link href="/create/image">
               <div className="p-4 bg-slate-100   rounded-lg text-sm  cursor-pointer hover:bg-slate-200">
                 <div className="flex gap-3 justify-center items-center">
-                  <p className="text-emerald-900">Analyze Receipt Image</p>
-                  <TooltipWithHelperIcon
-                    iconColor="text-orange-600"
-                    content="Enter your receipt details first, then copy and paste the item
-              information from your online receipt email. We use AI to
-              accurately populate the item details."
-                  />
-                </div>
-              </div>
-            </Link>
-          )}
-        </>
-        <>
-          {pathname.startsWith("/create") && (
-            <div
-              className="p-4 bg-slate-100   rounded-lg text-sm  cursor-pointer hover:bg-slate-200"
-              onClick={() => {
-                setSelectedPage("/create/text");
-                setDiscardModal(true);
-              }}
-            >
-              <div className="flex gap-3 justify-center items-center">
-                <p className="text-emerald-900">Analyze Receipt Text</p>
-                <TooltipWithHelperIcon
-                  iconColor="text-orange-600"
-                  content="Enter your receipt details first, then copy and paste the item
-              information from your online receipt email. We use AI to
-              accurately populate the item details."
-                />
-              </div>
-            </div>
-          )}
-          {!pathname.startsWith("/create") && (
-            <Link href="/create/text">
-              <div className="p-4 bg-slate-100   rounded-lg text-sm  cursor-pointer hover:bg-slate-200">
-                <div className="flex gap-3 justify-center items-center">
-                  <p className="text-emerald-900">Analyze Receipt Text</p>
+                  <p className="text-emerald-900">Analyze Receipt</p>
                   <TooltipWithHelperIcon
                     iconColor="text-orange-600"
                     content="Enter your receipt details first, then copy and paste the item

@@ -1,4 +1,4 @@
-import { canMakeRequest } from "@/actions/rateLimit/gpt";
+import { appendApiUsage, canMakeRequest } from "@/actions/rateLimit/gpt";
 import { auth } from "@/auth";
 import { Session } from "next-auth";
 import { NextResponse } from "next/server";
@@ -94,8 +94,7 @@ Instructions:
    - **Please do not start the object with \`\`\`json**
 
 8. Error Handling:
-   - If the content does not resemble a receipt, respond with an error in JSON format:
-     {"error": "This is not a receipt."}
+   - If the content does not resemble a receipt, respond with an error in string format: "Error: This is not a receipt."
 
 Edge Case Considerations:
 - Handle different layouts and formats of receipts, including digital and physical copies.
@@ -111,39 +110,13 @@ export async function POST(request: Request) {
 
   const { projectId, projectOwner, input } = json;
 
-  const apiCalls = await canMakeRequest(
-    userId,
-    parseInt(projectId),
-    planId,
-    "analyze-memo",
-    projectOwner
-  );
+  const apiCalls = await canMakeRequest(userId, parseInt(projectId), planId);
 
-  if (apiCalls.status === "500") {
-    return new NextResponse(
-      JSON.stringify({
-        error: apiCalls.message,
-      }),
-      {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-  }
-  if (apiCalls.status === "429") {
-    return new NextResponse(
-      JSON.stringify({
-        error: apiCalls.message,
-      }),
-      {
-        status: 429,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+  if (apiCalls.status === "500" || apiCalls.status === "429") {
+    return new NextResponse(JSON.stringify({ error: apiCalls.message }), {
+      status: parseInt(apiCalls.status),
+      headers: { "Content-Type": "application/json" },
+    });
   }
   try {
     const api_key = process.env.OPENAI_API_KEY;
@@ -219,8 +192,6 @@ export async function POST(request: Request) {
         }
       );
     }
-
-    console.log("Response from OpenAI:", data);
 
     return new NextResponse(JSON.stringify(data), {
       status: response.status,

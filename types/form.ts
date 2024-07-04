@@ -26,7 +26,7 @@ export interface ReceiptInput {
   return_date: string;
   receiptImage?: string;
   items: ItemInput[];
-  folder: number;
+  folder: string;
   folderName: string;
   folderUserId: string;
   pdfText: string;

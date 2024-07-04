@@ -1,4 +1,4 @@
-import { canMakeRequest } from "@/actions/rateLimit/gpt";
+import { appendApiUsage, canMakeRequest } from "@/actions/rateLimit/gpt";
 import { auth } from "@/auth";
 import { Session } from "next-auth";
 import { NextResponse } from "next/server";
@@ -126,8 +126,7 @@ Instructions:
 
 
 6. Error Handling:
-   - If the input text does not resemble a receipt or is unrelated to inventory items, return an error in JSON format:
-     {"error": "This is not a receipt."}
+   - If the content does not resemble a receipt, respond with an error in string format: "Error: This is not a receipt."
 
 Edge Case Considerations:
 - If a product description or price is missing, ensure fields are still present in the JSON but left empty or filled with a default value (e.g., null or 0).
@@ -141,14 +140,14 @@ export async function POST(request: Request) {
 
   const { projectId, projectOwner, input } = body;
 
-  const apiCalls = await canMakeRequest(
-    userId,
-    parseInt(projectId),
-    planId,
-    "analyze-input",
-    projectOwner
-  );
+  const apiCalls = await canMakeRequest(userId, parseInt(projectId), planId);
 
+  if (apiCalls.status === "500" || apiCalls.status === "429") {
+    return new NextResponse(JSON.stringify({ error: apiCalls.message }), {
+      status: parseInt(apiCalls.status),
+      headers: { "Content-Type": "application/json" },
+    });
+  }
   console.log("API Call status:", apiCalls.status);
 
   if (apiCalls.status === "500") {

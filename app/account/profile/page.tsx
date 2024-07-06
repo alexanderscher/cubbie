@@ -17,9 +17,8 @@ export default async function Profile() {
 
   return (
     <div className={`${styles.layout} gap-6 w-full justify-start `}>
-      <Header />
-
-      <div className="flex justify-center w-full">
+      <div className="flex justify-center w-full gap-8">
+        <Header />
         <Account session={session} projects={projects} />
       </div>
     </div>

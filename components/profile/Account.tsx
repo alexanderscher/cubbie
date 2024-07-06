@@ -46,7 +46,7 @@ const Account = ({ session, projects }: AccountProps) => {
   const [deletePrompt, setDeletePrompt] = useState(false);
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-[800px]">
+    <div className="flex flex-col gap-4 w-full max-w-[600px] mb-[200px]">
       <div className="bg-white rounded-lg p-6  flex flex-col gap-4">
         <div className="flex justify-between">
           <p className="text-emerald-900 text-lg">User Profile</p>
@@ -93,13 +93,13 @@ const Account = ({ session, projects }: AccountProps) => {
       </div>
       {isOpen && <Menu setIsOpen={setIsOpen} />}
       {deletePrompt && (
-        <ModalOverlay onClose={() => setDeletePrompt(false)}>
-          <DeleteModal
-            projects={projects}
-            session={session}
-            setDeletePrompt={setDeletePrompt}
-          />
-        </ModalOverlay>
+        // <ModalOverlay onClose={() => setDeletePrompt(false)}>
+        <DeleteModal
+          projects={projects}
+          session={session}
+          setDeletePrompt={setDeletePrompt}
+        />
+        // </ModalOverlay>
       )}
     </div>
   );

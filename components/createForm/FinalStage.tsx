@@ -134,12 +134,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
           <div
             className={`border-[1px] border-emerald-900 rounded  flex flex-col gap-4 p-6`}
           >
-            {/* <p className="text-xl text-emerald-900">
-              {pathname !== "/create/memo"
-                ? "Receipt Information"
-                : "Memo Information"}
-            </p> */}
-            {!values.receiptImage && (
+            {/* {!values.receiptImage && (
               <div className="w-full  overflow-hidden relative flex justify-center items-center ">
                 <div className="w-full h-full flex justify-center items-start ">
                   <Image
@@ -152,9 +147,9 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
                   />
                 </div>
               </div>
-            )}
+            )} */}
 
-            {values.receiptImage && (
+            {/* {values.receiptImage && (
               <div className="w-full flex justify-center items-center  ">
                 <div className=" w-[200px] max-h-[200px]  rounded overflow-hidden">
                   <Image
@@ -174,7 +169,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
                   altText="Your Image Description"
                 />
               </div>
-            )}
+            )} */}
 
             <div className="flex flex-col gap-4 text-sm ">
               <div className="w-full">

@@ -141,7 +141,7 @@ const EditReceipt = ({ receiptId, setEdit }: Props) => {
 
   if (isLoading)
     return (
-      <div className="h-[90vh] w-full flex items-center justify-center">
+      <div className="h-[400px] w-full flex items-center justify-center">
         <BeatLoader loading={isLoading} size={15} color={"rgb(6 78 59)"} />
       </div>
     );
@@ -201,8 +201,8 @@ const EditReceipt = ({ receiptId, setEdit }: Props) => {
               <span className="text-2xl">&times;</span>
             </button>
           </div>
-          <div className="p-8 flex gap-4 flex-col">
-            {!values.receipt_image_url && !values.edit_image && (
+          <div className="p-6 flex gap-4 flex-col">
+            {/* {!values.receipt_image_url && !values.edit_image && (
               <div className="w-full  overflow-hidden  relative ">
                 <FileUploadDropzone
                   onFileUpload={(e) => onFileUpload(e, setFieldValue)}
@@ -275,7 +275,7 @@ const EditReceipt = ({ receiptId, setEdit }: Props) => {
                   changeField="receipt_image_url"
                 />
               </div>
-            )}
+            )} */}
 
             <div className="flex flex-col gap-4 text-sm">
               <div className="w-full">

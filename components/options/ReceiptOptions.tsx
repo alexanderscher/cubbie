@@ -164,6 +164,25 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
               </div>
             </div>
           )}
+          {receipt.tracking_number && (
+            <a
+              target="_blank"
+              href="https://chatgpt.com/c/bdbcc109-00c6-42e2-9db3-5ed228c5727e"
+              rel="noopener noreferrer"
+            >
+              <div className={color}>
+                <div className="flex gap-2">
+                  <Image
+                    src={"/edit.png"}
+                    width={20}
+                    height={20}
+                    alt=""
+                  ></Image>
+                  <p>Track</p>
+                </div>
+              </div>
+            </a>
+          )}
 
           <div
             className={color}
@@ -284,9 +303,9 @@ const ReceiptDetails = ({ receipt }: { receipt: ReceiptType }) => {
   }, [receipt]);
   return (
     <div
-      className={`flex flex-col items-center gap-4 p-8 overflow-auto h-[600px]  max-w-[400px] w-full`}
+      className={`flex flex-col items-center gap-4 py-6 overflow-auto h-[600px]  max-w-[400px] w-full`}
     >
-      {!receipt.receipt_image_url && (
+      {/* {!receipt.receipt_image_url && (
         <div className="w-full flex justify-center items-center  ">
           <div className="  overflow-hidden">
             <Image
@@ -299,9 +318,9 @@ const ReceiptDetails = ({ receipt }: { receipt: ReceiptType }) => {
             />
           </div>
         </div>
-      )}
+      )} */}
 
-      {receipt.receipt_image_url && (
+      {/* {receipt.receipt_image_url && (
         <div className="w-full flex justify-center items-center  ">
           <div className=" w-[200px] max-h-[200px]  rounded-lg overflow-hidden">
             <Image
@@ -315,7 +334,7 @@ const ReceiptDetails = ({ receipt }: { receipt: ReceiptType }) => {
             />
           </div>
         </div>
-      )}
+      )} */}
       <ImageModal
         isOpen={isOpen}
         setIsOpen={setIsOpen}

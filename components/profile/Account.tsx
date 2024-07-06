@@ -50,7 +50,7 @@ const Account = ({ session, projects }: AccountProps) => {
       <div className="bg-white rounded-lg p-6  flex flex-col gap-4">
         <div className="flex justify-between">
           <p className="text-emerald-900 text-lg">User Profile</p>
-          <div className={styles.button}>
+          <div>
             <Image
               src={"/dashboard_b.png"}
               alt="user image"

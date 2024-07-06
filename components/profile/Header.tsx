@@ -6,7 +6,7 @@ import Image from "next/image";
 const Header = () => {
   return (
     <div
-      className={`${styles.header}  bg-white min-w-[200px] shadow p-8 flex flex-col gap-4 rounded-lg h-[400px]`}
+      className={`${styles.header}   bg-white min-w-[200px] shadow p-8 flex flex-col gap-4 h-screen -mt-6 -ml-8 -mb-[100px]`}
     >
       <h1 className="text-lg">Settings</h1>
       <div className="flex flex-col gap-4 text-sm ">

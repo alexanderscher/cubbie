@@ -126,7 +126,7 @@ const EditItem = ({ itemId, setEdit }: ItemIdEditProps) => {
 
   if (isLoading)
     return (
-      <div className="w-full ">
+      <div className="w-full h-[400px] flex justify-center items-center">
         <PageLoading loading={isLoading} />
       </div>
     );
@@ -231,8 +231,8 @@ const EditItem = ({ itemId, setEdit }: ItemIdEditProps) => {
             )}
 
             {values.photo_url && (
-              <div className="w-full flex justify-center items-center relative ">
-                <div className="relative  w-full max-h-[300px] rpunded-md overflow-hidden hover:opacity-80 transition-all duration-300 ease-in-out">
+              <div className="w-full flex justify-center items-center relative group">
+                <div className="relative  w-[200px] max-h-[400px] rounded overflow-hidden">
                   <Image
                     src={values.photo_url}
                     width={300}

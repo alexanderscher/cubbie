@@ -102,7 +102,7 @@ const ReceiptManual = ({
 
         <div className={styles.receiptContainer}>
           <div className={styles.receiptInputs}>
-            <div className="w-full">
+            <div className="w-full flex flex-col gap-2">
               <p className="text-sm text-emerald-900 ">Store name*</p>
               <input
                 className="w-full border-[1px] bg  p-2  border-emerald-900 rounded  focus:outline-none"
@@ -116,7 +116,7 @@ const ReceiptManual = ({
               <p className="text-orange-800 text-sm">{errors.store}</p>
             )}
 
-            <div className="flex flex-col ">
+            <div className="w-full flex flex-col gap-2">
               <p className="text-emerald-900 text-sm">Project folder*</p>
               {help && (
                 <p className="text-xs text-orange-600">
@@ -135,7 +135,7 @@ const ReceiptManual = ({
               <p className="text-orange-800 text-sm">{errors.folderName}</p>
             )}
 
-            <div className="w-full">
+            <div className="w-full flex flex-col gap-2">
               <p className="text-sm text-emerald-900 ">Card</p>
               <input
                 className="w-full border-[1px] bg  p-2  border-emerald-900 rounded  focus:outline-none"
@@ -146,7 +146,7 @@ const ReceiptManual = ({
             </div>
 
             {online && (
-              <div className="w-full">
+              <div className="w-full flex flex-col gap-2">
                 <p className="text-sm text-emerald-900 ">
                   Tracking Number Link
                 </p>
@@ -172,7 +172,7 @@ const ReceiptManual = ({
 
               <TooltipWithHelperIcon
                 placement="right-start"
-                content="Number of days until return. You can manually enter one or choose from your return store policy list."
+                content="Number of days until return. You can manually enter one or choose from your return store policy list. Creat a new poilcy by clicking on the 'Returns' tab in the navigation bar."
               />
             </div>
             {help && (
@@ -225,7 +225,7 @@ const ReceiptManual = ({
             )}
           </div>
 
-          <div className={`w-full relative`}>
+          {/* <div className={`w-full relative`}>
             <FileUploadDropzone
               onFileUpload={onFileUpload}
               button={
@@ -247,8 +247,8 @@ const ReceiptManual = ({
                 </div>
               }
             />
-          </div>
-          {values.receiptImage && (
+          </div> */}
+          {/* {values.receiptImage && (
             <div className="relative w-24 h-24 ">
               <div className="w-24 h-24 overflow-hidden flex items-center justify-center  border-[1px] border-emerald-900 rounded">
                 <button
@@ -268,7 +268,7 @@ const ReceiptManual = ({
                 />
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>

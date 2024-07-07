@@ -14,6 +14,11 @@ input::placeholder {
   color: rgb(6 78 59);
 }
 
+html,
+body {
+  overflow: auto;
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {

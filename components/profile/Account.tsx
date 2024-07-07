@@ -24,33 +24,38 @@ import { toast } from "sonner";
 import { deleteAccount } from "@/actions/user/deleteAccount";
 import Loading from "@/components/loading-components/Loading";
 import { TooltipWithHelperIcon } from "@/components/tooltips/TooltipWithHelperIcon";
-import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { changeProjectOwner } from "@/actions/projects/transferOwnership";
 import { useRouter } from "next/navigation";
 import { logout } from "@/actions/logout";
 import { ProjectType, ProjectUserType } from "@/types/ProjectTypes";
+import { toggleFactor } from "@/actions/user/twoFactor";
 
 interface AccountProps {
   session: Session;
   projects: ProjectType[];
+  twoFactor: isTwoFactorEnabled;
 }
 
+interface isTwoFactorEnabled {
+  isTwoFactorEnabled: boolean;
+}
 interface Props {
   session: Session;
 }
 
-const Account = ({ session, projects }: AccountProps) => {
+const Account = ({ session, projects, twoFactor }: AccountProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  console.log(twoFactor);
 
   const [deletePrompt, setDeletePrompt] = useState(false);
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-[600px] mb-[200px]">
+    <div className="flex flex-col gap-4 w-full max-w-[700px] mb-[200px]">
       <div className="bg-white rounded-lg p-6  flex flex-col gap-4">
         <div className="flex justify-between">
           <p className="text-emerald-900 text-lg">User Profile</p>
-          <div>
+          <div className={styles.button}>
             <Image
               src={"/dashboard_b.png"}
               alt="user image"
@@ -69,6 +74,9 @@ const Account = ({ session, projects }: AccountProps) => {
       <div className="flex flex-col gap-4 ">
         <PersonalInformation session={session} />
         {!session.user.isOAuth && <Password />}
+        {!session.user.isOAuth && (
+          <TwoFactorAuthentication isTwo={twoFactor.isTwoFactorEnabled} />
+        )}
         <div className="bg-white rounded-lg shadow  w-full  p-8 flex flex-col justify-center gap-4">
           <div className="flex items-center gap-1">
             <h1 className="text-emerald-900 text-lg">Delete my account</h1>
@@ -83,9 +91,7 @@ const Account = ({ session, projects }: AccountProps) => {
           <RegularButton
             handleClick={() => setDeletePrompt(true)}
             type="submit"
-            styles="mt-2  border-emerald-900 text-emerald-900 h-[40px] w-full
-            
-            "
+            styles="mt-2  border-emerald-900 text-white bg-emerald-900 h-[40px] w-full"
           >
             <p className="text-sm">Delete my account</p>
           </RegularButton>
@@ -94,11 +100,14 @@ const Account = ({ session, projects }: AccountProps) => {
       {isOpen && <Menu setIsOpen={setIsOpen} />}
       {deletePrompt && (
         // <ModalOverlay onClose={() => setDeletePrompt(false)}>
-        <DeleteModal
-          projects={projects}
-          session={session}
-          setDeletePrompt={setDeletePrompt}
-        />
+        <div className="mb-[200px]">
+          <DeleteModal
+            projects={projects}
+            session={session}
+            setDeletePrompt={setDeletePrompt}
+          />
+        </div>
+
         // </ModalOverlay>
       )}
     </div>
@@ -169,9 +178,7 @@ const PersonalInformation = ({ session }: Props) => {
 
             <RegularButton
               type="submit"
-              styles="mt-2  border-emerald-900 text-emerald-900 h-[40px]
-            
-            "
+              styles="mt-2  border-emerald-900 text-white bg-emerald-900 h-[40px] w-full"
             >
               <p className="text-sm">Save Changes</p>
             </RegularButton>
@@ -180,6 +187,27 @@ const PersonalInformation = ({ session }: Props) => {
           </form>
         )}
       </Formik>
+    </div>
+  );
+};
+
+const TwoFactorAuthentication = ({ isTwo }: { isTwo: boolean }) => {
+  const [isToggled, setIsToggled] = useState(isTwo);
+
+  const toggleSwitch = async () => {
+    const newIsToggled = !isToggled;
+    setIsToggled(newIsToggled);
+    await toggleFactor({ isToggled: newIsToggled });
+  };
+  return (
+    <div className="bg-white rounded-lg shadow  w-full  p-8  justify-center">
+      <div className="flex justify-between items-center">
+        <h1 className="text-emerald-900">Two Factor Authentication</h1>
+        <label className="switch">
+          <input type="checkbox" checked={isToggled} onChange={toggleSwitch} />
+          <span className="slider round"></span>
+        </label>
+      </div>
     </div>
   );
 };
@@ -303,12 +331,11 @@ const DeleteModal = ({
     });
   };
 
-  const deleteAccountCall = async () => {
-    startTransition(() => {
+  const deleteAccountCall = () => {
+    startTransition(async () => {
       try {
-        deleteAccount();
-        toast.success("Account deleted successfully.");
-        logout();
+        await deleteAccount();
+        await logout();
       } catch (e) {
         toast.error("An error occurred. Please try again.");
       }
@@ -342,7 +369,7 @@ const DeleteModal = ({
 
   if (!projectUsers) {
     return (
-      <div className="w-full rounded-lg bg-red-50 flex flex-col gap-4 p-8 overflow-auto  items-center">
+      <div className=" w-full rounded-lg bg-red-50 flex flex-col gap-4 p-8 overflow-auto  items-center">
         <div className="bg-red-100 rounded-full flex items-center justify-center h-[50px] w-[50px] ">
           <ExclamationTriangleIcon className=" text-red-500 w-3/4 h-1/2" />
         </div>

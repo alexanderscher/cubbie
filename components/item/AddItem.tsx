@@ -1,9 +1,5 @@
 "use client";
 import SubmitButton from "@/components/buttons/SubmitButton";
-import {
-  SearchReceiptContext,
-  useSearchReceiptContext,
-} from "@/components/context/SearchReceiptContext";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
 import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import Loading from "@/components/loading-components/Loading";
@@ -232,10 +228,11 @@ export const AddItem = ({
         <div className="flex justify-end mt-6">
           <SubmitButton
             type="button"
+            loading={isPending}
             handleClick={handleSubmit}
             disabled={!newItem.description}
           >
-            <p className="text-xs">Add item</p>
+            <p className="text-sm">Add item</p>
           </SubmitButton>
         </div>
       </div>

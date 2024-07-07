@@ -127,7 +127,7 @@ const ManualPage = ({ projects }: { projects: ProjectType[] }) => {
                                 setDiscardModal(true);
                               }}
                             >
-                              <p className="text-emerald-900  text-xs">
+                              <p className="text-emerald-900  text-sm">
                                 Discard
                               </p>
                             </RegularButton>
@@ -175,7 +175,7 @@ const ManualPage = ({ projects }: { projects: ProjectType[] }) => {
                                   }
                                 }}
                               >
-                                <p className="text-white text-xs">Items</p>
+                                <p className="text-white text-sm">Items</p>
                               </RegularButton>
                             </div>
                           </div>

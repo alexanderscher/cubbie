@@ -6,6 +6,7 @@ interface SubmitButtonProps {
   type?: "button" | "submit" | "reset" | undefined;
   small?: boolean;
   restProps?: any;
+  loading?: boolean;
 }
 
 export const SubmitButton = ({
@@ -15,15 +16,16 @@ export const SubmitButton = ({
   disabled = false,
   type = "button",
   small = false,
+  loading = false,
   ...restProps
 }: SubmitButtonProps) => {
   return (
     <button
       type={type}
-      className={`${small ? "px-4 py-[6px]" : "px-6 py-[8px]"} 
+      className={`w-full ${small ? "px-4 py-[6px]" : "px-6 py-[8px]"} 
         rounded-3xl border-[1px]
         ${
-          disabled
+          disabled || loading
             ? "text-emerald-900 border-emerald-900 cursor-not-allowed"
             : `text-white bg-emerald-900 border-emerald-900`
         }`}

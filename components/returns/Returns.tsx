@@ -164,7 +164,7 @@ const AddReturnPolicy = ({ setCreateNew }: AddReturnPolicyProps) => {
         </button>
       </div>
       <div className="p-6 flex flex-col gap-4">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
           <div className="space-y-4">
             <div>
               <p className="text-xs text-emerald-900 mb-2">Store name*</p>
@@ -209,10 +209,11 @@ const AddReturnPolicy = ({ setCreateNew }: AddReturnPolicyProps) => {
           <div className="flex justify-end mt-6">
             <SubmitButton
               type="button"
-              disabled={!returnPolicy.days}
+              disabled={!returnPolicy.days && !returnPolicy.store}
               handleClick={handleSubmit}
+              loading={isPending}
             >
-              <p className="text-xs">Save Policy</p>
+              <p className="text-sm">Save Policy</p>
             </SubmitButton>
           </div>
 

@@ -14,7 +14,6 @@ import React, { useState } from "react";
 import ErrorModal from "@/components/modals/ErrorModal";
 import BottomBar from "@/components/createForm/BottomBar";
 import { formatCurrency } from "@/utils/formatCurrency";
-import ImageModal from "@/components/images/ImageModal";
 import CurrencyInput from "react-currency-input-field";
 import { BarcodeScanner } from "@/components/createForm/barcode/BarcodeScanner";
 import { usePathname, useRouter } from "next/navigation";
@@ -23,6 +22,7 @@ import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import { convertHeic } from "@/utils/media";
 import { AddItem } from "@/components/item/AddItem";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
+import SubmitButton from "@/components/buttons/SubmitButton";
 
 interface FinalStageProps {
   values: any;
@@ -55,7 +55,7 @@ const FinalStage = ({
               router.push("/");
             }}
           >
-            <p className="text-emerald-900  text-xs">Discard</p>
+            <p className="text-emerald-900  text-sm">Discard</p>
           </RegularButton>
           <div className="flex gap-2 ">
             <RegularButton
@@ -63,28 +63,22 @@ const FinalStage = ({
               handleClick={() => {
                 if (pathname === "/create/manual") {
                   setStage(ReceiptOnlineStage.ONLINE_RECEIPT);
-                } else if (pathname === "/create/text") {
-                  setStage(ReceiptOnlineStage.ONLINE_ITEMS);
                 } else if (pathname === "/create/image") {
                   setStage(ReceiptStoreStage.IN_STORE_GPT);
                 }
               }}
             >
-              <p className="text-emerald-900 text-xs">Back</p>
+              <p className="text-emerald-900 text-sm">Back</p>
             </RegularButton>
-
-            {loading ? (
-              <RegularButton styles={"bg-emerald-900 border-emerald-900 "}>
-                <p className="text-white text-xs">Uploading...</p>
-              </RegularButton>
-            ) : (
-              <RegularButton
-                type="submit"
-                styles={"bg-emerald-900 border-emerald-900 "}
-              >
-                <p className="text-white text-xs">Submit</p>
-              </RegularButton>
-            )}
+            <SubmitButton
+              type="submit"
+              loading={loading}
+              disabled={
+                !values.store || !values.folderName || !values.items.length
+              }
+            >
+              <p className="text-sm">Submit</p>
+            </SubmitButton>
           </div>
         </div>
       </BottomBar>
@@ -260,23 +254,6 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
                   }}
                 />
               </div>
-
-              {pathname === "/create/text" && (
-                <div className="w-full ">
-                  <p className="text-emerald-900 text-xs">Tracking Link</p>
-                  {/* <p className="">
-                    {values.tracking_number ? values.tracking_number : "None"}
-                  </p> */}
-                  <input
-                    className="w-full border-[1px] bg  p-2 rounded border-emerald-900 focus:border-emerald-900 focus:outline-none"
-                    name="tracking_number"
-                    value={values.tracking_number}
-                    onChange={(e) => {
-                      setFieldValue("tracking_number", e.target.value);
-                    }}
-                  />
-                </div>
-              )}
             </div>
           </div>
         </div>

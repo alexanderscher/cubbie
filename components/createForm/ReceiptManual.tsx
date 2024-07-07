@@ -72,22 +72,21 @@ const ReceiptManual = ({
   return (
     <div className="flex flex-col gap-10  w-full justify-center items-center mt-10 mb-[300px]">
       <div className=" max-w-[600px] w-full">
-        <div className="flex justify-between border-b-[1px] w-full border-orange-600">
-          <div className="flex flex-col gap-2 ">
-            <h1 className="text-2xl text-orange-600 mb-4">New Receipt</h1>
-            {help && (
-              <p className="text-xs text-orange-600">
-                Fill out the receipt details. Fields marked with * are required.
-                When done, press items to add items.
-              </p>
-            )}
-          </div>
+        <div className="flex justify-between border-b-[1px] w-full border-emerald-900">
+          <div className="flex gap-3 items-center pb-4">
+            <h1 className="text-2xl text-emerald-900 ">New Receipt</h1>
 
+            <TooltipWithHelperIcon
+              placement="right-start"
+              content=" Fill out the receipt details. Fields marked with * are required.
+                When done, press items to add items."
+            />
+          </div>
           <div
-            className="text-sm text-white border-[1px] border-emerald-900 rounded-full w-6 h-6 flex items-center justify-center cursor-pointer bg-emerald-900"
+            className=" text-white border-[1px] border-orange-600 rounded-full w-6 h-6 flex items-center justify-center cursor-pointer bg-orange-600"
             onClick={() => setHelp(!help)}
           >
-            ?
+            <p className="text-xs">?</p>
           </div>
         </div>
 

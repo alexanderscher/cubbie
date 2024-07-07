@@ -107,7 +107,7 @@ const ImagePage = ({ projects, session }: Pages) => {
                                   setDiscardModal(true);
                                 }}
                               >
-                                <p className="text-emerald-900  text-xs">
+                                <p className="text-emerald-900  text-sm">
                                   Discard
                                 </p>
                               </RegularButton>
@@ -118,7 +118,7 @@ const ImagePage = ({ projects, session }: Pages) => {
                                     setStage(ReceiptStoreStage.PREVIEW);
                                   }}
                                 >
-                                  <p className="text-emerald-900  text-xs">
+                                  <p className="text-emerald-900  text-sm">
                                     Items
                                   </p>
                                 </RegularButton>

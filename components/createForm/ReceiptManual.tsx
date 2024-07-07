@@ -3,8 +3,6 @@ import styles from "@/app/create/upload.module.css";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ProjectType } from "@/types/ProjectTypes";
 import { convertHeic } from "@/utils/media";
-import Image from "next/image";
-import FileUploadDropzone from "@/components/dropzone/FileUploadDropzone";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import ReturnPolicySelect from "@/components/selects/ReturnPolicySelect";
@@ -32,7 +30,6 @@ const ReceiptManual = ({
   projects,
   setProjectPlanId,
 }: ReceiptManualProps) => {
-  const pathname = usePathname();
   const [help, setHelp] = useState(false);
 
   const [isManual, setIsManual] = useState<boolean>(false);
@@ -75,33 +72,27 @@ const ReceiptManual = ({
   return (
     <div className="flex flex-col gap-10  w-full justify-center items-center mt-10 mb-[300px]">
       <div className=" max-w-[600px] w-full">
-        <div className="flex justify-between">
-          <div className="flex flex-col gap-2">
-            <h1 className="text-3xl text-orange-600 mb-4">
-              {pathname === "/create/manual" ? "Manual Entry" : "Analyze Text"}
-            </h1>
-            {pathname == "/create/manual" && help && (
+        <div className="flex justify-between border-b-[1px] w-full border-orange-600">
+          <div className="flex flex-col gap-2 ">
+            <h1 className="text-2xl text-orange-600 mb-4">New Receipt</h1>
+            {help && (
               <p className="text-xs text-orange-600">
                 Fill out the receipt details. Fields marked with * are required.
                 When done, press items to add items.
               </p>
             )}
-            {pathname == "/create/text" && help && (
-              <p className="text-xs text-orange-600">
-                Fill out the receipt details. Fields marked with * are required.
-                When done, press items to add analyze text from an email
-                receipt.
-              </p>
-            )}
           </div>
 
-          <p className="text-xs text-orange-600" onClick={() => setHelp(!help)}>
-            Help
-          </p>
+          <div
+            className="text-sm text-white border-[1px] border-emerald-900 rounded-full w-6 h-6 flex items-center justify-center cursor-pointer bg-emerald-900"
+            onClick={() => setHelp(!help)}
+          >
+            ?
+          </div>
         </div>
 
         <div className={styles.receiptContainer}>
-          <div className={styles.receiptInputs}>
+          <div className={`${styles.receiptInputs} gap-3`}>
             <div className="w-full flex flex-col gap-2">
               <p className="text-sm text-emerald-900 ">Store name*</p>
               <input

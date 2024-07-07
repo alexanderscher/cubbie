@@ -310,9 +310,10 @@ export default function ImageGpt({
   return (
     <div>
       <div className="flex flex-col gap-6 ">
-        <div className="flex justify-between">
+        <div className="flex justify-between border-b-[1px] w-full border-orange-600">
           <div className="flex gap-3 items-center">
-            <h1 className="text-3xl text-orange-600">Analyze</h1>
+            <h1 className="text-2xl text-orange-600 mb-4">Analyze Receipt</h1>
+
             <TooltipWithHelperIcon
               placement="right-start"
               content='Upload a receipt image or PDF, then click "Analyze Image". Our AI will extract the store, purchase date, and item details. Please upload only receipt images or PDFs.'
@@ -417,7 +418,7 @@ export default function ImageGpt({
 
               <TooltipWithHelperIcon
                 content="Selecting the type of receipt you upload enables us to
-                  accurately analyze and process it. Paper receipts are physical receipts you get from a store. PDF receipts are digital receipts you get from online purchases or memos."
+                  accurately analyze and process it. Photo receipts are physical receipts you get from a store. PDF receipts are digital receipts you get from online purchases or memos."
               />
             </div>
             {help && (
@@ -435,7 +436,7 @@ export default function ImageGpt({
                     : "bg text-emerald-900 border-[1px] border-emerald-900 text-sm w-1/2"
                 }`}
               >
-                <p className="">Paper</p>
+                <p className="">Photo</p>
                 <input
                   className="opacity-0 absolute"
                   name="paper"

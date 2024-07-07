@@ -18,6 +18,7 @@ import { Session } from "@/types/Session";
 import SubscribeModal from "@/components/modals/SubscribeModal";
 import Loading from "@/components/loading-components/Loading";
 import { appendApiUsage } from "@/actions/rateLimit/gpt";
+import SubmitButton from "@/components/buttons/SubmitButton";
 
 interface Props {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
@@ -310,9 +311,9 @@ export default function ImageGpt({
   return (
     <div>
       <div className="flex flex-col gap-6 ">
-        <div className="flex justify-between border-b-[1px] w-full border-orange-600">
-          <div className="flex gap-3 items-center">
-            <h1 className="text-2xl text-orange-600 mb-4">Analyze Receipt</h1>
+        <div className="flex justify-between border-b-[1px] w-full border-emerald-900">
+          <div className="flex gap-3 items-center pb-4">
+            <h1 className="text-2xl text-emerald-900 ">Analyze Receipt</h1>
 
             <TooltipWithHelperIcon
               placement="right-start"
@@ -320,10 +321,10 @@ export default function ImageGpt({
             />
           </div>
           <div
-            className="text-sm text-white border-[1px] border-emerald-900 rounded-full w-6 h-6 flex items-center justify-center cursor-pointer bg-emerald-900"
+            className=" text-white border-[1px] border-orange-600 rounded-full w-6 h-6 flex items-center justify-center cursor-pointer bg-orange-600"
             onClick={() => setHelp(!help)}
           >
-            ?
+            <p className="text-xs">?</p>
           </div>
         </div>
 
@@ -551,8 +552,14 @@ export default function ImageGpt({
               )}
 
               <div className="w-full ">
-                <RegularButton
-                  styles={`${"border-emerald-900 bg"}  w-full mt-2`}
+                <SubmitButton
+                  type="button"
+                  loading={loading}
+                  disabled={
+                    values.receiptType === "pdf"
+                      ? !values.pdfText
+                      : !values.gptImage
+                  }
                   handleClick={() => {
                     if (values.receiptType === "pdf") {
                       handleSubmitPDF();
@@ -561,16 +568,8 @@ export default function ImageGpt({
                     }
                   }}
                 >
-                  <p
-                    className={
-                      loading
-                        ? "text-white text-sm p-1"
-                        : "text-emerald-900 text-sm p-1"
-                    }
-                  >
-                    {"Analyze"}
-                  </p>
-                </RegularButton>
+                  <p>Analyze</p>
+                </SubmitButton>
               </div>
             </div>
           </div>

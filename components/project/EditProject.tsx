@@ -125,8 +125,9 @@ export const EditProject = ({ setEdit, project }: EditProjectProps) => {
               type="button"
               disabled={!hasChanges}
               handleClick={handleSubmit}
+              loading={isPending}
             >
-              <p className="text-xs">Edit Project</p>
+              <p className="text-sm">Edit Project</p>
             </SubmitButton>
           </div>
         </div>

@@ -1,6 +1,5 @@
 "use client";
 import { createProject } from "@/actions/projects/createProject";
-import RegularButton from "@/components/buttons/RegularButton";
 import SubmitButton from "@/components/buttons/SubmitButton";
 import { useSearchProjectContext } from "@/components/context/SearchProjectContext";
 import { FormError } from "@/components/form-error";
@@ -68,7 +67,7 @@ export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
         </button>
       </div>
       <div className="p-6 flex flex-col gap-4">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
           <div className="space-y-4">
             <div>
               <p className="text-xs text-emerald-900 mb-2">Project name*</p>
@@ -108,8 +107,9 @@ export const CreateProject = ({ setAddProjectOpen }: AddProjectModalProps) => {
               type="button"
               disabled={!project.name}
               handleClick={handleSubmit}
+              loading={isPending}
             >
-              <p className="text-xs">Create Project</p>
+              <p className="text-sm">Create Project</p>
             </SubmitButton>
           </div>
         </div>

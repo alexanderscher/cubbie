@@ -54,7 +54,9 @@ export const {
               const existingStripe =
                 await retrieveCustomerAndSubscriptionsByEmail(user.email);
               if (existingStripe) {
-                const updateData: any = {};
+                const updateData: any = {
+                  planId: 1,
+                };
 
                 if (existingStripe.customer) {
                   updateData.stripeCustomerId = existingStripe.customer;

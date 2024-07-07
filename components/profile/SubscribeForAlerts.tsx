@@ -9,7 +9,7 @@ export const SubscribeForAlerts = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-[800px]">
+    <div className="flex flex-col gap-4 w-full max-w-[700px]">
       <div className="bg-white rounded-lg  flex flex-col p-6">
         <div className="flex justify-between">
           <p className="text-lg text-emerald-900">Alert Settings</p>

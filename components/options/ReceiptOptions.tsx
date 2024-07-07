@@ -173,7 +173,7 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
               <div className={color}>
                 <div className="flex gap-2">
                   <Image
-                    src={"/edit.png"}
+                    src={"/returned.png"}
                     width={20}
                     height={20}
                     alt=""

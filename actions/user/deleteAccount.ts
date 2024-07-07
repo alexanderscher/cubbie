@@ -7,13 +7,13 @@ import { Session } from "@/types/Session";
 import { revalidateTag } from "next/cache";
 
 export const deleteAccount = async () => {
-  try {
-    const session = (await auth()) as Session;
-    const userId = session?.user?.id as string;
-    if (!userId) {
-      return { error: "Unauthorized" };
-    }
+  const session = (await auth()) as Session;
+  const userId = session?.user?.id as string;
+  if (!userId) {
+    return { error: "Unauthorized" };
+  }
 
+  const transaction = await prisma.$transaction(async (prisma) => {
     const projects = await prisma.project.findMany({
       where: { userId: userId },
       include: {
@@ -61,7 +61,10 @@ export const deleteAccount = async () => {
     revalidateTag(`projects_user_${userId}`);
     revalidateTag(`user_${userId}`);
     revalidateTag(`alerts_user_${userId}`);
+  });
 
+  try {
+    await transaction;
     return { success: true };
   } catch (error) {
     console.error("Error deleting account:", error);

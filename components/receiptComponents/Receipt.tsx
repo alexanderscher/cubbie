@@ -54,7 +54,7 @@ const Receipt = ({
       <div className="w-full  overflow-hidden relative flex justify-center items-center bg-slate-100 rounded-t-lg h-[90px]">
         <div className="w-full h-full flex justify-center items-center ">
           <Image
-            src="/receipt_b.png"
+            src="/green/receipt_green.png"
             alt=""
             width={24}
             height={24}

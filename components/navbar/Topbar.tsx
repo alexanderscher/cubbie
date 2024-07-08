@@ -44,7 +44,7 @@ const Topbar = ({ session, children }: TopbarProps) => {
             }}
           >
             <Image
-              src="/search_w.png"
+              src="/white/search_white.png"
               alt=""
               width={15}
               height={15}
@@ -61,7 +61,7 @@ const Topbar = ({ session, children }: TopbarProps) => {
         >
           {menu ? (
             <Image
-              src="/hamburger.png"
+              src="/white/hamburger_white.png"
               alt=""
               width={26}
               height={26}
@@ -74,7 +74,7 @@ const Topbar = ({ session, children }: TopbarProps) => {
             />
           ) : (
             <Image
-              src="/hamburger.png"
+              src="/white/hamburger_white.png"
               alt=""
               width={26}
               height={26}
@@ -101,7 +101,7 @@ const Topbar = ({ session, children }: TopbarProps) => {
 
               <div>
                 <Image
-                  src="/folder.png"
+                  src="/white/folder_white.png"
                   alt=""
                   width={30}
                   height={30}
@@ -120,7 +120,7 @@ const Topbar = ({ session, children }: TopbarProps) => {
 
               <div className="">
                 <Image
-                  src="/receipt_w.png"
+                  src="/white/receipt_white.png"
                   alt=""
                   width={20}
                   height={20}
@@ -139,7 +139,7 @@ const Topbar = ({ session, children }: TopbarProps) => {
 
               <div>
                 <Image
-                  src="/item_w.png"
+                  src="/white/item_w.png"
                   alt=""
                   width={35}
                   height={35}
@@ -157,7 +157,7 @@ const Topbar = ({ session, children }: TopbarProps) => {
 
               <div>
                 <Image
-                  src="/store_w.png"
+                  src="/white/store_w.png"
                   alt=""
                   width={35}
                   height={35}
@@ -176,7 +176,7 @@ const Topbar = ({ session, children }: TopbarProps) => {
 
               <div>
                 <Image
-                  src="/calendar_w.png"
+                  src="/white/calendar_white.png"
                   alt=""
                   width={25}
                   height={25}
@@ -195,7 +195,7 @@ const Topbar = ({ session, children }: TopbarProps) => {
 
               <div className="relative">
                 <Image
-                  src="/notification_w.png"
+                  src="/white/notify_white.png"
                   alt=""
                   width={25}
                   height={25}
@@ -220,7 +220,7 @@ const Topbar = ({ session, children }: TopbarProps) => {
               <div>
                 {" "}
                 <Image
-                  src="/account_w.png"
+                  src="/white/account_white.png"
                   alt=""
                   width={27}
                   height={27}

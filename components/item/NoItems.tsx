@@ -13,7 +13,7 @@ export const NoItems = ({
     <div className="box relative">
       <div className="flex flex-col gap-4 justify-center items-center p-6">
         <Image
-          src="/item_b.png"
+          src="/green/item_green.png"
           alt=""
           width={50}
           height={50}

@@ -101,10 +101,7 @@ interface ReceiptPageProps {
 }
 
 const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
-  const [isOpen, setIsOpen] = React.useState(false);
   const [isAddOpen, setIsAddOpen] = React.useState(false);
-
-  const pathname = usePathname();
 
   return (
     <div className="flex flex-col gap-8  w-full h-full mt-8">
@@ -132,7 +129,7 @@ const ReceiptPageForm = ({ values, setFieldValue }: ReceiptPageProps) => {
               <div className="w-full  overflow-hidden relative flex justify-center items-center ">
                 <div className="w-full h-full flex justify-center items-start ">
                   <Image
-                    src="/receipt_b.png"
+                    src="/green/receipt_green.png"
                     alt=""
                     width={40}
                     height={40}
@@ -300,7 +297,7 @@ const PlaceHolder = ({ setIsAddOpen }: PlaceHolderProps) => {
     <div className={styles.placeholder}>
       <div className="w-full  flex justify-center items-center">
         <Image
-          src="/item_b.png"
+          src="/green/item_green.png"
           alt=""
           width={60}
           height={60}
@@ -432,7 +429,7 @@ const ReceiptItems = ({
               button={
                 <div className="w-full h-[150px] soverflow-hidden  border-[1px]  border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-lg  relative flex flex-col items-center justify-center cursor-pointer gap-5">
                   <Image
-                    src="/image_b.png"
+                    src="/green/addimage_green.png"
                     alt=""
                     width={40}
                     height={40}

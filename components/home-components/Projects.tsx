@@ -253,7 +253,7 @@ const Project = ({
       <div className="w-full  overflow-hidden relative flex justify-center items-center bg-slate-100  rounded-t-lg h-[90px]">
         <div className="w-full h-full flex justify-center items-center ">
           <Image
-            src="/folder.png"
+            src="/green/folder_green.png"
             alt=""
             width={40}
             height={40}
@@ -369,7 +369,7 @@ const NoProjects = ({ setAddProjectOpen, addProjectOpen }: NoProjectsProps) => {
       <div className="box relative">
         <div className="flex flex-col gap-4 justify-center items-center  p-6">
           <Image
-            src="/folder.png"
+            src="/green/folder_green.png"
             alt=""
             width={40}
             height={40}
@@ -501,7 +501,12 @@ const SelectedProjectOptions = ({
           }}
         >
           <div className="flex gap-2 cursor-pointer">
-            <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
+            <Image
+              src={"/green/trash_green.png"}
+              width={20}
+              height={20}
+              alt=""
+            ></Image>
             <p className="text-sm">Delete All</p>
           </div>
         </div>
@@ -516,7 +521,12 @@ const SelectedProjectOptions = ({
           }}
         >
           <div className="flex gap-2 cursor-pointer">
-            <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
+            <Image
+              src={"/green/trash_green.png"}
+              width={20}
+              height={20}
+              alt=""
+            ></Image>
             <p className="text-sm">Delete selected</p>
           </div>
         </div>

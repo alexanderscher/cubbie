@@ -52,7 +52,7 @@ const Navbar = ({ session, children }: NavbarProps) => {
               className="flex flex-col justify-center items-center gap-2"
             >
               <Image
-                src="/folder.png"
+                src="/white/folder_white.png"
                 alt=""
                 width={35}
                 height={35}
@@ -74,7 +74,7 @@ const Navbar = ({ session, children }: NavbarProps) => {
               className="flex flex-col justify-center items-center gap-2"
             >
               <Image
-                src="/receipt_w.png"
+                src="/white/receipt_white.png"
                 alt=""
                 width={20}
                 height={20}
@@ -96,7 +96,7 @@ const Navbar = ({ session, children }: NavbarProps) => {
               className="flex flex-col justify-center items-center gap-2"
             >
               <Image
-                src="/item_w.png"
+                src="/white/item_w.png"
                 alt=""
                 width={35}
                 height={35}
@@ -118,7 +118,7 @@ const Navbar = ({ session, children }: NavbarProps) => {
               className="flex flex-col justify-center items-center gap-2"
             >
               <Image
-                src="/store_w.png"
+                src="/white/store_w.png"
                 alt=""
                 width={35}
                 height={35}
@@ -138,7 +138,7 @@ const Navbar = ({ session, children }: NavbarProps) => {
               }}
             >
               <Image
-                src="/search_w.png"
+                src="/white/search_white.png"
                 alt=""
                 width={20}
                 height={20}
@@ -159,7 +159,7 @@ const Navbar = ({ session, children }: NavbarProps) => {
               className="flex flex-col justify-center items-center gap-2"
             >
               <Image
-                src="/calendar_w.png"
+                src="/white/calendar_white.png"
                 alt=""
                 width={25}
                 height={25}
@@ -176,7 +176,7 @@ const Navbar = ({ session, children }: NavbarProps) => {
               className="flex flex-col justify-center items-center gap-2"
             >
               <Image
-                src="/notification_w.png"
+                src="/white/notify_white.png"
                 alt=""
                 width={25}
                 height={25}
@@ -199,7 +199,7 @@ const Navbar = ({ session, children }: NavbarProps) => {
                 onClick={toggleModal}
               >
                 <Image
-                  src="/account_w.png"
+                  src="/white/account_white.png"
                   alt=""
                   width={25}
                   height={25}

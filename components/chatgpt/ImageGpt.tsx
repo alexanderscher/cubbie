@@ -494,7 +494,7 @@ export default function ImageGpt({
                 button={
                   <div className="w-full h-[150px] soverflow-hidden  border-[1.5px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-lg  relative flex flex-col items-center justify-center cursor-pointer gap-5">
                     <Image
-                      src="/image_b.png"
+                      src="/green/addimage_green.png"
                       alt=""
                       width={40}
                       height={40}

@@ -132,19 +132,18 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
         }}
       >
         <div className="p-4 rounded text-sm flex flex-col gap-2">
-          {pathname === "/receipts" && (
-            <Link href={`/project/${receipt.project?.id}`} className={color}>
-              <div className="flex gap-2">
-                <Image
-                  src={"/folder.png"}
-                  width={20}
-                  height={20}
-                  alt=""
-                ></Image>
-                <p>{receipt.project?.name}</p>
-              </div>
-            </Link>
-          )}
+          <Link href={`/project/${receipt.project?.id}`} className={color}>
+            <div className="flex gap-2 cursor-pointer items-center">
+              <Image
+                src={"/green/folder_green.png"}
+                width={20}
+                height={20}
+                alt=""
+              ></Image>
+              <p>{receipt.project?.name}</p>
+            </div>
+          </Link>
+
           {pathname.startsWith("/receipt/") && (
             <div
               className={color}
@@ -153,9 +152,9 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
                 setDetailsOpen(true);
               }}
             >
-              <div className="flex gap-2">
+              <div className="flex gap-2 cursor-pointer items-center">
                 <Image
-                  src={"/dashboard_b.png"}
+                  src={"/green/dashboard_green.png"}
                   width={20}
                   height={20}
                   alt=""
@@ -171,9 +170,9 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
               rel="noopener noreferrer"
             >
               <div className={color}>
-                <div className="flex gap-2">
+                <div className="flex gap-2 cursor-pointer items-center">
                   <Image
-                    src={"/returned.png"}
+                    src={"/green/returned.png"}
                     width={20}
                     height={20}
                     alt=""
@@ -191,28 +190,43 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
               setIsAddOpen(true);
             }}
           >
-            <div className="flex gap-2">
-              <Image src={"/add.png"} width={20} height={20} alt=""></Image>
+            <div className="flex gap-2 cursor-pointer items-center">
+              <Image
+                src={"/green/plus_green.png"}
+                width={20}
+                height={20}
+                alt=""
+              ></Image>
               <p>Add item</p>
             </div>
           </div>
 
           <div className={color} onClick={() => setEdit(true)}>
-            <div className="flex gap-2">
-              <Image src={"/edit.png"} width={20} height={20} alt=""></Image>
+            <div className="flex gap-2 cursor-pointer items-center">
+              <Image
+                src={"/green/edit_green.png"}
+                width={20}
+                height={20}
+                alt=""
+              ></Image>
               <p>Edit</p>
             </div>
           </div>
 
           <div className={color}>
             <div
-              className="flex gap-2 cursor-pointer"
+              className="flex gap-2 cursor-pointer items-center"
               onClick={(e) => {
                 e.preventDefault();
                 setIsDeleteOpen(true);
               }}
             >
-              <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
+              <Image
+                src={"/green/trash_green.png"}
+                width={15}
+                height={15}
+                alt=""
+              ></Image>
               <p>Delete</p>
             </div>
           </div>
@@ -309,7 +323,7 @@ const ReceiptDetails = ({ receipt }: { receipt: ReceiptType }) => {
         <div className="w-full flex justify-center items-center  ">
           <div className="  overflow-hidden">
             <Image
-              src="/receipt_b.png"
+              src="/green/receipt_green.png"
               alt=""
               width={40}
               height={40}

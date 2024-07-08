@@ -75,12 +75,15 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
               <Link href={`/receipt/${item.receipt_id}`}>
                 <div className="flex gap-4">
                   <Image
-                    src={"/receipt_b.png"}
+                    src={"/green/receipt_green.png"}
                     width={12}
                     height={12}
                     alt=""
                   ></Image>
-                  <TruncateText text={item.receipt?.store} styles={"text-md"} />
+                  <TruncateText
+                    text={item.receipt?.store}
+                    styles={"text-md text-emerald-900"}
+                  />
                 </div>
               </Link>
             </div>
@@ -92,8 +95,13 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
                 setEdit(true);
               }}
             >
-              <Image src={"/edit.png"} width={20} height={20} alt=""></Image>
-              <p>Edit</p>
+              <Image
+                src={"/green/edit_green.png"}
+                width={20}
+                height={20}
+                alt=""
+              ></Image>
+              <p className="text-emerald-900">Edit</p>
             </div>
           </div>
 
@@ -101,12 +109,13 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
             {item.returned ? (
               <div className="flex gap-2">
                 <Image
-                  src={"/undoReturn.png"}
+                  src={"/green/cancelreturn_green.png"}
                   width={20}
                   height={20}
                   alt=""
                 ></Image>
                 <button
+                  className="text-emerald-900"
                   onClick={async (e) => {
                     startTransition(async () => {
                       try {
@@ -125,12 +134,13 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
             ) : (
               <div className="flex gap-2">
                 <Image
-                  src={"/returned.png"}
+                  src={"/green/return_green.png"}
                   width={20}
                   height={20}
                   alt=""
                 ></Image>
                 <button
+                  className="text-emerald-900"
                   onClick={async () => {
                     startTransition(async () => {
                       try {
@@ -155,8 +165,13 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
                 setDeleteOpen(true);
               }}
             >
-              <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
-              <p>Delete Item</p>
+              <Image
+                src={"/green/trash_green.png"}
+                width={15}
+                height={15}
+                alt=""
+              ></Image>
+              <p className="text-emerald-900">Delete Item</p>
             </div>
           </div>
         </div>

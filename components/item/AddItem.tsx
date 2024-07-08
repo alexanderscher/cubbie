@@ -190,7 +190,7 @@ export const AddItem = ({
                 button={
                   <div className="w-full h-[100px] overflow-hidden  border-[1px] border-dashed border-emerald-900  focus:border-emerald-900 focus:outline-none rounded-lg  relative flex items-center justify-center cursor-pointer">
                     <Image
-                      src="/image_b.png"
+                      src="/green/addimage_green.png"
                       alt=""
                       width={40}
                       height={40}

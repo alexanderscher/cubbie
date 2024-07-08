@@ -60,7 +60,7 @@ const Header = ({ type }: HeaderProps) => {
                       <div className="flex items-center gap-3">
                         <div className="pl-1">
                           <Image
-                            src="/receipt_b.png"
+                            src="/green/receipt_green.png"
                             width={13}
                             height={13}
                             alt="folder"
@@ -76,7 +76,7 @@ const Header = ({ type }: HeaderProps) => {
                       <div className="flex items-center gap-2">
                         <div>
                           <Image
-                            src="/item_b.png"
+                            src="/green/item_green.png"
                             width={20}
                             height={20}
                             alt="folder"
@@ -96,7 +96,7 @@ const Header = ({ type }: HeaderProps) => {
                     >
                       <div className="flex items-center gap-2">
                         <Image
-                          src="/folder.png"
+                          src="/green/folder_green.png"
                           width={20}
                           height={20}
                           alt="folder"
@@ -111,7 +111,7 @@ const Header = ({ type }: HeaderProps) => {
                       <div className="flex items-center gap-2">
                         <div>
                           <Image
-                            src="/item_b.png"
+                            src="/green/item_green.png"
                             width={20}
                             height={20}
                             alt="folder"
@@ -131,7 +131,7 @@ const Header = ({ type }: HeaderProps) => {
                     >
                       <div className="flex items-center gap-2">
                         <Image
-                          src="/folder.png"
+                          src="/green/folder_green.png"
                           width={20}
                           height={20}
                           alt="folder"
@@ -146,7 +146,7 @@ const Header = ({ type }: HeaderProps) => {
                       <div className="flex items-center gap-3">
                         <div className="pl-1">
                           <Image
-                            src="/receipt_b.png"
+                            src="/green/receipt_green.png"
                             width={13}
                             height={13}
                             alt="folder"
@@ -163,7 +163,7 @@ const Header = ({ type }: HeaderProps) => {
         </div>
 
         <div
-          className="text-sm border-[1px] border-emerald-900 rounded-full w-8 h-8 flex items-center justify-center cursor-pointer bg"
+          className="text-sm border-[1px] border-emerald-900 rounded-full w-9 h-9 flex items-center justify-center cursor-pointer bg p-1"
           onClick={() => {
             switch (type) {
               case "Projects":
@@ -180,7 +180,7 @@ const Header = ({ type }: HeaderProps) => {
           }}
         >
           <Image
-            src="/refresh.png"
+            src="/green/refresh_green.png"
             width={20}
             height={20}
             alt="refresh"

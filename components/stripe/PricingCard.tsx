@@ -263,8 +263,8 @@ const SubButton = ({
               </div>
               <h1 className="text-orange-600">
                 Are you sure you want to downgrade to the limited plan? If
-                you've already paid for this month, the remaining balance will
-                be credited towards your first month of your downgraded
+                you&apos;ve already paid for this month, the remaining balance
+                will be credited towards your first month of your downgraded
                 subscription.
               </h1>
 

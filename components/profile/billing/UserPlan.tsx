@@ -9,7 +9,7 @@ import RegularButton from "@/components/buttons/RegularButton";
 import Link from "next/link";
 import { getApiUsage } from "@/actions/rateLimit/gpt";
 import { BeatLoader } from "react-spinners";
-import { addDaysToDate, formatDateToMMDDYY } from "@/utils/Date";
+import { formatDateToMMDDYY } from "@/utils/Date";
 
 const UserPlan = ({ user }: { user: UserType }) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -128,12 +128,9 @@ const Usage = ({ user }: { user: UserType }) => {
                     (total, receipt) => total + receipt.items.length,
                     0
                   )}
-                  /{usage.limit}
+                  /10
                 </p>
               </div>
-              <p className="text-slate-400">
-                Resets on {formatDateToMMDDYY(usage.resetDate)}
-              </p>
             </div>
           ))}
         </div>
@@ -146,7 +143,10 @@ const Usage = ({ user }: { user: UserType }) => {
         {user.planId === 3 && (
           <div>
             <p className="text-slate-400">AI usage:</p>
-            <p className="text-slate-400"> {usage.used}/20</p>
+            <p className="text-slate-400">
+              {" "}
+              {usage.used}/{usage.limit}
+            </p>
           </div>
         )}
         <p className="text-slate-400">
@@ -182,6 +182,7 @@ const Usage = ({ user }: { user: UserType }) => {
         <h1 className=" text-lg text-emerald-900">Plan Usage</h1>
         {user.planId === 2 && (
           <p>
+            <p className="text-slate-400">AI usage:</p>
             {usage.used}/{usage.limit}
           </p>
         )}

@@ -1,13 +1,9 @@
 "use client";
-import ReactSelect, { StylesConfig } from "react-select";
-import { useSession } from "next-auth/react";
-import { ProjectType, ProjectUserArchiveType } from "@/types/ProjectTypes";
 import { FormError } from "@/components/form-error";
 import React, { useState, useTransition } from "react";
 import RegularButton from "@/components/buttons/RegularButton";
 import { freePlan, handlePayment } from "@/actions/stripe/payment";
 import Loading from "@/components/loading-components/Loading";
-import ErrorModal from "@/components/modals/ErrorModal";
 import { ModalOverlay } from "@/components/overlays/ModalOverlay";
 import { useRouter } from "next/navigation";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
@@ -182,13 +178,18 @@ const SubButton = ({
 }) => {
   const [errorModal, setErrorModal] = useState(false);
   const [checkRes, setCheckRes] = useState<CheckType>({ items: [], users: [] });
+  const [downgrade, setDowngrade] = useState(false);
 
   const handleClicker = () => {
     startTransition(async () => {
       if (userPlanId !== parseInt(pricePlanId)) {
         const check = await checkDowngrade(userPlanId, parseInt(pricePlanId));
         if (check.items.length === 0 && check.users.length === 0) {
-          handleSubscription();
+          if (userPlanId === 2 && parseInt(pricePlanId) === 3) {
+            setDowngrade(true);
+          } else {
+            handleSubscription();
+          }
         } else {
           setCheckRes(check);
           setErrorModal(true);
@@ -221,7 +222,6 @@ const SubButton = ({
     const userPlanIdNum = userPlanId ? userPlanId : null;
 
     if (planIdNum === userPlanIdNum || userPlanId === null) {
-      console.log(planIdNum);
       return "Current Plan";
     } else if (planIdNum === 1) {
       return "Downgrade";
@@ -237,6 +237,7 @@ const SubButton = ({
   return (
     <>
       <RegularButton
+        disabled={isPending || userPlanId === parseInt(pricePlanId)}
         handleClick={() => {
           parseInt(pricePlanId) === 1 ? handleClickerFree() : handleClicker();
         }}
@@ -253,8 +254,38 @@ const SubButton = ({
           <DowngradeErrorModal checkRes={checkRes} />
         </ModalOverlay>
       )}
+      {downgrade && (
+        <ModalOverlay onClose={() => setErrorModal(false)}>
+          <div className="bg-white p-20 rounded-xl shadow max-w-lg mx-auto text-center">
+            <div className="flex flex-col justify-center items-center gap-3">
+              <div className="bg-orange-100 rounded-full flex items-center justify-center h-[50px] w-[50px]">
+                <ExclamationTriangleIcon className=" text-orange-600 w-3/4 h-1/2" />
+              </div>
+              <h1 className="text-orange-600">
+                Are you sure you want to downgrade to the limited plan? If
+                you've already paid for this month, the remaining balance will
+                be credited towards your first month of your downgraded
+                subscription.
+              </h1>
+
+              <RegularButton
+                handleClick={() => handleSubscription()}
+                styles={
+                  "text-sm border-orange-600 bg-orange-600 text-white w-full"
+                }
+              >
+                Confirm
+              </RegularButton>
+            </div>
+          </div>
+        </ModalOverlay>
+      )}
     </>
   );
+};
+
+const DowngradeConfirm = () => {
+  return <div></div>;
 };
 
 const DowngradeErrorModal = ({ checkRes }: { checkRes: CheckType }) => {
@@ -272,7 +303,7 @@ const DowngradeErrorModal = ({ checkRes }: { checkRes: CheckType }) => {
       </p>
 
       <section className="bg-red-100 w-full rounded-lg p-3">
-        <h3 className="text-red-500">Projects Over Item Limit</h3>
+        <h3 className="text-red-500 text-sm">Projects Over Item Limit</h3>
         {checkRes.items.map((project) => (
           <div key={project.id} className="text-sm ">
             <p className="text-red-400">

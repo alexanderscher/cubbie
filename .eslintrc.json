@@ -1,22 +1,22 @@
 {
-  "extends": [
-    "eslint:recommended",
-    "next",
-    "next/core-web-vitals",
-    "plugin:react/recommended"
-  ],
-  "rules": {
-    "no-unused-vars": "error",
-    "import/no-unused-modules": [2, {"unusedExports": true, "missingExports": false}],
-    "import/no-unresolved": "error"
-  },
-  "plugins": [
-    "import",
-    "react"
-  ],
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
-  }
+  // "extends": [
+  //   "eslint:recommended",
+  //   "next",
+  //   "next/core-web-vitals",
+  //   "plugin:react/recommended"
+  // ],
+  // "rules": {
+  //   "no-unused-vars": "error",
+  //   "import/no-unused-modules": [2, {"unusedExports": true, "missingExports": false}],
+  //   "import/no-unresolved": "error"
+  // },
+  // "plugins": [
+  //   "import",
+  //   "react"
+  // ],
+  // "settings": {
+  //   "react": {
+  //     "version": "detect"
+  //   }
+  // }
 }

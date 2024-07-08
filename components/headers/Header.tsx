@@ -181,8 +181,8 @@ const Header = ({ type }: HeaderProps) => {
         >
           <Image
             src="/green/refresh_green.png"
-            width={20}
-            height={20}
+            width={16}
+            height={16}
             alt="refresh"
           ></Image>
         </div>

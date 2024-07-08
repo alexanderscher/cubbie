@@ -2,14 +2,21 @@
   "extends": [
     "eslint:recommended",
     "next",
-    "next/core-web-vitals"
+    "next/core-web-vitals",
+    "plugin:react/recommended"
   ],
   "rules": {
-    "no-unused-vars": "error",  // This includes unused imports
-    "import/no-unused-modules": [2, {"unusedExports": true, "missingExports": true}],
+    "no-unused-vars": "error",
+    "import/no-unused-modules": [2, {"unusedExports": true, "missingExports": false}],
     "import/no-unresolved": "error"
   },
   "plugins": [
-    "import"
-  ]
+    "import",
+    "react"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
 }

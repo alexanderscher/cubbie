@@ -1,3 +1,15 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "eslint:recommended",
+    "next",
+    "next/core-web-vitals"
+  ],
+  "rules": {
+    "no-unused-vars": "error",  // This includes unused imports
+    "import/no-unused-modules": [2, {"unusedExports": true, "missingExports": true}],
+    "import/no-unresolved": "error"
+  },
+  "plugins": [
+    "import"
+  ]
 }

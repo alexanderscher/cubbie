@@ -49,14 +49,14 @@ const Returns = ({ returns }: ReturnsProps) => {
       {returns.length === 0 && (
         <div className="w-full flex justify-center flex-col items-center gap-5 mt-20">
           <Image
-            src="/store_b.png"
+            src="/green/store_green.png"
             alt=""
             width={50}
             height={50}
             className="object-cover "
             style={{ objectFit: "cover", objectPosition: "center" }}
           />
-          <h1 className="text-xl">No return policies</h1>
+          <h1 className="text-xl text-emerald-900">No return policies</h1>
         </div>
       )}
       <div className="w-full flex flex-col gap-6">
@@ -266,14 +266,24 @@ export const ReturnOptionsModal = ({ item }: OptionsModalProps) => {
             onClick={() => setEditOpen(true)}
           >
             <div className="flex gap-2">
-              <Image src={"/edit.png"} width={20} height={20} alt=""></Image>
+              <Image
+                src={"/green/edit_green.png"}
+                width={20}
+                height={20}
+                alt=""
+              ></Image>
               <p>Edit</p>
             </div>
           </div>
 
           <div className="bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2">
             <div className="flex gap-2 cursor-pointer" onClick={deleteMethod}>
-              <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
+              <Image
+                src={"/green/trash_green.png"}
+                width={20}
+                height={20}
+                alt=""
+              ></Image>
               <p>Delete Item</p>
             </div>
           </div>

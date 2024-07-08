@@ -127,7 +127,7 @@ const Item = ({
                 )}
               <div className="w-full h-full flex justify-center items-center">
                 <Image
-                  src="/item_b.png"
+                  src="/green/item_green.png"
                   alt=""
                   width={50}
                   height={50}

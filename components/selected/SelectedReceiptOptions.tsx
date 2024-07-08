@@ -66,7 +66,12 @@ export const SelectedReceiptOptions = ({
           onClick={() => setDeleteConfirm(true)}
         >
           <div className="flex gap-2 cursor-pointer">
-            <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
+            <Image
+              src={"/green/trash_green.png"}
+              width={20}
+              height={20}
+              alt=""
+            ></Image>
             <p>Delete Selected</p>
           </div>
         </div>
@@ -75,7 +80,12 @@ export const SelectedReceiptOptions = ({
           onClick={() => setDeleteAllConfirm(true)}
         >
           <div className="flex gap-2 cursor-pointer">
-            <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
+            <Image
+              src={"/green/trash_green.png"}
+              width={20}
+              height={20}
+              alt=""
+            ></Image>
             <p>Delete All</p>
           </div>
         </div>

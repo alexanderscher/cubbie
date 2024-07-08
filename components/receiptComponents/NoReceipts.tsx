@@ -16,7 +16,7 @@ export const NoReceipts = ({
       <div className="box relative">
         <div className="flex flex-col gap-4 justify-center items-center  p-6">
           <Image
-            src="/receipt_b.png"
+            src="/green/receipt_green.png"
             alt=""
             width={25}
             height={25}

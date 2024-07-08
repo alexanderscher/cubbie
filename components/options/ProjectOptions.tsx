@@ -106,7 +106,7 @@ export const ProjectOptionsModal = ({
               >
                 <div className="flex gap-2">
                   <Image
-                    src={"/dashboard_b.png"}
+                    src={"/green/dashboard_green.png"}
                     width={20}
                     height={20}
                     alt=""
@@ -126,12 +126,12 @@ export const ProjectOptionsModal = ({
               >
                 <div className="flex gap-2">
                   <Image
-                    src={"/account_b.png"}
+                    src={"/green/account_green.png"}
                     width={20}
                     height={20}
                     alt=""
                   ></Image>
-                  <p>Members</p>
+                  <p className="text-emerald-900">Members</p>
                 </div>
               </div>
             )}
@@ -144,8 +144,13 @@ export const ProjectOptionsModal = ({
                   setAddReceiptOpen(true);
                 }}
               >
-                <Image src={"/add.png"} width={20} height={20} alt=""></Image>
-                <p>Add receipt</p>
+                <Image
+                  src={"/green/plus_green.png"}
+                  width={20}
+                  height={20}
+                  alt=""
+                ></Image>
+                <p className="text-emerald-900">Add receipt</p>
               </div>
             </div>
 
@@ -158,33 +163,38 @@ export const ProjectOptionsModal = ({
               }}
             >
               <div className="flex gap-2">
-                <Image src={"/edit.png"} width={20} height={20} alt=""></Image>
-                <p>Edit project</p>
+                <Image
+                  src={"/green/edit_green.png"}
+                  width={20}
+                  height={20}
+                  alt=""
+                ></Image>
+                <p className="text-emerald-900">Edit project</p>
               </div>
             </div>
             {archived && (
               <div className={color}>
                 <div
-                  className="flex gap-2 cursor-pointer"
+                  className="flex gap-2 cursor-pointer items-center"
                   onClick={(e) => {
                     e.preventDefault();
                     setArchive(project.id, "false");
                   }}
                 >
                   <Image
-                    src={"/archive.png"}
+                    src={"/green/archive_green.png"}
                     width={20}
                     height={20}
                     alt=""
                   ></Image>
-                  <p>Unarchive project</p>
+                  <p className="text-emerald-900">Unarchive project</p>
                 </div>
               </div>
             )}
             {!archived && (
               <div className={`${color} cursor-pointer`}>
                 <div
-                  className="flex gap-2 cursor-pointer"
+                  className="flex gap-2 cursor-pointer items-center"
                   onClick={(e) => {
                     e.preventDefault();
                     setArchive(project.id, "true");
@@ -193,7 +203,7 @@ export const ProjectOptionsModal = ({
                   <div>
                     {" "}
                     <Image
-                      src={"/archive.png"}
+                      src={"/green/archive_green.png"}
                       width={20}
                       height={20}
                       alt=""
@@ -201,7 +211,7 @@ export const ProjectOptionsModal = ({
                   </div>
 
                   <div className="flex justify-between w-full">
-                    <p>Archive project</p>
+                    <p className="text-emerald-900">Archive project</p>
                   </div>
                 </div>
               </div>
@@ -209,16 +219,16 @@ export const ProjectOptionsModal = ({
             {project.userId === session.user.id && (
               <div className={`${color} cursor-pointer`}>
                 <div
-                  className="flex gap-2 cursor-pointer"
+                  className="flex gap-2 cursor-pointer items-center"
                   onClick={toggleDeleteModal}
                 >
                   <Image
-                    src={"/trash.png"}
-                    width={20}
-                    height={20}
+                    src={"/green/trash_green.png"}
+                    width={15}
+                    height={15}
                     alt=""
                   ></Image>
-                  <p>Delete project</p>
+                  <p className="text-emerald-900">Delete project</p>
                 </div>
               </div>
             )}

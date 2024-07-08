@@ -179,7 +179,12 @@ export const SelectedItemOptions = ({
           }}
         >
           <div className="flex gap-2 cursor-pointer">
-            <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
+            <Image
+              src={"/green/trash_green.png"}
+              width={20}
+              height={20}
+              alt=""
+            ></Image>
             <p>Delete selected</p>
           </div>
         </div>
@@ -190,7 +195,12 @@ export const SelectedItemOptions = ({
           }}
         >
           <div className="flex gap-2 cursor-pointer">
-            <Image src={"/trash.png"} width={20} height={20} alt=""></Image>
+            <Image
+              src={"/green/trash_green.png"}
+              width={20}
+              height={20}
+              alt=""
+            ></Image>
             <p>Delete all</p>
           </div>
         </div>

@@ -87,7 +87,6 @@
     "@types/react-text-mask": "^5.4.14",
     "@types/uuid": "^9.0.8",
     "autoprefixer": "^10.0.1",
-    "eslint": "^8",
     "eslint-config-next": "14.1.0",
     "eslint-plugin-import": "^2.29.1",
     "node-loader": "^2.0.0",

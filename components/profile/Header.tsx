@@ -12,7 +12,7 @@ const Header = () => {
       <div
         className={`${styles.header} fixed   bg-white min-w-[200px] shadow p-8 flex flex-col gap-4 h-screen -mt-6 -ml-8 -mb-[100px] text-emerald-900`}
       >
-        <h1 className="text-lg">Settings</h1>
+        <h1 className="text-lg">Account</h1>
         <div className="flex flex-col gap-4 text-sm ">
           <Link href="/account/profile">
             <div className="flex gap-2 ml-1 w-full items-center">

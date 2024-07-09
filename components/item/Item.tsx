@@ -97,7 +97,7 @@ const Item = ({
             )}
 
             <Image
-              src="/three-dots.png"
+              src="/black/three-dots.png"
               className="absolute top-0 right-2 cursor-pointer z-10"
               alt=""
               width={20}
@@ -160,14 +160,14 @@ const Item = ({
               </div>
             )}
             <Image
-              src="/three-dots.png"
+              src="/black/three-dots.png"
               className="absolute top-0 right-2 cursor-pointer "
               alt=""
               width={20}
               height={20}
             />
             <Image
-              src="/three-dots.png"
+              src="/black/three-dots.png"
               className="absolute top-0 right-2 cursor-pointer "
               alt=""
               width={20}

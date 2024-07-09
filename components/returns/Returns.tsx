@@ -90,7 +90,7 @@ const Row = ({ item }: any) => {
           </div>
           <div>
             <Image
-              src="/three-dots.png"
+              src="/black/three-dots.png"
               className="cursor-pointer"
               alt=""
               width={20}

@@ -88,7 +88,7 @@ const Receipt = ({
             </div>
           )}
           <Image
-            src="/three-dots.png"
+            src="/black/three-dots.png"
             className="absolute top-0 right-2 cursor-pointer "
             alt=""
             width={20}

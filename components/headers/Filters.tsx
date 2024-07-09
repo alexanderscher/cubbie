@@ -208,7 +208,7 @@ const Filters = () => {
                     : "All receipts"}
                 </p>
                 <Image
-                  src="/arrow_grey.png"
+                  src="/black/arrow_grey.png"
                   width={8}
                   height={8}
                   alt="arrow"
@@ -413,7 +413,7 @@ const Filters = () => {
                     : "All receipts"}
                 </p>
                 <Image
-                  src="/arrow_grey.png"
+                  src="/black/arrow_grey.png"
                   width={8}
                   height={8}
                   alt="arrow"
@@ -545,7 +545,7 @@ const FilterButton = ({
     >
       <p className="text-xs">{label}</p>
       <Image
-        src="/arrow_grey.png"
+        src="/black/arrow_grey.png"
         width={8}
         height={8}
         alt="arrow"
@@ -597,7 +597,7 @@ const SortButton = ({ setOpenModal, openModal, label }: FilterButtonProps) => {
     >
       <p className="text-xs">{sortLabel}</p>
       <Image
-        src="/arrow_grey.png"
+        src="/black/arrow_grey.png"
         width={8}
         height={8}
         alt="arrow"

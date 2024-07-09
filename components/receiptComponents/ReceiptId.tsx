@@ -149,7 +149,7 @@ const ReceiptId = () => {
             }`}
             onClick={() => setisOptionsOpen(!isOptionsOpen)}
           >
-            <Image src="/three-dots.png" alt="" width={20} height={20} />
+            <Image src="/black/three-dots.png" alt="" width={20} height={20} />
             {isOptionsOpen && !isReceiptLoading && (
               <>
                 <Overlay onClose={() => setIsOpen(false)} />

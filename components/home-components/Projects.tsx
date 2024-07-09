@@ -305,7 +305,7 @@ const Project = ({
             onClick={onToggleOpen}
             className="absolute top-2 right-2 cursor-pointer "
           >
-            <Image src="/three-dots.png" alt="" width={20} height={20} />
+            <Image src="/black/three-dots.png" alt="" width={20} height={20} />
           </div>
         </div>
       </div>

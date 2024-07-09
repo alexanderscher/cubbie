@@ -52,7 +52,12 @@ const ItemID = () => {
                 }`}
                 onClick={() => setIsOptionsOpen(!isOptionsOpen)}
               >
-                <Image src="/three-dots.png" alt="" width={20} height={20} />
+                <Image
+                  src="/black/three-dots.png"
+                  alt=""
+                  width={20}
+                  height={20}
+                />
                 {isOptionsOpen && (
                   <>
                     <Overlay onClose={() => setIsOptionsOpen(false)} />

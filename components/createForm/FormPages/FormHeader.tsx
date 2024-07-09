@@ -33,7 +33,7 @@ const FormHeader = ({ children }: FormHeaderProps) => {
         >
           <p className="">{name}</p>
           <Image
-            src="/arrow_grey.png"
+            src="/black/arrow_grey.png"
             width={8}
             height={8}
             alt="arrow"

@@ -39,7 +39,19 @@ const Navbar = ({ session, children }: NavbarProps) => {
     <>
       <div className={`${styles.navbarFixed} p-2 `}>
         <div className={`${styles.navbarItems} text-sm`}>
-          <Link href="/">Cubbie</Link>
+          <Link
+            href="/"
+            className="flex flex-col justify-center items-center gap-2"
+          >
+            <Image
+              src="/logo/cubbielogowhite.png"
+              alt=""
+              width={50}
+              height={50}
+              className="object-cover "
+              style={{ objectFit: "cover", objectPosition: "center" }}
+            />
+          </Link>
           <div
             className={`${styles.linkWrapper} ${
               pathname === "/" || pathname.includes("project")
@@ -170,7 +182,11 @@ const Navbar = ({ session, children }: NavbarProps) => {
             </Link>
           </div>
 
-          <div className={`${styles.linkWrapper} relative`}>
+          <div
+            className={`${styles.linkWrapper} relative ${
+              pathname === "/alerts" ? styles.page : ""
+            }`}
+          >
             <Link
               href="/alerts"
               className="flex flex-col justify-center items-center gap-2"
@@ -192,8 +208,12 @@ const Navbar = ({ session, children }: NavbarProps) => {
               )}
             </Link>
           </div>
-          <div className="relative">
-            <div className={styles.linkWrapper}>
+          <div
+            className={`${styles.linkWrapper} relative ${
+              pathname.includes("account") ? styles.page : ""
+            }`}
+          >
+            <div>
               <div
                 className="flex flex-col justify-center items-center gap-2 cursor-pointer"
                 onClick={toggleModal}

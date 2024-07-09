@@ -257,7 +257,7 @@ const SingleAlert = ({ alertObj, userId, fetchAlerts }: SingleAlertProps) => {
         </div>
       </div>
       <Image
-        src="/three-dots.png"
+        src="/black/three-dots.png"
         className="absolute top-0 right-2 cursor-pointer "
         alt=""
         width={20}
@@ -355,7 +355,12 @@ const AlertOptionsModal = ({
               });
             }}
           >
-            <Image src={"/xmark.png"} width={20} height={20} alt=""></Image>
+            <Image
+              src={"/black/xmark.png"}
+              width={20}
+              height={20}
+              alt=""
+            ></Image>
             <p>Remove notification</p>
           </div>
         </div>

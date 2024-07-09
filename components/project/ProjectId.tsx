@@ -198,7 +198,12 @@ export const ProjectId = ({ session }: ProjectIdProps) => {
                   }`}
                   onClick={() => setIsOpen(!isOpen)}
                 >
-                  <Image src="/three-dots.png" alt="" width={20} height={20} />
+                  <Image
+                    src="/black/three-dots.png"
+                    alt=""
+                    width={20}
+                    height={20}
+                  />
                   {isOpen && !isProjectLoading && (
                     <>
                       <Overlay onClose={() => setIsOpen(false)} />

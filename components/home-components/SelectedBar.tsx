@@ -31,7 +31,7 @@ export const SelectedBar = ({
             className="cursor-pointer"
             onClick={() => setIsSelectedOpen(!isSelectedOpen)}
           >
-            <Image src="/three-dots.png" alt="" width={20} height={20} />
+            <Image src="/black/three-dots.png" alt="" width={20} height={20} />
           </div>
           {isSelectedOpen && (
             <>

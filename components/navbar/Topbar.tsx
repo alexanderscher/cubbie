@@ -31,8 +31,18 @@ const Topbar = ({ session, children }: TopbarProps) => {
     <div
       className={`${styles.topbar} p-4 justify-between  bg-emerald-900 text-white`}
     >
-      <Link onClick={() => setMenu(false)} href="/">
-        Cubbie
+      <Link
+        href="/"
+        className="flex flex-col justify-center items-center gap-2"
+      >
+        <Image
+          src="/logo/cubbielogowhite.png"
+          alt=""
+          width={40}
+          height={40}
+          className="object-cover "
+          style={{ objectFit: "cover", objectPosition: "center" }}
+        />
       </Link>
       <div className="flex gap-4">
         <div>
@@ -90,7 +100,7 @@ const Topbar = ({ session, children }: TopbarProps) => {
       )}
 
       {menu && (
-        <div className={`${styles.menu} p-4 `}>
+        <div className={`${styles.menu} p-4 mt-4 `}>
           <div className="flex flex-col gap-4 p-2">
             <Link
               className="flex justify-between"

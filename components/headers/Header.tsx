@@ -34,7 +34,7 @@ const Header = ({ type }: HeaderProps) => {
                 <h1 className="text-2xl text-emerald-900">{type}</h1>
 
                 <Image
-                  src="/arrow_grey.png"
+                  src="/black/arrow_grey.png"
                   width={8}
                   height={8}
                   alt="arrow"

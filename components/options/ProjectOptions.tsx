@@ -430,12 +430,12 @@ const MembersBlock = ({
           className="cursor-pointer"
           onClick={() => setIsLeaveOpen(!isLeaveOpen)}
         >
-          <Image src="/three-dots.png" alt="" width={20} height={20} />
+          <Image src="/black/three-dots.png" alt="" width={20} height={20} />
         </div>
       )}
       {sessionUserId && sessionUserId === projecUserId && (
         <div className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
-          <Image src="/three-dots.png" alt="" width={20} height={20} />
+          <Image src="/black/three-dots.png" alt="" width={20} height={20} />
         </div>
       )}
 
@@ -478,7 +478,7 @@ const LeaveProject = ({
           <div className="flex gap-4" onClick={leave}>
             <div>
               <Image
-                src={"/account_b.png"}
+                src={"/black/account_b.png"}
                 width={20}
                 height={20}
                 alt=""
@@ -538,7 +538,7 @@ const MembersOptionModal = ({
           <div className="flex gap-4" onClick={removeUser}>
             <div>
               <Image
-                src={"/account_b.png"}
+                src={"/black/account_b.png"}
                 width={20}
                 height={20}
                 alt=""
@@ -552,7 +552,7 @@ const MembersOptionModal = ({
           <div className="flex gap-4" onClick={makeOwner}>
             <div>
               <Image
-                src={"/account_b.png"}
+                src={"/black/account_b.png"}
                 width={20}
                 height={20}
                 alt=""

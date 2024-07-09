@@ -25,26 +25,41 @@ const TopbarSkeleton = () => {
     <div
       className={`${styles.topbar} p-4 justify-between  bg-emerald-900 text-white w-full`}
     >
-      <h1>Cubbie</h1>
+      <Image
+        src="/logo/cubbielogowhite.png"
+        alt=""
+        width={30}
+        height={30}
+        className="object-cover "
+        style={{ objectFit: "cover", objectPosition: "center" }}
+      />
+
       <div className="flex gap-4">
         <div>
-          <Image
-            src="/white/search_white.png"
-            alt="search"
-            width={15}
-            height={15}
-            className="object-cover "
-            style={{ objectFit: "cover", objectPosition: "center" }}
-          />
+          <button>
+            <Image
+              src="/white/search_white.png"
+              alt="search"
+              width={15}
+              height={15}
+              className="object-cover "
+              style={{ objectFit: "cover", objectPosition: "center" }}
+            />
+          </button>
         </div>
-        <Image
-          src="/white/hamburger_white.png"
-          alt=""
-          width={26}
-          height={26}
-          className="object-cover"
-          style={{ objectFit: "cover", objectPosition: "center" }}
-        />
+        <button>
+          <Image
+            src="/white/hamburger_white.png"
+            alt=""
+            width={26}
+            height={26}
+            className="object-cover"
+            style={{
+              objectFit: "cover",
+              objectPosition: "center",
+            }}
+          />
+        </button>
       </div>
     </div>
   );
@@ -54,7 +69,14 @@ const NavbarSkeleton = () => {
   return (
     <div className={`${styles.navbarFixed} p-2`}>
       <div className={`${styles.navbarItems} text-sm`}>
-        <h1>Cubbie</h1>
+        <Image
+          src="/logo/cubbielogowhite.png"
+          alt=""
+          width={50}
+          height={50}
+          className="object-cover "
+          style={{ objectFit: "cover", objectPosition: "center" }}
+        />
         <div className={`${styles.linkWrapper} `}>
           <div className="flex flex-col justify-center items-center gap-2">
             <Image

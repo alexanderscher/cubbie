@@ -34,7 +34,6 @@ export const ModalOverlay = ({
       className="fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center z-[20000]"
       onClick={handleOverlayClick}
     >
-      {/* This container should not be w-full to allow clicking to the sides to close the modal */}
       <div
         className={
           isDelete

@@ -29,8 +29,6 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
   const [color, setColor] = useState(white);
   const [edit, setEdit] = useState(false);
 
-  console.log(edit);
-
   useEffect(() => {
     if (!pathname.startsWith("/item/")) {
       setColor(white);
@@ -90,7 +88,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
           )}
           <div className={color}>
             <div
-              className="flex gap-2"
+              className="flex gap-2 cursor-pointer"
               onClick={() => {
                 setEdit(true);
               }}

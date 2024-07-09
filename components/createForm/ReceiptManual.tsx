@@ -3,7 +3,6 @@ import styles from "@/app/create/upload.module.css";
 import { ReceiptStoreStage } from "@/constants/form";
 import { ProjectType } from "@/types/ProjectTypes";
 import { convertHeic } from "@/utils/media";
-import { usePathname } from "next/navigation";
 import { useState } from "react";
 import ReturnPolicySelect from "@/components/selects/ReturnPolicySelect";
 import ManualDate from "@/components/createForm/FormPages/ManualDate";

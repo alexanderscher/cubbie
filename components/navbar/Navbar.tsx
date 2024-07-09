@@ -238,11 +238,11 @@ const Navbar = ({ session, children }: NavbarProps) => {
           </div>
         </div>
 
-        <div className={`${styles.title} p-4`}>
+        {/* <div className={`${styles.title} p-4`}>
           <Link href="/" className="text-black">
             Cubbie
           </Link>
-        </div>
+        </div> */}
       </div>
       {searchBarOpen && (
         <div className={`${styles.search}`}>

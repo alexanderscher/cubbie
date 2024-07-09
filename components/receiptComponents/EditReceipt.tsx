@@ -6,6 +6,10 @@ import Loading from "@/components/loading-components/Loading";
 import ErrorModal from "@/components/modals/ErrorModal";
 import { convertHeic } from "@/utils/media";
 import { editReceipt } from "@/actions/receipts/editReceipt";
+import DateTimePicker from "react-datetime-picker";
+import "react-datetime-picker/dist/DateTimePicker.css";
+import "react-calendar/dist/Calendar.css";
+import "react-clock/dist/Clock.css";
 import { formatDateToYYYYMMDD } from "@/utils/Date";
 import PurchaseTypeSelect from "@/components/selects/PurchaseTypeSelect";
 import { AddItem } from "@/components/item/AddItem";
@@ -294,12 +298,13 @@ const EditReceipt = ({ receiptId, setEdit }: Props) => {
 
               <div className="w-full ">
                 <p className="text-emerald-900 text-xs">Purcahse Date</p>
-                <input
-                  type="date"
-                  style={{ WebkitAppearance: "none" }}
-                  value={formatDateToYYYYMMDD(values.purchase_date)}
-                  onChange={handleChange("purchase_date")}
-                  className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2 bg-white"
+                <DateTimePicker
+                  onChange={(date) => setFieldValue("purchase_date", date)}
+                  value={
+                    values.purchase_date ? new Date(values.purchase_date) : null
+                  }
+                  format="MM/dd/yy"
+                  className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded bg-white"
                 />
                 {errorM.purchase_date && (
                   <p className="text-orange-900 text-xs mt-2">
@@ -310,12 +315,13 @@ const EditReceipt = ({ receiptId, setEdit }: Props) => {
 
               <div className="w-full">
                 <p className="text-emerald-900 text-xs">Return Date</p>
-                <input
-                  type="date"
-                  style={{ WebkitAppearance: "none" }}
-                  value={formatDateToYYYYMMDD(values.return_date)}
-                  onChange={handleChange("return_date")}
-                  className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded p-2 bg-white"
+                <DateTimePicker
+                  onChange={(date) => setFieldValue("return_date", date)}
+                  value={
+                    values.return_date ? new Date(values.return_date) : null
+                  }
+                  className="w-full border-[1px] border-emerald-900 focus:border-emerald-900 focus:outline-none rounded bg-white"
+                  format="MM/dd/yy"
                 />
                 {errorM.return_date && (
                   <p className="text-orange-900 text-xs mt-2">

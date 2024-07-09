@@ -349,3 +349,30 @@ button:hover + .ui_TooltipContainer {
     max-width: 100%;
   }
 }
+
+/* custom-datetime-picker.css */
+
+/* Ensure no border is applied */
+.react-datetime-picker__wrapper {
+  border: none !important; /* Ensure border is completely removed */
+  box-shadow: none !important; /* Ensure no box shadow */
+  padding: 0.4rem;
+  display: flex;
+  align-items: center;
+}
+
+.react-datetime-picker__inputGroup__input {
+  border: none;
+  outline: none;
+  box-shadow: none;
+  color: #065f46; /* emerald-900 */
+}
+
+.react-datetime-picker__inputGroup__divider {
+  color: #065f46; /* emerald-900 */
+}
+
+.react-datetime-picker__inputGroup {
+  display: flex;
+  align-items: center;
+}

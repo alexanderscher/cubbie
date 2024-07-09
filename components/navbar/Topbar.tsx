@@ -38,8 +38,8 @@ const Topbar = ({ session, children }: TopbarProps) => {
         <Image
           src="/logo/cubbielogowhite.png"
           alt=""
-          width={40}
-          height={40}
+          width={30}
+          height={30}
           className="object-cover "
           style={{ objectFit: "cover", objectPosition: "center" }}
         />

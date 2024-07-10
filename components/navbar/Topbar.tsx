@@ -100,7 +100,7 @@ const Topbar = ({ session, children }: TopbarProps) => {
       )}
 
       {menu && (
-        <div className={`${styles.menu} p-4 mt-4 `}>
+        <div className={`${styles.menu} p-4 mt-1 `}>
           <div className="flex flex-col gap-4 p-2">
             <Link
               className="flex justify-between"

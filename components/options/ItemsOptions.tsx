@@ -63,7 +63,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
       }}
     >
       <div
-        className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-[200px] z-[2000] ${
+        className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-5/6 z-[2000] ${
           !pathname.startsWith("/item/") ? " bg-white" : " bg-[#97cb97] "
         }`}
       >
@@ -151,7 +151,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
                     });
                   }}
                 >
-                  Mark as Returned
+                  Returned
                 </button>
               </div>
             )}
@@ -169,7 +169,7 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
                 height={15}
                 alt=""
               ></Image>
-              <p className="text-emerald-900">Delete Item</p>
+              <p className="text-emerald-900">Delete </p>
             </div>
           </div>
         </div>

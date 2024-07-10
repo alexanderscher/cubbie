@@ -123,7 +123,7 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
   return (
     <div>
       <div
-        className={`absolute  shadow-1 -right-2 top-10 rounded-lg  w-5/6 ${
+        className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-5/6 z-[2000] ${
           !pathname.startsWith("/receipt/") ? "bg-white" : " bg-[#97cb97] "
         }`}
         onClick={(e) => {
@@ -231,35 +231,34 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
             </div>
           </div>
         </div>
-
-        {isAddOpen && (
-          <ModalOverlay onClose={() => setIsAddOpen(false)}>
-            <AddItem
-              setIsAddOpen={setIsAddOpen}
-              handleSubmit={handleSubmit}
-              setNewItem={setNewItem}
-              newItem={newItem}
-              error={error}
-              isPending={isPending}
-            />
-          </ModalOverlay>
-        )}
-        {isDeleteOpen && (
-          <ModalOverlay isDelete={true} onClose={() => setIsDeleteOpen(false)}>
-            <DeleteModal setDeleteOpen={setIsDeleteOpen} receipt={receipt} />
-          </ModalOverlay>
-        )}
-        {isDetailsOpen && (
-          <ModalOverlay onClose={() => setDetailsOpen(false)}>
-            <ReceiptDetails receipt={receipt} />
-          </ModalOverlay>
-        )}
-        {edit && (
-          <ModalOverlay onClose={() => setEdit(false)}>
-            <EditReceipt receiptId={receipt.id.toString()} setEdit={setEdit} />
-          </ModalOverlay>
-        )}
       </div>
+      {isAddOpen && (
+        <ModalOverlay onClose={() => setIsAddOpen(false)}>
+          <AddItem
+            setIsAddOpen={setIsAddOpen}
+            handleSubmit={handleSubmit}
+            setNewItem={setNewItem}
+            newItem={newItem}
+            error={error}
+            isPending={isPending}
+          />
+        </ModalOverlay>
+      )}
+      {isDeleteOpen && (
+        <ModalOverlay isDelete={true} onClose={() => setIsDeleteOpen(false)}>
+          <DeleteModal setDeleteOpen={setIsDeleteOpen} receipt={receipt} />
+        </ModalOverlay>
+      )}
+      {isDetailsOpen && (
+        <ModalOverlay onClose={() => setDetailsOpen(false)}>
+          <ReceiptDetails receipt={receipt} />
+        </ModalOverlay>
+      )}
+      {edit && (
+        <ModalOverlay onClose={() => setEdit(false)}>
+          <EditReceipt receiptId={receipt.id.toString()} setEdit={setEdit} />
+        </ModalOverlay>
+      )}
     </div>
   );
 };

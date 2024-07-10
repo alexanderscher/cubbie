@@ -16,12 +16,13 @@ import { toast } from "sonner";
 
 interface OptionsModalProps {
   item: ItemType;
+  location?: string;
 }
 
 const white = "bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2";
 const green = "bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded-lg p-2";
 
-export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
+export const ItemOptionsModal = ({ item, location }: OptionsModalProps) => {
   const { reloadItems } = useSearchItemContext();
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -63,9 +64,9 @@ export const ItemOptionsModal = ({ item }: OptionsModalProps) => {
       }}
     >
       <div
-        className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-full md:w-3/4 z-[2000] ${
-          !pathname.startsWith("/item/") ? " bg-white" : " bg-[#97cb97] "
-        }`}
+        className={`absolute  shadow-1 -right-2 top-10 rounded-lg  z-[2000] ${
+          !pathname.startsWith("/item/") ? " bg-white" : " bg-[#97cb97]"
+        } ${location == "ID" ? "w-[200px]" : " w-full md:w-3/4"}`}
       >
         <div className="p-4 rounded text-sm flex flex-col gap-2">
           {pathname === "/items" && (

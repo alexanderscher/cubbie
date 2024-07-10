@@ -61,7 +61,7 @@ const ItemID = () => {
                 {isOptionsOpen && (
                   <>
                     <Overlay onClose={() => setIsOptionsOpen(false)} />
-                    <ItemOptionsModal item={item} />
+                    <ItemOptionsModal item={item} location="ID" />
                   </>
                 )}
               </div>

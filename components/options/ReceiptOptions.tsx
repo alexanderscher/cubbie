@@ -20,6 +20,7 @@ import * as Yup from "yup";
 
 interface OptionsModalProps {
   receipt: ReceiptType;
+  location?: string;
 }
 
 const white =
@@ -27,7 +28,10 @@ const white =
 const green =
   "bg-[#d2edd2] hover:bg-[#b8dab8] text-emerald-900 rounded-lg p-2 cursor-pointer";
 
-export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
+export const ReceiptOptionsModal = ({
+  receipt,
+  location,
+}: OptionsModalProps) => {
   const { reloadReceipts } = useSearchReceiptContext();
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [edit, setEdit] = useState(false);
@@ -123,9 +127,9 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
   return (
     <div className="">
       <div
-        className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-[200px] md:w-3/4 z-[2000] ${
+        className={`absolute  shadow-1 -right-2 top-10 rounded-lg z-[2000] ${
           !pathname.startsWith("/receipt/") ? "bg-white" : " bg-[#97cb97] "
-        }`}
+        } ${location == "ID" ? "w-[200px]" : " w-full md:w-3/4"}`}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();

@@ -153,7 +153,7 @@ const ReceiptId = () => {
             {isOptionsOpen && !isReceiptLoading && (
               <>
                 <Overlay onClose={() => setIsOpen(false)} />
-                <ReceiptOptionsModal receipt={receipt} />
+                <ReceiptOptionsModal receipt={receipt} location="ID" />
               </>
             )}
           </div>

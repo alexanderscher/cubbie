@@ -212,6 +212,7 @@ export const ProjectId = ({ session }: ProjectIdProps) => {
                         isOpen={isOpen}
                         project={project}
                         session={session}
+                        location="ID"
                       />
                     </>
                   )}

@@ -126,7 +126,7 @@ export const AddItem = ({
               >
                 <div className="w-full">
                   <Image
-                    src="/barcode_b.png"
+                    src="/green/barcode_green.png"
                     alt="barcode"
                     width={30}
                     height={30}

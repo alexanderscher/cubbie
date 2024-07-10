@@ -33,6 +33,7 @@ interface OptionsModalProps {
   project: ProjectType;
   archived: boolean;
   session: Session;
+  location?: string;
 }
 
 const white = "bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2";
@@ -42,6 +43,7 @@ export const ProjectOptionsModal = ({
   project,
   archived,
   session,
+  location,
 }: OptionsModalProps) => {
   const { reloadProjects } = useSearchProjectContext();
 
@@ -85,9 +87,9 @@ export const ProjectOptionsModal = ({
   return (
     <div>
       <div
-        className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-full md:w-3/4 z-[2000] ${
+        className={`absolute  shadow-1 -right-2 top-10 rounded-lg   z-[2000] ${
           pathname === "/" ? " bg-white" : " bg-[#97cb97] "
-        }`}
+        } ${location == "ID" ? "w-[200px]" : " w-full md:w-3/4"}`}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();

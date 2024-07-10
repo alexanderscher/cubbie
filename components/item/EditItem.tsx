@@ -301,7 +301,7 @@ const EditItem = ({ itemId, setEdit }: ItemIdEditProps) => {
                 >
                   <div>
                     <Image
-                      src="/barcode_b.png"
+                      src="/green/barcode_green.png"
                       alt="barcode"
                       width={60}
                       height={60}

@@ -85,7 +85,7 @@ export const ProjectOptionsModal = ({
   return (
     <div>
       <div
-        className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-full z-[2000] ${
+        className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-5/6 z-[2000] ${
           pathname === "/" ? " bg-white" : " bg-[#97cb97] "
         }`}
         onClick={(e) => {
@@ -169,7 +169,7 @@ export const ProjectOptionsModal = ({
                   height={20}
                   alt=""
                 ></Image>
-                <p className="text-emerald-900">Edit project</p>
+                <p className="text-emerald-900">Edit</p>
               </div>
             </div>
             {archived && (
@@ -187,7 +187,7 @@ export const ProjectOptionsModal = ({
                     height={20}
                     alt=""
                   ></Image>
-                  <p className="text-emerald-900">Unarchive project</p>
+                  <p className="text-emerald-900">Unarchive </p>
                 </div>
               </div>
             )}
@@ -211,7 +211,7 @@ export const ProjectOptionsModal = ({
                   </div>
 
                   <div className="flex justify-between w-full">
-                    <p className="text-emerald-900">Archive project</p>
+                    <p className="text-emerald-900">Archive</p>
                   </div>
                 </div>
               </div>
@@ -228,7 +228,7 @@ export const ProjectOptionsModal = ({
                     height={15}
                     alt=""
                   ></Image>
-                  <p className="text-emerald-900">Delete project</p>
+                  <p className="text-emerald-900">Delete </p>
                 </div>
               </div>
             )}

@@ -123,7 +123,7 @@ export const ReceiptOptionsModal = ({ receipt }: OptionsModalProps) => {
   return (
     <div>
       <div
-        className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-5/6 z-[2000] ${
+        className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-full md:w-3/4 z-[2000] ${
           !pathname.startsWith("/receipt/") ? "bg-white" : " bg-[#97cb97] "
         }`}
         onClick={(e) => {

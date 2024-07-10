@@ -173,7 +173,7 @@ export const SelectedItemOptions = ({
         )}
 
         <div
-          className="bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer"
+          className="bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer flex items-center text-emerald-900"
           onClick={(e) => {
             setDeleteConfirm(true);
           }}
@@ -181,15 +181,15 @@ export const SelectedItemOptions = ({
           <div className="flex gap-2 cursor-pointer">
             <Image
               src={"/green/trash_green.png"}
-              width={20}
-              height={20}
+              width={15}
+              height={15}
               alt=""
             ></Image>
             <p>Delete selected</p>
           </div>
         </div>
         <div
-          className="bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer"
+          className="bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer flex items-center text-emerald-900"
           onClick={(e) => {
             setDeleteAllConfirm(true);
           }}
@@ -197,8 +197,8 @@ export const SelectedItemOptions = ({
           <div className="flex gap-2 cursor-pointer">
             <Image
               src={"/green/trash_green.png"}
-              width={20}
-              height={20}
+              width={15}
+              height={15}
               alt=""
             ></Image>
             <p>Delete all</p>

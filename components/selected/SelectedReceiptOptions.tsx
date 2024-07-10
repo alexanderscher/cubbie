@@ -60,30 +60,30 @@ export const SelectedReceiptOptions = ({
         e.stopPropagation();
       }}
     >
-      <div className="p-4 rounded text-sm flex flex-col gap-2">
+      <div className="p-4 rounded text-sm flex flex-col gap-2 text-emerald-900">
         <div
-          className="bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer"
+          className="bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer flex items-center"
           onClick={() => setDeleteConfirm(true)}
         >
           <div className="flex gap-2 cursor-pointer">
             <Image
               src={"/green/trash_green.png"}
-              width={20}
-              height={20}
+              width={15}
+              height={15}
               alt=""
             ></Image>
             <p>Delete Selected</p>
           </div>
         </div>
         <div
-          className="bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer"
+          className="bg-slate-100 hover:bg-slate-200 rounded-lg w-full p-2 cursor-pointer flex items-center"
           onClick={() => setDeleteAllConfirm(true)}
         >
           <div className="flex gap-2 cursor-pointer">
             <Image
               src={"/green/trash_green.png"}
-              width={20}
-              height={20}
+              width={15}
+              height={15}
               alt=""
             ></Image>
             <p>Delete All</p>

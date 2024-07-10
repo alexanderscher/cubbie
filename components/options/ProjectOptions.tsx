@@ -85,7 +85,7 @@ export const ProjectOptionsModal = ({
   return (
     <div>
       <div
-        className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-[202px] z-[2000] ${
+        className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-full z-[2000] ${
           pathname === "/" ? " bg-white" : " bg-[#97cb97] "
         }`}
         onClick={(e) => {

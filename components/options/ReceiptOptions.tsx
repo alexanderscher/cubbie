@@ -125,7 +125,7 @@ export const ReceiptOptionsModal = ({
   };
 
   return (
-    <div className="">
+    <div className="text-emerald-900">
       <div
         className={`absolute  shadow-1 -right-2 top-10 rounded-lg z-[2000] ${
           !pathname.startsWith("/receipt/") ? "bg-white" : " bg-[#97cb97] "
@@ -136,17 +136,19 @@ export const ReceiptOptionsModal = ({
         }}
       >
         <div className="p-4 rounded text-sm flex flex-col gap-2">
-          <Link href={`/project/${receipt.project?.id}`} className={color}>
-            <div className="flex gap-2 cursor-pointer items-center">
-              <Image
-                src={"/green/folder_green.png"}
-                width={20}
-                height={20}
-                alt=""
-              ></Image>
-              <p>{receipt.project?.name}</p>
-            </div>
-          </Link>
+          {pathname.includes("projects") && (
+            <Link href={`/project/${receipt.project?.id}`} className={color}>
+              <div className="flex gap-2 cursor-pointer items-center">
+                <Image
+                  src={"/green/folder_green.png"}
+                  width={20}
+                  height={20}
+                  alt=""
+                ></Image>
+                <p>{receipt.project?.name}</p>
+              </div>
+            </Link>
+          )}
 
           {pathname.startsWith("/receipt/") && (
             <div
@@ -168,23 +170,26 @@ export const ReceiptOptionsModal = ({
             </div>
           )}
           {receipt.tracking_number && (
-            <a
-              target="_blank"
-              href="https://chatgpt.com/c/bdbcc109-00c6-42e2-9db3-5ed228c5727e"
-              rel="noopener noreferrer"
-            >
-              <div className={color}>
-                <div className="flex gap-2 cursor-pointer items-center">
-                  <Image
-                    src={"/green/returned.png"}
-                    width={20}
-                    height={20}
-                    alt=""
-                  ></Image>
-                  <p>Track</p>
-                </div>
+            <div className={color}>
+              <div
+                className="flex gap-2 cursor-pointer items-center"
+                onClick={() =>
+                  window.open(
+                    `${receipt.tracking_number}`,
+                    "_blank",
+                    "noopener,noreferrer"
+                  )
+                }
+              >
+                <Image
+                  src={"/green/tracking_green.png"}
+                  width={17}
+                  height={17}
+                  alt=""
+                />
+                <p>Track</p>
               </div>
-            </a>
+            </div>
           )}
 
           <div

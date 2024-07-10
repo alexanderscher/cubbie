@@ -188,7 +188,7 @@ const EditReceipt = ({ receiptId, setEdit }: Props) => {
         dirty,
         setFieldValue,
       }) => (
-        <div className=" flex flex-col gap-4  w-full">
+        <div className=" flex flex-col gap-4  w-full z-[19999]">
           <div className="flex justify-between items-center border-b  px-5 py-3 rounded-t-lg border-emerald-900 w-full">
             <h3 className="text-md text-emerald-900">Edit {receipt.store}</h3>
             <button

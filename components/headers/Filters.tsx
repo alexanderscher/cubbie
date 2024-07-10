@@ -153,8 +153,8 @@ const Filters = () => {
         </div>
       )}
       {pathname === "/receipts" && filteredReceiptData.length > 0 && (
-        <div className="flex gap-2 flex-wrap justify-between  gap-y-3 jus">
-          <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap justify-between  gap-y-3 ">
+          <div className="flex gap-2 flex-wrap">
             <div className="relative">
               <FilterButton
                 setOpenModal={setOpenModal}

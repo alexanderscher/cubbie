@@ -85,7 +85,7 @@ export const ProjectOptionsModal = ({
   return (
     <div>
       <div
-        className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-5/6 z-[2000] ${
+        className={`absolute  shadow-1 -right-2 top-10 rounded-lg w-full md:w-3/4 z-[2000] ${
           pathname === "/" ? " bg-white" : " bg-[#97cb97] "
         }`}
         onClick={(e) => {
@@ -144,13 +144,15 @@ export const ProjectOptionsModal = ({
                   setAddReceiptOpen(true);
                 }}
               >
-                <Image
-                  src={"/green/plus_green.png"}
-                  width={20}
-                  height={20}
-                  alt=""
-                ></Image>
-                <p className="text-emerald-900">Add receipt</p>
+                <div className="flex gap-2">
+                  <Image
+                    src={"/green/plus_green.png"}
+                    width={20}
+                    height={20}
+                    alt=""
+                  ></Image>
+                  <p className="text-emerald-900">Add receipt</p>
+                </div>
               </div>
             </div>
 

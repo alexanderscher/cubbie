@@ -191,7 +191,7 @@ const SingleAlert = ({ alertObj, userId, fetchAlerts }: SingleAlertProps) => {
 
       <div>
         <Image
-          src="/notification_b.png"
+          src="/green/notify_green.png"
           alt=""
           width={18}
           height={18}
@@ -374,14 +374,14 @@ const NoAlerts = () => {
   return (
     <div className="w-full flex justify-center flex-col items-center gap-5 mt-20">
       <Image
-        src="/notification_b.png"
+        src="/green/notify_green.png"
         alt=""
         width={50}
         height={50}
         className="object-cover "
         style={{ objectFit: "cover", objectPosition: "center" }}
       />
-      <h1 className="text-xl">No alerts</h1>
+      <h1 className="text-xl text-emerald-900">No alerts</h1>
     </div>
   );
 };

@@ -515,7 +515,7 @@ const ReceiptItems = ({
               >
                 <div className="w-[40px]">
                   <Image
-                    src="/barcode_b.png"
+                    src="/green/barcode_green.png"
                     alt="barcode"
                     width={50}
                     height={50}

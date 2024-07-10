@@ -101,7 +101,7 @@ function SearchAllItems({ projectData, receiptData }: SearchAllItemsProps) {
             disabled={showScanner}
           >
             <Image
-              src="/searchbar_w.png"
+              src="/white/searchbarcode_white.png"
               alt="barcode"
               width={100}
               height={100}

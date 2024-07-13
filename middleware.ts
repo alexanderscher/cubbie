@@ -1,5 +1,4 @@
 import NextAuth from "next-auth";
-import { getToken } from "next-auth/jwt";
 
 import authConfig from "@/auth.config";
 import {

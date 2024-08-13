@@ -108,6 +108,9 @@ export const login = async (
       password,
       redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     });
+    revalidateTag(`projects_user_${userId}`);
+    revalidateTag(`user_${userId}`);
+    revalidateTag(`alerts_user_${userId}`);
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {

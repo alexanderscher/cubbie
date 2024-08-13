@@ -24,7 +24,6 @@ const Header = ({ type }: HeaderProps) => {
   const { fetchProjects } = useSearchProjectContext();
   const { fetchReceipts } = useSearchReceiptContext();
   const { fetchItems } = useSearchItemContext();
-
   return (
     <div className="flex flex-col gap-6 pb-8">
       <div className={` flex justify-between `}>

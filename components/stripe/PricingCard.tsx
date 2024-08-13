@@ -238,9 +238,9 @@ const SubButton = ({
     <>
       <RegularButton
         disabled={isPending || userPlanId === parseInt(pricePlanId)}
-        handleClick={() => {
-          parseInt(pricePlanId) === 1 ? handleClickerFree() : handleClicker();
-        }}
+        // handleClick={() => {
+        //   parseInt(pricePlanId) === 1 ? handleClickerFree() : handleClicker();
+        // }}
         styles={
           userPlanId === parseInt(pricePlanId) || userPlanId === null
             ? " text-sm border-slate-400 text-slate-400"
@@ -282,10 +282,6 @@ const SubButton = ({
       )}
     </>
   );
-};
-
-const DowngradeConfirm = () => {
-  return <div></div>;
 };
 
 const DowngradeErrorModal = ({ checkRes }: { checkRes: CheckType }) => {

@@ -180,40 +180,40 @@ const SubButton = ({
   const [checkRes, setCheckRes] = useState<CheckType>({ items: [], users: [] });
   const [downgrade, setDowngrade] = useState(false);
 
-  const handleClicker = () => {
-    startTransition(async () => {
-      if (userPlanId !== parseInt(pricePlanId)) {
-        const check = await checkDowngrade(userPlanId, parseInt(pricePlanId));
-        if (check.items.length === 0 && check.users.length === 0) {
-          if (userPlanId === 2 && parseInt(pricePlanId) === 3) {
-            setDowngrade(true);
-          } else {
-            handleSubscription();
-          }
-        } else {
-          setCheckRes(check);
-          setErrorModal(true);
-        }
-      }
-    });
-  };
+  // const handleClicker = () => {
+  //   startTransition(async () => {
+  //     if (userPlanId !== parseInt(pricePlanId)) {
+  //       const check = await checkDowngrade(userPlanId, parseInt(pricePlanId));
+  //       if (check.items.length === 0 && check.users.length === 0) {
+  //         if (userPlanId === 2 && parseInt(pricePlanId) === 3) {
+  //           setDowngrade(true);
+  //         } else {
+  //           handleSubscription();
+  //         }
+  //       } else {
+  //         setCheckRes(check);
+  //         setErrorModal(true);
+  //       }
+  //     }
+  //   });
+  // };
 
-  const handleClickerFree = () => {
-    if (setCancelPrompt) {
-      startTransition(async () => {
-        if (userPlanId !== parseInt(pricePlanId)) {
-          const check = await checkDowngrade(userPlanId, parseInt(pricePlanId));
+  // const handleClickerFree = () => {
+  //   if (setCancelPrompt) {
+  //     startTransition(async () => {
+  //       if (userPlanId !== parseInt(pricePlanId)) {
+  //         const check = await checkDowngrade(userPlanId, parseInt(pricePlanId));
 
-          if (check.items.length === 0 && check.users.length === 0) {
-            setCancelPrompt(true);
-          } else {
-            setCheckRes(check);
-            setErrorModal(true);
-          }
-        }
-      });
-    }
-  };
+  //         if (check.items.length === 0 && check.users.length === 0) {
+  //           setCancelPrompt(true);
+  //         } else {
+  //           setCheckRes(check);
+  //           setErrorModal(true);
+  //         }
+  //       }
+  //     });
+  //   }
+  // };
   const hasUsedTrialAdvanced = user.hasUsedTrialAdvanced;
   const hasUsedTrialLimited = user.hasUsedTrialLimited;
 
